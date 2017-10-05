@@ -1,1 +1,1 @@
-This folder contains code snippets and samples referenced by the book as well as additional sample files.
+This folder contains code snippets and samples referenced by the book as well as additional sample files. A lot more samples will be uploaded soon. The site is currently being populated for the first time.
