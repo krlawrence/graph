@@ -5,7 +5,7 @@
 
 ## Welcome!
 
-Placeholder for graph book source text, sample data and sample code.
+The site is currently being setup and populated.
 
 Please check back again very soon
 
