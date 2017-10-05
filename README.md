@@ -9,6 +9,17 @@ The site is currently being setup and populated.
 
 Please check back again very soon
 
+## How this book came to be
+
+I forget exactly when, but over a year ago I started compiling a list of notes, hints and tips, initially  for my own benefit, of things I had found poorly explained elsewhere while using graph databases and especially using Apache TinkerPop, Janus Graph and Gremlin. Over time that document grew (and continues to grow) and has effectively become a book.  After some encouragement from colleagues I have decided to release it as a living book in an open source venue so that anyone who is interested can read it. It is aimed at programmers and  anyone using the Gremlin query language to work with graphs. Lots of code examples, sample queries,  discussion of best practices, lessons I learned the hard way etc. 
+
+Thanks to all those that have encouraged me to keep going with this adventure!  
+
+Kelvin R. Lawrence  
+October 5th, 2017  
+
+## Introduction
+
 **This book is a work in progress. Feedback (ideally via issue) is very much encouraged and welcomed!**
 
 The title of this book could equally well be "A getting started guide for users of graph databases and the Gremlin query language featuring hints, tips and sample queries". It turns out that is a bit too too long to fit on one line for a heading but in a single sentence that describes the focus of this book pretty well.
