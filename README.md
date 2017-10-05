@@ -17,7 +17,7 @@ The book introduces the Apache TinkerPop 3 Gremlin graph query and traversal lan
 
 ## How this site is organized
 
-The book is being written using a text editor in AsciiDoc format. For convenience, you will find dormatted HTML and PDF versions of the book in the folder above. The AsciiDoc source material is in the '/book' folder.
+The book is being written using a text editor in AsciiDoc format. For convenience, you will find formatted HTML and PDF versions of the book in the folder above. The AsciiDoc source material is in the '/book' folder.
 
 Included with the book are sample graph data (GraphML) and program files. You will find these, as well as some screen shots and images in the following folders.
 
