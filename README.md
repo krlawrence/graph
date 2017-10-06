@@ -5,9 +5,11 @@
 
 ## Welcome!
 
-The site is currently being setup and populated.
+This repository is the new home for the source materials, sample code and examples for the book "Graph Databases, Gremlin and TinkerPop - a Tutorial"
 
-Please check back again very soon
+The site is currently being setup and populated - Please check back again regularly
+
+To read the book in a browser click [here](http://kelvinlawrence.net/book/Gremlin-Graph-Guide.html) or for a PDF version click [here](http://kelvinlawrence.net/book/Gremlin-Graph-Guide.pdf).
 
 ## How this book came to be
 
@@ -18,7 +20,7 @@ While this book remains a work in progress, indeed some sections are still to be
 Thanks to all those that have encouraged me to keep going with this adventure!  
 
 Kelvin R. Lawrence  
-October 5th, 2017  
+October 6th, 2017  
 
 ## Introduction
 
@@ -30,10 +32,11 @@ The book introduces the Apache TinkerPop 3 Gremlin graph query and traversal lan
 
 ## How this site is organized
 
-The book is being written using a text editor in AsciiDoc format. For convenience, you will find formatted HTML and PDF versions of the book in the folder above. The AsciiDoc source material is in the '/book' folder.
+The book is being written using a text editor in AsciiDoc format. For convenience, you will find formatted HTML and PDF versions of the book in the /book folder. The AsciiDoc source material is in also the '/book' folder.
 
 Included with the book are sample graph data (GraphML) and program files. You will find these, as well as some screen shots and images, and demos in the following folders.
 
+- /book
 - /sample-data
 - /sample-code
 - /images
