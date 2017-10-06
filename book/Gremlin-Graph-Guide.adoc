@@ -1,7 +1,7 @@
 GRAPH DATABASES, GREMLIN & TINKERPOP
 ====================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v240, Oct 04, 2017
+v241, Oct 05, 2017
 // Thu Oct 04, 2017 18:17:00 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
@@ -52,10 +52,15 @@ INTRODUCTION
 
 .This book is a work in progress. Feedback is very much encouraged and welcomed!
 
-The title of this book could equally well be '"A getting started guide for users
-of graph databases and the Gremlin query language featuring hints, tips and sample
+The title of this book could equally well be '"A getting started guide for users of
+graph databases and the Gremlin query language featuring hints, tips and sample
 queries"'. It turns out that is a bit too too long to fit on one line for a heading
-but in a single sentence that describes the focus of this work pretty well.
+but in a single sentence that describes the focus of this work pretty well. 
+
+I hope people find what follows useful. It remains a work in progress and more will
+be added in the coming weeks and months as time permits. I am hopeful that what is
+presented so far is of some use to folks, who like me, are learning to use the
+Gremlin query and traversal language and related technologies.
 
 How this book came to be
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -219,7 +224,7 @@ come into their own is when the data you are storing is intrinsically linked by 
 very nature - the air routes network used as the basis for all of the examples in
 this document being a perfect example.
 
-Those of you that looked at graphs as part of a computer science course we be correct
+Those of you that looked at graphs as part of a computer science course are correct
 if your reaction was "haven't graphs been around for ages?". Indeed Leonard Euler is
 credited with demonstrating the first graph problem and inventing the whole concept
 of "Graph Theory" all the way back in 1763 when he investigated the now famous
