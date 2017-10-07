@@ -2,8 +2,6 @@
 //
 // To execute use the console command ":load load-air-routes-graph.groovy"
 //
-//
-//
 
 conf = new BaseConfiguration()
 conf.setProperty("gremlin.tinkergraph.vertexIdManager","LONG")
