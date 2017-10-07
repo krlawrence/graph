@@ -1,12 +1,12 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v244, Oct 07, 2017
-// Sat Oct 07, 2017 12:29:03 CDT
+v245, Oct 07, 2017
+// Sat Oct 07, 2017 12:54:48 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Oct 07 2017
-//:Revision:  244
+//:Revision:  245
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -779,18 +779,18 @@ to see a lot more statistics check the README.txt file that is included with the
 air-routes graph.
 
 ----
-Air Routes Graph (v0.76, 2017-Aug-09) contains:
-  3,367 airports
-  43,160 routes
+Air Routes Graph (v0.77, 2017-Oct-06) contains:
+  3,374 airports
+  43,400 routes
   237 countries (and dependent areas)
   7 continents
-  3,612 total nodes
-  49,894 total edges
+  3,619 total nodes
+  50,148 total edges
 
 Additional observations:
   Longest route is between DOH and AKL (9,025 miles)
   Shortest route is between WRY and PPW (2 miles)
-  Average route distance is 1,163.525 miles.
+  Average route distance is 1,164.747 miles.
   Longest runway is 18,045ft (BPX)
   Shortest runway is 1,300ft (SAB)
   Furthest North is LYR (latitude: 78.2461013793945)
@@ -801,34 +801,34 @@ Additional observations:
   Closest to the Greenwich meridian is LDE (longitude: -0.006438999902457)
   Highest elevation is DCY (14,472 feet)
   Lowest elevation is GUW (-72 feet)
-  Maximum airport node degree (routes in and out) is 541 (AMS)
+  Maximum airport node degree (routes in and out) is 544 (FRA)
   Country with the most airports: United States (579)
-  Continent with the most airports: North America (977)
-  Average degree (airport nodes) is 25.637
-  Average degree (all nodes) is 25.770
+  Continent with the most airports: North America (978)
+  Average degree (airport nodes) is 25.726
+  Average degree (all nodes) is 25.856
 ----
 
 Here are the Top 15 airports sorted by overall number of routes (in and out). In
 graph terminology this is often called the degree of the node or just 'node degree'.
 
 ----
- POS  ID   CODE  TOTAL     DETAILS    
-                                      
-  1	  70   AMS  (541)  out:269 in:272
-  2	 161   IST  (540)  out:270 in:270
-  3	  52   FRA  (532)  out:266 in:266
-  4	  51   CDG  (524)  out:262 in:262
-  5	  80   MUC  (474)  out:237 in:237
-  6	  64   PEK  (467)  out:233 in:234
-  7	  18   ORD  (464)  out:232 in:232
-  8	   1   ATL  (464)  out:232 in:232
-  9	  58   DXB  (458)  out:229 in:229
- 10	   8   DFW  (442)  out:221 in:221
- 11	 102   DME  (428)  out:214 in:214
- 12	  67   PVG  (400)  out:200 in:200
- 13	  50   LGW  (394)  out:197 in:197
- 14	  13   LAX  (390)  out:195 in:195
- 15	  74   MAD  (384)  out:192 in:192
+    POS   ID  CODE  TOTAL     DETAILS
+
+     1	  52   FRA  (544)  out:272 in:272
+     2	  70   AMS  (541)  out:269 in:272
+     3	 161   IST  (540)  out:270 in:270
+     4	  51   CDG  (524)  out:262 in:262
+     5	  80   MUC  (474)  out:237 in:237
+     6	  64   PEK  (469)  out:234 in:235
+     7	  18   ORD  (464)  out:232 in:232
+     8	   1   ATL  (464)  out:232 in:232
+     9	  58   DXB  (458)  out:229 in:229
+    10	   8   DFW  (442)  out:221 in:221
+    11	 102   DME  (428)  out:214 in:214
+    12	  67   PVG  (402)  out:201 in:201
+    13	  50   LGW  (400)  out:200 in:200
+    14	  13   LAX  (390)  out:195 in:195
+    15	  74   MAD  (384)  out:192 in:192
 ----
 
 Throughout this document you will find the Gremlin queries that can be used to
@@ -999,7 +999,7 @@ some other ways of doing that later in the document.
 graph.toString() 
 ----
 
-When using a TinkerGraph, the message you get back will look something like this.
+When using TinkerGraph, the message you get back will look something like this.
 
 [source,groovy]
 ----
@@ -1197,14 +1197,15 @@ g.V().has('code','AUS').repeat(out()).times(3).has('code','AGR').path().by('code
 ----
 
 Gremlin also has a 'repeat ... until' construct that we will see used later in this
-document. This provides a nice way of getting back any routes between a source and
-destination no matter how many hops it might take to get there.
+document. When combined with the 'emit' step, 'repeat' provides a nice way of getting
+back any routes between a source and destination no matter how many hops it might
+take to get there.
 
-Again, don't worry if some of the Gremlin shown here is confusing, we will cover it
-in detail a bit later. The key point to take away from this discussion of SQL and
-Gremlin is that for data that is very connected, Graph databases provide a very good
-way to store that data and Gremlin provides a nice and fairly intuitive way to
-traverse that data efficiently.
+Again, don't worry if some of the Gremlin steps shown here are confusing, we will
+cover them all in detail a bit later. The key point to take away from this discussion
+of SQL and Gremlin is that for data that is very connected, Graph databases provide a
+very good way to store that data and Gremlin provides a nice and fairly intuitive way
+to traverse that data efficiently.
 
 One other point worthy of note is that every node and every edge in a graph has a
 unique ID. Unlike in the relational world where you may or may not decide to give a
@@ -1416,7 +1417,7 @@ all lets find out how many nodes in the graph represent airports.
 // How many airports are there in the graph?
 g.V().hasLabel('airport').count()
 
-3367
+3374
 ----
 
 Now, looking at edges that have a 'route' label, let's find out how many flight
@@ -1427,7 +1428,7 @@ routes are stored in the graph.
 // How many routes are there?
 g.V().hasLabel('airport').outE('route').count()
 
-43126
+43400
 ----
 
 You could shorten the above a little as follows but this would caue more edges to get
@@ -1474,7 +1475,7 @@ and the values are the counts for the occurrence of each label in the graph.
 
 [source,groovy]
 ----
-[continent:7,country:237,version:1,airport:3367]
+[continent:7,country:237,version:1,airport:3374]
 ----
 
 There are other ways we could write the query above that will yield the same result.
@@ -1494,7 +1495,7 @@ graph. An example of the type of result we would get back is also shown.
 // How many of each type of edge are there?
 g.E().groupCount().by(label)
 
-[contains:6734,route:43126]
+[contains:6734,route:43400]
 ----
 
 As before we could rewrite the query as follows.
@@ -2717,7 +2718,7 @@ additional Groovy classes and methods with Gremlin are provided in the "<<grv>>"
 // How many airports are there?
 numAirports = g.V().hasLabel('airport').count().next()
 
-3367
+3374
 
 // Pick a random airport ID
 x=Math.round(numAirports*Math.random()) as Integer
@@ -2774,7 +2775,7 @@ airports = g.V().hasLabel('airport').id().toList()
 
 numAirports = airports.size
 
-3367
+3374
 
 x=Math.round(numAirports*Math.random()) as Integer 
 

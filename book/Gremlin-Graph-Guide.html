@@ -494,7 +494,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Kelvin R. Lawrence</span><br>
 <span id="email" class="email"><a href="mailto:klawrenc@us.ibm.com">klawrenc@us.ibm.com</a></span><br>
-<span id="revnumber">version 244,</span>
+<span id="revnumber">version 245,</span>
 <span id="revdate">Oct 07, 2017</span>
 </div>
 <div id="toc" class="toc">
@@ -1734,18 +1734,18 @@ air-routes graph.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>Air Routes Graph (v0.76, 2017-Aug-09) contains:
-  3,367 airports
-  43,160 routes
+<pre>Air Routes Graph (v0.77, 2017-Oct-06) contains:
+  3,374 airports
+  43,400 routes
   237 countries (and dependent areas)
   7 continents
-  3,612 total nodes
-  49,894 total edges
+  3,619 total nodes
+  50,148 total edges
 
 Additional observations:
   Longest route is between DOH and AKL (9,025 miles)
   Shortest route is between WRY and PPW (2 miles)
-  Average route distance is 1,163.525 miles.
+  Average route distance is 1,164.747 miles.
   Longest runway is 18,045ft (BPX)
   Shortest runway is 1,300ft (SAB)
   Furthest North is LYR (latitude: 78.2461013793945)
@@ -1756,11 +1756,11 @@ Additional observations:
   Closest to the Greenwich meridian is LDE (longitude: -0.006438999902457)
   Highest elevation is DCY (14,472 feet)
   Lowest elevation is GUW (-72 feet)
-  Maximum airport node degree (routes in and out) is 541 (AMS)
+  Maximum airport node degree (routes in and out) is 544 (FRA)
   Country with the most airports: United States (579)
-  Continent with the most airports: North America (977)
-  Average degree (airport nodes) is 25.637
-  Average degree (all nodes) is 25.770</pre>
+  Continent with the most airports: North America (978)
+  Average degree (airport nodes) is 25.726
+  Average degree (all nodes) is 25.856</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1769,23 +1769,23 @@ graph terminology this is often called the degree of the node or just <em>node d
 </div>
 <div class="listingblock">
 <div class="content">
-<pre> POS  ID   CODE  TOTAL     DETAILS
+<pre>    POS   ID  CODE  TOTAL     DETAILS
 
-  1	  70   AMS  (541)  out:269 in:272
-  2	 161   IST  (540)  out:270 in:270
-  3	  52   FRA  (532)  out:266 in:266
-  4	  51   CDG  (524)  out:262 in:262
-  5	  80   MUC  (474)  out:237 in:237
-  6	  64   PEK  (467)  out:233 in:234
-  7	  18   ORD  (464)  out:232 in:232
-  8	   1   ATL  (464)  out:232 in:232
-  9	  58   DXB  (458)  out:229 in:229
- 10	   8   DFW  (442)  out:221 in:221
- 11	 102   DME  (428)  out:214 in:214
- 12	  67   PVG  (400)  out:200 in:200
- 13	  50   LGW  (394)  out:197 in:197
- 14	  13   LAX  (390)  out:195 in:195
- 15	  74   MAD  (384)  out:192 in:192</pre>
+     1	  52   FRA  (544)  out:272 in:272
+     2	  70   AMS  (541)  out:269 in:272
+     3	 161   IST  (540)  out:270 in:270
+     4	  51   CDG  (524)  out:262 in:262
+     5	  80   MUC  (474)  out:237 in:237
+     6	  64   PEK  (469)  out:234 in:235
+     7	  18   ORD  (464)  out:232 in:232
+     8	   1   ATL  (464)  out:232 in:232
+     9	  58   DXB  (458)  out:229 in:229
+    10	   8   DFW  (442)  out:221 in:221
+    11	 102   DME  (428)  out:214 in:214
+    12	  67   PVG  (402)  out:201 in:201
+    13	  50   LGW  (400)  out:200 in:200
+    14	  13   LAX  (390)  out:195 in:195
+    15	  74   MAD  (384)  out:192 in:192</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2010,7 +2010,7 @@ some other ways of doing that later in the document.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>When using a TinkerGraph, the message you get back will look something like this.</p>
+<p>When using TinkerGraph, the message you get back will look something like this.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2235,15 +2235,16 @@ expressing a traversal remains fairly straightforward.</p>
 </div>
 <div class="paragraph">
 <p>Gremlin also has a <em>repeat &#8230;&#8203; until</em> construct that we will see used later in this
-document. This provides a nice way of getting back any routes between a source and
-destination no matter how many hops it might take to get there.</p>
+document. When combined with the <em>emit</em> step, <em>repeat</em> provides a nice way of getting
+back any routes between a source and destination no matter how many hops it might
+take to get there.</p>
 </div>
 <div class="paragraph">
-<p>Again, don&#8217;t worry if some of the Gremlin shown here is confusing, we will cover it
-in detail a bit later. The key point to take away from this discussion of SQL and
-Gremlin is that for data that is very connected, Graph databases provide a very good
-way to store that data and Gremlin provides a nice and fairly intuitive way to
-traverse that data efficiently.</p>
+<p>Again, don&#8217;t worry if some of the Gremlin steps shown here are confusing, we will
+cover them all in detail a bit later. The key point to take away from this discussion
+of SQL and Gremlin is that for data that is very connected, Graph databases provide a
+very good way to store that data and Gremlin provides a nice and fairly intuitive way
+to traverse that data efficiently.</p>
 </div>
 <div class="paragraph">
 <p>One other point worthy of note is that every node and every edge in a graph has a
@@ -2487,7 +2488,7 @@ all lets find out how many nodes in the graph represent airports.</p>
 <pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// How many airports are there in the graph?</span>
 <span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">hasLabel</span><span class="tok-o">(</span><span class="tok-s1">&#39;airport&#39;</span><span class="tok-o">).</span><span class="tok-na">count</span><span class="tok-o">()</span>
 
-<span class="tok-mi">3367</span></code></pre>
+<span class="tok-mi">3374</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2499,7 +2500,7 @@ routes are stored in the graph.</p>
 <pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// How many routes are there?</span>
 <span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">hasLabel</span><span class="tok-o">(</span><span class="tok-s1">&#39;airport&#39;</span><span class="tok-o">).</span><span class="tok-na">outE</span><span class="tok-o">(</span><span class="tok-s1">&#39;route&#39;</span><span class="tok-o">).</span><span class="tok-na">count</span><span class="tok-o">()</span>
 
-<span class="tok-mi">43126</span></code></pre>
+<span class="tok-mi">43400</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2550,7 +2551,7 @@ and the values are the counts for the occurrence of each label in the graph.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-o">[</span><span class="tok-nl">continent:</span><span class="tok-mi">7</span><span class="tok-o">,</span><span class="tok-nl">country:</span><span class="tok-mi">237</span><span class="tok-o">,</span><span class="tok-nl">version:</span><span class="tok-mi">1</span><span class="tok-o">,</span><span class="tok-nl">airport:</span><span class="tok-mi">3367</span><span class="tok-o">]</span></code></pre>
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-o">[</span><span class="tok-nl">continent:</span><span class="tok-mi">7</span><span class="tok-o">,</span><span class="tok-nl">country:</span><span class="tok-mi">237</span><span class="tok-o">,</span><span class="tok-nl">version:</span><span class="tok-mi">1</span><span class="tok-o">,</span><span class="tok-nl">airport:</span><span class="tok-mi">3374</span><span class="tok-o">]</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2572,7 +2573,7 @@ graph. An example of the type of result we would get back is also shown.</p>
 <pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// How many of each type of edge are there?</span>
 <span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">E</span><span class="tok-o">().</span><span class="tok-na">groupCount</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-n">label</span><span class="tok-o">)</span>
 
-<span class="tok-o">[</span><span class="tok-nl">contains:</span><span class="tok-mi">6734</span><span class="tok-o">,</span><span class="tok-nl">route:</span><span class="tok-mi">43126</span><span class="tok-o">]</span></code></pre>
+<span class="tok-o">[</span><span class="tok-nl">contains:</span><span class="tok-mi">6734</span><span class="tok-o">,</span><span class="tok-nl">route:</span><span class="tok-mi">43400</span><span class="tok-o">]</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3991,7 +3992,7 @@ additional Groovy classes and methods with Gremlin are provided in the "<a href=
 <pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// How many airports are there?</span>
 <span class="tok-n">numAirports</span> <span class="tok-o">=</span> <span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">hasLabel</span><span class="tok-o">(</span><span class="tok-s1">&#39;airport&#39;</span><span class="tok-o">).</span><span class="tok-na">count</span><span class="tok-o">().</span><span class="tok-na">next</span><span class="tok-o">()</span>
 
-<span class="tok-mi">3367</span>
+<span class="tok-mi">3374</span>
 
 <span class="tok-c1">// Pick a random airport ID</span>
 <span class="tok-n">x</span><span class="tok-o">=</span><span class="tok-n">Math</span><span class="tok-o">.</span><span class="tok-na">round</span><span class="tok-o">(</span><span class="tok-n">numAirports</span><span class="tok-o">*</span><span class="tok-n">Math</span><span class="tok-o">.</span><span class="tok-na">random</span><span class="tok-o">())</span> <span class="tok-k">as</span> <span class="tok-n">Integer</span>
@@ -4051,7 +4052,7 @@ doing do something like this if we wanted to use our <em>Math.random</em> techni
 
 <span class="tok-n">numAirports</span> <span class="tok-o">=</span> <span class="tok-n">airports</span><span class="tok-o">.</span><span class="tok-na">size</span>
 
-<span class="tok-mi">3367</span>
+<span class="tok-mi">3374</span>
 
 <span class="tok-n">x</span><span class="tok-o">=</span><span class="tok-n">Math</span><span class="tok-o">.</span><span class="tok-na">round</span><span class="tok-o">(</span><span class="tok-n">numAirports</span><span class="tok-o">*</span><span class="tok-n">Math</span><span class="tok-o">.</span><span class="tok-na">random</span><span class="tok-o">())</span> <span class="tok-k">as</span> <span class="tok-n">Integer</span>
 
@@ -12518,8 +12519,8 @@ C,B</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 244<br>
-Last updated 2017-10-07 12:40:20 CDT
+Version 245<br>
+Last updated 2017-10-07 13:12:02 CDT
 </div>
 </div>
 </body>
