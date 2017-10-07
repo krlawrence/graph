@@ -1,6 +1,6 @@
 // You can use this file to load the air-routes graph from the Gremlin Console
 //
-// To execute use the console command ":load aload-air-routes-graph.groovy"
+// To execute use the console command ":load load-air-routes-graph.groovy"
 //
 //
 //
