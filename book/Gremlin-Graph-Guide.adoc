@@ -1,12 +1,12 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v245, Oct 07, 2017
-// Sat Oct 07, 2017 12:54:48 CDT
+v246, Oct 07, 2017
+// Sat Oct 07, 2017 13:21:00 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Oct 07 2017
-//:Revision:  245
+//:Revision:  246
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -1495,7 +1495,7 @@ graph. An example of the type of result we would get back is also shown.
 // How many of each type of edge are there?
 g.E().groupCount().by(label)
 
-[contains:6734,route:43400]
+[contains:6748,route:43400]
 ----
 
 As before we could rewrite the query as follows.
@@ -1543,7 +1543,7 @@ output from running the query is shown below also.
 // How many airports are there in each continent?
 g.V().hasLabel('continent').group().by('code').by(out().count())
 
-[EU:578,AS:931,NA:977,OC:284,AF:294,AN:0,SA:303]
+[EU:583,AS:932,NA:978,OC:284,AF:294,AN:0,SA:303]
 ----
 
 These queries show how 'select' can be used to extract specific values from the map
@@ -2219,7 +2219,7 @@ query that we would write might look like the one below.
 ----
 g.V().hasLabel('airport').out('route').count().mean()
 
-42760.0
+43400.0
 ----
 
 As you can see the answer we got back, '42760.0' looks wrong, and indeed it is. That
@@ -2240,7 +2240,7 @@ Take a look at the modified query below.
 // Average number of outgoing routes from an airport.  
 g.V().hasLabel('airport').local(out('route').count()).mean()  
 
-12.707280832095096
+12.863070539419088
 ----
 
 The result this time is a much more believable answer. Notice how this time we placed
@@ -5193,7 +5193,7 @@ this case it is part of a TinkerGraph.
 ----
 g.V().has('airport','code','DFW').properties('city').next().graph()
 
-tinkergraph[vertices:3612 edges:49748]
+tinkergraph[vertices:3619 edges:50148]
 ----
 
 To further show that each property has an ID the following code retrieves a list of
