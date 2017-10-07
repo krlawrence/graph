@@ -1,12 +1,12 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v243, Oct 07, 2017
-// Sat Oct 07, 2017 09:40:17 CDT
+v244, Oct 07, 2017
+// Sat Oct 07, 2017 12:29:03 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Oct 07 2017
-//:Revision:  243
+//:Revision:  244
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -387,7 +387,7 @@ gremlin>
 ----
 
 You can get a list of the available commands by typing ':help'. Note that all
-commands to the console itself are prefixed by a colon ':'. This enables the
+commands to the console itself are prefixed by a colon '":"'. This enables the
 console to distinguish them as special and different from actual Gremlin and
 Groovy commands. 
 
@@ -647,7 +647,7 @@ Console.
 
 Once the TinkerGraph plugin is enabled you will need to close and re-load the Gremlin
 console. After doing that, you can create a new TinkerGraph instance from the console
-as follows.
+as follows. 
 
 [source,groovy]
 ----
@@ -882,19 +882,21 @@ A word about the TinkerPop.sugar plugin
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The Gremlin console has a set of plug in modules that can be independently enabled or
-disabled. Depending upon your use case you may or may not need to manage plugins.  In
-TinkerPop 3 the 'sugar' plugin us disabled by default.You can enable 'sugar' support
-from the Gremlin console as follows:
+disabled. Depending upon your use case you may or may not need to manage plugins. 
+
+TinkerPop 2 enabled by default a plugin called 'Tinkerpop.sugar' that allowed
+shorthand forms of queries to be entered when using the Gremlin console. In TinkerPop
+3 that plugin is off by default and has to be enabled if you want to continue to use
+the same shortcuts that TinkerPop 2 allowed by default. 
+
+You can enable 'sugar' support from the Gremlin console as follows:
 
 [source,groovy]
 ----
 :plugin use tinkerpop.sugar
 ----
 
-TinkerPop 2 provided by default a plugin called 'Tinkerpop.sugar' that allowed
-shorthand forms of queries to be entered when using the Gremlin console. In TinkerPop
-3 that plug-in is off by default and has to be enabled if you want to continue to use
-the same shortcuts that TinkerPop 2 allowed by default. 
+TIP: The Gremlin Console remembers which plugins are enabled between restarts.
 
 In the current revision of this document I have tried to remove any dependence on the
 'TinkerPop.sugar' plugin from the examples presented. By not using Sugar, queries
@@ -944,10 +946,13 @@ in our subsequent queries of the graph.  The 'max-iteration' option tells the Gr
 console the maximum number of lines of output that we ever want to see in return from
 a  query. The default, if this is not specified, is 100.
 
-If you are using a different graph environment such as IBM-Graph you can still load
-the 'air-routes.graphml' file by following the instructions specific to that system.
-Once loaded, the queries below should still work either unchanged or with minor
-modifications.
+TIP: You can use the 'max-iteration' setting to control how much output the Gremlin
+Console displays.
+
+If you are using a different graph environment, if GraphML import is supported, you
+can still load the 'air-routes.graphml' file by following the instructions specific
+to that system.  Once loaded, the queries below should still work either unchanged or
+with minor modifications.
 
 
 [source,groovy]

@@ -494,7 +494,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Kelvin R. Lawrence</span><br>
 <span id="email" class="email"><a href="mailto:klawrenc@us.ibm.com">klawrenc@us.ibm.com</a></span><br>
-<span id="revnumber">version 243,</span>
+<span id="revnumber">version 244,</span>
 <span id="revdate">Oct 07, 2017</span>
 </div>
 <div id="toc" class="toc">
@@ -1280,7 +1280,7 @@ gremlin&gt;</pre>
 </div>
 <div class="paragraph">
 <p>You can get a list of the available commands by typing <em>:help</em>. Note that all
-commands to the console itself are prefixed by a colon <em>:</em>. This enables the
+commands to the console itself are prefixed by a colon <em>":"</em>. This enables the
 console to distinguish them as special and different from actual Gremlin and
 Groovy commands.</p>
 </div>
@@ -1842,20 +1842,33 @@ The remainder of this document only shows TinkerPop 3 examples.</p>
 <h4 id="sugarplugin">2.5.3. A word about the TinkerPop.sugar plugin</h4>
 <div class="paragraph">
 <p>The Gremlin console has a set of plug in modules that can be independently enabled or
-disabled. Depending upon your use case you may or may not need to manage plugins.  In
-TinkerPop 3 the <em>sugar</em> plugin us disabled by default.You can enable <em>sugar</em> support
-from the Gremlin console as follows:</p>
+disabled. Depending upon your use case you may or may not need to manage plugins.</p>
+</div>
+<div class="paragraph">
+<p>TinkerPop 2 enabled by default a plugin called <em>Tinkerpop.sugar</em> that allowed
+shorthand forms of queries to be entered when using the Gremlin console. In TinkerPop
+3 that plugin is off by default and has to be enabled if you want to continue to use
+the same shortcuts that TinkerPop 2 allowed by default.</p>
+</div>
+<div class="paragraph">
+<p>You can enable <em>sugar</em> support from the Gremlin console as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="groovy"><span class="tok-o">:</span><span class="tok-n">plugin</span> <span class="tok-n">use</span> <span class="tok-n">tinkerpop</span><span class="tok-o">.</span><span class="tok-na">sugar</span></code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>TinkerPop 2 provided by default a plugin called <em>Tinkerpop.sugar</em> that allowed
-shorthand forms of queries to be entered when using the Gremlin console. In TinkerPop
-3 that plug-in is off by default and has to be enabled if you want to continue to use
-the same shortcuts that TinkerPop 2 allowed by default.</p>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+The Gremlin Console remembers which plugins are enabled between restarts.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>In the current revision of this document I have tried to remove any dependence on the
@@ -1920,11 +1933,24 @@ in our subsequent queries of the graph.  The <em>max-iteration</em> option tells
 console the maximum number of lines of output that we ever want to see in return from
 a  query. The default, if this is not specified, is 100.</p>
 </div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+You can use the <em>max-iteration</em> setting to control how much output the Gremlin
+Console displays.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
-<p>If you are using a different graph environment such as IBM-Graph you can still load
-the <em>air-routes.graphml</em> file by following the instructions specific to that system.
-Once loaded, the queries below should still work either unchanged or with minor
-modifications.</p>
+<p>If you are using a different graph environment, if GraphML import is supported, you
+can still load the <em>air-routes.graphml</em> file by following the instructions specific
+to that system.  Once loaded, the queries below should still work either unchanged or
+with minor modifications.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -12492,8 +12518,8 @@ C,B</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 243<br>
-Last updated 2017-10-07 10:02:14 CDT
+Version 244<br>
+Last updated 2017-10-07 12:40:20 CDT
 </div>
 </div>
 </body>
