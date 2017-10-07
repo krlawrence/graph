@@ -1,12 +1,12 @@
-GRAPH DATABASES, GREMLIN & TINKERPOP
-====================================
+GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
+===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v241, Oct 05, 2017
-// Thu Oct 04, 2017 18:17:00 CDT
+v243, Oct 07, 2017
+// Sat Oct 07, 2017 09:40:17 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Oct 04 2017
-//:Revision:  240
+//:Date:      Oct 07 2017
+//:Revision:  243
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -73,12 +73,19 @@ effectively become a book. After some encouragement from colleagues I have decid
 release it as a living book in an open source venue so that anyone who is interested
 can read it. It is aimed at programmers and anyone using the Gremlin query language
 to work with graphs. Lots of code examples, sample queries, discussion of best
-practices, lessons I learned the hard way etc.
+practices, lessons I learned the hard way etc. are included.
 
 Thanks to all those that have encouraged me to keep going with this adventure!
 
 Kelvin R. Lawrence +
 October 5th, 2017
+
+Providing feedback
+~~~~~~~~~~~~~~~~~~
+Please let me know about any mistakes you find in this material and also please feel
+free to send me feedback of any sort. Suggested improvements are especially welcome.
+A good way to provide feedback is by opening an issue in the GitHub repository
+located at https://github.com/krlawrence/graph. 
 
 What is this book about?
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -280,11 +287,6 @@ Graph database technology should not be viewed as a "rip and replace" technology
 as very much complimentary to other databases that you may already have deployed. One
 common use case is for the graph to be uses as a form of smart index into other data
 stores. This is sometimes called having a polyglot data architecture.
-
-
-.Feedback welcomed
-Please let me know about any mistakes you find in this material and also please feel
-free to send me feedback of any sort. Suggested improvements are especially welcome.
 
 
 [[gs]]

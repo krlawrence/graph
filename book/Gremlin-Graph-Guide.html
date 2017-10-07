@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 1.5.5">
+<meta name="generator" content="Asciidoctor 1.5.4">
 <meta name="author" content="Kelvin R. Lawrence">
-<title>GRAPH DATABASES, GREMLIN &amp; TINKERPOP</title>
+<title>GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -18,6 +18,7 @@ audio:not([controls]){display:none;height:0}
 [hidden],template{display:none}
 script{display:none!important}
 html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}
+body{margin:0}
 a{background:transparent}
 a:focus{outline:thin dotted}
 a:active,a:hover{outline:0}
@@ -52,7 +53,7 @@ textarea{overflow:auto;vertical-align:top}
 table{border-collapse:collapse;border-spacing:0}
 *,*:before,*:after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}
 html,body{font-size:100%}
-body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto;tab-size:4;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto}
 a:hover{cursor:pointer}
 img,object,embed{max-width:100%;height:auto}
 object,embed{height:100%}
@@ -64,6 +65,7 @@ img{-ms-interpolation-mode:bicubic}
 .text-center{text-align:center!important}
 .text-justify{text-align:justify!important}
 .hide{display:none}
+body{-webkit-font-smoothing:antialiased}
 img,object,svg{display:inline-block;vertical-align:middle}
 textarea{height:auto;min-height:50px}
 select{width:100%}
@@ -118,16 +120,13 @@ table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:
 table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
 table tr.even,table tr.alt,table tr:nth-of-type(even){background:#f8f8f7}
 table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{display:table-cell;line-height:1.6}
+body{tab-size:4}
 h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
 h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
 .clearfix:before,.clearfix:after,.float-group:before,.float-group:after{content:" ";display:table}
 .clearfix:after,.float-group:after{clear:both}
-*:not(pre)>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background-color:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed;word-wrap:break-word}
-*:not(pre)>code.nobreak{word-wrap:normal}
-*:not(pre)>code.nowrap{white-space:nowrap}
+*:not(pre)>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background-color:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
 pre,pre>code{line-height:1.45;color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;text-rendering:optimizeSpeed}
-em em{font-style:normal}
-strong strong{font-weight:400}
 .keyseq{color:rgba(51,51,51,.8)}
 kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background-color:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
 .keyseq kbd:first-child{margin-left:0}
@@ -420,7 +419,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </style>
 <style>
 .listingblock .pygments .hll { background-color: #4f424c }
-.listingblock .pygments, .listingblock .pygments code { background: #2f1e2e; color: #e7e9db }
+.listingblock .pygments  { background: #2f1e2e; color: #e7e9db }
 .listingblock .pygments .tok-c { color: #776e71 } /* Comment */
 .listingblock .pygments .tok-err { color: #ef6155 } /* Error */
 .listingblock .pygments .tok-k { color: #815ba4 } /* Keyword */
@@ -471,10 +470,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .listingblock .pygments .tok-mh { color: #f99b15 } /* Literal.Number.Hex */
 .listingblock .pygments .tok-mi { color: #f99b15 } /* Literal.Number.Integer */
 .listingblock .pygments .tok-mo { color: #f99b15 } /* Literal.Number.Oct */
-.listingblock .pygments .tok-sa { color: #48b685 } /* Literal.String.Affix */
 .listingblock .pygments .tok-sb { color: #48b685 } /* Literal.String.Backtick */
 .listingblock .pygments .tok-sc { color: #e7e9db } /* Literal.String.Char */
-.listingblock .pygments .tok-dl { color: #48b685 } /* Literal.String.Delimiter */
 .listingblock .pygments .tok-sd { color: #776e71 } /* Literal.String.Doc */
 .listingblock .pygments .tok-s2 { color: #48b685 } /* Literal.String.Double */
 .listingblock .pygments .tok-se { color: #f99b15 } /* Literal.String.Escape */
@@ -485,22 +482,20 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .listingblock .pygments .tok-s1 { color: #48b685 } /* Literal.String.Single */
 .listingblock .pygments .tok-ss { color: #48b685 } /* Literal.String.Symbol */
 .listingblock .pygments .tok-bp { color: #e7e9db } /* Name.Builtin.Pseudo */
-.listingblock .pygments .tok-fm { color: #06b6ef } /* Name.Function.Magic */
 .listingblock .pygments .tok-vc { color: #ef6155 } /* Name.Variable.Class */
 .listingblock .pygments .tok-vg { color: #ef6155 } /* Name.Variable.Global */
 .listingblock .pygments .tok-vi { color: #ef6155 } /* Name.Variable.Instance */
-.listingblock .pygments .tok-vm { color: #ef6155 } /* Name.Variable.Magic */
 .listingblock .pygments .tok-il { color: #f99b15 } /* Literal.Number.Integer.Long */
 </style>
 </head>
 <body class="article">
 <div id="header">
-<h1>GRAPH DATABASES, GREMLIN &amp; TINKERPOP</h1>
+<h1>GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL</h1>
 <div class="details">
 <span id="author" class="author">Kelvin R. Lawrence</span><br>
 <span id="email" class="email"><a href="mailto:klawrenc@us.ibm.com">klawrenc@us.ibm.com</a></span><br>
-<span id="revnumber">version 241,</span>
-<span id="revdate">Oct 05, 2017</span>
+<span id="revnumber">version 243,</span>
+<span id="revdate">Oct 07, 2017</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
@@ -508,9 +503,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_introduction">1. INTRODUCTION</a>
 <ul class="sectlevel2">
 <li><a href="#_how_this_book_came_to_be">1.1. How this book came to be</a></li>
-<li><a href="#_what_is_this_book_about">1.2. What is this book about?</a></li>
-<li><a href="#thanks">1.3. A word of thanks</a></li>
-<li><a href="#whygraph">1.4. So what is a graph database and why should I care?</a></li>
+<li><a href="#_providing_feedback">1.2. Providing feedback</a></li>
+<li><a href="#_what_is_this_book_about">1.3. What is this book about?</a></li>
+<li><a href="#thanks">1.4. A word of thanks</a></li>
+<li><a href="#whygraph">1.5. So what is a graph database and why should I care?</a></li>
 </ul>
 </li>
 <li><a href="#gs">2. GETTING STARTED</a>
@@ -806,7 +802,7 @@ effectively become a book. After some encouragement from colleagues I have decid
 release it as a living book in an open source venue so that anyone who is interested
 can read it. It is aimed at programmers and anyone using the Gremlin query language
 to work with graphs. Lots of code examples, sample queries, discussion of best
-practices, lessons I learned the hard way etc.</p>
+practices, lessons I learned the hard way etc. are included.</p>
 </div>
 <div class="paragraph">
 <p>Thanks to all those that have encouraged me to keep going with this adventure!</p>
@@ -817,7 +813,16 @@ October 5th, 2017</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_what_is_this_book_about">1.2. What is this book about?</h3>
+<h3 id="_providing_feedback">1.2. Providing feedback</h3>
+<div class="paragraph">
+<p>Please let me know about any mistakes you find in this material and also please feel
+free to send me feedback of any sort. Suggested improvements are especially welcome.
+A good way to provide feedback is by opening an issue in the GitHub repository
+located at <a href="https://github.com/krlawrence/graph" class="bare">https://github.com/krlawrence/graph</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_what_is_this_book_about">1.3. What is this book about?</h3>
 <div class="paragraph">
 <p>This book introduces the Apache TinkerPop 3 <em>Gremlin</em> graph query
 and traversal language via real examples against a real world graph. They are given
@@ -977,7 +982,7 @@ tools and documentation for many of the technologies covered in this document.</
 </div>
 </div>
 <div class="sect2">
-<h3 id="thanks">1.3. A word of thanks</h3>
+<h3 id="thanks">1.4. A word of thanks</h3>
 <div class="paragraph">
 <p>I would like to thank my colleagues at IBM, Graham Wallis, Jason Plurad and Adam
 Holley for their help in refining and improving several of the queries contained in
@@ -987,7 +992,7 @@ traversals!</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="whygraph">1.4. So what is a graph database and why should I care?</h3>
+<h3 id="whygraph">1.5. So what is a graph database and why should I care?</h3>
 <div class="paragraph">
 <p>This document is mainly intended to be a tutorial in working with graph databases and
 related technology using the Gremlin query language. However, it is worth spending
@@ -1116,11 +1121,6 @@ closely models the way they think of the world.</p>
 as very much complimentary to other databases that you may already have deployed. One
 common use case is for the graph to be uses as a form of smart index into other data
 stores. This is sometimes called having a polyglot data architecture.</p>
-</div>
-<div class="paragraph">
-<div class="title">Feedback welcomed</div>
-<p>Please let me know about any mistakes you find in this material and also please feel
-free to send me feedback of any sort. Suggested improvements are especially welcome.</p>
 </div>
 </div>
 </div>
@@ -12492,8 +12492,8 @@ C,B</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 241<br>
-Last updated 2017-10-06 10:48:36 CDT
+Version 243<br>
+Last updated 2017-10-07 10:02:14 CDT
 </div>
 </div>
 </body>
