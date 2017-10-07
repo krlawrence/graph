@@ -494,7 +494,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Kelvin R. Lawrence</span><br>
 <span id="email" class="email"><a href="mailto:klawrenc@us.ibm.com">klawrenc@us.ibm.com</a></span><br>
-<span id="revnumber">version 245,</span>
+<span id="revnumber">version 246,</span>
 <span id="revdate">Oct 07, 2017</span>
 </div>
 <div id="toc" class="toc">
@@ -2573,7 +2573,7 @@ graph. An example of the type of result we would get back is also shown.</p>
 <pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// How many of each type of edge are there?</span>
 <span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">E</span><span class="tok-o">().</span><span class="tok-na">groupCount</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-n">label</span><span class="tok-o">)</span>
 
-<span class="tok-o">[</span><span class="tok-nl">contains:</span><span class="tok-mi">6734</span><span class="tok-o">,</span><span class="tok-nl">route:</span><span class="tok-mi">43400</span><span class="tok-o">]</span></code></pre>
+<span class="tok-o">[</span><span class="tok-nl">contains:</span><span class="tok-mi">6748</span><span class="tok-o">,</span><span class="tok-nl">route:</span><span class="tok-mi">43400</span><span class="tok-o">]</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2625,7 +2625,7 @@ output from running the query is shown below also.</p>
 <pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// How many airports are there in each continent?</span>
 <span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">hasLabel</span><span class="tok-o">(</span><span class="tok-s1">&#39;continent&#39;</span><span class="tok-o">).</span><span class="tok-na">group</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-n">out</span><span class="tok-o">().</span><span class="tok-na">count</span><span class="tok-o">())</span>
 
-<span class="tok-o">[</span><span class="tok-nl">EU:</span><span class="tok-mi">578</span><span class="tok-o">,</span><span class="tok-nl">AS:</span><span class="tok-mi">931</span><span class="tok-o">,</span><span class="tok-nl">NA:</span><span class="tok-mi">977</span><span class="tok-o">,</span><span class="tok-nl">OC:</span><span class="tok-mi">284</span><span class="tok-o">,</span><span class="tok-nl">AF:</span><span class="tok-mi">294</span><span class="tok-o">,</span><span class="tok-nl">AN:</span><span class="tok-mi">0</span><span class="tok-o">,</span><span class="tok-nl">SA:</span><span class="tok-mi">303</span><span class="tok-o">]</span></code></pre>
+<span class="tok-o">[</span><span class="tok-nl">EU:</span><span class="tok-mi">583</span><span class="tok-o">,</span><span class="tok-nl">AS:</span><span class="tok-mi">932</span><span class="tok-o">,</span><span class="tok-nl">NA:</span><span class="tok-mi">978</span><span class="tok-o">,</span><span class="tok-nl">OC:</span><span class="tok-mi">284</span><span class="tok-o">,</span><span class="tok-nl">AF:</span><span class="tok-mi">294</span><span class="tok-o">,</span><span class="tok-nl">AN:</span><span class="tok-mi">0</span><span class="tok-o">,</span><span class="tok-nl">SA:</span><span class="tok-mi">303</span><span class="tok-o">]</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3403,7 +3403,7 @@ query that we would write might look like the one below.</p>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">hasLabel</span><span class="tok-o">(</span><span class="tok-s1">&#39;airport&#39;</span><span class="tok-o">).</span><span class="tok-na">out</span><span class="tok-o">(</span><span class="tok-s1">&#39;route&#39;</span><span class="tok-o">).</span><span class="tok-na">count</span><span class="tok-o">().</span><span class="tok-na">mean</span><span class="tok-o">()</span>
 
-<span class="tok-mf">42760.0</span></code></pre>
+<span class="tok-mf">43400.0</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3427,7 +3427,7 @@ these numbers by the number of members ,airports in this case, int the collectio
 <pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// Average number of outgoing routes from an airport.</span>
 <span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">hasLabel</span><span class="tok-o">(</span><span class="tok-s1">&#39;airport&#39;</span><span class="tok-o">).</span><span class="tok-na">local</span><span class="tok-o">(</span><span class="tok-n">out</span><span class="tok-o">(</span><span class="tok-s1">&#39;route&#39;</span><span class="tok-o">).</span><span class="tok-na">count</span><span class="tok-o">()).</span><span class="tok-na">mean</span><span class="tok-o">()</span>
 
-<span class="tok-mf">12.707280832095096</span></code></pre>
+<span class="tok-mf">12.863070539419088</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -6671,7 +6671,7 @@ this case it is part of a TinkerGraph.</p>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;airport&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;DFW&#39;</span><span class="tok-o">).</span><span class="tok-na">properties</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">).</span><span class="tok-na">next</span><span class="tok-o">().</span><span class="tok-na">graph</span><span class="tok-o">()</span>
 
-<span class="tok-n">tinkergraph</span><span class="tok-o">[</span><span class="tok-nl">vertices:</span><span class="tok-mi">3612</span> <span class="tok-nl">edges:</span><span class="tok-mi">49748</span><span class="tok-o">]</span></code></pre>
+<span class="tok-n">tinkergraph</span><span class="tok-o">[</span><span class="tok-nl">vertices:</span><span class="tok-mi">3619</span> <span class="tok-nl">edges:</span><span class="tok-mi">50148</span><span class="tok-o">]</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -12519,8 +12519,8 @@ C,B</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 245<br>
-Last updated 2017-10-07 13:12:02 CDT
+Version 246<br>
+Last updated 2017-10-07 13:33:10 CDT
 </div>
 </div>
 </body>
