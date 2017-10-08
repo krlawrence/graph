@@ -1,12 +1,12 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v246, Oct 07, 2017
-// Sat Oct 07, 2017 13:21:00 CDT
+v247, Oct 08, 2017
+// Sun Oct 08, 2017 10:39:08 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Oct 07 2017
-//:Revision:  246
+//:Date:      Oct 08 2017
+//:Revision:  247
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -3170,17 +3170,20 @@ Using 'where' and 'by' to filter results
 
 A new capability was added in the Tinkerpop 3.2.4 release that allows a 'where' step
 to be followed with a 'by' modulator. This makes writing certain types of queries a
-lot easier. The query below starts at the Austin airport and finds all the airports
-that you can fly to from there. A 'where' 'by' step is then used to filter the
-results to just those airports that have the same number of runways that Austin has.
-What is really nice about this is that we do not have to know ahead of time how many
-runways Austin itself has as that is handled for us by the query.
+lot easier than it was before. The query below starts at the Austin airport and finds
+all the airports that you can fly to from there. A 'where' 'by' step is then used to
+filter the results to just those airports that have the same number of runways that
+Austin has.  What is really nice about this is that we do not have to know ahead of
+time how many runways Austin itself has as that is handled for us by the query.
 
 [source,groovy]
 ----
  g.V().has('code','AUS').as('a').out().
        where(eq('a')).by('runways').valueMap('code','runways')
 ----
+
+TIP: Combining the 'where' and 'by' steps allows you to write powerful queries in a
+nice and simple way.
 
 If you were to run the query in the Gremlin Console, these are the results that you
 should see. Note that all the airports returned have two runways. This is the same
@@ -3352,7 +3355,11 @@ specific patterns.
 
 Below is an example that uses 'match' to look for airline route patterns where there
 is a flight from one airport to another but no return flight back to the original
-airport.
+airport. The first query looks for such patterns involving the JFK airport as the
+starting point. You can see the output from running the query below it. This is the
+correct answer as, currently, the British Airways Airbus A318 flight from London City
+(LCY) airport stops in Dublin (DUB) to take on more fuel on the way to JFK but does
+not need to stop on the way back because of the trailing wind.
    
 [source,groovy]
 ----
@@ -3362,10 +3369,36 @@ g.V().has('code','JFK').match(__.as('s').out().as('d'),
                               __.not(__.as('d').out().as('s'))).
                         select('s','d').by('code')
 
+[s:JFK,d:LCY]
+----
+
+We can expand the query by leaving off the specific starting point of JFK and look
+for this pattern anywhere in the graph. This really starts to show how important and
+useful the 'match' Gremlin step is. We don't have any idea what we might find, but by
+using 'match', we are able to describe the pattern of behavior that we are looking
+for and Gremlin does the rest.
+
+[source,groovy]
+----
 // Same as above but from any airport in the graph.
 g.V().hasLabel('airport').match(__.as('s').out().as('d'),
                                 __.not(__.as('d').out().as('s'))).
                           select('s','d').by('code')
+----
+
+If you were to run the query you would find that there are in fact over 200 places in
+the graph where this situation applies. We can add a 'count' to the end of query to
+find out just how many there are.
+
+[source,groovy]
+----
+// Same as above but from any airport in the graph.
+g.V().hasLabel('airport').match(__.as('s').out().as('d'),
+                                __.not(__.as('d').out().as('s'))).
+                          select('s','d').by('code').count()
+
+
+238
 ----
 
 The next example looks for routes that follow the pattern A->B->C but where there is
@@ -10262,6 +10295,66 @@ B,D
 B,F
 C,A
 C,B
+----
+
+There are many ways you could construct an edge list. By way of another simple
+example we could represent routes in the air-routes graph in a format similar to that
+shown below. In this case we also include the label of the edge between each of the
+nodes. The nodes are represented by their ID value.
+
+----
+[1,route,623]
+[1,route,624]
+[1,route,625]
+[1,route,626]
+[1,route,627]
+[1,route,628]
+[1,route,629]
+[1,route,630]
+[1,route,631]
+[1,route,632]
+----
+
+If you wanted to export a very simple version of the air-routes graph, using just the
+airport IATA codes and the edge labels you could write a Gremlin query to do it for
+you as follows. Only the first 10 results returned are shown.
+
+[source,groovy]
+----
+g.V().outE().inV().path().by('code').by(label)
+
+[ATL,route,MBS]
+[ATL,route,MCN]
+[ATL,route,MEI]
+[ATL,route,MLB]
+[ATL,route,MSL]
+[ATL,route,PHF]
+[ATL,route,PIB]
+[ATL,route,SBN]
+[ATL,route,TRI]
+[ATL,route,TTN]
+----
+
+If you wanted to print the list without the containing square brackets you could take
+advantage of the Java 'forEachRemaining' method from the Iterator interface to add a
+bit of post processing to the end of the query. Once again only the first 10 results
+are shown.
+
+[source,groovy]
+----
+g.V().outE().inV().path().by('code').by(label).
+      forEachRemaining{println it[0] + ',' + it[1] + ',' + it[2]}
+
+ATL,route,MBS
+ATL,route,MCN
+ATL,route,MEI
+ATL,route,MLB
+ATL,route,MSL
+ATL,route,PHF
+ATL,route,PIB
+ATL,route,SBN
+ATL,route,TRI
+ATL,route,TTN
 ----
 
 Exporting relational database data to a graph using CSV format

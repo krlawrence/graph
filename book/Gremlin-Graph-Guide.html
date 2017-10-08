@@ -494,8 +494,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Kelvin R. Lawrence</span><br>
 <span id="email" class="email"><a href="mailto:klawrenc@us.ibm.com">klawrenc@us.ibm.com</a></span><br>
-<span id="revnumber">version 246,</span>
-<span id="revdate">Oct 07, 2017</span>
+<span id="revnumber">version 247,</span>
+<span id="revdate">Oct 08, 2017</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
@@ -4492,17 +4492,30 @@ AUS&#8594;DFW&#8594;LHR will be as it does not end up back in Austin.</p>
 <div class="paragraph">
 <p>A new capability was added in the Tinkerpop 3.2.4 release that allows a <em>where</em> step
 to be followed with a <em>by</em> modulator. This makes writing certain types of queries a
-lot easier. The query below starts at the Austin airport and finds all the airports
-that you can fly to from there. A <em>where</em> <em>by</em> step is then used to filter the
-results to just those airports that have the same number of runways that Austin has.
-What is really nice about this is that we do not have to know ahead of time how many
-runways Austin itself has as that is handled for us by the query.</p>
+lot easier than it was before. The query below starts at the Austin airport and finds
+all the airports that you can fly to from there. A <em>where</em> <em>by</em> step is then used to
+filter the results to just those airports that have the same number of runways that
+Austin has.  What is really nice about this is that we do not have to know ahead of
+time how many runways Austin itself has as that is handled for us by the query.</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="groovy"> <span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;a&#39;</span><span class="tok-o">).</span><span class="tok-na">out</span><span class="tok-o">().</span>
        <span class="tok-n">where</span><span class="tok-o">(</span><span class="tok-n">eq</span><span class="tok-o">(</span><span class="tok-s1">&#39;a&#39;</span><span class="tok-o">)).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;runways&#39;</span><span class="tok-o">).</span><span class="tok-na">valueMap</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;runways&#39;</span><span class="tok-o">)</span></code></pre>
 </div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+Combining the <em>where</em> and <em>by</em> steps allows you to write powerful queries in a
+nice and simple way.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>If you were to run the query in the Gremlin Console, these are the results that you
@@ -4692,7 +4705,11 @@ specific patterns.</p>
 <div class="paragraph">
 <p>Below is an example that uses <em>match</em> to look for airline route patterns where there
 is a flight from one airport to another but no return flight back to the original
-airport.</p>
+airport. The first query looks for such patterns involving the JFK airport as the
+starting point. You can see the output from running the query below it. This is the
+correct answer as, currently, the British Airways Airbus A318 flight from London City
+(LCY) airport stops in Dublin (DUB) to take on more fuel on the way to JFK but does
+not need to stop on the way back because of the trailing wind.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4702,10 +4719,38 @@ airport.</p>
                               <span class="tok-n">__</span><span class="tok-o">.</span><span class="tok-na">not</span><span class="tok-o">(</span><span class="tok-n">__</span><span class="tok-o">.</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;d&#39;</span><span class="tok-o">).</span><span class="tok-na">out</span><span class="tok-o">().</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;s&#39;</span><span class="tok-o">))).</span>
                         <span class="tok-n">select</span><span class="tok-o">(</span><span class="tok-s1">&#39;s&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;d&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">)</span>
 
-<span class="tok-c1">// Same as above but from any airport in the graph.</span>
+<span class="tok-o">[</span><span class="tok-nl">s:</span><span class="tok-n">JFK</span><span class="tok-o">,</span><span class="tok-nl">d:</span><span class="tok-n">LCY</span><span class="tok-o">]</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can expand the query by leaving off the specific starting point of JFK and look
+for this pattern anywhere in the graph. This really starts to show how important and
+useful the <em>match</em> Gremlin step is. We don&#8217;t have any idea what we might find, but by
+using <em>match</em>, we are able to describe the pattern of behavior that we are looking
+for and Gremlin does the rest.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// Same as above but from any airport in the graph.</span>
 <span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">hasLabel</span><span class="tok-o">(</span><span class="tok-s1">&#39;airport&#39;</span><span class="tok-o">).</span><span class="tok-na">match</span><span class="tok-o">(</span><span class="tok-n">__</span><span class="tok-o">.</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;s&#39;</span><span class="tok-o">).</span><span class="tok-na">out</span><span class="tok-o">().</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;d&#39;</span><span class="tok-o">),</span>
                                 <span class="tok-n">__</span><span class="tok-o">.</span><span class="tok-na">not</span><span class="tok-o">(</span><span class="tok-n">__</span><span class="tok-o">.</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;d&#39;</span><span class="tok-o">).</span><span class="tok-na">out</span><span class="tok-o">().</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;s&#39;</span><span class="tok-o">))).</span>
                           <span class="tok-n">select</span><span class="tok-o">(</span><span class="tok-s1">&#39;s&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;d&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you were to run the query you would find that there are in fact over 200 places in
+the graph where this situation applies. We can add a <em>count</em> to the end of query to
+find out just how many there are.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// Same as above but from any airport in the graph.</span>
+<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">hasLabel</span><span class="tok-o">(</span><span class="tok-s1">&#39;airport&#39;</span><span class="tok-o">).</span><span class="tok-na">match</span><span class="tok-o">(</span><span class="tok-n">__</span><span class="tok-o">.</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;s&#39;</span><span class="tok-o">).</span><span class="tok-na">out</span><span class="tok-o">().</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;d&#39;</span><span class="tok-o">),</span>
+                                <span class="tok-n">__</span><span class="tok-o">.</span><span class="tok-na">not</span><span class="tok-o">(</span><span class="tok-n">__</span><span class="tok-o">.</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;d&#39;</span><span class="tok-o">).</span><span class="tok-na">out</span><span class="tok-o">().</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;s&#39;</span><span class="tok-o">))).</span>
+                          <span class="tok-n">select</span><span class="tok-o">(</span><span class="tok-s1">&#39;s&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;d&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">count</span><span class="tok-o">()</span>
+
+
+<span class="tok-mi">238</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -12157,6 +12202,70 @@ C,A
 C,B</pre>
 </div>
 </div>
+<div class="paragraph">
+<p>There are many ways you could construct an edge list. By way of another simple
+example we could represent routes in the air-routes graph in a format similar to that
+shown below. In this case we also include the label of the edge between each of the
+nodes. The nodes are represented by their ID value.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>[1,route,623]
+[1,route,624]
+[1,route,625]
+[1,route,626]
+[1,route,627]
+[1,route,628]
+[1,route,629]
+[1,route,630]
+[1,route,631]
+[1,route,632]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you wanted to export a very simple version of the air-routes graph, using just the
+airport IATA codes and the edge labels you could write a Gremlin query to do it for
+you as follows. Only the first 10 results returned are shown.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">outE</span><span class="tok-o">().</span><span class="tok-na">inV</span><span class="tok-o">().</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-n">label</span><span class="tok-o">)</span>
+
+<span class="tok-o">[</span><span class="tok-n">ATL</span><span class="tok-o">,</span><span class="tok-n">route</span><span class="tok-o">,</span><span class="tok-n">MBS</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">ATL</span><span class="tok-o">,</span><span class="tok-n">route</span><span class="tok-o">,</span><span class="tok-n">MCN</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">ATL</span><span class="tok-o">,</span><span class="tok-n">route</span><span class="tok-o">,</span><span class="tok-n">MEI</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">ATL</span><span class="tok-o">,</span><span class="tok-n">route</span><span class="tok-o">,</span><span class="tok-n">MLB</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">ATL</span><span class="tok-o">,</span><span class="tok-n">route</span><span class="tok-o">,</span><span class="tok-n">MSL</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">ATL</span><span class="tok-o">,</span><span class="tok-n">route</span><span class="tok-o">,</span><span class="tok-n">PHF</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">ATL</span><span class="tok-o">,</span><span class="tok-n">route</span><span class="tok-o">,</span><span class="tok-n">PIB</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">ATL</span><span class="tok-o">,</span><span class="tok-n">route</span><span class="tok-o">,</span><span class="tok-n">SBN</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">ATL</span><span class="tok-o">,</span><span class="tok-n">route</span><span class="tok-o">,</span><span class="tok-n">TRI</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">ATL</span><span class="tok-o">,</span><span class="tok-n">route</span><span class="tok-o">,</span><span class="tok-n">TTN</span><span class="tok-o">]</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you wanted to print the list without the containing square brackets you could take
+advantage of the Java <em>forEachRemaining</em> method from the Iterator interface to add a
+bit of post processing to the end of the query. Once again only the first 10 results
+are shown.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">outE</span><span class="tok-o">().</span><span class="tok-na">inV</span><span class="tok-o">().</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-n">label</span><span class="tok-o">).</span>
+      <span class="tok-n">forEachRemaining</span><span class="tok-o">{</span><span class="tok-n">println</span> <span class="tok-n">it</span><span class="tok-o">[</span><span class="tok-mi">0</span><span class="tok-o">]</span> <span class="tok-o">+</span> <span class="tok-s1">&#39;,&#39;</span> <span class="tok-o">+</span> <span class="tok-n">it</span><span class="tok-o">[</span><span class="tok-mi">1</span><span class="tok-o">]</span> <span class="tok-o">+</span> <span class="tok-s1">&#39;,&#39;</span> <span class="tok-o">+</span> <span class="tok-n">it</span><span class="tok-o">[</span><span class="tok-mi">2</span><span class="tok-o">]}</span>
+
+<span class="tok-n">ATL</span><span class="tok-o">,</span><span class="tok-n">route</span><span class="tok-o">,</span><span class="tok-n">MBS</span>
+<span class="tok-n">ATL</span><span class="tok-o">,</span><span class="tok-n">route</span><span class="tok-o">,</span><span class="tok-n">MCN</span>
+<span class="tok-n">ATL</span><span class="tok-o">,</span><span class="tok-n">route</span><span class="tok-o">,</span><span class="tok-n">MEI</span>
+<span class="tok-n">ATL</span><span class="tok-o">,</span><span class="tok-n">route</span><span class="tok-o">,</span><span class="tok-n">MLB</span>
+<span class="tok-n">ATL</span><span class="tok-o">,</span><span class="tok-n">route</span><span class="tok-o">,</span><span class="tok-n">MSL</span>
+<span class="tok-n">ATL</span><span class="tok-o">,</span><span class="tok-n">route</span><span class="tok-o">,</span><span class="tok-n">PHF</span>
+<span class="tok-n">ATL</span><span class="tok-o">,</span><span class="tok-n">route</span><span class="tok-o">,</span><span class="tok-n">PIB</span>
+<span class="tok-n">ATL</span><span class="tok-o">,</span><span class="tok-n">route</span><span class="tok-o">,</span><span class="tok-n">SBN</span>
+<span class="tok-n">ATL</span><span class="tok-o">,</span><span class="tok-n">route</span><span class="tok-o">,</span><span class="tok-n">TRI</span>
+<span class="tok-n">ATL</span><span class="tok-o">,</span><span class="tok-n">route</span><span class="tok-o">,</span><span class="tok-n">TTN</span></code></pre>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_exporting_relational_database_data_to_a_graph_using_csv_format">7.1.5. Exporting relational database data to a graph using CSV format</h4>
@@ -12519,8 +12628,8 @@ C,B</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 246<br>
-Last updated 2017-10-07 13:33:10 CDT
+Version 247<br>
+Last updated 2017-10-08 11:23:57 CDT
 </div>
 </div>
 </body>
