@@ -494,7 +494,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Kelvin R. Lawrence</span><br>
 <span id="email" class="email"><a href="mailto:klawrenc@us.ibm.com">klawrenc@us.ibm.com</a></span><br>
-<span id="revnumber">version 248,</span>
+<span id="revnumber">version 250,</span>
 <span id="revdate">Oct 08, 2017</span>
 </div>
 <div id="toc" class="toc">
@@ -1771,21 +1771,21 @@ graph terminology this is often called the degree of the node or just <em>node d
 <div class="content">
 <pre>    POS   ID  CODE  TOTAL     DETAILS
 
-     1	  52   FRA  (544)  out:272 in:272
-     2	  70   AMS  (541)  out:269 in:272
-     3	 161   IST  (540)  out:270 in:270
-     4	  51   CDG  (524)  out:262 in:262
-     5	  80   MUC  (474)  out:237 in:237
-     6	  64   PEK  (469)  out:234 in:235
-     7	  18   ORD  (464)  out:232 in:232
-     8	   1   ATL  (464)  out:232 in:232
-     9	  58   DXB  (458)  out:229 in:229
-    10	   8   DFW  (442)  out:221 in:221
-    11	 102   DME  (428)  out:214 in:214
-    12	  67   PVG  (402)  out:201 in:201
-    13	  50   LGW  (400)  out:200 in:200
-    14	  13   LAX  (390)  out:195 in:195
-    15	  74   MAD  (384)  out:192 in:192</pre>
+     1    52   FRA  (544)  out:272 in:272
+     2    70   AMS  (541)  out:269 in:272
+     3   161   IST  (540)  out:270 in:270
+     4    51   CDG  (524)  out:262 in:262
+     5    80   MUC  (474)  out:237 in:237
+     6    64   PEK  (469)  out:234 in:235
+     7    18   ORD  (464)  out:232 in:232
+     8     1   ATL  (464)  out:232 in:232
+     9    58   DXB  (458)  out:229 in:229
+    10     8   DFW  (442)  out:221 in:221
+    11   102   DME  (428)  out:214 in:214
+    12    67   PVG  (402)  out:201 in:201
+    13    50   LGW  (400)  out:200 in:200
+    14    13   LAX  (390)  out:195 in:195
+    15    74   MAD  (384)  out:192 in:192</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4754,12 +4754,13 @@ find out just how many there are.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The next query looks for routes that follow the pattern A&#8594;B&#8594;C but where there is
-no direct flight of the form A&#8594;C. In other words it looks for all routes between two
+<p>The next query looks for routes that follow the pattern A&#8594;B&#8594;C but where there is no
+direct flight of the form A&#8594;C. In other words it looks for all routes between two
 airports with one intermediate stop where there is no direct flight alternative
 available. Note that the query also eliminates any routes that would end up back at
-the airport of origin. Notice how a <em>where</em> step is included to make sure we do not
-match any routes of the form A&#8594;B&#8594;A.</p>
+the airport of origin. To achieve the requirement that we not end up back where we
+started, a <em>where</em> step is included to make sure we do not match any routes of the
+form A&#8594;B&#8594;A.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4853,11 +4854,17 @@ codes, all airports in the respective cities are considered.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;London&#39;</span><span class="tok-o">).</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;region&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;GB-ENG&#39;</span><span class="tok-o">)</span>
-      <span class="tok-o">.</span><span class="tok-na">union</span><span class="tok-o">(</span><span class="tok-n">out</span><span class="tok-o">(</span><span class="tok-s1">&#39;route&#39;</span><span class="tok-o">).</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;Paris&#39;</span><span class="tok-o">),</span>
-             <span class="tok-n">out</span><span class="tok-o">(</span><span class="tok-s1">&#39;route&#39;</span><span class="tok-o">).</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;Berlin&#39;</span><span class="tok-o">)).</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">)</span>
-
-<span class="tok-o">[</span><span class="tok-n">LHR</span><span class="tok-o">,</span><span class="tok-n">CDG</span><span class="tok-o">]</span>
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;London&#39;</span><span class="tok-o">).</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;region&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;GB-ENG&#39;</span><span class="tok-o">).</span>
+         <span class="tok-n">union</span><span class="tok-o">(</span><span class="tok-n">out</span><span class="tok-o">(</span><span class="tok-s1">&#39;route&#39;</span><span class="tok-o">).</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;Paris&#39;</span><span class="tok-o">),</span>
+              <span class="tok-n">out</span><span class="tok-o">(</span><span class="tok-s1">&#39;route&#39;</span><span class="tok-o">).</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;Berlin&#39;</span><span class="tok-o">)).</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here are the results we get back from running the query.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-o">[</span><span class="tok-n">LHR</span><span class="tok-o">,</span><span class="tok-n">CDG</span><span class="tok-o">]</span>
 <span class="tok-o">[</span><span class="tok-n">LHR</span><span class="tok-o">,</span><span class="tok-n">ORY</span><span class="tok-o">]</span>
 <span class="tok-o">[</span><span class="tok-n">LHR</span><span class="tok-o">,</span><span class="tok-n">TXL</span><span class="tok-o">]</span>
 <span class="tok-o">[</span><span class="tok-n">LGW</span><span class="tok-o">,</span><span class="tok-n">CDG</span><span class="tok-o">]</span>
@@ -4878,8 +4885,8 @@ using the <em>within</em> method.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// The above query could have been written without using union() as follows</span>
-<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;London&#39;</span><span class="tok-o">).</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;region&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;GB-ENG&#39;</span><span class="tok-o">)</span>
-     <span class="tok-o">.</span><span class="tok-na">out</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-n">within</span><span class="tok-o">(</span><span class="tok-s1">&#39;Paris&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;Berlin&#39;</span><span class="tok-o">)).</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">)</span></code></pre>
+<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;London&#39;</span><span class="tok-o">).</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;region&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;GB-ENG&#39;</span><span class="tok-o">).</span>
+      <span class="tok-n">out</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-n">within</span><span class="tok-o">(</span><span class="tok-s1">&#39;Paris&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;Berlin&#39;</span><span class="tok-o">)).</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">)</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4908,17 +4915,17 @@ sets of traversals.</p>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// Returns any paths found along with the distances between airport pairs.</span>
 
-<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;London&#39;</span><span class="tok-o">).</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;region&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;GB-ENG&#39;</span><span class="tok-o">)</span> <span class="tok-err">\</span>
-     <span class="tok-o">.</span><span class="tok-na">union</span><span class="tok-o">(</span><span class="tok-n">outE</span><span class="tok-o">().</span><span class="tok-na">inV</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;Berlin&#39;</span><span class="tok-o">).</span><span class="tok-na">outE</span><span class="tok-o">(</span><span class="tok-s1">&#39;route&#39;</span><span class="tok-o">).</span><span class="tok-na">inV</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;Lisbon&#39;</span><span class="tok-o">)</span>
-            <span class="tok-o">.</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">)</span>
-            <span class="tok-o">,</span><span class="tok-n">outE</span><span class="tok-o">().</span><span class="tok-na">inV</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;Paris&#39;</span><span class="tok-o">).</span><span class="tok-na">outE</span><span class="tok-o">(</span><span class="tok-s1">&#39;route&#39;</span><span class="tok-o">).</span><span class="tok-na">inV</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;Barcelona&#39;</span><span class="tok-o">)</span>
-            <span class="tok-o">.</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">)</span>
-            <span class="tok-o">,</span><span class="tok-n">outE</span><span class="tok-o">().</span><span class="tok-na">inV</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;Edinburgh&#39;</span><span class="tok-o">).</span><span class="tok-na">outE</span><span class="tok-o">(</span><span class="tok-s1">&#39;route&#39;</span><span class="tok-o">).</span><span class="tok-na">inV</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;Rome&#39;</span><span class="tok-o">)</span>
-            <span class="tok-o">.</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">))</span></code></pre>
+<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;London&#39;</span><span class="tok-o">).</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;region&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;GB-ENG&#39;</span><span class="tok-o">).</span>
+      <span class="tok-n">union</span><span class="tok-o">(</span><span class="tok-n">outE</span><span class="tok-o">().</span><span class="tok-na">inV</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;Berlin&#39;</span><span class="tok-o">).</span><span class="tok-na">outE</span><span class="tok-o">(</span><span class="tok-s1">&#39;route&#39;</span><span class="tok-o">).</span><span class="tok-na">inV</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;Lisbon&#39;</span><span class="tok-o">).</span>
+            <span class="tok-n">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">),</span>
+            <span class="tok-n">outE</span><span class="tok-o">().</span><span class="tok-na">inV</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;Paris&#39;</span><span class="tok-o">).</span><span class="tok-na">outE</span><span class="tok-o">(</span><span class="tok-s1">&#39;route&#39;</span><span class="tok-o">).</span><span class="tok-na">inV</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;Barcelona&#39;</span><span class="tok-o">).</span>
+            <span class="tok-n">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">),</span>
+            <span class="tok-n">outE</span><span class="tok-o">().</span><span class="tok-na">inV</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;Edinburgh&#39;</span><span class="tok-o">).</span><span class="tok-na">outE</span><span class="tok-o">(</span><span class="tok-s1">&#39;route&#39;</span><span class="tok-o">).</span><span class="tok-na">inV</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;Rome&#39;</span><span class="tok-o">).</span>
+            <span class="tok-n">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">))</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Here is what we get back when we run or query</p>
+<p>Here is what we get back when we run our query</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4939,9 +4946,9 @@ the same calculation but minus any routes that end up in any Paris airport.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;Madrid&#39;</span><span class="tok-o">).</span><span class="tok-na">outE</span><span class="tok-o">(</span><span class="tok-s1">&#39;route&#39;</span><span class="tok-o">)</span> <span class="tok-err">\</span>
-     <span class="tok-o">.</span><span class="tok-na">union</span><span class="tok-o">(</span><span class="tok-n">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span><span class="tok-na">sum</span><span class="tok-o">()</span>
-     <span class="tok-o">,</span><span class="tok-n">filter</span><span class="tok-o">(</span><span class="tok-n">inV</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-n">neq</span><span class="tok-o">(</span><span class="tok-s1">&#39;Paris&#39;</span><span class="tok-o">))).</span><span class="tok-na">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span><span class="tok-na">sum</span><span class="tok-o">())</span></code></pre>
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;Madrid&#39;</span><span class="tok-o">).</span><span class="tok-na">outE</span><span class="tok-o">(</span><span class="tok-s1">&#39;route&#39;</span><span class="tok-o">).</span>
+      <span class="tok-n">union</span><span class="tok-o">(</span><span class="tok-n">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span><span class="tok-na">sum</span><span class="tok-o">(),</span>
+            <span class="tok-n">filter</span><span class="tok-o">(</span><span class="tok-n">inV</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-n">neq</span><span class="tok-o">(</span><span class="tok-s1">&#39;Paris&#39;</span><span class="tok-o">))).</span><span class="tok-na">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span><span class="tok-na">sum</span><span class="tok-o">())</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4951,8 +4958,8 @@ filtered out from the calculation.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-mi">383382</span>
-<span class="tok-mi">382084</span></code></pre>
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-mi">397708</span>
+<span class="tok-mi">396410</span></code></pre>
 </div>
 </div>
 </div>
@@ -12648,8 +12655,8 @@ are shown.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 248<br>
-Last updated 2017-10-08 14:12:45 CDT
+Version 250<br>
+Last updated 2017-10-08 15:39:35 CDT
 </div>
 </div>
 </body>
