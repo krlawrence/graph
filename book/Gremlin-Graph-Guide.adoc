@@ -1,12 +1,12 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v248, Oct 08, 2017
-// Sun Oct 08, 2017 13:28:15 CDT
+v250, Oct 08, 2017
+// Sun Oct 08, 2017 15:23:39 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Oct 08 2017
-//:Revision:  248
+//:Revision:  250
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -814,21 +814,21 @@ graph terminology this is often called the degree of the node or just 'node degr
 ----
     POS   ID  CODE  TOTAL     DETAILS
 
-     1	  52   FRA  (544)  out:272 in:272
-     2	  70   AMS  (541)  out:269 in:272
-     3	 161   IST  (540)  out:270 in:270
-     4	  51   CDG  (524)  out:262 in:262
-     5	  80   MUC  (474)  out:237 in:237
-     6	  64   PEK  (469)  out:234 in:235
-     7	  18   ORD  (464)  out:232 in:232
-     8	   1   ATL  (464)  out:232 in:232
-     9	  58   DXB  (458)  out:229 in:229
-    10	   8   DFW  (442)  out:221 in:221
-    11	 102   DME  (428)  out:214 in:214
-    12	  67   PVG  (402)  out:201 in:201
-    13	  50   LGW  (400)  out:200 in:200
-    14	  13   LAX  (390)  out:195 in:195
-    15	  74   MAD  (384)  out:192 in:192
+     1    52   FRA  (544)  out:272 in:272
+     2    70   AMS  (541)  out:269 in:272
+     3   161   IST  (540)  out:270 in:270
+     4    51   CDG  (524)  out:262 in:262
+     5    80   MUC  (474)  out:237 in:237
+     6    64   PEK  (469)  out:234 in:235
+     7    18   ORD  (464)  out:232 in:232
+     8     1   ATL  (464)  out:232 in:232
+     9    58   DXB  (458)  out:229 in:229
+    10     8   DFW  (442)  out:221 in:221
+    11   102   DME  (428)  out:214 in:214
+    12    67   PVG  (402)  out:201 in:201
+    13    50   LGW  (400)  out:200 in:200
+    14    13   LAX  (390)  out:195 in:195
+    15    74   MAD  (384)  out:192 in:192
 ----
 
 Throughout this document you will find the Gremlin queries that can be used to
@@ -3401,12 +3401,13 @@ g.V().hasLabel('airport').match(__.as('s').out().as('d'),
 238
 ----
 
-The next query looks for routes that follow the pattern A->B->C but where there is
-no direct flight of the form A->C. In other words it looks for all routes between two
+The next query looks for routes that follow the pattern A->B->C but where there is no
+direct flight of the form A->C. In other words it looks for all routes between two
 airports with one intermediate stop where there is no direct flight alternative
 available. Note that the query also eliminates any routes that would end up back at
-the airport of origin. Notice how a 'where' step is included to make sure we do not
-match any routes of the form A->B->A.
+the airport of origin. To achieve the requirement that we not end up back where we
+started, a 'where' step is included to make sure we do not match any routes of the
+form A->B->A.
 
 [source,groovy]
 ----
@@ -3495,10 +3496,15 @@ codes, all airports in the respective cities are considered.
 
 [source,groovy]
 ----
-g.V().has('city','London').has('region','GB-ENG')
-      .union(out('route').has('city','Paris'),
-             out('route').has('city','Berlin')).path().by('code')
+g.V().has('city','London').has('region','GB-ENG').
+         union(out('route').has('city','Paris'),
+              out('route').has('city','Berlin')).path().by('code')
+----
 
+Here are the results we get back from running the query.
+
+[source,groovy]
+----
 [LHR,CDG]
 [LHR,ORY]
 [LHR,TXL]
@@ -3519,8 +3525,8 @@ using the 'within' method.
 [source,groovy]
 ----
 // The above query could have been written without using union() as follows
-g.V().has('city','London').has('region','GB-ENG')
-     .out().has('city',within('Paris','Berlin')).path().by('code')
+g.V().has('city','London').has('region','GB-ENG').
+      out().has('city',within('Paris','Berlin')).path().by('code')
 ----
 
 This next query is more interesting. We again start from any airport in London, but then
@@ -3539,16 +3545,16 @@ sets of traversals.
 ----
 // Returns any paths found along with the distances between airport pairs.
 
-g.V().has('city','London').has('region','GB-ENG') \
-     .union(outE().inV().has('city','Berlin').outE('route').inV().has('city','Lisbon')                         
-            .path().by('code').by('dist').by('code').by('dist')                                                
-            ,outE().inV().has('city','Paris').outE('route').inV().has('city','Barcelona')                      
-            .path().by('code').by('dist').by('code').by('dist')                                                
-            ,outE().inV().has('city','Edinburgh').outE('route').inV().has('city','Rome')                       
-            .path().by('code').by('dist').by('code').by('dist'))                                
+g.V().has('city','London').has('region','GB-ENG').
+      union(outE().inV().has('city','Berlin').outE('route').inV().has('city','Lisbon').                         
+            path().by('code').by('dist').by('code').by('dist'),
+            outE().inV().has('city','Paris').outE('route').inV().has('city','Barcelona').
+            path().by('code').by('dist').by('code').by('dist'),
+            outE().inV().has('city','Edinburgh').outE('route').inV().has('city','Rome').
+            path().by('code').by('dist').by('code').by('dist'))                                
 ----
 
-Here is what we get back when we run or query
+Here is what we get back when we run our query
 
 [source,groovy]
 ----
@@ -3568,9 +3574,9 @@ the same calculation but minus any routes that end up in any Paris airport.
 
 [source,groovy]
 ----
-g.V().has('city','Madrid').outE('route') \
-     .union(values('dist').sum()
-     ,filter(inV().has('city',neq('Paris'))).values('dist').sum())
+g.V().has('city','Madrid').outE('route').
+      union(values('dist').sum(),
+            filter(inV().has('city',neq('Paris'))).values('dist').sum())
 ----
 
 Here is the output from running the query. As you can see the first number is
@@ -3579,8 +3585,8 @@ filtered out from the calculation.
 
 [source,groovy]
 ----
-383382
-382084
+397708
+396410
 ----
 
 [[sideeffect]]
