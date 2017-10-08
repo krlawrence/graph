@@ -494,7 +494,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Kelvin R. Lawrence</span><br>
 <span id="email" class="email"><a href="mailto:klawrenc@us.ibm.com">klawrenc@us.ibm.com</a></span><br>
-<span id="revnumber">version 247,</span>
+<span id="revnumber">version 248,</span>
 <span id="revdate">Oct 08, 2017</span>
 </div>
 <div id="toc" class="toc">
@@ -4744,7 +4744,7 @@ find out just how many there are.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// Same as above but from any airport in the graph.</span>
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// How many occurrences of the pattern in the graph are there?</span>
 <span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">hasLabel</span><span class="tok-o">(</span><span class="tok-s1">&#39;airport&#39;</span><span class="tok-o">).</span><span class="tok-na">match</span><span class="tok-o">(</span><span class="tok-n">__</span><span class="tok-o">.</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;s&#39;</span><span class="tok-o">).</span><span class="tok-na">out</span><span class="tok-o">().</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;d&#39;</span><span class="tok-o">),</span>
                                 <span class="tok-n">__</span><span class="tok-o">.</span><span class="tok-na">not</span><span class="tok-o">(</span><span class="tok-n">__</span><span class="tok-o">.</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;d&#39;</span><span class="tok-o">).</span><span class="tok-na">out</span><span class="tok-o">().</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;s&#39;</span><span class="tok-o">))).</span>
                           <span class="tok-n">select</span><span class="tok-o">(</span><span class="tok-s1">&#39;s&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;d&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">count</span><span class="tok-o">()</span>
@@ -4754,18 +4754,38 @@ find out just how many there are.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The next example looks for routes that follow the pattern A&#8594;B&#8594;C but where there is
+<p>The next query looks for routes that follow the pattern A&#8594;B&#8594;C but where there is
 no direct flight of the form A&#8594;C. In other words it looks for all routes between two
 airports with one intermediate stop where there is no direct flight alternative
 available. Note that the query also eliminates any routes that would end up back at
-the airport of origin.</p>
+the airport of origin. Notice how a <em>where</em> step is included to make sure we do not
+match any routes of the form A&#8594;B&#8594;A.</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">hasLabel</span><span class="tok-o">(</span><span class="tok-s1">&#39;airport&#39;</span><span class="tok-o">).</span><span class="tok-na">match</span><span class="tok-o">(</span><span class="tok-n">__</span><span class="tok-o">.</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;a&#39;</span><span class="tok-o">).</span><span class="tok-na">out</span><span class="tok-o">().</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;b&#39;</span><span class="tok-o">)</span>
-                               <span class="tok-o">,</span><span class="tok-n">__</span><span class="tok-o">.</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;b&#39;</span><span class="tok-o">).</span><span class="tok-na">out</span><span class="tok-o">().</span><span class="tok-na">is</span><span class="tok-o">(</span><span class="tok-n">neq</span><span class="tok-o">(</span><span class="tok-s1">&#39;a&#39;</span><span class="tok-o">)).</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;c&#39;</span><span class="tok-o">)</span>
-                               <span class="tok-o">,</span><span class="tok-n">__</span><span class="tok-o">.</span><span class="tok-na">not</span><span class="tok-o">(</span><span class="tok-n">__</span><span class="tok-o">.</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;a&#39;</span><span class="tok-o">).</span><span class="tok-na">out</span><span class="tok-o">().</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;c&#39;</span><span class="tok-o">)))</span>
-                         <span class="tok-o">.</span><span class="tok-na">select</span><span class="tok-o">(</span><span class="tok-s1">&#39;a&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;b&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;c&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">)</span></code></pre>
+                               <span class="tok-o">,</span><span class="tok-n">__</span><span class="tok-o">.</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;b&#39;</span><span class="tok-o">).</span><span class="tok-na">out</span><span class="tok-o">().</span><span class="tok-na">where</span><span class="tok-o">(</span><span class="tok-n">neq</span><span class="tok-o">(</span><span class="tok-s1">&#39;a&#39;</span><span class="tok-o">)).</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;c&#39;</span><span class="tok-o">)</span>
+                               <span class="tok-o">,</span><span class="tok-n">__</span><span class="tok-o">.</span><span class="tok-na">not</span><span class="tok-o">(</span><span class="tok-n">__</span><span class="tok-o">.</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;a&#39;</span><span class="tok-o">).</span><span class="tok-na">out</span><span class="tok-o">().</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;c&#39;</span><span class="tok-o">))).</span>
+                          <span class="tok-n">select</span><span class="tok-o">(</span><span class="tok-s1">&#39;a&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;b&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;c&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">limit</span><span class="tok-o">(</span><span class="tok-mi">10</span><span class="tok-o">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There are, of course a lot of places in the air-routes graph where this pattern can
+be found. Here are just a few examples of the results you might get from running the
+query.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-o">[</span><span class="tok-nl">a:</span><span class="tok-n">ATL</span><span class="tok-o">,</span><span class="tok-nl">b:</span><span class="tok-n">MLB</span><span class="tok-o">,</span><span class="tok-nl">c:</span><span class="tok-n">ISP</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">a:</span><span class="tok-n">ATL</span><span class="tok-o">,</span><span class="tok-nl">b:</span><span class="tok-n">MLB</span><span class="tok-o">,</span><span class="tok-nl">c:</span><span class="tok-n">BIM</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">a:</span><span class="tok-n">ATL</span><span class="tok-o">,</span><span class="tok-nl">b:</span><span class="tok-n">MLB</span><span class="tok-o">,</span><span class="tok-nl">c:</span><span class="tok-n">YTZ</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">a:</span><span class="tok-n">ATL</span><span class="tok-o">,</span><span class="tok-nl">b:</span><span class="tok-n">PHF</span><span class="tok-o">,</span><span class="tok-nl">c:</span><span class="tok-n">SFB</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">a:</span><span class="tok-n">ATL</span><span class="tok-o">,</span><span class="tok-nl">b:</span><span class="tok-n">SBN</span><span class="tok-o">,</span><span class="tok-nl">c:</span><span class="tok-n">SFB</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">a:</span><span class="tok-n">ATL</span><span class="tok-o">,</span><span class="tok-nl">b:</span><span class="tok-n">SBN</span><span class="tok-o">,</span><span class="tok-nl">c:</span><span class="tok-n">AZA</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">a:</span><span class="tok-n">ATL</span><span class="tok-o">,</span><span class="tok-nl">b:</span><span class="tok-n">SBN</span><span class="tok-o">,</span><span class="tok-nl">c:</span><span class="tok-n">PIE</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">a:</span><span class="tok-n">ATL</span><span class="tok-o">,</span><span class="tok-nl">b:</span><span class="tok-n">SBN</span><span class="tok-o">,</span><span class="tok-nl">c:</span><span class="tok-n">PGD</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">a:</span><span class="tok-n">ATL</span><span class="tok-o">,</span><span class="tok-nl">b:</span><span class="tok-n">TRI</span><span class="tok-o">,</span><span class="tok-nl">c:</span><span class="tok-n">SFB</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">a:</span><span class="tok-n">ATL</span><span class="tok-o">,</span><span class="tok-nl">b:</span><span class="tok-n">TRI</span><span class="tok-o">,</span><span class="tok-nl">c:</span><span class="tok-n">PIE</span><span class="tok-o">]</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4786,7 +4806,7 @@ calculated in one part of a query later on in that same query.</p>
 <div class="paragraph">
 <p>As I mentioned, the example above is a bit contrived and it could actually be done
 without using a <em>match</em> step at all and just using a <em>where</em> step as shown below.
-Hopefully, however, these examples give you an idea for what <em>match</em> can do.</p>
+Hopefully, however, these examples give you an idea of what <em>match</em> can do.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -12628,8 +12648,8 @@ are shown.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 247<br>
-Last updated 2017-10-08 11:23:57 CDT
+Version 248<br>
+Last updated 2017-10-08 14:12:45 CDT
 </div>
 </div>
 </body>
