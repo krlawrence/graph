@@ -1,12 +1,12 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v247, Oct 08, 2017
-// Sun Oct 08, 2017 10:39:08 CDT
+v248, Oct 08, 2017
+// Sun Oct 08, 2017 13:28:15 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Oct 08 2017
-//:Revision:  247
+//:Revision:  248
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -3392,7 +3392,7 @@ find out just how many there are.
 
 [source,groovy]
 ----
-// Same as above but from any airport in the graph.
+// How many occurrences of the pattern in the graph are there?
 g.V().hasLabel('airport').match(__.as('s').out().as('d'),
                                 __.not(__.as('d').out().as('s'))).
                           select('s','d').by('code').count()
@@ -3401,18 +3401,38 @@ g.V().hasLabel('airport').match(__.as('s').out().as('d'),
 238
 ----
 
-The next example looks for routes that follow the pattern A->B->C but where there is
+The next query looks for routes that follow the pattern A->B->C but where there is
 no direct flight of the form A->C. In other words it looks for all routes between two
 airports with one intermediate stop where there is no direct flight alternative
 available. Note that the query also eliminates any routes that would end up back at
-the airport of origin.
+the airport of origin. Notice how a 'where' step is included to make sure we do not
+match any routes of the form A->B->A.
 
 [source,groovy]
 ----
 g.V().hasLabel('airport').match(__.as('a').out().as('b')
-                               ,__.as('b').out().is(neq('a')).as('c')
-                               ,__.not(__.as('a').out().as('c')))
-                         .select('a','b','c').by('code')
+                               ,__.as('b').out().where(neq('a')).as('c')
+                               ,__.not(__.as('a').out().as('c'))).
+                          select('a','b','c').by('code').limit(10)
+
+----
+
+There are, of course a lot of places in the air-routes graph where this pattern can
+be found. Here are just a few examples of the results you might get from running the
+query.
+
+[source,groovy]
+----
+[a:ATL,b:MLB,c:ISP]
+[a:ATL,b:MLB,c:BIM]
+[a:ATL,b:MLB,c:YTZ]
+[a:ATL,b:PHF,c:SFB]
+[a:ATL,b:SBN,c:SFB]
+[a:ATL,b:SBN,c:AZA]
+[a:ATL,b:SBN,c:PIE]
+[a:ATL,b:SBN,c:PGD]
+[a:ATL,b:TRI,c:SFB]
+[a:ATL,b:TRI,c:PIE]
 ----
 
 Here is another example of using 'match' along with a 'where'. This query starts out
@@ -3431,7 +3451,7 @@ g.V().has('code','AUS').match(__.as('aus').values('runways').as('ausr'),
 
 As I mentioned, the example above is a bit contrived and it could actually be done
 without using a 'match' step at all and just using a 'where' step as shown below.
-Hopefully, however, these examples give you an idea for what 'match' can do.
+Hopefully, however, these examples give you an idea of what 'match' can do.
 
 [source,groovy]
 ----
