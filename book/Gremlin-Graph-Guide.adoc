@@ -98,9 +98,9 @@ between 3,373 airports including 43,362 routes. The examples presented
 will work unmodified with the air-routes.graphml file loaded into the Gremlin
 console running with a TinkerGraph. 
 
-NOTE: The examples in this book have now been updated tested using Apache TinkerPop
-version 3.3 which introduced a few breaking changes. If you find any I missed please
-let me know!
+NOTE: The examples in this book have now been updated and tested using Apache
+TinkerPop version 3.3 which introduced a few breaking changes. If you find any I
+missed please let me know!
 
 TinkerGraph is an 'in-memory' graph, meaning
 nothing gets saved to disk automatically, that is shipped as part of the Apache
