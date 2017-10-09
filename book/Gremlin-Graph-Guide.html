@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 1.5.4">
+<meta name="generator" content="Asciidoctor 1.5.5">
 <meta name="author" content="Kelvin R. Lawrence">
 <title>GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
@@ -18,7 +18,6 @@ audio:not([controls]){display:none;height:0}
 [hidden],template{display:none}
 script{display:none!important}
 html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}
-body{margin:0}
 a{background:transparent}
 a:focus{outline:thin dotted}
 a:active,a:hover{outline:0}
@@ -53,7 +52,7 @@ textarea{overflow:auto;vertical-align:top}
 table{border-collapse:collapse;border-spacing:0}
 *,*:before,*:after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}
 html,body{font-size:100%}
-body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto;tab-size:4;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
 a:hover{cursor:pointer}
 img,object,embed{max-width:100%;height:auto}
 object,embed{height:100%}
@@ -65,7 +64,6 @@ img{-ms-interpolation-mode:bicubic}
 .text-center{text-align:center!important}
 .text-justify{text-align:justify!important}
 .hide{display:none}
-body{-webkit-font-smoothing:antialiased}
 img,object,svg{display:inline-block;vertical-align:middle}
 textarea{height:auto;min-height:50px}
 select{width:100%}
@@ -120,13 +118,16 @@ table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:
 table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
 table tr.even,table tr.alt,table tr:nth-of-type(even){background:#f8f8f7}
 table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{display:table-cell;line-height:1.6}
-body{tab-size:4}
 h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
 h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
 .clearfix:before,.clearfix:after,.float-group:before,.float-group:after{content:" ";display:table}
 .clearfix:after,.float-group:after{clear:both}
-*:not(pre)>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background-color:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
+*:not(pre)>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background-color:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed;word-wrap:break-word}
+*:not(pre)>code.nobreak{word-wrap:normal}
+*:not(pre)>code.nowrap{white-space:nowrap}
 pre,pre>code{line-height:1.45;color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;text-rendering:optimizeSpeed}
+em em{font-style:normal}
+strong strong{font-weight:400}
 .keyseq{color:rgba(51,51,51,.8)}
 kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background-color:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
 .keyseq kbd:first-child{margin-left:0}
@@ -419,7 +420,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </style>
 <style>
 .listingblock .pygments .hll { background-color: #4f424c }
-.listingblock .pygments  { background: #2f1e2e; color: #e7e9db }
+.listingblock .pygments, .listingblock .pygments code { background: #2f1e2e; color: #e7e9db }
 .listingblock .pygments .tok-c { color: #776e71 } /* Comment */
 .listingblock .pygments .tok-err { color: #ef6155 } /* Error */
 .listingblock .pygments .tok-k { color: #815ba4 } /* Keyword */
@@ -470,8 +471,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .listingblock .pygments .tok-mh { color: #f99b15 } /* Literal.Number.Hex */
 .listingblock .pygments .tok-mi { color: #f99b15 } /* Literal.Number.Integer */
 .listingblock .pygments .tok-mo { color: #f99b15 } /* Literal.Number.Oct */
+.listingblock .pygments .tok-sa { color: #48b685 } /* Literal.String.Affix */
 .listingblock .pygments .tok-sb { color: #48b685 } /* Literal.String.Backtick */
 .listingblock .pygments .tok-sc { color: #e7e9db } /* Literal.String.Char */
+.listingblock .pygments .tok-dl { color: #48b685 } /* Literal.String.Delimiter */
 .listingblock .pygments .tok-sd { color: #776e71 } /* Literal.String.Doc */
 .listingblock .pygments .tok-s2 { color: #48b685 } /* Literal.String.Double */
 .listingblock .pygments .tok-se { color: #f99b15 } /* Literal.String.Escape */
@@ -482,9 +485,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .listingblock .pygments .tok-s1 { color: #48b685 } /* Literal.String.Single */
 .listingblock .pygments .tok-ss { color: #48b685 } /* Literal.String.Symbol */
 .listingblock .pygments .tok-bp { color: #e7e9db } /* Name.Builtin.Pseudo */
+.listingblock .pygments .tok-fm { color: #06b6ef } /* Name.Function.Magic */
 .listingblock .pygments .tok-vc { color: #ef6155 } /* Name.Variable.Class */
 .listingblock .pygments .tok-vg { color: #ef6155 } /* Name.Variable.Global */
 .listingblock .pygments .tok-vi { color: #ef6155 } /* Name.Variable.Instance */
+.listingblock .pygments .tok-vm { color: #ef6155 } /* Name.Variable.Magic */
 .listingblock .pygments .tok-il { color: #f99b15 } /* Literal.Number.Integer.Long */
 </style>
 </head>
@@ -494,8 +499,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Kelvin R. Lawrence</span><br>
 <span id="email" class="email"><a href="mailto:klawrenc@us.ibm.com">klawrenc@us.ibm.com</a></span><br>
-<span id="revnumber">version 250,</span>
-<span id="revdate">Oct 08, 2017</span>
+<span id="revnumber">version 251,</span>
+<span id="revdate">Oct 09, 2017</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
@@ -683,10 +688,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#flr">5.10. Finding the longest flight route between two adjacent airports in the graph</a></li>
 <li><a href="#miscq">5.11. Miscellaneous other queries</a>
 <ul class="sectlevel3">
-<li><a href="#_changes_to_em_sack_em_syntax_in_tp_3_3">5.11.1. Changes to <em>sack</em> syntax in TP 3.3</a></li>
-<li><a href="#_warning_about_em_path_em_being_memory_intensive">5.11.2. Warning about <em>path</em> being memory intensive</a></li>
-<li><a href="#_work_in_progress">5.11.3. Work in progress</a></li>
-<li><a href="#pagerank">5.11.4. Experiments with Page Rank</a></li>
+<li><a href="#_warning_about_em_path_em_being_memory_intensive">5.11.1. Warning about <em>path</em> being memory intensive</a></li>
+<li><a href="#_work_in_progress">5.11.2. Work in progress</a></li>
+<li><a href="#pagerank">5.11.3. Experiments with Page Rank</a></li>
 </ul>
 </li>
 </ul>
@@ -839,9 +843,9 @@ console running with a TinkerGraph.</p>
 <div class="title">Note</div>
 </td>
 <td class="content">
-Currently the examples in this book have been tested using Apache Tinkerpop
-version 3.2.5.  Some breaking changes were recently introduced in Apache Tinkerpop
-3.3. The text will be revised ASAP to reflect those changes.
+The examples in this book have now been updated tested using Apache TinkerPop
+version 3.3 which introduced a few breaking changes. If you find any I missed please
+let me know!
 </td>
 </tr>
 </table>
@@ -4799,9 +4803,11 @@ calculated in one part of a query later on in that same query.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span><span class="tok-na">match</span><span class="tok-o">(</span><span class="tok-n">__</span><span class="tok-o">.</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;aus&#39;</span><span class="tok-o">).</span><span class="tok-na">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;runways&#39;</span><span class="tok-o">).</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;ausr&#39;</span><span class="tok-o">),</span>
-                              <span class="tok-n">__</span><span class="tok-o">.</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;aus&#39;</span><span class="tok-o">).</span><span class="tok-na">out</span><span class="tok-o">(</span><span class="tok-s1">&#39;route&#39;</span><span class="tok-o">).</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;outa&#39;</span><span class="tok-o">).</span><span class="tok-na">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;runways&#39;</span><span class="tok-o">).</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;outr&#39;</span><span class="tok-o">)</span>
-                              <span class="tok-o">.</span><span class="tok-na">where</span><span class="tok-o">(</span><span class="tok-s1">&#39;ausr&#39;</span><span class="tok-o">,</span><span class="tok-n">eq</span><span class="tok-o">(</span><span class="tok-s1">&#39;outr&#39;</span><span class="tok-o">))).</span><span class="tok-na">select</span><span class="tok-o">(</span><span class="tok-s1">&#39;outa&#39;</span><span class="tok-o">).</span><span class="tok-na">valueMap</span><span class="tok-o">().</span><span class="tok-na">select</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;runways&#39;</span><span class="tok-o">)</span></code></pre>
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span>
+      <span class="tok-n">match</span><span class="tok-o">(</span><span class="tok-n">__</span><span class="tok-o">.</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;aus&#39;</span><span class="tok-o">).</span><span class="tok-na">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;runways&#39;</span><span class="tok-o">).</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;ausr&#39;</span><span class="tok-o">),</span>
+            <span class="tok-n">__</span><span class="tok-o">.</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;aus&#39;</span><span class="tok-o">).</span><span class="tok-na">out</span><span class="tok-o">(</span><span class="tok-s1">&#39;route&#39;</span><span class="tok-o">).</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;outa&#39;</span><span class="tok-o">).</span><span class="tok-na">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;runways&#39;</span><span class="tok-o">).</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;outr&#39;</span><span class="tok-o">)</span>
+              <span class="tok-o">.</span><span class="tok-na">where</span><span class="tok-o">(</span><span class="tok-s1">&#39;ausr&#39;</span><span class="tok-o">,</span><span class="tok-n">eq</span><span class="tok-o">(</span><span class="tok-s1">&#39;outr&#39;</span><span class="tok-o">))).</span>
+      <span class="tok-n">select</span><span class="tok-o">(</span><span class="tok-s1">&#39;outa&#39;</span><span class="tok-o">).</span><span class="tok-na">valueMap</span><span class="tok-o">().</span><span class="tok-na">select</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;runways&#39;</span><span class="tok-o">)</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4811,9 +4817,9 @@ Hopefully, however, these examples give you an idea of what <em>match</em> can d
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;aus&#39;</span><span class="tok-o">).</span><span class="tok-na">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;runways&#39;</span><span class="tok-o">).</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;ausr&#39;</span><span class="tok-o">)</span>
-     <span class="tok-o">.</span><span class="tok-na">select</span><span class="tok-o">(</span><span class="tok-s1">&#39;aus&#39;</span><span class="tok-o">).</span><span class="tok-na">out</span><span class="tok-o">().</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;outa&#39;</span><span class="tok-o">).</span><span class="tok-na">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;runways&#39;</span><span class="tok-o">).</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;outr&#39;</span><span class="tok-o">)</span>
-     <span class="tok-o">.</span><span class="tok-na">where</span><span class="tok-o">(</span><span class="tok-s1">&#39;ausr&#39;</span><span class="tok-o">,</span><span class="tok-n">eq</span><span class="tok-o">(</span><span class="tok-s1">&#39;outr&#39;</span><span class="tok-o">)).</span><span class="tok-na">select</span><span class="tok-o">(</span><span class="tok-s1">&#39;outa&#39;</span><span class="tok-o">).</span><span class="tok-na">valueMap</span><span class="tok-o">().</span><span class="tok-na">select</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;runways&#39;</span><span class="tok-o">)</span></code></pre>
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;aus&#39;</span><span class="tok-o">).</span><span class="tok-na">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;runways&#39;</span><span class="tok-o">).</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;ausr&#39;</span><span class="tok-o">).</span>
+      <span class="tok-n">select</span><span class="tok-o">(</span><span class="tok-s1">&#39;aus&#39;</span><span class="tok-o">).</span><span class="tok-na">out</span><span class="tok-o">().</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;outa&#39;</span><span class="tok-o">).</span><span class="tok-na">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;runways&#39;</span><span class="tok-o">).</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;outr&#39;</span><span class="tok-o">).</span>
+      <span class="tok-n">where</span><span class="tok-o">(</span><span class="tok-s1">&#39;ausr&#39;</span><span class="tok-o">,</span><span class="tok-n">eq</span><span class="tok-o">(</span><span class="tok-s1">&#39;outr&#39;</span><span class="tok-o">)).</span><span class="tok-na">select</span><span class="tok-o">(</span><span class="tok-s1">&#39;outa&#39;</span><span class="tok-o">).</span><span class="tok-na">valueMap</span><span class="tok-o">().</span><span class="tok-na">select</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;runways&#39;</span><span class="tok-o">)</span></code></pre>
 </div>
 </div>
 </div>
@@ -9115,9 +9121,11 @@ following query:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// Shortest distances from AUS to LHR with one stop</span>
-<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">withSack</span><span class="tok-o">(</span><span class="tok-mi">0</span><span class="tok-o">).</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span><span class="tok-na">outE</span><span class="tok-o">().</span><span class="tok-na">sack</span><span class="tok-o">(</span><span class="tok-n">sum</span><span class="tok-o">,</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span><span class="tok-na">inV</span><span class="tok-o">().</span>
-                                    <span class="tok-n">outE</span><span class="tok-o">().</span><span class="tok-na">sack</span><span class="tok-o">(</span><span class="tok-n">sum</span><span class="tok-o">,</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span><span class="tok-na">inV</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;LHR&#39;</span><span class="tok-o">).</span>
-                                    <span class="tok-n">sack</span><span class="tok-o">().</span><span class="tok-na">order</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-n">incr</span><span class="tok-o">).</span><span class="tok-na">limit</span><span class="tok-o">(</span><span class="tok-mi">10</span><span class="tok-o">).</span>
+<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">withSack</span><span class="tok-o">(</span><span class="tok-mi">0</span><span class="tok-o">).</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span>
+                  <span class="tok-n">outE</span><span class="tok-o">().</span><span class="tok-na">sack</span><span class="tok-o">(</span><span class="tok-n">sum</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span>
+                  <span class="tok-n">inV</span><span class="tok-o">().</span><span class="tok-na">outE</span><span class="tok-o">().</span><span class="tok-na">sack</span><span class="tok-o">(</span><span class="tok-n">sum</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span>
+                  <span class="tok-n">inV</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;LHR&#39;</span><span class="tok-o">).</span><span class="tok-na">sack</span><span class="tok-o">().</span>
+                  <span class="tok-n">order</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-n">incr</span><span class="tok-o">).</span><span class="tok-na">limit</span><span class="tok-o">(</span><span class="tok-mi">10</span><span class="tok-o">).</span>
                   <span class="tok-n">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">()</span></code></pre>
 </div>
 </div>
@@ -9144,6 +9152,21 @@ query will produce the following results:</p>
 <span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span> <span class="tok-mi">142</span><span class="tok-o">,</span> <span class="tok-n">IAH</span><span class="tok-o">,</span> <span class="tok-mi">4820</span><span class="tok-o">,</span> <span class="tok-n">LHR</span><span class="tok-o">,</span> <span class="tok-mi">4962</span><span class="tok-o">]</span></code></pre>
 </div>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+In Tinkerpop 3.3 the syntax of <em>sack</em> was changed. Where previously you would
+write something like <em>sack(sum,</em>'runways'<em>)</em> you are now required to write
+<em>sack(sum).by(</em>'runways'<em>)</em>. The prior format was already deprecated in Tinkerpop
+3.2.5 but is now fully removed in Tinkerpop 3.3.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>We could add a little post processing to our query to only output the airport codes
 and the total mileage. Given this is post processing of a small data set, using a bit
@@ -9151,7 +9174,14 @@ of in-line code does not feel too ugly here.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">withSack</span><span class="tok-o">(</span><span class="tok-mi">0</span><span class="tok-o">).</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span><span class="tok-na">outE</span><span class="tok-o">().</span><span class="tok-na">sack</span><span class="tok-o">(</span><span class="tok-n">sum</span><span class="tok-o">,</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span><span class="tok-na">inV</span><span class="tok-o">().</span><span class="tok-na">outE</span><span class="tok-o">().</span><span class="tok-na">sack</span><span class="tok-o">(</span><span class="tok-n">sum</span><span class="tok-o">,</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span><span class="tok-na">inV</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;LHR&#39;</span><span class="tok-o">).</span><span class="tok-na">sack</span><span class="tok-o">().</span><span class="tok-na">order</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-n">incr</span><span class="tok-o">).</span><span class="tok-na">limit</span><span class="tok-o">(</span><span class="tok-mi">10</span><span class="tok-o">).</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">().</span><span class="tok-na">toList</span><span class="tok-o">().</span><span class="tok-na">each</span><span class="tok-o">(){</span><span class="tok-n">println</span> <span class="tok-s2">&quot;${it[0]} --&gt; ${it[2]} --&gt; ${it[4]} ${it[5]} miles&quot;</span><span class="tok-o">}</span></code></pre>
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">withSack</span><span class="tok-o">(</span><span class="tok-mi">0</span><span class="tok-o">).</span><span class="tok-na">V</span><span class="tok-o">().</span>
+  <span class="tok-n">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span>
+  <span class="tok-n">outE</span><span class="tok-o">().</span><span class="tok-na">sack</span><span class="tok-o">(</span><span class="tok-n">sum</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span>
+  <span class="tok-n">inV</span><span class="tok-o">().</span><span class="tok-na">outE</span><span class="tok-o">().</span><span class="tok-na">sack</span><span class="tok-o">(</span><span class="tok-n">sum</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span>
+  <span class="tok-n">inV</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;LHR&#39;</span><span class="tok-o">).</span><span class="tok-na">sack</span><span class="tok-o">().</span>
+  <span class="tok-n">order</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-n">incr</span><span class="tok-o">).</span><span class="tok-na">limit</span><span class="tok-o">(</span><span class="tok-mi">10</span><span class="tok-o">).</span>
+  <span class="tok-n">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">().</span>
+  <span class="tok-n">toList</span><span class="tok-o">().</span><span class="tok-na">each</span><span class="tok-o">(){</span><span class="tok-n">println</span> <span class="tok-s2">&quot;${it[0]} --&gt; ${it[2]} --&gt; ${it[4]} ${it[5]} miles&quot;</span><span class="tok-o">}[];</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -9204,6 +9234,7 @@ powerful ways to store data as your query iterates.</p>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// The same query but done using the new sack() step in TinkerPop 3</span>
 <span class="tok-c1">// shown as an example only. The prior query works just fine for this.</span>
+
 <span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">withSack</span><span class="tok-o">([:]).</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">hasLabel</span><span class="tok-o">(</span><span class="tok-s1">&#39;airport&#39;</span><span class="tok-o">).</span><span class="tok-na">where</span><span class="tok-o">(</span><span class="tok-n">out</span><span class="tok-o">().</span><span class="tok-na">count</span><span class="tok-o">().</span><span class="tok-na">is</span><span class="tok-o">(</span><span class="tok-n">gt</span><span class="tok-o">(</span><span class="tok-mi">200</span><span class="tok-o">))).</span>
                 <span class="tok-n">sack</span><span class="tok-o">{</span><span class="tok-n">m</span><span class="tok-o">,</span><span class="tok-n">v</span> <span class="tok-o">-&gt;</span> <span class="tok-n">m</span><span class="tok-o">[</span><span class="tok-n">v</span><span class="tok-o">.</span><span class="tok-na">value</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">)]=</span><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">(</span><span class="tok-n">v</span><span class="tok-o">).</span><span class="tok-na">out</span><span class="tok-o">().</span><span class="tok-na">count</span><span class="tok-o">().</span><span class="tok-na">next</span><span class="tok-o">()}.</span>
                 <span class="tok-n">fold</span><span class="tok-o">().</span><span class="tok-na">sack</span><span class="tok-o">()</span>
@@ -9257,7 +9288,7 @@ need to add all of those to get a single grand total.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span><span class="tok-na">sack</span><span class="tok-o">(</span><span class="tok-n">assign</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-n">constant</span><span class="tok-o">(</span><span class="tok-mi">0</span><span class="tok-o">)).</span>
-      <span class="tok-n">out</span><span class="tok-o">().</span><span class="tok-na">sack</span><span class="tok-o">(</span><span class="tok-n">sum</span><span class="tok-o">,</span><span class="tok-s1">&#39;runways&#39;</span><span class="tok-o">).</span><span class="tok-na">sack</span><span class="tok-o">().</span><span class="tok-na">sum</span><span class="tok-o">()</span>
+      <span class="tok-n">out</span><span class="tok-o">().</span><span class="tok-na">sack</span><span class="tok-o">(</span><span class="tok-n">sum</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;runways&#39;</span><span class="tok-o">).</span><span class="tok-na">sack</span><span class="tok-o">().</span><span class="tok-na">sum</span><span class="tok-o">()</span>
 
 <span class="tok-mi">212</span></code></pre>
 </div>
@@ -10286,30 +10317,7 @@ such combinations once but I will leave that as an exercise for the reader!</p>
 <p>Work in progress</p>
 </div>
 <div class="sect3">
-<h4 id="_changes_to_em_sack_em_syntax_in_tp_3_3">5.11.1. Changes to <em>sack</em> syntax in TP 3.3</h4>
-<div class="paragraph">
-<p>Starting with Tinkerpop version 3.3 a change was introduced to the way that <em>sack</em> is
-used.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">withSack</span><span class="tok-o">(</span><span class="tok-mi">0</span><span class="tok-o">).</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span><span class="tok-na">outE</span><span class="tok-o">().</span><span class="tok-na">sack</span><span class="tok-o">(</span><span class="tok-n">sum</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span><span class="tok-na">inV</span><span class="tok-o">().</span><span class="tok-na">outE</span><span class="tok-o">().</span><span class="tok-na">sack</span><span class="tok-o">(</span><span class="tok-n">sum</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span><span class="tok-na">inV</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;LHR&#39;</span><span class="tok-o">).</span><span class="tok-na">sack</span><span class="tok-o">().</span><span class="tok-na">order</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-n">incr</span><span class="tok-o">).</span><span class="tok-na">limit</span><span class="tok-o">(</span><span class="tok-mi">10</span><span class="tok-o">).</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">()</span>
-
-<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-mi">1140</span><span class="tok-o">,</span><span class="tok-n">DTW</span><span class="tok-o">,</span><span class="tok-mi">3753</span><span class="tok-o">,</span><span class="tok-n">LHR</span><span class="tok-o">,</span><span class="tok-mi">4893</span><span class="tok-o">]</span>
-<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-mi">1357</span><span class="tok-o">,</span><span class="tok-n">YYZ</span><span class="tok-o">,</span><span class="tok-mi">3544</span><span class="tok-o">,</span><span class="tok-n">LHR</span><span class="tok-o">,</span><span class="tok-mi">4901</span><span class="tok-o">]</span>
-<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-mi">973</span><span class="tok-o">,</span><span class="tok-n">ORD</span><span class="tok-o">,</span><span class="tok-mi">3939</span><span class="tok-o">,</span><span class="tok-n">LHR</span><span class="tok-o">,</span><span class="tok-mi">4912</span><span class="tok-o">]</span>
-<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-mi">190</span><span class="tok-o">,</span><span class="tok-n">DFW</span><span class="tok-o">,</span><span class="tok-mi">4736</span><span class="tok-o">,</span><span class="tok-n">LHR</span><span class="tok-o">,</span><span class="tok-mi">4926</span><span class="tok-o">]</span>
-<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-mi">1690</span><span class="tok-o">,</span><span class="tok-n">BOS</span><span class="tok-o">,</span><span class="tok-mi">3254</span><span class="tok-o">,</span><span class="tok-n">LHR</span><span class="tok-o">,</span><span class="tok-mi">4944</span><span class="tok-o">]</span>
-<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-mi">1500</span><span class="tok-o">,</span><span class="tok-n">EWR</span><span class="tok-o">,</span><span class="tok-mi">3453</span><span class="tok-o">,</span><span class="tok-n">LHR</span><span class="tok-o">,</span><span class="tok-mi">4953</span><span class="tok-o">]</span>
-<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-mi">1294</span><span class="tok-o">,</span><span class="tok-n">IAD</span><span class="tok-o">,</span><span class="tok-mi">3665</span><span class="tok-o">,</span><span class="tok-n">LHR</span><span class="tok-o">,</span><span class="tok-mi">4959</span><span class="tok-o">]</span>
-<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-mi">1520</span><span class="tok-o">,</span><span class="tok-n">JFK</span><span class="tok-o">,</span><span class="tok-mi">3440</span><span class="tok-o">,</span><span class="tok-n">LHR</span><span class="tok-o">,</span><span class="tok-mi">4960</span><span class="tok-o">]</span>
-<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-mi">1339</span><span class="tok-o">,</span><span class="tok-n">BWI</span><span class="tok-o">,</span><span class="tok-mi">3622</span><span class="tok-o">,</span><span class="tok-n">LHR</span><span class="tok-o">,</span><span class="tok-mi">4961</span><span class="tok-o">]</span>
-<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-mi">142</span><span class="tok-o">,</span><span class="tok-n">IAH</span><span class="tok-o">,</span><span class="tok-mi">4820</span><span class="tok-o">,</span><span class="tok-n">LHR</span><span class="tok-o">,</span><span class="tok-mi">4962</span><span class="tok-o">]</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_warning_about_em_path_em_being_memory_intensive">5.11.2. Warning about <em>path</em> being memory intensive</h4>
+<h4 id="_warning_about_em_path_em_being_memory_intensive">5.11.1. Warning about <em>path</em> being memory intensive</h4>
 <div class="paragraph">
 <p>Running a query with point of funnel first works fine but put AUS first and will
 run out of memory.</p>
@@ -10331,7 +10339,7 @@ run out of memory.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_work_in_progress">5.11.3. Work in progress</h4>
+<h4 id="_work_in_progress">5.11.2. Work in progress</h4>
 <div class="paragraph">
 <p>Using a mathematical expression inside of <em>is</em></p>
 </div>
@@ -10496,7 +10504,7 @@ run out of memory.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="pagerank">5.11.4. Experiments with Page Rank</h4>
+<h4 id="pagerank">5.11.3. Experiments with Page Rank</h4>
 <div class="listingblock">
 <div class="title">This is a placeholder.</div>
 <div class="content">
@@ -12655,8 +12663,8 @@ are shown.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 250<br>
-Last updated 2017-10-08 15:39:35 CDT
+Version 251<br>
+Last updated 2017-10-09 16:52:58 CDT
 </div>
 </div>
 </body>
