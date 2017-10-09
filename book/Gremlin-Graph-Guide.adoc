@@ -1,12 +1,12 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v250, Oct 08, 2017
-// Sun Oct 08, 2017 15:23:39 CDT
+v251, Oct 09, 2017
+// Mon Oct 09, 2017 16:50:10 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Oct 08 2017
-//:Revision:  250
+//:Date:      Oct 09 2017
+//:Revision:  251
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -98,9 +98,9 @@ between 3,373 airports including 43,362 routes. The examples presented
 will work unmodified with the air-routes.graphml file loaded into the Gremlin
 console running with a TinkerGraph. 
 
-NOTE: Currently the examples in this book have been tested using Apache Tinkerpop
-version 3.2.5.  Some breaking changes were recently introduced in Apache Tinkerpop
-3.3. The text will be revised ASAP to reflect those changes.
+NOTE: The examples in this book have now been updated tested using Apache TinkerPop
+version 3.3 which introduced a few breaking changes. If you find any I missed please
+let me know!
 
 TinkerGraph is an 'in-memory' graph, meaning
 nothing gets saved to disk automatically, that is shipped as part of the Apache
@@ -3445,9 +3445,11 @@ calculated in one part of a query later on in that same query.
 
 [source,groovy]
 ----
-g.V().has('code','AUS').match(__.as('aus').values('runways').as('ausr'),
-                              __.as('aus').out('route').as('outa').values('runways').as('outr')
-                              .where('ausr',eq('outr'))).select('outa').valueMap().select('code','runways')                           
+g.V().has('code','AUS').
+      match(__.as('aus').values('runways').as('ausr'),
+            __.as('aus').out('route').as('outa').values('runways').as('outr')
+              .where('ausr',eq('outr'))).
+      select('outa').valueMap().select('code','runways')                           
 ----
 
 As I mentioned, the example above is a bit contrived and it could actually be done
@@ -3456,9 +3458,9 @@ Hopefully, however, these examples give you an idea of what 'match' can do.
 
 [source,groovy]
 ----
-g.V().has('code','AUS').as('aus').values('runways').as('ausr')
-     .select('aus').out().as('outa').values('runways').as('outr')
-     .where('ausr',eq('outr')).select('outa').valueMap().select('code','runways')
+g.V().has('code','AUS').as('aus').values('runways').as('ausr').
+      select('aus').out().as('outa').values('runways').as('outr').
+      where('ausr',eq('outr')).select('outa').valueMap().select('code','runways')
 
 ----
 
@@ -7403,11 +7405,12 @@ following query:
 [source,groovy]
 ----
 // Shortest distances from AUS to LHR with one stop
-g.withSack(0).V().has('code','AUS').outE().sack(sum,'dist').inV().
-                                    outE().sack(sum,'dist').inV().has('code','LHR').
-                                    sack().order().by(incr).limit(10).
+g.withSack(0).V().has('code','AUS').
+                  outE().sack(sum).by('dist').
+                  inV().outE().sack(sum).by('dist').
+                  inV().has('code','LHR').sack().
+                  order().by(incr).limit(10).
                   path().by('code').by('dist').by('code').by('dist').by('code').by()
-
 ----
 
 On the first line of the query, we initialize our sack with the value zero. During
@@ -7432,13 +7435,25 @@ query will produce the following results:
 [AUS, 142, IAH, 4820, LHR, 4962]    
 ----
 
+NOTE: In Tinkerpop 3.3 the syntax of 'sack' was changed. Where previously you would
+write something like 'sack(sum,''runways'')' you are now required to write
+'sack(sum).by(''runways'')'. The prior format was already deprecated in Tinkerpop
+3.2.5 but is now fully removed in Tinkerpop 3.3.
+
 We could add a little post processing to our query to only output the airport codes
 and the total mileage. Given this is post processing of a small data set, using a bit
 of in-line code does not feel too ugly here.
 
 [source,groovy]
 ----
-g.withSack(0).V().has('code','AUS').outE().sack(sum,'dist').inV().outE().sack(sum,'dist').inV().has('code','LHR').sack().order().by(incr).limit(10).path().by('code').by('dist').by('code').by('dist').by('code').by().toList().each(){println "${it[0]} --> ${it[2]} --> ${it[4]} ${it[5]} miles"}
+g.withSack(0).V().
+  has('code','AUS').
+  outE().sack(sum).by('dist').
+  inV().outE().sack(sum).by('dist').
+  inV().has('code','LHR').sack().
+  order().by(incr).limit(10).
+  path().by('code').by('dist').by('code').by('dist').by('code').by().
+  toList().each(){println "${it[0]} --> ${it[2]} --> ${it[4]} ${it[5]} miles"}[];
 ----
 
 Here is what our modified query produces.
@@ -7488,6 +7503,7 @@ powerful ways to store data as your query iterates.
 ----
 // The same query but done using the new sack() step in TinkerPop 3
 // shown as an example only. The prior query works just fine for this.
+
 g.withSack([:]).V().hasLabel('airport').where(out().count().is(gt(200))).
                 sack{m,v -> m[v.value('code')]=g.V(v).out().count().next()}.
                 fold().sack()
@@ -7538,7 +7554,7 @@ need to add all of those to get a single grand total.
 [source,groovy]
 ----
 g.V().has('code','AUS').sack(assign).by(constant(0)).
-      out().sack(sum,'runways').sack().sum()
+      out().sack(sum).by('runways').sack().sum()
 
 212
 ----
@@ -8496,28 +8512,6 @@ These queries need to be moved to other sections or deleted.
 .THIS SECTION IS YET TO BE FULLY TIDIED UP
 
 Work in progress
-
-Changes to 'sack' syntax in TP 3.3
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Starting with Tinkerpop version 3.3 a change was introduced to the way that 'sack' is
-used.
-
-[source,groovy]
-----
-g.withSack(0).V().has('code','AUS').outE().sack(sum).by('dist').inV().outE().sack(sum).by('dist').inV().has('code','LHR').sack().order().by(incr).limit(10).path().by('code').by('dist').by('code').by('dist').by('code').by()
-
-[AUS,1140,DTW,3753,LHR,4893]
-[AUS,1357,YYZ,3544,LHR,4901]
-[AUS,973,ORD,3939,LHR,4912]
-[AUS,190,DFW,4736,LHR,4926]
-[AUS,1690,BOS,3254,LHR,4944]
-[AUS,1500,EWR,3453,LHR,4953]
-[AUS,1294,IAD,3665,LHR,4959]
-[AUS,1520,JFK,3440,LHR,4960]
-[AUS,1339,BWI,3622,LHR,4961]
-[AUS,142,IAH,4820,LHR,4962]
-----
 
 Warning about 'path' being memory intensive
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
