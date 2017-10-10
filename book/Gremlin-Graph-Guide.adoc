@@ -1,12 +1,12 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v252, Oct 09, 2017
-// Mon Oct 09, 2017 18:44:25 CDT
+v253, Oct 10, 2017
+// Tue Oct 10, 2017 11:42:42
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Oct 09 2017
-//:Revision:  252
+//:Date:      Oct 10 2017
+//:Revision:  253
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -90,13 +90,13 @@ located at https://github.com/krlawrence/graph.
 What is this book about?
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-This book introduces the Apache TinkerPop 3 'Gremlin' graph query
-and traversal language via real examples against a real world graph. They are given
-as a set of working examples against a graph that is also provided with these notes.
-The graph, 'air-routes.graphml', is a model of the world airline route network
-between 3,373 airports including 43,362 routes. The examples presented  
-will work unmodified with the air-routes.graphml file loaded into the Gremlin
-console running with a TinkerGraph. 
+This book introduces the Apache TinkerPop 3 'Gremlin' graph query and traversal
+language via real examples featuring a real world graph that is also provided with
+these notes.  The graph, 'air-routes.graphml', is a model of the world airline route
+network between 3,373 airports including 43,400 routes. The examples presented  will
+work unmodified with the air-routes.graphml file loaded into the Gremlin console
+running with a TinkerGraph. How to set that environment up is covered in the 
+<<gremlininstall>> section below.
 
 NOTE: The examples in this book have now been updated and tested using Apache
 TinkerPop version 3.3 which introduced a few breaking changes. If you find any I
@@ -7391,7 +7391,8 @@ the respective route distances.
 ----
 // Return all ways of getting from AUS to LHR with one stop. Include the distances between
 // each of the airports in the query result.
-g.V().has('airport','code','AUS').outE().inV().outE().inV().has('code','LHR').path().by('code').by('dist')
+g.V().has('airport','code','AUS').outE().inV().outE().inV().
+      has('code','LHR').path().by('code').by('dist')
 ----
 
 The output from running the query produces a nice set of data showing the starting,
@@ -7634,6 +7635,7 @@ this case we will look for any airports that have a longitude between -0.1 and 0
 ----
 // Which airports are very close to the Greenwich Meridian ?
 g.V().hasLabel('airport').has('lon',between(-0.1,0.1)).valueMap('code','lon')
+
 [code:[LCY], lon:[0.055278]]
 [code:[LDE], lon:[-0.006438999902457]]
 [code:[LEH], lon:[0.0880559980869293]]
@@ -7646,6 +7648,7 @@ This next query can be used to find out which airports are closest to the equato
 ----
 // Which airports are closest to the Equator ?
 g.V().hasLabel('airport').has('lat',between(-0.1,0.1)).valueMap('code','lat')
+
 [code:[EBB], lat:[0.0423859991133213]]
 [code:[MDK], lat:[0.0226000007242]]
 [code:[KIS], lat:[-0.0861390009522438]]
