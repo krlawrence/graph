@@ -1,12 +1,12 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v253, Oct 10, 2017
-// Tue Oct 10, 2017 11:42:42
+v254, Oct 10, 2017
+// Tue Oct 10, 2017 12:51:38 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Oct 10 2017
-//:Revision:  253
+//:Revision:  254
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -3883,33 +3883,149 @@ looking at the other vertices relative to where we started from, which was 'v[3]
 
 
 [[sp]]
-Shortest paths (between airports)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Shortest paths (between airports) -  introducing 'repeat'
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We can use a repeat...until looping construct to look for paths between two airports 
+We can use a 'repeat...until' looping construct to look for paths between two airports 
 without having to specify an explicit number of 'out' steps to try.
 
 The use of 'simplePath' prevents paths already taken from being taken again and
 greatly speeds up this query.  Without the 'simplePath' step being used this query
-could take HOURS!!  The 'limit' step is also important as without it this query will
-run for a LONG time looking for every possible path!! 
+could take a lot longer.  The addition of a 'limit' step is also important as without
+it this query will run for a LONG time looking for every possible path!! 
+
+The query blow looks for routes between Austin (AUS) and Agra (AGR). An important
+query for those Austinites wanting to visit the Taj Mahal!
 
 [source,groovy]
 ----
 // What are some of the shortest routes (paths) from AUS to AGR?
-g.V().has('code','AUS').repeat(out().simplePath()).until(has('code','AGR')).path().by('code').limit(10) 
+g.V().has('code','AUS').repeat(out().simplePath()).
+                        until(has('code','AGR')).path().by('code').limit(10) 
+----
 
+Here are the results from running the query. Notice how, using the 'repeat...until'
+construct we did not have to specify how many steps to try.
+
+[source,groovy]
+----
+[AUS,YYZ,BOM,AGR]
+[AUS,LHR,BOM,AGR]
+[AUS,FRA,BOM,AGR]
+[AUS,EWR,BOM,AGR]
+[AUS,YYZ,ZRH,BOM,AGR]
+[AUS,YYZ,BRU,BOM,AGR]
+[AUS,YYZ,MUC,BOM,AGR]
+[AUS,YYZ,ICN,BOM,AGR]
+[AUS,YYZ,CAI,BOM,AGR]
+[AUS,YYZ,ADD,BOM,AGR]
+----
+
+
+You can also place the 'repeat' before the 'until' as shown below.
+
+[source,groovy]
+----
 // Another shortest path example using until...repeat instead  
-g.V().has('code','AUS').until(has('code','SYD')).repeat(out().simplePath()).limit(10).path().by('code')    
+g.V().has('code','AUS').until(has('code','SYD')).
+                        repeat(out().simplePath()).limit(10).path().by('code')    
+----
 
-// We can also specify an explicit number of out steps to try using a repeat...times loop but this of course
-// assumes that we know ahead of time how many stops we want to look for between airports.
+Here are the results from running the query.
+
+[source,groovy]
+----
+[AUS,DFW,SYD]
+[AUS,LAX,SYD]
+[AUS,SFO,SYD]
+[AUS,YYZ,HND,SYD]
+[AUS,YYZ,ICN,SYD]
+[AUS,YYZ,SCL,SYD]
+[AUS,YYZ,AUH,SYD]
+[AUS,YYZ,TPE,SYD]
+[AUS,YYZ,CAN,SYD]
+[AUS,YYZ,DFW,SYD]
+----
+
+We can also specify an explicit number of out steps to try using a 'repeat...times'
+loop but this of course assumes that we know ahead of time how many stops we want to
+look for between airports.
+
+[source,groovy]
+----
 g.V().has('code','AUS').repeat(out()).times(2).has('code','SYD').path().by('code')
 
-// This is the same as the prior query (but less flexible in that we can less easily vary the number of out steps()):
+[AUS,DFW,SYD]
+[AUS,LAX,SYD]
+[AUS,SFO,SYD]
+----
+
+The previous query is equivalent to this next one but doing it this way is less
+flexible in that we can not as easily vary the number of 'out' steps, should, for
+example we want to next try 5 hops.
+
+[source,groovy]
+----
 g.V().has('code','AUS').out().out().has('code','SYD').path().by('code')
 ----
 
+A bit later, in the <<emit>> section we will look at how 'emit' can be used to adjust the
+behavior of a 'repeat...times' loop.
+
+[[pathwarn]]
+A warning that 'path' can be memory and CPU intensive
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The 'path' step is incredibly useful and I find myself using it a lot. However, there
+are some downsides to the use of 'path', especially when searching entire graphs for
+non trivial results. Take a look at the query below. It returns the first 10 routes
+found that will get you from Papa Stour (PSV), a small airport in the Shetland
+Islands, to Austin (AUS). The 'simplePath' step is used to make sure the same exact
+path is never looked at twice. This query runs quickly and returns some useful
+results.
+
+[source,groovy]
+----
+g.V().has('code','PSV').repeat(out().simplePath()).until(has('code','AUS')).
+      limit(10).path().by('code')
+
+[PSV,LWK,FIE,KOI,EDI,JFK,AUS]
+[PSV,LWK,FIE,KOI,EDI,EWR,AUS]
+[PSV,LWK,FIE,KOI,EDI,LHR,AUS]
+[PSV,LWK,FIE,KOI,EDI,FRA,AUS]
+[PSV,LWK,FIE,KOI,GLA,JFK,AUS]
+[PSV,LWK,FIE,KOI,GLA,MCO,AUS]
+[PSV,LWK,FIE,KOI,GLA,EWR,AUS]
+[PSV,LWK,FIE,KOI,GLA,PHL,AUS]
+[PSV,LWK,FIE,KOI,GLA,YYZ,AUS]
+[PSV,LWK,FIE,KOI,GLA,LHR,AUS]
+----
+
+However, were we to reverse the query as follows we can run into trouble. In fact, if
+you run this query on your laptop, after a few minutes of hight CPU usage and
+increased fan noise, it is likely you will get an error that the query ran out of
+available memory.
+
+[source,groovy]
+----
+g.V().has('code','AUS').repeat(out().simplePath()).until(has('code','PSV')).
+      limit(10).path().by('code')
+----
+
+The reason this happens is as follows. There are very few routes from PSV and not
+many more from the airports it is closely connected to. Therefore, if you start the
+query from PSV, you will fairly quickly find some paths that end up in AUS. However,
+if you start from AUS there are a lot of possible routes that Gremlin has to explore
+before it gets close to finding PSV. If it helps, think of a funnel where PSV is at
+the narrow end and AUS is at the other.
+
+NOTE: The 'path' step uses a lot of memory and in some cases can cause issues.
+
+The reason that so much memory is consumed is that the 'path' step, even if
+'simplePath' is used to avoid travelling the same path twice, has to store up a very
+large number of routes before finding the ones we are actually interested in.  So
+while the 'path' step is incredibly useful, be aware that in cases like this one, it
+can get you into trouble if not used with care.
 
 [[nd]]
 Calculating node degree
@@ -8545,26 +8661,6 @@ These queries need to be moved to other sections or deleted.
 
 Work in progress
 
-Warning about 'path' being memory intensive
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Running a query with point of funnel first works fine but put AUS first and will
-run out of memory.
-
-[source,groovy]
-----
-g.V().has('code','PSV').repeat(out().simplePath()).until(has('code','AUS')).limit(10).path().by('code')
-[PSV,LWK,FIE,KOI,EDI,JFK,AUS]
-[PSV,LWK,FIE,KOI,EDI,EWR,AUS]
-[PSV,LWK,FIE,KOI,EDI,LHR,AUS]
-[PSV,LWK,FIE,KOI,EDI,FRA,AUS]
-[PSV,LWK,FIE,KOI,GLA,JFK,AUS]
-[PSV,LWK,FIE,KOI,GLA,MCO,AUS]
-[PSV,LWK,FIE,KOI,GLA,EWR,AUS]
-[PSV,LWK,FIE,KOI,GLA,PHL,AUS]
-[PSV,LWK,FIE,KOI,GLA,YYZ,AUS]
-[PSV,LWK,FIE,KOI,GLA,LHR,AUS]
-----
 
 Work in progress
 ^^^^^^^^^^^^^^^^
