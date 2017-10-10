@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 1.5.5">
+<meta name="generator" content="Asciidoctor 1.5.4">
 <meta name="author" content="Kelvin R. Lawrence">
 <title>GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
@@ -18,6 +18,7 @@ audio:not([controls]){display:none;height:0}
 [hidden],template{display:none}
 script{display:none!important}
 html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}
+body{margin:0}
 a{background:transparent}
 a:focus{outline:thin dotted}
 a:active,a:hover{outline:0}
@@ -52,7 +53,7 @@ textarea{overflow:auto;vertical-align:top}
 table{border-collapse:collapse;border-spacing:0}
 *,*:before,*:after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}
 html,body{font-size:100%}
-body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto;tab-size:4;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto}
 a:hover{cursor:pointer}
 img,object,embed{max-width:100%;height:auto}
 object,embed{height:100%}
@@ -64,6 +65,7 @@ img{-ms-interpolation-mode:bicubic}
 .text-center{text-align:center!important}
 .text-justify{text-align:justify!important}
 .hide{display:none}
+body{-webkit-font-smoothing:antialiased}
 img,object,svg{display:inline-block;vertical-align:middle}
 textarea{height:auto;min-height:50px}
 select{width:100%}
@@ -118,16 +120,13 @@ table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:
 table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
 table tr.even,table tr.alt,table tr:nth-of-type(even){background:#f8f8f7}
 table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{display:table-cell;line-height:1.6}
+body{tab-size:4}
 h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
 h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
 .clearfix:before,.clearfix:after,.float-group:before,.float-group:after{content:" ";display:table}
 .clearfix:after,.float-group:after{clear:both}
-*:not(pre)>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background-color:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed;word-wrap:break-word}
-*:not(pre)>code.nobreak{word-wrap:normal}
-*:not(pre)>code.nowrap{white-space:nowrap}
+*:not(pre)>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background-color:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
 pre,pre>code{line-height:1.45;color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;text-rendering:optimizeSpeed}
-em em{font-style:normal}
-strong strong{font-weight:400}
 .keyseq{color:rgba(51,51,51,.8)}
 kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background-color:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
 .keyseq kbd:first-child{margin-left:0}
@@ -420,7 +419,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </style>
 <style>
 .listingblock .pygments .hll { background-color: #4f424c }
-.listingblock .pygments, .listingblock .pygments code { background: #2f1e2e; color: #e7e9db }
+.listingblock .pygments  { background: #2f1e2e; color: #e7e9db }
 .listingblock .pygments .tok-c { color: #776e71 } /* Comment */
 .listingblock .pygments .tok-err { color: #ef6155 } /* Error */
 .listingblock .pygments .tok-k { color: #815ba4 } /* Keyword */
@@ -471,10 +470,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .listingblock .pygments .tok-mh { color: #f99b15 } /* Literal.Number.Hex */
 .listingblock .pygments .tok-mi { color: #f99b15 } /* Literal.Number.Integer */
 .listingblock .pygments .tok-mo { color: #f99b15 } /* Literal.Number.Oct */
-.listingblock .pygments .tok-sa { color: #48b685 } /* Literal.String.Affix */
 .listingblock .pygments .tok-sb { color: #48b685 } /* Literal.String.Backtick */
 .listingblock .pygments .tok-sc { color: #e7e9db } /* Literal.String.Char */
-.listingblock .pygments .tok-dl { color: #48b685 } /* Literal.String.Delimiter */
 .listingblock .pygments .tok-sd { color: #776e71 } /* Literal.String.Doc */
 .listingblock .pygments .tok-s2 { color: #48b685 } /* Literal.String.Double */
 .listingblock .pygments .tok-se { color: #f99b15 } /* Literal.String.Escape */
@@ -485,11 +482,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .listingblock .pygments .tok-s1 { color: #48b685 } /* Literal.String.Single */
 .listingblock .pygments .tok-ss { color: #48b685 } /* Literal.String.Symbol */
 .listingblock .pygments .tok-bp { color: #e7e9db } /* Name.Builtin.Pseudo */
-.listingblock .pygments .tok-fm { color: #06b6ef } /* Name.Function.Magic */
 .listingblock .pygments .tok-vc { color: #ef6155 } /* Name.Variable.Class */
 .listingblock .pygments .tok-vg { color: #ef6155 } /* Name.Variable.Global */
 .listingblock .pygments .tok-vi { color: #ef6155 } /* Name.Variable.Instance */
-.listingblock .pygments .tok-vm { color: #ef6155 } /* Name.Variable.Magic */
 .listingblock .pygments .tok-il { color: #f99b15 } /* Literal.Number.Integer.Long */
 </style>
 </head>
@@ -499,7 +494,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Kelvin R. Lawrence</span><br>
 <span id="email" class="email"><a href="mailto:klawrenc@us.ibm.com">klawrenc@us.ibm.com</a></span><br>
-<span id="revnumber">version 251,</span>
+<span id="revnumber">version 252,</span>
 <span id="revdate">Oct 09, 2017</span>
 </div>
 <div id="toc" class="toc">
@@ -9027,29 +9022,10 @@ distance of all routes between those airports.</p>
 <div class="sect3">
 <h4 id="_more_queries_that_analyze_distances">5.3.3. More queries that analyze distances</h4>
 <div class="paragraph">
-<p>Here are some more queries that are based on the distance between airports.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// Routes Between 100 and 200 miles in length</span>
-<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;src&#39;</span><span class="tok-o">).</span><span class="tok-na">outE</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">,</span><span class="tok-n">within</span><span class="tok-o">(</span><span class="tok-mi">100</span><span class="tok-o">..</span><span class="tok-mi">200</span><span class="tok-o">)).</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;e&#39;</span><span class="tok-o">).</span><span class="tok-na">inV</span><span class="tok-o">().</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;dest&#39;</span><span class="tok-o">)</span>
-     <span class="tok-o">.</span><span class="tok-na">select</span><span class="tok-o">(</span><span class="tok-s1">&#39;src&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;e&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;dest&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">)</span>
-
-<span class="tok-c1">// Routes Between 100 and 200 miles in length, but only within the US.</span>
-<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;airport&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;country&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;US&#39;</span><span class="tok-o">).</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;src&#39;</span><span class="tok-o">).</span><span class="tok-na">outE</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">,</span><span class="tok-n">within</span><span class="tok-o">(</span><span class="tok-mi">100</span><span class="tok-o">..</span><span class="tok-mi">200</span><span class="tok-o">)).</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;e&#39;</span><span class="tok-o">)</span><span class="tok-err">\</span>
-     <span class="tok-o">.</span><span class="tok-na">inV</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;country&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;US&#39;</span><span class="tok-o">).</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;dest&#39;</span><span class="tok-o">)</span><span class="tok-err">\</span>
-     <span class="tok-o">.</span><span class="tok-na">select</span><span class="tok-o">(</span><span class="tok-s1">&#39;src&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;e&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;dest&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">)</span>
-
-<span class="tok-c1">// Return a list of routes and their distances, starting from San Antonio (SAT)</span>
-<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;SAT&#39;</span><span class="tok-o">).</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;src&#39;</span><span class="tok-o">).</span><span class="tok-na">outE</span><span class="tok-o">(</span><span class="tok-s1">&#39;route&#39;</span><span class="tok-o">).</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;e&#39;</span><span class="tok-o">).</span><span class="tok-na">inV</span><span class="tok-o">().</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;dest&#39;</span><span class="tok-o">)</span>
-     <span class="tok-o">.</span><span class="tok-na">select</span><span class="tok-o">(</span><span class="tok-s1">&#39;src&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;e&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;dest&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">)</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
 <p>Calculating the distance between two directly connected airports is very easy. All we
-have to do is look at the <em>dist</em> property of the edge that connects them. We could do
-this using the <em>select</em> technique or in more recent versions of TinkerPop we could
-use <em>path</em> and <em>by</em>.</p>
+have to do is look at the <em>dist</em> property of the edge that connects them. We can do
+this using the <em>select</em> and <em>as</em> or in more recent versions of TinkerPop we can
+use <em>path</em> and <em>by</em>. I prefer the latter technique.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -9061,6 +9037,55 @@ use <em>path</em> and <em>by</em>.</p>
 <span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span><span class="tok-na">outE</span><span class="tok-o">().</span><span class="tok-na">inV</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;MEX&#39;</span><span class="tok-o">).</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">)</span>
 
 <span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span> <span class="tok-mi">748</span><span class="tok-o">,</span> <span class="tok-n">MEX</span><span class="tok-o">]</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here are some more queries that are based on the distance between airports. The first
+query calculates how many routes there are between 100 and 200 miles. If you remove
+the call to <em>count</em> it will list some of the routes.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// Routes Between 100 and 200 miles in length</span>
+<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;src&#39;</span><span class="tok-o">).</span><span class="tok-na">outE</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">,</span><span class="tok-n">within</span><span class="tok-o">(</span><span class="tok-mi">100</span><span class="tok-o">..</span><span class="tok-mi">200</span><span class="tok-o">)).</span><span class="tok-na">inV</span><span class="tok-o">().</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;dest&#39;</span><span class="tok-o">).</span>
+      <span class="tok-n">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span><span class="tok-na">count</span><span class="tok-o">()</span>
+
+<span class="tok-mi">3029</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The next query is similar to the previous one but only counts routes that are between
+airports located in the United States. As before. if you remove the call to <em>count</em>
+some of the routes will be returned.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// Routes Between 100 and 200 miles in length, but only within the US.</span>
+<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;airport&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;country&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;US&#39;</span><span class="tok-o">).</span><span class="tok-na">outE</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">,</span><span class="tok-n">within</span><span class="tok-o">(</span><span class="tok-mi">100</span><span class="tok-o">..</span><span class="tok-mi">200</span><span class="tok-o">)).</span>
+     <span class="tok-n">inV</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;country&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;US&#39;</span><span class="tok-o">).</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span><span class="tok-na">count</span><span class="tok-o">()</span>
+
+<span class="tok-mi">583</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Lastly, this query returns a list of all the routes from San Antonio along with their
+distances.  Some of the results are shown.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// Return a list of routes and their distances, starting from San Antonio (SAT)</span>
+<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;SAT&#39;</span><span class="tok-o">).</span><span class="tok-na">outE</span><span class="tok-o">(</span><span class="tok-s1">&#39;route&#39;</span><span class="tok-o">).</span><span class="tok-na">inV</span><span class="tok-o">().</span> <span class="tok-n">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span><span class="tok-na">count</span><span class="tok-o">()</span>
+
+<span class="tok-o">[</span><span class="tok-n">SAT</span><span class="tok-o">,</span><span class="tok-mi">872</span><span class="tok-o">,</span><span class="tok-n">ATL</span><span class="tok-o">]</span>      <span class="tok-o">[</span><span class="tok-n">SAT</span><span class="tok-o">,</span><span class="tok-mi">1140</span><span class="tok-o">,</span><span class="tok-n">MIA</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">SAT</span><span class="tok-o">,</span><span class="tok-mi">820</span><span class="tok-o">,</span><span class="tok-n">BNA</span><span class="tok-o">]</span>      <span class="tok-o">[</span><span class="tok-n">SAT</span><span class="tok-o">,</span><span class="tok-mi">698</span><span class="tok-o">,</span><span class="tok-n">MEX</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">SAT</span><span class="tok-o">,</span><span class="tok-mi">1410</span><span class="tok-o">,</span><span class="tok-n">BWI</span><span class="tok-o">]</span>     <span class="tok-o">[</span><span class="tok-n">SAT</span><span class="tok-o">,</span><span class="tok-mi">1097</span><span class="tok-o">,</span><span class="tok-n">MSP</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">SAT</span><span class="tok-o">,</span><span class="tok-mi">248</span><span class="tok-o">,</span><span class="tok-n">DFW</span><span class="tok-o">]</span>      <span class="tok-o">[</span><span class="tok-n">SAT</span><span class="tok-o">,</span><span class="tok-mi">1093</span><span class="tok-o">,</span><span class="tok-n">CLT</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">SAT</span><span class="tok-o">,</span><span class="tok-mi">1360</span><span class="tok-o">,</span><span class="tok-n">IAD</span><span class="tok-o">]</span>     <span class="tok-o">[</span><span class="tok-n">SAT</span><span class="tok-o">,</span><span class="tok-mi">1040</span><span class="tok-o">,</span><span class="tok-n">ORD</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">SAT</span><span class="tok-o">,</span><span class="tok-mi">190</span><span class="tok-o">,</span><span class="tok-n">IAH</span><span class="tok-o">]</span>      <span class="tok-o">[</span><span class="tok-n">SAT</span><span class="tok-o">,</span><span class="tok-mi">931</span><span class="tok-o">,</span><span class="tok-n">CUN</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">SAT</span><span class="tok-o">,</span><span class="tok-mi">1580</span><span class="tok-o">,</span><span class="tok-n">JFK</span><span class="tok-o">]</span>     <span class="tok-o">[</span><span class="tok-n">SAT</span><span class="tok-o">,</span><span class="tok-mi">841</span><span class="tok-o">,</span><span class="tok-n">PHX</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">SAT</span><span class="tok-o">,</span><span class="tok-mi">1210</span><span class="tok-o">,</span><span class="tok-n">LAX</span><span class="tok-o">]</span>     <span class="tok-o">[</span><span class="tok-n">SAT</span><span class="tok-o">,</span><span class="tok-mi">624</span><span class="tok-o">,</span><span class="tok-n">MEM</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">SAT</span><span class="tok-o">,</span><span class="tok-mi">1038</span><span class="tok-o">,</span><span class="tok-n">MCO</span><span class="tok-o">]</span>     <span class="tok-o">[</span><span class="tok-n">SAT</span><span class="tok-o">,</span><span class="tok-mi">1772</span><span class="tok-o">,</span><span class="tok-n">SEA</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">SAT</span><span class="tok-o">,</span><span class="tok-mi">1423</span><span class="tok-o">,</span><span class="tok-n">YYZ</span><span class="tok-o">]</span>     <span class="tok-o">[</span><span class="tok-n">SAT</span><span class="tok-o">,</span><span class="tok-mi">707</span><span class="tok-o">,</span><span class="tok-n">MCI</span><span class="tok-o">]</span></code></pre>
 </div>
 </div>
 </div>
@@ -12663,8 +12688,8 @@ are shown.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 251<br>
-Last updated 2017-10-09 16:57:07 CDT
+Version 252<br>
+Last updated 2017-10-09 19:01:40 CDT
 </div>
 </div>
 </body>

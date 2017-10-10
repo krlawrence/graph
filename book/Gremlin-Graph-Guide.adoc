@@ -1,12 +1,12 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v251, Oct 09, 2017
-// Mon Oct 09, 2017 16:50:10 CDT
+v252, Oct 09, 2017
+// Mon Oct 09, 2017 18:44:25 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Oct 09 2017
-//:Revision:  251
+//:Revision:  252
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -7314,28 +7314,10 @@ distance of all routes between those airports.
 More queries that analyze distances
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Here are some more queries that are based on the distance between airports.
-
-[source,groovy]
-----
-// Routes Between 100 and 200 miles in length 
-g.V().as('src').outE().has('dist',within(100..200)).as('e').inV().as('dest')
-     .select('src','e','dest').by('code').by('dist')
-
-// Routes Between 100 and 200 miles in length, but only within the US.
-g.V().has('airport','country','US').as('src').outE().has('dist',within(100..200)).as('e')\
-     .inV().has('country','US').as('dest')\
-     .select('src','e','dest').by('code').by('dist')
-
-// Return a list of routes and their distances, starting from San Antonio (SAT)
-g.V().has('code','SAT').as('src').outE('route').as('e').inV().as('dest')
-     .select('src','e','dest').by('code').by('dist')
-----
-
 Calculating the distance between two directly connected airports is very easy. All we
-have to do is look at the 'dist' property of the edge that connects them. We could do
-this using the 'select' technique or in more recent versions of TinkerPop we could
-use 'path' and 'by'.
+have to do is look at the 'dist' property of the edge that connects them. We can do
+this using the 'select' and 'as' or in more recent versions of TinkerPop we can
+use 'path' and 'by'. I prefer the latter technique.
 
 [source,groovy]
 ----
@@ -7348,6 +7330,53 @@ g.V().has('code','AUS').outE().inV().has('code','MEX').path().by('code').by('dis
 
 [AUS, 748, MEX]
 ----
+
+Here are some more queries that are based on the distance between airports. The first
+query calculates how many routes there are between 100 and 200 miles. If you remove
+the call to 'count' it will list some of the routes.
+
+[source,groovy]
+----
+// Routes Between 100 and 200 miles in length 
+g.V().as('src').outE().has('dist',within(100..200)).inV().as('dest').
+      path().by('code').by('dist').count()
+
+3029
+----
+
+The next query is similar to the previous one but only counts routes that are between
+airports located in the United States. As before. if you remove the call to 'count'
+some of the routes will be returned.
+
+[source,groovy]
+----
+// Routes Between 100 and 200 miles in length, but only within the US.
+g.V().has('airport','country','US').outE().has('dist',within(100..200)).
+     inV().has('country','US').path().by('code').by('dist').count()
+
+583 
+----
+
+Lastly, this query returns a list of all the routes from San Antonio along with their
+distances.  Some of the results are shown.
+
+[source,groovy]
+----
+// Return a list of routes and their distances, starting from San Antonio (SAT)
+g.V().has('code','SAT').outE('route').inV(). path().by('code').by('dist').count()
+
+[SAT,872,ATL]      [SAT,1140,MIA]   
+[SAT,820,BNA]      [SAT,698,MEX]    
+[SAT,1410,BWI]     [SAT,1097,MSP]   
+[SAT,248,DFW]      [SAT,1093,CLT]   
+[SAT,1360,IAD]     [SAT,1040,ORD]   
+[SAT,190,IAH]      [SAT,931,CUN]    
+[SAT,1580,JFK]     [SAT,841,PHX]    
+[SAT,1210,LAX]     [SAT,624,MEM]    
+[SAT,1038,MCO]     [SAT,1772,SEA]   
+[SAT,1423,YYZ]     [SAT,707,MCI]
+----
+
 
 [[AUSLHR-OS]]
 How far is it from AUS to LHR with one stop?
