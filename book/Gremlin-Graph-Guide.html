@@ -499,7 +499,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Kelvin R. Lawrence</span><br>
 <span id="email" class="email"><a href="mailto:klawrenc@us.ibm.com">klawrenc@us.ibm.com</a></span><br>
-<span id="revnumber">version 253,</span>
+<span id="revnumber">version 254,</span>
 <span id="revdate">Oct 10, 2017</span>
 </div>
 <div id="toc" class="toc">
@@ -590,7 +590,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_using_em_aggregate_em_to_create_a_temporary_collection">3.17. Using <em>aggregate</em> to create a temporary collection</a></li>
 <li><a href="#coalesce">3.18. Using <em>coalesce</em> to see which traversal returns a result</a></li>
 <li><a href="#otherv">3.19. Other ways to explore nodes and edges using <em>both</em>, <em>bothE</em>, <em>bothV</em> and <em>otherV</em></a></li>
-<li><a href="#sp">3.20. Shortest paths (between airports)</a></li>
+<li><a href="#sp">3.20. Shortest paths (between airports) -  introducing <em>repeat</em></a>
+<ul class="sectlevel3">
+<li><a href="#pathwarn">3.20.1. A warning that <em>path</em> can be memory and CPU intensive</a></li>
+</ul>
+</li>
 <li><a href="#nd">3.21. Calculating node degree</a></li>
 <li><a href="#sx">3.22. More examples using what we have covered so far</a></li>
 </ul>
@@ -688,9 +692,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#flr">5.10. Finding the longest flight route between two adjacent airports in the graph</a></li>
 <li><a href="#miscq">5.11. Miscellaneous other queries</a>
 <ul class="sectlevel3">
-<li><a href="#_warning_about_em_path_em_being_memory_intensive">5.11.1. Warning about <em>path</em> being memory intensive</a></li>
-<li><a href="#_work_in_progress">5.11.2. Work in progress</a></li>
-<li><a href="#pagerank">5.11.3. Experiments with Page Rank</a></li>
+<li><a href="#_work_in_progress">5.11.1. Work in progress</a></li>
+<li><a href="#pagerank">5.11.2. Experiments with Page Rank</a></li>
 </ul>
 </li>
 </ul>
@@ -5286,31 +5289,167 @@ looking at the other vertices relative to where we started from, which was <em>v
 </div>
 </div>
 <div class="sect2">
-<h3 id="sp">3.20. Shortest paths (between airports)</h3>
+<h3 id="sp">3.20. Shortest paths (between airports) -  introducing <em>repeat</em></h3>
 <div class="paragraph">
-<p>We can use a repeat&#8230;&#8203;until looping construct to look for paths between two airports
+<p>We can use a <em>repeat&#8230;&#8203;until</em> looping construct to look for paths between two airports
 without having to specify an explicit number of <em>out</em> steps to try.</p>
 </div>
 <div class="paragraph">
 <p>The use of <em>simplePath</em> prevents paths already taken from being taken again and
 greatly speeds up this query.  Without the <em>simplePath</em> step being used this query
-could take HOURS!!  The <em>limit</em> step is also important as without it this query will
-run for a LONG time looking for every possible path!!</p>
+could take a lot longer.  The addition of a <em>limit</em> step is also important as without
+it this query will run for a LONG time looking for every possible path!!</p>
+</div>
+<div class="paragraph">
+<p>The query blow looks for routes between Austin (AUS) and Agra (AGR). An important
+query for those Austinites wanting to visit the Taj Mahal!</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// What are some of the shortest routes (paths) from AUS to AGR?</span>
-<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span><span class="tok-na">repeat</span><span class="tok-o">(</span><span class="tok-n">out</span><span class="tok-o">().</span><span class="tok-na">simplePath</span><span class="tok-o">()).</span><span class="tok-na">until</span><span class="tok-o">(</span><span class="tok-n">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AGR&#39;</span><span class="tok-o">)).</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">limit</span><span class="tok-o">(</span><span class="tok-mi">10</span><span class="tok-o">)</span>
+<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span><span class="tok-na">repeat</span><span class="tok-o">(</span><span class="tok-n">out</span><span class="tok-o">().</span><span class="tok-na">simplePath</span><span class="tok-o">()).</span>
+                        <span class="tok-n">until</span><span class="tok-o">(</span><span class="tok-n">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AGR&#39;</span><span class="tok-o">)).</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">limit</span><span class="tok-o">(</span><span class="tok-mi">10</span><span class="tok-o">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here are the results from running the query. Notice how, using the <em>repeat&#8230;&#8203;until</em>
+construct we did not have to specify how many steps to try.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">YYZ</span><span class="tok-o">,</span><span class="tok-n">BOM</span><span class="tok-o">,</span><span class="tok-n">AGR</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">LHR</span><span class="tok-o">,</span><span class="tok-n">BOM</span><span class="tok-o">,</span><span class="tok-n">AGR</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">FRA</span><span class="tok-o">,</span><span class="tok-n">BOM</span><span class="tok-o">,</span><span class="tok-n">AGR</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">EWR</span><span class="tok-o">,</span><span class="tok-n">BOM</span><span class="tok-o">,</span><span class="tok-n">AGR</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">YYZ</span><span class="tok-o">,</span><span class="tok-n">ZRH</span><span class="tok-o">,</span><span class="tok-n">BOM</span><span class="tok-o">,</span><span class="tok-n">AGR</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">YYZ</span><span class="tok-o">,</span><span class="tok-n">BRU</span><span class="tok-o">,</span><span class="tok-n">BOM</span><span class="tok-o">,</span><span class="tok-n">AGR</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">YYZ</span><span class="tok-o">,</span><span class="tok-n">MUC</span><span class="tok-o">,</span><span class="tok-n">BOM</span><span class="tok-o">,</span><span class="tok-n">AGR</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">YYZ</span><span class="tok-o">,</span><span class="tok-n">ICN</span><span class="tok-o">,</span><span class="tok-n">BOM</span><span class="tok-o">,</span><span class="tok-n">AGR</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">YYZ</span><span class="tok-o">,</span><span class="tok-n">CAI</span><span class="tok-o">,</span><span class="tok-n">BOM</span><span class="tok-o">,</span><span class="tok-n">AGR</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">YYZ</span><span class="tok-o">,</span><span class="tok-n">ADD</span><span class="tok-o">,</span><span class="tok-n">BOM</span><span class="tok-o">,</span><span class="tok-n">AGR</span><span class="tok-o">]</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also place the <em>repeat</em> before the <em>until</em> as shown below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// Another shortest path example using until...repeat instead</span>
+<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span><span class="tok-na">until</span><span class="tok-o">(</span><span class="tok-n">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;SYD&#39;</span><span class="tok-o">)).</span>
+                        <span class="tok-n">repeat</span><span class="tok-o">(</span><span class="tok-n">out</span><span class="tok-o">().</span><span class="tok-na">simplePath</span><span class="tok-o">()).</span><span class="tok-na">limit</span><span class="tok-o">(</span><span class="tok-mi">10</span><span class="tok-o">).</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here are the results from running the query.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">DFW</span><span class="tok-o">,</span><span class="tok-n">SYD</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">LAX</span><span class="tok-o">,</span><span class="tok-n">SYD</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">SFO</span><span class="tok-o">,</span><span class="tok-n">SYD</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">YYZ</span><span class="tok-o">,</span><span class="tok-n">HND</span><span class="tok-o">,</span><span class="tok-n">SYD</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">YYZ</span><span class="tok-o">,</span><span class="tok-n">ICN</span><span class="tok-o">,</span><span class="tok-n">SYD</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">YYZ</span><span class="tok-o">,</span><span class="tok-n">SCL</span><span class="tok-o">,</span><span class="tok-n">SYD</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">YYZ</span><span class="tok-o">,</span><span class="tok-n">AUH</span><span class="tok-o">,</span><span class="tok-n">SYD</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">YYZ</span><span class="tok-o">,</span><span class="tok-n">TPE</span><span class="tok-o">,</span><span class="tok-n">SYD</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">YYZ</span><span class="tok-o">,</span><span class="tok-n">CAN</span><span class="tok-o">,</span><span class="tok-n">SYD</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">YYZ</span><span class="tok-o">,</span><span class="tok-n">DFW</span><span class="tok-o">,</span><span class="tok-n">SYD</span><span class="tok-o">]</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can also specify an explicit number of out steps to try using a <em>repeat&#8230;&#8203;times</em>
+loop but this of course assumes that we know ahead of time how many stops we want to
+look for between airports.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span><span class="tok-na">repeat</span><span class="tok-o">(</span><span class="tok-n">out</span><span class="tok-o">()).</span><span class="tok-na">times</span><span class="tok-o">(</span><span class="tok-mi">2</span><span class="tok-o">).</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;SYD&#39;</span><span class="tok-o">).</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">)</span>
 
-<span class="tok-c1">// Another shortest path example using until...repeat instead</span>
-<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span><span class="tok-na">until</span><span class="tok-o">(</span><span class="tok-n">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;SYD&#39;</span><span class="tok-o">)).</span><span class="tok-na">repeat</span><span class="tok-o">(</span><span class="tok-n">out</span><span class="tok-o">().</span><span class="tok-na">simplePath</span><span class="tok-o">()).</span><span class="tok-na">limit</span><span class="tok-o">(</span><span class="tok-mi">10</span><span class="tok-o">).</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">)</span>
+<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">DFW</span><span class="tok-o">,</span><span class="tok-n">SYD</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">LAX</span><span class="tok-o">,</span><span class="tok-n">SYD</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">SFO</span><span class="tok-o">,</span><span class="tok-n">SYD</span><span class="tok-o">]</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The previous query is equivalent to this next one but doing it this way is less
+flexible in that we can not as easily vary the number of <em>out</em> steps, should, for
+example we want to next try 5 hops.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span><span class="tok-na">out</span><span class="tok-o">().</span><span class="tok-na">out</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;SYD&#39;</span><span class="tok-o">).</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A bit later, in the <a href="#emit">Using <em>emit</em> to return results during a traversal</a> section we will look at how <em>emit</em> can be used to adjust the
+behavior of a <em>repeat&#8230;&#8203;times</em> loop.</p>
+</div>
+<div class="sect3">
+<h4 id="pathwarn">3.20.1. A warning that <em>path</em> can be memory and CPU intensive</h4>
+<div class="paragraph">
+<p>The <em>path</em> step is incredibly useful and I find myself using it a lot. However, there
+are some downsides to the use of <em>path</em>, especially when searching entire graphs for
+non trivial results. Take a look at the query below. It returns the first 10 routes
+found that will get you from Papa Stour (PSV), a small airport in the Shetland
+Islands, to Austin (AUS). The <em>simplePath</em> step is used to make sure the same exact
+path is never looked at twice. This query runs quickly and returns some useful
+results.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;PSV&#39;</span><span class="tok-o">).</span><span class="tok-na">repeat</span><span class="tok-o">(</span><span class="tok-n">out</span><span class="tok-o">().</span><span class="tok-na">simplePath</span><span class="tok-o">()).</span><span class="tok-na">until</span><span class="tok-o">(</span><span class="tok-n">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">)).</span>
+      <span class="tok-n">limit</span><span class="tok-o">(</span><span class="tok-mi">10</span><span class="tok-o">).</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">)</span>
 
-<span class="tok-c1">// We can also specify an explicit number of out steps to try using a repeat...times loop but this of course</span>
-<span class="tok-c1">// assumes that we know ahead of time how many stops we want to look for between airports.</span>
-<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span><span class="tok-na">repeat</span><span class="tok-o">(</span><span class="tok-n">out</span><span class="tok-o">()).</span><span class="tok-na">times</span><span class="tok-o">(</span><span class="tok-mi">2</span><span class="tok-o">).</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;SYD&#39;</span><span class="tok-o">).</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">)</span>
-
-<span class="tok-c1">// This is the same as the prior query (but less flexible in that we can less easily vary the number of out steps()):</span>
-<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span><span class="tok-na">out</span><span class="tok-o">().</span><span class="tok-na">out</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;SYD&#39;</span><span class="tok-o">).</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">)</span></code></pre>
+<span class="tok-o">[</span><span class="tok-n">PSV</span><span class="tok-o">,</span><span class="tok-n">LWK</span><span class="tok-o">,</span><span class="tok-n">FIE</span><span class="tok-o">,</span><span class="tok-n">KOI</span><span class="tok-o">,</span><span class="tok-n">EDI</span><span class="tok-o">,</span><span class="tok-n">JFK</span><span class="tok-o">,</span><span class="tok-n">AUS</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">PSV</span><span class="tok-o">,</span><span class="tok-n">LWK</span><span class="tok-o">,</span><span class="tok-n">FIE</span><span class="tok-o">,</span><span class="tok-n">KOI</span><span class="tok-o">,</span><span class="tok-n">EDI</span><span class="tok-o">,</span><span class="tok-n">EWR</span><span class="tok-o">,</span><span class="tok-n">AUS</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">PSV</span><span class="tok-o">,</span><span class="tok-n">LWK</span><span class="tok-o">,</span><span class="tok-n">FIE</span><span class="tok-o">,</span><span class="tok-n">KOI</span><span class="tok-o">,</span><span class="tok-n">EDI</span><span class="tok-o">,</span><span class="tok-n">LHR</span><span class="tok-o">,</span><span class="tok-n">AUS</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">PSV</span><span class="tok-o">,</span><span class="tok-n">LWK</span><span class="tok-o">,</span><span class="tok-n">FIE</span><span class="tok-o">,</span><span class="tok-n">KOI</span><span class="tok-o">,</span><span class="tok-n">EDI</span><span class="tok-o">,</span><span class="tok-n">FRA</span><span class="tok-o">,</span><span class="tok-n">AUS</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">PSV</span><span class="tok-o">,</span><span class="tok-n">LWK</span><span class="tok-o">,</span><span class="tok-n">FIE</span><span class="tok-o">,</span><span class="tok-n">KOI</span><span class="tok-o">,</span><span class="tok-n">GLA</span><span class="tok-o">,</span><span class="tok-n">JFK</span><span class="tok-o">,</span><span class="tok-n">AUS</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">PSV</span><span class="tok-o">,</span><span class="tok-n">LWK</span><span class="tok-o">,</span><span class="tok-n">FIE</span><span class="tok-o">,</span><span class="tok-n">KOI</span><span class="tok-o">,</span><span class="tok-n">GLA</span><span class="tok-o">,</span><span class="tok-n">MCO</span><span class="tok-o">,</span><span class="tok-n">AUS</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">PSV</span><span class="tok-o">,</span><span class="tok-n">LWK</span><span class="tok-o">,</span><span class="tok-n">FIE</span><span class="tok-o">,</span><span class="tok-n">KOI</span><span class="tok-o">,</span><span class="tok-n">GLA</span><span class="tok-o">,</span><span class="tok-n">EWR</span><span class="tok-o">,</span><span class="tok-n">AUS</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">PSV</span><span class="tok-o">,</span><span class="tok-n">LWK</span><span class="tok-o">,</span><span class="tok-n">FIE</span><span class="tok-o">,</span><span class="tok-n">KOI</span><span class="tok-o">,</span><span class="tok-n">GLA</span><span class="tok-o">,</span><span class="tok-n">PHL</span><span class="tok-o">,</span><span class="tok-n">AUS</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">PSV</span><span class="tok-o">,</span><span class="tok-n">LWK</span><span class="tok-o">,</span><span class="tok-n">FIE</span><span class="tok-o">,</span><span class="tok-n">KOI</span><span class="tok-o">,</span><span class="tok-n">GLA</span><span class="tok-o">,</span><span class="tok-n">YYZ</span><span class="tok-o">,</span><span class="tok-n">AUS</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">PSV</span><span class="tok-o">,</span><span class="tok-n">LWK</span><span class="tok-o">,</span><span class="tok-n">FIE</span><span class="tok-o">,</span><span class="tok-n">KOI</span><span class="tok-o">,</span><span class="tok-n">GLA</span><span class="tok-o">,</span><span class="tok-n">LHR</span><span class="tok-o">,</span><span class="tok-n">AUS</span><span class="tok-o">]</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>However, were we to reverse the query as follows we can run into trouble. In fact, if
+you run this query on your laptop, after a few minutes of hight CPU usage and
+increased fan noise, it is likely you will get an error that the query ran out of
+available memory.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span><span class="tok-na">repeat</span><span class="tok-o">(</span><span class="tok-n">out</span><span class="tok-o">().</span><span class="tok-na">simplePath</span><span class="tok-o">()).</span><span class="tok-na">until</span><span class="tok-o">(</span><span class="tok-n">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;PSV&#39;</span><span class="tok-o">)).</span>
+      <span class="tok-n">limit</span><span class="tok-o">(</span><span class="tok-mi">10</span><span class="tok-o">).</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The reason this happens is as follows. There are very few routes from PSV and not
+many more from the airports it is closely connected to. Therefore, if you start the
+query from PSV, you will fairly quickly find some paths that end up in AUS. However,
+if you start from AUS there are a lot of possible routes that Gremlin has to explore
+before it gets close to finding PSV. If it helps, think of a funnel where PSV is at
+the narrow end and AUS is at the other.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+The <em>path</em> step uses a lot of memory and in some cases can cause issues.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The reason that so much memory is consumed is that the <em>path</em> step, even if
+<em>simplePath</em> is used to avoid travelling the same path twice, has to store up a very
+large number of routes before finding the ones we are actually interested in.  So
+while the <em>path</em> step is incredibly useful, be aware that in cases like this one, it
+can get you into trouble if not used with care.</p>
 </div>
 </div>
 </div>
@@ -10350,29 +10489,7 @@ such combinations once but I will leave that as an exercise for the reader!</p>
 <p>Work in progress</p>
 </div>
 <div class="sect3">
-<h4 id="_warning_about_em_path_em_being_memory_intensive">5.11.1. Warning about <em>path</em> being memory intensive</h4>
-<div class="paragraph">
-<p>Running a query with point of funnel first works fine but put AUS first and will
-run out of memory.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;PSV&#39;</span><span class="tok-o">).</span><span class="tok-na">repeat</span><span class="tok-o">(</span><span class="tok-n">out</span><span class="tok-o">().</span><span class="tok-na">simplePath</span><span class="tok-o">()).</span><span class="tok-na">until</span><span class="tok-o">(</span><span class="tok-n">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">)).</span><span class="tok-na">limit</span><span class="tok-o">(</span><span class="tok-mi">10</span><span class="tok-o">).</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">)</span>
-<span class="tok-o">[</span><span class="tok-n">PSV</span><span class="tok-o">,</span><span class="tok-n">LWK</span><span class="tok-o">,</span><span class="tok-n">FIE</span><span class="tok-o">,</span><span class="tok-n">KOI</span><span class="tok-o">,</span><span class="tok-n">EDI</span><span class="tok-o">,</span><span class="tok-n">JFK</span><span class="tok-o">,</span><span class="tok-n">AUS</span><span class="tok-o">]</span>
-<span class="tok-o">[</span><span class="tok-n">PSV</span><span class="tok-o">,</span><span class="tok-n">LWK</span><span class="tok-o">,</span><span class="tok-n">FIE</span><span class="tok-o">,</span><span class="tok-n">KOI</span><span class="tok-o">,</span><span class="tok-n">EDI</span><span class="tok-o">,</span><span class="tok-n">EWR</span><span class="tok-o">,</span><span class="tok-n">AUS</span><span class="tok-o">]</span>
-<span class="tok-o">[</span><span class="tok-n">PSV</span><span class="tok-o">,</span><span class="tok-n">LWK</span><span class="tok-o">,</span><span class="tok-n">FIE</span><span class="tok-o">,</span><span class="tok-n">KOI</span><span class="tok-o">,</span><span class="tok-n">EDI</span><span class="tok-o">,</span><span class="tok-n">LHR</span><span class="tok-o">,</span><span class="tok-n">AUS</span><span class="tok-o">]</span>
-<span class="tok-o">[</span><span class="tok-n">PSV</span><span class="tok-o">,</span><span class="tok-n">LWK</span><span class="tok-o">,</span><span class="tok-n">FIE</span><span class="tok-o">,</span><span class="tok-n">KOI</span><span class="tok-o">,</span><span class="tok-n">EDI</span><span class="tok-o">,</span><span class="tok-n">FRA</span><span class="tok-o">,</span><span class="tok-n">AUS</span><span class="tok-o">]</span>
-<span class="tok-o">[</span><span class="tok-n">PSV</span><span class="tok-o">,</span><span class="tok-n">LWK</span><span class="tok-o">,</span><span class="tok-n">FIE</span><span class="tok-o">,</span><span class="tok-n">KOI</span><span class="tok-o">,</span><span class="tok-n">GLA</span><span class="tok-o">,</span><span class="tok-n">JFK</span><span class="tok-o">,</span><span class="tok-n">AUS</span><span class="tok-o">]</span>
-<span class="tok-o">[</span><span class="tok-n">PSV</span><span class="tok-o">,</span><span class="tok-n">LWK</span><span class="tok-o">,</span><span class="tok-n">FIE</span><span class="tok-o">,</span><span class="tok-n">KOI</span><span class="tok-o">,</span><span class="tok-n">GLA</span><span class="tok-o">,</span><span class="tok-n">MCO</span><span class="tok-o">,</span><span class="tok-n">AUS</span><span class="tok-o">]</span>
-<span class="tok-o">[</span><span class="tok-n">PSV</span><span class="tok-o">,</span><span class="tok-n">LWK</span><span class="tok-o">,</span><span class="tok-n">FIE</span><span class="tok-o">,</span><span class="tok-n">KOI</span><span class="tok-o">,</span><span class="tok-n">GLA</span><span class="tok-o">,</span><span class="tok-n">EWR</span><span class="tok-o">,</span><span class="tok-n">AUS</span><span class="tok-o">]</span>
-<span class="tok-o">[</span><span class="tok-n">PSV</span><span class="tok-o">,</span><span class="tok-n">LWK</span><span class="tok-o">,</span><span class="tok-n">FIE</span><span class="tok-o">,</span><span class="tok-n">KOI</span><span class="tok-o">,</span><span class="tok-n">GLA</span><span class="tok-o">,</span><span class="tok-n">PHL</span><span class="tok-o">,</span><span class="tok-n">AUS</span><span class="tok-o">]</span>
-<span class="tok-o">[</span><span class="tok-n">PSV</span><span class="tok-o">,</span><span class="tok-n">LWK</span><span class="tok-o">,</span><span class="tok-n">FIE</span><span class="tok-o">,</span><span class="tok-n">KOI</span><span class="tok-o">,</span><span class="tok-n">GLA</span><span class="tok-o">,</span><span class="tok-n">YYZ</span><span class="tok-o">,</span><span class="tok-n">AUS</span><span class="tok-o">]</span>
-<span class="tok-o">[</span><span class="tok-n">PSV</span><span class="tok-o">,</span><span class="tok-n">LWK</span><span class="tok-o">,</span><span class="tok-n">FIE</span><span class="tok-o">,</span><span class="tok-n">KOI</span><span class="tok-o">,</span><span class="tok-n">GLA</span><span class="tok-o">,</span><span class="tok-n">LHR</span><span class="tok-o">,</span><span class="tok-n">AUS</span><span class="tok-o">]</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_work_in_progress">5.11.2. Work in progress</h4>
+<h4 id="_work_in_progress">5.11.1. Work in progress</h4>
 <div class="paragraph">
 <p>Using a mathematical expression inside of <em>is</em></p>
 </div>
@@ -10537,7 +10654,7 @@ run out of memory.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="pagerank">5.11.3. Experiments with Page Rank</h4>
+<h4 id="pagerank">5.11.2. Experiments with Page Rank</h4>
 <div class="listingblock">
 <div class="title">This is a placeholder.</div>
 <div class="content">
@@ -12696,8 +12813,8 @@ are shown.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 253<br>
-Last updated 2017-10-10 11:44:46 CDT
+Version 254<br>
+Last updated 2017-10-10 14:03:24 CDT
 </div>
 </div>
 </body>
