@@ -499,8 +499,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Kelvin R. Lawrence</span><br>
 <span id="email" class="email"><a href="mailto:klawrenc@us.ibm.com">klawrenc@us.ibm.com</a></span><br>
-<span id="revnumber">version 254,</span>
-<span id="revdate">Oct 10, 2017</span>
+<span id="revnumber">version 257,</span>
+<span id="revdate">Oct 11, 2017</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
@@ -2794,10 +2794,32 @@ document.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;airport&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;LCY&#39;</span><span class="tok-o">).</span><span class="tok-na">outE</span><span class="tok-o">().</span><span class="tok-na">inV</span><span class="tok-o">().</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">)</span>
-
-<span class="tok-o">[</span><span class="tok-n">LCY</span><span class="tok-o">,</span><span class="tok-mi">468</span><span class="tok-o">,</span><span class="tok-n">GVA</span><span class="tok-o">]</span></code></pre>
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;airport&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;LCY&#39;</span><span class="tok-o">).</span><span class="tok-na">outE</span><span class="tok-o">().</span><span class="tok-na">inV</span><span class="tok-o">().</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">)</span></code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>When you run this modified version of the query, you will receive a set of results
+that look like the following line.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-o">[</span><span class="tok-n">LCY</span><span class="tok-o">,</span><span class="tok-mi">468</span><span class="tok-o">,</span><span class="tok-n">GVA</span><span class="tok-o">]</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that the example above is equivalent to this longer form of the same query. The
+<em>by</em> modulator steps that follow a <em>path</em> are applied in a <em>round robin</em> fashion. So
+if there are not enough specified for the number of steps in the path, it just loops
+back around to the first <em>by</em> step and so on.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;airport&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;LCY&#39;</span><span class="tok-o">).</span><span class="tok-na">outE</span><span class="tok-o">().</span><span class="tok-na">inV</span><span class="tok-o">().</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There are a few things to be aware of when using <em>path</em>. Those concerns are explained
+in the <a href="#pathwarn">A warning that <em>path</em> can be memory and CPU intensive</a> section a bit later.</p>
 </div>
 </div>
 <div class="sect3">
@@ -5291,22 +5313,27 @@ looking at the other vertices relative to where we started from, which was <em>v
 <div class="sect2">
 <h3 id="sp">3.20. Shortest paths (between airports) -  introducing <em>repeat</em></h3>
 <div class="paragraph">
-<p>We can use a <em>repeat&#8230;&#8203;until</em> looping construct to look for paths between two airports
+<p>Gremlin provides a <em>repeat&#8230;&#8203;until</em> looping construct similar to those found in many
+programming languages. This gives us a nice way to perform simple shortest path type
+queries. We can use a <em>repeat&#8230;&#8203;until</em> loop to look for paths between two airports
 without having to specify an explicit number of <em>out</em> steps to try.</p>
 </div>
 <div class="paragraph">
-<p>The use of <em>simplePath</em> prevents paths already taken from being taken again and
-greatly speeds up this query.  Without the <em>simplePath</em> step being used this query
-could take a lot longer.  The addition of a <em>limit</em> step is also important as without
-it this query will run for a LONG time looking for every possible path!!</p>
+<p>While performing such computations, we may not want paths we have already travelled
+to be travelled again. We can ask for this behavior this using the <em>simplePath</em> step.
+Doing so will speed up queries that do not need to travel the same paths through a
+graph multiple times.  Without the <em>simplePath</em> step being used the query we are
+about to look at could take a lot longer.  The addition of a <em>limit</em> step is also
+important as without it this query will run for a LONG time looking for every
+possible path!!</p>
 </div>
 <div class="paragraph">
-<p>The query blow looks for routes between Austin (AUS) and Agra (AGR). An important
+<p>The query below looks for routes between Austin (AUS) and Agra (AGR). An important
 query for those Austinites wanting to visit the Taj Mahal!</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// What are some of the shortest routes (paths) from AUS to AGR?</span>
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// What are some of the ways to travel from AUS to AGR?</span>
 <span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span><span class="tok-na">repeat</span><span class="tok-o">(</span><span class="tok-n">out</span><span class="tok-o">().</span><span class="tok-na">simplePath</span><span class="tok-o">()).</span>
                         <span class="tok-n">until</span><span class="tok-o">(</span><span class="tok-n">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AGR&#39;</span><span class="tok-o">)).</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">limit</span><span class="tok-o">(</span><span class="tok-mi">10</span><span class="tok-o">)</span></code></pre>
 </div>
@@ -5381,8 +5408,8 @@ example we want to next try 5 hops.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>A bit later, in the <a href="#emit">Using <em>emit</em> to return results during a traversal</a> section we will look at how <em>emit</em> can be used to adjust the
-behavior of a <em>repeat&#8230;&#8203;times</em> loop.</p>
+<p>A bit later, in the <a href="#emit">Using <em>emit</em> to return results during a traversal</a> section, we will look at how <em>emit</em> can be used to
+adjust the behavior of a <em>repeat&#8230;&#8203;times</em> loop.</p>
 </div>
 <div class="sect3">
 <h4 id="pathwarn">3.20.1. A warning that <em>path</em> can be memory and CPU intensive</h4>
@@ -5414,7 +5441,7 @@ results.</p>
 </div>
 <div class="paragraph">
 <p>However, were we to reverse the query as follows we can run into trouble. In fact, if
-you run this query on your laptop, after a few minutes of hight CPU usage and
+you run this query on your laptop, after a few minutes of high CPU usage and
 increased fan noise, it is likely you will get an error that the query ran out of
 available memory.</p>
 </div>
@@ -12813,8 +12840,8 @@ are shown.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 254<br>
-Last updated 2017-10-10 14:03:24 CDT
+Version 257<br>
+Last updated 2017-10-11 15:34:08 CDT
 </div>
 </div>
 </body>

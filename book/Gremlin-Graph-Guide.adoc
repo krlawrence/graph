@@ -1,12 +1,12 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v254, Oct 10, 2017
-// Tue Oct 10, 2017 12:51:38 CDT
+v257, Oct 11, 2017
+// Wed Oct 11, 2017 15:33:07 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Oct 10 2017
-//:Revision:  254
+//:Date:      Oct 11 2017
+//:Revision:  257
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -1695,9 +1695,28 @@ document.
 [source,groovy]
 ----
 g.V().has('airport','code','LCY').outE().inV().path().by('code').by('dist')
+----
 
+When you run this modified version of the query, you will receive a set of results
+that look like the following line.
+
+[source,groovy]
+----
 [LCY,468,GVA]
 ----
+
+Note that the example above is equivalent to this longer form of the same query. The
+'by' modulator steps that follow a 'path' are applied in a 'round robin' fashion. So
+if there are not enough specified for the number of steps in the path, it just loops
+back around to the first 'by' step and so on.
+
+[source,groovy]
+----
+g.V().has('airport','code','LCY').outE().inV().path().by('code').by('dist').by('code')
+----
+
+There are a few things to be aware of when using 'path'. Those concerns are explained
+in the <<pathwarn>> section a bit later.
 
 [[edgeexist]]
 Does an edge exist between two nodes?
@@ -3886,20 +3905,25 @@ looking at the other vertices relative to where we started from, which was 'v[3]
 Shortest paths (between airports) -  introducing 'repeat'
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We can use a 'repeat...until' looping construct to look for paths between two airports 
+Gremlin provides a 'repeat...until' looping construct similar to those found in many
+programming languages. This gives us a nice way to perform simple shortest path type
+queries. We can use a 'repeat...until' loop to look for paths between two airports
 without having to specify an explicit number of 'out' steps to try.
 
-The use of 'simplePath' prevents paths already taken from being taken again and
-greatly speeds up this query.  Without the 'simplePath' step being used this query
-could take a lot longer.  The addition of a 'limit' step is also important as without
-it this query will run for a LONG time looking for every possible path!! 
+While performing such computations, we may not want paths we have already travelled
+to be travelled again. We can ask for this behavior this using the 'simplePath' step.
+Doing so will speed up queries that do not need to travel the same paths through a
+graph multiple times.  Without the 'simplePath' step being used the query we are
+about to look at could take a lot longer.  The addition of a 'limit' step is also
+important as without it this query will run for a LONG time looking for every
+possible path!! 
 
-The query blow looks for routes between Austin (AUS) and Agra (AGR). An important
+The query below looks for routes between Austin (AUS) and Agra (AGR). An important
 query for those Austinites wanting to visit the Taj Mahal!
 
 [source,groovy]
 ----
-// What are some of the shortest routes (paths) from AUS to AGR?
+// What are some of the ways to travel from AUS to AGR?
 g.V().has('code','AUS').repeat(out().simplePath()).
                         until(has('code','AGR')).path().by('code').limit(10) 
 ----
@@ -3969,8 +3993,8 @@ example we want to next try 5 hops.
 g.V().has('code','AUS').out().out().has('code','SYD').path().by('code')
 ----
 
-A bit later, in the <<emit>> section we will look at how 'emit' can be used to adjust the
-behavior of a 'repeat...times' loop.
+A bit later, in the <<emit>> section, we will look at how 'emit' can be used to
+adjust the behavior of a 'repeat...times' loop.
 
 [[pathwarn]]
 A warning that 'path' can be memory and CPU intensive
@@ -4002,7 +4026,7 @@ g.V().has('code','PSV').repeat(out().simplePath()).until(has('code','AUS')).
 ----
 
 However, were we to reverse the query as follows we can run into trouble. In fact, if
-you run this query on your laptop, after a few minutes of hight CPU usage and
+you run this query on your laptop, after a few minutes of high CPU usage and
 increased fan noise, it is likely you will get an error that the query ran out of
 available memory.
 
