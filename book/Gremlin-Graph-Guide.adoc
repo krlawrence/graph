@@ -1,12 +1,12 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v257, Oct 11, 2017
-// Wed Oct 11, 2017 15:33:07 CDT
+v258, Oct 12, 2017
+// Fri Oct 13, 2017 11:03:49 CDT 
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Oct 11 2017
-//:Revision:  257
+//:Date:      Oct 12 2017
+//:Revision:  258
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -227,9 +227,9 @@ store where you currently have them. A sales ledger system built using a relatio
 database is probably doing just fine where it is and likewise a document store is
 quite possibly just the right place to be storing your documents. So "use the right
 tool for the job" remains as valid a phrase here as elsewhere". Where graph databases
-come into their own is when the data you are storing is intrinsically linked by it's
-very nature - the air routes network used as the basis for all of the examples in
-this document being a perfect example.
+come into their own is when the data you are storing is intrinsically linked by its
+very nature, the air routes network used as the basis for all of the examples in
+this document being a perfect example of such a situation.
 
 Those of you that looked at graphs as part of a computer science course are correct
 if your reaction was "haven't graphs been around for ages?". Indeed Leonard Euler is
@@ -241,18 +241,21 @@ If you want read a bit more about graph theory and its present day application y
 can find a lot of good information on-line. Here's a Wikipedia link to get you
 started. https://en.wikipedia.org/wiki/Graph_theory
 
-So given Graph Theory is anything but a new idea, why is it that only recently we are
-seeing a massive growth in the building and deployment of graph database systems and
-applications? At least part of the answer is that computer hardware and software has
-reached the point where you can build large big data systems that scale well for a
-reasonable price, especially now that using cloud deployments you don't even have to
-buy the hardware that your system runs on. While you can certainly run a graph
-database on your laptop, I do just that every day, the reality is that in production,
-at scale, they are big data systems. Large graphs commonly have many billions of
-nodes and edges in them taking up petabytes of data on disk. Graph algorithms can be
-both compute and memory intensive and it is only fairly recently that deploying the
-necessary resources for such big data systems has made financial sense for more
-everyday uses in business and not just in government or academia. Graph databases are
+So given Graph Theory is anything but a new idea, why is it that only recently
+we are seeing a massive growth in the building and deployment of graph database
+systems and applications? At least part of the answer is that computer hardware
+and software has reached the point where you can build large big data systems
+that scale well for a reasonable price. In fact, it's even easier than
+ever to build the large systems because you don't have to buy the hardware that
+your system will run on when you use the cloud.
+
+While you can certainly run a graph database on your laptop, I do just that
+every day, the reality is that in production, at scale, they are big data
+systems. Large graphs commonly have many billions of nodes and edges in them
+taking up petabytes of data on disk. Graph algorithms can be both compute and
+memory intensive and it is only fairly recently that deploying the necessary
+resources for such big data systems has made financial sense for more everyday
+uses in business and not just in government or academia. Graph databases are
 becoming much more broadly adopted across the spectrum from high end scientific
 research to financial networks and beyond.
 
@@ -320,17 +323,18 @@ Programming Interfaces::
 Documentation::
 - A user guide, a tutorial and programming API documentation.
 
-The programming interfaces allow providers of graph databases to build systems that
-are TinkerPop enabled. Any such databases can be accessed using the Gremlin query
-language and corresponding API. For most of this document we will be working within
-the Gremlin console with a local graph. However in Section 6 we will take a look at
-Gremlin Server and some other TinkerPop 3 enabled environments. Most of Apache
-Tinkerpop has been developed using Java 8 but there are also bindings available for
-many other programming languages such as Groovy and Python. Parts of TinkerPop are
-themselves developed in Groovy. Most notably the Gremlin Console and the Gremlin
-Server. The nice thing about that is that we can use Groovy syntax along with Gremlin
-when entering queries into the Console or sending them via REST API to a Gremlin
-Server. We cover all of these topics in detail in this document.
+The programming interfaces allow providers of graph databases to build systems
+that are TinkerPop enabled. Any such databases can be accessed using the
+Gremlin query language and corresponding API. For most of this document we will
+be working within the Gremlin console with a local graph. However in Section 6
+we will take a look at Gremlin Server and some other TinkerPop 3 enabled
+environments. Most of Apache Tinkerpop has been developed using Java 8 but
+there are also bindings available for many other programming languages such as
+Groovy and Python. Parts of TinkerPop are themselves developed in Groovy, most
+notably the Gremlin Console. The nice thing about that is that we can
+use Groovy syntax along with Gremlin when entering queries into the Console or
+sending them via REST API to a Gremlin Server. We cover all of these topics in
+detail in this document.
 
 We have tested the queries and other examples in this document against Apache
 TinkerPop version 3.2.4 using the TinkerGraph graph and the Gremlin console as well
