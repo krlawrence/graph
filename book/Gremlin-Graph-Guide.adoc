@@ -892,10 +892,10 @@ A word about the TinkerPop.sugar plugin
 The Gremlin console has a set of plug in modules that can be independently enabled or
 disabled. Depending upon your use case you may or may not need to manage plugins. 
 
-TinkerPop 2 enabled by default a plugin called 'Tinkerpop.sugar' that allowed
-shorthand forms of queries to be entered when using the Gremlin console. In TinkerPop
-3 that plugin is off by default and has to be enabled if you want to continue to use
-the same shortcuts that TinkerPop 2 allowed by default. 
+TinkerPop 2 supported by default some of syntactic 'sugar' that allowed shorthand
+forms of queries to be entered when using the Gremlin console. In TinkerPop 3 that
+support has been moved to a plugin and is off by default. It has to be enabled if you
+want to continue to use the same shortcuts that TinkerPop 2 allowed by default. 
 
 You can enable 'sugar' support from the Gremlin console as follows:
 
