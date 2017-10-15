@@ -10,6 +10,7 @@ This repository is the new home for the source materials, sample code and exampl
 The site is currently being setup and populated - Please check back again regularly
 
 LATEST NEWS:   
+[Oct-15-2017] Experimental - The /book folder now includes DOCBOOK, EPUB and MOBI format versions on the book.
 [Oct-10-2017] Several sections have been improved, I also made updates to reflect changes made in Tinkerpop 3.3
 
 To read the book in a browser click [here](http://kelvinlawrence.net/book/Gremlin-Graph-Guide.html) or for a PDF version click [here](http://kelvinlawrence.net/book/Gremlin-Graph-Guide.pdf).
