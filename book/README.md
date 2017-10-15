@@ -1,7 +1,7 @@
 This folder contains the AsciiDoc source file used to produce the HTML, XML (DOCBOOK), EPUB, MOBI and PDF output.
 
 LATEST NEWS:   
-[Oct-15-2017] Experimental - The /book folder now includes DOCBOOK, EPUB and MOBI format versions on the book. 
+[Oct-15-2017] Experimental - The /book folder now includes DOCBOOK, EPUB and MOBI format versions of the book. 
 [Oct-11-2017] I improved the section that introduces the 'repeat' step.  
 [Oct-10-2017] Several sections have been improved, I also made updates to reflect changes made in Tinkerpop 3.3
 
