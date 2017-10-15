@@ -1,12 +1,12 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v258, Oct 12, 2017
-// Fri Oct 13, 2017 11:03:49 CDT 
+v259, Oct 15, 2017
+// Sun Oct 15, 2017 09:58:36
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Oct 12 2017
-//:Revision:  258
+//:Date:      Oct 15 2017
+//:Revision:  259
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -241,23 +241,22 @@ If you want read a bit more about graph theory and its present day application y
 can find a lot of good information on-line. Here's a Wikipedia link to get you
 started. https://en.wikipedia.org/wiki/Graph_theory
 
-So given Graph Theory is anything but a new idea, why is it that only recently
-we are seeing a massive growth in the building and deployment of graph database
-systems and applications? At least part of the answer is that computer hardware
-and software has reached the point where you can build large big data systems
-that scale well for a reasonable price. In fact, it's even easier than
-ever to build the large systems because you don't have to buy the hardware that
-your system will run on when you use the cloud.
+So given Graph Theory is anything but a new idea, why is it that only recently we are
+seeing a massive growth in the building and deployment of graph database systems and
+applications? At least part of the answer is that computer hardware and software has
+reached the point where you can build large big data systems that scale well for a
+reasonable price. In fact, it's even easier than ever to build the large systems
+because you don't have to buy the hardware that your system will run on when you use
+the cloud.
 
-While you can certainly run a graph database on your laptop, I do just that
-every day, the reality is that in production, at scale, they are big data
-systems. Large graphs commonly have many billions of nodes and edges in them
-taking up petabytes of data on disk. Graph algorithms can be both compute and
-memory intensive and it is only fairly recently that deploying the necessary
-resources for such big data systems has made financial sense for more everyday
-uses in business and not just in government or academia. Graph databases are
-becoming much more broadly adopted across the spectrum from high end scientific
-research to financial networks and beyond.
+While you can certainly run a graph database on your laptop, I do just that every
+day, the reality is that in production, at scale, they are big data systems. Large
+graphs commonly have many billions of nodes and edges in them taking up petabytes of
+data on disk. Graph algorithms can be both compute and memory intensive and it is
+only fairly recently that deploying the necessary resources for such big data systems
+has made financial sense for more everyday uses in business and not just in
+government or academia. Graph databases are becoming much more broadly adopted across
+the spectrum from high end scientific research to financial networks and beyond.
 
 Another factor that has really helped start this graph database revolution is the
 availability of high quality open source technology.  There are a lot of great open
@@ -323,22 +322,21 @@ Programming Interfaces::
 Documentation::
 - A user guide, a tutorial and programming API documentation.
 
-The programming interfaces allow providers of graph databases to build systems
-that are TinkerPop enabled. Any such databases can be accessed using the
-Gremlin query language and corresponding API. For most of this document we will
-be working within the Gremlin console with a local graph. However in Section 6
-we will take a look at Gremlin Server and some other TinkerPop 3 enabled
-environments. Most of Apache Tinkerpop has been developed using Java 8 but
-there are also bindings available for many other programming languages such as
-Groovy and Python. Parts of TinkerPop are themselves developed in Groovy, most
-notably the Gremlin Console. The nice thing about that is that we can
-use Groovy syntax along with Gremlin when entering queries into the Console or
-sending them via REST API to a Gremlin Server. We cover all of these topics in
-detail in this document.
+The programming interfaces allow providers of graph databases to build systems that
+are TinkerPop enabled. Any such databases can be accessed using the Gremlin query
+language and corresponding API. For most of this document we will be working within
+the Gremlin console with a local graph. However in Section 6 we will take a look at
+Gremlin Server and some other TinkerPop 3 enabled environments. Most of Apache
+Tinkerpop has been developed using Java 8 but there are also bindings available for
+many other programming languages such as Groovy and Python. Parts of TinkerPop are
+themselves developed in Groovy, most notably the Gremlin Console. The nice thing
+about that is that we can use Groovy syntax along with Gremlin when entering queries
+into the Console or sending them via REST API to a Gremlin Server. All of these
+topics are covered in detail in this boook.
 
-We have tested the queries and other examples in this document against Apache
-TinkerPop version 3.2.4 using the TinkerGraph graph and the Gremlin console as well
-as some other TinkerPop 3 enabled graph stores.
+The queries used as examples in this book have been tested with Apache TinkerPop
+version 3.3. using the TinkerGraph graph and the Gremlin console as well as some
+other TinkerPop 3 enabled graph stores.
 
 [[gconsole]]
 The Gremlin console
@@ -631,18 +629,24 @@ Don't worry if not all of these terms makes sense right away - we'll get there s
 >-- UuidIds: true                                                   
 ----
 
-As TinkerGraph is intended mostly for learning and testing it does not support some
-of the more advanced features you will find in Janus Graph such as ACID Transactions
-and external indexes. We will cover these topics as part of our discussion of Janus
-Graph towards the end of the document. One other thing worth noting in the list above
-is that 'UserSuppliedIds' is set to true for vertex and edge ID values. This means
-that if you load a graph file, such as a GraphML format file, that specifies ID
-values for vertices and edges then TinkerGraph will honor those IDs and use them. As
-we shall see later this is not the case with most other graph systems.
+TinkerGraph is really useful while learning to work with Gremlin and great for
+testing things out. One common use case where TinkerGraph can be very useful is to
+crate a sub-graph of a larger graph and work with it locally. TinkerGraph can even be
+used in production deployments if an all in memory graph fits the bill. Typically,
+TinkerGraph us used to explore static (no changing) graphs but you can use it from a
+programming language like Java and mutate its contents if you want to. However,
+TinkerGraph does not support some of the more advanced features you will find in
+implementations like Janus Graph such as ACID Transactions and external indexes. We
+will cover these topics as part of our discussion of Janus Graph towards the end of
+the document. One other thing worth noting in the list above is that
+'UserSuppliedIds' is set to true for vertex and edge ID values. This means that if
+you load a graph file, such as a GraphML format file, that specifies ID values for
+vertices and edges then TinkerGraph will honor those IDs and use them. As we shall
+see later this is not the case with most other graph systems.
 
-When running in the Gremlin Console, support for TinkerGraph is off by default. You
-can enable it by issuing the following command while inside the Gremlin Console.
-Console.
+When running in the Gremlin Console, support for TinkerGraph should be on by default.
+If for any reason you find it to be off you, can enable it by issuing the following
+command.
 
 [source,groovy]
 ----
@@ -661,7 +665,7 @@ graph = TinkerGraph.open()
 In many cases you will want to pass parameters to the 'open' method that give more
 information on how the graph is to be configured. We will explore those options later
 in the document. Before you can start to issue Gremlin queries against the graph you
-also need to establish a graph traversal object by calling the new graph's
+also need to establish a graph traversal source object by calling the new graph's
 'traversal' method as follows.
 
 [source,groovy]
@@ -672,7 +676,7 @@ g = graph.traversal()
 NOTE: Throughout the remainder of this document we will follow the convention that we
 will always use the variable name 'graph' for any variable that represents a graph
 instance and we will always use the variable name 'g' for any variable that
-represents an instance of a graph traversal object.
+represents an instance of a graph traversal source object.
 
 [[air]]
 Introducing the air-routes graph
