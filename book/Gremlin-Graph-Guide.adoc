@@ -1461,7 +1461,7 @@ g.E().hasLabel('route').count()
 We have not yet looked at the 'outE' step used above. We will look at it very soon
 however in the "<<walk>>" section.
 
-[[count]]
+[[countgroup]]
 Counting groups of things
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -8931,10 +8931,14 @@ will want to write stand alone applications that can work with a graph. There ar
 number of different language bindings currently available for TinkerPop 3. One of the
 most widely used is the Java API for TinkerPop. 
 
-In reality, for a commercial application you would not use TinkerGraph as your graph
-database. However, as a first step towards writing stand alone applications that use
-different graph database back ends, lets look at a few examples of how you can create
-a stand alone Java application that uses Gremlin and TinkerGraph.
+As discussed at earlier, when building a commercial application, you may need
+capabilities such as ACID transactions and would not use TinkerGraph as your graph
+database in those cases. There are however, places where TinkerGraph may be just what
+you need. One example might be doing analysis on a static graph that can fit into
+memory on your laptop. The air-routes graph is a good example of such a graph. As a
+first step towards writing stand alone applications that use different graph database
+back ends, lets look at a few examples of how you can create a Java application that
+uses Gremlin and TinkerGraph.
 
 [[tpinterfaces]]
 The Apache TinkerPop interfaces and classes
