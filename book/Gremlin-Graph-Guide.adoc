@@ -1,12 +1,11 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v259, Oct 15, 2017
-// Sun Oct 15, 2017 11:17:48
+v260, Oct 15, 2017
+// Sun Oct 15, 2017 15:30:34 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Oct 15 2017
-//:Revision:  259
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -17,6 +16,7 @@ v259, Oct 15, 2017
 //:pygments-style: manni
 :toc:
 :toclevels: 4
+:revision: 260
 
 // NOTE: These notes are encoded using a minimal level of Asciidoc markup. You can read
 // them as-is or generate HTML or other output formats from this file using the
@@ -78,14 +78,31 @@ practices, lessons I learned the hard way etc. are included.
 Thanks to all those that have encouraged me to keep going with this adventure!
 
 Kelvin R. Lawrence +
-October 5th, 2017
+October 5th, 2017 +
 
 Providing feedback
 ~~~~~~~~~~~~~~~~~~
 Please let me know about any mistakes you find in this material and also please feel
 free to send me feedback of any sort. Suggested improvements are especially welcome.
 A good way to provide feedback is by opening an issue in the GitHub repository
-located at https://github.com/krlawrence/graph. 
+located at https://github.com/krlawrence/graph. You are currently reading revision
+{revision} of the document.
+
+[[thanks]]
+A word of thanks
+~~~~~~~~~~~~~~~~
+
+I would like to thank my colleagues at IBM, Graham Wallis, Jason Plurad and Adam
+Holley for their help in refining and improving several of the queries contained in
+this document. Gremlin is definitely a bit of a team sport. We spent many hours over
+the last many months discussing the best way to handle different types of queries and
+traversals!
+
+I would also be remiss if I did not give a big shout out to all of the folks that
+spend a  lot of time replying to questions and suggestions on the
+https://groups.google.com/forum/#!forum/gremlin-users[Gremlin Users Google Group].
+Special thanks should go to Daniel Kuppitz, Marko Rodriguez and Stephen Mallette, key
+members of the team that created and maintains Apache TinkerPop.
 
 What is this book about?
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -158,15 +175,6 @@ Chapter 8 - FURTHER READING::
 - We finish up by providing several links to useful web sites where you can find
   tools and documentation for many of the technologies covered in this document.
 
-[[thanks]]
-A word of thanks
-~~~~~~~~~~~~~~~~
-
-I would like to thank my colleagues at IBM, Graham Wallis, Jason Plurad and Adam
-Holley for their help in refining and improving several of the queries contained in
-this document. Gremlin is definitely a bit of a team sport. We spent many hours over
-the last many months discussing the best way to handle different types of queries and
-traversals! 
 
 [[whygraph]]
 So what is a graph database and why should I care?
