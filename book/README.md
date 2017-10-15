@@ -1,4 +1,4 @@
-This folder contains the AsciiDoc source file used to produce the HTML, DOCBOOK, EPUB, MOBI and PDF output.
+This folder contains the AsciiDoc source file used to produce the HTML, XML (DOCBOOK), EPUB, MOBI and PDF output.
 
 LATEST NEWS:   
 [Oct-11-2017] I improved the section that introduces the 'repeat' step.  
@@ -10,6 +10,6 @@ To read the HTML file please either downloaded or visit http://kelvinlawrence.ne
 
 Also while Git will display the PDF file if you click on it, it does not enable the hyper links etc. To view the PDF please either download it and use a PDF viewer or visit http://kelvinlawrence.net/book/Gremlin-Graph-Guide.pdf
 
-The DOCBOOK file is generated using Asciidoctor and can be viewed on Linux using the Yelp tool among many others or used to produce other formats. The EPUB and MOBI files can be viewed using most popular e-book readers.
+The XML (DOCBOOK) file is generated using Asciidoctor and can be viewed on Linux using the Yelp tool among many others or used to produce other formats. The EPUB and MOBI files can be viewed using most popular e-book readers and some browsers.
 
 Please note that the DOCBOOK, EPUB and MOBI format files currently do not have all of the nice source code highlighting and colors that the HTML and PDF versions have.
