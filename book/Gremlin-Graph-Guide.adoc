@@ -2,7 +2,7 @@ GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v259, Oct 15, 2017
-// Sun Oct 15, 2017 09:58:36
+// Sun Oct 15, 2017 11:17:48
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Oct 15 2017
@@ -892,7 +892,7 @@ A word about the TinkerPop.sugar plugin
 The Gremlin console has a set of plug in modules that can be independently enabled or
 disabled. Depending upon your use case you may or may not need to manage plugins. 
 
-TinkerPop 2 supported by default some of syntactic 'sugar' that allowed shorthand
+TinkerPop 2 supported by default some syntactic 'sugar' that allowed shorthand
 forms of queries to be entered when using the Gremlin console. In TinkerPop 3 that
 support has been moved to a plugin and is off by default. It has to be enabled if you
 want to continue to use the same shortcuts that TinkerPop 2 allowed by default. 
