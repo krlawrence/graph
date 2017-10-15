@@ -1,8 +1,8 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v260, Oct 15, 2017
-// Sun Oct 15, 2017 15:30:34 CDT
+v261, Oct 15, 2017
+// Sun Oct 15, 2017 15:57:10 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Oct 15 2017
@@ -16,7 +16,7 @@ v260, Oct 15, 2017
 //:pygments-style: manni
 :toc:
 :toclevels: 4
-:revision: 260
+:revision: 261
 
 // NOTE: These notes are encoded using a minimal level of Asciidoc markup. You can read
 // them as-is or generate HTML or other output formats from this file using the
@@ -108,12 +108,12 @@ What is this book about?
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 This book introduces the Apache TinkerPop 3 'Gremlin' graph query and traversal
-language via real examples featuring a real world graph that is also provided with
-these notes.  The graph, 'air-routes.graphml', is a model of the world airline route
-network between 3,373 airports including 43,400 routes. The examples presented  will
-work unmodified with the air-routes.graphml file loaded into the Gremlin console
-running with a TinkerGraph. How to set that environment up is covered in the 
-<<gremlininstall>> section below.
+language via real examples featuring a real world graph that is also provided along
+with sample code and applications. The graph, 'air-routes.graphml', is a model of the
+world airline route network between 3,373 airports including 43,400 routes. The
+examples presented will work unmodified with the air-routes.graphml file loaded into
+the Gremlin console running with a TinkerGraph. How to set that environment up is
+covered in the <<gremlininstall>> section below.
 
 NOTE: The examples in this book have now been updated and tested using Apache
 TinkerPop version 3.3 which introduced a few breaking changes. If you find any I

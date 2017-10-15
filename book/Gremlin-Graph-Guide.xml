@@ -17,7 +17,7 @@
 <authorinitials>KRL</authorinitials>
 <revhistory>
 <revision>
-<revnumber>260</revnumber>
+<revnumber>261</revnumber>
 <date>Oct 15, 2017</date>
 <authorinitials>KRL</authorinitials>
 </revision>
@@ -57,7 +57,7 @@ October 5th, 2017<?asciidoc-br?></simpara>
 free to send me feedback of any sort. Suggested improvements are especially welcome.
 A good way to provide feedback is by opening an issue in the GitHub repository
 located at <link xl:href="https://github.com/krlawrence/graph">https://github.com/krlawrence/graph</link>. You are currently reading revision
-260 of the document.</simpara>
+261 of the document.</simpara>
 </section>
 <section xml:id="thanks">
 <title>A word of thanks</title>
@@ -75,12 +75,12 @@ members of the team that created and maintains Apache TinkerPop.</simpara>
 <section xml:id="_what_is_this_book_about">
 <title>What is this book about?</title>
 <simpara>This book introduces the Apache TinkerPop 3 <emphasis>Gremlin</emphasis> graph query and traversal
-language via real examples featuring a real world graph that is also provided with
-these notes.  The graph, <emphasis>air-routes.graphml</emphasis>, is a model of the world airline route
-network between 3,373 airports including 43,400 routes. The examples presented  will
-work unmodified with the air-routes.graphml file loaded into the Gremlin console
-running with a TinkerGraph. How to set that environment up is covered in the
-<xref linkend="gremlininstall"/> section below.</simpara>
+language via real examples featuring a real world graph that is also provided along
+with sample code and applications. The graph, <emphasis>air-routes.graphml</emphasis>, is a model of the
+world airline route network between 3,373 airports including 43,400 routes. The
+examples presented will work unmodified with the air-routes.graphml file loaded into
+the Gremlin console running with a TinkerGraph. How to set that environment up is
+covered in the <xref linkend="gremlininstall"/> section below.</simpara>
 <note>
 <simpara>The examples in this book have now been updated and tested using Apache
 TinkerPop version 3.3 which introduced a few breaking changes. If you find any I
