@@ -17,7 +17,7 @@
 <authorinitials>KRL</authorinitials>
 <revhistory>
 <revision>
-<revnumber>259</revnumber>
+<revnumber>260</revnumber>
 <date>Oct 15, 2017</date>
 <authorinitials>KRL</authorinitials>
 </revision>
@@ -49,14 +49,28 @@ to work with graphs. Lots of code examples, sample queries, discussion of best
 practices, lessons I learned the hard way etc. are included.</simpara>
 <simpara>Thanks to all those that have encouraged me to keep going with this adventure!</simpara>
 <simpara>Kelvin R. Lawrence<?asciidoc-br?>
-October 5th, 2017</simpara>
+October 5th, 2017<?asciidoc-br?></simpara>
 </section>
 <section xml:id="_providing_feedback">
 <title>Providing feedback</title>
 <simpara>Please let me know about any mistakes you find in this material and also please feel
 free to send me feedback of any sort. Suggested improvements are especially welcome.
 A good way to provide feedback is by opening an issue in the GitHub repository
-located at <link xl:href="https://github.com/krlawrence/graph">https://github.com/krlawrence/graph</link>.</simpara>
+located at <link xl:href="https://github.com/krlawrence/graph">https://github.com/krlawrence/graph</link>. You are currently reading revision
+260 of the document.</simpara>
+</section>
+<section xml:id="thanks">
+<title>A word of thanks</title>
+<simpara>I would like to thank my colleagues at IBM, Graham Wallis, Jason Plurad and Adam
+Holley for their help in refining and improving several of the queries contained in
+this document. Gremlin is definitely a bit of a team sport. We spent many hours over
+the last many months discussing the best way to handle different types of queries and
+traversals!</simpara>
+<simpara>I would also be remiss if I did not give a big shout out to all of the folks that
+spend a  lot of time replying to questions and suggestions on the
+<link xl:href="https://groups.google.com/forum/#!forum/gremlin-users">Gremlin Users Google Group</link>.
+Special thanks should go to Daniel Kuppitz, Marko Rodriguez and Stephen Mallette, key
+members of the team that created and maintains Apache TinkerPop.</simpara>
 </section>
 <section xml:id="_what_is_this_book_about">
 <title>What is this book about?</title>
@@ -193,14 +207,6 @@ tools and documentation for many of the technologies covered in this document.</
 </listitem>
 </varlistentry>
 </variablelist>
-</section>
-<section xml:id="thanks">
-<title>A word of thanks</title>
-<simpara>I would like to thank my colleagues at IBM, Graham Wallis, Jason Plurad and Adam
-Holley for their help in refining and improving several of the queries contained in
-this document. Gremlin is definitely a bit of a team sport. We spent many hours over
-the last many months discussing the best way to handle different types of queries and
-traversals!</simpara>
 </section>
 <section xml:id="whygraph">
 <title>So what is a graph database and why should I care?</title>
