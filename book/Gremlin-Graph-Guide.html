@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 1.5.5">
+<meta name="generator" content="Asciidoctor 1.5.4">
 <meta name="author" content="Kelvin R. Lawrence">
 <title>GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
@@ -18,6 +18,7 @@ audio:not([controls]){display:none;height:0}
 [hidden],template{display:none}
 script{display:none!important}
 html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}
+body{margin:0}
 a{background:transparent}
 a:focus{outline:thin dotted}
 a:active,a:hover{outline:0}
@@ -52,7 +53,7 @@ textarea{overflow:auto;vertical-align:top}
 table{border-collapse:collapse;border-spacing:0}
 *,*:before,*:after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}
 html,body{font-size:100%}
-body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto;tab-size:4;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto}
 a:hover{cursor:pointer}
 img,object,embed{max-width:100%;height:auto}
 object,embed{height:100%}
@@ -64,6 +65,7 @@ img{-ms-interpolation-mode:bicubic}
 .text-center{text-align:center!important}
 .text-justify{text-align:justify!important}
 .hide{display:none}
+body{-webkit-font-smoothing:antialiased}
 img,object,svg{display:inline-block;vertical-align:middle}
 textarea{height:auto;min-height:50px}
 select{width:100%}
@@ -118,16 +120,13 @@ table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:
 table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
 table tr.even,table tr.alt,table tr:nth-of-type(even){background:#f8f8f7}
 table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{display:table-cell;line-height:1.6}
+body{tab-size:4}
 h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
 h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
 .clearfix:before,.clearfix:after,.float-group:before,.float-group:after{content:" ";display:table}
 .clearfix:after,.float-group:after{clear:both}
-*:not(pre)>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background-color:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed;word-wrap:break-word}
-*:not(pre)>code.nobreak{word-wrap:normal}
-*:not(pre)>code.nowrap{white-space:nowrap}
+*:not(pre)>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background-color:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
 pre,pre>code{line-height:1.45;color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;text-rendering:optimizeSpeed}
-em em{font-style:normal}
-strong strong{font-weight:400}
 .keyseq{color:rgba(51,51,51,.8)}
 kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background-color:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
 .keyseq kbd:first-child{margin-left:0}
@@ -420,7 +419,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </style>
 <style>
 .listingblock .pygments .hll { background-color: #4f424c }
-.listingblock .pygments, .listingblock .pygments code { background: #2f1e2e; color: #e7e9db }
+.listingblock .pygments  { background: #2f1e2e; color: #e7e9db }
 .listingblock .pygments .tok-c { color: #776e71 } /* Comment */
 .listingblock .pygments .tok-err { color: #ef6155 } /* Error */
 .listingblock .pygments .tok-k { color: #815ba4 } /* Keyword */
@@ -471,10 +470,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .listingblock .pygments .tok-mh { color: #f99b15 } /* Literal.Number.Hex */
 .listingblock .pygments .tok-mi { color: #f99b15 } /* Literal.Number.Integer */
 .listingblock .pygments .tok-mo { color: #f99b15 } /* Literal.Number.Oct */
-.listingblock .pygments .tok-sa { color: #48b685 } /* Literal.String.Affix */
 .listingblock .pygments .tok-sb { color: #48b685 } /* Literal.String.Backtick */
 .listingblock .pygments .tok-sc { color: #e7e9db } /* Literal.String.Char */
-.listingblock .pygments .tok-dl { color: #48b685 } /* Literal.String.Delimiter */
 .listingblock .pygments .tok-sd { color: #776e71 } /* Literal.String.Doc */
 .listingblock .pygments .tok-s2 { color: #48b685 } /* Literal.String.Double */
 .listingblock .pygments .tok-se { color: #f99b15 } /* Literal.String.Escape */
@@ -485,11 +482,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .listingblock .pygments .tok-s1 { color: #48b685 } /* Literal.String.Single */
 .listingblock .pygments .tok-ss { color: #48b685 } /* Literal.String.Symbol */
 .listingblock .pygments .tok-bp { color: #e7e9db } /* Name.Builtin.Pseudo */
-.listingblock .pygments .tok-fm { color: #06b6ef } /* Name.Function.Magic */
 .listingblock .pygments .tok-vc { color: #ef6155 } /* Name.Variable.Class */
 .listingblock .pygments .tok-vg { color: #ef6155 } /* Name.Variable.Global */
 .listingblock .pygments .tok-vi { color: #ef6155 } /* Name.Variable.Instance */
-.listingblock .pygments .tok-vm { color: #ef6155 } /* Name.Variable.Magic */
 .listingblock .pygments .tok-il { color: #f99b15 } /* Literal.Number.Integer.Long */
 </style>
 </head>
@@ -499,8 +494,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Kelvin R. Lawrence</span><br>
 <span id="email" class="email"><a href="mailto:klawrenc@us.ibm.com">klawrenc@us.ibm.com</a></span><br>
-<span id="revnumber">version 257,</span>
-<span id="revdate">Oct 11, 2017</span>
+<span id="revnumber">version 259,</span>
+<span id="revdate">Oct 15, 2017</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
@@ -549,7 +544,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#values">3.2.1. Retrieving property values from a node</a></li>
 <li><a href="#exist">3.2.2. Does a specific property exist on a given node or edge?</a></li>
 <li><a href="#count">3.2.3. Counting things</a></li>
-<li><a href="#count">3.2.4. Counting groups of things</a></li>
+<li><a href="#countgroup">3.2.4. Counting groups of things</a></li>
 <li><a href="#walk">3.2.5. Starting to walk the graph</a></li>
 <li><a href="#pathintro">3.2.6. What nodes and edges did I visit? - Introducing <em>path</em></a></li>
 <li><a href="#edgeexist">3.2.7. Does an edge exist between two nodes?</a></li>
@@ -1062,9 +1057,9 @@ store where you currently have them. A sales ledger system built using a relatio
 database is probably doing just fine where it is and likewise a document store is
 quite possibly just the right place to be storing your documents. So "use the right
 tool for the job" remains as valid a phrase here as elsewhere". Where graph databases
-come into their own is when the data you are storing is intrinsically linked by it&#8217;s
-very nature - the air routes network used as the basis for all of the examples in
-this document being a perfect example.</p>
+come into their own is when the data you are storing is intrinsically linked by its
+very nature, the air routes network used as the basis for all of the examples in
+this document being a perfect example of such a situation.</p>
 </div>
 <div class="paragraph">
 <p>Those of you that looked at graphs as part of a computer science course are correct
@@ -1083,16 +1078,19 @@ started. <a href="https://en.wikipedia.org/wiki/Graph_theory" class="bare">https
 seeing a massive growth in the building and deployment of graph database systems and
 applications? At least part of the answer is that computer hardware and software has
 reached the point where you can build large big data systems that scale well for a
-reasonable price, especially now that using cloud deployments you don&#8217;t even have to
-buy the hardware that your system runs on. While you can certainly run a graph
-database on your laptop, I do just that every day, the reality is that in production,
-at scale, they are big data systems. Large graphs commonly have many billions of
-nodes and edges in them taking up petabytes of data on disk. Graph algorithms can be
-both compute and memory intensive and it is only fairly recently that deploying the
-necessary resources for such big data systems has made financial sense for more
-everyday uses in business and not just in government or academia. Graph databases are
-becoming much more broadly adopted across the spectrum from high end scientific
-research to financial networks and beyond.</p>
+reasonable price. In fact, it&#8217;s even easier than ever to build the large systems
+because you don&#8217;t have to buy the hardware that your system will run on when you use
+the cloud.</p>
+</div>
+<div class="paragraph">
+<p>While you can certainly run a graph database on your laptop, I do just that every
+day, the reality is that in production, at scale, they are big data systems. Large
+graphs commonly have many billions of nodes and edges in them taking up petabytes of
+data on disk. Graph algorithms can be both compute and memory intensive and it is
+only fairly recently that deploying the necessary resources for such big data systems
+has made financial sense for more everyday uses in business and not just in
+government or academia. Graph databases are becoming much more broadly adopted across
+the spectrum from high end scientific research to financial networks and beyond.</p>
 </div>
 <div class="paragraph">
 <p>Another factor that has really helped start this graph database revolution is the
@@ -1220,15 +1218,15 @@ the Gremlin console with a local graph. However in Section 6 we will take a look
 Gremlin Server and some other TinkerPop 3 enabled environments. Most of Apache
 Tinkerpop has been developed using Java 8 but there are also bindings available for
 many other programming languages such as Groovy and Python. Parts of TinkerPop are
-themselves developed in Groovy. Most notably the Gremlin Console and the Gremlin
-Server. The nice thing about that is that we can use Groovy syntax along with Gremlin
-when entering queries into the Console or sending them via REST API to a Gremlin
-Server. We cover all of these topics in detail in this document.</p>
+themselves developed in Groovy, most notably the Gremlin Console. The nice thing
+about that is that we can use Groovy syntax along with Gremlin when entering queries
+into the Console or sending them via REST API to a Gremlin Server. All of these
+topics are covered in detail in this boook.</p>
 </div>
 <div class="paragraph">
-<p>We have tested the queries and other examples in this document against Apache
-TinkerPop version 3.2.4 using the TinkerGraph graph and the Gremlin console as well
-as some other TinkerPop 3 enabled graph stores.</p>
+<p>The queries used as examples in this book have been tested with Apache TinkerPop
+version 3.3. using the TinkerGraph graph and the Gremlin console as well as some
+other TinkerPop 3 enabled graph stores.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1563,19 +1561,25 @@ Don&#8217;t worry if not all of these terms makes sense right away - we&#8217;ll
 </div>
 </div>
 <div class="paragraph">
-<p>As TinkerGraph is intended mostly for learning and testing it does not support some
-of the more advanced features you will find in Janus Graph such as ACID Transactions
-and external indexes. We will cover these topics as part of our discussion of Janus
-Graph towards the end of the document. One other thing worth noting in the list above
-is that <em>UserSuppliedIds</em> is set to true for vertex and edge ID values. This means
-that if you load a graph file, such as a GraphML format file, that specifies ID
-values for vertices and edges then TinkerGraph will honor those IDs and use them. As
-we shall see later this is not the case with most other graph systems.</p>
+<p>TinkerGraph is really useful while learning to work with Gremlin and great for
+testing things out. One common use case where TinkerGraph can be very useful is to
+crate a sub-graph of a larger graph and work with it locally. TinkerGraph can even be
+used in production deployments if an all in memory graph fits the bill. Typically,
+TinkerGraph us used to explore static (no changing) graphs but you can use it from a
+programming language like Java and mutate its contents if you want to. However,
+TinkerGraph does not support some of the more advanced features you will find in
+implementations like Janus Graph such as ACID Transactions and external indexes. We
+will cover these topics as part of our discussion of Janus Graph towards the end of
+the document. One other thing worth noting in the list above is that
+<em>UserSuppliedIds</em> is set to true for vertex and edge ID values. This means that if
+you load a graph file, such as a GraphML format file, that specifies ID values for
+vertices and edges then TinkerGraph will honor those IDs and use them. As we shall
+see later this is not the case with most other graph systems.</p>
 </div>
 <div class="paragraph">
-<p>When running in the Gremlin Console, support for TinkerGraph is off by default. You
-can enable it by issuing the following command while inside the Gremlin Console.
-Console.</p>
+<p>When running in the Gremlin Console, support for TinkerGraph should be on by default.
+If for any reason you find it to be off you, can enable it by issuing the following
+command.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1596,7 +1600,7 @@ as follows.</p>
 <p>In many cases you will want to pass parameters to the <em>open</em> method that give more
 information on how the graph is to be configured. We will explore those options later
 in the document. Before you can start to issue Gremlin queries against the graph you
-also need to establish a graph traversal object by calling the new graph&#8217;s
+also need to establish a graph traversal source object by calling the new graph&#8217;s
 <em>traversal</em> method as follows.</p>
 </div>
 <div class="listingblock">
@@ -1614,7 +1618,7 @@ also need to establish a graph traversal object by calling the new graph&#8217;s
 Throughout the remainder of this document we will follow the convention that we
 will always use the variable name <em>graph</em> for any variable that represents a graph
 instance and we will always use the variable name <em>g</em> for any variable that
-represents an instance of a graph traversal object.
+represents an instance of a graph traversal source object.
 </td>
 </tr>
 </table>
@@ -1852,10 +1856,10 @@ The remainder of this document only shows TinkerPop 3 examples.</p>
 disabled. Depending upon your use case you may or may not need to manage plugins.</p>
 </div>
 <div class="paragraph">
-<p>TinkerPop 2 enabled by default a plugin called <em>Tinkerpop.sugar</em> that allowed
-shorthand forms of queries to be entered when using the Gremlin console. In TinkerPop
-3 that plugin is off by default and has to be enabled if you want to continue to use
-the same shortcuts that TinkerPop 2 allowed by default.</p>
+<p>TinkerPop 2 supported by default some syntactic <em>sugar</em> that allowed shorthand
+forms of queries to be entered when using the Gremlin console. In TinkerPop 3 that
+support has been moved to a plugin and is off by default. It has to be enabled if you
+want to continue to use the same shortcuts that TinkerPop 2 allowed by default.</p>
 </div>
 <div class="paragraph">
 <p>You can enable <em>sugar</em> support from the Gremlin console as follows:</p>
@@ -1935,10 +1939,10 @@ console features are also enabled.</p>
 <div class="paragraph">
 <p>These commands create an in-memory TinkerGraph which will use LONG values for the
 vertex and edge IDs. TinkerPop 3 introduced the concept of a <em>traversal</em>  so as part
-of loading a <em>graph</em> we also setup a traversal called <em>g</em> which we will then refer to
-in our subsequent queries of the graph.  The <em>max-iteration</em> option tells the Gremlin
-console the maximum number of lines of output that we ever want to see in return from
-a  query. The default, if this is not specified, is 100.</p>
+of loading a <em>graph</em> we also setup a graph traversal source called <em>g</em> which we will
+then refer to in our subsequent queries of the graph.  The <em>max-iteration</em> option
+tells the Gremlin console the maximum number of lines of output that we ever want to
+see in return from a  query. The default, if this is not specified, is 100.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -2537,7 +2541,7 @@ however in the "<a href="#walk">Starting to walk the graph</a>" section.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="count">3.2.4. Counting groups of things</h4>
+<h4 id="countgroup">3.2.4. Counting groups of things</h4>
 <div class="paragraph">
 <p>Sometimes it is useful to count how many of each type (or group) of things there are
 in the graph. This can be done using the <em>group</em> and <em>groupCount</em> steps. While for a
@@ -10754,10 +10758,14 @@ number of different language bindings currently available for TinkerPop 3. One o
 most widely used is the Java API for TinkerPop.</p>
 </div>
 <div class="paragraph">
-<p>In reality, for a commercial application you would not use TinkerGraph as your graph
-database. However, as a first step towards writing stand alone applications that use
-different graph database back ends, lets look at a few examples of how you can create
-a stand alone Java application that uses Gremlin and TinkerGraph.</p>
+<p>As discussed at earlier, when building a commercial application, you may need
+capabilities such as ACID transactions and would not use TinkerGraph as your graph
+database in those cases. There are however, places where TinkerGraph may be just what
+you need. One example might be doing analysis on a static graph that can fit into
+memory on your laptop. The air-routes graph is a good example of such a graph. As a
+first step towards writing stand alone applications that use different graph database
+back ends, lets look at a few examples of how you can create a Java application that
+uses Gremlin and TinkerGraph.</p>
 </div>
 <div class="sect3">
 <h4 id="tpinterfaces">6.1.1. The Apache TinkerPop interfaces and classes</h4>
@@ -12840,8 +12848,8 @@ are shown.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 257<br>
-Last updated 2017-10-11 15:34:08 CDT
+Version 259<br>
+Last updated 2017-10-15 11:17:50 CDT
 </div>
 </div>
 </body>
