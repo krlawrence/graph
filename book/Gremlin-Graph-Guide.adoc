@@ -1,11 +1,11 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v262, Oct 15, 2017
-// Mon Oct 16, 2017 19:44:08 CDT
+v263, Oct 17, 2017
+// Tue Oct 17, 2017 07:37:59 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Oct 16 2017
+//:Date:      Oct 17 2017
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -16,7 +16,7 @@ v262, Oct 15, 2017
 //:pygments-style: manni
 :toc:
 :toclevels: 4
-:revision: 262
+:revision: 263
 
 // NOTE: These notes are encoded using a minimal level of Asciidoc markup. You can read
 // them as-is or generate HTML or other output formats from this file using the
@@ -1200,7 +1200,7 @@ g.V().has('code','AUS').out().out().out().has('code','AGR').path().by('code')
 Adding or removing hops is as simple as adding or removing one or more of the 'out()'
 steps which is a  lot simpler than having to add additional 'join' clauses to our SQL
 query. This is a simple example, but as queries get more and more complicated in
-heavily connected data sets like networks, the SQL queries get harder and herder to
+heavily connected data sets like networks, the SQL queries get harder and harder to
 write whereas, because Gremlin is designed for working with this type of data,
 expressing a traversal remains fairly straightforward.
 
@@ -1249,7 +1249,7 @@ see used a lot. Firstly, you will notice that almost all traversals start with e
 a 'g.V()' or a 'g.E()'. Sometimes there will be parameters specified along with those
 steps but we will get into that a little later. You may remember from when we looked
 at how to load the 'air-routes' graph in Section 2 we used the following instruction
-to create a graph traversal object for our loaded 'graph'.
+to create a graph traversal source object for our loaded 'graph'.
 
 
 [source,groovy]
@@ -1257,7 +1257,7 @@ to create a graph traversal object for our loaded 'graph'.
 g = graph.traversal()
 ----
 
-Once we have a graph traversal object we can use it to start exploring the graph.
+Once we have a graph traversal source object we can use it to start exploring the graph.
 The 'V' step returns vertices and the 'E' step returns edges. You can also use a 'V'
 step in the middle of a traversal as well as at the start but we will examine those
 uses a little later. The 'V' and 'E' steps can also take parameters indicating which
@@ -1401,7 +1401,7 @@ Does a specific property exist on a given node or edge?
 
 You can simply test to see if a property exists as well as testing for it containing
 a specific value. To do this we can just provide 'has' with the name of the property
-we are interested in.
+we are interested in. This works equally well for both vertex and edge properties.
 
 [source,groovy]
 ----
@@ -1454,6 +1454,8 @@ looked as as we do not first filter out all nodes that are not airports.
 ----
 // How many routes are there?
 g.V().outE('route').count()
+
+43400
 ----
 
 You could also do it this way but generally starting by looking at all the Edges in
@@ -1464,6 +1466,8 @@ than nodes
 ----
 // How many routes are there?
 g.E().hasLabel('route').count()
+
+43400
 ----
 
 We have not yet looked at the 'outE' step used above. We will look at it very soon
@@ -1501,6 +1505,8 @@ One such example is shown below.
 ----
 // How many of each type of node are there?
 g.V().label().groupCount()
+
+[continent:7,country:237,version:1,airport:3374]
 ----
 
 We can also run a similar query to find out the distribution of edge labels in the
@@ -1520,15 +1526,19 @@ As before we could rewrite the query as follows.
 ----
 // How many of each type of edge are there?
 g.E().label().groupCount()
+
+[contains:6748,route:43400
 ----
 
 By way of a side note, the examples above are shorthand ways of writing
-something like this
+something like this example which also counts vertices by label.
 
 [source,groovy]
 ----
 // As above but using group()
 g.V().group().by(label).by(count())
+
+[continent:7,country:237,version:1,airport:3374]
 ----
 
 We can be more selective in how we specify the groups of things that we want to
@@ -3796,6 +3806,24 @@ As we can see the results returned are still the same.
 ----
 [code:[NA],type:[continent],desc:[North America]]
 [code:[US],type:[country],desc:[United States]]
+----
+
+Combining 'coalesce' with a 'constant' value
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The 'coalesce' step can also be very useful when combined with a 'constant' value. In
+the example below if the airport is in Texas then its description is returned. If it
+is not in Texas, the string "Not in Texas" is returned instead.
+
+[source,groovy]
+----
+g.V(1).coalesce(has('region','US-TX').values('desc'),constant("Not in Texas"))
+
+Not in Texas
+
+g.V(3).coalesce(has('region','US-TX').values('desc'),constant("Not in Texas"))
+
+Austin Bergstrom International Airport
 ----
 
 [[otherv]]
