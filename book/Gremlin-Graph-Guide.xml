@@ -5,7 +5,7 @@
 <info>
 <title>GRAPH DATABASES, GREMLIN and TINKERPOP </title>
 <subtitle>A TUTORIAL</subtitle>
-<date>Oct 15, 2017</date>
+<date>Oct 17, 2017</date>
 <author>
 <personname>
 <firstname>Kelvin</firstname>
@@ -17,8 +17,8 @@
 <authorinitials>KRL</authorinitials>
 <revhistory>
 <revision>
-<revnumber>262</revnumber>
-<date>Oct 15, 2017</date>
+<revnumber>263</revnumber>
+<date>Oct 17, 2017</date>
 <authorinitials>KRL</authorinitials>
 </revision>
 </revhistory>
@@ -57,7 +57,7 @@ October 5th, 2017<?asciidoc-br?></simpara>
 free to send me feedback of any sort. Suggested improvements are especially welcome.
 A good way to provide feedback is by opening an issue in the GitHub repository
 located at <link xl:href="https://github.com/krlawrence/graph">https://github.com/krlawrence/graph</link>. You are currently reading revision
-262 of the document.</simpara>
+263 of the document.</simpara>
 </section>
 <section xml:id="thanks">
 <title>A word of thanks</title>
@@ -1057,7 +1057,7 @@ follows:</simpara>
 <simpara>Adding or removing hops is as simple as adding or removing one or more of the <emphasis>out()</emphasis>
 steps which is a  lot simpler than having to add additional <emphasis>join</emphasis> clauses to our SQL
 query. This is a simple example, but as queries get more and more complicated in
-heavily connected data sets like networks, the SQL queries get harder and herder to
+heavily connected data sets like networks, the SQL queries get harder and harder to
 write whereas, because Gremlin is designed for working with this type of data,
 expressing a traversal remains fairly straightforward.</simpara>
 <simpara>We can go one step further with Gremlin and use <emphasis>repeat</emphasis> to express the concept of
@@ -1096,9 +1096,9 @@ see used a lot. Firstly, you will notice that almost all traversals start with e
 a <emphasis>g.V()</emphasis> or a <emphasis>g.E()</emphasis>. Sometimes there will be parameters specified along with those
 steps but we will get into that a little later. You may remember from when we looked
 at how to load the <emphasis>air-routes</emphasis> graph in Section 2 we used the following instruction
-to create a graph traversal object for our loaded <emphasis>graph</emphasis>.</simpara>
+to create a graph traversal source object for our loaded <emphasis>graph</emphasis>.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">g = graph.traversal()</programlisting>
-<simpara>Once we have a graph traversal object we can use it to start exploring the graph.
+<simpara>Once we have a graph traversal source object we can use it to start exploring the graph.
 The <emphasis>V</emphasis> step returns vertices and the <emphasis>E</emphasis> step returns edges. You can also use a <emphasis>V</emphasis>
 step in the middle of a traversal as well as at the start but we will examine those
 uses a little later. The <emphasis>V</emphasis> and <emphasis>E</emphasis> steps can also take parameters indicating which
@@ -1197,7 +1197,7 @@ KDFW
 <title>Does a specific property exist on a given node or edge?</title>
 <simpara>You can simply test to see if a property exists as well as testing for it containing
 a specific value. To do this we can just provide <emphasis>has</emphasis> with the name of the property
-we are interested in.</simpara>
+we are interested in. This works equally well for both vertex and edge properties.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Find all edges that have a 'dist' property
 g.E().has('dist')
 
@@ -1230,12 +1230,16 @@ g.V().hasLabel('airport').outE('route').count()
 <simpara>You could shorten the above a little as follows but this would caue more edges to get
 looked as as we do not first filter out all nodes that are not airports.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// How many routes are there?
-g.V().outE('route').count()</programlisting>
+g.V().outE('route').count()
+
+43400</programlisting>
 <simpara>You could also do it this way but generally starting by looking at all the Edges in
 the graph is considered bad form as property graphs tend to have a lot more edges
 than nodes</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// How many routes are there?
-g.E().hasLabel('route').count()</programlisting>
+g.E().hasLabel('route').count()
+
+43400</programlisting>
 <simpara>We have not yet looked at the <emphasis>outE</emphasis> step used above. We will look at it very soon
 however in the "<xref linkend="walk"/>" section.</simpara>
 </section>
@@ -1255,7 +1259,9 @@ and the values are the counts for the occurrence of each label in the graph.</si
 <simpara>There are other ways we could write the query above that will yield the same result.
 One such example is shown below.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// How many of each type of node are there?
-g.V().label().groupCount()</programlisting>
+g.V().label().groupCount()
+
+[continent:7,country:237,version:1,airport:3374]</programlisting>
 <simpara>We can also run a similar query to find out the distribution of edge labels in the
 graph. An example of the type of result we would get back is also shown.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// How many of each type of edge are there?
@@ -1264,11 +1270,15 @@ g.E().groupCount().by(label)
 [contains:6748,route:43400]</programlisting>
 <simpara>As before we could rewrite the query as follows.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// How many of each type of edge are there?
-g.E().label().groupCount()</programlisting>
+g.E().label().groupCount()
+
+[contains:6748,route:43400</programlisting>
 <simpara>By way of a side note, the examples above are shorthand ways of writing
-something like this</simpara>
+something like this example which also counts vertices by label.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// As above but using group()
-g.V().group().by(label).by(count())</programlisting>
+g.V().group().by(label).by(count())
+
+[continent:7,country:237,version:1,airport:3374]</programlisting>
 <simpara>We can be more selective in how we specify the groups of things that we want to
 count. In the examples below we first count how many airports there are in each
 country. This will return a map of key:value pairs where the key is the country code
@@ -2807,6 +2817,19 @@ right order.</simpara>
 <simpara>As we can see the results returned are still the same.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">[code:[NA],type:[continent],desc:[North America]]
 [code:[US],type:[country],desc:[United States]]</programlisting>
+<section xml:id="_combining_emphasis_coalesce_emphasis_with_a_emphasis_constant_emphasis_value">
+<title>Combining <emphasis>coalesce</emphasis> with a <emphasis>constant</emphasis> value</title>
+<simpara>The <emphasis>coalesce</emphasis> step can also be very useful when combined with a <emphasis>constant</emphasis> value. In
+the example below if the airport is in Texas then its description is returned. If it
+is not in Texas, the string "Not in Texas" is returned instead.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">g.V(1).coalesce(has('region','US-TX').values('desc'),constant("Not in Texas"))
+
+Not in Texas
+
+g.V(3).coalesce(has('region','US-TX').values('desc'),constant("Not in Texas"))
+
+Austin Bergstrom International Airport</programlisting>
+</section>
 </section>
 <section xml:id="otherv">
 <title>Other ways to explore nodes and edges using <emphasis>both</emphasis>, <emphasis>bothE</emphasis>, <emphasis>bothV</emphasis> and <emphasis>otherV</emphasis></title>

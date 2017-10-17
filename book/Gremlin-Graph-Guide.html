@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 1.5.4">
+<meta name="generator" content="Asciidoctor 1.5.5">
 <meta name="author" content="Kelvin R. Lawrence">
 <title>GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
@@ -18,7 +18,6 @@ audio:not([controls]){display:none;height:0}
 [hidden],template{display:none}
 script{display:none!important}
 html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}
-body{margin:0}
 a{background:transparent}
 a:focus{outline:thin dotted}
 a:active,a:hover{outline:0}
@@ -53,7 +52,7 @@ textarea{overflow:auto;vertical-align:top}
 table{border-collapse:collapse;border-spacing:0}
 *,*:before,*:after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}
 html,body{font-size:100%}
-body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto;tab-size:4;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
 a:hover{cursor:pointer}
 img,object,embed{max-width:100%;height:auto}
 object,embed{height:100%}
@@ -65,7 +64,6 @@ img{-ms-interpolation-mode:bicubic}
 .text-center{text-align:center!important}
 .text-justify{text-align:justify!important}
 .hide{display:none}
-body{-webkit-font-smoothing:antialiased}
 img,object,svg{display:inline-block;vertical-align:middle}
 textarea{height:auto;min-height:50px}
 select{width:100%}
@@ -120,13 +118,16 @@ table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:
 table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
 table tr.even,table tr.alt,table tr:nth-of-type(even){background:#f8f8f7}
 table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{display:table-cell;line-height:1.6}
-body{tab-size:4}
 h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
 h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
 .clearfix:before,.clearfix:after,.float-group:before,.float-group:after{content:" ";display:table}
 .clearfix:after,.float-group:after{clear:both}
-*:not(pre)>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background-color:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
+*:not(pre)>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background-color:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed;word-wrap:break-word}
+*:not(pre)>code.nobreak{word-wrap:normal}
+*:not(pre)>code.nowrap{white-space:nowrap}
 pre,pre>code{line-height:1.45;color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;text-rendering:optimizeSpeed}
+em em{font-style:normal}
+strong strong{font-weight:400}
 .keyseq{color:rgba(51,51,51,.8)}
 kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background-color:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
 .keyseq kbd:first-child{margin-left:0}
@@ -419,7 +420,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </style>
 <style>
 .listingblock .pygments .hll { background-color: #4f424c }
-.listingblock .pygments  { background: #2f1e2e; color: #e7e9db }
+.listingblock .pygments, .listingblock .pygments code { background: #2f1e2e; color: #e7e9db }
 .listingblock .pygments .tok-c { color: #776e71 } /* Comment */
 .listingblock .pygments .tok-err { color: #ef6155 } /* Error */
 .listingblock .pygments .tok-k { color: #815ba4 } /* Keyword */
@@ -470,8 +471,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .listingblock .pygments .tok-mh { color: #f99b15 } /* Literal.Number.Hex */
 .listingblock .pygments .tok-mi { color: #f99b15 } /* Literal.Number.Integer */
 .listingblock .pygments .tok-mo { color: #f99b15 } /* Literal.Number.Oct */
+.listingblock .pygments .tok-sa { color: #48b685 } /* Literal.String.Affix */
 .listingblock .pygments .tok-sb { color: #48b685 } /* Literal.String.Backtick */
 .listingblock .pygments .tok-sc { color: #e7e9db } /* Literal.String.Char */
+.listingblock .pygments .tok-dl { color: #48b685 } /* Literal.String.Delimiter */
 .listingblock .pygments .tok-sd { color: #776e71 } /* Literal.String.Doc */
 .listingblock .pygments .tok-s2 { color: #48b685 } /* Literal.String.Double */
 .listingblock .pygments .tok-se { color: #f99b15 } /* Literal.String.Escape */
@@ -482,9 +485,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .listingblock .pygments .tok-s1 { color: #48b685 } /* Literal.String.Single */
 .listingblock .pygments .tok-ss { color: #48b685 } /* Literal.String.Symbol */
 .listingblock .pygments .tok-bp { color: #e7e9db } /* Name.Builtin.Pseudo */
+.listingblock .pygments .tok-fm { color: #06b6ef } /* Name.Function.Magic */
 .listingblock .pygments .tok-vc { color: #ef6155 } /* Name.Variable.Class */
 .listingblock .pygments .tok-vg { color: #ef6155 } /* Name.Variable.Global */
 .listingblock .pygments .tok-vi { color: #ef6155 } /* Name.Variable.Instance */
+.listingblock .pygments .tok-vm { color: #ef6155 } /* Name.Variable.Magic */
 .listingblock .pygments .tok-il { color: #f99b15 } /* Literal.Number.Integer.Long */
 </style>
 </head>
@@ -494,8 +499,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Kelvin R. Lawrence</span><br>
 <span id="email" class="email"><a href="mailto:klawrenc@us.ibm.com">klawrenc@us.ibm.com</a></span><br>
-<span id="revnumber">version 262,</span>
-<span id="revdate">Oct 15, 2017</span>
+<span id="revnumber">version 263,</span>
+<span id="revdate">Oct 17, 2017</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
@@ -584,7 +589,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#sideeffect">3.16. Using <em>sideEffect</em> to do things on the side</a></li>
 <li><a href="#_using_em_aggregate_em_to_create_a_temporary_collection">3.17. Using <em>aggregate</em> to create a temporary collection</a></li>
 <li><a href="#_using_em_inject_em_to_insert_values_into_a_query">3.18. Using <em>inject</em> to insert values into a query</a></li>
-<li><a href="#coalesce">3.19. Using <em>coalesce</em> to see which traversal returns a result</a></li>
+<li><a href="#coalesce">3.19. Using <em>coalesce</em> to see which traversal returns a result</a>
+<ul class="sectlevel3">
+<li><a href="#_combining_em_coalesce_em_with_a_em_constant_em_value">3.19.1. Combining <em>coalesce</em> with a <em>constant</em> value</a></li>
+</ul>
+</li>
 <li><a href="#otherv">3.20. Other ways to explore nodes and edges using <em>both</em>, <em>bothE</em>, <em>bothV</em> and <em>otherV</em></a></li>
 <li><a href="#sp">3.21. Shortest paths (between airports) -  introducing <em>repeat</em></a>
 <ul class="sectlevel3">
@@ -822,7 +831,7 @@ October 5th, 2017<br></p>
 free to send me feedback of any sort. Suggested improvements are especially welcome.
 A good way to provide feedback is by opening an issue in the GitHub repository
 located at <a href="https://github.com/krlawrence/graph" class="bare">https://github.com/krlawrence/graph</a>. You are currently reading revision
-262 of the document.</p>
+263 of the document.</p>
 </div>
 </div>
 <div class="sect2">
@@ -2240,7 +2249,7 @@ follows:</p>
 <p>Adding or removing hops is as simple as adding or removing one or more of the <em>out()</em>
 steps which is a  lot simpler than having to add additional <em>join</em> clauses to our SQL
 query. This is a simple example, but as queries get more and more complicated in
-heavily connected data sets like networks, the SQL queries get harder and herder to
+heavily connected data sets like networks, the SQL queries get harder and harder to
 write whereas, because Gremlin is designed for working with this type of data,
 expressing a traversal remains fairly straightforward.</p>
 </div>
@@ -2295,7 +2304,7 @@ see used a lot. Firstly, you will notice that almost all traversals start with e
 a <em>g.V()</em> or a <em>g.E()</em>. Sometimes there will be parameters specified along with those
 steps but we will get into that a little later. You may remember from when we looked
 at how to load the <em>air-routes</em> graph in Section 2 we used the following instruction
-to create a graph traversal object for our loaded <em>graph</em>.</p>
+to create a graph traversal source object for our loaded <em>graph</em>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2303,7 +2312,7 @@ to create a graph traversal object for our loaded <em>graph</em>.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Once we have a graph traversal object we can use it to start exploring the graph.
+<p>Once we have a graph traversal source object we can use it to start exploring the graph.
 The <em>V</em> step returns vertices and the <em>E</em> step returns edges. You can also use a <em>V</em>
 step in the middle of a traversal as well as at the start but we will examine those
 uses a little later. The <em>V</em> and <em>E</em> steps can also take parameters indicating which
@@ -2476,7 +2485,7 @@ properties.</p>
 <div class="paragraph">
 <p>You can simply test to see if a property exists as well as testing for it containing
 a specific value. To do this we can just provide <em>has</em> with the name of the property
-we are interested in.</p>
+we are interested in. This works equally well for both vertex and edge properties.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2530,7 +2539,9 @@ looked as as we do not first filter out all nodes that are not airports.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// How many routes are there?</span>
-<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">outE</span><span class="tok-o">(</span><span class="tok-s1">&#39;route&#39;</span><span class="tok-o">).</span><span class="tok-na">count</span><span class="tok-o">()</span></code></pre>
+<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">outE</span><span class="tok-o">(</span><span class="tok-s1">&#39;route&#39;</span><span class="tok-o">).</span><span class="tok-na">count</span><span class="tok-o">()</span>
+
+<span class="tok-mi">43400</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2541,7 +2552,9 @@ than nodes</p>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// How many routes are there?</span>
-<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">E</span><span class="tok-o">().</span><span class="tok-na">hasLabel</span><span class="tok-o">(</span><span class="tok-s1">&#39;route&#39;</span><span class="tok-o">).</span><span class="tok-na">count</span><span class="tok-o">()</span></code></pre>
+<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">E</span><span class="tok-o">().</span><span class="tok-na">hasLabel</span><span class="tok-o">(</span><span class="tok-s1">&#39;route&#39;</span><span class="tok-o">).</span><span class="tok-na">count</span><span class="tok-o">()</span>
+
+<span class="tok-mi">43400</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2581,7 +2594,9 @@ One such example is shown below.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// How many of each type of node are there?</span>
-<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">label</span><span class="tok-o">().</span><span class="tok-na">groupCount</span><span class="tok-o">()</span></code></pre>
+<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">label</span><span class="tok-o">().</span><span class="tok-na">groupCount</span><span class="tok-o">()</span>
+
+<span class="tok-o">[</span><span class="tok-nl">continent:</span><span class="tok-mi">7</span><span class="tok-o">,</span><span class="tok-nl">country:</span><span class="tok-mi">237</span><span class="tok-o">,</span><span class="tok-nl">version:</span><span class="tok-mi">1</span><span class="tok-o">,</span><span class="tok-nl">airport:</span><span class="tok-mi">3374</span><span class="tok-o">]</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2602,17 +2617,21 @@ graph. An example of the type of result we would get back is also shown.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// How many of each type of edge are there?</span>
-<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">E</span><span class="tok-o">().</span><span class="tok-na">label</span><span class="tok-o">().</span><span class="tok-na">groupCount</span><span class="tok-o">()</span></code></pre>
+<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">E</span><span class="tok-o">().</span><span class="tok-na">label</span><span class="tok-o">().</span><span class="tok-na">groupCount</span><span class="tok-o">()</span>
+
+<span class="tok-o">[</span><span class="tok-nl">contains:</span><span class="tok-mi">6748</span><span class="tok-o">,</span><span class="tok-nl">route:</span><span class="tok-mi">43400</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>By way of a side note, the examples above are shorthand ways of writing
-something like this</p>
+something like this example which also counts vertices by label.</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// As above but using group()</span>
-<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">group</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-n">label</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-n">count</span><span class="tok-o">())</span></code></pre>
+<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">group</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-n">label</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-n">count</span><span class="tok-o">())</span>
+
+<span class="tok-o">[</span><span class="tok-nl">continent:</span><span class="tok-mi">7</span><span class="tok-o">,</span><span class="tok-nl">country:</span><span class="tok-mi">237</span><span class="tok-o">,</span><span class="tok-nl">version:</span><span class="tok-mi">1</span><span class="tok-o">,</span><span class="tok-nl">airport:</span><span class="tok-mi">3374</span><span class="tok-o">]</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -5189,6 +5208,25 @@ right order.</p>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="groovy"><span class="tok-o">[</span><span class="tok-nl">code:</span><span class="tok-o">[</span><span class="tok-n">NA</span><span class="tok-o">],</span><span class="tok-nl">type:</span><span class="tok-o">[</span><span class="tok-n">continent</span><span class="tok-o">],</span><span class="tok-nl">desc:</span><span class="tok-o">[</span><span class="tok-n">North</span> <span class="tok-n">America</span><span class="tok-o">]]</span>
 <span class="tok-o">[</span><span class="tok-nl">code:</span><span class="tok-o">[</span><span class="tok-n">US</span><span class="tok-o">],</span><span class="tok-nl">type:</span><span class="tok-o">[</span><span class="tok-n">country</span><span class="tok-o">],</span><span class="tok-nl">desc:</span><span class="tok-o">[</span><span class="tok-n">United</span> <span class="tok-n">States</span><span class="tok-o">]]</span></code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_combining_em_coalesce_em_with_a_em_constant_em_value">3.19.1. Combining <em>coalesce</em> with a <em>constant</em> value</h4>
+<div class="paragraph">
+<p>The <em>coalesce</em> step can also be very useful when combined with a <em>constant</em> value. In
+the example below if the airport is in Texas then its description is returned. If it
+is not in Texas, the string "Not in Texas" is returned instead.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">(</span><span class="tok-mi">1</span><span class="tok-o">).</span><span class="tok-na">coalesce</span><span class="tok-o">(</span><span class="tok-n">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;region&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;US-TX&#39;</span><span class="tok-o">).</span><span class="tok-na">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;desc&#39;</span><span class="tok-o">),</span><span class="tok-n">constant</span><span class="tok-o">(</span><span class="tok-s2">&quot;Not in Texas&quot;</span><span class="tok-o">))</span>
+
+<span class="tok-n">Not</span> <span class="tok-k">in</span> <span class="tok-n">Texas</span>
+
+<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">(</span><span class="tok-mi">3</span><span class="tok-o">).</span><span class="tok-na">coalesce</span><span class="tok-o">(</span><span class="tok-n">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;region&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;US-TX&#39;</span><span class="tok-o">).</span><span class="tok-na">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;desc&#39;</span><span class="tok-o">),</span><span class="tok-n">constant</span><span class="tok-o">(</span><span class="tok-s2">&quot;Not in Texas&quot;</span><span class="tok-o">))</span>
+
+<span class="tok-n">Austin</span> <span class="tok-n">Bergstrom</span> <span class="tok-n">International</span> <span class="tok-n">Airport</span></code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -12873,8 +12911,8 @@ are shown.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 262<br>
-Last updated 2017-10-16 19:45:42 CDT
+Version 263<br>
+Last updated 2017-10-17 07:48:33 CDT
 </div>
 </div>
 </body>
