@@ -17,7 +17,7 @@
 <authorinitials>KRL</authorinitials>
 <revhistory>
 <revision>
-<revnumber>264</revnumber>
+<revnumber>265</revnumber>
 <date>Oct 17, 2017</date>
 <authorinitials>KRL</authorinitials>
 </revision>
@@ -57,7 +57,7 @@ October 5th, 2017<?asciidoc-br?></simpara>
 free to send me feedback of any sort. Suggested improvements are especially welcome.
 A good way to provide feedback is by opening an issue in the GitHub repository
 located at <link xl:href="https://github.com/krlawrence/graph">https://github.com/krlawrence/graph</link>. You are currently reading revision
-264 of the document.</simpara>
+265 of the document.</simpara>
 </section>
 <section xml:id="thanks">
 <title>A word of thanks</title>
@@ -308,6 +308,7 @@ closely models the way they think of the world.</simpara>
 as very much complimentary to other databases that you may already have deployed. One
 common use case is for the graph to be uses as a form of smart index into other data
 stores. This is sometimes called having a polyglot data architecture.</simpara>
+</section>
 <section xml:id="nodevert">
 <title>A word about terminology</title>
 <simpara>The words <emphasis>node</emphasis> and <emphasis>vertex</emphasis> are synonymous when discussing a graph. Throughout this
@@ -317,7 +318,6 @@ Gremlin queries and other concepts, I will endeavor to stick to the word <emphas
 the plural form <emphasis>vertices</emphasis>. As this document has evolved I realized my use of these
 terms had become inconsistent and in future updates I plan to standardize on <emphasis>vertex</emphasis>
 rather than <emphasis>node</emphasis> to be consistent with the TinkerPop documentation.</simpara>
-</section>
 </section>
 </chapter>
 <chapter xml:id="gs">
