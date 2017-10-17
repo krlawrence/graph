@@ -17,7 +17,7 @@
 <authorinitials>KRL</authorinitials>
 <revhistory>
 <revision>
-<revnumber>261</revnumber>
+<revnumber>262</revnumber>
 <date>Oct 15, 2017</date>
 <authorinitials>KRL</authorinitials>
 </revision>
@@ -57,7 +57,7 @@ October 5th, 2017<?asciidoc-br?></simpara>
 free to send me feedback of any sort. Suggested improvements are especially welcome.
 A good way to provide feedback is by opening an issue in the GitHub repository
 located at <link xl:href="https://github.com/krlawrence/graph">https://github.com/krlawrence/graph</link>. You are currently reading revision
-261 of the document.</simpara>
+262 of the document.</simpara>
 </section>
 <section xml:id="thanks">
 <title>A word of thanks</title>
@@ -2757,6 +2757,28 @@ query which shows the places you can get to non stop were all correctly removed 
 the second query.  This also tells us there are no flights from Austin to places that
 you cannot get to from anywhere else!</simpara>
 </section>
+<section xml:id="_using_emphasis_inject_emphasis_to_insert_values_into_a_query">
+<title>Using <emphasis>inject</emphasis> to insert values into a query</title>
+<simpara>Sometimes you may want to add something additional to be returned along with the
+results of your query. This can be done using the <emphasis>inject</emphasis> step. In the example
+below, the string <emphasis>ABIA</emphasis>, another acronym commonly used when referring to the Austin
+Bergstrom International Airport, is injected into the query.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('code','AUS').values().inject('ABIA')</programlisting>
+<simpara>If we were to run the query, here is what we would get back</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">ABIA
+US
+AUS
+12250
+Austin
+542
+KAUS
+-97.6698989868164
+airport
+US-TX
+2
+30.1944999694824
+Austin Bergstrom International Airport</programlisting>
+</section>
 <section xml:id="coalesce">
 <title>Using <emphasis>coalesce</emphasis> to see which traversal returns a result</title>
 <simpara>Sometimes, when you are uncertain as to which traversal of a set you are interested
@@ -4145,11 +4167,12 @@ first ten airports in the graph.</simpara>
 of those IDs returned in the query above by adding one to each. Take a look at the
 query below. We have introduced a <emphasis>map</emphasis> step. The <emphasis>map</emphasis> step takes as a parameter a
 closure (or lambda) function telling it how we want it to operate on the values
-flowing in to it. The <emphasis>it</emphasis> is Groovy syntax for the thing that came in (in this case
-a vertex. The <emphasis>get</emphasis> is needed to gain access to the properties of the vertex inside
-of a lambda expression. Lastly we get the <emphasis>id</emphasis> of the vertex and add one to it. The
-modified values are then passed on to the next step of the traversal where they are
-made into a list by the <emphasis>fold</emphasis> step.</simpara>
+flowing in to it. The <emphasis>it</emphasis> is Groovy syntax for <emphasis>"the thing that came in"</emphasis> (in this
+case a traversal). The <emphasis>get</emphasis> is needed to gain access to the current vertex and its
+properties. Lastly we get the <emphasis>id</emphasis> of the vertex and add one to it. The modified
+values are then passed on to the next step of the traversal where they are made into
+a list by the <emphasis>fold</emphasis> step.
+                                                                                                      gg</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">g.V().hasLabel('airport').limit(10).map{it.get().id() + 1}.fold()
 
 [2,3,4,5,6,7,8,9,10,11]</programlisting>
@@ -6135,21 +6158,6 @@ g.V().has('airport','code','AUS').as('aus').out().
       has('lon',lte(dfw)).
       has('code',without('PHX','LAX')).out().
       has('code','LAS').path().by('code')</programlisting>
-<programlisting language="groovy" linenumbering="unnumbered">g.V().has('code','AUS').values().inject('ABIA')
-
-ABIA
-US
-AUS
-12250
-Austin
-542
-KAUS
--97.6698989868164
-airport
-US-TX
-2
-30.1944999694824
-Austin Bergstrom International Airport</programlisting>
 <programlisting language="groovy" linenumbering="unnumbered">a=g.V().has('region','US-OK').values('code').withIndex().toList()
 [OKC,0]
 [TUL,1]

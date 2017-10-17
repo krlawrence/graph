@@ -494,7 +494,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Kelvin R. Lawrence</span><br>
 <span id="email" class="email"><a href="mailto:klawrenc@us.ibm.com">klawrenc@us.ibm.com</a></span><br>
-<span id="revnumber">version 261,</span>
+<span id="revnumber">version 262,</span>
 <span id="revdate">Oct 15, 2017</span>
 </div>
 <div id="toc" class="toc">
@@ -583,15 +583,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_using_em_union_em_to_combine_query_results">3.15. Using <em>union</em> to combine query results</a></li>
 <li><a href="#sideeffect">3.16. Using <em>sideEffect</em> to do things on the side</a></li>
 <li><a href="#_using_em_aggregate_em_to_create_a_temporary_collection">3.17. Using <em>aggregate</em> to create a temporary collection</a></li>
-<li><a href="#coalesce">3.18. Using <em>coalesce</em> to see which traversal returns a result</a></li>
-<li><a href="#otherv">3.19. Other ways to explore nodes and edges using <em>both</em>, <em>bothE</em>, <em>bothV</em> and <em>otherV</em></a></li>
-<li><a href="#sp">3.20. Shortest paths (between airports) -  introducing <em>repeat</em></a>
+<li><a href="#_using_em_inject_em_to_insert_values_into_a_query">3.18. Using <em>inject</em> to insert values into a query</a></li>
+<li><a href="#coalesce">3.19. Using <em>coalesce</em> to see which traversal returns a result</a></li>
+<li><a href="#otherv">3.20. Other ways to explore nodes and edges using <em>both</em>, <em>bothE</em>, <em>bothV</em> and <em>otherV</em></a></li>
+<li><a href="#sp">3.21. Shortest paths (between airports) -  introducing <em>repeat</em></a>
 <ul class="sectlevel3">
-<li><a href="#pathwarn">3.20.1. A warning that <em>path</em> can be memory and CPU intensive</a></li>
+<li><a href="#pathwarn">3.21.1. A warning that <em>path</em> can be memory and CPU intensive</a></li>
 </ul>
 </li>
-<li><a href="#nd">3.21. Calculating node degree</a></li>
-<li><a href="#sx">3.22. More examples using what we have covered so far</a></li>
+<li><a href="#nd">3.22. Calculating node degree</a></li>
+<li><a href="#sx">3.23. More examples using what we have covered so far</a></li>
 </ul>
 </li>
 <li><a href="#beq">4. BEYOND BASIC QUERIES</a>
@@ -821,7 +822,7 @@ October 5th, 2017<br></p>
 free to send me feedback of any sort. Suggested improvements are especially welcome.
 A good way to provide feedback is by opening an issue in the GitHub repository
 located at <a href="https://github.com/krlawrence/graph" class="bare">https://github.com/krlawrence/graph</a>. You are currently reading revision
-261 of the document.</p>
+262 of the document.</p>
 </div>
 </div>
 <div class="sect2">
@@ -5101,7 +5102,41 @@ you cannot get to from anywhere else!</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="coalesce">3.18. Using <em>coalesce</em> to see which traversal returns a result</h3>
+<h3 id="_using_em_inject_em_to_insert_values_into_a_query">3.18. Using <em>inject</em> to insert values into a query</h3>
+<div class="paragraph">
+<p>Sometimes you may want to add something additional to be returned along with the
+results of your query. This can be done using the <em>inject</em> step. In the example
+below, the string <em>ABIA</em>, another acronym commonly used when referring to the Austin
+Bergstrom International Airport, is injected into the query.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span><span class="tok-na">values</span><span class="tok-o">().</span><span class="tok-na">inject</span><span class="tok-o">(</span><span class="tok-s1">&#39;ABIA&#39;</span><span class="tok-o">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If we were to run the query, here is what we would get back</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">ABIA</span>
+<span class="tok-n">US</span>
+<span class="tok-n">AUS</span>
+<span class="tok-mi">12250</span>
+<span class="tok-n">Austin</span>
+<span class="tok-mi">542</span>
+<span class="tok-n">KAUS</span>
+<span class="tok-o">-</span><span class="tok-mf">97.6698989868164</span>
+<span class="tok-n">airport</span>
+<span class="tok-n">US</span><span class="tok-o">-</span><span class="tok-n">TX</span>
+<span class="tok-mi">2</span>
+<span class="tok-mf">30.1944999694824</span>
+<span class="tok-n">Austin</span> <span class="tok-n">Bergstrom</span> <span class="tok-n">International</span> <span class="tok-n">Airport</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="coalesce">3.19. Using <em>coalesce</em> to see which traversal returns a result</h3>
 <div class="paragraph">
 <p>Sometimes, when you are uncertain as to which traversal of a set you are interested
 in will return a result you can have them evaluated in order by the <em>coalesce</em> step.
@@ -5158,7 +5193,7 @@ right order.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="otherv">3.19. Other ways to explore nodes and edges using <em>both</em>, <em>bothE</em>, <em>bothV</em> and <em>otherV</em></h3>
+<h3 id="otherv">3.20. Other ways to explore nodes and edges using <em>both</em>, <em>bothE</em>, <em>bothV</em> and <em>otherV</em></h3>
 <div class="paragraph">
 <p>We have already looked at examples of how you can walk a graph and examine nodes and
 edges using steps such as <em>out</em>, <em>in</em>, <em>outE</em> and <em>inE</em>. In this section we
@@ -5323,7 +5358,7 @@ looking at the other vertices relative to where we started from, which was <em>v
 </div>
 </div>
 <div class="sect2">
-<h3 id="sp">3.20. Shortest paths (between airports) -  introducing <em>repeat</em></h3>
+<h3 id="sp">3.21. Shortest paths (between airports) -  introducing <em>repeat</em></h3>
 <div class="paragraph">
 <p>Gremlin provides a <em>repeat&#8230;&#8203;until</em> looping construct similar to those found in many
 programming languages. This gives us a nice way to perform simple shortest path type
@@ -5424,7 +5459,7 @@ example we want to next try 5 hops.</p>
 adjust the behavior of a <em>repeat&#8230;&#8203;times</em> loop.</p>
 </div>
 <div class="sect3">
-<h4 id="pathwarn">3.20.1. A warning that <em>path</em> can be memory and CPU intensive</h4>
+<h4 id="pathwarn">3.21.1. A warning that <em>path</em> can be memory and CPU intensive</h4>
 <div class="paragraph">
 <p>The <em>path</em> step is incredibly useful and I find myself using it a lot. However, there
 are some downsides to the use of <em>path</em>, especially when searching entire graphs for
@@ -5493,7 +5528,7 @@ can get you into trouble if not used with care.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="nd">3.21. Calculating node degree</h3>
+<h3 id="nd">3.22. Calculating node degree</h3>
 <div class="paragraph">
 <p>While working with graphs, the word <em>degree</em> is used when discussing the number of
 edges coming into a node, going out from a node or potentially both coming in and
@@ -5518,7 +5553,7 @@ the examples below show.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="sx">3.22. More examples using what we have covered so far</h3>
+<h3 id="sx">3.23. More examples using what we have covered so far</h3>
 <div class="paragraph">
 <p>The queries in this section build upon the topics that we have covered so far.</p>
 </div>
@@ -7432,11 +7467,12 @@ first ten airports in the graph.</p>
 of those IDs returned in the query above by adding one to each. Take a look at the
 query below. We have introduced a <em>map</em> step. The <em>map</em> step takes as a parameter a
 closure (or lambda) function telling it how we want it to operate on the values
-flowing in to it. The <em>it</em> is Groovy syntax for the thing that came in (in this case
-a vertex. The <em>get</em> is needed to gain access to the properties of the vertex inside
-of a lambda expression. Lastly we get the <em>id</em> of the vertex and add one to it. The
-modified values are then passed on to the next step of the traversal where they are
-made into a list by the <em>fold</em> step.</p>
+flowing in to it. The <em>it</em> is Groovy syntax for <em>"the thing that came in"</em> (in this
+case a traversal). The <em>get</em> is needed to gain access to the current vertex and its
+properties. Lastly we get the <em>id</em> of the vertex and add one to it. The modified
+values are then passed on to the next step of the traversal where they are made into
+a list by the <em>fold</em> step.
+                                                                                                      gg</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -10578,25 +10614,6 @@ such combinations once but I will leave that as an exercise for the reader!</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span><span class="tok-na">values</span><span class="tok-o">().</span><span class="tok-na">inject</span><span class="tok-o">(</span><span class="tok-s1">&#39;ABIA&#39;</span><span class="tok-o">)</span>
-
-<span class="tok-n">ABIA</span>
-<span class="tok-n">US</span>
-<span class="tok-n">AUS</span>
-<span class="tok-mi">12250</span>
-<span class="tok-n">Austin</span>
-<span class="tok-mi">542</span>
-<span class="tok-n">KAUS</span>
-<span class="tok-o">-</span><span class="tok-mf">97.6698989868164</span>
-<span class="tok-n">airport</span>
-<span class="tok-n">US</span><span class="tok-o">-</span><span class="tok-n">TX</span>
-<span class="tok-mi">2</span>
-<span class="tok-mf">30.1944999694824</span>
-<span class="tok-n">Austin</span> <span class="tok-n">Bergstrom</span> <span class="tok-n">International</span> <span class="tok-n">Airport</span></code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="content">
 <pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">a</span><span class="tok-o">=</span><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;region&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;US-OK&#39;</span><span class="tok-o">).</span><span class="tok-na">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">withIndex</span><span class="tok-o">().</span><span class="tok-na">toList</span><span class="tok-o">()</span>
 <span class="tok-o">[</span><span class="tok-n">OKC</span><span class="tok-o">,</span><span class="tok-mi">0</span><span class="tok-o">]</span>
 <span class="tok-o">[</span><span class="tok-n">TUL</span><span class="tok-o">,</span><span class="tok-mi">1</span><span class="tok-o">]</span>
@@ -12856,8 +12873,8 @@ are shown.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 261<br>
-Last updated 2017-10-15 15:57:25 CDT
+Version 262<br>
+Last updated 2017-10-16 19:45:42 CDT
 </div>
 </div>
 </body>
