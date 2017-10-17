@@ -17,7 +17,7 @@
 <authorinitials>KRL</authorinitials>
 <revhistory>
 <revision>
-<revnumber>265</revnumber>
+<revnumber>266</revnumber>
 <date>Oct 17, 2017</date>
 <authorinitials>KRL</authorinitials>
 </revision>
@@ -57,7 +57,7 @@ October 5th, 2017<?asciidoc-br?></simpara>
 free to send me feedback of any sort. Suggested improvements are especially welcome.
 A good way to provide feedback is by opening an issue in the GitHub repository
 located at <link xl:href="https://github.com/krlawrence/graph">https://github.com/krlawrence/graph</link>. You are currently reading revision
-265 of the document.</simpara>
+266 of the document.</simpara>
 </section>
 <section xml:id="thanks">
 <title>A word of thanks</title>
@@ -1538,9 +1538,9 @@ the traversal/query.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">g.V().has('type','airport').limit(10).as('a','b','c').
       select('a','b','c').by('code').by('region').by(out().count())</programlisting>
 <simpara>In the most recent releases of TinkerPop you can also use the new <emphasis>project</emphasis> step and
-achieve the same results that you can get from the combination of <emphasis>as</emphasis> and
-<emphasis>select</emphasis> steps. The example below shows the previous query, rewritten to use <emphasis>project</emphasis>
-instead of <emphasis>as</emphasis> and <emphasis>select</emphasis>.</simpara>
+achieve the same results that you can get from the combination of <emphasis>as</emphasis> and <emphasis>select</emphasis>
+steps. The example below shows the previous query, rewritten to use <emphasis>project</emphasis> instead
+of <emphasis>as</emphasis> and <emphasis>select</emphasis>.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">g.V().has('type','airport').limit(10).project('a','b','c').
       by('code').by('region').by(out().count())</programlisting>
 <simpara>This query, and the prior query, would return the following results.</simpara>
@@ -1576,9 +1576,12 @@ names.</simpara>
 <section xml:id="vm">
 <title>Using <emphasis>valueMap</emphasis> to explore the properties of a vertex or element</title>
 <simpara>A call to <emphasis>valueMap</emphasis> will return all of the properties of a vertex or element as an
-array of key:value pairs. Basically a hash map. Each element in the map can be
-addressed using the name of the key. By default the ID and label are not included in
-the map unless a parameter of <emphasis>true</emphasis> is provided.</simpara>
+array of key:value pairs. Basically a hash map. You can also select which properties
+you want <emphasis>valueMap</emphasis> to return if you do not want them all.  Each element in the map
+can be addressed using the name of the key. By default the ID and label are not
+included in the map unless a parameter of <emphasis>true</emphasis> is provided.</simpara>
+<simpara>The query below will return the keys and values for all properties associated with
+the Austin airport vertex.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Return all the properties and values the AUS vertex has
 g.V().has('code','AUS').valueMap()</programlisting>
 <simpara>If you are using the Gremlin console, the output from running the previous command
@@ -1602,11 +1605,32 @@ The next example will just return the ID, label and <emphasis>region</emphasis> 
 g.V().has('code','AUS').valueMap(true,'region')
 
 [id:3,region:[US-TX],label:airport]</programlisting>
-<simpara>The last example selects three properties to be in the value map.</simpara>
-<programlisting language="groovy" linenumbering="unnumbered">// You can select specific fields from a value map
+<tip>
+<simpara>If you only need the keys and values for specific properties to be returned it
+is recommended to pass the names of those properties as parameters to the <emphasis>valueMap</emphasis>
+step so it does not return a lot more data than you need. Think of this as the
+difference, in the SQL World, between selecting just the columns you are interested
+in from a table rather than doing a <emphasis>SELECT *</emphasis>.</simpara>
+</tip>
+<simpara>As shown above, you can specify which properties you want returned by supplying their
+names as parameters to the <emphasis>valueMap</emphasis> step.
+For completeness, it is worth noting that you can also use a <emphasis>select</emphasis> step to refine
+the results of a <emphasis>valueMap</emphasis>.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">// You can 'select' specific fields from a value map
 g.V().has('code','AUS').valueMap().select('code','icao','desc')
 
 [code:[AUS],icao:[KAUS],desc:[Austin Bergstrom International Airport]]</programlisting>
+<simpara>If you are reading the output of queries that use <emphasis>valueMap</emphasis> on the Gremlin console,
+it is sometimes easier to read the output if you add an <emphasis>unfold</emphasis> step to the end of
+the query as follows.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('code','AUS').valueMap(true,'code','icao','desc','city').unfold()
+
+code=[AUS]
+city=[Austin]
+icao=[KAUS]
+id=3
+label=airport
+desc=[Austin Bergstrom International Airport]</programlisting>
 </section>
 <section xml:id="var">
 <title>Assigning query results to a variable</title>

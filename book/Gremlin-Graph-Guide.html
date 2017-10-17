@@ -499,7 +499,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Kelvin R. Lawrence</span><br>
 <span id="email" class="email"><a href="mailto:klawrenc@us.ibm.com">klawrenc@us.ibm.com</a></span><br>
-<span id="revnumber">version 265,</span>
+<span id="revnumber">version 266,</span>
 <span id="revdate">Oct 17, 2017</span>
 </div>
 <div id="toc" class="toc">
@@ -832,7 +832,7 @@ October 5th, 2017<br></p>
 free to send me feedback of any sort. Suggested improvements are especially welcome.
 A good way to provide feedback is by opening an issue in the GitHub repository
 located at <a href="https://github.com/krlawrence/graph" class="bare">https://github.com/krlawrence/graph</a>. You are currently reading revision
-265 of the document.</p>
+266 of the document.</p>
 </div>
 </div>
 <div class="sect2">
@@ -3056,9 +3056,9 @@ the traversal/query.</p>
 </div>
 <div class="paragraph">
 <p>In the most recent releases of TinkerPop you can also use the new <em>project</em> step and
-achieve the same results that you can get from the combination of <em>as</em> and
-<em>select</em> steps. The example below shows the previous query, rewritten to use <em>project</em>
-instead of <em>as</em> and <em>select</em>.</p>
+achieve the same results that you can get from the combination of <em>as</em> and <em>select</em>
+steps. The example below shows the previous query, rewritten to use <em>project</em> instead
+of <em>as</em> and <em>select</em>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3118,9 +3118,14 @@ names.</p>
 <h3 id="vm">3.3. Using <em>valueMap</em> to explore the properties of a vertex or element</h3>
 <div class="paragraph">
 <p>A call to <em>valueMap</em> will return all of the properties of a vertex or element as an
-array of key:value pairs. Basically a hash map. Each element in the map can be
-addressed using the name of the key. By default the ID and label are not included in
-the map unless a parameter of <em>true</em> is provided.</p>
+array of key:value pairs. Basically a hash map. You can also select which properties
+you want <em>valueMap</em> to return if you do not want them all.  Each element in the map
+can be addressed using the name of the key. By default the ID and label are not
+included in the map unless a parameter of <em>true</em> is provided.</p>
+</div>
+<div class="paragraph">
+<p>The query below will return the keys and values for all properties associated with
+the Austin airport vertex.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3176,15 +3181,51 @@ The next example will just return the ID, label and <em>region</em> property.</p
 <span class="tok-o">[</span><span class="tok-nl">id:</span><span class="tok-mi">3</span><span class="tok-o">,</span><span class="tok-nl">region:</span><span class="tok-o">[</span><span class="tok-n">US</span><span class="tok-o">-</span><span class="tok-n">TX</span><span class="tok-o">],</span><span class="tok-nl">label:</span><span class="tok-n">airport</span><span class="tok-o">]</span></code></pre>
 </div>
 </div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+If you only need the keys and values for specific properties to be returned it
+is recommended to pass the names of those properties as parameters to the <em>valueMap</em>
+step so it does not return a lot more data than you need. Think of this as the
+difference, in the SQL World, between selecting just the columns you are interested
+in from a table rather than doing a <em>SELECT *</em>.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
-<p>The last example selects three properties to be in the value map.</p>
+<p>As shown above, you can specify which properties you want returned by supplying their
+names as parameters to the <em>valueMap</em> step.
+For completeness, it is worth noting that you can also use a <em>select</em> step to refine
+the results of a <em>valueMap</em>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// You can select specific fields from a value map</span>
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// You can &#39;select&#39; specific fields from a value map</span>
 <span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span><span class="tok-na">valueMap</span><span class="tok-o">().</span><span class="tok-na">select</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;icao&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;desc&#39;</span><span class="tok-o">)</span>
 
 <span class="tok-o">[</span><span class="tok-nl">code:</span><span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">],</span><span class="tok-nl">icao:</span><span class="tok-o">[</span><span class="tok-n">KAUS</span><span class="tok-o">],</span><span class="tok-nl">desc:</span><span class="tok-o">[</span><span class="tok-n">Austin</span> <span class="tok-n">Bergstrom</span> <span class="tok-n">International</span> <span class="tok-n">Airport</span><span class="tok-o">]]</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you are reading the output of queries that use <em>valueMap</em> on the Gremlin console,
+it is sometimes easier to read the output if you add an <em>unfold</em> step to the end of
+the query as follows.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span><span class="tok-na">valueMap</span><span class="tok-o">(</span><span class="tok-kc">true</span><span class="tok-o">,</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;icao&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;desc&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">).</span><span class="tok-na">unfold</span><span class="tok-o">()</span>
+
+<span class="tok-n">code</span><span class="tok-o">=[</span><span class="tok-n">AUS</span><span class="tok-o">]</span>
+<span class="tok-n">city</span><span class="tok-o">=[</span><span class="tok-n">Austin</span><span class="tok-o">]</span>
+<span class="tok-n">icao</span><span class="tok-o">=[</span><span class="tok-n">KAUS</span><span class="tok-o">]</span>
+<span class="tok-n">id</span><span class="tok-o">=</span><span class="tok-mi">3</span>
+<span class="tok-n">label</span><span class="tok-o">=</span><span class="tok-n">airport</span>
+<span class="tok-n">desc</span><span class="tok-o">=[</span><span class="tok-n">Austin</span> <span class="tok-n">Bergstrom</span> <span class="tok-n">International</span> <span class="tok-n">Airport</span><span class="tok-o">]</span></code></pre>
 </div>
 </div>
 </div>
@@ -12941,8 +12982,8 @@ are shown.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 265<br>
-Last updated 2017-10-17 11:48:48 CDT
+Version 266<br>
+Last updated 2017-10-17 16:35:03 CDT
 </div>
 </div>
 </body>
