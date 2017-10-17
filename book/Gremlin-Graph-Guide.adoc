@@ -1,11 +1,11 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v261, Oct 15, 2017
-// Sun Oct 15, 2017 15:57:10 CDT
+v262, Oct 15, 2017
+// Mon Oct 16, 2017 19:44:08 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Oct 15 2017
+//:Date:      Oct 16 2017
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -16,7 +16,7 @@ v261, Oct 15, 2017
 //:pygments-style: manni
 :toc:
 :toclevels: 4
-:revision: 261
+:revision: 262
 
 // NOTE: These notes are encoded using a minimal level of Asciidoc markup. You can read
 // them as-is or generate HTML or other output formats from this file using the
@@ -3714,6 +3714,38 @@ the second query.  This also tells us there are no flights from Austin to places
 you cannot get to from anywhere else!
 
 
+Using 'inject' to insert values into a query
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Sometimes you may want to add something additional to be returned along with the
+results of your query. This can be done using the 'inject' step. In the example
+below, the string 'ABIA', another acronym commonly used when referring to the Austin
+Bergstrom International Airport, is injected into the query.
+
+[source,groovy]
+----
+g.V().has('code','AUS').values().inject('ABIA')
+----
+
+If we were to run the query, here is what we would get back
+
+[source,groovy]
+----
+ABIA
+US
+AUS
+12250
+Austin
+542
+KAUS
+-97.6698989868164
+airport
+US-TX
+2
+30.1944999694824
+Austin Bergstrom International Airport
+----
+
 [[coalesce]]
 Using 'coalesce' to see which traversal returns a result
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -5849,7 +5881,7 @@ the 'map' step allows us to do.
 Take a look at the query below. It simply returns us a list containing the IDs of the
 first ten airports in the graph.
 
-[source,groovy]
+[source,groovy]                                
 ----
 g.V().hasLabel('airport').limit(10).id().fold()
 
@@ -5860,12 +5892,12 @@ Let's say we wanted to write a query, similar to the one above, that will modify
 of those IDs returned in the query above by adding one to each. Take a look at the
 query below. We have introduced a 'map' step. The 'map' step takes as a parameter a
 closure (or lambda) function telling it how we want it to operate on the values
-flowing in to it. The 'it' is Groovy syntax for the thing that came in (in this case
-a vertex. The 'get' is needed to gain access to the properties of the vertex inside
-of a lambda expression. Lastly we get the 'id' of the vertex and add one to it. The
-modified values are then passed on to the next step of the traversal where they are
-made into a list by the 'fold' step.
-
+flowing in to it. The 'it' is Groovy syntax for '"the thing that came in"' (in this
+case a traversal). The 'get' is needed to gain access to the current vertex and its
+properties. Lastly we get the 'id' of the vertex and add one to it. The modified
+values are then passed on to the next step of the traversal where they are made into
+a list by the 'fold' step.
+                                                                                                      gg
 [source,groovy]
 ----
 g.V().hasLabel('airport').limit(10).map{it.get().id() + 1}.fold()
@@ -8751,24 +8783,8 @@ g.V().has('airport','code','AUS').as('aus').out().
       has('code','LAS').path().by('code')
 ----
 
-[source,groovy]
-----
-g.V().has('code','AUS').values().inject('ABIA')
 
-ABIA
-US
-AUS
-12250
-Austin
-542
-KAUS
--97.6698989868164
-airport
-US-TX
-2
-30.1944999694824
-Austin Bergstrom International Airport
-----
+
 
 [source,groovy]
 ----
