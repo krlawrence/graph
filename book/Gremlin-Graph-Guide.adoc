@@ -1,7 +1,7 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v265, Oct 17, 2017
+v266, Oct 17, 2017
 // Tue Oct 17, 2017 11:48:41 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
@@ -16,7 +16,7 @@ v265, Oct 17, 2017
 //:pygments-style: manni
 :toc:
 :toclevels: 4
-:revision: 265
+:revision: 266
 
 // NOTE: These notes are encoded using a minimal level of Asciidoc markup. You can read
 // them as-is or generate HTML or other output formats from this file using the
@@ -1924,9 +1924,9 @@ g.V().has('type','airport').limit(10).as('a','b','c').
 ----
 
 In the most recent releases of TinkerPop you can also use the new 'project' step and
-achieve the same results that you can get from the combination of 'as' and
-'select' steps. The example below shows the previous query, rewritten to use 'project'
-instead of 'as' and 'select'.
+achieve the same results that you can get from the combination of 'as' and 'select'
+steps. The example below shows the previous query, rewritten to use 'project' instead
+of 'as' and 'select'.
 
 [source,groovy]
 ----
@@ -1983,9 +1983,13 @@ Using 'valueMap' to explore the properties of a vertex or element
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A call to 'valueMap' will return all of the properties of a vertex or element as an
-array of key:value pairs. Basically a hash map. Each element in the map can be
-addressed using the name of the key. By default the ID and label are not included in
-the map unless a parameter of 'true' is provided.
+array of key:value pairs. Basically a hash map. You can also select which properties
+you want 'valueMap' to return if you do not want them all.  Each element in the map
+can be addressed using the name of the key. By default the ID and label are not
+included in the map unless a parameter of 'true' is provided.
+
+The query below will return the keys and values for all properties associated with
+the Austin airport vertex.
 
 [source,groovy]
 ----
@@ -2028,14 +2032,39 @@ g.V().has('code','AUS').valueMap(true,'region')
 [id:3,region:[US-TX],label:airport]
 ----
 
-The last example selects three properties to be in the value map.
+TIP: If you only need the keys and values for specific properties to be returned it
+is recommended to pass the names of those properties as parameters to the 'valueMap'
+step so it does not return a lot more data than you need. Think of this as the
+difference, in the SQL World, between selecting just the columns you are interested
+in from a table rather than doing a 'SELECT *'.
+
+As shown above, you can specify which properties you want returned by supplying their
+names as parameters to the 'valueMap' step.
+For completeness, it is worth noting that you can also use a 'select' step to refine
+the results of a 'valueMap'.
 
 [source,groovy]
 ----
-// You can select specific fields from a value map
+// You can 'select' specific fields from a value map
 g.V().has('code','AUS').valueMap().select('code','icao','desc')
 
 [code:[AUS],icao:[KAUS],desc:[Austin Bergstrom International Airport]]
+----
+
+If you are reading the output of queries that use 'valueMap' on the Gremlin console,
+it is sometimes easier to read the output if you add an 'unfold' step to the end of
+the query as follows.
+
+[source,groovy]
+----
+g.V().has('code','AUS').valueMap(true,'code','icao','desc','city').unfold()
+
+code=[AUS]
+city=[Austin]
+icao=[KAUS]
+id=3
+label=airport
+desc=[Austin Bergstrom International Airport]
 ----
 
 [[var]]
