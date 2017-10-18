@@ -1,8 +1,8 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v266, Oct 17, 2017
-// Tue Oct 17, 2017 11:48:41 CDT
+v267, Oct 17, 2017
+// Tue Oct 17, 2017 19:53:45 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Oct 17 2017
@@ -16,7 +16,7 @@ v266, Oct 17, 2017
 //:pygments-style: manni
 :toc:
 :toclevels: 4
-:revision: 266
+:revision: 267
 
 // NOTE: These notes are encoded using a minimal level of Asciidoc markup. You can read
 // them as-is or generate HTML or other output formats from this file using the
@@ -756,8 +756,7 @@ the following properties. The word in parenthesis indicates the type of the prop
 
 We can use Gremlin once the air route graph is loaded to show us what properties an
 airport vertex has. As an example here is what the airport vertex with an ID of 3 looks
-like. We will explain the steps that make up the Gremlin query later in this
-document.
+like. We will explain the steps that make up the Gremlin query shortly.
 
 [source,groovy]
 ----
@@ -1325,7 +1324,7 @@ g.V().hasLabel('airport').has('code','DFW')
 g.V().has('airport','code','DFW') 
 ----
 
-Here is what we gt back from the query. Notice that this is the Gremlin Console's way
+Here is what we get back from the query. Notice that this is the Gremlin Console's way
 of telling us we got back the 'Vertex' with an ID of 8.
 
 [source,groovy]
@@ -2072,7 +2071,7 @@ Assigning query results to a variable
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 It is extremely useful to be able to assign the results of a query to a variable. The
-example below stores the results of the 'valueMap()' call shown above into a variable
+example below stores the results of the 'valueMap' call shown above into a variable
 called 'aus'. 
 
 [source,groovy]
