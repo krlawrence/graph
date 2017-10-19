@@ -1,11 +1,11 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v267, Oct 17, 2017
-// Tue Oct 17, 2017 19:53:45 CDT
+v267, Oct 19, 2017
+// Thu Oct 19, 2017 11:41:36 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Oct 17 2017
+//:Date:      Oct 19 2017
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -9578,13 +9578,48 @@ transactional capabilities provided by Janus Graph.
 Installing Janus Graph
 ^^^^^^^^^^^^^^^^^^^^^^
 
-To be written
+Janus Graph itself is very easy to install. You just have to download the ZIP file
+and unzip it into a convenient location. Having done that you can immediately begin
+to experiment with it if you use the 'inmemory' option which is explained more in the 
+<<janusinmemory>> section below. However, for a production deployment you will
+probably be using Janus Graph in conjunction with some sort of persistent storage, an
+indexing service and other components that will also have to be installed. We will
+get into that a bit later on. The download page has information regarding versions of
+related technologies like Apache Cassandra and Apache Solr that Janus Graph has been
+tested with.
+
+NOTE: It is important to remember that Janus Graph does not have its own process, it
+is not a delivered as a service that you run, rather it is a set of Java classes that
+have to be invoked either from your own code, the Gremlin Console hosted using
+something like Gremlin Server.
+
+The install package for Janus Graph is located at http://janusgraph.org/ and is a
+single ZIP file. Once you have it downloaded and unzipped you are ready to experiment
+using the Gremlin Console. As will be discussed below, when working with Janus Graph
+you must use the version of the Gremlin Console that is packaged as part of the Janus
+Graph download.
 
 [[janusconsole]]
 Using Janus Graph from the Gremlin Console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To be written
+A version of the Gremlin Console is included as part of the Janus Graph download. The
+only major difference between this version of the console and the one you get as part
+of the standard Apache TinkerPop download is that the console has been preconfigured
+to recognize and find the Janus Graph specific classes. A good example of one such
+class is 'JanusGraphFactory' that is used from the Console to create a new Janus
+Graph instance.
+
+NOTE: When working with Janus Graph you must use the version of the Gremlin Console
+that is packaged as part of the Janus Graph download.
+
+As mentioned above, Janus Graph is not a stand alone service, it is a set of Java
+classes that a process to invoke it. The Gremlin Console can play that role. After
+you have unzipped Janus Graph you will find the gremlin.sh and gremlin.bat scripts in
+the bin directory under the Janus Graph parent directory. Once you have started the
+Gremlin Console you can, as we will explore in the next few sections, tell Janus
+Graph about the environment you will be operating in in terms of back end store and
+index.
 
 [[janusinmemory]]
 Using Janus Graph with the 'inmemory' option
