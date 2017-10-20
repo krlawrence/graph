@@ -5,7 +5,7 @@
 <info>
 <title>GRAPH DATABASES, GREMLIN and TINKERPOP </title>
 <subtitle>A TUTORIAL</subtitle>
-<date>Oct 17, 2017</date>
+<date>Oct 19, 2017</date>
 <author>
 <personname>
 <firstname>Kelvin</firstname>
@@ -17,8 +17,8 @@
 <authorinitials>KRL</authorinitials>
 <revhistory>
 <revision>
-<revnumber>266</revnumber>
-<date>Oct 17, 2017</date>
+<revnumber>267</revnumber>
+<date>Oct 19, 2017</date>
 <authorinitials>KRL</authorinitials>
 </revision>
 </revhistory>
@@ -57,7 +57,7 @@ October 5th, 2017<?asciidoc-br?></simpara>
 free to send me feedback of any sort. Suggested improvements are especially welcome.
 A good way to provide feedback is by opening an issue in the GitHub repository
 located at <link xl:href="https://github.com/krlawrence/graph">https://github.com/krlawrence/graph</link>. You are currently reading revision
-266 of the document.</simpara>
+267 of the document.</simpara>
 </section>
 <section xml:id="thanks">
 <title>A word of thanks</title>
@@ -728,8 +728,7 @@ the following properties. The word in parenthesis indicates the type of the prop
  lon     (double) : Longitude of the airport</screen>
 <simpara>We can use Gremlin once the air route graph is loaded to show us what properties an
 airport vertex has. As an example here is what the airport vertex with an ID of 3 looks
-like. We will explain the steps that make up the Gremlin query later in this
-document.</simpara>
+like. We will explain the steps that make up the Gremlin query shortly.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Query the properties of vertex 3
 g.V(3).valueMap(true).unfold()
 
@@ -1149,7 +1148,7 @@ not looked at before that takes an additional label value as its first parameter
 g.V().hasLabel('airport').has('code','DFW')
 
 g.V().has('airport','code','DFW')</programlisting>
-<simpara>Here is what we gt back from the query. Notice that this is the Gremlin Console&#8217;s way
+<simpara>Here is what we get back from the query. Notice that this is the Gremlin Console&#8217;s way
 of telling us we got back the <emphasis>Vertex</emphasis> with an ID of 8.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">v[8]</programlisting>
 <simpara>So, what we actually got back from these queries was a TinkerPop <emphasis>Vertex</emphasis> data
@@ -1635,7 +1634,7 @@ desc=[Austin Bergstrom International Airport]</programlisting>
 <section xml:id="var">
 <title>Assigning query results to a variable</title>
 <simpara>It is extremely useful to be able to assign the results of a query to a variable. The
-example below stores the results of the <emphasis>valueMap()</emphasis> call shown above into a variable
+example below stores the results of the <emphasis>valueMap</emphasis> call shown above into a variable
 called <emphasis>aus</emphasis>.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Store the properties for the AUS aiport in the variable aus.
 aus=g.V().has('code','AUS').valueMap().next()</programlisting>
@@ -6739,11 +6738,46 @@ topics including how to create and manage both schemas and indexes and how to us
 transactional capabilities provided by Janus Graph.</simpara>
 <section xml:id="janusinstall">
 <title>Installing Janus Graph</title>
-<simpara>To be written</simpara>
+<simpara>Janus Graph itself is very easy to install. You just have to download the ZIP file
+and unzip it into a convenient location. Having done that you can immediately begin
+to experiment with it if you use the <emphasis>inmemory</emphasis> option which is explained more in the
+<xref linkend="janusinmemory"/> section below. However, for a production deployment you will
+probably be using Janus Graph in conjunction with some sort of persistent storage, an
+indexing service and other components that will also have to be installed. We will
+get into that a bit later on. The download page has information regarding versions of
+related technologies like Apache Cassandra and Apache Solr that Janus Graph has been
+tested with.</simpara>
+<note>
+<simpara>It is important to remember that Janus Graph does not have its own process, it
+is not a delivered as a service that you run, rather it is a set of Java classes that
+have to be invoked either from your own code, the Gremlin Console hosted using
+something like Gremlin Server.</simpara>
+</note>
+<simpara>The install package for Janus Graph is located at <link xl:href="http://janusgraph.org/">http://janusgraph.org/</link> and is a
+single ZIP file. Once you have it downloaded and unzipped you are ready to experiment
+using the Gremlin Console. As will be discussed below, when working with Janus Graph
+you must use the version of the Gremlin Console that is packaged as part of the Janus
+Graph download.</simpara>
 </section>
 <section xml:id="janusconsole">
 <title>Using Janus Graph from the Gremlin Console</title>
-<simpara>To be written</simpara>
+<simpara>A version of the Gremlin Console is included as part of the Janus Graph download. The
+only major difference between this version of the console and the one you get as part
+of the standard Apache TinkerPop download is that the console has been preconfigured
+to recognize and find the Janus Graph specific classes. A good example of one such
+class is <emphasis>JanusGraphFactory</emphasis> that is used from the Console to create a new Janus
+Graph instance.</simpara>
+<note>
+<simpara>When working with Janus Graph you must use the version of the Gremlin Console
+that is packaged as part of the Janus Graph download.</simpara>
+</note>
+<simpara>As mentioned above, Janus Graph is not a stand alone service, it is a set of Java
+classes that a process to invoke it. The Gremlin Console can play that role. After
+you have unzipped Janus Graph you will find the gremlin.sh and gremlin.bat scripts in
+the bin directory under the Janus Graph parent directory. Once you have started the
+Gremlin Console you can, as we will explore in the next few sections, tell Janus
+Graph about the environment you will be operating in in terms of back end store and
+index.</simpara>
 </section>
 <section xml:id="janusinmemory">
 <title>Using Janus Graph with the <emphasis>inmemory</emphasis> option</title>
