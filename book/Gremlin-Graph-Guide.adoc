@@ -2,7 +2,7 @@ GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v268, Oct 19, 2017
-// Sun Oct 22, 2017 09:13:44 CDT
+// Sun Oct 22, 2017 12:58:47 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Oct 22 2017
@@ -10294,7 +10294,10 @@ Dallas
 ----
 // Matches any city that conains dal followed by anything, ignoring case.
 g.V().has('city',textRegex('(?i)dal.*')).values('city')
+----
 
+[source,json]
+----
 Dallas
 Dallas
 Dalcahue
