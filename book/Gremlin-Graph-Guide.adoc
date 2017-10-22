@@ -2,7 +2,7 @@ GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v268, Oct 22, 2017
-// Sun Oct 22, 2017 15:13:21 CDT
+// Sun Oct 22, 2017 18:48:29 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Oct 22 2017
@@ -10230,7 +10230,12 @@ being examined. These searches are *not* case sensitive.
 [source,groovy]
 ----
 g.V().has('desc',textContains("Dallas")).values('desc')
+----
 
+Here is what the query should return.
+
+[source,json]
+----
 Dallas/Fort Worth International Airport
 Dallas Love Field
 ----
@@ -10273,16 +10278,27 @@ Fort Leonard Wood    Fort Dodge
 
 NOTE: Searches using 'textContains' are *not* case sensitive.
 
+The query below does not match any whole word in any description anywhere in the
+graph so no results will be returned.
+
 [source,groovy]
 ----
 // Matches no whole word so no results
 g.V().has('desc',textContains("Dalla")).values('desc')
 ----
 
+If we use 'textContainsPrefix' instead of 'textContains', which looks for whole words
+that start with the specified text, we will get some results.
+
 [source,groovy]
 ----
-g.V().has('desc',textContainsPrefix("dall")).values('desc')
+g.V().has('desc',textContainsPrefix("dalla")).values('desc')
+----
 
+Here is what the query will return.
+
+[source,json]
+----
 Dallas/Fort Worth International Airport
 Dallas Love Field
 ----
@@ -10292,13 +10308,22 @@ Regular expression predicates
 +++++++++++++++++++++++++++++
 
 The Janus Graph regular expression predicates recognize the syntax defined as part of
-the Java 1.8 Pattern class that is documented 
-at https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html
+the Java 1.8 Pattern class that is documented at
+https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html. The Java
+regular expression syntax may be different than the one you are used to so it is
+worth taking a few minutes to study the documentation at that URL.
+
+The query below uses a 'textContainsRegex' predicate to search for any city name that
+contains a word starting with 'for', while ignoring case.
 
 [source,groovy]
 ----
 g.V().has('city',textContainsRegex("(?i)for.*")).values('city')
 ----
+
+Notice how names that start with 'For' such as 'Fort Myers' as well as city names
+containing words that start with the text 'For' somewhere else are found. For example
+'La Fortuna'  and 'View Fort' are also found.
 
 [source,json]
 ----
