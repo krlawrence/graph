@@ -10181,18 +10181,126 @@ To be written
 .Additional Janus Graph text search predicates
 [cols="^1,4"]
 |==============================================================================
-|textContains           | 
-|textContainsPrefix     | 
-|textContainsRegex      | 
-|textContainsFuzzy      | 
-|textPrefix             | 
-|textRegex              | 
-|textFuzzy              | 
+|textContains           | True if a whole word matches the search string provided.
+|textContainsPrefix     | True if at least one word starts with the search string provided.
+|textContainsRegex      | True if at least one word matches the regular expression provided.
+|textContainsFuzzy      | True if a word matches the fuzzy search text provided.
+|textPrefix             | True if the string being inspected starts with the search text.
+|textRegex              | True if the string being inspected matches the regular expression provided. 
+|textFuzzy              | True if the string being inspected matches the fuzzy search text.
 |==============================================================================
+
 
 [source,groovy]
 ----
-g.V().has('desc',textContainsRegex("(?i)dal"))
+g.V().has('desc',textContains("Dallas")).values('desc')
+
+Dallas/Fort Worth International Airport
+Dallas Love Field
+----
+
+
+[source,groovy]
+----
+g.V().has('city',textContains("Fort")).values('city')
+
+Fort Myers
+Fort-de-France
+Fort Lauderdale
+Fort Wayne
+Fort St.John
+Fort Nelson
+Fort Chipewyan
+Fort Mcpherson
+Fort Smith
+Fort Severn
+Fort Simpson
+Fort Leonard Wood
+Fort Worth
+Fort McMurray
+Fort Sandeman
+Fort Smith
+Fort Yukon
+Fort Albany
+Fort Hood/Killeen
+Vieux Fort
+Fort Good Hope
+Fort Frances
+Fort Hope
+Fort Dodge
+----
+
+
+[source,groovy]
+----
+// Matches no whole word so no results
+g.V().has('desc',textContains("Dalla")).values('desc')
+----
+
+[source,groovy]
+----
+g.V().has('desc',textContainsPrefix("Dall")).values('desc')
+
+Dallas/Fort Worth International Airport
+Dallas Love Field
+----
+
+[source,groovy]
+----
+g.V().has('city',textContainsRegex("(?i)for.*")).values('city')
+
+Fort Myers
+La Fortuna/San Carlos
+Fort-de-France
+Fort Lauderdale
+Fort Wayne
+Jerez de la Forntera
+Fort St.John
+Fort Nelson
+Fort Chipewyan
+Formosa
+Fort Mcpherson
+Fort Smith
+Juiz de Fora
+Fort Severn
+Fort Simpson
+Fort Leonard Wood
+Fort Worth
+Fort McMurray
+Fort Sandeman
+Fortaleza
+Fort Smith
+Fort Yukon
+Fort Albany
+Fort Hood/Killeen
+Vieux Fort
+Fort Good Hope
+Grand Forks
+Fort Frances
+Fort Hope
+Fort Dodge
+----
+
+[source,groovy]
+----
+// Matches dallas ignoring case
+g.V().has('city',textRegex('(?i)dallas')).values('city')
+
+Dallas
+Dallas
+----
+
+[source,groovy]
+----
+`g.V().has('city',textRegex('(?i)dal.*')).values('city')
+
+Dallas
+Dallas
+Dalcahue
+Dalat
+Dalaman
+Dalanzadgad
+Dalian
 ----
 
 [[janusgeo]]
