@@ -10174,9 +10174,12 @@ defines such as 'neq', 'gte' and 'lte'. Janus graph offers an additional set of
 predicates that can be used when looking for specific patterns within text in a
 graph.
 
-To be written
+The methods that include the word 'Contains' in their name look for whole words that
+match the specified search pattern. The methods that do not include 'Contains' in the
+name look at the entire string being inspected for matches.
 
-
+The table below summarizes the additional text search predicates that Janus Graph
+provides. 
 
 .Additional Janus Graph text search predicates
 [cols="^1,4"]
@@ -10204,30 +10207,18 @@ Dallas Love Field
 ----
 g.V().has('city',textContains("Fort")).values('city')
 
-Fort Myers
-Fort-de-France
-Fort Lauderdale
-Fort Wayne
-Fort St.John
-Fort Nelson
-Fort Chipewyan
-Fort Mcpherson
-Fort Smith
-Fort Severn
-Fort Simpson
-Fort Leonard Wood
-Fort Worth
-Fort McMurray
-Fort Sandeman
-Fort Smith
-Fort Yukon
-Fort Albany
-Fort Hood/Killeen
-Vieux Fort
-Fort Good Hope
-Fort Frances
-Fort Hope
-Fort Dodge
+Fort Myers           Fort Worth               
+Fort-de-France       Fort McMurray            
+Fort Lauderdale      Fort Sandeman            
+Fort Wayne           Fort Smith               
+Fort St.John         Fort Yukon               
+Fort Nelson          Fort Albany              
+Fort Chipewyan       Fort Hood/Killeen        
+Fort Mcpherson       Vieux Fort               
+Fort Smith           Fort Good Hope           
+Fort Severn          Fort Frances             
+Fort Simpson         Fort Hope                
+Fort Leonard Wood    Fort Dodge               
 ----
 
 
