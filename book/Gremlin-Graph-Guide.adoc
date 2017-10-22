@@ -10137,12 +10137,22 @@ To be written
 ----
 mgmt = graph.openManagement()
 mgmt.makePropertyKey('numbers').dataType(Integer.class).cardinality(SET).make()
+----
+
+[source,groovy]
+----
 mgmt.getPropertyKey('numbers').cardinality()
 
 SET
+----
 
+[source,groovy]
+----
 mgmt.commit()
+----
 
+[source,groovy]
+----
 n = g.addV('numbers',1,'numbers',2,'numbers',3).next()
 
 v[2846792]
@@ -10150,18 +10160,30 @@ v[2846792]
 g.V(n).valueMap()
 
 [numbers:[1,2,3]]
+----
 
+[source,groovy]
+----
 g.V(n).property(set,'numbers',2)
 g.V(n).valueMap()
+----
 
+[source,groovy]
+----
 // Duplicates not allowed
 [numbers:[1,2,3]]
+----
 
+[source,groovy]
+----
 g.V(n).property(set,'numbers',4)
 g.V(n).valueMap()
 
 [numbers:[1,2,3,4]]
+----
 
+[source,groovy]
+----
 graph.tx().commit()
 ----
 
@@ -10356,15 +10378,19 @@ These predicates use the
 https://en.wikipedia.org/wiki/Levenshtein_distance[Levenshtein distance] method to
 decide if a piece of text is 'close enough' to the pattern being looked for. This is
 based on assessing how many characterss would have to change in the pattern word to
-achieve a match in the text being inspected. For example 'pall' would match 'wall'
-, 'fall', 'pill' and 'pale'.
+achieve a match in the text being inspected. For example 'pall' would match 'palm',
+'paul' and 'palm'.
 
-
+The query below uses a fuzzy sort to find any words that are close to the word
+'pall'.
 
 [source,groovy]
 ----
 .V().has('desc',textContainsFuzzy("pall")).values('desc')
 ----
+
+Here are the results from running the query. You can see that airport descriptions
+that contain the whole words 'Paul', 'Palm' and 'Hall' have been found.
 
 [source,json]
 ----
