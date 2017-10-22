@@ -10249,36 +10249,21 @@ Dallas Love Field
 ----
 g.V().has('city',textContainsRegex("(?i)for.*")).values('city')
 
-Fort Myers
-La Fortuna/San Carlos
-Fort-de-France
-Fort Lauderdale
-Fort Wayne
-Jerez de la Forntera
-Fort St.John
-Fort Nelson
-Fort Chipewyan
-Formosa
-Fort Mcpherson
-Fort Smith
-Juiz de Fora
-Fort Severn
-Fort Simpson
-Fort Leonard Wood
-Fort Worth
-Fort McMurray
-Fort Sandeman
-Fortaleza
-Fort Smith
-Fort Yukon
-Fort Albany
-Fort Hood/Killeen
-Vieux Fort
-Fort Good Hope
-Grand Forks
-Fort Frances
-Fort Hope
-Fort Dodge
+Fort Myers                Fort Worth                
+La Fortuna/San Carlos     Fort McMurray             
+Fort-de-France            Fort Sandeman             
+Fort Lauderdale           Fortaleza                 
+Fort Wayne                Fort Smith                
+Jerez de la Forntera      Fort Yukon                
+Fort St.John              Fort Albany               
+Fort Nelson               Fort Hood/Killeen         
+Fort Chipewyan            Vieux Fort                
+Formosa                   Fort Good Hope            
+Fort Mcpherson            Grand Forks               
+Fort Smith                Fort Frances              
+Juiz de Fora              Fort Hope                 
+Fort Severn               Fort Dodge                
+Fort Simpson              Fort Leonard Wood
 ----
 
 [source,groovy]
@@ -10292,7 +10277,8 @@ Dallas
 
 [source,groovy]
 ----
-`g.V().has('city',textRegex('(?i)dal.*')).values('city')
+// Matches any city that conains dal followed by anything, ignoring case.
+g.V().has('city',textRegex('(?i)dal.*')).values('city')
 
 Dallas
 Dallas
@@ -10301,6 +10287,23 @@ Dalat
 Dalaman
 Dalanzadgad
 Dalian
+----
+
+[source,groovy]
+----
+// Anything that matches 3 characters followed by 'cah' followed by
+// anything.
+g.V().has('city',textRegex(".{3}cah.*")).values('city')
+
+Dalcahue
+----
+
+[source,groovy]
+----
+g.V().has('city',textRegex(".{3}(cah|anz).*")).values('city')
+
+Dalcahue
+Dalanzadgad
 ----
 
 [[janusgeo]]
