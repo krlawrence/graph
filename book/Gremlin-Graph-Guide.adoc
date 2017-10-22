@@ -10292,7 +10292,8 @@ Regular expression predicates
 +++++++++++++++++++++++++++++
 
 The Janus Graph regular expression predicates recognize the syntax defined as part of
-the Java 1.8 Pattern class that is documented at https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html
+the Java 1.8 Pattern class that is documented 
+at https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html
 
 [source,groovy]
 ----
@@ -10321,7 +10322,7 @@ Fort Simpson              Fort Leonard Wood
 [source,groovy]
 ----
 // Matches dallas ignoring case
-g.V().has('city',textRegex('(?i)dallas')).values('city')
+g.V().has('city',textRegex("(?i)dallas")).values('city')
 
 Dallas
 Dallas
@@ -10397,7 +10398,7 @@ that contain the whole words 'Paul', 'Palm' and 'Hall' have been found.
 Minneapolis-St.Paul International Airport
 Palm Beach International Airport
 Palm Springs International Airport
-John Paul II International Airport Kraków-Balice Airport
+John Paul II International Airport Krakow-Balice Airport
 Melville Hall Airport
 Hall Beach Airport
 St Paul Island Airport
