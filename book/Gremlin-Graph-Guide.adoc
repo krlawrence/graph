@@ -10251,11 +10251,14 @@ g.V().has('desc',textContains("Dalla")).values('desc')
 
 [source,groovy]
 ----
-g.V().has('desc',textContainsPrefix("Dall")).values('desc')
+g.V().has('desc',textContainsPrefix("dall")).values('desc')
 
 Dallas/Fort Worth International Airport
 Dallas Love Field
 ----
+
+
+https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html
 
 [source,groovy]
 ----
@@ -10323,6 +10326,34 @@ g.V().has('city',textRegex(".{3}(cah|anz).*")).values('city')
 Dalcahue
 Dalanzadgad
 ----
+
+[source,groovy]
+----
+g.V().has('region',textRegex("US-[OMD].*")).values('code','region').fold()
+----
+
+[source,json]
+----
+[MSP,US-MN,GPT,US-MS,BZN,US-MT,AUG,US-ME,IRK,US-MO,LCK,US-OH,DTW,US-MI,MCI,US-MO,BTM,US-MT,MKG,US-MI,BOS,US-MA,DCA,US-DC,PDX,US-OR,OKC,US-OK,SGF,US-MO,JAN,US-MS,MQT,US-MI,FNT,US-MI,GTR,US-MS,RDM,US-OR,HLN,US-MT,MSO,US-MT,LUK,US-OH,OLF,US-MT,IMT,US-MI,GRR,US-MI,LMT,US-OR,DLH,US-MN,BJI,US-MN,SBY,US-MD,EWB,US-MA,HVR,US-MT,TBN,US-MO,PWM,US-ME,RST,US-MN,CMH,US-OH,LAW,US-OK,BGR,US-ME,EUG,US-OR,MFR,US-OR,HIB,US-MN,HYA,US-MA,PLN,US-MI,GGW,US-MT,TVF,US-MN,SWO,US-OK,TUL,US-OK,JLN,US-MO,CAK,US-OH,LAN,US-MI,AZO,US-MI,MBS,US-MI,MEI,US-MS,TUP,US-MS,OTH,US-OR,FCA,US-MT,GTF,US-MT,TOL,US-OH,BHB,US-ME,CIU,US-MI,ESC,US-MI,CGI,US-MO,IWD,US-MI,CLE,US-OH,BIL,US-MT,CMX,US-MI,STC,US-MN,HGR,US-MD,INL,US-MN,GLH,US-MS,PDT,US-OR,SDY,US-MT,BWI,US-MD,DAY,US-OH,PIB,US-MS,ILG,US-DE,APN,US-MI,ACK,US-MA,MVY,US-MA,PVC,US-MA,RKD,US-ME,YNG,US-OH,STL,US-MO,COU,US-MO,BKG,US-MO,TVC,US-MI,ORH,US-MA,BRD,US-MN,PQI,US-ME,GDV,US-MT,MBL,US-MI]
+----
+
+https://en.wikipedia.org/wiki/Levenshtein_distance
+
+[source,groovy]
+----
+.V().has('desc',textContainsFuzzy("pall")).values('desc')
+----
+
+[source,json]
+----
+Minneapolis-St.Paul International Airport
+Palm Beach International Airport
+Palm Springs International Airport
+John Paul II International Airport Kraków-Balice Airport
+Melville Hall Airport
+Hall Beach Airport
+St Paul Island Airport
+---- 
 
 [[janusgeo]]
 The Janus Graph geospatial API
