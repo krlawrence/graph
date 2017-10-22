@@ -1,8 +1,8 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v268, Oct 19, 2017
-// Sun Oct 22, 2017 12:58:47 CDT
+v268, Oct 22, 2017
+// Sun Oct 22, 2017 15:13:21 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Oct 22 2017
@@ -10193,9 +10193,17 @@ provides.
 |textFuzzy              | True if the string being inspected matches the fuzzy search text.
 |==============================================================================
 
-The query below will find any vertex that has a 'desc' (description) property that
-contains the word '"Dallas"'. Note that this matches 'Dallas' followed by any word break
-character such as a space or a forward slash.
+Let's take a look at each of these predicates and what they offer with examples of
+each being used. First off, the query below will find any vertex that has a 'desc'
+(description) property that contains the word '"Dallas"'. Note that this matches
+'Dallas' followed by any word break character such as a space or a forward slash.
+
+Text comparison predicates
+++++++++++++++++++++++++++
+
+The simplest of the search predicates allow you to specify an exact match that string  must
+be present either as a whole word (complete word match) or as part of the entire text
+being examined. These searches are *not* case sensitive.
 
 [source,groovy]
 ----
@@ -10258,7 +10266,11 @@ Dallas Love Field
 ----
 
 
-https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html
+Regular expression predicates
++++++++++++++++++++++++++++++
+
+The Janus Graph regular expression predicates recognize the syntax defined as part of
+the Java 1.8 Pattern class that is documented at https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html
 
 [source,groovy]
 ----
@@ -10337,7 +10349,17 @@ g.V().has('region',textRegex("US-[OMD].*")).values('code','region').fold()
 [MSP,US-MN,GPT,US-MS,BZN,US-MT,AUG,US-ME,IRK,US-MO,LCK,US-OH,DTW,US-MI,MCI,US-MO,BTM,US-MT,MKG,US-MI,BOS,US-MA,DCA,US-DC,PDX,US-OR,OKC,US-OK,SGF,US-MO,JAN,US-MS,MQT,US-MI,FNT,US-MI,GTR,US-MS,RDM,US-OR,HLN,US-MT,MSO,US-MT,LUK,US-OH,OLF,US-MT,IMT,US-MI,GRR,US-MI,LMT,US-OR,DLH,US-MN,BJI,US-MN,SBY,US-MD,EWB,US-MA,HVR,US-MT,TBN,US-MO,PWM,US-ME,RST,US-MN,CMH,US-OH,LAW,US-OK,BGR,US-ME,EUG,US-OR,MFR,US-OR,HIB,US-MN,HYA,US-MA,PLN,US-MI,GGW,US-MT,TVF,US-MN,SWO,US-OK,TUL,US-OK,JLN,US-MO,CAK,US-OH,LAN,US-MI,AZO,US-MI,MBS,US-MI,MEI,US-MS,TUP,US-MS,OTH,US-OR,FCA,US-MT,GTF,US-MT,TOL,US-OH,BHB,US-ME,CIU,US-MI,ESC,US-MI,CGI,US-MO,IWD,US-MI,CLE,US-OH,BIL,US-MT,CMX,US-MI,STC,US-MN,HGR,US-MD,INL,US-MN,GLH,US-MS,PDT,US-OR,SDY,US-MT,BWI,US-MD,DAY,US-OH,PIB,US-MS,ILG,US-DE,APN,US-MI,ACK,US-MA,MVY,US-MA,PVC,US-MA,RKD,US-ME,YNG,US-OH,STL,US-MO,COU,US-MO,BKG,US-MO,TVC,US-MI,ORH,US-MA,BRD,US-MN,PQI,US-ME,GDV,US-MT,MBL,US-MI]
 ----
 
-https://en.wikipedia.org/wiki/Levenshtein_distance
+Fuzzy search predicates
++++++++++++++++++++++++
+
+These predicates use the
+https://en.wikipedia.org/wiki/Levenshtein_distance[Levenshtein distance] method to
+decide if a piece of text is 'close enough' to the pattern being looked for. This is
+based on assessing how many characterss would have to change in the pattern word to
+achieve a match in the text being inspected. For example 'pall' would match 'wall'
+, 'fall', 'pill' and 'pale'.
+
+
 
 [source,groovy]
 ----
