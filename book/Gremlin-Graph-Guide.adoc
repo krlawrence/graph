@@ -1,11 +1,11 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v267, Oct 19, 2017
-// Thu Oct 19, 2017 11:41:36 CDT
+v268, Oct 19, 2017
+// Sun Oct 22, 2017 09:13:44 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Oct 19 2017
+//:Date:      Oct 22 2017
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -16,7 +16,7 @@ v267, Oct 19, 2017
 //:pygments-style: manni
 :toc:
 :toclevels: 4
-:revision: 267
+:revision: 268
 
 // NOTE: These notes are encoded using a minimal level of Asciidoc markup. You can read
 // them as-is or generate HTML or other output formats from this file using the
@@ -187,13 +187,14 @@ database is, what some good use cases for graphs are and why you should care in 
 World that is already full of all kinds of SQL and NoSQL databases. In this document
 we are going to be discussing 'directed property graphs'. At the conceptual level
 these types of graphs are quite simple to understand. You have three basic building
-blocks.  Vertices (often referred to as nodes), edges and properties. Vertices represent "things" such as people or
-places. Edges represent connections between those vertices and properties and
-information to the vertices and edges as needed. The 'directed' part of the name means
-that any edge has a direction. It goes 'out' from one vertex and 'in' to another. You
-will sometimes hear people use the word 'digraph' as shorthand for 'directed graph'.
-Consider the relationship "Kelvin knows Jack". This could be modeled as a vertex for
-each of the people and an edge for the relationship as follows. 
+blocks.  Vertices (often referred to as nodes), edges and properties. Vertices
+represent "things" such as people or places. Edges represent connections between
+those vertices and properties and information to the vertices and edges as needed.
+The 'directed' part of the name means that any edge has a direction. It goes 'out'
+from one vertex and 'in' to another. You will sometimes hear people use the word
+'digraph' as shorthand for 'directed graph'.  Consider the relationship "Kelvin knows
+Jack". This could be modeled as a vertex for each of the people and an edge for the
+relationship as follows. 
 
 [.text-center]
 Kelvin -- knows -> Jack
@@ -9727,11 +9728,15 @@ start at zero) from what we might expect from TinkerGraph.
 [source,groovy]
 ----
 g.addV(label,'person','name','Kelvin')
-v[1466464]
+v[4232]
 
 g.V().has('name','Kelvin')
-v[1466464]
+v[4232]
+
+g.V().has('name','Kelvin').id()
+4232
 ----
+
 
 Before we experiment too much more with Janus Graph there are three important
 subjects we need to discuss. One is transactions, another is defining a schema for
@@ -10158,6 +10163,36 @@ g.V(n).valueMap()
 [numbers:[1,2,3,4]]
 
 graph.tx().commit()
+----
+
+[[janpred]]
+Additional Janus Graph text search predicates
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+We have already looked, in the "<<tranges>> section, at the predicates TinkerPop
+defines such as 'neq', 'gte' and 'lte'. Janus graph offers an additional set of
+predicates that can be used when looking for specific patterns within text in a
+graph.
+
+To be written
+
+
+
+.Additional Janus Graph text search predicates
+[cols="^1,4"]
+|==============================================================================
+|textContains           | 
+|textContainsPrefix     | 
+|textContainsRegex      | 
+|textContainsFuzzy      | 
+|textPrefix             | 
+|textRegex              | 
+|textFuzzy              | 
+|==============================================================================
+
+[source,groovy]
+----
+g.V().has('desc',textContainsRegex("(?i)dal"))
 ----
 
 [[janusgeo]]
