@@ -10193,6 +10193,9 @@ provides.
 |textFuzzy              | True if the string being inspected matches the fuzzy search text.
 |==============================================================================
 
+The query below will find any vertex that has a 'desc' (description) property that
+contains the word '"Dallas"'. Note that this matches 'Dallas' followed by any word break
+character such as a space or a forward slash.
 
 [source,groovy]
 ----
@@ -10202,11 +10205,28 @@ Dallas/Fort Worth International Airport
 Dallas Love Field
 ----
 
+The word being searched for using 'textContains' does not have to be the first word
+within the string. It just has to exist as a whole word. The query below looks for
+the word '"Love"' appearing anywhere in the 'desc' property.
 
 [source,groovy]
 ----
-g.V().has('city',textContains("Fort")).values('city')
+g.V().has('desc',textContains("Love")).values('desc')
 
+Dallas Love Field
+Ernest A. Love Field
+----
+
+In this example the word 'fort' is found no matter where it occurs in the 'city'
+name. 
+
+[source,groovy]
+----
+g.V().has('city',textContains("fort")).values('city')
+----
+
+[source,json]
+----
 Fort Myers           Fort Worth               
 Fort-de-France       Fort McMurray            
 Fort Lauderdale      Fort Sandeman            
@@ -10221,6 +10241,7 @@ Fort Simpson         Fort Hope
 Fort Leonard Wood    Fort Dodge               
 ----
 
+NOTE: Searches using 'textContains' are *not* case sensitive.
 
 [source,groovy]
 ----
@@ -10239,7 +10260,10 @@ Dallas Love Field
 [source,groovy]
 ----
 g.V().has('city',textContainsRegex("(?i)for.*")).values('city')
+----
 
+[source,json]
+----
 Fort Myers                Fort Worth                
 La Fortuna/San Carlos     Fort McMurray             
 Fort-de-France            Fort Sandeman             
