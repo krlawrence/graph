@@ -10281,7 +10281,7 @@ Fort Simpson         Fort Hope
 Fort Leonard Wood    Fort Dodge               
 ----
 
-NOTE: Searches using 'textContains' are *not* case sensitive.
+NOTE: Searches using 'textContains' and 'textContainsPrefix' are *not* case sensitive.
 
 The query below does not match any whole word in any description anywhere in the
 graph so no results will be returned.
@@ -10321,6 +10321,8 @@ with the characters 'Los'.
 g.V().has('city',textPrefix('Los')).values('city')
 ----
 
+NOTE: Searches using 'textPrefix' *are* case sensitive.
+
 This is what we get back from the query. 
 
 [source,json]
@@ -10332,7 +10334,7 @@ Losuia
 ----
 
 Notice how the query did not find the city of 'Chapelco/San Martin de los Andes' as
-in this case the 'los' is not at the start of the name. If we did want to also have
+in this case the 'Los' is not at the start of the name. If we did want to also have
 that city discovered we could use 'textContainsPrefix' instead as shown below.
 
 [source,groovy]
