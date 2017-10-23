@@ -494,8 +494,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Kelvin R. Lawrence</span><br>
 <span id="email" class="email"><a href="mailto:klawrenc@us.ibm.com">klawrenc@us.ibm.com</a></span><br>
-<span id="revnumber">version 267,</span>
-<span id="revdate">Oct 19, 2017</span>
+<span id="revnumber">version 268,</span>
+<span id="revdate">Oct 22, 2017</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
@@ -727,7 +727,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#janusschema">6.3.7. Defining a Janus Graph schema for air-routes</a></li>
 <li><a href="#cardlist">6.3.8. Creating a property with cardinality LIST</a></li>
 <li><a href="#cardset">6.3.9. Creating a property with cardinality SET</a></li>
-<li><a href="#janusgeo">6.3.10. The Janus Graph geospatial API</a></li>
+<li><a href="#janpred">6.3.10. Additional Janus Graph text search predicates</a>
+<ul class="sectlevel4">
+<li><a href="#_text_comparison_predicates">Text comparison predicates</a></li>
+<li><a href="#_regular_expression_predicates">Regular expression predicates</a></li>
+<li><a href="#_fuzzy_search_predicates">Fuzzy search predicates</a></li>
+</ul>
+</li>
+<li><a href="#janusgeo">6.3.11. The Janus Graph geospatial API</a></li>
 </ul>
 </li>
 <li><a href="#janusstorage">6.4. Choosing a persistent storage technology for Janus Graph</a>
@@ -827,7 +834,7 @@ October 5th, 2017<br></p>
 free to send me feedback of any sort. Suggested improvements are especially welcome.
 A good way to provide feedback is by opening an issue in the GitHub repository
 located at <a href="https://github.com/krlawrence/graph" class="bare">https://github.com/krlawrence/graph</a>. You are currently reading revision
-267 of the document.</p>
+268 of the document.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1017,13 +1024,14 @@ database is, what some good use cases for graphs are and why you should care in 
 World that is already full of all kinds of SQL and NoSQL databases. In this document
 we are going to be discussing <em>directed property graphs</em>. At the conceptual level
 these types of graphs are quite simple to understand. You have three basic building
-blocks.  Vertices (often referred to as nodes), edges and properties. Vertices represent "things" such as people or
-places. Edges represent connections between those vertices and properties and
-information to the vertices and edges as needed. The <em>directed</em> part of the name means
-that any edge has a direction. It goes <em>out</em> from one vertex and <em>in</em> to another. You
-will sometimes hear people use the word <em>digraph</em> as shorthand for <em>directed graph</em>.
-Consider the relationship "Kelvin knows Jack". This could be modeled as a vertex for
-each of the people and an edge for the relationship as follows.</p>
+blocks.  Vertices (often referred to as nodes), edges and properties. Vertices
+represent "things" such as people or places. Edges represent connections between
+those vertices and properties and information to the vertices and edges as needed.
+The <em>directed</em> part of the name means that any edge has a direction. It goes <em>out</em>
+from one vertex and <em>in</em> to another. You will sometimes hear people use the word
+<em>digraph</em> as shorthand for <em>directed graph</em>.  Consider the relationship "Kelvin knows
+Jack". This could be modeled as a vertex for each of the people and an edge for the
+relationship as follows.</p>
 </div>
 <div class="paragraph text-center">
 <p>Kelvin&#8201;&#8212;&#8201;knows &#8594; Jack</p>
@@ -11636,10 +11644,13 @@ start at zero) from what we might expect from TinkerGraph.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">addV</span><span class="tok-o">(</span><span class="tok-n">label</span><span class="tok-o">,</span><span class="tok-s1">&#39;person&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;name&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;Kelvin&#39;</span><span class="tok-o">)</span>
-<span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">1466464</span><span class="tok-o">]</span>
+<span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">4232</span><span class="tok-o">]</span>
 
 <span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;name&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;Kelvin&#39;</span><span class="tok-o">)</span>
-<span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">1466464</span><span class="tok-o">]</span></code></pre>
+<span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">4232</span><span class="tok-o">]</span>
+
+<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;name&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;Kelvin&#39;</span><span class="tok-o">).</span><span class="tok-na">id</span><span class="tok-o">()</span>
+<span class="tok-mi">4232</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -12097,38 +12108,352 @@ multiplicty for the <em>route</em> and <em>contains</em> edges used by the air-r
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">mgmt</span> <span class="tok-o">=</span> <span class="tok-n">graph</span><span class="tok-o">.</span><span class="tok-na">openManagement</span><span class="tok-o">()</span>
-<span class="tok-n">mgmt</span><span class="tok-o">.</span><span class="tok-na">makePropertyKey</span><span class="tok-o">(</span><span class="tok-s1">&#39;numbers&#39;</span><span class="tok-o">).</span><span class="tok-na">dataType</span><span class="tok-o">(</span><span class="tok-n">Integer</span><span class="tok-o">.</span><span class="tok-na">class</span><span class="tok-o">).</span><span class="tok-na">cardinality</span><span class="tok-o">(</span><span class="tok-n">SET</span><span class="tok-o">).</span><span class="tok-na">make</span><span class="tok-o">()</span>
-<span class="tok-n">mgmt</span><span class="tok-o">.</span><span class="tok-na">getPropertyKey</span><span class="tok-o">(</span><span class="tok-s1">&#39;numbers&#39;</span><span class="tok-o">).</span><span class="tok-na">cardinality</span><span class="tok-o">()</span>
+<span class="tok-n">mgmt</span><span class="tok-o">.</span><span class="tok-na">makePropertyKey</span><span class="tok-o">(</span><span class="tok-s1">&#39;numbers&#39;</span><span class="tok-o">).</span><span class="tok-na">dataType</span><span class="tok-o">(</span><span class="tok-n">Integer</span><span class="tok-o">.</span><span class="tok-na">class</span><span class="tok-o">).</span><span class="tok-na">cardinality</span><span class="tok-o">(</span><span class="tok-n">SET</span><span class="tok-o">).</span><span class="tok-na">make</span><span class="tok-o">()</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">mgmt</span><span class="tok-o">.</span><span class="tok-na">getPropertyKey</span><span class="tok-o">(</span><span class="tok-s1">&#39;numbers&#39;</span><span class="tok-o">).</span><span class="tok-na">cardinality</span><span class="tok-o">()</span>
 
-<span class="tok-n">SET</span>
-
-<span class="tok-n">mgmt</span><span class="tok-o">.</span><span class="tok-na">commit</span><span class="tok-o">()</span>
-
-<span class="tok-n">n</span> <span class="tok-o">=</span> <span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">addV</span><span class="tok-o">(</span><span class="tok-s1">&#39;numbers&#39;</span><span class="tok-o">,</span><span class="tok-mi">1</span><span class="tok-o">,</span><span class="tok-s1">&#39;numbers&#39;</span><span class="tok-o">,</span><span class="tok-mi">2</span><span class="tok-o">,</span><span class="tok-s1">&#39;numbers&#39;</span><span class="tok-o">,</span><span class="tok-mi">3</span><span class="tok-o">).</span><span class="tok-na">next</span><span class="tok-o">()</span>
+<span class="tok-n">SET</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">mgmt</span><span class="tok-o">.</span><span class="tok-na">commit</span><span class="tok-o">()</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">n</span> <span class="tok-o">=</span> <span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">addV</span><span class="tok-o">(</span><span class="tok-s1">&#39;numbers&#39;</span><span class="tok-o">,</span><span class="tok-mi">1</span><span class="tok-o">,</span><span class="tok-s1">&#39;numbers&#39;</span><span class="tok-o">,</span><span class="tok-mi">2</span><span class="tok-o">,</span><span class="tok-s1">&#39;numbers&#39;</span><span class="tok-o">,</span><span class="tok-mi">3</span><span class="tok-o">).</span><span class="tok-na">next</span><span class="tok-o">()</span>
 
 <span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">2846792</span><span class="tok-o">]</span>
 
 <span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">(</span><span class="tok-n">n</span><span class="tok-o">).</span><span class="tok-na">valueMap</span><span class="tok-o">()</span>
 
-<span class="tok-o">[</span><span class="tok-nl">numbers:</span><span class="tok-o">[</span><span class="tok-mi">1</span><span class="tok-o">,</span><span class="tok-mi">2</span><span class="tok-o">,</span><span class="tok-mi">3</span><span class="tok-o">]]</span>
-
-<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">(</span><span class="tok-n">n</span><span class="tok-o">).</span><span class="tok-na">property</span><span class="tok-o">(</span><span class="tok-n">set</span><span class="tok-o">,</span><span class="tok-s1">&#39;numbers&#39;</span><span class="tok-o">,</span><span class="tok-mi">2</span><span class="tok-o">)</span>
+<span class="tok-o">[</span><span class="tok-nl">numbers:</span><span class="tok-o">[</span><span class="tok-mi">1</span><span class="tok-o">,</span><span class="tok-mi">2</span><span class="tok-o">,</span><span class="tok-mi">3</span><span class="tok-o">]]</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">(</span><span class="tok-n">n</span><span class="tok-o">).</span><span class="tok-na">property</span><span class="tok-o">(</span><span class="tok-n">set</span><span class="tok-o">,</span><span class="tok-s1">&#39;numbers&#39;</span><span class="tok-o">,</span><span class="tok-mi">2</span><span class="tok-o">)</span>
+<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">(</span><span class="tok-n">n</span><span class="tok-o">).</span><span class="tok-na">valueMap</span><span class="tok-o">()</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// Duplicates not allowed</span>
+<span class="tok-o">[</span><span class="tok-nl">numbers:</span><span class="tok-o">[</span><span class="tok-mi">1</span><span class="tok-o">,</span><span class="tok-mi">2</span><span class="tok-o">,</span><span class="tok-mi">3</span><span class="tok-o">]]</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">(</span><span class="tok-n">n</span><span class="tok-o">).</span><span class="tok-na">property</span><span class="tok-o">(</span><span class="tok-n">set</span><span class="tok-o">,</span><span class="tok-s1">&#39;numbers&#39;</span><span class="tok-o">,</span><span class="tok-mi">4</span><span class="tok-o">)</span>
 <span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">(</span><span class="tok-n">n</span><span class="tok-o">).</span><span class="tok-na">valueMap</span><span class="tok-o">()</span>
 
-<span class="tok-c1">// Duplicates not allowed</span>
-<span class="tok-o">[</span><span class="tok-nl">numbers:</span><span class="tok-o">[</span><span class="tok-mi">1</span><span class="tok-o">,</span><span class="tok-mi">2</span><span class="tok-o">,</span><span class="tok-mi">3</span><span class="tok-o">]]</span>
-
-<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">(</span><span class="tok-n">n</span><span class="tok-o">).</span><span class="tok-na">property</span><span class="tok-o">(</span><span class="tok-n">set</span><span class="tok-o">,</span><span class="tok-s1">&#39;numbers&#39;</span><span class="tok-o">,</span><span class="tok-mi">4</span><span class="tok-o">)</span>
-<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">(</span><span class="tok-n">n</span><span class="tok-o">).</span><span class="tok-na">valueMap</span><span class="tok-o">()</span>
-
-<span class="tok-o">[</span><span class="tok-nl">numbers:</span><span class="tok-o">[</span><span class="tok-mi">1</span><span class="tok-o">,</span><span class="tok-mi">2</span><span class="tok-o">,</span><span class="tok-mi">3</span><span class="tok-o">,</span><span class="tok-mi">4</span><span class="tok-o">]]</span>
-
-<span class="tok-n">graph</span><span class="tok-o">.</span><span class="tok-na">tx</span><span class="tok-o">().</span><span class="tok-na">commit</span><span class="tok-o">()</span></code></pre>
+<span class="tok-o">[</span><span class="tok-nl">numbers:</span><span class="tok-o">[</span><span class="tok-mi">1</span><span class="tok-o">,</span><span class="tok-mi">2</span><span class="tok-o">,</span><span class="tok-mi">3</span><span class="tok-o">,</span><span class="tok-mi">4</span><span class="tok-o">]]</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">graph</span><span class="tok-o">.</span><span class="tok-na">tx</span><span class="tok-o">().</span><span class="tok-na">commit</span><span class="tok-o">()</span></code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="janusgeo">6.3.10. The Janus Graph geospatial API</h4>
+<h4 id="janpred">6.3.10. Additional Janus Graph text search predicates</h4>
+<div class="paragraph">
+<p>We have already looked, in the "<a href="#tranges">Testing values and ranges of values</a> section, at the predicates TinkerPop
+defines such as <em>neq</em>, <em>gte</em> and <em>lte</em>. Janus graph offers an additional set of
+predicates that can be used when looking for specific patterns within text in a
+graph.</p>
+</div>
+<div class="paragraph">
+<p>The methods that include the word <em>Contains</em> in their name look for whole words that
+match the specified search pattern. The methods that do not include <em>Contains</em> in the
+name look at the entire string being inspected for matches.</p>
+</div>
+<div class="paragraph">
+<p>The table below summarizes the additional text search predicates that Janus Graph
+provides.</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 2. Additional Janus Graph text search predicates</caption>
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">textContains</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">True if a whole word matches the search string provided.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">textContainsPrefix</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">True if at least one word starts with the search string provided.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">textContainsRegex</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">True if at least one word matches the regular expression provided.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">textContainsFuzzy</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">True if a word matches the fuzzy search text provided.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">textPrefix</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">True if the string being inspected starts with the search text.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">textRegex</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">True if the string being inspected matches the regular expression provided.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">textFuzzy</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">True if the string being inspected matches the fuzzy search text.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Let&#8217;s take a look at each of these predicates and what they offer with examples of
+each being used. First off, the query below will find any vertex that has a <em>desc</em>
+(description) property that contains the word <em>"Dallas"</em>. Note that this matches
+<em>Dallas</em> followed by any word break character such as a space or a forward slash.</p>
+</div>
+<div class="sect4">
+<h5 id="_text_comparison_predicates">Text comparison predicates</h5>
+<div class="paragraph">
+<p>The simplest of the search predicates allow you to specify an exact match that string  must
+be present either as a whole word (complete word match) or as part of the entire text
+being examined. These searches are <strong>not</strong> case sensitive.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;desc&#39;</span><span class="tok-o">,</span><span class="tok-n">textContains</span><span class="tok-o">(</span><span class="tok-s2">&quot;Dallas&quot;</span><span class="tok-o">)).</span><span class="tok-na">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;desc&#39;</span><span class="tok-o">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here is what the query should return.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="json"><span class="tok-err">Dallas/Fort</span> <span class="tok-err">Worth</span> <span class="tok-err">International</span> <span class="tok-err">Airport</span>
+<span class="tok-err">Dallas</span> <span class="tok-err">Love</span> <span class="tok-err">Field</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The word being searched for using <em>textContains</em> does not have to be the first word
+within the string. It just has to exist as a whole word. The query below looks for
+the word <em>"Love"</em> appearing anywhere in the <em>desc</em> property.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;desc&#39;</span><span class="tok-o">,</span><span class="tok-n">textContains</span><span class="tok-o">(</span><span class="tok-s2">&quot;Love&quot;</span><span class="tok-o">)).</span><span class="tok-na">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;desc&#39;</span><span class="tok-o">)</span>
+
+<span class="tok-n">Dallas</span> <span class="tok-n">Love</span> <span class="tok-n">Field</span>
+<span class="tok-n">Ernest</span> <span class="tok-n">A</span><span class="tok-o">.</span> <span class="tok-n">Love</span> <span class="tok-n">Field</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this example the word <em>fort</em> is found no matter where it occurs in the <em>city</em>
+name.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-n">textContains</span><span class="tok-o">(</span><span class="tok-s2">&quot;fort&quot;</span><span class="tok-o">)).</span><span class="tok-na">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">)</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="json"><span class="tok-err">Fort</span> <span class="tok-err">Myers</span>           <span class="tok-err">Fort</span> <span class="tok-err">Worth</span>
+<span class="tok-err">Fort-de-France</span>       <span class="tok-err">Fort</span> <span class="tok-err">McMurray</span>
+<span class="tok-err">Fort</span> <span class="tok-err">Lauderdale</span>      <span class="tok-err">Fort</span> <span class="tok-err">Sandeman</span>
+<span class="tok-err">Fort</span> <span class="tok-err">Wayne</span>           <span class="tok-err">Fort</span> <span class="tok-err">Smith</span>
+<span class="tok-err">Fort</span> <span class="tok-err">St.John</span>         <span class="tok-err">Fort</span> <span class="tok-err">Yukon</span>
+<span class="tok-err">Fort</span> <span class="tok-err">Nelson</span>          <span class="tok-err">Fort</span> <span class="tok-err">Albany</span>
+<span class="tok-err">Fort</span> <span class="tok-err">Chipewyan</span>       <span class="tok-err">Fort</span> <span class="tok-err">Hood/Killeen</span>
+<span class="tok-err">Fort</span> <span class="tok-err">Mcpherson</span>       <span class="tok-err">Vieux</span> <span class="tok-err">Fort</span>
+<span class="tok-err">Fort</span> <span class="tok-err">Smith</span>           <span class="tok-err">Fort</span> <span class="tok-err">Good</span> <span class="tok-err">Hope</span>
+<span class="tok-err">Fort</span> <span class="tok-err">Severn</span>          <span class="tok-err">Fort</span> <span class="tok-err">Frances</span>
+<span class="tok-err">Fort</span> <span class="tok-err">Simpson</span>         <span class="tok-err">Fort</span> <span class="tok-err">Hope</span>
+<span class="tok-err">Fort</span> <span class="tok-err">Leonard</span> <span class="tok-err">Wood</span>    <span class="tok-err">Fort</span> <span class="tok-err">Dodge</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Searches using <em>textContains</em> are <strong>not</strong> case sensitive.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The query below does not match any whole word in any description anywhere in the
+graph so no results will be returned.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// Matches no whole word so no results</span>
+<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;desc&#39;</span><span class="tok-o">,</span><span class="tok-n">textContains</span><span class="tok-o">(</span><span class="tok-s2">&quot;Dalla&quot;</span><span class="tok-o">)).</span><span class="tok-na">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;desc&#39;</span><span class="tok-o">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If we use <em>textContainsPrefix</em> instead of <em>textContains</em>, which looks for whole words
+that start with the specified text, we will get some results.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;desc&#39;</span><span class="tok-o">,</span><span class="tok-n">textContainsPrefix</span><span class="tok-o">(</span><span class="tok-s2">&quot;dalla&quot;</span><span class="tok-o">)).</span><span class="tok-na">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;desc&#39;</span><span class="tok-o">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here is what the query will return.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="json"><span class="tok-err">Dallas/Fort</span> <span class="tok-err">Worth</span> <span class="tok-err">International</span> <span class="tok-err">Airport</span>
+<span class="tok-err">Dallas</span> <span class="tok-err">Love</span> <span class="tok-err">Field</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_regular_expression_predicates">Regular expression predicates</h5>
+<div class="paragraph">
+<p>The Janus Graph regular expression predicates recognize the syntax defined as part of
+the Java 1.8 Pattern class that is documented at
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html" class="bare">https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html</a>. The Java
+regular expression syntax may be different than the one you are used to so it is
+worth taking a few minutes to study the documentation at that URL.</p>
+</div>
+<div class="paragraph">
+<p>The query below uses a <em>textContainsRegex</em> predicate to search for any city name that
+contains a word starting with <em>for</em>, while ignoring case.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-n">textContainsRegex</span><span class="tok-o">(</span><span class="tok-s2">&quot;(?i)for.*&quot;</span><span class="tok-o">)).</span><span class="tok-na">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Notice how names that start with <em>For</em> such as <em>Fort Myers</em> as well as city names
+containing words that start with the text <em>For</em> somewhere else are found. For example
+<em>La Fortuna</em>  and <em>View Fort</em> are also found.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="json"><span class="tok-err">Fort</span> <span class="tok-err">Myers</span>                <span class="tok-err">Fort</span> <span class="tok-err">Worth</span>
+<span class="tok-err">La</span> <span class="tok-err">Fortuna/San</span> <span class="tok-err">Carlos</span>     <span class="tok-err">Fort</span> <span class="tok-err">McMurray</span>
+<span class="tok-err">Fort-de-France</span>            <span class="tok-err">Fort</span> <span class="tok-err">Sandeman</span>
+<span class="tok-err">Fort</span> <span class="tok-err">Lauderdale</span>           <span class="tok-err">Fortaleza</span>
+<span class="tok-err">Fort</span> <span class="tok-err">Wayne</span>                <span class="tok-err">Fort</span> <span class="tok-err">Smith</span>
+<span class="tok-err">Jerez</span> <span class="tok-err">de</span> <span class="tok-err">la</span> <span class="tok-err">Forntera</span>      <span class="tok-err">Fort</span> <span class="tok-err">Yukon</span>
+<span class="tok-err">Fort</span> <span class="tok-err">St.John</span>              <span class="tok-err">Fort</span> <span class="tok-err">Albany</span>
+<span class="tok-err">Fort</span> <span class="tok-err">Nelson</span>               <span class="tok-err">Fort</span> <span class="tok-err">Hood/Killeen</span>
+<span class="tok-err">Fort</span> <span class="tok-err">Chipewyan</span>            <span class="tok-err">Vieux</span> <span class="tok-err">Fort</span>
+<span class="tok-err">Formosa</span>                   <span class="tok-err">Fort</span> <span class="tok-err">Good</span> <span class="tok-err">Hope</span>
+<span class="tok-err">Fort</span> <span class="tok-err">Mcpherson</span>            <span class="tok-err">Grand</span> <span class="tok-err">Forks</span>
+<span class="tok-err">Fort</span> <span class="tok-err">Smith</span>                <span class="tok-err">Fort</span> <span class="tok-err">Frances</span>
+<span class="tok-err">Juiz</span> <span class="tok-err">de</span> <span class="tok-err">Fora</span>              <span class="tok-err">Fort</span> <span class="tok-err">Hope</span>
+<span class="tok-err">Fort</span> <span class="tok-err">Severn</span>               <span class="tok-err">Fort</span> <span class="tok-err">Dodge</span>
+<span class="tok-err">Fort</span> <span class="tok-err">Simpson</span>              <span class="tok-err">Fort</span> <span class="tok-err">Leonard</span> <span class="tok-err">Wood</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// Matches dallas ignoring case</span>
+<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-n">textRegex</span><span class="tok-o">(</span><span class="tok-s2">&quot;(?i)dallas&quot;</span><span class="tok-o">)).</span><span class="tok-na">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">)</span>
+
+<span class="tok-n">Dallas</span>
+<span class="tok-n">Dallas</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// Matches any city that conains dal followed by anything, ignoring case.</span>
+<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-n">textRegex</span><span class="tok-o">(</span><span class="tok-s1">&#39;(?i)dal.*&#39;</span><span class="tok-o">)).</span><span class="tok-na">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">)</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="json"><span class="tok-err">Dallas</span>
+<span class="tok-err">Dallas</span>
+<span class="tok-err">Dalcahue</span>
+<span class="tok-err">Dalat</span>
+<span class="tok-err">Dalaman</span>
+<span class="tok-err">Dalanzadgad</span>
+<span class="tok-err">Dalian</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// Anything that matches 3 characters followed by &#39;cah&#39; followed by</span>
+<span class="tok-c1">// anything.</span>
+<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-n">textRegex</span><span class="tok-o">(</span><span class="tok-s2">&quot;.{3}cah.*&quot;</span><span class="tok-o">)).</span><span class="tok-na">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">)</span>
+
+<span class="tok-n">Dalcahue</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-n">textRegex</span><span class="tok-o">(</span><span class="tok-s2">&quot;.{3}(cah|anz).*&quot;</span><span class="tok-o">)).</span><span class="tok-na">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">)</span>
+
+<span class="tok-n">Dalcahue</span>
+<span class="tok-n">Dalanzadgad</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;region&#39;</span><span class="tok-o">,</span><span class="tok-n">textRegex</span><span class="tok-o">(</span><span class="tok-s2">&quot;US-[OMD].*&quot;</span><span class="tok-o">)).</span><span class="tok-na">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;region&#39;</span><span class="tok-o">).</span><span class="tok-na">fold</span><span class="tok-o">()</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="json"><span class="tok-p">[</span><span class="tok-err">MSP</span><span class="tok-p">,</span><span class="tok-err">US-MN</span><span class="tok-p">,</span><span class="tok-err">GPT</span><span class="tok-p">,</span><span class="tok-err">US-MS</span><span class="tok-p">,</span><span class="tok-err">BZN</span><span class="tok-p">,</span><span class="tok-err">US-MT</span><span class="tok-p">,</span><span class="tok-err">AUG</span><span class="tok-p">,</span><span class="tok-err">US-ME</span><span class="tok-p">,</span><span class="tok-err">IRK</span><span class="tok-p">,</span><span class="tok-err">US-MO</span><span class="tok-p">,</span><span class="tok-err">LCK</span><span class="tok-p">,</span><span class="tok-err">US-OH</span><span class="tok-p">,</span><span class="tok-err">DTW</span><span class="tok-p">,</span><span class="tok-err">US-MI</span><span class="tok-p">,</span><span class="tok-err">MCI</span><span class="tok-p">,</span><span class="tok-err">US-MO</span><span class="tok-p">,</span><span class="tok-err">BTM</span><span class="tok-p">,</span><span class="tok-err">US-MT</span><span class="tok-p">,</span><span class="tok-err">MKG</span><span class="tok-p">,</span><span class="tok-err">US-MI</span><span class="tok-p">,</span><span class="tok-err">BOS</span><span class="tok-p">,</span><span class="tok-err">US-MA</span><span class="tok-p">,</span><span class="tok-err">DCA</span><span class="tok-p">,</span><span class="tok-err">US-DC</span><span class="tok-p">,</span><span class="tok-err">PDX</span><span class="tok-p">,</span><span class="tok-err">US-OR</span><span class="tok-p">,</span><span class="tok-err">OKC</span><span class="tok-p">,</span><span class="tok-err">US-OK</span><span class="tok-p">,</span><span class="tok-err">SGF</span><span class="tok-p">,</span><span class="tok-err">US-MO</span><span class="tok-p">,</span><span class="tok-err">JAN</span><span class="tok-p">,</span><span class="tok-err">US-MS</span><span class="tok-p">,</span><span class="tok-err">MQT</span><span class="tok-p">,</span><span class="tok-err">US-MI</span><span class="tok-p">,</span><span class="tok-err">FNT</span><span class="tok-p">,</span><span class="tok-err">US-MI</span><span class="tok-p">,</span><span class="tok-err">GTR</span><span class="tok-p">,</span><span class="tok-err">US-MS</span><span class="tok-p">,</span><span class="tok-err">RDM</span><span class="tok-p">,</span><span class="tok-err">US-OR</span><span class="tok-p">,</span><span class="tok-err">HLN</span><span class="tok-p">,</span><span class="tok-err">US-MT</span><span class="tok-p">,</span><span class="tok-err">MSO</span><span class="tok-p">,</span><span class="tok-err">US-MT</span><span class="tok-p">,</span><span class="tok-err">LUK</span><span class="tok-p">,</span><span class="tok-err">US-OH</span><span class="tok-p">,</span><span class="tok-err">OLF</span><span class="tok-p">,</span><span class="tok-err">US-MT</span><span class="tok-p">,</span><span class="tok-err">IMT</span><span class="tok-p">,</span><span class="tok-err">US-MI</span><span class="tok-p">,</span><span class="tok-err">GRR</span><span class="tok-p">,</span><span class="tok-err">US-MI</span><span class="tok-p">,</span><span class="tok-err">LMT</span><span class="tok-p">,</span><span class="tok-err">US-OR</span><span class="tok-p">,</span><span class="tok-err">DLH</span><span class="tok-p">,</span><span class="tok-err">US-MN</span><span class="tok-p">,</span><span class="tok-err">BJI</span><span class="tok-p">,</span><span class="tok-err">US-MN</span><span class="tok-p">,</span><span class="tok-err">SBY</span><span class="tok-p">,</span><span class="tok-err">US-MD</span><span class="tok-p">,</span><span class="tok-err">EWB</span><span class="tok-p">,</span><span class="tok-err">US-MA</span><span class="tok-p">,</span><span class="tok-err">HVR</span><span class="tok-p">,</span><span class="tok-err">US-MT</span><span class="tok-p">,</span><span class="tok-err">TBN</span><span class="tok-p">,</span><span class="tok-err">US-MO</span><span class="tok-p">,</span><span class="tok-err">PWM</span><span class="tok-p">,</span><span class="tok-err">US-ME</span><span class="tok-p">,</span><span class="tok-err">RST</span><span class="tok-p">,</span><span class="tok-err">US-MN</span><span class="tok-p">,</span><span class="tok-err">CMH</span><span class="tok-p">,</span><span class="tok-err">US-OH</span><span class="tok-p">,</span><span class="tok-err">LAW</span><span class="tok-p">,</span><span class="tok-err">US-OK</span><span class="tok-p">,</span><span class="tok-err">BGR</span><span class="tok-p">,</span><span class="tok-err">US-ME</span><span class="tok-p">,</span><span class="tok-err">EUG</span><span class="tok-p">,</span><span class="tok-err">US-OR</span><span class="tok-p">,</span><span class="tok-err">MFR</span><span class="tok-p">,</span><span class="tok-err">US-OR</span><span class="tok-p">,</span><span class="tok-err">HIB</span><span class="tok-p">,</span><span class="tok-err">US-MN</span><span class="tok-p">,</span><span class="tok-err">HYA</span><span class="tok-p">,</span><span class="tok-err">US-MA</span><span class="tok-p">,</span><span class="tok-err">PLN</span><span class="tok-p">,</span><span class="tok-err">US-MI</span><span class="tok-p">,</span><span class="tok-err">GGW</span><span class="tok-p">,</span><span class="tok-err">US-MT</span><span class="tok-p">,</span><span class="tok-err">TVF</span><span class="tok-p">,</span><span class="tok-err">US-MN</span><span class="tok-p">,</span><span class="tok-err">SWO</span><span class="tok-p">,</span><span class="tok-err">US-OK</span><span class="tok-p">,</span><span class="tok-err">TUL</span><span class="tok-p">,</span><span class="tok-err">US-OK</span><span class="tok-p">,</span><span class="tok-err">JLN</span><span class="tok-p">,</span><span class="tok-err">US-MO</span><span class="tok-p">,</span><span class="tok-err">CAK</span><span class="tok-p">,</span><span class="tok-err">US-OH</span><span class="tok-p">,</span><span class="tok-err">LAN</span><span class="tok-p">,</span><span class="tok-err">US-MI</span><span class="tok-p">,</span><span class="tok-err">AZO</span><span class="tok-p">,</span><span class="tok-err">US-MI</span><span class="tok-p">,</span><span class="tok-err">MBS</span><span class="tok-p">,</span><span class="tok-err">US-MI</span><span class="tok-p">,</span><span class="tok-err">MEI</span><span class="tok-p">,</span><span class="tok-err">US-MS</span><span class="tok-p">,</span><span class="tok-err">TUP</span><span class="tok-p">,</span><span class="tok-err">US-MS</span><span class="tok-p">,</span><span class="tok-err">OTH</span><span class="tok-p">,</span><span class="tok-err">US-OR</span><span class="tok-p">,</span><span class="tok-err">FCA</span><span class="tok-p">,</span><span class="tok-err">US-MT</span><span class="tok-p">,</span><span class="tok-err">GTF</span><span class="tok-p">,</span><span class="tok-err">US-MT</span><span class="tok-p">,</span><span class="tok-err">TOL</span><span class="tok-p">,</span><span class="tok-err">US-OH</span><span class="tok-p">,</span><span class="tok-err">BHB</span><span class="tok-p">,</span><span class="tok-err">US-ME</span><span class="tok-p">,</span><span class="tok-err">CIU</span><span class="tok-p">,</span><span class="tok-err">US-MI</span><span class="tok-p">,</span><span class="tok-err">ESC</span><span class="tok-p">,</span><span class="tok-err">US-MI</span><span class="tok-p">,</span><span class="tok-err">CGI</span><span class="tok-p">,</span><span class="tok-err">US-MO</span><span class="tok-p">,</span><span class="tok-err">IWD</span><span class="tok-p">,</span><span class="tok-err">US-MI</span><span class="tok-p">,</span><span class="tok-err">CLE</span><span class="tok-p">,</span><span class="tok-err">US-OH</span><span class="tok-p">,</span><span class="tok-err">BIL</span><span class="tok-p">,</span><span class="tok-err">US-MT</span><span class="tok-p">,</span><span class="tok-err">CMX</span><span class="tok-p">,</span><span class="tok-err">US-MI</span><span class="tok-p">,</span><span class="tok-err">STC</span><span class="tok-p">,</span><span class="tok-err">US-MN</span><span class="tok-p">,</span><span class="tok-err">HGR</span><span class="tok-p">,</span><span class="tok-err">US-MD</span><span class="tok-p">,</span><span class="tok-err">INL</span><span class="tok-p">,</span><span class="tok-err">US-MN</span><span class="tok-p">,</span><span class="tok-err">GLH</span><span class="tok-p">,</span><span class="tok-err">US-MS</span><span class="tok-p">,</span><span class="tok-err">PDT</span><span class="tok-p">,</span><span class="tok-err">US-OR</span><span class="tok-p">,</span><span class="tok-err">SDY</span><span class="tok-p">,</span><span class="tok-err">US-MT</span><span class="tok-p">,</span><span class="tok-err">BWI</span><span class="tok-p">,</span><span class="tok-err">US-MD</span><span class="tok-p">,</span><span class="tok-err">DAY</span><span class="tok-p">,</span><span class="tok-err">US-OH</span><span class="tok-p">,</span><span class="tok-err">PIB</span><span class="tok-p">,</span><span class="tok-err">US-MS</span><span class="tok-p">,</span><span class="tok-err">ILG</span><span class="tok-p">,</span><span class="tok-err">US-DE</span><span class="tok-p">,</span><span class="tok-err">APN</span><span class="tok-p">,</span><span class="tok-err">US-MI</span><span class="tok-p">,</span><span class="tok-err">ACK</span><span class="tok-p">,</span><span class="tok-err">US-MA</span><span class="tok-p">,</span><span class="tok-err">MVY</span><span class="tok-p">,</span><span class="tok-err">US-MA</span><span class="tok-p">,</span><span class="tok-err">PVC</span><span class="tok-p">,</span><span class="tok-err">US-MA</span><span class="tok-p">,</span><span class="tok-err">RKD</span><span class="tok-p">,</span><span class="tok-err">US-ME</span><span class="tok-p">,</span><span class="tok-err">YNG</span><span class="tok-p">,</span><span class="tok-err">US-OH</span><span class="tok-p">,</span><span class="tok-err">STL</span><span class="tok-p">,</span><span class="tok-err">US-MO</span><span class="tok-p">,</span><span class="tok-err">COU</span><span class="tok-p">,</span><span class="tok-err">US-MO</span><span class="tok-p">,</span><span class="tok-err">BKG</span><span class="tok-p">,</span><span class="tok-err">US-MO</span><span class="tok-p">,</span><span class="tok-err">TVC</span><span class="tok-p">,</span><span class="tok-err">US-MI</span><span class="tok-p">,</span><span class="tok-err">ORH</span><span class="tok-p">,</span><span class="tok-err">US-MA</span><span class="tok-p">,</span><span class="tok-err">BRD</span><span class="tok-p">,</span><span class="tok-err">US-MN</span><span class="tok-p">,</span><span class="tok-err">PQI</span><span class="tok-p">,</span><span class="tok-err">US-ME</span><span class="tok-p">,</span><span class="tok-err">GDV</span><span class="tok-p">,</span><span class="tok-err">US-MT</span><span class="tok-p">,</span><span class="tok-err">MBL</span><span class="tok-p">,</span><span class="tok-err">US-MI</span><span class="tok-p">]</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_fuzzy_search_predicates">Fuzzy search predicates</h5>
+<div class="paragraph">
+<p>These predicates use the
+<a href="https://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein distance</a> method to
+decide if a piece of text is <em>close enough</em> to the pattern being looked for. This is
+based on assessing how many characterss would have to change in the pattern word to
+achieve a match in the text being inspected. For example <em>pall</em> would match <em>palm</em>,
+<em>paul</em> and <em>palm</em>.</p>
+</div>
+<div class="paragraph">
+<p>The query below uses a fuzzy sort to find any words that are close to the word
+<em>pall</em>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;desc&#39;</span><span class="tok-o">,</span><span class="tok-n">textContainsFuzzy</span><span class="tok-o">(</span><span class="tok-s2">&quot;pall&quot;</span><span class="tok-o">)).</span><span class="tok-na">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;desc&#39;</span><span class="tok-o">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here are the results from running the query. You can see that airport descriptions
+that contain the whole words <em>Paul</em>, <em>Palm</em> and <em>Hall</em> have been found.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="json"><span class="tok-err">Minneapolis-St.Paul</span> <span class="tok-err">International</span> <span class="tok-err">Airport</span>
+<span class="tok-err">Palm</span> <span class="tok-err">Beach</span> <span class="tok-err">International</span> <span class="tok-err">Airport</span>
+<span class="tok-err">Palm</span> <span class="tok-err">Springs</span> <span class="tok-err">International</span> <span class="tok-err">Airport</span>
+<span class="tok-err">John</span> <span class="tok-err">Paul</span> <span class="tok-err">II</span> <span class="tok-err">International</span> <span class="tok-err">Airport</span> <span class="tok-err">Krakow-Balice</span> <span class="tok-err">Airport</span>
+<span class="tok-err">Melville</span> <span class="tok-err">Hall</span> <span class="tok-err">Airport</span>
+<span class="tok-err">Hall</span> <span class="tok-err">Beach</span> <span class="tok-err">Airport</span>
+<span class="tok-err">St</span> <span class="tok-err">Paul</span> <span class="tok-err">Island</span> <span class="tok-err">Airport</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="janusgeo">6.3.11. The Janus Graph geospatial API</h4>
 <div class="paragraph">
 <p>To be written</p>
 </div>
@@ -13033,8 +13358,8 @@ are shown.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 267<br>
-Last updated 2017-10-19 18:55:12 CDT
+Version 268<br>
+Last updated 2017-10-22 18:54:28 CDT
 </div>
 </div>
 </body>

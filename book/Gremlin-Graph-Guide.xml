@@ -5,7 +5,7 @@
 <info>
 <title>GRAPH DATABASES, GREMLIN and TINKERPOP </title>
 <subtitle>A TUTORIAL</subtitle>
-<date>Oct 19, 2017</date>
+<date>Oct 22, 2017</date>
 <author>
 <personname>
 <firstname>Kelvin</firstname>
@@ -17,8 +17,8 @@
 <authorinitials>KRL</authorinitials>
 <revhistory>
 <revision>
-<revnumber>267</revnumber>
-<date>Oct 19, 2017</date>
+<revnumber>268</revnumber>
+<date>Oct 22, 2017</date>
 <authorinitials>KRL</authorinitials>
 </revision>
 </revhistory>
@@ -57,7 +57,7 @@ October 5th, 2017<?asciidoc-br?></simpara>
 free to send me feedback of any sort. Suggested improvements are especially welcome.
 A good way to provide feedback is by opening an issue in the GitHub repository
 located at <link xl:href="https://github.com/krlawrence/graph">https://github.com/krlawrence/graph</link>. You are currently reading revision
-267 of the document.</simpara>
+268 of the document.</simpara>
 </section>
 <section xml:id="thanks">
 <title>A word of thanks</title>
@@ -217,13 +217,14 @@ database is, what some good use cases for graphs are and why you should care in 
 World that is already full of all kinds of SQL and NoSQL databases. In this document
 we are going to be discussing <emphasis>directed property graphs</emphasis>. At the conceptual level
 these types of graphs are quite simple to understand. You have three basic building
-blocks.  Vertices (often referred to as nodes), edges and properties. Vertices represent "things" such as people or
-places. Edges represent connections between those vertices and properties and
-information to the vertices and edges as needed. The <emphasis>directed</emphasis> part of the name means
-that any edge has a direction. It goes <emphasis>out</emphasis> from one vertex and <emphasis>in</emphasis> to another. You
-will sometimes hear people use the word <emphasis>digraph</emphasis> as shorthand for <emphasis>directed graph</emphasis>.
-Consider the relationship "Kelvin knows Jack". This could be modeled as a vertex for
-each of the people and an edge for the relationship as follows.</simpara>
+blocks.  Vertices (often referred to as nodes), edges and properties. Vertices
+represent "things" such as people or places. Edges represent connections between
+those vertices and properties and information to the vertices and edges as needed.
+The <emphasis>directed</emphasis> part of the name means that any edge has a direction. It goes <emphasis>out</emphasis>
+from one vertex and <emphasis>in</emphasis> to another. You will sometimes hear people use the word
+<emphasis>digraph</emphasis> as shorthand for <emphasis>directed graph</emphasis>.  Consider the relationship "Kelvin knows
+Jack". This could be modeled as a vertex for each of the people and an edge for the
+relationship as follows.</simpara>
 <simpara role="text-center">Kelvin&#8201;&#8212;&#8201;knows &#8594; Jack</simpara>
 <simpara>Note the arrow which implies the direction of the relationship. If we wanted to
 record the fact that Jack also admits to knowing Kelvin we would need to add a
@@ -6869,10 +6870,13 @@ the Gremlin Console just as we did with TinkerGraph in our prior examples. Notic
 that the ID values that Janus Graph generates look quite different (as in they don&#8217;t
 start at zero) from what we might expect from TinkerGraph.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">g.addV(label,'person','name','Kelvin')
-v[1466464]
+v[4232]
 
 g.V().has('name','Kelvin')
-v[1466464]</programlisting>
+v[4232]
+
+g.V().has('name','Kelvin').id()
+4232</programlisting>
 <simpara>Before we experiment too much more with Janus Graph there are three important
 subjects we need to discuss. One is transactions, another is defining a schema for
 our vertices, edges and properties and the third is the Janus Graph management API. We
@@ -7186,33 +7190,189 @@ graph.tx().commit()</programlisting>
 <title>Creating a property with cardinality SET</title>
 <simpara>To be written</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">mgmt = graph.openManagement()
-mgmt.makePropertyKey('numbers').dataType(Integer.class).cardinality(SET).make()
-mgmt.getPropertyKey('numbers').cardinality()
+mgmt.makePropertyKey('numbers').dataType(Integer.class).cardinality(SET).make()</programlisting>
+<programlisting language="groovy" linenumbering="unnumbered">mgmt.getPropertyKey('numbers').cardinality()
 
-SET
-
-mgmt.commit()
-
-n = g.addV('numbers',1,'numbers',2,'numbers',3).next()
+SET</programlisting>
+<programlisting language="groovy" linenumbering="unnumbered">mgmt.commit()</programlisting>
+<programlisting language="groovy" linenumbering="unnumbered">n = g.addV('numbers',1,'numbers',2,'numbers',3).next()
 
 v[2846792]
 
 g.V(n).valueMap()
 
-[numbers:[1,2,3]]
-
-g.V(n).property(set,'numbers',2)
+[numbers:[1,2,3]]</programlisting>
+<programlisting language="groovy" linenumbering="unnumbered">g.V(n).property(set,'numbers',2)
+g.V(n).valueMap()</programlisting>
+<programlisting language="groovy" linenumbering="unnumbered">// Duplicates not allowed
+[numbers:[1,2,3]]</programlisting>
+<programlisting language="groovy" linenumbering="unnumbered">g.V(n).property(set,'numbers',4)
 g.V(n).valueMap()
 
-// Duplicates not allowed
-[numbers:[1,2,3]]
+[numbers:[1,2,3,4]]</programlisting>
+<programlisting language="groovy" linenumbering="unnumbered">graph.tx().commit()</programlisting>
+</section>
+<section xml:id="janpred">
+<title>Additional Janus Graph text search predicates</title>
+<simpara>We have already looked, in the "<xref linkend="tranges"/> section, at the predicates TinkerPop
+defines such as <emphasis>neq</emphasis>, <emphasis>gte</emphasis> and <emphasis>lte</emphasis>. Janus graph offers an additional set of
+predicates that can be used when looking for specific patterns within text in a
+graph.</simpara>
+<simpara>The methods that include the word <emphasis>Contains</emphasis> in their name look for whole words that
+match the specified search pattern. The methods that do not include <emphasis>Contains</emphasis> in the
+name look at the entire string being inspected for matches.</simpara>
+<simpara>The table below summarizes the additional text search predicates that Janus Graph
+provides.</simpara>
+<table frame="all" rowsep="1" colsep="1">
+<title>Additional Janus Graph text search predicates</title>
+<tgroup cols="2">
+<colspec colname="col_1" colwidth="20*"/>
+<colspec colname="col_2" colwidth="80*"/>
+<tbody>
+<row>
+<entry align="center" valign="top"><simpara>textContains</simpara></entry>
+<entry align="left" valign="top"><simpara>True if a whole word matches the search string provided.</simpara></entry>
+</row>
+<row>
+<entry align="center" valign="top"><simpara>textContainsPrefix</simpara></entry>
+<entry align="left" valign="top"><simpara>True if at least one word starts with the search string provided.</simpara></entry>
+</row>
+<row>
+<entry align="center" valign="top"><simpara>textContainsRegex</simpara></entry>
+<entry align="left" valign="top"><simpara>True if at least one word matches the regular expression provided.</simpara></entry>
+</row>
+<row>
+<entry align="center" valign="top"><simpara>textContainsFuzzy</simpara></entry>
+<entry align="left" valign="top"><simpara>True if a word matches the fuzzy search text provided.</simpara></entry>
+</row>
+<row>
+<entry align="center" valign="top"><simpara>textPrefix</simpara></entry>
+<entry align="left" valign="top"><simpara>True if the string being inspected starts with the search text.</simpara></entry>
+</row>
+<row>
+<entry align="center" valign="top"><simpara>textRegex</simpara></entry>
+<entry align="left" valign="top"><simpara>True if the string being inspected matches the regular expression provided.</simpara></entry>
+</row>
+<row>
+<entry align="center" valign="top"><simpara>textFuzzy</simpara></entry>
+<entry align="left" valign="top"><simpara>True if the string being inspected matches the fuzzy search text.</simpara></entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+<simpara>Let&#8217;s take a look at each of these predicates and what they offer with examples of
+each being used. First off, the query below will find any vertex that has a <emphasis>desc</emphasis>
+(description) property that contains the word <emphasis>"Dallas"</emphasis>. Note that this matches
+<emphasis>Dallas</emphasis> followed by any word break character such as a space or a forward slash.</simpara>
+<section xml:id="_text_comparison_predicates">
+<title>Text comparison predicates</title>
+<simpara>The simplest of the search predicates allow you to specify an exact match that string  must
+be present either as a whole word (complete word match) or as part of the entire text
+being examined. These searches are <emphasis role="strong">not</emphasis> case sensitive.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('desc',textContains("Dallas")).values('desc')
 
-g.V(n).property(set,'numbers',4)
-g.V(n).valueMap()
+Dallas/Fort Worth International Airport
+Dallas Love Field</programlisting>
+<simpara>The word being searched for using <emphasis>textContains</emphasis> does not have to be the first word
+within the string. It just has to exist as a whole word. The query below looks for
+the word <emphasis>"Love"</emphasis> appearing anywhere in the <emphasis>desc</emphasis> property.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('desc',textContains("Love")).values('desc')
 
-[numbers:[1,2,3,4]]
+Dallas Love Field
+Ernest A. Love Field</programlisting>
+<simpara>In this example the word <emphasis>fort</emphasis> is found no matter where it occurs in the <emphasis>city</emphasis>
+name.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('city',textContains("fort")).values('city')</programlisting>
+<programlisting language="json" linenumbering="unnumbered">Fort Myers           Fort Worth
+Fort-de-France       Fort McMurray
+Fort Lauderdale      Fort Sandeman
+Fort Wayne           Fort Smith
+Fort St.John         Fort Yukon
+Fort Nelson          Fort Albany
+Fort Chipewyan       Fort Hood/Killeen
+Fort Mcpherson       Vieux Fort
+Fort Smith           Fort Good Hope
+Fort Severn          Fort Frances
+Fort Simpson         Fort Hope
+Fort Leonard Wood    Fort Dodge</programlisting>
+<note>
+<simpara>Searches using <emphasis>textContains</emphasis> are <emphasis role="strong">not</emphasis> case sensitive.</simpara>
+</note>
+<programlisting language="groovy" linenumbering="unnumbered">// Matches no whole word so no results
+g.V().has('desc',textContains("Dalla")).values('desc')</programlisting>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('desc',textContainsPrefix("dall")).values('desc')
 
-graph.tx().commit()</programlisting>
+Dallas/Fort Worth International Airport
+Dallas Love Field</programlisting>
+</section>
+<section xml:id="_regular_expression_predicates">
+<title>Regular expression predicates</title>
+<simpara>The Janus Graph regular expression predicates recognize the syntax defined as part of
+the Java 1.8 Pattern class that is documented
+at <link xl:href="https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html">https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html</link></simpara>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('city',textContainsRegex("(?i)for.*")).values('city')</programlisting>
+<programlisting language="json" linenumbering="unnumbered">Fort Myers                Fort Worth
+La Fortuna/San Carlos     Fort McMurray
+Fort-de-France            Fort Sandeman
+Fort Lauderdale           Fortaleza
+Fort Wayne                Fort Smith
+Jerez de la Forntera      Fort Yukon
+Fort St.John              Fort Albany
+Fort Nelson               Fort Hood/Killeen
+Fort Chipewyan            Vieux Fort
+Formosa                   Fort Good Hope
+Fort Mcpherson            Grand Forks
+Fort Smith                Fort Frances
+Juiz de Fora              Fort Hope
+Fort Severn               Fort Dodge
+Fort Simpson              Fort Leonard Wood</programlisting>
+<programlisting language="groovy" linenumbering="unnumbered">// Matches dallas ignoring case
+g.V().has('city',textRegex("(?i)dallas")).values('city')
+
+Dallas
+Dallas</programlisting>
+<programlisting language="groovy" linenumbering="unnumbered">// Matches any city that conains dal followed by anything, ignoring case.
+g.V().has('city',textRegex('(?i)dal.*')).values('city')</programlisting>
+<programlisting language="json" linenumbering="unnumbered">Dallas
+Dallas
+Dalcahue
+Dalat
+Dalaman
+Dalanzadgad
+Dalian</programlisting>
+<programlisting language="groovy" linenumbering="unnumbered">// Anything that matches 3 characters followed by 'cah' followed by
+// anything.
+g.V().has('city',textRegex(".{3}cah.*")).values('city')
+
+Dalcahue</programlisting>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('city',textRegex(".{3}(cah|anz).*")).values('city')
+
+Dalcahue
+Dalanzadgad</programlisting>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('region',textRegex("US-[OMD].*")).values('code','region').fold()</programlisting>
+<programlisting language="json" linenumbering="unnumbered">[MSP,US-MN,GPT,US-MS,BZN,US-MT,AUG,US-ME,IRK,US-MO,LCK,US-OH,DTW,US-MI,MCI,US-MO,BTM,US-MT,MKG,US-MI,BOS,US-MA,DCA,US-DC,PDX,US-OR,OKC,US-OK,SGF,US-MO,JAN,US-MS,MQT,US-MI,FNT,US-MI,GTR,US-MS,RDM,US-OR,HLN,US-MT,MSO,US-MT,LUK,US-OH,OLF,US-MT,IMT,US-MI,GRR,US-MI,LMT,US-OR,DLH,US-MN,BJI,US-MN,SBY,US-MD,EWB,US-MA,HVR,US-MT,TBN,US-MO,PWM,US-ME,RST,US-MN,CMH,US-OH,LAW,US-OK,BGR,US-ME,EUG,US-OR,MFR,US-OR,HIB,US-MN,HYA,US-MA,PLN,US-MI,GGW,US-MT,TVF,US-MN,SWO,US-OK,TUL,US-OK,JLN,US-MO,CAK,US-OH,LAN,US-MI,AZO,US-MI,MBS,US-MI,MEI,US-MS,TUP,US-MS,OTH,US-OR,FCA,US-MT,GTF,US-MT,TOL,US-OH,BHB,US-ME,CIU,US-MI,ESC,US-MI,CGI,US-MO,IWD,US-MI,CLE,US-OH,BIL,US-MT,CMX,US-MI,STC,US-MN,HGR,US-MD,INL,US-MN,GLH,US-MS,PDT,US-OR,SDY,US-MT,BWI,US-MD,DAY,US-OH,PIB,US-MS,ILG,US-DE,APN,US-MI,ACK,US-MA,MVY,US-MA,PVC,US-MA,RKD,US-ME,YNG,US-OH,STL,US-MO,COU,US-MO,BKG,US-MO,TVC,US-MI,ORH,US-MA,BRD,US-MN,PQI,US-ME,GDV,US-MT,MBL,US-MI]</programlisting>
+</section>
+<section xml:id="_fuzzy_search_predicates">
+<title>Fuzzy search predicates</title>
+<simpara>These predicates use the
+<link xl:href="https://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein distance</link> method to
+decide if a piece of text is <emphasis>close enough</emphasis> to the pattern being looked for. This is
+based on assessing how many characterss would have to change in the pattern word to
+achieve a match in the text being inspected. For example <emphasis>pall</emphasis> would match <emphasis>palm</emphasis>,
+<emphasis>paul</emphasis> and <emphasis>palm</emphasis>.</simpara>
+<simpara>The query below uses a fuzzy sort to find any words that are close to the word
+<emphasis>pall</emphasis>.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">.V().has('desc',textContainsFuzzy("pall")).values('desc')</programlisting>
+<simpara>Here are the results from running the query. You can see that airport descriptions
+that contain the whole words <emphasis>Paul</emphasis>, <emphasis>Palm</emphasis> and <emphasis>Hall</emphasis> have been found.</simpara>
+<programlisting language="json" linenumbering="unnumbered">Minneapolis-St.Paul International Airport
+Palm Beach International Airport
+Palm Springs International Airport
+John Paul II International Airport Krakow-Balice Airport
+Melville Hall Airport
+Hall Beach Airport
+St Paul Island Airport</programlisting>
+</section>
 </section>
 <section xml:id="janusgeo">
 <title>The Janus Graph geospatial API</title>
