@@ -2,7 +2,7 @@ GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v270, Oct 23, 2017
-// Mon Oct 23, 2017 12:53:06 CDT
+// Mon Oct 23, 2017 17:18:19 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Oct 23 2017
@@ -9846,7 +9846,7 @@ include querying metadata about the graph, defining the edge, vertex and propert
 schema types and creating and updating the index.
 
 You can create an instance of the ManagementSystem object using the 'openManagement'
-method call.
+method call as shown below.
 
 [source,groovy]
 ----
@@ -9866,7 +9866,7 @@ country
 continent
 ----
 
-This query finds all of the currently defined edge labels.
+This query similarly finds all of the currently defined edge labels.
 
 [source,groovy]
 ----
@@ -9933,8 +9933,8 @@ false
 ----
 
 [[janusschema]]
-Defining a Janus Graph schema for air-routes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Defining a Janus Graph schema for the air-routes graph
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You are not required to define the types and labels of your edges, vertices and
 properties ahead of time but it is strongly recommended that you do so. If you do not
@@ -9987,6 +9987,8 @@ ONE2ONE::
 - This setting permits at most one incoming and one outgoing edge of a given label to
   and from any vertex in the graph. 
 
+Defining edge labels and usage
+++++++++++++++++++++++++++++++
 Let's look at how we can use the Janus Graph Management API to specify the
 multiplicty for the 'route' and 'contains' edges used by the air-routes graph.
 
@@ -9998,6 +10000,9 @@ mgmt.makeEdgeLabel('route').multiplicity(MULTI).make()
 mgmt.makeEdgeLabel('contains').multiplicity(SIMPLE).make()
 mgmt.commit()
 ----
+
+Defining vertex labels
+++++++++++++++++++++++
 
 To be written
 
@@ -10011,6 +10016,10 @@ mgmt.makeVertexLabel('country').make()
 mgmt.makeVertexLabel('continent').make()
 mgmt.commit()
 ----
+
+
+Defining vertex property keys
++++++++++++++++++++++++++++++
 
 To be written
 
@@ -10032,6 +10041,8 @@ mgmt.makePropertyKey('lon').dataType(Double.class).cardinality(Cardinality.SINGL
 mgmt.commit()
 ----
 
+Defining edge property keys
++++++++++++++++++++++++++++
 
 To be written
 
@@ -10043,6 +10054,8 @@ mgmt.makePropertyKey('dist').dataType(Integer.class).cardinality(Cardinality.SIN
 mgmt.commit()
 ----
 
+Loading 'air-routes.graphml' into a Janus Graph
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To be written
 
@@ -10318,7 +10331,47 @@ Dallas/Fort Worth International Airport
 Dallas Love Field
 ----
 
-The 'textPrefix' predicate will look at the string being inspected and compare it to
+We could use a 'textContains' query to find airports that have the
+word 'Regional' as part of their description. An example of such a query is given
+below. Only the first five matching airport descriptions found are returned.
+
+[source,groovy]
+----
+g.V().has('desc',textContains('Regional')).values('desc').limit(5)
+----
+
+Here are the descriptions returned by the query.
+
+[source,text]
+----
+Rapid City Regional Airport
+Abilene Regional Airport
+Grand Junction Regional Airport
+San Luis County Regional Airport
+Liberal Mid-America Regional Airport
+----
+
+We could adjust the regional airport query we did above to use  'textContainsPrefix'
+if we wanted to be a bit less specific and look for any airport with 'Reg' at the
+start of any word in its description.
+
+[source,groovy]
+----
+g.V().has('desc',textContainsPrefix('Reg')).values('desc').limit(5)
+----
+
+We still get the same five results back.
+
+[source,text]
+----
+Rapid City Regional Airport
+Abilene Regional Airport
+Grand Junction Regional Airport
+San Luis County Regional Airport
+Liberal Mid-America Regional Airport
+----
+
+The 'textPrefix' predicate will look at the entire string being inspected and compare it to
 the string you provide and only return a result if the string starts with the specified
 pattern. So in this case we look at just the start of the whole string and not at
 individual words within it. The query below looks for any cities whose name starts
@@ -10351,7 +10404,7 @@ g.V().has('city',textContainsPrefix('Los')).values('city')
 ----
 
 As you can see this time we also found 'Chapelco/San Martin de los Ande' and it is
-part of the results returned.
+part of the results returned. As before the case of the search term is ignored.
 
 [source,text]
 ----
@@ -10401,6 +10454,11 @@ Juiz de Fora              Fort Hope
 Fort Severn               Fort Dodge                
 Fort Simpson              Fort Leonard Wood
 ----
+
+The query below shows another way of searching for the word 'dallas' at the start of
+a string of text while ignoring case. This time we use a very simple regular
+expression. Of course, in reality, this yields the same result that we could achieve
+by simply using 'textContainsPrefix'.
 
 [source,groovy]
 ----
@@ -10473,20 +10531,47 @@ Dalcahue
 Dalanzadgad
 ----
 
-Lastly, here is a query that uses a regular expression to find airports that have a
-region code that starts with the characters 'US-' followed by any of 'O', 'M' or 'D'
+Here is another query that uses a regular expression to find airports that have a
+region code that starts with the characters 'US-' followed by any of 'O', 'R' or 'D'
 followed by any number of characters.
 
 [source,groovy]
 ----
-g.V().has('region',textRegex("US-[OMD].*")).values('code','region').fold()
+g.V().has('region',textRegex("US-[ORD].*")).
+      local(values('code','region').fold()).fold()
 ----
 
 Here is what this query returns.
 
+[source,groovy]
+----
+[[PVD,US-RI],[LMT,US-OR],[SWO,US-OK],[PDX,US-OR],[EUG,US-OR],[MFR,US-OR],[TOL,US-OH],[PDT,US-OR],[CMH,US-OH],[OTH,US-OR],[YNG,US-OH],[OKC,US-OK],[DAY,US-OH],[LAW,US-OK],[LCK,US-OH],[LUK,US-OH],[RDM,US-OR],[DCA,US-DC],[CLE,US-OH],[TUL,US-OK],[CAK,US-OH],[ILG,US-DE],[BID,US-RI]]
+
+----
+
+Here is a slightly more complicated query that uses a regular expression. The pattern
+matches any airport description containing a word that starts with any character
+followed by 'al', optionally followed by another 'l' and then followed by any
+character that is not one of '"s,k,e,i"' ignoring case.
+
+[source,groovy]
+----
+g.V().has('desc',textContainsRegex("(?i).all?[^(s|k|e|i)]")).values('desc')
+----
+
+Here is the list of airport descriptions that the query returns.
+
 [source,text]
 ----
-[MSP,US-MN,GPT,US-MS,BZN,US-MT,AUG,US-ME,IRK,US-MO,LCK,US-OH,DTW,US-MI,MCI,US-MO,BTM,US-MT,MKG,US-MI,BOS,US-MA,DCA,US-DC,PDX,US-OR,OKC,US-OK,SGF,US-MO,JAN,US-MS,MQT,US-MI,FNT,US-MI,GTR,US-MS,RDM,US-OR,HLN,US-MT,MSO,US-MT,LUK,US-OH,OLF,US-MT,IMT,US-MI,GRR,US-MI,LMT,US-OR,DLH,US-MN,BJI,US-MN,SBY,US-MD,EWB,US-MA,HVR,US-MT,TBN,US-MO,PWM,US-ME,RST,US-MN,CMH,US-OH,LAW,US-OK,BGR,US-ME,EUG,US-OR,MFR,US-OR,HIB,US-MN,HYA,US-MA,PLN,US-MI,GGW,US-MT,TVF,US-MN,SWO,US-OK,TUL,US-OK,JLN,US-MO,CAK,US-OH,LAN,US-MI,AZO,US-MI,MBS,US-MI,MEI,US-MS,TUP,US-MS,OTH,US-OR,FCA,US-MT,GTF,US-MT,TOL,US-OH,BHB,US-ME,CIU,US-MI,ESC,US-MI,CGI,US-MO,IWD,US-MI,CLE,US-OH,BIL,US-MT,CMX,US-MI,STC,US-MN,HGR,US-MD,INL,US-MN,GLH,US-MS,PDT,US-OR,SDY,US-MT,BWI,US-MD,DAY,US-OH,PIB,US-MS,ILG,US-DE,APN,US-MI,ACK,US-MA,MVY,US-MA,PVC,US-MA,RKD,US-ME,YNG,US-OH,STL,US-MO,COU,US-MO,BKG,US-MO,TVC,US-MI,ORH,US-MA,BRD,US-MN,PQI,US-ME,GDV,US-MT,MBL,US-MI]
+Dinard-Pleurtuit-Saint-Malo Airport
+Walla Walla Regional Airport
+Salt Lake City
+Palm Springs International Airport
+Eduardo Falla Solano Airport
+Palm Beach International Airport
+Salt Cay Airport
+Melville Hall Airport
+Hall Beach Airport
 ----
 
 Fuzzy search predicates
