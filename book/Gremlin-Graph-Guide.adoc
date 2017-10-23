@@ -9,23 +9,27 @@ v270, Oct 23, 2017
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
+//:pygments-style: lovelace
 //:source-highlighter: rouge
 //:source-highlighter: coderay
 //:pygments-style: native
 //:pygments-style: monokai
 //:pygments-style: manni
+//:pygments-style: vim
 :toc:
 :toclevels: 4
 :revision: 270
 
-// NOTE: These notes are encoded using a minimal level of Asciidoc markup. You can read
+// NOTE1: I updated the paraiso-dark style so that source code with a style of text
+//        has a white foreground color. The default was unreadable,
+// NOTE2: These notes are encoded using a minimal level of Asciidoc markup. You can read
 // them as-is or generate HTML or other output formats from this file using the
 // 'asciidoc' processor available on most Linux systems or via Cygwin on
 // Windows.  On Mac OS X the easiest way to install asciidoc is probably via
 // Homebrew. You can also install Asciidoctor, a Ruby Gem, as an alternative to
 // Asciidoc which is written in Python.
 //
-// NOTE: In my tests, Asciidoctor seems a lot faster than Asciidoc and it has now become my
+// NOTE3: In my tests, Asciidoctor seems a lot faster than Asciidoc and it has now become my
 //       preferred way of processing this file.
 //
 // As well as 'asciidoc' or Asciidoctor, the 'source-highlight' utility will also need to
@@ -10234,7 +10238,7 @@ g.V().has('desc',textContains("Dallas")).values('desc')
 
 Here is what the query should return.
 
-[source,json]
+[source,text]
 ----
 Dallas/Fort Worth International Airport
 Dallas Love Field
@@ -10251,7 +10255,7 @@ g.V().has('desc',textContains("Love")).values('desc')
 
 Here is what the query returns.
 
-[source,json]
+[source,text]
 ----
 Dallas Love Field
 Ernest A. Love Field
@@ -10268,7 +10272,7 @@ g.V().has('city',textContains("fort")).values('city')
 As you can see in the results below 'Viex Fort' was found as well as all of the
 cities with names that start with 'Fort'.
 
-[source,json]
+[source,text]
 ----
 Fort Myers           Fort Worth               
 Fort-de-France       Fort McMurray            
@@ -10308,7 +10312,7 @@ g.V().has('desc',textContainsPrefix("dalla")).values('desc')
 Here is what the query returns. This time we got some results as 'Dallas' starts with
 the characters 'dalla'. Again, remember these are case insensitive queries.
 
-[source,json]
+[source,text]
 ----
 Dallas/Fort Worth International Airport
 Dallas Love Field
@@ -10329,7 +10333,7 @@ NOTE: Searches using 'textPrefix' *are* case sensitive.
 
 This is what we get back from the query. 
 
-[source,json]
+[source,text]
 ----
 Los Alamos
 Los Angeles
@@ -10349,7 +10353,7 @@ g.V().has('city',textContainsPrefix('Los')).values('city')
 As you can see this time we also found 'Chapelco/San Martin de los Ande' and it is
 part of the results returned.
 
-[source,json]
+[source,text]
 ----
 Los Alamos
 Chapelco/San Martin de los Andes
@@ -10379,7 +10383,7 @@ Notice how names that start with 'For' such as 'Fort Myers' as well as city name
 containing words that start with the text 'For' somewhere else are found. For example
 'La Fortuna'  and 'View Fort' are also found.
 
-[source,json]
+[source,text]
 ----
 Fort Myers                Fort Worth                
 La Fortuna/San Carlos     Fort McMurray             
@@ -10406,7 +10410,7 @@ g.V().has('city',textRegex("(?i)dallas")).valueMap('code','city')
 
 As we can see the query worked as expected.
 
-[source,json]
+[source,groovy]
 ----
 [code:[DFW],city:[Dallas]]
 [code:[DAL],city:[Dallas]]
@@ -10424,7 +10428,7 @@ g.V().has('city',textRegex('(?i)dal.*')).values('city')
 
 This time we get some additional cities back.
 
-[source,json]
+[source,text]
 ----
 Dallas
 Dallas
@@ -10448,7 +10452,7 @@ g.V().has('city',textRegex(".{3}cah.*")).values('city')
 Using our modified, and much more specific search pattern we find just one city that
 matches the pattern.
  
-[source,json]
+[source,text]
 ----
 Dalcahue
 ----
@@ -10463,7 +10467,7 @@ g.V().has('city',textRegex(".{3}(cah|anz).*")).values('city')
 
 Here is what we get back using this regular expression.
 
-[source,json]
+[source,text]
 ----
 Dalcahue
 Dalanzadgad
@@ -10480,7 +10484,7 @@ g.V().has('region',textRegex("US-[OMD].*")).values('code','region').fold()
 
 Here is what this query returns.
 
-[source,json]
+[source,text]
 ----
 [MSP,US-MN,GPT,US-MS,BZN,US-MT,AUG,US-ME,IRK,US-MO,LCK,US-OH,DTW,US-MI,MCI,US-MO,BTM,US-MT,MKG,US-MI,BOS,US-MA,DCA,US-DC,PDX,US-OR,OKC,US-OK,SGF,US-MO,JAN,US-MS,MQT,US-MI,FNT,US-MI,GTR,US-MS,RDM,US-OR,HLN,US-MT,MSO,US-MT,LUK,US-OH,OLF,US-MT,IMT,US-MI,GRR,US-MI,LMT,US-OR,DLH,US-MN,BJI,US-MN,SBY,US-MD,EWB,US-MA,HVR,US-MT,TBN,US-MO,PWM,US-ME,RST,US-MN,CMH,US-OH,LAW,US-OK,BGR,US-ME,EUG,US-OR,MFR,US-OR,HIB,US-MN,HYA,US-MA,PLN,US-MI,GGW,US-MT,TVF,US-MN,SWO,US-OK,TUL,US-OK,JLN,US-MO,CAK,US-OH,LAN,US-MI,AZO,US-MI,MBS,US-MI,MEI,US-MS,TUP,US-MS,OTH,US-OR,FCA,US-MT,GTF,US-MT,TOL,US-OH,BHB,US-ME,CIU,US-MI,ESC,US-MI,CGI,US-MO,IWD,US-MI,CLE,US-OH,BIL,US-MT,CMX,US-MI,STC,US-MN,HGR,US-MD,INL,US-MN,GLH,US-MS,PDT,US-OR,SDY,US-MT,BWI,US-MD,DAY,US-OH,PIB,US-MS,ILG,US-DE,APN,US-MI,ACK,US-MA,MVY,US-MA,PVC,US-MA,RKD,US-ME,YNG,US-OH,STL,US-MO,COU,US-MO,BKG,US-MO,TVC,US-MI,ORH,US-MA,BRD,US-MN,PQI,US-ME,GDV,US-MT,MBL,US-MI]
 ----
@@ -10506,7 +10510,7 @@ The query below uses a fuzzy sort to find any words that are close to the word
 Here are the results from running the query. You can see that airport descriptions
 that contain the whole words 'Paul', 'Palm' and 'Hall' have been found.
 
-[source,json]
+[source,text]
 ----
 Minneapolis-St.Paul International Airport
 Palm Beach International Airport
@@ -10528,7 +10532,7 @@ is more than just single character replacement. Note that not all of the city na
 returned are of the same length. To better understand the 'fuzzy search' algorithm it
 is recommended to look at the Wikipedia page mentioned above.
 
-[source,json]
+[source,text]
 ----
 Yulin
 Hubli
