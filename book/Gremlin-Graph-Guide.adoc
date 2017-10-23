@@ -1,8 +1,8 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v269, Oct 23, 2017
-// Mon Oct 23, 2017 08:50:20  CDT
+v270, Oct 23, 2017
+// Mon Oct 23, 2017 09:24:58 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Oct 23 2017
@@ -16,7 +16,7 @@ v269, Oct 23, 2017
 //:pygments-style: manni
 :toc:
 :toclevels: 4
-:revision: 269
+:revision: 270
 
 // NOTE: These notes are encoded using a minimal level of Asciidoc markup. You can read
 // them as-is or generate HTML or other output formats from this file using the
