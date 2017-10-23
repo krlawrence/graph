@@ -2,7 +2,7 @@ GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v269, Oct 23, 2017
-// Mon Oct 23, 2017 08:15:22 CDT
+// Mon Oct 23, 2017 08:50:20  CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Oct 23 2017
@@ -10247,7 +10247,12 @@ the word '"Love"' appearing anywhere in the 'desc' property.
 [source,groovy]
 ----
 g.V().has('desc',textContains("Love")).values('desc')
+----
 
+Here is what the query returns.
+
+[source,json]
+----
 Dallas Love Field
 Ernest A. Love Field
 ----
@@ -10305,6 +10310,47 @@ Dallas/Fort Worth International Airport
 Dallas Love Field
 ----
 
+The 'textPrefix' predicate will look at the string being inspected and compare it to
+the string you provide and only return a result if the string starts with the specified
+pattern. So in this case we look at just the start of the whole string and not at
+individual words within it. The query below looks for any cities whose name starts
+with the characters 'Los'.
+
+[source,groovy]
+----
+g.V().has('city',textPrefix('Los')).values('city')
+----
+
+This is what we get back from the query. 
+
+[source,json]
+----
+Los Alamos
+Los Angeles
+Los Mochis
+Losuia
+----
+
+Notice how the query did not find the city of 'Chapelco/San Martin de los Andes' as
+in this case the 'los' is not at the start of the name. If we did want to also have
+that city discovered we could use 'textContainsPrefix' instead as shown below.
+
+[source,groovy]
+----
+g.V().has('city',textContainsPrefix('Los')).values('city')
+----
+
+As you can see this time we also found 'Chapelco/San Martin de los Ande' and it is
+part of the results returned.
+
+[source,json]
+----
+Los Alamos
+Chapelco/San Martin de los Andes
+Los Angeles
+Los Mochis
+Losuia
+----
 
 Regular expression predicates
 +++++++++++++++++++++++++++++
@@ -10349,17 +10395,28 @@ Fort Simpson              Fort Leonard Wood
 [source,groovy]
 ----
 // Matches dallas ignoring case
-g.V().has('city',textRegex("(?i)dallas")).values('city')
-
-Dallas
-Dallas
+g.V().has('city',textRegex("(?i)dallas")).valueMap('code','city')
 ----
+
+As we can see the query worked as expected.
+
+[source,json]
+----
+[code:[DFW],city:[Dallas]]
+[code:[DAL],city:[Dallas]]
+
+----
+
+If we wanted to expand our search a bit we could modify the regular expression, as
+shown below, to find an city name that starts with the characters 'dal'.
 
 [source,groovy]
 ----
 // Matches any city that contains dal followed by anything, ignoring case.
 g.V().has('city',textRegex('(?i)dal.*')).values('city')
 ----
+
+This time we get some additional cities back.
 
 [source,json]
 ----
@@ -10372,26 +10429,50 @@ Dalanzadgad
 Dalian
 ----
 
+If we instead wanted to get more specific we could again adjust the regular
+expression. This time we look for any city name that starts with any three characters
+followed by the characters 'cah' followed by any number of other characters.
+
 [source,groovy]
 ----
 // Anything that matches 3 characters followed by 'cah' followed by anything.
 g.V().has('city',textRegex(".{3}cah.*")).values('city')
+----
 
+Using our modified, and much more specific search pattern we find just one city that
+matches the pattern.
+ 
+[source,json]
+----
 Dalcahue
 ----
+
+Here is another example that looks for a city name that starts with any three
+characters followed by either 'cah' or 'anz' followed by any number of characters.
 
 [source,groovy]
 ----
 g.V().has('city',textRegex(".{3}(cah|anz).*")).values('city')
+----
 
+Here is what we get back using this regular expression.
+
+[source,json]
+----
 Dalcahue
 Dalanzadgad
 ----
+
+Lastly, here is a query that uses a regular expression to find airports that have a
+region code that starts with the characters 'US-' followed by any of 'O', 'M' or 'D'
+followed by any number of characters.
 
 [source,groovy]
 ----
 g.V().has('region',textRegex("US-[OMD].*")).values('code','region').fold()
 ----
+
+Here is what this query returns.
 
 [source,json]
 ----
