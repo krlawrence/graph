@@ -10509,7 +10509,28 @@ John Paul II International Airport Krakow-Balice Airport
 Melville Hall Airport
 Hall Beach Airport
 St Paul Island Airport
----- 
+----
+
+This query uses 'textFuzzy' to find cities whose names are close to Dublin.
+[source,groovy]
+----
+g.V().has('city',textFuzzy('Dublin')).values('city')
+----
+
+Here is what the query returns. You can see that the method used by 'fuzzy' searches
+is more than just single character replacement. Note that not all of the city names
+returned are of the same length. To better understand the 'fuzzy search' algorithm it
+is recommended to look at the Wikipedia page mentioned above.
+
+[source,json]
+----
+Yulin
+Hubli
+Dublin
+Lublin
+Dubois
+Dubai
+----
 
 [[janusgeo]]
 The Janus Graph geospatial API
