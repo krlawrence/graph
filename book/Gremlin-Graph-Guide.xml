@@ -5,7 +5,7 @@
 <info>
 <title>GRAPH DATABASES, GREMLIN and TINKERPOP </title>
 <subtitle>A TUTORIAL</subtitle>
-<date>Oct 22, 2017</date>
+<date>Oct 23, 2017</date>
 <author>
 <personname>
 <firstname>Kelvin</firstname>
@@ -17,8 +17,8 @@
 <authorinitials>KRL</authorinitials>
 <revhistory>
 <revision>
-<revnumber>268</revnumber>
-<date>Oct 22, 2017</date>
+<revnumber>269</revnumber>
+<date>Oct 23, 2017</date>
 <authorinitials>KRL</authorinitials>
 </revision>
 </revhistory>
@@ -57,7 +57,7 @@ October 5th, 2017<?asciidoc-br?></simpara>
 free to send me feedback of any sort. Suggested improvements are especially welcome.
 A good way to provide feedback is by opening an issue in the GitHub repository
 located at <link xl:href="https://github.com/krlawrence/graph">https://github.com/krlawrence/graph</link>. You are currently reading revision
-268 of the document.</simpara>
+269 of the document.</simpara>
 </section>
 <section xml:id="thanks">
 <title>A word of thanks</title>
@@ -7269,16 +7269,16 @@ each being used. First off, the query below will find any vertex that has a <emp
 <simpara>The simplest of the search predicates allow you to specify an exact match that string  must
 be present either as a whole word (complete word match) or as part of the entire text
 being examined. These searches are <emphasis role="strong">not</emphasis> case sensitive.</simpara>
-<programlisting language="groovy" linenumbering="unnumbered">g.V().has('desc',textContains("Dallas")).values('desc')
-
-Dallas/Fort Worth International Airport
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('desc',textContains("Dallas")).values('desc')</programlisting>
+<simpara>Here is what the query should return.</simpara>
+<programlisting language="json" linenumbering="unnumbered">Dallas/Fort Worth International Airport
 Dallas Love Field</programlisting>
 <simpara>The word being searched for using <emphasis>textContains</emphasis> does not have to be the first word
 within the string. It just has to exist as a whole word. The query below looks for
 the word <emphasis>"Love"</emphasis> appearing anywhere in the <emphasis>desc</emphasis> property.</simpara>
-<programlisting language="groovy" linenumbering="unnumbered">g.V().has('desc',textContains("Love")).values('desc')
-
-Dallas Love Field
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('desc',textContains("Love")).values('desc')</programlisting>
+<simpara>Here is what the query returns.</simpara>
+<programlisting language="json" linenumbering="unnumbered">Dallas Love Field
 Ernest A. Love Field</programlisting>
 <simpara>In this example the word <emphasis>fort</emphasis> is found no matter where it occurs in the <emphasis>city</emphasis>
 name.</simpara>
@@ -7298,19 +7298,54 @@ Fort Leonard Wood    Fort Dodge</programlisting>
 <note>
 <simpara>Searches using <emphasis>textContains</emphasis> are <emphasis role="strong">not</emphasis> case sensitive.</simpara>
 </note>
+<simpara>The query below does not match any whole word in any description anywhere in the
+graph so no results will be returned.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Matches no whole word so no results
 g.V().has('desc',textContains("Dalla")).values('desc')</programlisting>
-<programlisting language="groovy" linenumbering="unnumbered">g.V().has('desc',textContainsPrefix("dall")).values('desc')
-
-Dallas/Fort Worth International Airport
+<simpara>If we use <emphasis>textContainsPrefix</emphasis> instead of <emphasis>textContains</emphasis>, the search will look for
+whole words that start with the specified text and we will get some results. Take a
+look at the next query and the results it generates.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('desc',textContainsPrefix("dalla")).values('desc')</programlisting>
+<simpara>Here is what the query returns. This time we got some results as <emphasis>Dallas</emphasis> starts with
+the characters <emphasis>dalla</emphasis>. Again, remember these are case insensitive queries.</simpara>
+<programlisting language="json" linenumbering="unnumbered">Dallas/Fort Worth International Airport
 Dallas Love Field</programlisting>
+<simpara>The <emphasis>textPrefix</emphasis> predicate will look at the string being inspected and compare it to
+the string you provide and only return a result if the string starts with the specified
+pattern. So in this case we look at just the start of the whole string and not at
+individual words within it. The query below looks for any cities whose name starts
+with the characters <emphasis>Los</emphasis>.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('city',textPrefix('Los')).values('city')</programlisting>
+<simpara>This is what we get back from the query.</simpara>
+<programlisting language="json" linenumbering="unnumbered">Los Alamos
+Los Angeles
+Los Mochis
+Losuia</programlisting>
+<simpara>Notice how the query did not find the city of <emphasis>Chapelco/San Martin de los Andes</emphasis> as
+in this case the <emphasis>los</emphasis> is not at the start of the name. If we did want to also have
+that city discovered we could use <emphasis>textContainsPrefix</emphasis> instead as shown below.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('city',textContainsPrefix('Los')).values('city')</programlisting>
+<simpara>As you can see this time we also found <emphasis>Chapelco/San Martin de los Ande</emphasis> and it is
+part of the results returned.</simpara>
+<programlisting language="json" linenumbering="unnumbered">Los Alamos
+Chapelco/San Martin de los Andes
+Los Angeles
+Los Mochis
+Losuia</programlisting>
 </section>
 <section xml:id="_regular_expression_predicates">
 <title>Regular expression predicates</title>
 <simpara>The Janus Graph regular expression predicates recognize the syntax defined as part of
-the Java 1.8 Pattern class that is documented
-at <link xl:href="https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html">https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html</link></simpara>
+the Java 1.8 Pattern class that is documented at
+<link xl:href="https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html">https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html</link>. The Java
+regular expression syntax may be different than the one you are used to so it is
+worth taking a few minutes to study the documentation at that URL.</simpara>
+<simpara>The query below uses a <emphasis>textContainsRegex</emphasis> predicate to search for any city name that
+contains a word starting with <emphasis>for</emphasis>, while ignoring case.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">g.V().has('city',textContainsRegex("(?i)for.*")).values('city')</programlisting>
+<simpara>Notice how names that start with <emphasis>For</emphasis> such as <emphasis>Fort Myers</emphasis> as well as city names
+containing words that start with the text <emphasis>For</emphasis> somewhere else are found. For example
+<emphasis>La Fortuna</emphasis>  and <emphasis>View Fort</emphasis> are also found.</simpara>
 <programlisting language="json" linenumbering="unnumbered">Fort Myers                Fort Worth
 La Fortuna/San Carlos     Fort McMurray
 Fort-de-France            Fort Sandeman
@@ -7327,12 +7362,15 @@ Juiz de Fora              Fort Hope
 Fort Severn               Fort Dodge
 Fort Simpson              Fort Leonard Wood</programlisting>
 <programlisting language="groovy" linenumbering="unnumbered">// Matches dallas ignoring case
-g.V().has('city',textRegex("(?i)dallas")).values('city')
-
-Dallas
-Dallas</programlisting>
-<programlisting language="groovy" linenumbering="unnumbered">// Matches any city that conains dal followed by anything, ignoring case.
+g.V().has('city',textRegex("(?i)dallas")).valueMap('code','city')</programlisting>
+<simpara>As we can see the query worked as expected.</simpara>
+<programlisting language="json" linenumbering="unnumbered">[code:[DFW],city:[Dallas]]
+[code:[DAL],city:[Dallas]]</programlisting>
+<simpara>If we wanted to expand our search a bit we could modify the regular expression, as
+shown below, to find an city name that starts with the characters <emphasis>dal</emphasis>.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">// Matches any city that contains dal followed by anything, ignoring case.
 g.V().has('city',textRegex('(?i)dal.*')).values('city')</programlisting>
+<simpara>This time we get some additional cities back.</simpara>
 <programlisting language="json" linenumbering="unnumbered">Dallas
 Dallas
 Dalcahue
@@ -7340,16 +7378,25 @@ Dalat
 Dalaman
 Dalanzadgad
 Dalian</programlisting>
-<programlisting language="groovy" linenumbering="unnumbered">// Anything that matches 3 characters followed by 'cah' followed by
-// anything.
-g.V().has('city',textRegex(".{3}cah.*")).values('city')
-
-Dalcahue</programlisting>
-<programlisting language="groovy" linenumbering="unnumbered">g.V().has('city',textRegex(".{3}(cah|anz).*")).values('city')
-
-Dalcahue
+<simpara>If we instead wanted to get more specific we could again adjust the regular
+expression. This time we look for any city name that starts with any three characters
+followed by the characters <emphasis>cah</emphasis> followed by any number of other characters.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">// Anything that matches 3 characters followed by 'cah' followed by anything.
+g.V().has('city',textRegex(".{3}cah.*")).values('city')</programlisting>
+<simpara>Using our modified, and much more specific search pattern we find just one city that
+matches the pattern.</simpara>
+<programlisting language="json" linenumbering="unnumbered">Dalcahue</programlisting>
+<simpara>Here is another example that looks for a city name that starts with any three
+characters followed by either <emphasis>cah</emphasis> or <emphasis>anz</emphasis> followed by any number of characters.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('city',textRegex(".{3}(cah|anz).*")).values('city')</programlisting>
+<simpara>Here is what we get back using this regular expression.</simpara>
+<programlisting language="json" linenumbering="unnumbered">Dalcahue
 Dalanzadgad</programlisting>
+<simpara>Lastly, here is a query that uses a regular expression to find airports that have a
+region code that starts with the characters <emphasis>US-</emphasis> followed by any of <emphasis>O</emphasis>, <emphasis>M</emphasis> or <emphasis>D</emphasis>
+followed by any number of characters.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">g.V().has('region',textRegex("US-[OMD].*")).values('code','region').fold()</programlisting>
+<simpara>Here is what this query returns.</simpara>
 <programlisting language="json" linenumbering="unnumbered">[MSP,US-MN,GPT,US-MS,BZN,US-MT,AUG,US-ME,IRK,US-MO,LCK,US-OH,DTW,US-MI,MCI,US-MO,BTM,US-MT,MKG,US-MI,BOS,US-MA,DCA,US-DC,PDX,US-OR,OKC,US-OK,SGF,US-MO,JAN,US-MS,MQT,US-MI,FNT,US-MI,GTR,US-MS,RDM,US-OR,HLN,US-MT,MSO,US-MT,LUK,US-OH,OLF,US-MT,IMT,US-MI,GRR,US-MI,LMT,US-OR,DLH,US-MN,BJI,US-MN,SBY,US-MD,EWB,US-MA,HVR,US-MT,TBN,US-MO,PWM,US-ME,RST,US-MN,CMH,US-OH,LAW,US-OK,BGR,US-ME,EUG,US-OR,MFR,US-OR,HIB,US-MN,HYA,US-MA,PLN,US-MI,GGW,US-MT,TVF,US-MN,SWO,US-OK,TUL,US-OK,JLN,US-MO,CAK,US-OH,LAN,US-MI,AZO,US-MI,MBS,US-MI,MEI,US-MS,TUP,US-MS,OTH,US-OR,FCA,US-MT,GTF,US-MT,TOL,US-OH,BHB,US-ME,CIU,US-MI,ESC,US-MI,CGI,US-MO,IWD,US-MI,CLE,US-OH,BIL,US-MT,CMX,US-MI,STC,US-MN,HGR,US-MD,INL,US-MN,GLH,US-MS,PDT,US-OR,SDY,US-MT,BWI,US-MD,DAY,US-OH,PIB,US-MS,ILG,US-DE,APN,US-MI,ACK,US-MA,MVY,US-MA,PVC,US-MA,RKD,US-ME,YNG,US-OH,STL,US-MO,COU,US-MO,BKG,US-MO,TVC,US-MI,ORH,US-MA,BRD,US-MN,PQI,US-ME,GDV,US-MT,MBL,US-MI]</programlisting>
 </section>
 <section xml:id="_fuzzy_search_predicates">
