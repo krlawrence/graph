@@ -2,7 +2,7 @@ GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v270, Oct 23, 2017
-// Mon Oct 23, 2017 09:24:58 CDT
+// Mon Oct 23, 2017 12:53:06 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Oct 23 2017
@@ -10258,12 +10258,15 @@ Ernest A. Love Field
 ----
 
 In this example the word 'fort' is found no matter where it occurs in the 'city'
-name. 
+name so long as it occurs as a stand alone word.. 
 
 [source,groovy]
 ----
 g.V().has('city',textContains("fort")).values('city')
 ----
+
+As you can see in the results below 'Viex Fort' was found as well as all of the
+cities with names that start with 'Fort'.
 
 [source,json]
 ----
@@ -10281,7 +10284,6 @@ Fort Simpson         Fort Hope
 Fort Leonard Wood    Fort Dodge               
 ----
 
-NOTE: Searches using 'textContains' and 'textContainsPrefix' are *not* case sensitive.
 
 The query below does not match any whole word in any description anywhere in the
 graph so no results will be returned.
@@ -10295,6 +10297,8 @@ g.V().has('desc',textContains("Dalla")).values('desc')
 If we use 'textContainsPrefix' instead of 'textContains', the search will look for
 whole words that start with the specified text and we will get some results. Take a
 look at the next query and the results it generates.
+
+NOTE: Searches using 'textContains' and 'textContainsPrefix' are *not* case sensitive.
 
 [source,groovy]
 ----
