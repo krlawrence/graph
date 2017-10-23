@@ -1,11 +1,11 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v268, Oct 22, 2017
-// Sun Oct 22, 2017 18:48:29 CDT
+v269, Oct 23, 2017
+// Mon Oct 23, 2017 08:15:22 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Oct 22 2017
+//:Date:      Oct 23 2017
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -16,7 +16,7 @@ v268, Oct 22, 2017
 //:pygments-style: manni
 :toc:
 :toclevels: 4
-:revision: 268
+:revision: 269
 
 // NOTE: These notes are encoded using a minimal level of Asciidoc markup. You can read
 // them as-is or generate HTML or other output formats from this file using the
@@ -10287,15 +10287,17 @@ graph so no results will be returned.
 g.V().has('desc',textContains("Dalla")).values('desc')
 ----
 
-If we use 'textContainsPrefix' instead of 'textContains', which looks for whole words
-that start with the specified text, we will get some results.
+If we use 'textContainsPrefix' instead of 'textContains', the search will look for
+whole words that start with the specified text and we will get some results. Take a
+look at the next query and the results it generates.
 
 [source,groovy]
 ----
 g.V().has('desc',textContainsPrefix("dalla")).values('desc')
 ----
 
-Here is what the query will return.
+Here is what the query returns. This time we got some results as 'Dallas' starts with
+the characters 'dalla'. Again, remember these are case insensitive queries.
 
 [source,json]
 ----
@@ -10355,7 +10357,7 @@ Dallas
 
 [source,groovy]
 ----
-// Matches any city that conains dal followed by anything, ignoring case.
+// Matches any city that contains dal followed by anything, ignoring case.
 g.V().has('city',textRegex('(?i)dal.*')).values('city')
 ----
 
@@ -10372,8 +10374,7 @@ Dalian
 
 [source,groovy]
 ----
-// Anything that matches 3 characters followed by 'cah' followed by
-// anything.
+// Anything that matches 3 characters followed by 'cah' followed by anything.
 g.V().has('city',textRegex(".{3}cah.*")).values('city')
 
 Dalcahue
