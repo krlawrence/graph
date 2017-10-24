@@ -1,11 +1,11 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v270, Oct 23, 2017
-// Tue Oct 24, 2017 14:01:48 CDT
+v270, Oct 24, 2017
+// Tue Oct 24, 2017 16:15:53 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Oct 23 2017
+//:Date:      Oct 24 2017
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -10109,17 +10109,6 @@ mgmt = graph.openManagement()
 mgmt.makePropertyKey('dist').dataType(Integer.class).cardinality(Cardinality.SINGLE).make()
 mgmt.commit()
 ----
-
-To be written
-
-
-[source,groovy]
-----
-// Load the air routes graph
-graph.io(graphml()).readGraph('air-routes.graphml')
-graph.tx().commit()
-----
-
 
 To be written
 
