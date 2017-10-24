@@ -2,7 +2,7 @@ GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v270, Oct 23, 2017
-// Mon Oct 23, 2017 17:18:19 CDT
+// Tue Oct 24, 2017 14:01:48 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Oct 23 2017
@@ -9783,58 +9783,6 @@ graph.tx().rollback()
 g.V().has('code','XYZ')
 ----
 
-Loading air-routes into a Janus Graph instance
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-We can use the same basic steps to load the air-routes graph into a Janus Graph
-instance that we used with Tinkergraph. Note that after loading the graph from the
-XML file we then call 'commit' to finalize the transaction. 
-
-[source,groovy]
-----
-graph.io(graphml()).readGraph('air-routes.graphml')
-graph.tx().commit()
-----
-
-Note that as we have not defined a schema before loading the air-routes graph that
-Janus Graph will create vertices, edges and properties using default types and settings.
-A bit later we will look at creating a schema for air-routes and then loading it
-again to see the differences. It is strongly recommended to create the schema before
-loading the data but lets examine a few things before we discuss how to do that. 
-
-Unlike TinkerGraph, Janus Graph does not, by default,  guarantee to respect user
-provided node and edge ID values. Instead it creates its own ID values as vertices and
-edges are added to the graph. You may have noticed from earlier in the document or
-from the air-routes.graphml file if you happened to look in there, that the ID
-provided for Austin in the GraphML markup is 3. However, having loaded air-routes
-into Janus Graph if we query the ID for the Austin node we can see that it is no
-longer 3. There is a setting that can be changed to force Janus Graph to honor user
-provided ID values but it is not recommended this be used as it will disable some
-other useful Janus Graph features. If you are interested in learning more about this
-option this please refer to the Janus Graph documentation.
-
-[source,groovy]
-----
-g.V().has('code','AUS').id()
-
-4240
-----
-
-Having the graph system allocate its own ID values is not a big problem as we can
-always query the graph to get the ID but it is a reminder that you should not get
-into the habit of relying on any user provided ID values as you work with graphs.
-
-If necessary, as we  discussed earlier in the document, we can always store important
-ID values in a variable for later use.
-
-[source,groovy]
-----
-ausid = g.V().has('code','AUS').id().next()
-
-g.V(ausid).values('city','desc','region').join(',')
-
-Austin Bergstrom International Airport,Austin,US-TX
-----
 
 [[janusmgmt]]
 The Janus Graph management API
@@ -9853,8 +9801,16 @@ method call as shown below.
 mgmt = graph.openManagement()
 ----
 
+In the following sections we will show how to use the management API to create both a
+schema and an index for the air-routes graph and then load it. Before we do that we
+need should take a few minutes to introduce the Janus Graph Management API. For the
+time being, assume we have created an in memory Janus Graph instance and loaded the
+air-routes graph into it but have not defined an index or a schema. In this
+situation, Janus Graph will give us the best defaults it can as it loads the graph
+for schema types.
+
 The example below uses the Management API to get a list of all the vertex labels
-currently defined by in graph.
+currently defined in graph.
 
 [source,groovy]
 ----
@@ -9930,6 +9886,106 @@ true
 mgmt.containsEdgeLabel('travels')
 
 false
+----
+
+[[cardlist]]
+Creating a property with cardinality LIST
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+To be written
+
+[source,groovy]
+----
+mgmt = graph.openManagement()
+maker = mgmt.makePropertyKey('mylist')
+maker.dataType(String.class)
+maker.cardinality(LIST)
+maker.make()
+mgmt.commit()
+
+mgmt = graph.openManagement()
+mgmt.makePropertyKey('anotherlist').dataType(String.class).cardinality(LIST).make()
+
+mgmt = graph.openManagement()
+mgmt.getPropertyKey('mylist').cardinality()
+
+LIST
+
+mgmt.commit()
+
+n = g.addV('mylist','one','mylist','two').next()
+
+v[3043568]
+
+g.V(n).property(list,'mylist','one')
+g.V(n).valueMap()
+
+// Duplicates allowed
+[mylist:[one,one,two]]
+
+graph.tx().commit()
+----
+
+[[cardset]]
+Creating a property with cardinality SET
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+To be written
+
+[source,groovy]
+----
+mgmt = graph.openManagement()
+mgmt.makePropertyKey('numbers').dataType(Integer.class).cardinality(SET).make()
+----
+
+[source,groovy]
+----
+mgmt.getPropertyKey('numbers').cardinality()
+
+SET
+----
+
+[source,groovy]
+----
+mgmt.commit()
+----
+
+[source,groovy]
+----
+n = g.addV('numbers',1,'numbers',2,'numbers',3).next()
+
+v[2846792]
+
+g.V(n).valueMap()
+
+[numbers:[1,2,3]]
+----
+
+[source,groovy]
+----
+g.V(n).property(set,'numbers',2)
+g.V(n).valueMap()
+----
+
+[source,groovy]
+----
+// Duplicates not allowed
+[numbers:[1,2,3]]
+----
+
+[source,groovy]
+----
+g.V(n).property(set,'numbers',4)
+g.V(n).valueMap()
+
+[numbers:[1,2,3,4]]
+----
+
+[source,groovy]
+----
+graph.tx().commit()
 ----
 
 [[janusschema]]
@@ -10054,9 +10110,6 @@ mgmt.makePropertyKey('dist').dataType(Integer.class).cardinality(Cardinality.SIN
 mgmt.commit()
 ----
 
-Loading 'air-routes.graphml' into a Janus Graph
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 To be written
 
 
@@ -10104,106 +10157,100 @@ elev    : class java.lang.Integer SINGLE
 
 ----
 
-[[cardlist]]
-Creating a property with cardinality LIST
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+
+[[janusload]]
+Loading air-routes into a Janus Graph instance
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Now that we know how to create a schema and an index for the air-routes graph 
+we can use the same basic steps to load it into a Janus Graph
+instance that we used with TinkerGraph. Note that after loading the graph from the
+XML file we then call 'commit' to finalize the transaction. 
+
+[source,groovy]
+----
+graph.io(graphml()).readGraph('air-routes.graphml')
+graph.tx().commit()
+----
+
+Note that as we have not defined a schema before loading the air-routes graph that
+Janus Graph will create vertices, edges and properties using default types and settings.
+A bit later we will look at creating a schema for air-routes and then loading it
+again to see the differences. It is strongly recommended to create the schema before
+loading the data but lets examine a few things before we discuss how to do that. 
+
+Unlike TinkerGraph, Janus Graph does not, by default,  guarantee to respect user
+provided node and edge ID values. Instead it creates its own ID values as vertices and
+edges are added to the graph. You may have noticed from earlier in the document or
+from the air-routes.graphml file if you happened to look in there, that the ID
+provided for Austin in the GraphML markup is 3. However, having loaded air-routes
+into Janus Graph if we query the ID for the Austin node we can see that it is no
+longer 3. There is a setting that can be changed to force Janus Graph to honor user
+provided ID values but it is not recommended this be used as it will disable some
+other useful Janus Graph features. If you are interested in learning more about this
+option this please refer to the Janus Graph documentation.
+
+[source,groovy]
+----
+g.V().has('code','AUS').id()
+
+4240
+----
+
+Having the graph system allocate its own ID values is not a big problem as we can
+always query the graph to get the ID but it is a reminder that you should not get
+into the habit of relying on any user provided ID values as you work with graphs.
+
+If necessary, as we  discussed earlier in the document, we can always store important
+ID values in a variable for later use.
+
+[source,groovy]
+----
+ausid = g.V().has('code','AUS').id().next()
+
+g.V(ausid).values('city','desc','region').join(',')
+
+Austin Bergstrom International Airport,Austin,US-TX
+----
+
+[[janindex]]
+Building a composite index to speed up searching
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To be written
 
 [source,groovy]
 ----
-mgmt = graph.openManagement()
-maker = mgmt.makePropertyKey('mylist')
-maker.dataType(String.class)
-maker.cardinality(LIST)
-maker.make()
+g.V().has('code','LHR')
+
+WARN  org.janusgraph.graphdb.transaction.StandardJanusGraphTx  
+    - Query requires iterating over all vertices [(code = LHR)]. 
+      For better performance, use indexes
+
+v[32904]
+----
+
+[source,groovy]
+----
+graph.tx().rollback()
+mgmt=graph.openManagement()
+idx=mgmt.buildIndex('airportIndex',Vertex.class)
+iata = mgmt.getPropertyKey('code')
+idx.addKey(iata).buildCompositeIndex()
 mgmt.commit()
 
 mgmt = graph.openManagement()
-mgmt.makePropertyKey('anotherlist').dataType(String.class).cardinality(LIST).make()
-
-mgmt = graph.openManagement()
-mgmt.getPropertyKey('mylist').cardinality()
-
-LIST
-
+mgmt.updateIndex(mgmt.getGraphIndex("airportIndex"), SchemaAction.REINDEX).get()
 mgmt.commit()
 
-n = g.addV('mylist','one','mylist','two').next()
 
-v[3043568]
+gremlin> g.V().has('code','LHR')
 
-g.V(n).property(list,'mylist','one')
-g.V(n).valueMap()
+v[32904]
 
-// Duplicates allowed
-[mylist:[one,one,two]]
 
-graph.tx().commit()
 ----
-
-[[cardset]]
-Creating a property with cardinality SET
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-To be written
-
-[source,groovy]
-----
-mgmt = graph.openManagement()
-mgmt.makePropertyKey('numbers').dataType(Integer.class).cardinality(SET).make()
-----
-
-[source,groovy]
-----
-mgmt.getPropertyKey('numbers').cardinality()
-
-SET
-----
-
-[source,groovy]
-----
-mgmt.commit()
-----
-
-[source,groovy]
-----
-n = g.addV('numbers',1,'numbers',2,'numbers',3).next()
-
-v[2846792]
-
-g.V(n).valueMap()
-
-[numbers:[1,2,3]]
-----
-
-[source,groovy]
-----
-g.V(n).property(set,'numbers',2)
-g.V(n).valueMap()
-----
-
-[source,groovy]
-----
-// Duplicates not allowed
-[numbers:[1,2,3]]
-----
-
-[source,groovy]
-----
-g.V(n).property(set,'numbers',4)
-g.V(n).valueMap()
-
-[numbers:[1,2,3,4]]
-----
-
-[source,groovy]
-----
-graph.tx().commit()
-----
-
 [[janpred]]
 Additional Janus Graph text search predicates
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -10433,7 +10480,7 @@ g.V().has('city',textContainsRegex("(?i)for.*")).values('city')
 ----
 
 Notice how names that start with 'For' such as 'Fort Myers' as well as city names
-containing words that start with the text 'For' somewhere else are found. For example
+containing words that start with the text 'For' in a subsequent word are found. For example
 'La Fortuna'  and 'View Fort' are also found.
 
 [source,text]
