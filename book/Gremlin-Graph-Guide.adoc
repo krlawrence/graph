@@ -9560,7 +9560,7 @@ the Linux Foundation and provides these advanced capabilities.
 Janus Graph can run on a laptop, which is useful for learning and experimenting, but
 it is designed to handle very large graphs stored on distributed clusters. It can
 handle graphs containing billions of vertices and edges. As we shall discuss, Janus
-graph is designed to work with a variety of persistent storage options including
+Graph is designed to work with a variety of persistent storage options including
 Apache Cassandra and Apache HBase as well as indexing technology such as Apache Solr
 and Apache Elastic Search.
 
@@ -9578,6 +9578,9 @@ scalable graph database solution. We will start by quickly looking at how to ins
 Janus Graph and access it from the Gremlin Console before getting into more advanced
 topics including how to create and manage both schemas and indexes and how to use the
 transactional capabilities provided by Janus Graph.
+
+It is also recommended that you read and get familiar with the official Janus Graph
+documentation as well as reading what is presented below.
 
 [[janusinstall]]
 Installing Janus Graph
@@ -10229,17 +10232,37 @@ iata = mgmt.getPropertyKey('code')
 idx.addKey(iata).buildCompositeIndex()
 mgmt.commit()
 
+mgmt.awaitGraphIndexStatus(graph, 'airportIndex').
+     status(SchemaStatus.REGISTERED).call()
+
 mgmt = graph.openManagement()
+mgmt.awaitGraphIndexStatus(graph, 'airportIndex').call()
 mgmt.updateIndex(mgmt.getGraphIndex("airportIndex"), SchemaAction.REINDEX).get()
 mgmt.commit()
+----
 
-
-gremlin> g.V().has('code','LHR')
+[source,groovy]
+----
+g.V().has('code','LHR')
 
 v[32904]
-
-
 ----
+
+[source,groovy]
+----
+mgmt = graph.openManagement()
+v_idxes = mgmt.getGraphIndexes(Vertex.class)
+
+airportIndex
+
+v_idxes.each {println it.getFieldKeys()} 
+
+[code]
+
+mgmt.commit()
+----
+
+
 [[janpred]]
 Additional Janus Graph text search predicates
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
