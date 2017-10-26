@@ -1,6 +1,7 @@
 This folder contains the AsciiDoc source file used to produce the HTML, XML (DOCBOOK), EPUB, MOBI and PDF output.
 
 LATEST NEWS:   
+[Oct-27-2017] Revision 270 was just published in all formats. Fixes issue #6 and adds more to Janus section.  
 [Oct-23-2017] Quite a lot has been added to the Janus Graph section - more to come soon  
 [Oct-15-2017] Experimental - The /book folder now includes DOCBOOK, EPUB and MOBI format versions of the book. 
 [Oct-11-2017] I improved the section that introduces the 'repeat' step.  
