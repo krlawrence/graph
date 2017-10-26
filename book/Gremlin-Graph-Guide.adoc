@@ -1,11 +1,11 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v270, Oct 24, 2017
-// Tue Oct 24, 2017 16:15:53 CDT
+v270, Oct 26, 2017
+// Thu Oct 26, 2017 09:06:21 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Oct 24 2017
+//:Date:      Oct 26 2017
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -2992,6 +2992,10 @@ Sometimes, when the results of a query are a set of one or more key:value pairs,
 need to sort by either the key or the value in either ascending or descending order.
 Gremlin offers us four ways that we can control the sort in these cases. The four
 keywords are 'keyIncr', 'keyDecr', 'valueIncr' and 'valueDecr'.
+
+NOTE: In Tinkerpop 3.3 changes to the syntax were made. The keywords valueDecr,
+valueIncr, keyDecr and keyIncr are now specified using the form 'by(keys,incr) or
+by(values,decr) etc. I will update the book to reflect these changes ASAP.
 
 The following shows the difference between running the query with and without the use
 of 'order'
