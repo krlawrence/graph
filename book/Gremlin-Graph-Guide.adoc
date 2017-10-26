@@ -1,7 +1,7 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v270, Oct 26, 2017
+v271, Oct 26, 2017
 // Thu Oct 26, 2017 09:34:29 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
@@ -18,7 +18,7 @@ v270, Oct 26, 2017
 //:pygments-style: vim
 :toc:
 :toclevels: 4
-:revision: 270
+:revision: 271
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
 //        has a white foreground color. The default was unreadable,
@@ -6958,7 +6958,8 @@ London, Ontario, in Canada.
 
 [source,groovy]
 ----
-g.V().has('region','GB-ENG').has('city','London').group().by('code').by(out().count())
+g.V().has('region','GB-ENG').has('city','London').
+      group().by('code').by(out().count())
 
 [LCY:37, LHR:176, LTN:91, STN:162, LGW:179]
 ----
@@ -6972,20 +6973,21 @@ ruling out any flights that would end up back in London.
 [source,groovy]
 ----
 // Leave from London, fly with one stop, not ending back in London, how many places?
-g.V().has('region','GB-ENG').has('city','London').aggregate('lon').out().out().dedup().where(without('lon')).count()
+g.V().has('region','GB-ENG').has('city','London').aggregate('lon').
+      out().out().dedup().where(without('lon')).count()
 
 2082
 ----
 
 We could have written the previous query like this and avoided using 'aggregate' but
-to me, this feels more clumsy and somewhat repetetive.
+to me, this feels more clumsy and somewhat repetitive.
 
 [source,groovy]
 ----
- g.V().has('region','GB-ENG').has('city','London').out().out().dedup()
-                             .not(and(has('city','London'),has('region','GB-ENG'))).count()
+g.V().has('region','GB-ENG').has('city','London').out().out().dedup().
+      not(and(has('city','London'),has('region','GB-ENG'))).count()
 
-2082                         
+2240                        
 ----
 
 [[topten]]
@@ -7046,18 +7048,19 @@ outgoing routes that they have.
 [source,groovy]
 ----
 // Find the top ten overall in terms of total routes
-g.V().hasLabel('airport').order().by(both('route').count(),decr).limit(10).project('ap','routes').by('code').by(both('route').count())
+g.V().hasLabel('airport').order().by(both('route').count(),decr).limit(10).
+      project('ap','routes').by('code').by(both('route').count())
 
-[ap:AMS, routes:489]
-[ap:FRA, routes:486]
-[ap:CDG, routes:478]
-[ap:IST, routes:466]
-[ap:ATL, routes:442]
-[ap:PEK, routes:426]
-[ap:ORD, routes:424]
-[ap:MUC, routes:398]
-[ap:DFW, routes:396]
-[ap:DME, routes:380]
+[ap:FRA,routes:544]
+[ap:AMS,routes:541]
+[ap:IST,routes:540]
+[ap:CDG,routes:524]
+[ap:MUC,routes:474]
+[ap:PEK,routes:469]
+[ap:ATL,routes:464]
+[ap:ORD,routes:464]
+[ap:DXB,routes:460]
+[ap:DFW,routes:442]
 ----
 
 [[localfold]]
@@ -7113,12 +7116,14 @@ runway value pair is now in it's own individual list.
 Where can I fly to from here?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Here are some more examples of queries that explore different questions along
-the lines of "Where can I fly to from here?".
+the lines of "Where can I fly to from here?". The first query looks for routes to the
+USA or Canada from any airport in India.
 
 [source,groovy]
 ----
 // Where in the USA or Canada can I fly to from any airport in India?
-g.V().has('country','code','IN').out().out().has('country',within('US','CA')).path().by('code')
+g.V().has('country','code','IN').out().out().
+      has('country',within('US','CA')).path().by('code')
 
 [IN,BOM,EWR]
 [IN,DEL,SFO]
@@ -7129,11 +7134,13 @@ g.V().has('country','code','IN').out().out().has('country',within('US','CA')).pa
 [IN,DEL,YYZ]
 ----
 
-Which cities in Europe can I fly to from Ft; Lauderdale in Florida?
+Which cities in Europe can I fly to from Ft. Lauderdale in Florida?
+
 [source,groovy]
 ----
 // Where can I fly to in Europe from Ft. Lauderdale?
-g.V().has('code','FLL').out().as('a').in('contains').has('code','EU').select('a').values('city')
+g.V().has('code','FLL').out().as('a').in('contains').
+      has('code','EU').select('a').values('city')
 
 London
 Paris
@@ -7148,7 +7155,8 @@ America?
 [source,groovy]
 ----
 // Flights from Charlotte to airports in Europe or South America
-g.V().has('code','CLT').out().as('a').in('contains').has('code',within('EU','SA')).select('a').by('code')
+g.V().has('code','CLT').out().as('a').in('contains').
+      has('code',within('EU','SA')).select('a').by('code')
 
 LHR     FCO
 CDG     MAD
@@ -7164,7 +7172,8 @@ London area in the UK?
 ----
 // Where in the United States can I fly to non-stop from any of the
 // airports in and around London in the UK.
-g.V().has('airport','code',within('LHR','LCY','LGW','LTN','STN')).out().has('country','US').path().by('code')
+g.V().has('airport','code',within('LHR','LCY','LGW','LTN','STN')).
+      out().has('country','US').path().by('code')
 
 [LHR,AUS]      [LHR,SEA]      [LHR,EWR]         
 [LHR,ATL]      [LHR,RDU]      [LHR,DEN]         
@@ -7213,7 +7222,8 @@ Which cities in Europe can I fly to from Delhi in India?
 [source,groovy]
 ----
 // Where in Europe can I fly to from Delhi?
-g.V().has('code','DEL').out().as('a').in("contains").has('code','EU').select('a').by('city')
+g.V().has('code','DEL').out().as('a').in("contains").
+      has('code','EU').select('a').by('city')
 
 Istanbul
 Helsinki
@@ -7238,8 +7248,8 @@ the aggregated collection.
 
 [source,groovy]
 ----
-g.V().has('city',within('London','Munich','Paris')).aggregate('a').out()  \
-     .where(within('a')).path().by('code')
+g.V().has('city',within('London','Munich','Paris')).aggregate('a').out().
+      where(within('a')).path().by('code')
 
 [LHR,MUC]   [CDG,LHR]   [MUC,STN]   [STN,MUC]                              
 [LHR,ORY]   [CDG,LGW]   [MUC,LHR]   [ORY,LCY]                              
@@ -7260,6 +7270,7 @@ airports.
 This query returns a nice list of all the routes from Austin (AUS) along with
 their distances. The results are sorted in ascending order by distance. For ease of
 reading I broke the results into four columns.
+
 [source,groovy]
 ----
 // Distances of all routes from AUS along with destination IATA CODE
@@ -7284,7 +7295,7 @@ returns the airport codes and the distances. Notice the use of two 'by'
 modulators in this query to decide which values are returned from the source
 node, the edge and the destination node respectively. Also note that only two
 were specified but three values are returned. This works because 'by' is
-processed in a round robbin fashion if there are more values than 'by'
+processed in a round robin fashion if there are more values than 'by'
 modulators.
 
 [source,groovy]
@@ -7354,8 +7365,8 @@ section.
 // Routes from DFW that are over 4,500 miles in length.
 // Sorted into ascending order
 
-g.V().hasLabel('airport').has('code','DFW').outE().has('dist',gt(4500)).as('e').inV().as('c')
-                         .select('e','c').by('dist').by('code').sort(){it.e}
+g.V().hasLabel('airport').has('code','DFW').outE().has('dist',gt(4500)).as('e').
+      inV().as('c').select('e','c').by('dist').by('code').sort(){it.e}
 
 
 [e:4736, c:LHR]     [e:6410, c:NRT]
@@ -7380,7 +7391,8 @@ than 8,000 miles. This will includes routes in both directions between airport p
 [source,groovy]
 ----
 // All outes longer than 8,000 miles
-g.V().as('src').outE('route').has('dist',gt(8000)).inV().as('dest').select('src','dest').by('code')
+g.V().as('src').outE('route').has('dist',gt(8000)).inV().as('dest').
+      select('src','dest').by('code')
 
 
 [src:ATL,dest:JNB]   [src:SIN,dest:SFO]
@@ -7408,7 +7420,8 @@ Now let's improve the query by including the distance of each route in the query
 [source,groovy]
 ----
 // Find routes longer than 8,000 miles, include the distance in returned values.
-g.V().as('src').outE().has('dist',gt(8000)).as('e').inV().as('dest').select('src','e','dest').by('code').by('dist')
+g.V().as('src').outE().has('dist',gt(8000)).as('e').inV().as('dest').
+      select('src','e','dest').by('code').by('dist')
 
 
 [src:ATL,e:8434,dest:JNB]     [src:SIN,e:8433,dest:SFO]  
@@ -7430,8 +7443,9 @@ g.V().as('src').outE().has('dist',gt(8000)).as('e').inV().as('dest').select('src
 [src:EWR,e:8047,dest:HKG]     [src:JED,e:8314,dest:LAX]  
 [src:SYD,e:8574,dest:DFW]     [src:RUH,e:8246,dest:LAX]  
 ----
-Next let's simplify things a bit. While using 'as' and 'select' gets the job done, using
-'path' and 'by' shortens the query and makes it more readable.
+
+Next let's simplify things a bit. While using 'as' and 'select' gets the job done,
+using 'path' and 'by' shortens the query and makes it more readable.
 
 [source,groovy]
 ----
@@ -7460,8 +7474,9 @@ seen.
 [source,groovy]
 ----
 // We could avoid returning both directions of travel by refining our query as follows
-g.V().as('a').outE().has('dist',gt(8000)).inV().as('b') \
-     .filter(select('a','b').by('code').where('a', lt('b'))).path().by('code').by('dist')
+g.V().as('a').outE().has('dist',gt(8000)).inV().as('b'). 
+      filter(select('a','b').by('code').where('a', lt('b'))).
+      path().by('code').by('dist')
 
 [ATL,8434,JNB]
 [DFW,8574,SYD]
@@ -7488,8 +7503,9 @@ sorted by descending order of distance.
 [source,groovy]
 ----
 // As above but sorted by route lengths
-g.V().as('a').outE().has('dist',gt(8000)).order().by('dist',decr).inV().as('b') \
-     .filter(select('a','b').by('code').where('a', lt('b'))).path().by('code').by('dist')
+g.V().as('a').outE().has('dist',gt(8000)).order().by('dist',decr).inV().as('b').
+      filter(select('a','b').by('code').where('a', lt('b'))).
+      path().by('code').by('dist')
 
 [AKL,8818,DXB]
 [DFW,8574,SYD]
@@ -7517,8 +7533,8 @@ bit more as follows.
 [source,groovy]
 ----
 //Query changed to take advantage of the where().by() construct
-g.V().as('s').outE().has('dist',gt(8000)).order().by('dist',decr).inV().as('f')
-                             .where('f',lt('s')).by('code').path().by('code').by('dist')
+g.V().as('s').outE().has('dist',gt(8000)).order().by('dist',decr).inV().as('f').
+              where('f',lt('s')).by('code').path().by('code').by('dist')
 [DXB,8818,AKL]
 [SYD,8574,DFW]
 [JNB,8434,ATL]
@@ -7545,8 +7561,8 @@ first result is now '[AKL,8818,DXB]'.
 
 [source,groovy]
 ----
-g.V().as('s').outE().has('dist',gt(8000)).order().by('dist',decr).inV().as('f') \
-                    .where('f',gt('s')).by('code').path().by('code').by('dist')
+g.V().as('s').outE().has('dist',gt(8000)).order().by('dist',decr).inV().as('f').
+              where('f',gt('s')).by('code').path().by('code').by('dist')
 
 [AKL,8818,DXB]
 [DFW,8574,SYD]
@@ -8046,6 +8062,48 @@ that Dallas is also included!.
 [AUS,OAK,LAS]
 ----
 
+Here is one more example that is similar to the previous one. First of all we store
+the longitude of the Dallas (DFW) airport in the variable 'dfw'. Then we use that
+variable to find routes to Las Vegas (LAS) from Austin (AUS) that have one stop but
+avoid Phoenix (PHX) and Los Angeles (LAX) and only have a plane change either in
+Dallas or to the West of Dallas. Note that we use 'lte' and not 'lt' when testing the
+longitude value. It we used 'lt' instead that would also rule out Dallas as an
+option. This query, as in the prior one,  has the effect of ruling out plane changes
+at airports further to the East of Austin than Dallas.
+
+[source,groovy]
+----
+dfw = g.V().has('code','DFW').values('lon').next()
+
+g.V().has('airport','code','AUS').as('aus').out().
+      has('country',within('US','CA')).
+      has('lon',lte(dfw)).
+      has('code',without('PHX','LAX')).out().
+      has('code','LAS').path().by('code')
+----
+
+Here is what we get back when we run the query. Still lots of choices even if we
+avoid LAX and PHX it seems.
+
+
+[source,groovy]
+----
+[AUS,PDX,LAS]
+[AUS,ONT,LAS]
+[AUS,ABQ,LAS]
+[AUS,LBB,LAS]
+[AUS,DFW,LAS]
+[AUS,SEA,LAS]
+[AUS,SFO,LAS]
+[AUS,SJC,LAS]
+[AUS,SAN,LAS]
+[AUS,LGB,LAS]
+[AUS,SNA,LAS]
+[AUS,SLC,LAS]
+[AUS,DEN,LAS]
+[AUS,ELP,LAS]
+[AUS,OAK,LAS]
+----
 
 We will revisit the topic of performing geospatial queries in the "<<janusgeo>>" 
 section where we look at some additional capabilities that Janus Graph offers to us
@@ -8831,11 +8889,12 @@ These queries need to be moved to other sections or deleted.
 
 Work in progress
 
+Using a calculation inside of an 'is' step
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Work in progress
-^^^^^^^^^^^^^^^^
-
-Using a mathematical expression inside of 'is'
+It is possible to use a mathematical expression inside of an 'is' step. At times this
+comes in quite handy. The example below simply divides 500 by 2 as part of a test.
+Clearly you would normally just enter 250 but this shows the capability.
 
 [source,groovy]
 ----
@@ -8846,6 +8905,8 @@ FRA
 AMS
 IST
 ----
+
+The capability becomes more interesting when used in conjunction with a variable.
 
 [source,groovy]
 ----
@@ -8859,27 +8920,32 @@ AMS
 IST
 ----
 
+Here is one more example where we start by setting the variable 'a' to the value that
+represents the maximum number of routes from any single airport. The we use a query
+to find all the airports that have at least as many outgoing routes as 50 less than
+our value 'a'. 
+
 [source,groovy]
 ----
-g.V().hasLabel('airport').where(out().count().is(gt(a/2))).
+a = g.V().local(out('route').count()).max().next()
+
+g.V().hasLabel('airport').where(out().count().is(gt(a-50))).
       project('apt','routes').by('code').by(out().count())
 
+[apt:ATL,routes:232]
+[apt:ORD,routes:232]
 [apt:CDG,routes:262]
-[apt:FRA,routes:266]
+[apt:FRA,routes:272]
+[apt:DXB,routes:230]
+[apt:PEK,routes:234]
 [apt:AMS,routes:269]
+[apt:MUC,routes:237]
 [apt:IST,routes:270]
 ----
 
-[source,groovy]
-----
-dfw = g.V().has('code','DFW').values('lon').next()
+Work in progress
+^^^^^^^^^^^^^^^^
 
-g.V().has('airport','code','AUS').as('aus').out().
-      has('country',within('US','CA')).
-      has('lon',lte(dfw)).
-      has('code',without('PHX','LAX')).out().
-      has('code','LAS').path().by('code')
-----
 
 
 
