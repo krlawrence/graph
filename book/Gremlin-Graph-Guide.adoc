@@ -2990,12 +2990,12 @@ Sorting by key or value
 
 Sometimes, when the results of a query are a set of one or more key:value pairs, we
 need to sort by either the key or the value in either ascending or descending order.
-Gremlin offers us four ways that we can control the sort in these cases. The four
-keywords are 'keyIncr', 'keyDecr', 'valueIncr' and 'valueDecr'.
+Gremlin offers us ways that we can control the sort in these cases. Examples of how
+this works are shown below.
 
-NOTE: In Tinkerpop 3.3 changes to the syntax were made. The keywords valueDecr,
-valueIncr, keyDecr and keyIncr are now specified using the form 'by(keys,incr) or
-by(values,decr) etc. I will update the book to reflect these changes ASAP.
+NOTE: In Tinkerpop 3.3 changes to the syntax were made. The previous keywords valueDecr,
+valueIncr, keyDecr and keyIncr are now specified using the form 'by(keys,incr)' or
+'by(values,decr)' etc. I will update the book to reflect these changes ASAP.
 
 The following shows the difference between running the query with and without the use
 of 'order'
@@ -3007,7 +3007,7 @@ g.V().hasLabel('airport').limit(5).group().by('code').by('runways')
 [BNA:[4],ANC:[3],BOS:[6],ATL:[5],AUS:[2]]
 
 g.V().hasLabel('airport').limit(5).group().by('code').by('runways').
-      order(local).by(keyIncr)
+      order(local).by(keys,incr)
 
 [ANC:[3],ATL:[5],AUS:[2],BNA:[4],BOS:[6]]
 ----
@@ -3018,7 +3018,7 @@ descending order.
 [source,groovy]
 ----
 g.V().hasLabel('airport').limit(10).group().by('runways').by('code').
-      order(local).by(keyDecr)
+      order(local).by(keys,decr)
 
 [7:[DFW],6:[BOS],5:[ATL],4:[BNA,IAD],3:[ANC,BWI,DCA],2:[AUS,FLL]]
 ----
