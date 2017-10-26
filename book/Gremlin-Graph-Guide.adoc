@@ -2,7 +2,7 @@ GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v270, Oct 26, 2017
-// Thu Oct 26, 2017 09:06:21 CDT
+// Thu Oct 26, 2017 09:34:29 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Oct 26 2017
@@ -2993,20 +2993,31 @@ need to sort by either the key or the value in either ascending or descending or
 Gremlin offers us ways that we can control the sort in these cases. Examples of how
 this works are shown below.
 
-NOTE: In Tinkerpop 3.3 changes to the syntax were made. The previous keywords valueDecr,
-valueIncr, keyDecr and keyIncr are now specified using the form 'by(keys,incr)' or
-'by(values,decr)' etc. I will update the book to reflect these changes ASAP.
+NOTE: In Tinkerpop 3.3 changes to the syntax were made. The previous keywords
+'valueDecr', 'valueIncr', 'keyDecr' and 'keyIncr' are now specified using the form
+'by(keys,incr)' or 'by(values,decr)' etc. 
 
-The following shows the difference between running the query with and without the use
-of 'order'
+The following example shows the difference between running a query with and without
+the use of 'order' to sort using the keys of the map created by the 'group' step. 
 
 [source,groovy]
 ----
+// Query but do not order
 g.V().hasLabel('airport').limit(5).group().by('code').by('runways')
 
 [BNA:[4],ANC:[3],BOS:[6],ATL:[5],AUS:[2]]
+----
 
-g.V().hasLabel('airport').limit(5).group().by('code').by('runways').
+Notice also how 'local' is used as a parameter to 'order'. This
+is required so that the ordering is done while the final list is being constructed.
+If you do not specify 'local' then 'order' will have no effect as it will be applied to
+the entire result which is treated as a single entity at that point.
+
+[source,groovy]
+----
+// Query and order by airport code (the key)
+g.V().hasLabel('airport').limit(5).
+      group().by('code').by('runways').
       order(local).by(keys,incr)
 
 [ANC:[3],ATL:[5],AUS:[2],BNA:[4],BOS:[6]]
@@ -3017,7 +3028,8 @@ descending order.
 
 [source,groovy]
 ----
-g.V().hasLabel('airport').limit(10).group().by('runways').by('code').
+g.V().hasLabel('airport').limit(10).
+      group().by('runways').by('code').
       order(local).by(keys,decr)
 
 [7:[DFW],6:[BOS],5:[ATL],4:[BNA,IAD],3:[ANC,BWI,DCA],2:[AUS,FLL]]
@@ -6562,19 +6574,19 @@ not use 'local' the ordering would not have the desired effect.
 
 [source,groovy]
 ----
-g.V().hasLabel('airport').groupCount().by('country').order(local).by(valueDecr)
+g.V().hasLabel('airport').groupCount().by('country').order(local).by(values,decr)
 
-[US:578, CA:203, CN:200, AU:118, RU:118, BR:115, IN:72, ID:67, JP:63, MX:58, FR:56, UK:54, CO:50, NO:49, TR:48, IR:44, ES:41, SE:39, GR:39, PH:38, AR:36, IT:36, MY:34, TH:32, DE:32, PF:30, DZ:29, SA:26, VU:26, PG:26, NZ:25, VE:24, VN:21, PK:21, FI:20, ZA:20, PE:20, BS:18, KZ:18, NG:18, SB:17, CL:17, BO:15, EC:15, KR:15, PT:14, AO:14, UA:14, ET:14, GL:14, KE:14, MA:14, MM:14, RO:13, BZ:13, CR:13, MG:13, PL:13, CU:12, CD:11, UZ:11, AE:10, EG:10, FJ:10, LY:10, MN:10, MZ:10, NP:10, TW:9, YE:9, TN:8, TZ:8, DK:8, HR:8, ZM:8, LA:8, MV:8, BD:7, CV:7, DO:7, IE:7, PR:6, AT:6, CK:6, HN:6, IQ:6, LK:6, AZ:5, BE:5, SD:5, SO:5, CH:5, CM:5, CZ:5, GH:5, IL:5, IS:5, NL:5, PA:5, AF:4, BA:4, BG:4, BW:4, TC:4, TJ:4, UG:4, FM:4, NA:4, BQ:3, SN:3, CG:3, CY:3, EE:3, GE:3, ZW:3, KH:3, KY:3, LT:3, MR:3, OM:3, PY:2, AM:2, RE:2, RS:2, BF:2, RW:2, SC:2, SH:2, SK:2, SY:2, TT:2, EH:2, UY:2, VG:2, VI:2, FK:2, WF:2, GA:2, GG:2, GQ:2, GT:2, GY:2, HT:2, HU:2, JM:2, JO:2, KG:2, KI:2, KN:2, LC:2, LR:2, ME:2, MH:2, MP:2, MU:2, MW:2, PW:1, QA:1, AG:1, AI:1, AL:1, AS:1, AW:1, BB:1, BH:1, BI:1, BJ:1, BL:1, BM:1, BN:1, BT:1, SG:1, SI:1, BY:1, SL:1, SR:1, SS:1, CC:1, ST:1, SV:1, CF:1, SX:1, CI:1, SZ:1, TD:1, TG:1, CW:1, CX:1, TL:1, TM:1, TO:1, TV:1, DJ:1, DM:1, ER:1, VC:1, FO:1, WS:1, GD:1, GF:1, GI:1, GM:1, GN:1, GP:1, GU:1, GW:1, HK:1, YT:1, IM:1, JE:1, KM:1, KP:1, KS:1, KW:1, LB:1, LS:1, LU:1, LV:1, MD:1, MF:1, MK:1, ML:1, MO:1, MQ:1, MS:1, MT:1, NC:1, NE:1, NF:1, NI:1, NR:1, PM:1] 
+[US:579,CN:209,CA:203,AU:124,RU:120,BR:115,IN:73,ID:67,JP:63,MX:59,UK:58,FR:58,CO:50,NO:49,TR:48,IR:44,ES:42,SE:39,GR:39,PH:38,AR:36,IT:36,MY:34,DE:33,TH:32,PF:30,DZ:29,SA:26,VU:26,PG:26,NZ:25,VE:24,VN:21,PK:21,FI:20,ZA:20,KZ:20,PE:20,BS:18,NG:18,SB:17,CL:17,BO:15,UA:15,EC:15,KR:15,PT:14,AO:14,RO:14,ET:14,GL:14,KE:14,MA:14,MM:14,BZ:13,CR:13,MG:13,PL:13,CU:12,CD:11,UZ:11,AE:10,EG:10,FJ:10,LY:10,MN:10,MZ:10,NP:10,TW:9,YE:9,TN:8,TZ:8,DK:8,HR:8,ZM:8,LA:8,MV:8,BD:7,CV:7,DO:7,IE:7,PR:6,AT:6,CK:6,HN:6,IQ:6,LK:6,AZ:5,BE:5,SD:5,SO:5,CH:5,CM:5,CZ:5,GH:5,IL:5,IS:5,NL:5,PA:5,AF:4,BA:4,BG:4,BW:4,TC:4,TJ:4,UG:4,FM:4,NA:4,OM:4,BQ:3,SN:3,CG:3,CY:3,EE:3,GE:3,ZW:3,KH:3,KY:3,LT:3,MR:3,PY:2,AM:2,RE:2,RS:2,BF:2,RW:2,SC:2,SH:2,BY:2,SK:2,SY:2,TT:2,EH:2,UY:2,VG:2,VI:2,FK:2,WF:2,GA:2,GG:2,GQ:2,GT:2,GY:2,HT:2,HU:2,JM:2,JO:2,KG:2,KI:2,KN:2,LC:2,LR:2,ME:2,MH:2,MP:2,MU:2,MW:2,PW:1,QA:1,AG:1,AI:1,AL:1,AS:1,AW:1,BB:1,BH:1,BI:1,BJ:1,BL:1,BM:1,BN:1,BT:1,SG:1,SI:1,SL:1,SR:1,SS:1,CC:1,ST:1,SV:1,CF:1,SX:1,CI:1,SZ:1,TD:1,TG:1,CW:1,CX:1,TL:1,TM:1,TO:1,TV:1,DJ:1,DM:1,ER:1,VC:1,FO:1,WS:1,GD:1,GF:1,GI:1,GM:1,GN:1,GP:1,GU:1,GW:1,HK:1,YT:1,IM:1,JE:1,KM:1,KP:1,KS:1,KW:1,LB:1,LS:1,LU:1,LV:1,MD:1,MF:1,MK:1,ML:1,MO:1,MQ:1,MS:1,MT:1,NC:1,NE:1,NF:1,NI:1,NR:1,PM:1]
 ----
 
 If we wanted to sort by the country code, the 'key' in other words, we could change
-the query accordingly. In this case we will use 'keyIncr' to get a sort in ascending
-order. If we wanted to dort in descending order by key we could use 'keyDecr'
+the query accordingly. In this case we will use 'by(keys,incr)' to get a sort in ascending
+order. If we wanted to sort in descending order by key we could use 'by(keys,decr)'
 instead.
 
 [source,groovy]
 ----
-g.V().hasLabel('airport').groupCount().by('country').order(local).by(keyIncr)
+g.V().hasLabel('airport').groupCount().by('country').order(local).by(keys,incr)
 
 [AE:10, AF:4, AG:1, AI:1, AL:1, AM:2, AO:14, AR:36, AS:1, AT:6, AU:118, AW:1, AZ:5, BA:4, BB:1, BD:7, BE:5, BF:2, BG:4, BH:1, BI:1, BJ:1, BL:1, BM:1, BN:1, BO:15, BQ:3, BR:115, BS:18, BT:1, BW:4, BY:1, BZ:13, CA:203, CC:1, CD:11, CF:1, CG:3, CH:5, CI:1, CK:6, CL:17, CM:5, CN:200, CO:50, CR:13, CU:12, CV:7, CW:1, CX:1, CY:3, CZ:5, DE:32, DJ:1, DK:8, DM:1, DO:7, DZ:29, EC:15, EE:3, EG:10, EH:2, ER:1, ES:41, ET:14, FI:20, FJ:10, FK:2, FM:4, FO:1, FR:56, GA:2, GD:1, GE:3, GF:1, GG:2, GH:5, GI:1, GL:14, GM:1, GN:1, GP:1, GQ:2, GR:39, GT:2, GU:1, GW:1, GY:2, HK:1, HN:6, HR:8, HT:2, HU:2, ID:67, IE:7, IL:5, IM:1, IN:72, IQ:6, IR:44, IS:5, IT:36, JE:1, JM:2, JO:2, JP:63, KE:14, KG:2, KH:3, KI:2, KM:1, KN:2, KP:1, KR:15, KS:1, KW:1, KY:3, KZ:18, LA:8, LB:1, LC:2, LK:6, LR:2, LS:1, LT:3, LU:1, LV:1, LY:10, MA:14, MD:1, ME:2, MF:1, MG:13, MH:2, MK:1, ML:1, MM:14, MN:10, MO:1, MP:2, MQ:1, MR:3, MS:1, MT:1, MU:2, MV:8, MW:2, MX:58, MY:34, MZ:10, NA:4, NC:1, NE:1, NF:1, NG:18, NI:1, NL:5, NO:49, NP:10, NR:1, NZ:25, OM:3, PA:5, PE:20, PF:30, PG:26, PH:38, PK:21, PL:13, PM:1, PR:6, PT:14, PW:1, PY:2, QA:1, RE:2, RO:13, RS:2, RU:118, RW:2, SA:26, SB:17, SC:2, SD:5, SE:39, SG:1, SH:2, SI:1, SK:2, SL:1, SN:3, SO:5, SR:1, SS:1, ST:1, SV:1, SX:1, SY:2, SZ:1, TC:4, TD:1, TG:1, TH:32, TJ:4, TL:1, TM:1, TN:8, TO:1, TR:48, TT:2, TV:1, TW:9, TZ:8, UA:14, UG:4, UK:54, US:578, UY:2, UZ:11, VC:1, VE:24, VG:2, VI:2, VN:21, VU:26, WF:2, WS:1, YE:9, YT:1, ZA:20, ZM:8, ZW:3]
 ----
@@ -6721,7 +6733,7 @@ appears to have the most routes from Europe with Newark (EWR) having the second 
 //What is the distribution of the routes amongst those US airports?
 
 g.V().has('continent','code','EU').out().out().has('country','US').
-      groupCount().by('code').order(local).by(valueIncr)
+      groupCount().by('code').order(local).by(values,incr)
 
 [PHX:1,CVG:1,RSW:1,BDL:2,SJC:2,BWI:2,AUS:2,RDU:2,MSY:2,SAN:3,TPA:3,SLC:3,PDX:3,PIT:3,SFB:4,DEN:4,OAK:4,DTW:5,FLL:5,SWF:5,MSP:5,CLT:7,DFW:7,SEA:7,PVD:7,IAH:8,MCO:9,LAS:10,ATL:14,SFO:15,PHL:17,IAD:19,ORD:21,BOS:22,LAX:23,MIA:24,EWR:33,JFK:40]
 ----
@@ -6746,7 +6758,7 @@ most US destinations and Frankfurt (FRA) the second most.
 ----
 //What is the distribution of these routes amongst the European airports?
 g.V().has('continent','code','EU').out().as('a').out().has('country','US').
-      select('a').groupCount().by('code').order(local).by(valueIncr)
+      select('a').groupCount().by('code').order(local).by(values,incr)
 
 [RIX:1,TER:1,BRS:1,STN:1,NCE:1,KRK:1,ORK:1,KBP:1,PDL:1,DME:1,BEG:1,AGP:1,HAM:1,OPO:2,STR:2,VCE:2,BHX:2,ORY:2,ATH:2,MXP:3,BFS:3,BGO:3,GVA:3,VKO:3,HEL:3,WAW:4,SVO:4,GLA:4,EDI:5,SNN:5,CGN:5,TXL:6,VIE:6,LIS:6,BRU:7,ARN:7,OSL:8,BCN:9,LGW:9,IST:9,MAD:11,DUS:11,CPH:11,FCO:12,ZRH:13,MAN:13,DUB:14,MUC:16,KEF:17,AMS:18,CDG:21,FRA:24,LHR:27]
 ----
@@ -6837,7 +6849,8 @@ number of outgoing routes.
 
 [source,groovy]
 ----
-g.V().hasLabel('airport').groupCount().by(out('route').count()).order(local).by(valueDecr)
+g.V().hasLabel('airport').groupCount().by(out('route').count()).
+                          order(local).by(values,decr)
 ----
 
 When we run the query we get back the results below. As the results are sorted in
@@ -6848,7 +6861,7 @@ also see at the other end of the scale that one airport has 226 outgoing routes.
 
 [source,groovy]
 ----
-[1:786, 2:654, 3:361, 4:244, 5:149, 6:110, 7:86, 8:80, 9:67, 10:54, 11:45, 12:40, 13:30, 19:30, 14:28, 15:28, 17:23, 23:19, 20:18, 16:17, 18:17, 0:16, 22:15, 21:13, 29:13, 26:12, 30:12, 35:11, 39:11, 24:10, 32:10, 42:10, 25:9, 33:9, 49:9, 28:8, 31:8, 34:8, 37:8, 27:7, 38:7, 41:7, 58:7, 60:7, 36:6, 50:6, 54:6, 59:6, 40:5, 47:5, 62:5, 43:4, 44:4, 51:4, 52:4, 53:4, 56:4, 57:4, 64:4, 65:4, 66:4, 83:4, 84:4, 92:4, 100:4, 46:3, 69:3, 72:3, 76:3, 78:3, 81:3, 86:3, 97:3, 103:3, 134:3, 142:3, 45:2, 48:2, 55:2, 63:2, 67:2, 70:2, 74:2, 77:2, 82:2, 85:2, 91:2, 93:2, 99:2, 108:2, 115:2, 119:2, 128:2, 174:2, 176:2, 183:2, 191:2, 232:2, 254:2, 257:1, 259:1, 61:1, 71:1, 75:1, 79:1, 80:1, 87:1, 88:1, 89:1, 94:1, 95:1, 96:1, 101:1, 102:1, 104:1, 105:1, 106:1, 109:1, 110:1, 111:1, 112:1, 117:1, 118:1, 121:1, 123:1, 125:1, 127:1, 129:1, 132:1, 140:1, 141:1, 146:1, 148:1, 149:1, 153:1, 154:1, 155:1, 157:1, 158:1, 159:1, 166:1, 172:1, 178:1, 182:1, 184:1, 186:1, 197:1, 206:1, 216:1, 219:1, 225:1, 226:1]
+[1:770,2:652,3:370,4:236,5:148,6:115,7:94,8:81,9:68,10:61,12:42,11:39,13:38,15:30,19:27,16:26,20:25,22:25,14:20,17:17,18:16,0:15,23:14,31:14,33:14,30:13,21:12,32:12,37:12,35:10,24:9,25:9,39:9,42:9,26:8,29:8,47:8,27:7,34:7,36:7,40:7,44:7,45:7,55:7,63:7,67:7,41:6,48:6,50:6,59:6,60:6,105:6,28:5,38:5,43:5,52:5,54:5,61:5,62:5,64:5,94:5,56:4,68:4,70:4,80:4,74:3,77:3,83:3,84:3,85:3,86:3,93:3,106:3,107:3,124:3,144:3,46:2,53:2,57:2,73:2,76:2,78:2,79:2,82:2,91:2,95:2,97:2,98:2,104:2,109:2,116:2,118:2,146:2,166:2,182:2,192:2,232:2,262:1,269:1,270:1,272:1,49:1,51:1,58:1,65:1,66:1,69:1,71:1,72:1,75:1,81:1,89:1,90:1,92:1,101:1,102:1,108:1,110:1,112:1,113:1,114:1,115:1,119:1,122:1,126:1,127:1,129:1,130:1,132:1,133:1,136:1,137:1,141:1,142:1,143:1,145:1,151:1,153:1,156:1,162:1,163:1,164:1,168:1,175:1,180:1,181:1,186:1,187:1,188:1,189:1,190:1,191:1,197:1,200:1,201:1,214:1,221:1,229:1,234:1,237:1]
 ----
 
 We could change our query above, replacing 'out()' with '__.in()' and we could find
@@ -6861,18 +6874,19 @@ field for each key:value pair and this time sort in ascending order.
 
 [source,groovy]
 ----
-g.V().hasLabel('airport').groupCount().by(out('route').count()).order(local).by(keyIncr)
+g.V().hasLabel('airport').groupCount().by(out('route').count()).
+                          order(local).by(keys,incr)
 ----
 
 When we run our query again we get the results below. Looking at the data sorted
 this way helps some new interesting facts stand out. The most interesting thing
-we can immediately spot is that there are 16 airports that currently have no
+we can immediately spot is that there are 15 airports that currently have no
 outgoing routes at all!
 
 [source,groovy]
 ----
 
-[0:16, 1:786, 2:654, 3:361, 4:244, 5:149, 6:110, 7:86, 8:80, 9:67, 10:54, 11:45, 12:40, 13:30, 14:28, 15:28, 16:17, 17:23, 18:17, 19:30, 20:18, 21:13, 22:15, 23:19, 24:10, 25:9, 26:12, 27:7, 28:8, 29:13, 30:12, 31:8, 32:10, 33:9, 34:8, 35:11, 36:6, 37:8, 38:7, 39:11, 40:5, 41:7, 42:10, 43:4, 44:4, 45:2, 46:3, 47:5, 48:2, 49:9, 50:6, 51:4, 52:4, 53:4, 54:6, 55:2, 56:4, 57:4, 58:7, 59:6, 60:7, 61:1, 62:5, 63:2, 64:4, 65:4, 66:4, 67:2, 69:3, 70:2, 71:1, 72:3, 74:2, 75:1, 76:3, 77:2, 78:3, 79:1, 80:1, 81:3, 82:2, 83:4, 84:4, 85:2, 86:3, 87:1, 88:1, 89:1, 91:2, 92:4, 93:2, 94:1, 95:1, 96:1, 97:3, 99:2, 100:4, 101:1, 102:1, 103:3, 104:1, 105:1, 106:1, 108:2, 109:1, 110:1, 111:1, 112:1, 115:2, 117:1, 118:1, 119:2, 121:1, 123:1, 125:1, 127:1, 128:2, 129:1, 132:1, 134:3, 140:1, 141:1, 142:3, 146:1, 148:1, 149:1, 153:1, 154:1, 155:1, 157:1, 158:1, 159:1, 166:1, 172:1, 174:2, 176:2, 178:1, 182:1, 183:2, 184:1, 186:1, 191:2, 197:1, 206:1, 216:1, 219:1, 225:1, 226:1, 232:2, 254:2, 257:1, 259:1]
+[0:15, 1:786, 2:654, 3:361, 4:244, 5:149, 6:110, 7:86, 8:80, 9:67, 10:54, 11:45, 12:40, 13:30, 14:28, 15:28, 16:17, 17:23, 18:17, 19:30, 20:18, 21:13, 22:15, 23:19, 24:10, 25:9, 26:12, 27:7, 28:8, 29:13, 30:12, 31:8, 32:10, 33:9, 34:8, 35:11, 36:6, 37:8, 38:7, 39:11, 40:5, 41:7, 42:10, 43:4, 44:4, 45:2, 46:3, 47:5, 48:2, 49:9, 50:6, 51:4, 52:4, 53:4, 54:6, 55:2, 56:4, 57:4, 58:7, 59:6, 60:7, 61:1, 62:5, 63:2, 64:4, 65:4, 66:4, 67:2, 69:3, 70:2, 71:1, 72:3, 74:2, 75:1, 76:3, 77:2, 78:3, 79:1, 80:1, 81:3, 82:2, 83:4, 84:4, 85:2, 86:3, 87:1, 88:1, 89:1, 91:2, 92:4, 93:2, 94:1, 95:1, 96:1, 97:3, 99:2, 100:4, 101:1, 102:1, 103:3, 104:1, 105:1, 106:1, 108:2, 109:1, 110:1, 111:1, 112:1, 115:2, 117:1, 118:1, 119:2, 121:1, 123:1, 125:1, 127:1, 128:2, 129:1, 132:1, 134:3, 140:1, 141:1, 142:3, 146:1, 148:1, 149:1, 153:1, 154:1, 155:1, 157:1, 158:1, 159:1, 166:1, 172:1, 174:2, 176:2, 178:1, 182:1, 183:2, 184:1, 186:1, 191:2, 197:1, 206:1, 216:1, 219:1, 225:1, 226:1, 232:2, 254:2, 257:1, 259:1]
 ----
 
 If we wanted to find the statistical mean number of routes in the graph we could
@@ -8604,7 +8618,7 @@ airport vertices in the graph.
 [source,groovy]
 ----
 g.V().has('code','LHR').out().groupCount().by('code').
-  order(local).by(valueDecr).next().values().max()  
+  order(local).by(values,decr).next().values().max()  
 ----
 
 If the answer came back greater than one I then ran the following query and manually
@@ -8612,7 +8626,7 @@ looked at each result to see where the duplicate edge was.
 
 [source,groovy]
 ----
-g.V().has('code','LHR').out().groupCount().by('code').order(local).by(valueDecr)]
+g.V().has('code','LHR').out().groupCount().by('code').order(local).by(values,decr)]
 ----
 
 As I said this was a very manual and time consuming process. I clearly needed a
