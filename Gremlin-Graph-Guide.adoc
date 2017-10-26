@@ -1,31 +1,35 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v269, Oct 23, 2017
-// Mon Oct 23, 2017 08:15:22 CDT
+v270, Oct 26, 2017
+// Thu Oct 26, 2017 09:34:29 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Oct 23 2017
+//:Date:      Oct 26 2017
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
+//:pygments-style: lovelace
 //:source-highlighter: rouge
 //:source-highlighter: coderay
 //:pygments-style: native
 //:pygments-style: monokai
 //:pygments-style: manni
+//:pygments-style: vim
 :toc:
 :toclevels: 4
-:revision: 269
+:revision: 270
 
-// NOTE: These notes are encoded using a minimal level of Asciidoc markup. You can read
+// NOTE1: I updated the paraiso-dark style so that source code with a style of text
+//        has a white foreground color. The default was unreadable,
+// NOTE2: These notes are encoded using a minimal level of Asciidoc markup. You can read
 // them as-is or generate HTML or other output formats from this file using the
 // 'asciidoc' processor available on most Linux systems or via Cygwin on
 // Windows.  On Mac OS X the easiest way to install asciidoc is probably via
 // Homebrew. You can also install Asciidoctor, a Ruby Gem, as an alternative to
 // Asciidoc which is written in Python.
 //
-// NOTE: In my tests, Asciidoctor seems a lot faster than Asciidoc and it has now become my
+// NOTE3: In my tests, Asciidoctor seems a lot faster than Asciidoc and it has now become my
 //       preferred way of processing this file.
 //
 // As well as 'asciidoc' or Asciidoctor, the 'source-highlight' utility will also need to
@@ -2986,20 +2990,35 @@ Sorting by key or value
 
 Sometimes, when the results of a query are a set of one or more key:value pairs, we
 need to sort by either the key or the value in either ascending or descending order.
-Gremlin offers us four ways that we can control the sort in these cases. The four
-keywords are 'keyIncr', 'keyDecr', 'valueIncr' and 'valueDecr'.
+Gremlin offers us ways that we can control the sort in these cases. Examples of how
+this works are shown below.
 
-The following shows the difference between running the query with and without the use
-of 'order'
+NOTE: In Tinkerpop 3.3 changes to the syntax were made. The previous keywords
+'valueDecr', 'valueIncr', 'keyDecr' and 'keyIncr' are now specified using the form
+'by(keys,incr)' or 'by(values,decr)' etc. 
+
+The following example shows the difference between running a query with and without
+the use of 'order' to sort using the keys of the map created by the 'group' step. 
 
 [source,groovy]
 ----
+// Query but do not order
 g.V().hasLabel('airport').limit(5).group().by('code').by('runways')
 
 [BNA:[4],ANC:[3],BOS:[6],ATL:[5],AUS:[2]]
+----
 
-g.V().hasLabel('airport').limit(5).group().by('code').by('runways').
-      order(local).by(keyIncr)
+Notice also how 'local' is used as a parameter to 'order'. This
+is required so that the ordering is done while the final list is being constructed.
+If you do not specify 'local' then 'order' will have no effect as it will be applied to
+the entire result which is treated as a single entity at that point.
+
+[source,groovy]
+----
+// Query and order by airport code (the key)
+g.V().hasLabel('airport').limit(5).
+      group().by('code').by('runways').
+      order(local).by(keys,incr)
 
 [ANC:[3],ATL:[5],AUS:[2],BNA:[4],BOS:[6]]
 ----
@@ -3009,8 +3028,9 @@ descending order.
 
 [source,groovy]
 ----
-g.V().hasLabel('airport').limit(10).group().by('runways').by('code').
-      order(local).by(keyDecr)
+g.V().hasLabel('airport').limit(10).
+      group().by('runways').by('code').
+      order(local).by(keys,decr)
 
 [7:[DFW],6:[BOS],5:[ATL],4:[BNA,IAD],3:[ANC,BWI,DCA],2:[AUS,FLL]]
 ----
@@ -6554,19 +6574,19 @@ not use 'local' the ordering would not have the desired effect.
 
 [source,groovy]
 ----
-g.V().hasLabel('airport').groupCount().by('country').order(local).by(valueDecr)
+g.V().hasLabel('airport').groupCount().by('country').order(local).by(values,decr)
 
-[US:578, CA:203, CN:200, AU:118, RU:118, BR:115, IN:72, ID:67, JP:63, MX:58, FR:56, UK:54, CO:50, NO:49, TR:48, IR:44, ES:41, SE:39, GR:39, PH:38, AR:36, IT:36, MY:34, TH:32, DE:32, PF:30, DZ:29, SA:26, VU:26, PG:26, NZ:25, VE:24, VN:21, PK:21, FI:20, ZA:20, PE:20, BS:18, KZ:18, NG:18, SB:17, CL:17, BO:15, EC:15, KR:15, PT:14, AO:14, UA:14, ET:14, GL:14, KE:14, MA:14, MM:14, RO:13, BZ:13, CR:13, MG:13, PL:13, CU:12, CD:11, UZ:11, AE:10, EG:10, FJ:10, LY:10, MN:10, MZ:10, NP:10, TW:9, YE:9, TN:8, TZ:8, DK:8, HR:8, ZM:8, LA:8, MV:8, BD:7, CV:7, DO:7, IE:7, PR:6, AT:6, CK:6, HN:6, IQ:6, LK:6, AZ:5, BE:5, SD:5, SO:5, CH:5, CM:5, CZ:5, GH:5, IL:5, IS:5, NL:5, PA:5, AF:4, BA:4, BG:4, BW:4, TC:4, TJ:4, UG:4, FM:4, NA:4, BQ:3, SN:3, CG:3, CY:3, EE:3, GE:3, ZW:3, KH:3, KY:3, LT:3, MR:3, OM:3, PY:2, AM:2, RE:2, RS:2, BF:2, RW:2, SC:2, SH:2, SK:2, SY:2, TT:2, EH:2, UY:2, VG:2, VI:2, FK:2, WF:2, GA:2, GG:2, GQ:2, GT:2, GY:2, HT:2, HU:2, JM:2, JO:2, KG:2, KI:2, KN:2, LC:2, LR:2, ME:2, MH:2, MP:2, MU:2, MW:2, PW:1, QA:1, AG:1, AI:1, AL:1, AS:1, AW:1, BB:1, BH:1, BI:1, BJ:1, BL:1, BM:1, BN:1, BT:1, SG:1, SI:1, BY:1, SL:1, SR:1, SS:1, CC:1, ST:1, SV:1, CF:1, SX:1, CI:1, SZ:1, TD:1, TG:1, CW:1, CX:1, TL:1, TM:1, TO:1, TV:1, DJ:1, DM:1, ER:1, VC:1, FO:1, WS:1, GD:1, GF:1, GI:1, GM:1, GN:1, GP:1, GU:1, GW:1, HK:1, YT:1, IM:1, JE:1, KM:1, KP:1, KS:1, KW:1, LB:1, LS:1, LU:1, LV:1, MD:1, MF:1, MK:1, ML:1, MO:1, MQ:1, MS:1, MT:1, NC:1, NE:1, NF:1, NI:1, NR:1, PM:1] 
+[US:579,CN:209,CA:203,AU:124,RU:120,BR:115,IN:73,ID:67,JP:63,MX:59,UK:58,FR:58,CO:50,NO:49,TR:48,IR:44,ES:42,SE:39,GR:39,PH:38,AR:36,IT:36,MY:34,DE:33,TH:32,PF:30,DZ:29,SA:26,VU:26,PG:26,NZ:25,VE:24,VN:21,PK:21,FI:20,ZA:20,KZ:20,PE:20,BS:18,NG:18,SB:17,CL:17,BO:15,UA:15,EC:15,KR:15,PT:14,AO:14,RO:14,ET:14,GL:14,KE:14,MA:14,MM:14,BZ:13,CR:13,MG:13,PL:13,CU:12,CD:11,UZ:11,AE:10,EG:10,FJ:10,LY:10,MN:10,MZ:10,NP:10,TW:9,YE:9,TN:8,TZ:8,DK:8,HR:8,ZM:8,LA:8,MV:8,BD:7,CV:7,DO:7,IE:7,PR:6,AT:6,CK:6,HN:6,IQ:6,LK:6,AZ:5,BE:5,SD:5,SO:5,CH:5,CM:5,CZ:5,GH:5,IL:5,IS:5,NL:5,PA:5,AF:4,BA:4,BG:4,BW:4,TC:4,TJ:4,UG:4,FM:4,NA:4,OM:4,BQ:3,SN:3,CG:3,CY:3,EE:3,GE:3,ZW:3,KH:3,KY:3,LT:3,MR:3,PY:2,AM:2,RE:2,RS:2,BF:2,RW:2,SC:2,SH:2,BY:2,SK:2,SY:2,TT:2,EH:2,UY:2,VG:2,VI:2,FK:2,WF:2,GA:2,GG:2,GQ:2,GT:2,GY:2,HT:2,HU:2,JM:2,JO:2,KG:2,KI:2,KN:2,LC:2,LR:2,ME:2,MH:2,MP:2,MU:2,MW:2,PW:1,QA:1,AG:1,AI:1,AL:1,AS:1,AW:1,BB:1,BH:1,BI:1,BJ:1,BL:1,BM:1,BN:1,BT:1,SG:1,SI:1,SL:1,SR:1,SS:1,CC:1,ST:1,SV:1,CF:1,SX:1,CI:1,SZ:1,TD:1,TG:1,CW:1,CX:1,TL:1,TM:1,TO:1,TV:1,DJ:1,DM:1,ER:1,VC:1,FO:1,WS:1,GD:1,GF:1,GI:1,GM:1,GN:1,GP:1,GU:1,GW:1,HK:1,YT:1,IM:1,JE:1,KM:1,KP:1,KS:1,KW:1,LB:1,LS:1,LU:1,LV:1,MD:1,MF:1,MK:1,ML:1,MO:1,MQ:1,MS:1,MT:1,NC:1,NE:1,NF:1,NI:1,NR:1,PM:1]
 ----
 
 If we wanted to sort by the country code, the 'key' in other words, we could change
-the query accordingly. In this case we will use 'keyIncr' to get a sort in ascending
-order. If we wanted to dort in descending order by key we could use 'keyDecr'
+the query accordingly. In this case we will use 'by(keys,incr)' to get a sort in ascending
+order. If we wanted to sort in descending order by key we could use 'by(keys,decr)'
 instead.
 
 [source,groovy]
 ----
-g.V().hasLabel('airport').groupCount().by('country').order(local).by(keyIncr)
+g.V().hasLabel('airport').groupCount().by('country').order(local).by(keys,incr)
 
 [AE:10, AF:4, AG:1, AI:1, AL:1, AM:2, AO:14, AR:36, AS:1, AT:6, AU:118, AW:1, AZ:5, BA:4, BB:1, BD:7, BE:5, BF:2, BG:4, BH:1, BI:1, BJ:1, BL:1, BM:1, BN:1, BO:15, BQ:3, BR:115, BS:18, BT:1, BW:4, BY:1, BZ:13, CA:203, CC:1, CD:11, CF:1, CG:3, CH:5, CI:1, CK:6, CL:17, CM:5, CN:200, CO:50, CR:13, CU:12, CV:7, CW:1, CX:1, CY:3, CZ:5, DE:32, DJ:1, DK:8, DM:1, DO:7, DZ:29, EC:15, EE:3, EG:10, EH:2, ER:1, ES:41, ET:14, FI:20, FJ:10, FK:2, FM:4, FO:1, FR:56, GA:2, GD:1, GE:3, GF:1, GG:2, GH:5, GI:1, GL:14, GM:1, GN:1, GP:1, GQ:2, GR:39, GT:2, GU:1, GW:1, GY:2, HK:1, HN:6, HR:8, HT:2, HU:2, ID:67, IE:7, IL:5, IM:1, IN:72, IQ:6, IR:44, IS:5, IT:36, JE:1, JM:2, JO:2, JP:63, KE:14, KG:2, KH:3, KI:2, KM:1, KN:2, KP:1, KR:15, KS:1, KW:1, KY:3, KZ:18, LA:8, LB:1, LC:2, LK:6, LR:2, LS:1, LT:3, LU:1, LV:1, LY:10, MA:14, MD:1, ME:2, MF:1, MG:13, MH:2, MK:1, ML:1, MM:14, MN:10, MO:1, MP:2, MQ:1, MR:3, MS:1, MT:1, MU:2, MV:8, MW:2, MX:58, MY:34, MZ:10, NA:4, NC:1, NE:1, NF:1, NG:18, NI:1, NL:5, NO:49, NP:10, NR:1, NZ:25, OM:3, PA:5, PE:20, PF:30, PG:26, PH:38, PK:21, PL:13, PM:1, PR:6, PT:14, PW:1, PY:2, QA:1, RE:2, RO:13, RS:2, RU:118, RW:2, SA:26, SB:17, SC:2, SD:5, SE:39, SG:1, SH:2, SI:1, SK:2, SL:1, SN:3, SO:5, SR:1, SS:1, ST:1, SV:1, SX:1, SY:2, SZ:1, TC:4, TD:1, TG:1, TH:32, TJ:4, TL:1, TM:1, TN:8, TO:1, TR:48, TT:2, TV:1, TW:9, TZ:8, UA:14, UG:4, UK:54, US:578, UY:2, UZ:11, VC:1, VE:24, VG:2, VI:2, VN:21, VU:26, WF:2, WS:1, YE:9, YT:1, ZA:20, ZM:8, ZW:3]
 ----
@@ -6713,7 +6733,7 @@ appears to have the most routes from Europe with Newark (EWR) having the second 
 //What is the distribution of the routes amongst those US airports?
 
 g.V().has('continent','code','EU').out().out().has('country','US').
-      groupCount().by('code').order(local).by(valueIncr)
+      groupCount().by('code').order(local).by(values,incr)
 
 [PHX:1,CVG:1,RSW:1,BDL:2,SJC:2,BWI:2,AUS:2,RDU:2,MSY:2,SAN:3,TPA:3,SLC:3,PDX:3,PIT:3,SFB:4,DEN:4,OAK:4,DTW:5,FLL:5,SWF:5,MSP:5,CLT:7,DFW:7,SEA:7,PVD:7,IAH:8,MCO:9,LAS:10,ATL:14,SFO:15,PHL:17,IAD:19,ORD:21,BOS:22,LAX:23,MIA:24,EWR:33,JFK:40]
 ----
@@ -6738,7 +6758,7 @@ most US destinations and Frankfurt (FRA) the second most.
 ----
 //What is the distribution of these routes amongst the European airports?
 g.V().has('continent','code','EU').out().as('a').out().has('country','US').
-      select('a').groupCount().by('code').order(local).by(valueIncr)
+      select('a').groupCount().by('code').order(local).by(values,incr)
 
 [RIX:1,TER:1,BRS:1,STN:1,NCE:1,KRK:1,ORK:1,KBP:1,PDL:1,DME:1,BEG:1,AGP:1,HAM:1,OPO:2,STR:2,VCE:2,BHX:2,ORY:2,ATH:2,MXP:3,BFS:3,BGO:3,GVA:3,VKO:3,HEL:3,WAW:4,SVO:4,GLA:4,EDI:5,SNN:5,CGN:5,TXL:6,VIE:6,LIS:6,BRU:7,ARN:7,OSL:8,BCN:9,LGW:9,IST:9,MAD:11,DUS:11,CPH:11,FCO:12,ZRH:13,MAN:13,DUB:14,MUC:16,KEF:17,AMS:18,CDG:21,FRA:24,LHR:27]
 ----
@@ -6829,7 +6849,8 @@ number of outgoing routes.
 
 [source,groovy]
 ----
-g.V().hasLabel('airport').groupCount().by(out('route').count()).order(local).by(valueDecr)
+g.V().hasLabel('airport').groupCount().by(out('route').count()).
+                          order(local).by(values,decr)
 ----
 
 When we run the query we get back the results below. As the results are sorted in
@@ -6840,7 +6861,7 @@ also see at the other end of the scale that one airport has 226 outgoing routes.
 
 [source,groovy]
 ----
-[1:786, 2:654, 3:361, 4:244, 5:149, 6:110, 7:86, 8:80, 9:67, 10:54, 11:45, 12:40, 13:30, 19:30, 14:28, 15:28, 17:23, 23:19, 20:18, 16:17, 18:17, 0:16, 22:15, 21:13, 29:13, 26:12, 30:12, 35:11, 39:11, 24:10, 32:10, 42:10, 25:9, 33:9, 49:9, 28:8, 31:8, 34:8, 37:8, 27:7, 38:7, 41:7, 58:7, 60:7, 36:6, 50:6, 54:6, 59:6, 40:5, 47:5, 62:5, 43:4, 44:4, 51:4, 52:4, 53:4, 56:4, 57:4, 64:4, 65:4, 66:4, 83:4, 84:4, 92:4, 100:4, 46:3, 69:3, 72:3, 76:3, 78:3, 81:3, 86:3, 97:3, 103:3, 134:3, 142:3, 45:2, 48:2, 55:2, 63:2, 67:2, 70:2, 74:2, 77:2, 82:2, 85:2, 91:2, 93:2, 99:2, 108:2, 115:2, 119:2, 128:2, 174:2, 176:2, 183:2, 191:2, 232:2, 254:2, 257:1, 259:1, 61:1, 71:1, 75:1, 79:1, 80:1, 87:1, 88:1, 89:1, 94:1, 95:1, 96:1, 101:1, 102:1, 104:1, 105:1, 106:1, 109:1, 110:1, 111:1, 112:1, 117:1, 118:1, 121:1, 123:1, 125:1, 127:1, 129:1, 132:1, 140:1, 141:1, 146:1, 148:1, 149:1, 153:1, 154:1, 155:1, 157:1, 158:1, 159:1, 166:1, 172:1, 178:1, 182:1, 184:1, 186:1, 197:1, 206:1, 216:1, 219:1, 225:1, 226:1]
+[1:770,2:652,3:370,4:236,5:148,6:115,7:94,8:81,9:68,10:61,12:42,11:39,13:38,15:30,19:27,16:26,20:25,22:25,14:20,17:17,18:16,0:15,23:14,31:14,33:14,30:13,21:12,32:12,37:12,35:10,24:9,25:9,39:9,42:9,26:8,29:8,47:8,27:7,34:7,36:7,40:7,44:7,45:7,55:7,63:7,67:7,41:6,48:6,50:6,59:6,60:6,105:6,28:5,38:5,43:5,52:5,54:5,61:5,62:5,64:5,94:5,56:4,68:4,70:4,80:4,74:3,77:3,83:3,84:3,85:3,86:3,93:3,106:3,107:3,124:3,144:3,46:2,53:2,57:2,73:2,76:2,78:2,79:2,82:2,91:2,95:2,97:2,98:2,104:2,109:2,116:2,118:2,146:2,166:2,182:2,192:2,232:2,262:1,269:1,270:1,272:1,49:1,51:1,58:1,65:1,66:1,69:1,71:1,72:1,75:1,81:1,89:1,90:1,92:1,101:1,102:1,108:1,110:1,112:1,113:1,114:1,115:1,119:1,122:1,126:1,127:1,129:1,130:1,132:1,133:1,136:1,137:1,141:1,142:1,143:1,145:1,151:1,153:1,156:1,162:1,163:1,164:1,168:1,175:1,180:1,181:1,186:1,187:1,188:1,189:1,190:1,191:1,197:1,200:1,201:1,214:1,221:1,229:1,234:1,237:1]
 ----
 
 We could change our query above, replacing 'out()' with '__.in()' and we could find
@@ -6853,18 +6874,19 @@ field for each key:value pair and this time sort in ascending order.
 
 [source,groovy]
 ----
-g.V().hasLabel('airport').groupCount().by(out('route').count()).order(local).by(keyIncr)
+g.V().hasLabel('airport').groupCount().by(out('route').count()).
+                          order(local).by(keys,incr)
 ----
 
 When we run our query again we get the results below. Looking at the data sorted
 this way helps some new interesting facts stand out. The most interesting thing
-we can immediately spot is that there are 16 airports that currently have no
+we can immediately spot is that there are 15 airports that currently have no
 outgoing routes at all!
 
 [source,groovy]
 ----
 
-[0:16, 1:786, 2:654, 3:361, 4:244, 5:149, 6:110, 7:86, 8:80, 9:67, 10:54, 11:45, 12:40, 13:30, 14:28, 15:28, 16:17, 17:23, 18:17, 19:30, 20:18, 21:13, 22:15, 23:19, 24:10, 25:9, 26:12, 27:7, 28:8, 29:13, 30:12, 31:8, 32:10, 33:9, 34:8, 35:11, 36:6, 37:8, 38:7, 39:11, 40:5, 41:7, 42:10, 43:4, 44:4, 45:2, 46:3, 47:5, 48:2, 49:9, 50:6, 51:4, 52:4, 53:4, 54:6, 55:2, 56:4, 57:4, 58:7, 59:6, 60:7, 61:1, 62:5, 63:2, 64:4, 65:4, 66:4, 67:2, 69:3, 70:2, 71:1, 72:3, 74:2, 75:1, 76:3, 77:2, 78:3, 79:1, 80:1, 81:3, 82:2, 83:4, 84:4, 85:2, 86:3, 87:1, 88:1, 89:1, 91:2, 92:4, 93:2, 94:1, 95:1, 96:1, 97:3, 99:2, 100:4, 101:1, 102:1, 103:3, 104:1, 105:1, 106:1, 108:2, 109:1, 110:1, 111:1, 112:1, 115:2, 117:1, 118:1, 119:2, 121:1, 123:1, 125:1, 127:1, 128:2, 129:1, 132:1, 134:3, 140:1, 141:1, 142:3, 146:1, 148:1, 149:1, 153:1, 154:1, 155:1, 157:1, 158:1, 159:1, 166:1, 172:1, 174:2, 176:2, 178:1, 182:1, 183:2, 184:1, 186:1, 191:2, 197:1, 206:1, 216:1, 219:1, 225:1, 226:1, 232:2, 254:2, 257:1, 259:1]
+[0:15, 1:786, 2:654, 3:361, 4:244, 5:149, 6:110, 7:86, 8:80, 9:67, 10:54, 11:45, 12:40, 13:30, 14:28, 15:28, 16:17, 17:23, 18:17, 19:30, 20:18, 21:13, 22:15, 23:19, 24:10, 25:9, 26:12, 27:7, 28:8, 29:13, 30:12, 31:8, 32:10, 33:9, 34:8, 35:11, 36:6, 37:8, 38:7, 39:11, 40:5, 41:7, 42:10, 43:4, 44:4, 45:2, 46:3, 47:5, 48:2, 49:9, 50:6, 51:4, 52:4, 53:4, 54:6, 55:2, 56:4, 57:4, 58:7, 59:6, 60:7, 61:1, 62:5, 63:2, 64:4, 65:4, 66:4, 67:2, 69:3, 70:2, 71:1, 72:3, 74:2, 75:1, 76:3, 77:2, 78:3, 79:1, 80:1, 81:3, 82:2, 83:4, 84:4, 85:2, 86:3, 87:1, 88:1, 89:1, 91:2, 92:4, 93:2, 94:1, 95:1, 96:1, 97:3, 99:2, 100:4, 101:1, 102:1, 103:3, 104:1, 105:1, 106:1, 108:2, 109:1, 110:1, 111:1, 112:1, 115:2, 117:1, 118:1, 119:2, 121:1, 123:1, 125:1, 127:1, 128:2, 129:1, 132:1, 134:3, 140:1, 141:1, 142:3, 146:1, 148:1, 149:1, 153:1, 154:1, 155:1, 157:1, 158:1, 159:1, 166:1, 172:1, 174:2, 176:2, 178:1, 182:1, 183:2, 184:1, 186:1, 191:2, 197:1, 206:1, 216:1, 219:1, 225:1, 226:1, 232:2, 254:2, 257:1, 259:1]
 ----
 
 If we wanted to find the statistical mean number of routes in the graph we could
@@ -8596,7 +8618,7 @@ airport vertices in the graph.
 [source,groovy]
 ----
 g.V().has('code','LHR').out().groupCount().by('code').
-  order(local).by(valueDecr).next().values().max()  
+  order(local).by(values,decr).next().values().max()  
 ----
 
 If the answer came back greater than one I then ran the following query and manually
@@ -8604,7 +8626,7 @@ looked at each result to see where the duplicate edge was.
 
 [source,groovy]
 ----
-g.V().has('code','LHR').out().groupCount().by('code').order(local).by(valueDecr)]
+g.V().has('code','LHR').out().groupCount().by('code').order(local).by(values,decr)]
 ----
 
 As I said this was a very manual and time consuming process. I clearly needed a
@@ -9556,7 +9578,7 @@ the Linux Foundation and provides these advanced capabilities.
 Janus Graph can run on a laptop, which is useful for learning and experimenting, but
 it is designed to handle very large graphs stored on distributed clusters. It can
 handle graphs containing billions of vertices and edges. As we shall discuss, Janus
-graph is designed to work with a variety of persistent storage options including
+Graph is designed to work with a variety of persistent storage options including
 Apache Cassandra and Apache HBase as well as indexing technology such as Apache Solr
 and Apache Elastic Search.
 
@@ -9574,6 +9596,9 @@ scalable graph database solution. We will start by quickly looking at how to ins
 Janus Graph and access it from the Gremlin Console before getting into more advanced
 topics including how to create and manage both schemas and indexes and how to use the
 transactional capabilities provided by Janus Graph.
+
+It is also recommended that you read and get familiar with the official Janus Graph
+documentation as well as reading what is presented below.
 
 [[janusinstall]]
 Installing Janus Graph
@@ -9779,58 +9804,6 @@ graph.tx().rollback()
 g.V().has('code','XYZ')
 ----
 
-Loading air-routes into a Janus Graph instance
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-We can use the same basic steps to load the air-routes graph into a Janus Graph
-instance that we used with Tinkergraph. Note that after loading the graph from the
-XML file we then call 'commit' to finalize the transaction. 
-
-[source,groovy]
-----
-graph.io(graphml()).readGraph('air-routes.graphml')
-graph.tx().commit()
-----
-
-Note that as we have not defined a schema before loading the air-routes graph that
-Janus Graph will create vertices, edges and properties using default types and settings.
-A bit later we will look at creating a schema for air-routes and then loading it
-again to see the differences. It is strongly recommended to create the schema before
-loading the data but lets examine a few things before we discuss how to do that. 
-
-Unlike TinkerGraph, Janus Graph does not, by default,  guarantee to respect user
-provided node and edge ID values. Instead it creates its own ID values as vertices and
-edges are added to the graph. You may have noticed from earlier in the document or
-from the air-routes.graphml file if you happened to look in there, that the ID
-provided for Austin in the GraphML markup is 3. However, having loaded air-routes
-into Janus Graph if we query the ID for the Austin node we can see that it is no
-longer 3. There is a setting that can be changed to force Janus Graph to honor user
-provided ID values but it is not recommended this be used as it will disable some
-other useful Janus Graph features. If you are interested in learning more about this
-option this please refer to the Janus Graph documentation.
-
-[source,groovy]
-----
-g.V().has('code','AUS').id()
-
-4240
-----
-
-Having the graph system allocate its own ID values is not a big problem as we can
-always query the graph to get the ID but it is a reminder that you should not get
-into the habit of relying on any user provided ID values as you work with graphs.
-
-If necessary, as we  discussed earlier in the document, we can always store important
-ID values in a variable for later use.
-
-[source,groovy]
-----
-ausid = g.V().has('code','AUS').id().next()
-
-g.V(ausid).values('city','desc','region').join(',')
-
-Austin Bergstrom International Airport,Austin,US-TX
-----
 
 [[janusmgmt]]
 The Janus Graph management API
@@ -9842,15 +9815,23 @@ include querying metadata about the graph, defining the edge, vertex and propert
 schema types and creating and updating the index.
 
 You can create an instance of the ManagementSystem object using the 'openManagement'
-method call.
+method call as shown below.
 
 [source,groovy]
 ----
 mgmt = graph.openManagement()
 ----
 
+In the following sections we will show how to use the management API to create both a
+schema and an index for the air-routes graph and then load it. Before we do that we
+need should take a few minutes to introduce the Janus Graph Management API. For the
+time being, assume we have created an in memory Janus Graph instance and loaded the
+air-routes graph into it but have not defined an index or a schema. In this
+situation, Janus Graph will give us the best defaults it can as it loads the graph
+for schema types.
+
 The example below uses the Management API to get a list of all the vertex labels
-currently defined by in graph.
+currently defined in graph.
 
 [source,groovy]
 ----
@@ -9862,7 +9843,7 @@ country
 continent
 ----
 
-This query finds all of the currently defined edge labels.
+This query similarly finds all of the currently defined edge labels.
 
 [source,groovy]
 ----
@@ -9926,165 +9907,6 @@ true
 mgmt.containsEdgeLabel('travels')
 
 false
-----
-
-[[janusschema]]
-Defining a Janus Graph schema for air-routes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-You are not required to define the types and labels of your edges, vertices and
-properties ahead of time but it is strongly recommended that you do so. If you do not
-define anything and load the air routes data for example, it will work fine but Janus
-Graph will make assumptions about various things. One thing it will do is default the
-type of all property keys to Java's 'Object.class' which is not ideal if you want the
-graph to help you enforce stricter type checking. Also, without a schema being
-defined, Janus Graph will default the usage constraint or 'multiplicity' setting on
-all edges to 'MULTI'. We will explain what that means in a minute but in essence it
-means there is no restriction by default on how many edges with the same label that
-can exist between two vertices.
-
-You can use the Management API do define your schema. You can add additional property
-types at any time but once defined you cannot change their types. The only thing you
-can do once they have been created is to change the names of the keys.
-
-A best practice when working with Janus Graph is to define your labels and property
-types before you load any data into the graph. As the graph grows if you find you
-need to add additional property types or labels you are allowed to do that.
-
-Using the management API you can define the labels that will be used by vertices and
-edges. These values must be unique across the graph. You can also define the type and
-cardinality (SINGLE, LIST or SET) of each property key and for edges you can specify
-the allowed usage of edges for any given label (MULTI, MANY2ONE, ONE2MANY, ONE2ONE or
-SIMPLE). Property key names must also be unique across the graph.
-
-Before we can define a schema for our edge labels we need to understand what each
-option allows and decide on the best fit for each of our edge types.
-
-.The multiplicity options provide the following constraints:
-MULTI::
-- This is the default option if no multiplicity has been defined for an edge with
-a given label. This setting permits multiple edges of the same label between any 
-pair of vertices. The air-routes graph uses a multiplicity of MULTI for the
-'routes' edges between airports. 
-  
-SIMPLE::
-- This setting permits at most one edge of a given label between any pair of
-  vertices.  In the air-routes graph this setting is used for the edges between a
-  continent and an airport as an airport cannot be in more than one continent. The
-  same is used for the edges between airports and countries.
-MANY2ONE::
-- This setting permits at most one outgoing edge of a given label name from any vertex
-  in the graph but places no constraint on the number of incoming edges with this
-  label.
-ONE2MANY::
-- This setting permits at most one incoming edge of a given label to any vertex in the
-  graph but places no constraint on the number of outgoing edges
-ONE2ONE::
-- This setting permits at most one incoming and one outgoing edge of a given label to
-  and from any vertex in the graph. 
-
-Let's look at how we can use the Janus Graph Management API to specify the
-multiplicty for the 'route' and 'contains' edges used by the air-routes graph.
-
-[source,groovy]
-----
-// Define edge labels and usage
-mgmt = graph.openManagement()
-mgmt.makeEdgeLabel('route').multiplicity(MULTI).make()
-mgmt.makeEdgeLabel('contains').multiplicity(SIMPLE).make()
-mgmt.commit()
-----
-
-To be written
-
-[source,groovy]
-----
-// Define vertex labels
-mgmt = graph.openManagement()
-mgmt.makeVertexLabel('version').make()
-mgmt.makeVertexLabel('airport').make()
-mgmt.makeVertexLabel('country').make()
-mgmt.makeVertexLabel('continent').make()
-mgmt.commit()
-----
-
-To be written
-
-[source,groovy]
-----
-// Define vertex property keys
-mgmt = graph.openManagement()
-mgmt.makePropertyKey('code').dataType(String.class).cardinality(Cardinality.SINGLE).make()
-mgmt.makePropertyKey('icao').dataType(String.class).cardinality(Cardinality.SINGLE).make()
-mgmt.makePropertyKey('type').dataType(String.class).cardinality(Cardinality.SINGLE).make()
-mgmt.makePropertyKey('city').dataType(String.class).cardinality(Cardinality.SINGLE).make()
-mgmt.makePropertyKey('country').dataType(String.class).cardinality(Cardinality.SINGLE).make()
-mgmt.makePropertyKey('region').dataType(String.class).cardinality(Cardinality.SINGLE).make()
-mgmt.makePropertyKey('desc').dataType(String.class).cardinality(Cardinality.SINGLE).make()
-mgmt.makePropertyKey('runways').dataType(Integer.class).cardinality(Cardinality.SINGLE).make()
-mgmt.makePropertyKey('elev').dataType(Integer.class).cardinality(Cardinality.SINGLE).make()
-mgmt.makePropertyKey('lat').dataType(Double.class).cardinality(Cardinality.SINGLE).make()
-mgmt.makePropertyKey('lon').dataType(Double.class).cardinality(Cardinality.SINGLE).make()
-mgmt.commit()
-----
-
-
-To be written
-
-[source,groovy]
-----
-// Define edge property keys
-mgmt = graph.openManagement()
-mgmt.makePropertyKey('dist').dataType(Integer.class).cardinality(Cardinality.SINGLE).make()
-mgmt.commit()
-----
-
-
-To be written
-
-
-[source,groovy]
-----
-// Load the air routes graph
-graph.io(graphml()).readGraph('air-routes.graphml')
-graph.tx().commit()
-----
-
-
-To be written
-
-
-[source,groovy]
-----
-// Look at the properties
-mgmt = graph.openManagement()
-types = mgmt.getRelationTypes(PropertyKey.class) 
-types.each{println "$it\t: " + 
-                    mgmt.getPropertyKey("$it").dataType() + 
-                    " " + mgmt.getPropertyKey("$it").cardinality()}
-
-mgmt.commit()
-----
-
-
-To be written
-
-[source,groovy]
-----
-lat     : class java.lang.Double SINGLE
-lon     : class java.lang.Double SINGLE
-dist    : class java.lang.Integer SINGLE
-longest : class java.lang.Object SINGLE
-code    : class java.lang.String SINGLE
-icao    : class java.lang.String SINGLE
-type    : class java.lang.String SINGLE
-city    : class java.lang.String SINGLE
-country : class java.lang.String SINGLE
-region  : class java.lang.String SINGLE
-desc    : class java.lang.String SINGLE
-runways : class java.lang.Integer SINGLE
-elev    : class java.lang.Integer SINGLE
-
 ----
 
 [[cardlist]]
@@ -10187,6 +10009,278 @@ g.V(n).valueMap()
 graph.tx().commit()
 ----
 
+[[janusschema]]
+Defining a Janus Graph schema for the air-routes graph
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You are not required to define the types and labels of your edges, vertices and
+properties ahead of time but it is strongly recommended that you do so. If you do not
+define anything and load the air routes data for example, it will work fine but Janus
+Graph will make assumptions about various things. One thing it will do is default the
+type of all property keys to Java's 'Object.class' which is not ideal if you want the
+graph to help you enforce stricter type checking. Also, without a schema being
+defined, Janus Graph will default the usage constraint or 'multiplicity' setting on
+all edges to 'MULTI'. We will explain what that means in a minute but in essence it
+means there is no restriction by default on how many edges with the same label that
+can exist between two vertices.
+
+You can use the Management API do define your schema. You can add additional property
+types at any time but once defined you cannot change their types. The only thing you
+can do once they have been created is to change the names of the keys.
+
+A best practice when working with Janus Graph is to define your labels and property
+types before you load any data into the graph. As the graph grows if you find you
+need to add additional property types or labels you are allowed to do that.
+
+Using the management API you can define the labels that will be used by vertices and
+edges. These values must be unique across the graph. You can also define the type and
+cardinality (SINGLE, LIST or SET) of each property key and for edges you can specify
+the allowed usage of edges for any given label (MULTI, MANY2ONE, ONE2MANY, ONE2ONE or
+SIMPLE). Property key names must also be unique across the graph.
+
+Before we can define a schema for our edge labels we need to understand what each
+option allows and decide on the best fit for each of our edge types.
+
+.The multiplicity options provide the following constraints:
+MULTI::
+- This is the default option if no multiplicity has been defined for an edge with
+a given label. This setting permits multiple edges of the same label between any 
+pair of vertices. The air-routes graph uses a multiplicity of MULTI for the
+'routes' edges between airports. 
+  
+SIMPLE::
+- This setting permits at most one edge of a given label between any pair of
+  vertices.  In the air-routes graph this setting is used for the edges between a
+  continent and an airport as an airport cannot be in more than one continent. The
+  same is used for the edges between airports and countries.
+MANY2ONE::
+- This setting permits at most one outgoing edge of a given label name from any vertex
+  in the graph but places no constraint on the number of incoming edges with this
+  label.
+ONE2MANY::
+- This setting permits at most one incoming edge of a given label to any vertex in the
+  graph but places no constraint on the number of outgoing edges
+ONE2ONE::
+- This setting permits at most one incoming and one outgoing edge of a given label to
+  and from any vertex in the graph. 
+
+Defining edge labels and usage
+++++++++++++++++++++++++++++++
+Let's look at how we can use the Janus Graph Management API to specify the
+multiplicty for the 'route' and 'contains' edges used by the air-routes graph.
+
+[source,groovy]
+----
+// Define edge labels and usage
+mgmt = graph.openManagement()
+mgmt.makeEdgeLabel('route').multiplicity(MULTI).make()
+mgmt.makeEdgeLabel('contains').multiplicity(SIMPLE).make()
+mgmt.commit()
+----
+
+Defining vertex labels
+++++++++++++++++++++++
+
+To be written
+
+[source,groovy]
+----
+// Define vertex labels
+mgmt = graph.openManagement()
+mgmt.makeVertexLabel('version').make()
+mgmt.makeVertexLabel('airport').make()
+mgmt.makeVertexLabel('country').make()
+mgmt.makeVertexLabel('continent').make()
+mgmt.commit()
+----
+
+
+Defining vertex property keys
++++++++++++++++++++++++++++++
+
+To be written
+
+[source,groovy]
+----
+// Define vertex property keys
+mgmt = graph.openManagement()
+mgmt.makePropertyKey('code').dataType(String.class).cardinality(Cardinality.SINGLE).make()
+mgmt.makePropertyKey('icao').dataType(String.class).cardinality(Cardinality.SINGLE).make()
+mgmt.makePropertyKey('type').dataType(String.class).cardinality(Cardinality.SINGLE).make()
+mgmt.makePropertyKey('city').dataType(String.class).cardinality(Cardinality.SINGLE).make()
+mgmt.makePropertyKey('country').dataType(String.class).cardinality(Cardinality.SINGLE).make()
+mgmt.makePropertyKey('region').dataType(String.class).cardinality(Cardinality.SINGLE).make()
+mgmt.makePropertyKey('desc').dataType(String.class).cardinality(Cardinality.SINGLE).make()
+mgmt.makePropertyKey('runways').dataType(Integer.class).cardinality(Cardinality.SINGLE).make()
+mgmt.makePropertyKey('elev').dataType(Integer.class).cardinality(Cardinality.SINGLE).make()
+mgmt.makePropertyKey('lat').dataType(Double.class).cardinality(Cardinality.SINGLE).make()
+mgmt.makePropertyKey('lon').dataType(Double.class).cardinality(Cardinality.SINGLE).make()
+mgmt.commit()
+----
+
+Defining edge property keys
++++++++++++++++++++++++++++
+
+To be written
+
+[source,groovy]
+----
+// Define edge property keys
+mgmt = graph.openManagement()
+mgmt.makePropertyKey('dist').dataType(Integer.class).cardinality(Cardinality.SINGLE).make()
+mgmt.commit()
+----
+
+To be written
+
+
+[source,groovy]
+----
+// Look at the properties
+mgmt = graph.openManagement()
+types = mgmt.getRelationTypes(PropertyKey.class) 
+types.each{println "$it\t: " + 
+                    mgmt.getPropertyKey("$it").dataType() + 
+                    " " + mgmt.getPropertyKey("$it").cardinality()}
+
+mgmt.commit()
+----
+
+
+To be written
+
+[source,groovy]
+----
+lat     : class java.lang.Double SINGLE
+lon     : class java.lang.Double SINGLE
+dist    : class java.lang.Integer SINGLE
+longest : class java.lang.Object SINGLE
+code    : class java.lang.String SINGLE
+icao    : class java.lang.String SINGLE
+type    : class java.lang.String SINGLE
+city    : class java.lang.String SINGLE
+country : class java.lang.String SINGLE
+region  : class java.lang.String SINGLE
+desc    : class java.lang.String SINGLE
+runways : class java.lang.Integer SINGLE
+elev    : class java.lang.Integer SINGLE
+
+----
+
+
+
+[[janusload]]
+Loading air-routes into a Janus Graph instance
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Now that we know how to create a schema and an index for the air-routes graph 
+we can use the same basic steps to load it into a Janus Graph
+instance that we used with TinkerGraph. Note that after loading the graph from the
+XML file we then call 'commit' to finalize the transaction. 
+
+[source,groovy]
+----
+graph.io(graphml()).readGraph('air-routes.graphml')
+graph.tx().commit()
+----
+
+Note that as we have not defined a schema before loading the air-routes graph that
+Janus Graph will create vertices, edges and properties using default types and settings.
+A bit later we will look at creating a schema for air-routes and then loading it
+again to see the differences. It is strongly recommended to create the schema before
+loading the data but lets examine a few things before we discuss how to do that. 
+
+Unlike TinkerGraph, Janus Graph does not, by default,  guarantee to respect user
+provided node and edge ID values. Instead it creates its own ID values as vertices and
+edges are added to the graph. You may have noticed from earlier in the document or
+from the air-routes.graphml file if you happened to look in there, that the ID
+provided for Austin in the GraphML markup is 3. However, having loaded air-routes
+into Janus Graph if we query the ID for the Austin node we can see that it is no
+longer 3. There is a setting that can be changed to force Janus Graph to honor user
+provided ID values but it is not recommended this be used as it will disable some
+other useful Janus Graph features. If you are interested in learning more about this
+option this please refer to the Janus Graph documentation.
+
+[source,groovy]
+----
+g.V().has('code','AUS').id()
+
+4240
+----
+
+Having the graph system allocate its own ID values is not a big problem as we can
+always query the graph to get the ID but it is a reminder that you should not get
+into the habit of relying on any user provided ID values as you work with graphs.
+
+If necessary, as we  discussed earlier in the document, we can always store important
+ID values in a variable for later use.
+
+[source,groovy]
+----
+ausid = g.V().has('code','AUS').id().next()
+
+g.V(ausid).values('city','desc','region').join(',')
+
+Austin Bergstrom International Airport,Austin,US-TX
+----
+
+[[janindex]]
+Building a composite index to speed up searching
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To be written
+
+[source,groovy]
+----
+g.V().has('code','LHR')
+
+WARN  org.janusgraph.graphdb.transaction.StandardJanusGraphTx  
+    - Query requires iterating over all vertices [(code = LHR)]. 
+      For better performance, use indexes
+
+v[32904]
+----
+
+[source,groovy]
+----
+graph.tx().rollback()
+mgmt=graph.openManagement()
+idx=mgmt.buildIndex('airportIndex',Vertex.class)
+iata = mgmt.getPropertyKey('code')
+idx.addKey(iata).buildCompositeIndex()
+mgmt.commit()
+
+mgmt.awaitGraphIndexStatus(graph, 'airportIndex').
+     status(SchemaStatus.REGISTERED).call()
+
+mgmt = graph.openManagement()
+mgmt.awaitGraphIndexStatus(graph, 'airportIndex').call()
+mgmt.updateIndex(mgmt.getGraphIndex("airportIndex"), SchemaAction.REINDEX).get()
+mgmt.commit()
+----
+
+[source,groovy]
+----
+g.V().has('code','LHR')
+
+v[32904]
+----
+
+[source,groovy]
+----
+mgmt = graph.openManagement()
+v_idxes = mgmt.getGraphIndexes(Vertex.class)
+
+airportIndex
+
+v_idxes.each {println it.getFieldKeys()} 
+
+[code]
+
+mgmt.commit()
+----
+
+
 [[janpred]]
 Additional Janus Graph text search predicates
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -10234,7 +10328,7 @@ g.V().has('desc',textContains("Dallas")).values('desc')
 
 Here is what the query should return.
 
-[source,json]
+[source,text]
 ----
 Dallas/Fort Worth International Airport
 Dallas Love Field
@@ -10247,20 +10341,28 @@ the word '"Love"' appearing anywhere in the 'desc' property.
 [source,groovy]
 ----
 g.V().has('desc',textContains("Love")).values('desc')
+----
 
+Here is what the query returns.
+
+[source,text]
+----
 Dallas Love Field
 Ernest A. Love Field
 ----
 
 In this example the word 'fort' is found no matter where it occurs in the 'city'
-name. 
+name so long as it occurs as a stand alone word.. 
 
 [source,groovy]
 ----
 g.V().has('city',textContains("fort")).values('city')
 ----
 
-[source,json]
+As you can see in the results below 'Viex Fort' was found as well as all of the
+cities with names that start with 'Fort'.
+
+[source,text]
 ----
 Fort Myers           Fort Worth               
 Fort-de-France       Fort McMurray            
@@ -10276,7 +10378,6 @@ Fort Simpson         Fort Hope
 Fort Leonard Wood    Fort Dodge               
 ----
 
-NOTE: Searches using 'textContains' are *not* case sensitive.
 
 The query below does not match any whole word in any description anywhere in the
 graph so no results will be returned.
@@ -10291,6 +10392,8 @@ If we use 'textContainsPrefix' instead of 'textContains', the search will look f
 whole words that start with the specified text and we will get some results. Take a
 look at the next query and the results it generates.
 
+NOTE: Searches using 'textContains' and 'textContainsPrefix' are *not* case sensitive.
+
 [source,groovy]
 ----
 g.V().has('desc',textContainsPrefix("dalla")).values('desc')
@@ -10299,13 +10402,53 @@ g.V().has('desc',textContainsPrefix("dalla")).values('desc')
 Here is what the query returns. This time we got some results as 'Dallas' starts with
 the characters 'dalla'. Again, remember these are case insensitive queries.
 
-[source,json]
+[source,text]
 ----
 Dallas/Fort Worth International Airport
 Dallas Love Field
 ----
 
-The 'textPrefix' predicate will look at the string being inspected and compare it to
+We could use a 'textContains' query to find airports that have the
+word 'Regional' as part of their description. An example of such a query is given
+below. Only the first five matching airport descriptions found are returned.
+
+[source,groovy]
+----
+g.V().has('desc',textContains('Regional')).values('desc').limit(5)
+----
+
+Here are the descriptions returned by the query.
+
+[source,text]
+----
+Rapid City Regional Airport
+Abilene Regional Airport
+Grand Junction Regional Airport
+San Luis County Regional Airport
+Liberal Mid-America Regional Airport
+----
+
+We could adjust the regional airport query we did above to use  'textContainsPrefix'
+if we wanted to be a bit less specific and look for any airport with 'Reg' at the
+start of any word in its description.
+
+[source,groovy]
+----
+g.V().has('desc',textContainsPrefix('Reg')).values('desc').limit(5)
+----
+
+We still get the same five results back.
+
+[source,text]
+----
+Rapid City Regional Airport
+Abilene Regional Airport
+Grand Junction Regional Airport
+San Luis County Regional Airport
+Liberal Mid-America Regional Airport
+----
+
+The 'textPrefix' predicate will look at the entire string being inspected and compare it to
 the string you provide and only return a result if the string starts with the specified
 pattern. So in this case we look at just the start of the whole string and not at
 individual words within it. The query below looks for any cities whose name starts
@@ -10316,9 +10459,11 @@ with the characters 'Los'.
 g.V().has('city',textPrefix('Los')).values('city')
 ----
 
+NOTE: Searches using 'textPrefix' *are* case sensitive.
+
 This is what we get back from the query. 
 
-[source,json]
+[source,text]
 ----
 Los Alamos
 Los Angeles
@@ -10327,7 +10472,7 @@ Losuia
 ----
 
 Notice how the query did not find the city of 'Chapelco/San Martin de los Andes' as
-in this case the 'los' is not at the start of the name. If we did want to also have
+in this case the 'Los' is not at the start of the name. If we did want to also have
 that city discovered we could use 'textContainsPrefix' instead as shown below.
 
 [source,groovy]
@@ -10336,9 +10481,9 @@ g.V().has('city',textContainsPrefix('Los')).values('city')
 ----
 
 As you can see this time we also found 'Chapelco/San Martin de los Ande' and it is
-part of the results returned.
+part of the results returned. As before the case of the search term is ignored.
 
-[source,json]
+[source,text]
 ----
 Los Alamos
 Chapelco/San Martin de los Andes
@@ -10365,10 +10510,10 @@ g.V().has('city',textContainsRegex("(?i)for.*")).values('city')
 ----
 
 Notice how names that start with 'For' such as 'Fort Myers' as well as city names
-containing words that start with the text 'For' somewhere else are found. For example
+containing words that start with the text 'For' in a subsequent word are found. For example
 'La Fortuna'  and 'View Fort' are also found.
 
-[source,json]
+[source,text]
 ----
 Fort Myers                Fort Worth                
 La Fortuna/San Carlos     Fort McMurray             
@@ -10387,14 +10532,28 @@ Fort Severn               Fort Dodge
 Fort Simpson              Fort Leonard Wood
 ----
 
+The query below shows another way of searching for the word 'dallas' at the start of
+a string of text while ignoring case. This time we use a very simple regular
+expression. Of course, in reality, this yields the same result that we could achieve
+by simply using 'textContainsPrefix'.
+
 [source,groovy]
 ----
 // Matches dallas ignoring case
-g.V().has('city',textRegex("(?i)dallas")).values('city')
-
-Dallas
-Dallas
+g.V().has('city',textRegex("(?i)dallas")).valueMap('code','city')
 ----
+
+As we can see the query worked as expected.
+
+[source,groovy]
+----
+[code:[DFW],city:[Dallas]]
+[code:[DAL],city:[Dallas]]
+
+----
+
+If we wanted to expand our search a bit we could modify the regular expression, as
+shown below, to find an city name that starts with the characters 'dal'.
 
 [source,groovy]
 ----
@@ -10402,7 +10561,9 @@ Dallas
 g.V().has('city',textRegex('(?i)dal.*')).values('city')
 ----
 
-[source,json]
+This time we get some additional cities back.
+
+[source,text]
 ----
 Dallas
 Dallas
@@ -10413,30 +10574,81 @@ Dalanzadgad
 Dalian
 ----
 
+If we instead wanted to get more specific we could again adjust the regular
+expression. This time we look for any city name that starts with any three characters
+followed by the characters 'cah' followed by any number of other characters.
+
 [source,groovy]
 ----
 // Anything that matches 3 characters followed by 'cah' followed by anything.
 g.V().has('city',textRegex(".{3}cah.*")).values('city')
+----
 
+Using our modified, and much more specific search pattern we find just one city that
+matches the pattern.
+ 
+[source,text]
+----
 Dalcahue
 ----
+
+Here is another example that looks for a city name that starts with any three
+characters followed by either 'cah' or 'anz' followed by any number of characters.
 
 [source,groovy]
 ----
 g.V().has('city',textRegex(".{3}(cah|anz).*")).values('city')
+----
 
+Here is what we get back using this regular expression.
+
+[source,text]
+----
 Dalcahue
 Dalanzadgad
 ----
 
+Here is another query that uses a regular expression to find airports that have a
+region code that starts with the characters 'US-' followed by any of 'O', 'R' or 'D'
+followed by any number of characters.
+
 [source,groovy]
 ----
-g.V().has('region',textRegex("US-[OMD].*")).values('code','region').fold()
+g.V().has('region',textRegex("US-[ORD].*")).
+      local(values('code','region').fold()).fold()
 ----
 
-[source,json]
+Here is what this query returns.
+
+[source,groovy]
 ----
-[MSP,US-MN,GPT,US-MS,BZN,US-MT,AUG,US-ME,IRK,US-MO,LCK,US-OH,DTW,US-MI,MCI,US-MO,BTM,US-MT,MKG,US-MI,BOS,US-MA,DCA,US-DC,PDX,US-OR,OKC,US-OK,SGF,US-MO,JAN,US-MS,MQT,US-MI,FNT,US-MI,GTR,US-MS,RDM,US-OR,HLN,US-MT,MSO,US-MT,LUK,US-OH,OLF,US-MT,IMT,US-MI,GRR,US-MI,LMT,US-OR,DLH,US-MN,BJI,US-MN,SBY,US-MD,EWB,US-MA,HVR,US-MT,TBN,US-MO,PWM,US-ME,RST,US-MN,CMH,US-OH,LAW,US-OK,BGR,US-ME,EUG,US-OR,MFR,US-OR,HIB,US-MN,HYA,US-MA,PLN,US-MI,GGW,US-MT,TVF,US-MN,SWO,US-OK,TUL,US-OK,JLN,US-MO,CAK,US-OH,LAN,US-MI,AZO,US-MI,MBS,US-MI,MEI,US-MS,TUP,US-MS,OTH,US-OR,FCA,US-MT,GTF,US-MT,TOL,US-OH,BHB,US-ME,CIU,US-MI,ESC,US-MI,CGI,US-MO,IWD,US-MI,CLE,US-OH,BIL,US-MT,CMX,US-MI,STC,US-MN,HGR,US-MD,INL,US-MN,GLH,US-MS,PDT,US-OR,SDY,US-MT,BWI,US-MD,DAY,US-OH,PIB,US-MS,ILG,US-DE,APN,US-MI,ACK,US-MA,MVY,US-MA,PVC,US-MA,RKD,US-ME,YNG,US-OH,STL,US-MO,COU,US-MO,BKG,US-MO,TVC,US-MI,ORH,US-MA,BRD,US-MN,PQI,US-ME,GDV,US-MT,MBL,US-MI]
+[[PVD,US-RI],[LMT,US-OR],[SWO,US-OK],[PDX,US-OR],[EUG,US-OR],[MFR,US-OR],[TOL,US-OH],[PDT,US-OR],[CMH,US-OH],[OTH,US-OR],[YNG,US-OH],[OKC,US-OK],[DAY,US-OH],[LAW,US-OK],[LCK,US-OH],[LUK,US-OH],[RDM,US-OR],[DCA,US-DC],[CLE,US-OH],[TUL,US-OK],[CAK,US-OH],[ILG,US-DE],[BID,US-RI]]
+
+----
+
+Here is a slightly more complicated query that uses a regular expression. The pattern
+matches any airport description containing a word that starts with any character
+followed by 'al', optionally followed by another 'l' and then followed by any
+character that is not one of '"s,k,e,i"' ignoring case.
+
+[source,groovy]
+----
+g.V().has('desc',textContainsRegex("(?i).all?[^(s|k|e|i)]")).values('desc')
+----
+
+Here is the list of airport descriptions that the query returns.
+
+[source,text]
+----
+Dinard-Pleurtuit-Saint-Malo Airport
+Walla Walla Regional Airport
+Salt Lake City
+Palm Springs International Airport
+Eduardo Falla Solano Airport
+Palm Beach International Airport
+Salt Cay Airport
+Melville Hall Airport
+Hall Beach Airport
 ----
 
 Fuzzy search predicates
@@ -10460,7 +10672,7 @@ The query below uses a fuzzy sort to find any words that are close to the word
 Here are the results from running the query. You can see that airport descriptions
 that contain the whole words 'Paul', 'Palm' and 'Hall' have been found.
 
-[source,json]
+[source,text]
 ----
 Minneapolis-St.Paul International Airport
 Palm Beach International Airport
@@ -10469,7 +10681,28 @@ John Paul II International Airport Krakow-Balice Airport
 Melville Hall Airport
 Hall Beach Airport
 St Paul Island Airport
----- 
+----
+
+This query uses 'textFuzzy' to find cities whose names are close to Dublin.
+[source,groovy]
+----
+g.V().has('city',textFuzzy('Dublin')).values('city')
+----
+
+Here is what the query returns. You can see that the method used by 'fuzzy' searches
+is more than just single character replacement. Note that not all of the city names
+returned are of the same length. To better understand the 'fuzzy search' algorithm it
+is recommended to look at the Wikipedia page mentioned above.
+
+[source,text]
+----
+Yulin
+Hubli
+Dublin
+Lublin
+Dubois
+Dubai
+----
 
 [[janusgeo]]
 The Janus Graph geospatial API
