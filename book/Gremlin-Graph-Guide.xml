@@ -5,7 +5,7 @@
 <info>
 <title>GRAPH DATABASES, GREMLIN and TINKERPOP </title>
 <subtitle>A TUTORIAL</subtitle>
-<date>Oct 23, 2017</date>
+<date>Oct 26, 2017</date>
 <author>
 <personname>
 <firstname>Kelvin</firstname>
@@ -17,8 +17,8 @@
 <authorinitials>KRL</authorinitials>
 <revhistory>
 <revision>
-<revnumber>269</revnumber>
-<date>Oct 23, 2017</date>
+<revnumber>270</revnumber>
+<date>Oct 26, 2017</date>
 <authorinitials>KRL</authorinitials>
 </revision>
 </revhistory>
@@ -57,7 +57,7 @@ October 5th, 2017<?asciidoc-br?></simpara>
 free to send me feedback of any sort. Suggested improvements are especially welcome.
 A good way to provide feedback is by opening an issue in the GitHub repository
 located at <link xl:href="https://github.com/krlawrence/graph">https://github.com/krlawrence/graph</link>. You are currently reading revision
-269 of the document.</simpara>
+270 of the document.</simpara>
 </section>
 <section xml:id="thanks">
 <title>A word of thanks</title>
@@ -2288,22 +2288,34 @@ above sea level. Aircraft need a lot more runway to operate safely at that altit
 <title>Sorting by key or value</title>
 <simpara>Sometimes, when the results of a query are a set of one or more key:value pairs, we
 need to sort by either the key or the value in either ascending or descending order.
-Gremlin offers us four ways that we can control the sort in these cases. The four
-keywords are <emphasis>keyIncr</emphasis>, <emphasis>keyDecr</emphasis>, <emphasis>valueIncr</emphasis> and <emphasis>valueDecr</emphasis>.</simpara>
-<simpara>The following shows the difference between running the query with and without the use
-of <emphasis>order</emphasis></simpara>
-<programlisting language="groovy" linenumbering="unnumbered">g.V().hasLabel('airport').limit(5).group().by('code').by('runways')
+Gremlin offers us ways that we can control the sort in these cases. Examples of how
+this works are shown below.</simpara>
+<note>
+<simpara>In Tinkerpop 3.3 changes to the syntax were made. The previous keywords
+<emphasis>valueDecr</emphasis>, <emphasis>valueIncr</emphasis>, <emphasis>keyDecr</emphasis> and <emphasis>keyIncr</emphasis> are now specified using the form
+<emphasis>by(keys,incr)</emphasis> or <emphasis>by(values,decr)</emphasis> etc.</simpara>
+</note>
+<simpara>The following example shows the difference between running a query with and without
+the use of <emphasis>order</emphasis> to sort using the keys of the map created by the <emphasis>group</emphasis> step.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">// Query but do not order
+g.V().hasLabel('airport').limit(5).group().by('code').by('runways')
 
-[BNA:[4],ANC:[3],BOS:[6],ATL:[5],AUS:[2]]
-
-g.V().hasLabel('airport').limit(5).group().by('code').by('runways').
-      order(local).by(keyIncr)
+[BNA:[4],ANC:[3],BOS:[6],ATL:[5],AUS:[2]]</programlisting>
+<simpara>Notice also how <emphasis>local</emphasis> is used as a parameter to <emphasis>order</emphasis>. This
+is required so that the ordering is done while the final list is being constructed.
+If you do not specify <emphasis>local</emphasis> then <emphasis>order</emphasis> will have no effect as it will be applied to
+the entire result which is treated as a single entity at that point.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">// Query and order by airport code (the key)
+g.V().hasLabel('airport').limit(5).
+      group().by('code').by('runways').
+      order(local).by(keys,incr)
 
 [ANC:[3],ATL:[5],AUS:[2],BNA:[4],BOS:[6]]</programlisting>
 <simpara>In this example we make the numbers of runways the key field and sort on it in
 descending order.</simpara>
-<programlisting language="groovy" linenumbering="unnumbered">g.V().hasLabel('airport').limit(10).group().by('runways').by('code').
-      order(local).by(keyDecr)
+<programlisting language="groovy" linenumbering="unnumbered">g.V().hasLabel('airport').limit(10).
+      group().by('runways').by('code').
+      order(local).by(keys,decr)
 
 [7:[DFW],6:[BOS],5:[ATL],4:[BNA,IAD],3:[ANC,BWI,DCA],2:[AUS,FLL]]</programlisting>
 </section>
@@ -4636,14 +4648,14 @@ g.V().hasLabel('country').group().by('code').by(outE().count())</programlisting>
 <simpara>If we wanted to sort the list in descending order we could adjust the query as
 follows. Note the use of <emphasis>local</emphasis> to specify how the ordering is applied. If we did
 not use <emphasis>local</emphasis> the ordering would not have the desired effect.</simpara>
-<programlisting language="groovy" linenumbering="unnumbered">g.V().hasLabel('airport').groupCount().by('country').order(local).by(valueDecr)
+<programlisting language="groovy" linenumbering="unnumbered">g.V().hasLabel('airport').groupCount().by('country').order(local).by(values,decr)
 
-[US:578, CA:203, CN:200, AU:118, RU:118, BR:115, IN:72, ID:67, JP:63, MX:58, FR:56, UK:54, CO:50, NO:49, TR:48, IR:44, ES:41, SE:39, GR:39, PH:38, AR:36, IT:36, MY:34, TH:32, DE:32, PF:30, DZ:29, SA:26, VU:26, PG:26, NZ:25, VE:24, VN:21, PK:21, FI:20, ZA:20, PE:20, BS:18, KZ:18, NG:18, SB:17, CL:17, BO:15, EC:15, KR:15, PT:14, AO:14, UA:14, ET:14, GL:14, KE:14, MA:14, MM:14, RO:13, BZ:13, CR:13, MG:13, PL:13, CU:12, CD:11, UZ:11, AE:10, EG:10, FJ:10, LY:10, MN:10, MZ:10, NP:10, TW:9, YE:9, TN:8, TZ:8, DK:8, HR:8, ZM:8, LA:8, MV:8, BD:7, CV:7, DO:7, IE:7, PR:6, AT:6, CK:6, HN:6, IQ:6, LK:6, AZ:5, BE:5, SD:5, SO:5, CH:5, CM:5, CZ:5, GH:5, IL:5, IS:5, NL:5, PA:5, AF:4, BA:4, BG:4, BW:4, TC:4, TJ:4, UG:4, FM:4, NA:4, BQ:3, SN:3, CG:3, CY:3, EE:3, GE:3, ZW:3, KH:3, KY:3, LT:3, MR:3, OM:3, PY:2, AM:2, RE:2, RS:2, BF:2, RW:2, SC:2, SH:2, SK:2, SY:2, TT:2, EH:2, UY:2, VG:2, VI:2, FK:2, WF:2, GA:2, GG:2, GQ:2, GT:2, GY:2, HT:2, HU:2, JM:2, JO:2, KG:2, KI:2, KN:2, LC:2, LR:2, ME:2, MH:2, MP:2, MU:2, MW:2, PW:1, QA:1, AG:1, AI:1, AL:1, AS:1, AW:1, BB:1, BH:1, BI:1, BJ:1, BL:1, BM:1, BN:1, BT:1, SG:1, SI:1, BY:1, SL:1, SR:1, SS:1, CC:1, ST:1, SV:1, CF:1, SX:1, CI:1, SZ:1, TD:1, TG:1, CW:1, CX:1, TL:1, TM:1, TO:1, TV:1, DJ:1, DM:1, ER:1, VC:1, FO:1, WS:1, GD:1, GF:1, GI:1, GM:1, GN:1, GP:1, GU:1, GW:1, HK:1, YT:1, IM:1, JE:1, KM:1, KP:1, KS:1, KW:1, LB:1, LS:1, LU:1, LV:1, MD:1, MF:1, MK:1, ML:1, MO:1, MQ:1, MS:1, MT:1, NC:1, NE:1, NF:1, NI:1, NR:1, PM:1]</programlisting>
+[US:579,CN:209,CA:203,AU:124,RU:120,BR:115,IN:73,ID:67,JP:63,MX:59,UK:58,FR:58,CO:50,NO:49,TR:48,IR:44,ES:42,SE:39,GR:39,PH:38,AR:36,IT:36,MY:34,DE:33,TH:32,PF:30,DZ:29,SA:26,VU:26,PG:26,NZ:25,VE:24,VN:21,PK:21,FI:20,ZA:20,KZ:20,PE:20,BS:18,NG:18,SB:17,CL:17,BO:15,UA:15,EC:15,KR:15,PT:14,AO:14,RO:14,ET:14,GL:14,KE:14,MA:14,MM:14,BZ:13,CR:13,MG:13,PL:13,CU:12,CD:11,UZ:11,AE:10,EG:10,FJ:10,LY:10,MN:10,MZ:10,NP:10,TW:9,YE:9,TN:8,TZ:8,DK:8,HR:8,ZM:8,LA:8,MV:8,BD:7,CV:7,DO:7,IE:7,PR:6,AT:6,CK:6,HN:6,IQ:6,LK:6,AZ:5,BE:5,SD:5,SO:5,CH:5,CM:5,CZ:5,GH:5,IL:5,IS:5,NL:5,PA:5,AF:4,BA:4,BG:4,BW:4,TC:4,TJ:4,UG:4,FM:4,NA:4,OM:4,BQ:3,SN:3,CG:3,CY:3,EE:3,GE:3,ZW:3,KH:3,KY:3,LT:3,MR:3,PY:2,AM:2,RE:2,RS:2,BF:2,RW:2,SC:2,SH:2,BY:2,SK:2,SY:2,TT:2,EH:2,UY:2,VG:2,VI:2,FK:2,WF:2,GA:2,GG:2,GQ:2,GT:2,GY:2,HT:2,HU:2,JM:2,JO:2,KG:2,KI:2,KN:2,LC:2,LR:2,ME:2,MH:2,MP:2,MU:2,MW:2,PW:1,QA:1,AG:1,AI:1,AL:1,AS:1,AW:1,BB:1,BH:1,BI:1,BJ:1,BL:1,BM:1,BN:1,BT:1,SG:1,SI:1,SL:1,SR:1,SS:1,CC:1,ST:1,SV:1,CF:1,SX:1,CI:1,SZ:1,TD:1,TG:1,CW:1,CX:1,TL:1,TM:1,TO:1,TV:1,DJ:1,DM:1,ER:1,VC:1,FO:1,WS:1,GD:1,GF:1,GI:1,GM:1,GN:1,GP:1,GU:1,GW:1,HK:1,YT:1,IM:1,JE:1,KM:1,KP:1,KS:1,KW:1,LB:1,LS:1,LU:1,LV:1,MD:1,MF:1,MK:1,ML:1,MO:1,MQ:1,MS:1,MT:1,NC:1,NE:1,NF:1,NI:1,NR:1,PM:1]</programlisting>
 <simpara>If we wanted to sort by the country code, the <emphasis>key</emphasis> in other words, we could change
-the query accordingly. In this case we will use <emphasis>keyIncr</emphasis> to get a sort in ascending
-order. If we wanted to dort in descending order by key we could use <emphasis>keyDecr</emphasis>
+the query accordingly. In this case we will use <emphasis>by(keys,incr)</emphasis> to get a sort in ascending
+order. If we wanted to sort in descending order by key we could use <emphasis>by(keys,decr)</emphasis>
 instead.</simpara>
-<programlisting language="groovy" linenumbering="unnumbered">g.V().hasLabel('airport').groupCount().by('country').order(local).by(keyIncr)
+<programlisting language="groovy" linenumbering="unnumbered">g.V().hasLabel('airport').groupCount().by('country').order(local).by(keys,incr)
 
 [AE:10, AF:4, AG:1, AI:1, AL:1, AM:2, AO:14, AR:36, AS:1, AT:6, AU:118, AW:1, AZ:5, BA:4, BB:1, BD:7, BE:5, BF:2, BG:4, BH:1, BI:1, BJ:1, BL:1, BM:1, BN:1, BO:15, BQ:3, BR:115, BS:18, BT:1, BW:4, BY:1, BZ:13, CA:203, CC:1, CD:11, CF:1, CG:3, CH:5, CI:1, CK:6, CL:17, CM:5, CN:200, CO:50, CR:13, CU:12, CV:7, CW:1, CX:1, CY:3, CZ:5, DE:32, DJ:1, DK:8, DM:1, DO:7, DZ:29, EC:15, EE:3, EG:10, EH:2, ER:1, ES:41, ET:14, FI:20, FJ:10, FK:2, FM:4, FO:1, FR:56, GA:2, GD:1, GE:3, GF:1, GG:2, GH:5, GI:1, GL:14, GM:1, GN:1, GP:1, GQ:2, GR:39, GT:2, GU:1, GW:1, GY:2, HK:1, HN:6, HR:8, HT:2, HU:2, ID:67, IE:7, IL:5, IM:1, IN:72, IQ:6, IR:44, IS:5, IT:36, JE:1, JM:2, JO:2, JP:63, KE:14, KG:2, KH:3, KI:2, KM:1, KN:2, KP:1, KR:15, KS:1, KW:1, KY:3, KZ:18, LA:8, LB:1, LC:2, LK:6, LR:2, LS:1, LT:3, LU:1, LV:1, LY:10, MA:14, MD:1, ME:2, MF:1, MG:13, MH:2, MK:1, ML:1, MM:14, MN:10, MO:1, MP:2, MQ:1, MR:3, MS:1, MT:1, MU:2, MV:8, MW:2, MX:58, MY:34, MZ:10, NA:4, NC:1, NE:1, NF:1, NG:18, NI:1, NL:5, NO:49, NP:10, NR:1, NZ:25, OM:3, PA:5, PE:20, PF:30, PG:26, PH:38, PK:21, PL:13, PM:1, PR:6, PT:14, PW:1, PY:2, QA:1, RE:2, RO:13, RS:2, RU:118, RW:2, SA:26, SB:17, SC:2, SD:5, SE:39, SG:1, SH:2, SI:1, SK:2, SL:1, SN:3, SO:5, SR:1, SS:1, ST:1, SV:1, SX:1, SY:2, SZ:1, TC:4, TD:1, TG:1, TH:32, TJ:4, TL:1, TM:1, TN:8, TO:1, TR:48, TT:2, TV:1, TW:9, TZ:8, UA:14, UG:4, UK:54, US:578, UY:2, UZ:11, VC:1, VE:24, VG:2, VI:2, VN:21, VU:26, WF:2, WS:1, YE:9, YT:1, ZA:20, ZM:8, ZW:3]</programlisting>
 <simpara>Note that we can use <emphasis>select</emphasis> to only return one or more of the full set of key/value
@@ -4741,7 +4753,7 @@ appears to have the most routes from Europe with Newark (EWR) having the second 
 <programlisting language="groovy" linenumbering="unnumbered">//What is the distribution of the routes amongst those US airports?
 
 g.V().has('continent','code','EU').out().out().has('country','US').
-      groupCount().by('code').order(local).by(valueIncr)
+      groupCount().by('code').order(local).by(values,incr)
 
 [PHX:1,CVG:1,RSW:1,BDL:2,SJC:2,BWI:2,AUS:2,RDU:2,MSY:2,SAN:3,TPA:3,SLC:3,PDX:3,PIT:3,SFB:4,DEN:4,OAK:4,DTW:5,FLL:5,SWF:5,MSP:5,CLT:7,DFW:7,SEA:7,PVD:7,IAH:8,MCO:9,LAS:10,ATL:14,SFO:15,PHL:17,IAD:19,ORD:21,BOS:22,LAX:23,MIA:24,EWR:33,JFK:40]</programlisting>
 <simpara>Now let&#8217;s repeat the process but looking at the European end of the routes. First of
@@ -4756,7 +4768,7 @@ routes for the European airports. It appears that London Heathrow (LHR) offers t
 most US destinations and Frankfurt (FRA) the second most.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">//What is the distribution of these routes amongst the European airports?
 g.V().has('continent','code','EU').out().as('a').out().has('country','US').
-      select('a').groupCount().by('code').order(local).by(valueIncr)
+      select('a').groupCount().by('code').order(local).by(values,incr)
 
 [RIX:1,TER:1,BRS:1,STN:1,NCE:1,KRK:1,ORK:1,KBP:1,PDL:1,DME:1,BEG:1,AGP:1,HAM:1,OPO:2,STR:2,VCE:2,BHX:2,ORY:2,ATH:2,MXP:3,BFS:3,BGO:3,GVA:3,VKO:3,HEL:3,WAW:4,SVO:4,GLA:4,EDI:5,SNN:5,CGN:5,TXL:6,VIE:6,LIS:6,BRU:7,ARN:7,OSL:8,BCN:9,LGW:9,IST:9,MAD:11,DUS:11,CPH:11,FCO:12,ZRH:13,MAN:13,DUB:14,MUC:16,KEF:17,AMS:18,CDG:21,FRA:24,LHR:27]</programlisting>
 <simpara>Lastly, we can find out what the list of routes flown is. For this example we just
@@ -4819,25 +4831,27 @@ for those vertices we want to count how many outgoing routes each airport has.  
 to return the results as a set of odered <emphasis>key:value</emphasis> pairs where the key is the
 number of outgoing routes and the value is the number of airports that have that
 number of outgoing routes.</simpara>
-<programlisting language="groovy" linenumbering="unnumbered">g.V().hasLabel('airport').groupCount().by(out('route').count()).order(local).by(valueDecr)</programlisting>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().hasLabel('airport').groupCount().by(out('route').count()).
+                          order(local).by(values,decr)</programlisting>
 <simpara>When we run the query we get back the results below. As the results are sorted in
 descending order by value, we can see that the <emphasis>mode</emphasis> (most common) number of
 outgoing routes is actually just one route and that 786 airports have just one
 outgoing route. We can see that 654 airports have just two routes and so on. We can
 also see at the other end of the scale that one airport has 226 outgoing routes.</simpara>
-<programlisting language="groovy" linenumbering="unnumbered">[1:786, 2:654, 3:361, 4:244, 5:149, 6:110, 7:86, 8:80, 9:67, 10:54, 11:45, 12:40, 13:30, 19:30, 14:28, 15:28, 17:23, 23:19, 20:18, 16:17, 18:17, 0:16, 22:15, 21:13, 29:13, 26:12, 30:12, 35:11, 39:11, 24:10, 32:10, 42:10, 25:9, 33:9, 49:9, 28:8, 31:8, 34:8, 37:8, 27:7, 38:7, 41:7, 58:7, 60:7, 36:6, 50:6, 54:6, 59:6, 40:5, 47:5, 62:5, 43:4, 44:4, 51:4, 52:4, 53:4, 56:4, 57:4, 64:4, 65:4, 66:4, 83:4, 84:4, 92:4, 100:4, 46:3, 69:3, 72:3, 76:3, 78:3, 81:3, 86:3, 97:3, 103:3, 134:3, 142:3, 45:2, 48:2, 55:2, 63:2, 67:2, 70:2, 74:2, 77:2, 82:2, 85:2, 91:2, 93:2, 99:2, 108:2, 115:2, 119:2, 128:2, 174:2, 176:2, 183:2, 191:2, 232:2, 254:2, 257:1, 259:1, 61:1, 71:1, 75:1, 79:1, 80:1, 87:1, 88:1, 89:1, 94:1, 95:1, 96:1, 101:1, 102:1, 104:1, 105:1, 106:1, 109:1, 110:1, 111:1, 112:1, 117:1, 118:1, 121:1, 123:1, 125:1, 127:1, 129:1, 132:1, 140:1, 141:1, 146:1, 148:1, 149:1, 153:1, 154:1, 155:1, 157:1, 158:1, 159:1, 166:1, 172:1, 178:1, 182:1, 184:1, 186:1, 197:1, 206:1, 216:1, 219:1, 225:1, 226:1]</programlisting>
+<programlisting language="groovy" linenumbering="unnumbered">[1:770,2:652,3:370,4:236,5:148,6:115,7:94,8:81,9:68,10:61,12:42,11:39,13:38,15:30,19:27,16:26,20:25,22:25,14:20,17:17,18:16,0:15,23:14,31:14,33:14,30:13,21:12,32:12,37:12,35:10,24:9,25:9,39:9,42:9,26:8,29:8,47:8,27:7,34:7,36:7,40:7,44:7,45:7,55:7,63:7,67:7,41:6,48:6,50:6,59:6,60:6,105:6,28:5,38:5,43:5,52:5,54:5,61:5,62:5,64:5,94:5,56:4,68:4,70:4,80:4,74:3,77:3,83:3,84:3,85:3,86:3,93:3,106:3,107:3,124:3,144:3,46:2,53:2,57:2,73:2,76:2,78:2,79:2,82:2,91:2,95:2,97:2,98:2,104:2,109:2,116:2,118:2,146:2,166:2,182:2,192:2,232:2,262:1,269:1,270:1,272:1,49:1,51:1,58:1,65:1,66:1,69:1,71:1,72:1,75:1,81:1,89:1,90:1,92:1,101:1,102:1,108:1,110:1,112:1,113:1,114:1,115:1,119:1,122:1,126:1,127:1,129:1,130:1,132:1,133:1,136:1,137:1,141:1,142:1,143:1,145:1,151:1,153:1,156:1,162:1,163:1,164:1,168:1,175:1,180:1,181:1,186:1,187:1,188:1,189:1,190:1,191:1,197:1,200:1,201:1,214:1,221:1,229:1,234:1,237:1]</programlisting>
 <simpara>We could change our query above, replacing <emphasis>out()</emphasis> with <emphasis>__.in()</emphasis> and we could find
 out the distribution of incoming routes. Remember, in an air route network there is
 not always a one to one equivalent number of outgoing to incoming routes due to the
 way airlines plan their routes.</simpara>
 <simpara>Another change we could make to our query is to change the ordering to use the key
 field for each key:value pair and this time sort in ascending order.</simpara>
-<programlisting language="groovy" linenumbering="unnumbered">g.V().hasLabel('airport').groupCount().by(out('route').count()).order(local).by(keyIncr)</programlisting>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().hasLabel('airport').groupCount().by(out('route').count()).
+                          order(local).by(keys,incr)</programlisting>
 <simpara>When we run our query again we get the results below. Looking at the data sorted
 this way helps some new interesting facts stand out. The most interesting thing
-we can immediately spot is that there are 16 airports that currently have no
+we can immediately spot is that there are 15 airports that currently have no
 outgoing routes at all!</simpara>
-<programlisting language="groovy" linenumbering="unnumbered">[0:16, 1:786, 2:654, 3:361, 4:244, 5:149, 6:110, 7:86, 8:80, 9:67, 10:54, 11:45, 12:40, 13:30, 14:28, 15:28, 16:17, 17:23, 18:17, 19:30, 20:18, 21:13, 22:15, 23:19, 24:10, 25:9, 26:12, 27:7, 28:8, 29:13, 30:12, 31:8, 32:10, 33:9, 34:8, 35:11, 36:6, 37:8, 38:7, 39:11, 40:5, 41:7, 42:10, 43:4, 44:4, 45:2, 46:3, 47:5, 48:2, 49:9, 50:6, 51:4, 52:4, 53:4, 54:6, 55:2, 56:4, 57:4, 58:7, 59:6, 60:7, 61:1, 62:5, 63:2, 64:4, 65:4, 66:4, 67:2, 69:3, 70:2, 71:1, 72:3, 74:2, 75:1, 76:3, 77:2, 78:3, 79:1, 80:1, 81:3, 82:2, 83:4, 84:4, 85:2, 86:3, 87:1, 88:1, 89:1, 91:2, 92:4, 93:2, 94:1, 95:1, 96:1, 97:3, 99:2, 100:4, 101:1, 102:1, 103:3, 104:1, 105:1, 106:1, 108:2, 109:1, 110:1, 111:1, 112:1, 115:2, 117:1, 118:1, 119:2, 121:1, 123:1, 125:1, 127:1, 128:2, 129:1, 132:1, 134:3, 140:1, 141:1, 142:3, 146:1, 148:1, 149:1, 153:1, 154:1, 155:1, 157:1, 158:1, 159:1, 166:1, 172:1, 174:2, 176:2, 178:1, 182:1, 183:2, 184:1, 186:1, 191:2, 197:1, 206:1, 216:1, 219:1, 225:1, 226:1, 232:2, 254:2, 257:1, 259:1]</programlisting>
+<programlisting language="groovy" linenumbering="unnumbered">[0:15, 1:786, 2:654, 3:361, 4:244, 5:149, 6:110, 7:86, 8:80, 9:67, 10:54, 11:45, 12:40, 13:30, 14:28, 15:28, 16:17, 17:23, 18:17, 19:30, 20:18, 21:13, 22:15, 23:19, 24:10, 25:9, 26:12, 27:7, 28:8, 29:13, 30:12, 31:8, 32:10, 33:9, 34:8, 35:11, 36:6, 37:8, 38:7, 39:11, 40:5, 41:7, 42:10, 43:4, 44:4, 45:2, 46:3, 47:5, 48:2, 49:9, 50:6, 51:4, 52:4, 53:4, 54:6, 55:2, 56:4, 57:4, 58:7, 59:6, 60:7, 61:1, 62:5, 63:2, 64:4, 65:4, 66:4, 67:2, 69:3, 70:2, 71:1, 72:3, 74:2, 75:1, 76:3, 77:2, 78:3, 79:1, 80:1, 81:3, 82:2, 83:4, 84:4, 85:2, 86:3, 87:1, 88:1, 89:1, 91:2, 92:4, 93:2, 94:1, 95:1, 96:1, 97:3, 99:2, 100:4, 101:1, 102:1, 103:3, 104:1, 105:1, 106:1, 108:2, 109:1, 110:1, 111:1, 112:1, 115:2, 117:1, 118:1, 119:2, 121:1, 123:1, 125:1, 127:1, 128:2, 129:1, 132:1, 134:3, 140:1, 141:1, 142:3, 146:1, 148:1, 149:1, 153:1, 154:1, 155:1, 157:1, 158:1, 159:1, 166:1, 172:1, 174:2, 176:2, 178:1, 182:1, 183:2, 184:1, 186:1, 191:2, 197:1, 206:1, 216:1, 219:1, 225:1, 226:1, 232:2, 254:2, 257:1, 259:1]</programlisting>
 <simpara>If we wanted to find the statistical mean number of routes in the graph we could
 easily write a query like the one below to tell us how many airports and
 outgoing routes in total there are in the graph.</simpara>
@@ -6069,10 +6083,10 @@ than one outgoing edge to any other airport. This required me to have a hunch ah
 time which airport vertices might have an issue. Far from ideal when there are over 3,300
 airport vertices in the graph.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">g.V().has('code','LHR').out().groupCount().by('code').
-  order(local).by(valueDecr).next().values().max()</programlisting>
+  order(local).by(values,decr).next().values().max()</programlisting>
 <simpara>If the answer came back greater than one I then ran the following query and manually
 looked at each result to see where the duplicate edge was.</simpara>
-<programlisting language="groovy" linenumbering="unnumbered">g.V().has('code','LHR').out().groupCount().by('code').order(local).by(valueDecr)]</programlisting>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('code','LHR').out().groupCount().by('code').order(local).by(values,decr)]</programlisting>
 <simpara>As I said this was a very manual and time consuming process. I clearly needed a
 better query. Given what we know about <emphasis>groupCount</emphasis> I realized I could write an
 arbitrary query to tell me how many times every single route in the graph exists.
@@ -6707,7 +6721,7 @@ the Linux Foundation and provides these advanced capabilities.</simpara>
 <simpara>Janus Graph can run on a laptop, which is useful for learning and experimenting, but
 it is designed to handle very large graphs stored on distributed clusters. It can
 handle graphs containing billions of vertices and edges. As we shall discuss, Janus
-graph is designed to work with a variety of persistent storage options including
+Graph is designed to work with a variety of persistent storage options including
 Apache Cassandra and Apache HBase as well as indexing technology such as Apache Solr
 and Apache Elastic Search.</simpara>
 <variablelist>
@@ -6737,6 +6751,8 @@ scalable graph database solution. We will start by quickly looking at how to ins
 Janus Graph and access it from the Gremlin Console before getting into more advanced
 topics including how to create and manage both schemas and indexes and how to use the
 transactional capabilities provided by Janus Graph.</simpara>
+<simpara>It is also recommended that you read and get familiar with the official Janus Graph
+documentation as well as reading what is presented below.</simpara>
 <section xml:id="janusinstall">
 <title>Installing Janus Graph</title>
 <simpara>Janus Graph itself is very easy to install. You just have to download the ZIP file
@@ -6908,42 +6924,6 @@ graph.tx().rollback()
 // Nothing will be returned
 g.V().has('code','XYZ')</programlisting>
 </section>
-<section xml:id="_loading_air_routes_into_a_janus_graph_instance">
-<title>Loading air-routes into a Janus Graph instance</title>
-<simpara>We can use the same basic steps to load the air-routes graph into a Janus Graph
-instance that we used with Tinkergraph. Note that after loading the graph from the
-XML file we then call <emphasis>commit</emphasis> to finalize the transaction.</simpara>
-<programlisting language="groovy" linenumbering="unnumbered">graph.io(graphml()).readGraph('air-routes.graphml')
-graph.tx().commit()</programlisting>
-<simpara>Note that as we have not defined a schema before loading the air-routes graph that
-Janus Graph will create vertices, edges and properties using default types and settings.
-A bit later we will look at creating a schema for air-routes and then loading it
-again to see the differences. It is strongly recommended to create the schema before
-loading the data but lets examine a few things before we discuss how to do that.</simpara>
-<simpara>Unlike TinkerGraph, Janus Graph does not, by default,  guarantee to respect user
-provided node and edge ID values. Instead it creates its own ID values as vertices and
-edges are added to the graph. You may have noticed from earlier in the document or
-from the air-routes.graphml file if you happened to look in there, that the ID
-provided for Austin in the GraphML markup is 3. However, having loaded air-routes
-into Janus Graph if we query the ID for the Austin node we can see that it is no
-longer 3. There is a setting that can be changed to force Janus Graph to honor user
-provided ID values but it is not recommended this be used as it will disable some
-other useful Janus Graph features. If you are interested in learning more about this
-option this please refer to the Janus Graph documentation.</simpara>
-<programlisting language="groovy" linenumbering="unnumbered">g.V().has('code','AUS').id()
-
-4240</programlisting>
-<simpara>Having the graph system allocate its own ID values is not a big problem as we can
-always query the graph to get the ID but it is a reminder that you should not get
-into the habit of relying on any user provided ID values as you work with graphs.</simpara>
-<simpara>If necessary, as we  discussed earlier in the document, we can always store important
-ID values in a variable for later use.</simpara>
-<programlisting language="groovy" linenumbering="unnumbered">ausid = g.V().has('code','AUS').id().next()
-
-g.V(ausid).values('city','desc','region').join(',')
-
-Austin Bergstrom International Airport,Austin,US-TX</programlisting>
-</section>
 <section xml:id="janusmgmt">
 <title>The Janus Graph management API</title>
 <simpara>Janus graph includes a management API that is made available via the ManagementSystem
@@ -6951,17 +6931,24 @@ class. You can use the management API to perform various important functions tha
 include querying metadata about the graph, defining the edge, vertex and property
 schema types and creating and updating the index.</simpara>
 <simpara>You can create an instance of the ManagementSystem object using the <emphasis>openManagement</emphasis>
-method call.</simpara>
+method call as shown below.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">mgmt = graph.openManagement()</programlisting>
+<simpara>In the following sections we will show how to use the management API to create both a
+schema and an index for the air-routes graph and then load it. Before we do that we
+need should take a few minutes to introduce the Janus Graph Management API. For the
+time being, assume we have created an in memory Janus Graph instance and loaded the
+air-routes graph into it but have not defined an index or a schema. In this
+situation, Janus Graph will give us the best defaults it can as it loads the graph
+for schema types.</simpara>
 <simpara>The example below uses the Management API to get a list of all the vertex labels
-currently defined by in graph.</simpara>
+currently defined in graph.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">mgmt.getVertexLabels()
 
 version
 airport
 country
 continent</programlisting>
-<simpara>This query finds all of the currently defined edge labels.</simpara>
+<simpara>This query similarly finds all of the currently defined edge labels.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">mgmt.getRelationTypes(EdgeLabel.class)
 
 route
@@ -7003,8 +6990,66 @@ mgmt.containsEdgeLabel('travels')
 
 false</programlisting>
 </section>
+<section xml:id="cardlist">
+<title>Creating a property with cardinality LIST</title>
+<simpara>To be written</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">mgmt = graph.openManagement()
+maker = mgmt.makePropertyKey('mylist')
+maker.dataType(String.class)
+maker.cardinality(LIST)
+maker.make()
+mgmt.commit()
+
+mgmt = graph.openManagement()
+mgmt.makePropertyKey('anotherlist').dataType(String.class).cardinality(LIST).make()
+
+mgmt = graph.openManagement()
+mgmt.getPropertyKey('mylist').cardinality()
+
+LIST
+
+mgmt.commit()
+
+n = g.addV('mylist','one','mylist','two').next()
+
+v[3043568]
+
+g.V(n).property(list,'mylist','one')
+g.V(n).valueMap()
+
+// Duplicates allowed
+[mylist:[one,one,two]]
+
+graph.tx().commit()</programlisting>
+</section>
+<section xml:id="cardset">
+<title>Creating a property with cardinality SET</title>
+<simpara>To be written</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">mgmt = graph.openManagement()
+mgmt.makePropertyKey('numbers').dataType(Integer.class).cardinality(SET).make()</programlisting>
+<programlisting language="groovy" linenumbering="unnumbered">mgmt.getPropertyKey('numbers').cardinality()
+
+SET</programlisting>
+<programlisting language="groovy" linenumbering="unnumbered">mgmt.commit()</programlisting>
+<programlisting language="groovy" linenumbering="unnumbered">n = g.addV('numbers',1,'numbers',2,'numbers',3).next()
+
+v[2846792]
+
+g.V(n).valueMap()
+
+[numbers:[1,2,3]]</programlisting>
+<programlisting language="groovy" linenumbering="unnumbered">g.V(n).property(set,'numbers',2)
+g.V(n).valueMap()</programlisting>
+<programlisting language="groovy" linenumbering="unnumbered">// Duplicates not allowed
+[numbers:[1,2,3]]</programlisting>
+<programlisting language="groovy" linenumbering="unnumbered">g.V(n).property(set,'numbers',4)
+g.V(n).valueMap()
+
+[numbers:[1,2,3,4]]</programlisting>
+<programlisting language="groovy" linenumbering="unnumbered">graph.tx().commit()</programlisting>
+</section>
 <section xml:id="janusschema">
-<title>Defining a Janus Graph schema for air-routes</title>
+<title>Defining a Janus Graph schema for the air-routes graph</title>
 <simpara>You are not required to define the types and labels of your edges, vertices and
 properties ahead of time but it is strongly recommended that you do so. If you do not
 define anything and load the air routes data for example, it will work fine but Janus
@@ -7091,6 +7136,8 @@ and from any vertex in the graph.</simpara>
 </listitem>
 </varlistentry>
 </variablelist>
+<section xml:id="_defining_edge_labels_and_usage">
+<title>Defining edge labels and usage</title>
 <simpara>Let&#8217;s look at how we can use the Janus Graph Management API to specify the
 multiplicty for the <emphasis>route</emphasis> and <emphasis>contains</emphasis> edges used by the air-routes graph.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Define edge labels and usage
@@ -7098,6 +7145,9 @@ mgmt = graph.openManagement()
 mgmt.makeEdgeLabel('route').multiplicity(MULTI).make()
 mgmt.makeEdgeLabel('contains').multiplicity(SIMPLE).make()
 mgmt.commit()</programlisting>
+</section>
+<section xml:id="_defining_vertex_labels">
+<title>Defining vertex labels</title>
 <simpara>To be written</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Define vertex labels
 mgmt = graph.openManagement()
@@ -7106,6 +7156,9 @@ mgmt.makeVertexLabel('airport').make()
 mgmt.makeVertexLabel('country').make()
 mgmt.makeVertexLabel('continent').make()
 mgmt.commit()</programlisting>
+</section>
+<section xml:id="_defining_vertex_property_keys">
+<title>Defining vertex property keys</title>
 <simpara>To be written</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Define vertex property keys
 mgmt = graph.openManagement()
@@ -7121,15 +7174,14 @@ mgmt.makePropertyKey('elev').dataType(Integer.class).cardinality(Cardinality.SIN
 mgmt.makePropertyKey('lat').dataType(Double.class).cardinality(Cardinality.SINGLE).make()
 mgmt.makePropertyKey('lon').dataType(Double.class).cardinality(Cardinality.SINGLE).make()
 mgmt.commit()</programlisting>
+</section>
+<section xml:id="_defining_edge_property_keys">
+<title>Defining edge property keys</title>
 <simpara>To be written</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Define edge property keys
 mgmt = graph.openManagement()
 mgmt.makePropertyKey('dist').dataType(Integer.class).cardinality(Cardinality.SINGLE).make()
 mgmt.commit()</programlisting>
-<simpara>To be written</simpara>
-<programlisting language="groovy" linenumbering="unnumbered">// Load the air routes graph
-graph.io(graphml()).readGraph('air-routes.graphml')
-graph.tx().commit()</programlisting>
 <simpara>To be written</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Look at the properties
 mgmt = graph.openManagement()
@@ -7154,63 +7206,81 @@ desc    : class java.lang.String SINGLE
 runways : class java.lang.Integer SINGLE
 elev    : class java.lang.Integer SINGLE</programlisting>
 </section>
-<section xml:id="cardlist">
-<title>Creating a property with cardinality LIST</title>
-<simpara>To be written</simpara>
-<programlisting language="groovy" linenumbering="unnumbered">mgmt = graph.openManagement()
-maker = mgmt.makePropertyKey('mylist')
-maker.dataType(String.class)
-maker.cardinality(LIST)
-maker.make()
-mgmt.commit()
-
-mgmt = graph.openManagement()
-mgmt.makePropertyKey('anotherlist').dataType(String.class).cardinality(LIST).make()
-
-mgmt = graph.openManagement()
-mgmt.getPropertyKey('mylist').cardinality()
-
-LIST
-
-mgmt.commit()
-
-n = g.addV('mylist','one','mylist','two').next()
-
-v[3043568]
-
-g.V(n).property(list,'mylist','one')
-g.V(n).valueMap()
-
-// Duplicates allowed
-[mylist:[one,one,two]]
-
-graph.tx().commit()</programlisting>
 </section>
-<section xml:id="cardset">
-<title>Creating a property with cardinality SET</title>
+<section xml:id="janusload">
+<title>Loading air-routes into a Janus Graph instance</title>
+<simpara>Now that we know how to create a schema and an index for the air-routes graph
+we can use the same basic steps to load it into a Janus Graph
+instance that we used with TinkerGraph. Note that after loading the graph from the
+XML file we then call <emphasis>commit</emphasis> to finalize the transaction.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">graph.io(graphml()).readGraph('air-routes.graphml')
+graph.tx().commit()</programlisting>
+<simpara>Note that as we have not defined a schema before loading the air-routes graph that
+Janus Graph will create vertices, edges and properties using default types and settings.
+A bit later we will look at creating a schema for air-routes and then loading it
+again to see the differences. It is strongly recommended to create the schema before
+loading the data but lets examine a few things before we discuss how to do that.</simpara>
+<simpara>Unlike TinkerGraph, Janus Graph does not, by default,  guarantee to respect user
+provided node and edge ID values. Instead it creates its own ID values as vertices and
+edges are added to the graph. You may have noticed from earlier in the document or
+from the air-routes.graphml file if you happened to look in there, that the ID
+provided for Austin in the GraphML markup is 3. However, having loaded air-routes
+into Janus Graph if we query the ID for the Austin node we can see that it is no
+longer 3. There is a setting that can be changed to force Janus Graph to honor user
+provided ID values but it is not recommended this be used as it will disable some
+other useful Janus Graph features. If you are interested in learning more about this
+option this please refer to the Janus Graph documentation.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('code','AUS').id()
+
+4240</programlisting>
+<simpara>Having the graph system allocate its own ID values is not a big problem as we can
+always query the graph to get the ID but it is a reminder that you should not get
+into the habit of relying on any user provided ID values as you work with graphs.</simpara>
+<simpara>If necessary, as we  discussed earlier in the document, we can always store important
+ID values in a variable for later use.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">ausid = g.V().has('code','AUS').id().next()
+
+g.V(ausid).values('city','desc','region').join(',')
+
+Austin Bergstrom International Airport,Austin,US-TX</programlisting>
+</section>
+<section xml:id="janindex">
+<title>Building a composite index to speed up searching</title>
 <simpara>To be written</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('code','LHR')
+
+WARN  org.janusgraph.graphdb.transaction.StandardJanusGraphTx
+    - Query requires iterating over all vertices [(code = LHR)].
+      For better performance, use indexes
+
+v[32904]</programlisting>
+<programlisting language="groovy" linenumbering="unnumbered">graph.tx().rollback()
+mgmt=graph.openManagement()
+idx=mgmt.buildIndex('airportIndex',Vertex.class)
+iata = mgmt.getPropertyKey('code')
+idx.addKey(iata).buildCompositeIndex()
+mgmt.commit()
+
+mgmt.awaitGraphIndexStatus(graph, 'airportIndex').
+     status(SchemaStatus.REGISTERED).call()
+
+mgmt = graph.openManagement()
+mgmt.awaitGraphIndexStatus(graph, 'airportIndex').call()
+mgmt.updateIndex(mgmt.getGraphIndex("airportIndex"), SchemaAction.REINDEX).get()
+mgmt.commit()</programlisting>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('code','LHR')
+
+v[32904]</programlisting>
 <programlisting language="groovy" linenumbering="unnumbered">mgmt = graph.openManagement()
-mgmt.makePropertyKey('numbers').dataType(Integer.class).cardinality(SET).make()</programlisting>
-<programlisting language="groovy" linenumbering="unnumbered">mgmt.getPropertyKey('numbers').cardinality()
+v_idxes = mgmt.getGraphIndexes(Vertex.class)
 
-SET</programlisting>
-<programlisting language="groovy" linenumbering="unnumbered">mgmt.commit()</programlisting>
-<programlisting language="groovy" linenumbering="unnumbered">n = g.addV('numbers',1,'numbers',2,'numbers',3).next()
+airportIndex
 
-v[2846792]
+v_idxes.each {println it.getFieldKeys()}
 
-g.V(n).valueMap()
+[code]
 
-[numbers:[1,2,3]]</programlisting>
-<programlisting language="groovy" linenumbering="unnumbered">g.V(n).property(set,'numbers',2)
-g.V(n).valueMap()</programlisting>
-<programlisting language="groovy" linenumbering="unnumbered">// Duplicates not allowed
-[numbers:[1,2,3]]</programlisting>
-<programlisting language="groovy" linenumbering="unnumbered">g.V(n).property(set,'numbers',4)
-g.V(n).valueMap()
-
-[numbers:[1,2,3,4]]</programlisting>
-<programlisting language="groovy" linenumbering="unnumbered">graph.tx().commit()</programlisting>
+mgmt.commit()</programlisting>
 </section>
 <section xml:id="janpred">
 <title>Additional Janus Graph text search predicates</title>
@@ -7271,19 +7341,21 @@ be present either as a whole word (complete word match) or as part of the entire
 being examined. These searches are <emphasis role="strong">not</emphasis> case sensitive.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">g.V().has('desc',textContains("Dallas")).values('desc')</programlisting>
 <simpara>Here is what the query should return.</simpara>
-<programlisting language="json" linenumbering="unnumbered">Dallas/Fort Worth International Airport
+<programlisting language="text" linenumbering="unnumbered">Dallas/Fort Worth International Airport
 Dallas Love Field</programlisting>
 <simpara>The word being searched for using <emphasis>textContains</emphasis> does not have to be the first word
 within the string. It just has to exist as a whole word. The query below looks for
 the word <emphasis>"Love"</emphasis> appearing anywhere in the <emphasis>desc</emphasis> property.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">g.V().has('desc',textContains("Love")).values('desc')</programlisting>
 <simpara>Here is what the query returns.</simpara>
-<programlisting language="json" linenumbering="unnumbered">Dallas Love Field
+<programlisting language="text" linenumbering="unnumbered">Dallas Love Field
 Ernest A. Love Field</programlisting>
 <simpara>In this example the word <emphasis>fort</emphasis> is found no matter where it occurs in the <emphasis>city</emphasis>
-name.</simpara>
+name so long as it occurs as a stand alone word..</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">g.V().has('city',textContains("fort")).values('city')</programlisting>
-<programlisting language="json" linenumbering="unnumbered">Fort Myers           Fort Worth
+<simpara>As you can see in the results below <emphasis>Viex Fort</emphasis> was found as well as all of the
+cities with names that start with <emphasis>Fort</emphasis>.</simpara>
+<programlisting language="text" linenumbering="unnumbered">Fort Myers           Fort Worth
 Fort-de-France       Fort McMurray
 Fort Lauderdale      Fort Sandeman
 Fort Wayne           Fort Smith
@@ -7295,9 +7367,6 @@ Fort Smith           Fort Good Hope
 Fort Severn          Fort Frances
 Fort Simpson         Fort Hope
 Fort Leonard Wood    Fort Dodge</programlisting>
-<note>
-<simpara>Searches using <emphasis>textContains</emphasis> are <emphasis role="strong">not</emphasis> case sensitive.</simpara>
-</note>
 <simpara>The query below does not match any whole word in any description anywhere in the
 graph so no results will be returned.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Matches no whole word so no results
@@ -7305,29 +7374,55 @@ g.V().has('desc',textContains("Dalla")).values('desc')</programlisting>
 <simpara>If we use <emphasis>textContainsPrefix</emphasis> instead of <emphasis>textContains</emphasis>, the search will look for
 whole words that start with the specified text and we will get some results. Take a
 look at the next query and the results it generates.</simpara>
+<note>
+<simpara>Searches using <emphasis>textContains</emphasis> and <emphasis>textContainsPrefix</emphasis> are <emphasis role="strong">not</emphasis> case sensitive.</simpara>
+</note>
 <programlisting language="groovy" linenumbering="unnumbered">g.V().has('desc',textContainsPrefix("dalla")).values('desc')</programlisting>
 <simpara>Here is what the query returns. This time we got some results as <emphasis>Dallas</emphasis> starts with
 the characters <emphasis>dalla</emphasis>. Again, remember these are case insensitive queries.</simpara>
-<programlisting language="json" linenumbering="unnumbered">Dallas/Fort Worth International Airport
+<programlisting language="text" linenumbering="unnumbered">Dallas/Fort Worth International Airport
 Dallas Love Field</programlisting>
-<simpara>The <emphasis>textPrefix</emphasis> predicate will look at the string being inspected and compare it to
+<simpara>We could use a <emphasis>textContains</emphasis> query to find airports that have the
+word <emphasis>Regional</emphasis> as part of their description. An example of such a query is given
+below. Only the first five matching airport descriptions found are returned.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('desc',textContains('Regional')).values('desc').limit(5)</programlisting>
+<simpara>Here are the descriptions returned by the query.</simpara>
+<programlisting language="text" linenumbering="unnumbered">Rapid City Regional Airport
+Abilene Regional Airport
+Grand Junction Regional Airport
+San Luis County Regional Airport
+Liberal Mid-America Regional Airport</programlisting>
+<simpara>We could adjust the regional airport query we did above to use  <emphasis>textContainsPrefix</emphasis>
+if we wanted to be a bit less specific and look for any airport with <emphasis>Reg</emphasis> at the
+start of any word in its description.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('desc',textContainsPrefix('Reg')).values('desc').limit(5)</programlisting>
+<simpara>We still get the same five results back.</simpara>
+<programlisting language="text" linenumbering="unnumbered">Rapid City Regional Airport
+Abilene Regional Airport
+Grand Junction Regional Airport
+San Luis County Regional Airport
+Liberal Mid-America Regional Airport</programlisting>
+<simpara>The <emphasis>textPrefix</emphasis> predicate will look at the entire string being inspected and compare it to
 the string you provide and only return a result if the string starts with the specified
 pattern. So in this case we look at just the start of the whole string and not at
 individual words within it. The query below looks for any cities whose name starts
 with the characters <emphasis>Los</emphasis>.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">g.V().has('city',textPrefix('Los')).values('city')</programlisting>
+<note>
+<simpara>Searches using <emphasis>textPrefix</emphasis> <emphasis role="strong">are</emphasis> case sensitive.</simpara>
+</note>
 <simpara>This is what we get back from the query.</simpara>
-<programlisting language="json" linenumbering="unnumbered">Los Alamos
+<programlisting language="text" linenumbering="unnumbered">Los Alamos
 Los Angeles
 Los Mochis
 Losuia</programlisting>
 <simpara>Notice how the query did not find the city of <emphasis>Chapelco/San Martin de los Andes</emphasis> as
-in this case the <emphasis>los</emphasis> is not at the start of the name. If we did want to also have
+in this case the <emphasis>Los</emphasis> is not at the start of the name. If we did want to also have
 that city discovered we could use <emphasis>textContainsPrefix</emphasis> instead as shown below.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">g.V().has('city',textContainsPrefix('Los')).values('city')</programlisting>
 <simpara>As you can see this time we also found <emphasis>Chapelco/San Martin de los Ande</emphasis> and it is
-part of the results returned.</simpara>
-<programlisting language="json" linenumbering="unnumbered">Los Alamos
+part of the results returned. As before the case of the search term is ignored.</simpara>
+<programlisting language="text" linenumbering="unnumbered">Los Alamos
 Chapelco/San Martin de los Andes
 Los Angeles
 Los Mochis
@@ -7344,9 +7439,9 @@ worth taking a few minutes to study the documentation at that URL.</simpara>
 contains a word starting with <emphasis>for</emphasis>, while ignoring case.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">g.V().has('city',textContainsRegex("(?i)for.*")).values('city')</programlisting>
 <simpara>Notice how names that start with <emphasis>For</emphasis> such as <emphasis>Fort Myers</emphasis> as well as city names
-containing words that start with the text <emphasis>For</emphasis> somewhere else are found. For example
+containing words that start with the text <emphasis>For</emphasis> in a subsequent word are found. For example
 <emphasis>La Fortuna</emphasis>  and <emphasis>View Fort</emphasis> are also found.</simpara>
-<programlisting language="json" linenumbering="unnumbered">Fort Myers                Fort Worth
+<programlisting language="text" linenumbering="unnumbered">Fort Myers                Fort Worth
 La Fortuna/San Carlos     Fort McMurray
 Fort-de-France            Fort Sandeman
 Fort Lauderdale           Fortaleza
@@ -7361,17 +7456,21 @@ Fort Smith                Fort Frances
 Juiz de Fora              Fort Hope
 Fort Severn               Fort Dodge
 Fort Simpson              Fort Leonard Wood</programlisting>
+<simpara>The query below shows another way of searching for the word <emphasis>dallas</emphasis> at the start of
+a string of text while ignoring case. This time we use a very simple regular
+expression. Of course, in reality, this yields the same result that we could achieve
+by simply using <emphasis>textContainsPrefix</emphasis>.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Matches dallas ignoring case
 g.V().has('city',textRegex("(?i)dallas")).valueMap('code','city')</programlisting>
 <simpara>As we can see the query worked as expected.</simpara>
-<programlisting language="json" linenumbering="unnumbered">[code:[DFW],city:[Dallas]]
+<programlisting language="groovy" linenumbering="unnumbered">[code:[DFW],city:[Dallas]]
 [code:[DAL],city:[Dallas]]</programlisting>
 <simpara>If we wanted to expand our search a bit we could modify the regular expression, as
 shown below, to find an city name that starts with the characters <emphasis>dal</emphasis>.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Matches any city that contains dal followed by anything, ignoring case.
 g.V().has('city',textRegex('(?i)dal.*')).values('city')</programlisting>
 <simpara>This time we get some additional cities back.</simpara>
-<programlisting language="json" linenumbering="unnumbered">Dallas
+<programlisting language="text" linenumbering="unnumbered">Dallas
 Dallas
 Dalcahue
 Dalat
@@ -7385,19 +7484,35 @@ followed by the characters <emphasis>cah</emphasis> followed by any number of ot
 g.V().has('city',textRegex(".{3}cah.*")).values('city')</programlisting>
 <simpara>Using our modified, and much more specific search pattern we find just one city that
 matches the pattern.</simpara>
-<programlisting language="json" linenumbering="unnumbered">Dalcahue</programlisting>
+<programlisting language="text" linenumbering="unnumbered">Dalcahue</programlisting>
 <simpara>Here is another example that looks for a city name that starts with any three
 characters followed by either <emphasis>cah</emphasis> or <emphasis>anz</emphasis> followed by any number of characters.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">g.V().has('city',textRegex(".{3}(cah|anz).*")).values('city')</programlisting>
 <simpara>Here is what we get back using this regular expression.</simpara>
-<programlisting language="json" linenumbering="unnumbered">Dalcahue
+<programlisting language="text" linenumbering="unnumbered">Dalcahue
 Dalanzadgad</programlisting>
-<simpara>Lastly, here is a query that uses a regular expression to find airports that have a
-region code that starts with the characters <emphasis>US-</emphasis> followed by any of <emphasis>O</emphasis>, <emphasis>M</emphasis> or <emphasis>D</emphasis>
+<simpara>Here is another query that uses a regular expression to find airports that have a
+region code that starts with the characters <emphasis>US-</emphasis> followed by any of <emphasis>O</emphasis>, <emphasis>R</emphasis> or <emphasis>D</emphasis>
 followed by any number of characters.</simpara>
-<programlisting language="groovy" linenumbering="unnumbered">g.V().has('region',textRegex("US-[OMD].*")).values('code','region').fold()</programlisting>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('region',textRegex("US-[ORD].*")).
+      local(values('code','region').fold()).fold()</programlisting>
 <simpara>Here is what this query returns.</simpara>
-<programlisting language="json" linenumbering="unnumbered">[MSP,US-MN,GPT,US-MS,BZN,US-MT,AUG,US-ME,IRK,US-MO,LCK,US-OH,DTW,US-MI,MCI,US-MO,BTM,US-MT,MKG,US-MI,BOS,US-MA,DCA,US-DC,PDX,US-OR,OKC,US-OK,SGF,US-MO,JAN,US-MS,MQT,US-MI,FNT,US-MI,GTR,US-MS,RDM,US-OR,HLN,US-MT,MSO,US-MT,LUK,US-OH,OLF,US-MT,IMT,US-MI,GRR,US-MI,LMT,US-OR,DLH,US-MN,BJI,US-MN,SBY,US-MD,EWB,US-MA,HVR,US-MT,TBN,US-MO,PWM,US-ME,RST,US-MN,CMH,US-OH,LAW,US-OK,BGR,US-ME,EUG,US-OR,MFR,US-OR,HIB,US-MN,HYA,US-MA,PLN,US-MI,GGW,US-MT,TVF,US-MN,SWO,US-OK,TUL,US-OK,JLN,US-MO,CAK,US-OH,LAN,US-MI,AZO,US-MI,MBS,US-MI,MEI,US-MS,TUP,US-MS,OTH,US-OR,FCA,US-MT,GTF,US-MT,TOL,US-OH,BHB,US-ME,CIU,US-MI,ESC,US-MI,CGI,US-MO,IWD,US-MI,CLE,US-OH,BIL,US-MT,CMX,US-MI,STC,US-MN,HGR,US-MD,INL,US-MN,GLH,US-MS,PDT,US-OR,SDY,US-MT,BWI,US-MD,DAY,US-OH,PIB,US-MS,ILG,US-DE,APN,US-MI,ACK,US-MA,MVY,US-MA,PVC,US-MA,RKD,US-ME,YNG,US-OH,STL,US-MO,COU,US-MO,BKG,US-MO,TVC,US-MI,ORH,US-MA,BRD,US-MN,PQI,US-ME,GDV,US-MT,MBL,US-MI]</programlisting>
+<programlisting language="groovy" linenumbering="unnumbered">[[PVD,US-RI],[LMT,US-OR],[SWO,US-OK],[PDX,US-OR],[EUG,US-OR],[MFR,US-OR],[TOL,US-OH],[PDT,US-OR],[CMH,US-OH],[OTH,US-OR],[YNG,US-OH],[OKC,US-OK],[DAY,US-OH],[LAW,US-OK],[LCK,US-OH],[LUK,US-OH],[RDM,US-OR],[DCA,US-DC],[CLE,US-OH],[TUL,US-OK],[CAK,US-OH],[ILG,US-DE],[BID,US-RI]]</programlisting>
+<simpara>Here is a slightly more complicated query that uses a regular expression. The pattern
+matches any airport description containing a word that starts with any character
+followed by <emphasis>al</emphasis>, optionally followed by another <emphasis>l</emphasis> and then followed by any
+character that is not one of <emphasis>"s,k,e,i"</emphasis> ignoring case.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('desc',textContainsRegex("(?i).all?[^(s|k|e|i)]")).values('desc')</programlisting>
+<simpara>Here is the list of airport descriptions that the query returns.</simpara>
+<programlisting language="text" linenumbering="unnumbered">Dinard-Pleurtuit-Saint-Malo Airport
+Walla Walla Regional Airport
+Salt Lake City
+Palm Springs International Airport
+Eduardo Falla Solano Airport
+Palm Beach International Airport
+Salt Cay Airport
+Melville Hall Airport
+Hall Beach Airport</programlisting>
 </section>
 <section xml:id="_fuzzy_search_predicates">
 <title>Fuzzy search predicates</title>
@@ -7412,13 +7527,25 @@ achieve a match in the text being inspected. For example <emphasis>pall</emphasi
 <programlisting language="groovy" linenumbering="unnumbered">.V().has('desc',textContainsFuzzy("pall")).values('desc')</programlisting>
 <simpara>Here are the results from running the query. You can see that airport descriptions
 that contain the whole words <emphasis>Paul</emphasis>, <emphasis>Palm</emphasis> and <emphasis>Hall</emphasis> have been found.</simpara>
-<programlisting language="json" linenumbering="unnumbered">Minneapolis-St.Paul International Airport
+<programlisting language="text" linenumbering="unnumbered">Minneapolis-St.Paul International Airport
 Palm Beach International Airport
 Palm Springs International Airport
 John Paul II International Airport Krakow-Balice Airport
 Melville Hall Airport
 Hall Beach Airport
 St Paul Island Airport</programlisting>
+<simpara>This query uses <emphasis>textFuzzy</emphasis> to find cities whose names are close to Dublin.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('city',textFuzzy('Dublin')).values('city')</programlisting>
+<simpara>Here is what the query returns. You can see that the method used by <emphasis>fuzzy</emphasis> searches
+is more than just single character replacement. Note that not all of the city names
+returned are of the same length. To better understand the <emphasis>fuzzy search</emphasis> algorithm it
+is recommended to look at the Wikipedia page mentioned above.</simpara>
+<programlisting language="text" linenumbering="unnumbered">Yulin
+Hubli
+Dublin
+Lublin
+Dubois
+Dubai</programlisting>
 </section>
 </section>
 <section xml:id="janusgeo">
