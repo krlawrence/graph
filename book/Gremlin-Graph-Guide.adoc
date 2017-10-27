@@ -2,7 +2,7 @@ GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v271, Oct 26, 2017
-// Thu Oct 26, 2017 09:34:29 CDT
+// Thu Oct 26, 2017 18:53:55 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Oct 26 2017
@@ -8946,10 +8946,6 @@ g.V().hasLabel('airport').where(out().count().is(gt(a-50))).
 Work in progress
 ^^^^^^^^^^^^^^^^
 
-
-
-
-
 [source,groovy]
 ----
 a=g.V().has('region','US-OK').values('code').withIndex().toList()
@@ -10251,15 +10247,16 @@ graph.tx().commit()
 ----
 
 Note that as we have not defined a schema before loading the air-routes graph that
-Janus Graph will create vertices, edges and properties using default types and settings.
-A bit later we will look at creating a schema for air-routes and then loading it
-again to see the differences. It is strongly recommended to create the schema before
-loading the data but lets examine a few things before we discuss how to do that. 
+Janus Graph will create vertices, edges and properties using default types and
+settings.  A bit later we will look at creating a schema for air-routes and then
+loading it again to see the differences. It is strongly recommended to create the
+schema before loading the data but lets examine a few things before we discuss how to
+do that. 
 
 Unlike TinkerGraph, Janus Graph does not, by default,  guarantee to respect user
-provided node and edge ID values. Instead it creates its own ID values as vertices and
-edges are added to the graph. You may have noticed from earlier in the document or
-from the air-routes.graphml file if you happened to look in there, that the ID
+provided node and edge ID values. Instead it creates its own ID values as vertices
+and edges are added to the graph. You may have noticed from earlier in the document
+or from the air-routes.graphml file if you happened to look in there, that the ID
 provided for Austin in the GraphML markup is 3. However, having loaded air-routes
 into Janus Graph if we query the ID for the Austin node we can see that it is no
 longer 3. There is a setting that can be changed to force Janus Graph to honor user
@@ -10278,8 +10275,8 @@ Having the graph system allocate its own ID values is not a big problem as we ca
 always query the graph to get the ID but it is a reminder that you should not get
 into the habit of relying on any user provided ID values as you work with graphs.
 
-If necessary, as we  discussed earlier in the document, we can always store important
-ID values in a variable for later use.
+If necessary, as discussed earlier, we can always store important ID values in a
+variable for later use.
 
 [source,groovy]
 ----
