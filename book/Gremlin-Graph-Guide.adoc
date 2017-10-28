@@ -2,10 +2,10 @@ GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v271, Oct 26, 2017
-// Thu Oct 26, 2017 18:53:55 CDT
+// Sat Oct 28, 2017 10:37:29
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Oct 26 2017
+//:Date:      Oct 28 2017
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -2428,13 +2428,27 @@ throughout this document.
 
 The following queries demonstrate these capabilities being used in different ways.
 First of all, here are some examples of some of the direct compare steps such as 'gt'
-and 'gte' being used.
+and 'gte' being used. The 'fold' step conveniently folds all of the results into  a
+list for us.
 
 [source,groovy]
 ----
 // Airports with at least 5 runways
 g.V().has('runways',gte(5)).values('code','runways').fold()
+----
 
+Here is the output that we might get from running the query.
+
+
+[source,groovy]
+----
+[ATL,5,BOS,6,DFW,7,IAH,5,ORD,8,DEN,6,DTW,6,YYZ,5,AMS,6,SNN,5,MKE,5,MDW,5,GIS,5,HLZ,5,NPE,5,NSN,5,PPQ,5,TRG,5,UFA,5,KRP,5]
+----
+
+The next three queries show examples of 'lt', 'eq' and 'neq' bing used.
+
+[source,groovy]
+----
 // Airports with less than 3 runways
 g.V().has('runways',lt(3)).values('code','runways').fold()
 
