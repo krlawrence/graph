@@ -2,7 +2,7 @@ GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v271, Oct 26, 2017
-// Sat Oct 28, 2017 10:37:29
+// Sat Oct 28, 2017 20:06:53 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Oct 28 2017
@@ -2439,7 +2439,6 @@ g.V().has('runways',gte(5)).values('code','runways').fold()
 
 Here is the output that we might get from running the query.
 
-
 [source,groovy]
 ----
 [ATL,5,BOS,6,DFW,7,IAH,5,ORD,8,DEN,6,DTW,6,YYZ,5,AMS,6,SNN,5,MKE,5,MDW,5,GIS,5,HLZ,5,NPE,5,NSN,5,PPQ,5,TRG,5,UFA,5,KRP,5]
@@ -2470,7 +2469,7 @@ g.V().has('runways',inside(3,6)).values('code','runways')
 g.V().has('runways',outside(3,6)).values('code','runways')
 ----
 
-Examples of 'within' and 'without'.
+Below are some examples showing 'within' and 'without' being used.
 
 [source,groovy]
 ----
@@ -2492,7 +2491,14 @@ than 8 runways.
 [source,groovy]
 ----
 // Airports with at least 5 runways but less than 8
-g.V().has('runways',between(5,8)).values('code','runways')
+g.V().has('runways',between(5,8)).values('code','runways').fold()
+----
+
+Here is the result of running the query.
+
+[source,groovy]
+----
+[ATL,5,BOS,6,DFW,7,IAH,5,DEN,6,DTW,6,YYZ,5,AMS,6,SNN,5,MKE,5,MDW,5,GIS,5,HLZ,5,NPE,5,NSN,5,PPQ,5,TRG,5,UFA,5,KRP,5]
 ----
 
 As with many queries we may build, there are several ways to get the same answer. 
@@ -8955,6 +8961,34 @@ g.V().hasLabel('airport').where(out().count().is(gt(a-50))).
 [apt:AMS,routes:269]
 [apt:MUC,routes:237]
 [apt:IST,routes:270]
+----
+
+Analyzing where time is spent - introducing 'profile'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You can use the 'profile' step to ask Gremlin to give you a summary of where the time
+is spent processing your query. Take a look at the example below.
+
+[source,groovy]
+----
+g.V().has('region','US-TX').out().has('region','US-CA').
+                            out().has('country','DE').profile()
+----
+
+After you run the query, instead of showing you the results, Gremlin will show you
+where the time was spent processing the components of the query.
+
+[source,groovy]
+----
+Step                                       Count  Traversers  Time (ms)    % Dur
+===============================================================================
+TinkerGraphStep(vertex,[region.eq(US-TX)])   26          26      1.810     9.71
+VertexStep(OUT,vertex)                      701         701      0.877     4.70
+HasStep([region.eq(US-CA)])                  47          47      0.561     3.01
+VertexStep(OUT,vertex)                     3464        3464     12.035    64.54
+NoOpBarrierStep(2500)                      3464         224      3.157    16.93
+HasStep([country.eq(DE)])                    59           4      0.206     1.11
+   >TOTAL                                     -           -     18.650        -
 ----
 
 Work in progress
