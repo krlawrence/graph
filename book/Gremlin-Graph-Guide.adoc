@@ -8991,6 +8991,19 @@ HasStep([country.eq(DE)])                    59           4      0.206     1.11
    >TOTAL                                     -           -     18.650        -
 ----
 
+Introducing 'cyclicPath'
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+You can use cyclicPath to find paths through the graph that end up back where they
+started. The example below finds routes that both start and end in Austin (AUS).
+
+[source,groovy]
+----
+// From Austin and back again
+g.V().has('code','AUS').out().out().cyclicPath().path().by('code')
+----
+
+
 Work in progress
 ^^^^^^^^^^^^^^^^
 
@@ -9085,8 +9098,6 @@ g.V().has('code','AUS').as('a').repeat(out().where(neq('a'))).times(3).simplePat
 g.V().has('code','AUS').as('a').repeat(out().where(neq('a'))).times(4).simplePath().has('code','LAX').path().by('code').count()
 122329
 
-// From Austin and back again
-g.V().has('code','AUS').out().out().cyclicPath().path().by('code')
 
 // Ugly query! Look at every property of every node and see if it contains "R."
 g.V().as('a').values().filter{it.toString().contains('R.')}.select('a').dedup().valueMap()
