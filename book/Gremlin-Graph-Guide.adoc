@@ -9488,9 +9488,10 @@ can go ahead and create our graph traversal object
 ----
 println "Loading the air-routes graph...\n"
 
+// Load the air-routes graph
 try
 {
-  tg.io(IoCore.graphml()).readGraph("/Users/kelvin/krl/code/graph/air-routes.graphml");
+  tg.io(IoCore.graphml()).readGraph("air-routes.graphml");
 } 
 catch (IOException e)
 {
@@ -9498,6 +9499,7 @@ catch (IOException e)
   System.exit(0);
 }
 
+// Create a graph traversal source object and find the Austin airport vertex
 def g = tg.traversal()
 
 def aus = g.V().has('code','AUS').valueMap().next()
