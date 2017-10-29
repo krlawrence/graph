@@ -1,11 +1,11 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v271, Oct 26, 2017
-// Sat Oct 28, 2017 20:06:53 CDT
+v271, Oct 29, 2017
+// Sun Oct 29, 2017 17:00:24 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Oct 28 2017
+//:Date:      Oct 29 2017
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -9126,6 +9126,7 @@ g.V().hasLabel('airport').pageRank().by(outE('route')).by('r').order().by('r',de
 [r:[13.154068946539626],code:[PEK]]
 [r:[13.047424689334612],code:[FRA]]
 ----
+
 [[beyond]]
 MOVING BEYOND THE CONSOLE AND TINKERGRAPH
 -----------------------------------------
@@ -9539,7 +9540,7 @@ ADDL=$GREMLIN/ext/tinkergraph-gremlin/lib/*
 export CLASSPATH=$CLASSPATH:$LIBPATH/*:$EXTPATH/*:$ADDL 
 
 # Compile
-groovyc GraphTest.groovy
+groovyc TinkerGraphTest.groovy
 ----
 
 Running our Groovy application
@@ -9549,25 +9550,41 @@ Assuming everything compiled cleanly we can now run our Groovy application.
 
 [source,groovy]
 ----
-groovy GraphTest
+groovy TinkerGraphTest
+----
 
+And here is the output we should get back.
+
+[source,groovy]
+----
 Gremlin version is 3.2.4
 Loading the air-routes graph...
 
 [country:[US], code:[AUS], longest:[12250], city:[Austin], elev:[542], icao:[KAUS], lon:[-97.6698989868164], type:[airport], region:[US-TX], runways:[2], lat:[30.1944999694824], desc:[Austin Bergstrom International Airport]]
 ----
 
+Now that we have a small skeleton of a test program running, we can start to add a
+few more interesting features to it.
+
+
 Adding to our Groovy application
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+The code below demonstrates how to work with the 'valueMap' for the Austin vertex
+that we created a few lines back in our program.
 
 [source,groovy]
 ----
+// Retieve the city name property and display it
 def city = aus['city']
 println "\nThe AUS airport is in ${city[0]}\n"
 
+// Iterate through the keys we got back and print them along with their values
 aus.each {println "${it.key} : ${it.value[0]}"}
 ----
+
+If we were to re-compile and run our program now, the lines that we added will
+generate the following output.
 
 [source,groovy]
 ----
