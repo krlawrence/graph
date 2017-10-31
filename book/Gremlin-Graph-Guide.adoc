@@ -2,7 +2,7 @@ GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v271, Oct 31, 2017
-// Tue Oct 31, 2017 08:14:01  CDT
+// Tue Oct 31, 2017 11:50:51 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Oct 31 2017
@@ -9720,7 +9720,7 @@ began in 2016 as an open source fork of the popular Titan graph database, is hos
 the Linux Foundation and provides these advanced capabilities.
 
 In this book I have attempted to provide a reasonable amount of Janus Graph 
-coverage of using but it is still recommended to become familiar with the official
+coverage of but it is still recommended to become familiar with the official
 Janus Graph documentation where you will find more in depth discussions of advanced
 topics.
 
