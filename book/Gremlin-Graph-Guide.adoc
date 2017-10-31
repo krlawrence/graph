@@ -10210,6 +10210,7 @@ ONE2ONE::
 
 Defining edge labels and usage
 ++++++++++++++++++++++++++++++
+
 Let's look at how we can use the Janus Graph Management API to specify the
 multiplicty for the 'route' and 'contains' edges used by the air-routes graph.
 
@@ -10225,7 +10226,9 @@ mgmt.commit()
 Defining vertex labels
 ++++++++++++++++++++++
 
-To be written
+Now let's tell Janus Graph about the vertex labels that we are going to be using. The
+'air-routes' graph has four different vertex types, namely, 'version', 'airport',
+'country' and 'continent' so we will create a label for each of those.
 
 [source,groovy]
 ----
@@ -10242,7 +10245,8 @@ mgmt.commit()
 Defining vertex property keys
 +++++++++++++++++++++++++++++
 
-To be written
+Next we need to define the property keys and data types that our vertices will be
+using. The air-routes graph only uses properties that have a cardinality of SINGLE.
 
 [source,groovy]
 ----
@@ -10265,7 +10269,9 @@ mgmt.commit()
 Defining edge property keys
 +++++++++++++++++++++++++++
 
-To be written
+We also need to define the property keys and data types that will be used on edges.
+Currently the 'air-routes' graph only has one edge property, 'dist' that is used to
+store the distance between two airports.
 
 [source,groovy]
 ----
@@ -10275,7 +10281,10 @@ mgmt.makePropertyKey('dist').dataType(Integer.class).cardinality(Cardinality.SIN
 mgmt.commit()
 ----
 
-To be written
+Now that we have defined our schema, we can use the management API to double check
+that everything we just did looks correct. The snippet of code below can be run from
+within the Gremlin console and will display the property keys along with their data
+types and cardinality settings.
 
 
 [source,groovy]
@@ -10291,7 +10300,8 @@ mgmt.commit()
 ----
 
 
-To be written
+This is the output we should get back if our schema creation has succeeded. Note that
+both the edge and vertex property keys are displayed.
 
 [source,groovy]
 ----
@@ -10308,7 +10318,6 @@ region  : class java.lang.String SINGLE
 desc    : class java.lang.String SINGLE
 runways : class java.lang.Integer SINGLE
 elev    : class java.lang.Integer SINGLE
-
 ----
 
 
