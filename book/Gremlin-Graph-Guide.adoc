@@ -9719,6 +9719,11 @@ define schemas and support for ACID transactions. The Janus Graph project, which
 began in 2016 as an open source fork of the popular Titan graph database, is hosted by
 the Linux Foundation and provides these advanced capabilities.
 
+In this book I have attempted to provide a reasonable amount of Janus Graph 
+coverage of using but it is still recommended to become familiar with the official
+Janus Graph documentation where you will find more in depth discussions of advanced
+topics.
+
 Janus Graph can run on a laptop, which is useful for learning and experimenting, but
 it is designed to handle very large graphs stored on distributed clusters. It can
 handle graphs containing billions of vertices and edges. As we shall discuss, Janus
