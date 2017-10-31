@@ -1,11 +1,11 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v271, Oct 29, 2017
-// Sun Oct 29, 2017 17:00:24 CDT
+v271, Oct 31, 2017
+// Tue Oct 31, 2017 08:14:01  CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Oct 29 2017
+//:Date:      Oct 31 2017
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -997,9 +997,13 @@ g=graph.traversal()
 :set max-iteration 1000
 ----
 
+NOTE: Setting the ID manager as shown above is important. If you do not do this, by
+default, when using TinkerGraph, ID values will have to be specified as strings such
+as '"3"' rather than just the numeral '3'.
+
 If you put the commands given above into a file called something like
 'mygremlin-setup', once the console is up and running you can load that file by
-entering the command below.  Doing this will save you a fair bit of time as each time
+entering the command below. Doing this will save you a fair bit of time as each time
 you restart the console you can just reload your configuration file and the
 environment will be configured and the graph loaded and you can get straight to
 writing queries.
@@ -4142,7 +4146,7 @@ g.V().has('code','AUS').repeat(out()).times(2).has('code','SYD').path().by('code
 
 The previous query is equivalent to this next one but doing it this way is less
 flexible in that we can not as easily vary the number of 'out' steps, should, for
-example we want to next try 5 hops.
+example we want to next try five hops instead of the current two..
 
 [source,groovy]
 ----
