@@ -1,11 +1,11 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v271, Oct 31, 2017
-// Tue Oct 31, 2017 11:50:51 CDT
+v271, Nov 02, 2017
+// Thu Nov 02, 2017 18:41:38 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Oct 31 2017
+//:Date:      Nov 02 2017
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -727,19 +727,19 @@ much deeper look at different ways to work with graph data stored in text format
 files including importing and exporting graph data in the "<<serialize>>" section at
 the end of this document.
 
-The air-routes graph contains several vertex types that are specified using labels. The
-most common ones being 'airport' and 'country'. There are also vertices for each of the
-seven continents ('continent') and a single 'version' vertex that I provided as a way
-to test which version of the graph you are using.
+The air-routes graph contains several vertex types that are specified using labels.
+The most common ones being 'airport' and 'country'. There are also vertices for each
+of the seven continents ('continent') and a single 'version' vertex that I provided
+as a way to test which version of the graph you are using.
 
 Routes between airports are modeled as edges. These edges carry the 'route' label and
 include the distance between the two connected airport vertices as a property called
 'dist'.  Connections between countries and airports are modelled using an edge with a
 'contains' label.
 
-Each airport vertex has many properties associated with it giving various details about
-that airport including its IATA and ICAO codes, its description, the city it is in
-and its geographic location.
+Each airport vertex has many properties associated with it giving various details
+about that airport including its IATA and ICAO codes, its description, the city it is
+in and its geographic location.
 
 Specifically, each airport vertex has a unique ID, a label of 'airport' and contains
 the following properties. The word in parenthesis indicates the type of the property.
@@ -3892,6 +3892,7 @@ As we can see the results returned are still the same.
 [code:[US],type:[country],desc:[United States]]
 ----
 
+[[coalconst]]
 Combining 'coalesce' with a 'constant' value
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -3909,6 +3910,10 @@ g.V(3).coalesce(has('region','US-TX').values('desc'),constant("Not in Texas"))
 
 Austin Bergstrom International Airport
 ----
+
+A bit later in the "<<coaladdv>>" section we will again use 'coalesce' to check to
+see if a vertex already exists before we try to add it.
+
 
 [[otherv]]
 Other ways to explore vertices and edges using 'both', 'bothE', 'bothV' and 'otherV'
@@ -5186,6 +5191,69 @@ vertices = [["WYZ","KWYZ"],["XYZ","KXYZ"]]
 vertices.each {g.addV("airport").property("code",it[0],"iata",it[1]).next()}
 ----
 
+[[coaladdv]]
+Using 'coalesce' to only add a vertex if it does not exist
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In the <<coalconst>> section we looked at how coalesce could be used to return a
+constant value if the other entities that we were looking for did not exist. We can
+reuse that pattern to produce a traversal that will only add a vertex to the graph if
+that vertex has not already been created.
+
+Let's assume we wanted to add a new airport, with the code '"XYZ"' but we are not
+sure if the airport might have already been added.
+
+We can check to see if the airport exists, using a basic 'has' step.
+
+[source,groovy]
+----
+g.V().has('code','XYZ')
+----
+
+If it does not exist yet, which in this case it does not, noting will be returned. We
+could go one step further and change the query to return an empty list '[]' if the
+airport does not exist by adding a 'fold' step to the query.
+
+[source,groovy]
+----
+g.V().has('code','XYZ').fold()
+
+[]
+----
+
+Now that we have a query that can return an empty list if a vertex does not exist we
+can take advantage of this in a 'coalesce' step. The query below looks to see if the
+airport already exists and passes the result of that into a 'coalesce' step.
+Remember, 'coalesce' will return the result of the first traversal it looks at that
+returns a good result. We can make the first parameter passed to 'coalesce' and
+'unfold' step. This way in the case where the airport does not exist, 'unfold' will
+return nothing and so 'coalesce' will attempt the second step. In this case our
+second step creates a vertex for the airport '"XYZ"'.
+
+[source,groovy]
+----
+g.V().has('code','XYZ').fold().coalesce(unfold(),addV().property('code','XYZ'))
+
+v[53865]
+----
+
+As you can see the query above created a new vertex with an ID of '53865' as the
+'XYZ' airport did not already exist. However, if we run the same query again, notice
+that we get the same vertex back that we just created and not a new one. This is
+because this time, the 'coalesce' step *does* find a result from the 'unfold' step
+and so completed before attempting the 'addV' step.
+
+[source,groovy]
+----
+g.V().has('code','XYZ').fold().coalesce(unfold(),addV().property('code','XYZ'))
+
+v[53865]
+----
+
+Using 'coalesce' in this way provides us with a nice pattern for a commonly performed
+task of checking to see if something already exists before we create it.
+
+
 [[deleting]]
 Deleting vertices, edges and properties
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -5397,8 +5465,8 @@ vp[desc->Dallas/Fort Worth In]
 
 We have already seen how each property on a vertex or edge is represented as a key
 and value pair. If we wanted to retrieve a list of all of the property keys
-associated with a given node we could write a query like the one below that finds all
-of the property keys associated with the DFW node in the air-routes graph.
+associated with a given vertex we could write a query like the one below that finds all
+of the property keys associated with the DFW vertex in the air-routes graph.
 
 [source,groovy]
 ----
@@ -5419,7 +5487,7 @@ desc
 ----
 
 We could likewise find the names, with duplicates removed, of any property keys
-associated with any outgoing edges from the DFW node using this query. Note that edge
+associated with any outgoing edges from the DFW vertex using this query. Note that edge
 properties are implementations of 'Property' and not 'VertexProperty'.
 
 [source,groovy]
@@ -9946,7 +10014,7 @@ xyz = graph.addVertex()
 // Add a property
 xyz.property("name", "XYZ")
 
-// Commit the transaction
+// Rollback the transaction
 graph.tx().rollback()
 
 // Nothing will be returned
