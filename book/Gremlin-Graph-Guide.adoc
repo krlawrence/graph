@@ -1,11 +1,11 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v271, Nov 02, 2017
-// Thu Nov 02, 2017 18:41:38 CDT
+v272, Nov 03, 2017
+// Fri Nov 03, 2017 15:29:15 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Nov 02 2017
+//:Date:      Nov 03 2017
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -18,7 +18,7 @@ v271, Nov 02, 2017
 //:pygments-style: vim
 :toc:
 :toclevels: 4
-:revision: 271
+:revision: 272
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
 //        has a white foreground color. The default was unreadable,
@@ -5263,8 +5263,8 @@ vertices, edges and properties but we have not yet looked at how we can delete t
 Gremlin provides the 'drop' step that we can use to remove things from a graph. 
 
 
-Deleting a node
-^^^^^^^^^^^^^^^
+Deleting a vertex
+^^^^^^^^^^^^^^^^^
 
 In some of our earlier examples we created a fictitious airport node with a code of
 'XYZ' and added it to the air routes graph. If we now wanted to delete it we could
