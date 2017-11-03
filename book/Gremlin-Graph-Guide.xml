@@ -5,7 +5,7 @@
 <info>
 <title>GRAPH DATABASES, GREMLIN and TINKERPOP </title>
 <subtitle>A TUTORIAL</subtitle>
-<date>Oct 26, 2017</date>
+<date>Nov 02, 2017</date>
 <author>
 <personname>
 <firstname>Kelvin</firstname>
@@ -17,8 +17,8 @@
 <authorinitials>KRL</authorinitials>
 <revhistory>
 <revision>
-<revnumber>270</revnumber>
-<date>Oct 26, 2017</date>
+<revnumber>271</revnumber>
+<date>Nov 02, 2017</date>
 <authorinitials>KRL</authorinitials>
 </revision>
 </revhistory>
@@ -57,7 +57,7 @@ October 5th, 2017<?asciidoc-br?></simpara>
 free to send me feedback of any sort. Suggested improvements are especially welcome.
 A good way to provide feedback is by opening an issue in the GitHub repository
 located at <link xl:href="https://github.com/krlawrence/graph">https://github.com/krlawrence/graph</link>. You are currently reading revision
-270 of the document.</simpara>
+271 of the document.</simpara>
 </section>
 <section xml:id="thanks">
 <title>A word of thanks</title>
@@ -702,17 +702,17 @@ files.</simpara>
 much deeper look at different ways to work with graph data stored in text format
 files including importing and exporting graph data in the "<xref linkend="serialize"/>" section at
 the end of this document.</simpara>
-<simpara>The air-routes graph contains several vertex types that are specified using labels. The
-most common ones being <emphasis>airport</emphasis> and <emphasis>country</emphasis>. There are also vertices for each of the
-seven continents (<emphasis>continent</emphasis>) and a single <emphasis>version</emphasis> vertex that I provided as a way
-to test which version of the graph you are using.</simpara>
+<simpara>The air-routes graph contains several vertex types that are specified using labels.
+The most common ones being <emphasis>airport</emphasis> and <emphasis>country</emphasis>. There are also vertices for each
+of the seven continents (<emphasis>continent</emphasis>) and a single <emphasis>version</emphasis> vertex that I provided
+as a way to test which version of the graph you are using.</simpara>
 <simpara>Routes between airports are modeled as edges. These edges carry the <emphasis>route</emphasis> label and
 include the distance between the two connected airport vertices as a property called
 <emphasis>dist</emphasis>.  Connections between countries and airports are modelled using an edge with a
 <emphasis>contains</emphasis> label.</simpara>
-<simpara>Each airport vertex has many properties associated with it giving various details about
-that airport including its IATA and ICAO codes, its description, the city it is in
-and its geographic location.</simpara>
+<simpara>Each airport vertex has many properties associated with it giving various details
+about that airport including its IATA and ICAO codes, its description, the city it is
+in and its geographic location.</simpara>
 <simpara>Specifically, each airport vertex has a unique ID, a label of <emphasis>airport</emphasis> and contains
 the following properties. The word in parenthesis indicates the type of the property.</simpara>
 <screen> type    (string) : Vertex type. Will be 'airport' for airport vertices
@@ -911,9 +911,14 @@ graph = TinkerGraph.open(conf)
 graph.io(graphml()).readGraph('air-routes.graphml')
 g=graph.traversal()
 :set max-iteration 1000</programlisting>
+<note>
+<simpara>Setting the ID manager as shown above is important. If you do not do this, by
+default, when using TinkerGraph, ID values will have to be specified as strings such
+as <emphasis>"3"</emphasis> rather than just the numeral <emphasis>3</emphasis>.</simpara>
+</note>
 <simpara>If you put the commands given above into a file called something like
 <emphasis>mygremlin-setup</emphasis>, once the console is up and running you can load that file by
-entering the command below.  Doing this will save you a fair bit of time as each time
+entering the command below. Doing this will save you a fair bit of time as each time
 you restart the console you can just reload your configuration file and the
 environment will be configured and the graph loaded and you can get straight to
 writing queries.</simpara>
@@ -1935,11 +1940,14 @@ throughout this document.</simpara>
 </table>
 <simpara>The following queries demonstrate these capabilities being used in different ways.
 First of all, here are some examples of some of the direct compare steps such as <emphasis>gt</emphasis>
-and <emphasis>gte</emphasis> being used.</simpara>
+and <emphasis>gte</emphasis> being used. The <emphasis>fold</emphasis> step conveniently folds all of the results into  a
+list for us.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Airports with at least 5 runways
-g.V().has('runways',gte(5)).values('code','runways').fold()
-
-// Airports with less than 3 runways
+g.V().has('runways',gte(5)).values('code','runways').fold()</programlisting>
+<simpara>Here is the output that we might get from running the query.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">[ATL,5,BOS,6,DFW,7,IAH,5,ORD,8,DEN,6,DTW,6,YYZ,5,AMS,6,SNN,5,MKE,5,MDW,5,GIS,5,HLZ,5,NPE,5,NSN,5,PPQ,5,TRG,5,UFA,5,KRP,5]</programlisting>
+<simpara>The next three queries show examples of <emphasis>lt</emphasis>, <emphasis>eq</emphasis> and <emphasis>neq</emphasis> bing used.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">// Airports with less than 3 runways
 g.V().has('runways',lt(3)).values('code','runways').fold()
 
 // How many airports have 3 runways?
@@ -1953,7 +1961,7 @@ g.V().has('runways',inside(3,6)).values('code','runways')
 
 // Airports with less than  3 or more than 6 runways.
 g.V().has('runways',outside(3,6)).values('code','runways')</programlisting>
-<simpara>Examples of <emphasis>within</emphasis> and <emphasis>without</emphasis>.</simpara>
+<simpara>Below are some examples showing <emphasis>within</emphasis> and <emphasis>without</emphasis> being used.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Airports with at least 3 but not more than 6 runways
 g.V().has('runways',within(3..6)).values('code','runways').limit(15)
 
@@ -1967,7 +1975,9 @@ a lower bound but less than an upper bound. The query below will find any airpor
 that has 5,6 or 7 runways. In other words, any airport that has at least 5 but less
 than 8 runways.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Airports with at least 5 runways but less than 8
-g.V().has('runways',between(5,8)).values('code','runways')</programlisting>
+g.V().has('runways',between(5,8)).values('code','runways').fold()</programlisting>
+<simpara>Here is the result of running the query.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">[ATL,5,BOS,6,DFW,7,IAH,5,DEN,6,DTW,6,YYZ,5,AMS,6,SNN,5,MKE,5,MDW,5,GIS,5,HLZ,5,NPE,5,NSN,5,PPQ,5,TRG,5,UFA,5,KRP,5]</programlisting>
 <simpara>As with many queries we may build, there are several ways to get the same answer.
 Each of the following queries will return the same result. To an extent which one
 you use comes down to personal preference although in some cases one form of a query
@@ -2863,7 +2873,7 @@ right order.</simpara>
 <simpara>As we can see the results returned are still the same.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">[code:[NA],type:[continent],desc:[North America]]
 [code:[US],type:[country],desc:[United States]]</programlisting>
-<section xml:id="_combining_emphasis_coalesce_emphasis_with_a_emphasis_constant_emphasis_value">
+<section xml:id="coalconst">
 <title>Combining <emphasis>coalesce</emphasis> with a <emphasis>constant</emphasis> value</title>
 <simpara>The <emphasis>coalesce</emphasis> step can also be very useful when combined with a <emphasis>constant</emphasis> value. In
 the example below if the airport is in Texas then its description is returned. If it
@@ -2875,6 +2885,8 @@ Not in Texas
 g.V(3).coalesce(has('region','US-TX').values('desc'),constant("Not in Texas"))
 
 Austin Bergstrom International Airport</programlisting>
+<simpara>A bit later in the "<xref linkend="coaladdv"/>" section we will again use <emphasis>coalesce</emphasis> to check to
+see if a vertex already exists before we try to add it.</simpara>
 </section>
 </section>
 <section xml:id="otherv">
@@ -3017,7 +3029,7 @@ look for between airports.</simpara>
 [AUS,SFO,SYD]</programlisting>
 <simpara>The previous query is equivalent to this next one but doing it this way is less
 flexible in that we can not as easily vary the number of <emphasis>out</emphasis> steps, should, for
-example we want to next try 5 hops.</simpara>
+example we want to next try five hops instead of the current two..</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">g.V().has('code','AUS').out().out().has('code','SYD').path().by('code')</programlisting>
 <simpara>A bit later, in the <xref linkend="emit"/> section, we will look at how <emphasis>emit</emphasis> can be used to
 adjust the behavior of a <emphasis>repeat&#8230;&#8203;times</emphasis> loop.</simpara>
@@ -3725,6 +3737,44 @@ to combine a set of creation steps into a single REST API call.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">vertices = [["WYZ","KWYZ"],["XYZ","KXYZ"]]
 vertices.each {g.addV("airport").property("code",it[0],"iata",it[1]).next()}</programlisting>
 </section>
+<section xml:id="coaladdv">
+<title>Using <emphasis>coalesce</emphasis> to only add a vertex if it does not exist</title>
+<simpara>In the <xref linkend="coalconst"/> section we looked at how coalesce could be used to return a
+constant value if the other entities that we were looking for did not exist. We can
+reuse that pattern to produce a traversal that will only add a vertex to the graph if
+that vertex has not already been created.</simpara>
+<simpara>Let&#8217;s assume we wanted to add a new airport, with the code <emphasis>"XYZ"</emphasis> but we are not
+sure if the airport might have already been added.</simpara>
+<simpara>We can check to see if the airport exists, using a basic <emphasis>has</emphasis> step.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('code','XYZ')</programlisting>
+<simpara>If it does not exist yet, which in this case it does not, noting will be returned. We
+could go one step further and change the query to return an empty list <emphasis>[]</emphasis> if the
+airport does not exist by adding a <emphasis>fold</emphasis> step to the query.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('code','XYZ').fold()
+
+[]</programlisting>
+<simpara>Now that we have a query that can return an empty list if a vertex does not exist we
+can take advantage of this in a <emphasis>coalesce</emphasis> step. The query below looks to see if the
+airport already exists and passes the result of that into a <emphasis>coalesce</emphasis> step.
+Remember, <emphasis>coalesce</emphasis> will return the result of the first traversal it looks at that
+returns a good result. We can make the first parameter passed to <emphasis>coalesce</emphasis> and
+<emphasis>unfold</emphasis> step. This way in the case where the airport does not exist, <emphasis>unfold</emphasis> will
+return nothing and so <emphasis>coalesce</emphasis> will attempt the second step. In this case our
+second step creates a vertex for the airport <emphasis>"XYZ"</emphasis>.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('code','XYZ').fold().coalesce(unfold(),addV().property('code','XYZ'))
+
+v[53865]</programlisting>
+<simpara>As you can see the query above created a new vertex with an ID of <emphasis>53865</emphasis> as the
+<emphasis>XYZ</emphasis> airport did not already exist. However, if we run the same query again, notice
+that we get the same vertex back that we just created and not a new one. This is
+because this time, the <emphasis>coalesce</emphasis> step <emphasis role="strong">does</emphasis> find a result from the <emphasis>unfold</emphasis> step
+and so completed before attempting the <emphasis>addV</emphasis> step.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('code','XYZ').fold().coalesce(unfold(),addV().property('code','XYZ'))
+
+v[53865]</programlisting>
+<simpara>Using <emphasis>coalesce</emphasis> in this way provides us with a nice pattern for a commonly performed
+task of checking to see if something already exists before we create it.</simpara>
+</section>
 </section>
 <section xml:id="deleting">
 <title>Deleting vertices, edges and properties</title>
@@ -3870,8 +3920,8 @@ vp[lat-&gt;32.896800994873]
 vp[desc-&gt;Dallas/Fort Worth In]</programlisting>
 <simpara>We have already seen how each property on a vertex or edge is represented as a key
 and value pair. If we wanted to retrieve a list of all of the property keys
-associated with a given node we could write a query like the one below that finds all
-of the property keys associated with the DFW node in the air-routes graph.</simpara>
+associated with a given vertex we could write a query like the one below that finds all
+of the property keys associated with the DFW vertex in the air-routes graph.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">g.V().has('airport','code','DFW').properties().key()
 
 country
@@ -3887,7 +3937,7 @@ runways
 lat
 desc</programlisting>
 <simpara>We could likewise find the names, with duplicates removed, of any property keys
-associated with any outgoing edges from the DFW node using this query. Note that edge
+associated with any outgoing edges from the DFW vertex using this query. Note that edge
 properties are implementations of <emphasis>Property</emphasis> and not <emphasis>VertexProperty</emphasis>.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">g.V().has('code','DFW').outE().properties().key().dedup()
 
@@ -4897,7 +4947,8 @@ airports classified as being in (or near) London, England has. Note that we
 first find all airports in England using <emphasis>has('region</emphasis>,<emphasis>GB-ENG</emphasis>)'. If we did
 not do this we would pick up airports in other countries as well such as
 London, Ontario, in Canada.</simpara>
-<programlisting language="groovy" linenumbering="unnumbered">g.V().has('region','GB-ENG').has('city','London').group().by('code').by(out().count())
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('region','GB-ENG').has('city','London').
+      group().by('code').by(out().count())
 
 [LCY:37, LHR:176, LTN:91, STN:162, LGW:179]</programlisting>
 <simpara>Here is a twist on the above theme. How many places can I get to from London in two
@@ -4906,15 +4957,16 @@ over 2,000 places!  Notice how <emphasis>aggregate</emphasis> is used to store t
 airports as a collection that can be referenced later on in the query to help with
 ruling out any flights that would end up back in London.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Leave from London, fly with one stop, not ending back in London, how many places?
-g.V().has('region','GB-ENG').has('city','London').aggregate('lon').out().out().dedup().where(without('lon')).count()
+g.V().has('region','GB-ENG').has('city','London').aggregate('lon').
+      out().out().dedup().where(without('lon')).count()
 
 2082</programlisting>
 <simpara>We could have written the previous query like this and avoided using <emphasis>aggregate</emphasis> but
-to me, this feels more clumsy and somewhat repetetive.</simpara>
-<programlisting language="groovy" linenumbering="unnumbered"> g.V().has('region','GB-ENG').has('city','London').out().out().dedup()
-                             .not(and(has('city','London'),has('region','GB-ENG'))).count()
+to me, this feels more clumsy and somewhat repetitive.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('region','GB-ENG').has('city','London').out().out().dedup().
+      not(and(has('city','London'),has('region','GB-ENG'))).count()
 
-2082</programlisting>
+2240</programlisting>
 </section>
 <section xml:id="topten">
 <title>What are the top ten airports by route count?</title>
@@ -4958,18 +5010,19 @@ g.V().hasLabel('airport').order().by(out('routes').count(),decr).limit(10)
 <simpara>Lastly, let&#8217;s find the top ten airports ordered by the total number of incoming and
 outgoing routes that they have.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Find the top ten overall in terms of total routes
-g.V().hasLabel('airport').order().by(both('route').count(),decr).limit(10).project('ap','routes').by('code').by(both('route').count())
+g.V().hasLabel('airport').order().by(both('route').count(),decr).limit(10).
+      project('ap','routes').by('code').by(both('route').count())
 
-[ap:AMS, routes:489]
-[ap:FRA, routes:486]
-[ap:CDG, routes:478]
-[ap:IST, routes:466]
-[ap:ATL, routes:442]
-[ap:PEK, routes:426]
-[ap:ORD, routes:424]
-[ap:MUC, routes:398]
-[ap:DFW, routes:396]
-[ap:DME, routes:380]</programlisting>
+[ap:FRA,routes:544]
+[ap:AMS,routes:541]
+[ap:IST,routes:540]
+[ap:CDG,routes:524]
+[ap:MUC,routes:474]
+[ap:PEK,routes:469]
+[ap:ATL,routes:464]
+[ap:ORD,routes:464]
+[ap:DXB,routes:460]
+[ap:DFW,routes:442]</programlisting>
 </section>
 <section xml:id="localfold">
 <title>Using <emphasis>local</emphasis> while counting things</title>
@@ -5001,9 +5054,11 @@ runway value pair is now in it&#8217;s own individual list.</simpara>
 <section xml:id="wherefly">
 <title>Where can I fly to from here?</title>
 <simpara>Here are some more examples of queries that explore different questions along
-the lines of "Where can I fly to from here?".</simpara>
+the lines of "Where can I fly to from here?". The first query looks for routes to the
+USA or Canada from any airport in India.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Where in the USA or Canada can I fly to from any airport in India?
-g.V().has('country','code','IN').out().out().has('country',within('US','CA')).path().by('code')
+g.V().has('country','code','IN').out().out().
+      has('country',within('US','CA')).path().by('code')
 
 [IN,BOM,EWR]
 [IN,DEL,SFO]
@@ -5012,9 +5067,10 @@ g.V().has('country','code','IN').out().out().has('country',within('US','CA')).pa
 [IN,DEL,ORD]
 [IN,DEL,YVR]
 [IN,DEL,YYZ]</programlisting>
-<simpara>Which cities in Europe can I fly to from Ft; Lauderdale in Florida?</simpara>
+<simpara>Which cities in Europe can I fly to from Ft. Lauderdale in Florida?</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Where can I fly to in Europe from Ft. Lauderdale?
-g.V().has('code','FLL').out().as('a').in('contains').has('code','EU').select('a').values('city')
+g.V().has('code','FLL').out().as('a').in('contains').
+      has('code','EU').select('a').values('city')
 
 London
 Paris
@@ -5024,7 +5080,8 @@ Copenhagen</programlisting>
 <simpara>Where can I fly to from Charlotte, North Carolina to cities in Europe or South
 America?</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Flights from Charlotte to airports in Europe or South America
-g.V().has('code','CLT').out().as('a').in('contains').has('code',within('EU','SA')).select('a').by('code')
+g.V().has('code','CLT').out().as('a').in('contains').
+      has('code',within('EU','SA')).select('a').by('code')
 
 LHR     FCO
 CDG     MAD
@@ -5035,7 +5092,8 @@ GRU</programlisting>
 London area in the UK?</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Where in the United States can I fly to non-stop from any of the
 // airports in and around London in the UK.
-g.V().has('airport','code',within('LHR','LCY','LGW','LTN','STN')).out().has('country','US').path().by('code')
+g.V().has('airport','code',within('LHR','LCY','LGW','LTN','STN')).
+      out().has('country','US').path().by('code')
 
 [LHR,AUS]      [LHR,SEA]      [LHR,EWR]
 [LHR,ATL]      [LHR,RDU]      [LHR,DEN]
@@ -5069,7 +5127,8 @@ Mexico City
 Cancun</programlisting>
 <simpara>Which cities in Europe can I fly to from Delhi in India?</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Where in Europe can I fly to from Delhi?
-g.V().has('code','DEL').out().as('a').in("contains").has('code','EU').select('a').by('city')
+g.V().has('code','DEL').out().as('a').in("contains").
+      has('code','EU').select('a').by('city')
 
 Istanbul
 Helsinki
@@ -5088,8 +5147,8 @@ Rome</programlisting>
 by using <emphasis>aggregate</emphasis> to collect the results of the first <emphasis>within</emphasis> test that we
 don&#8217;t have to repeat the names in the second <emphasis>within</emphasis>, we can just refer to
 the aggregated collection.</simpara>
-<programlisting language="groovy" linenumbering="unnumbered">g.V().has('city',within('London','Munich','Paris')).aggregate('a').out()  \
-     .where(within('a')).path().by('code')
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('city',within('London','Munich','Paris')).aggregate('a').out().
+      where(within('a')).path().by('code')
 
 [LHR,MUC]   [CDG,LHR]   [MUC,STN]   [STN,MUC]
 [LHR,ORY]   [CDG,LGW]   [MUC,LHR]   [ORY,LCY]
@@ -5125,7 +5184,7 @@ returns the airport codes and the distances. Notice the use of two <emphasis>by<
 modulators in this query to decide which values are returned from the source
 node, the edge and the destination node respectively. Also note that only two
 were specified but three values are returned. This works because <emphasis>by</emphasis> is
-processed in a round robbin fashion if there are more values than <emphasis>by</emphasis>
+processed in a round robin fashion if there are more values than <emphasis>by</emphasis>
 modulators.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Where can I fly to from DFW that is more than 4,000 miles away?
 g.V().has('code','DFW').outE('route').has('dist',gt(4000)).inV()\
@@ -5182,8 +5241,8 @@ section.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Routes from DFW that are over 4,500 miles in length.
 // Sorted into ascending order
 
-g.V().hasLabel('airport').has('code','DFW').outE().has('dist',gt(4500)).as('e').inV().as('c')
-                         .select('e','c').by('dist').by('code').sort(){it.e}
+g.V().hasLabel('airport').has('code','DFW').outE().has('dist',gt(4500)).as('e').
+      inV().as('c').select('e','c').by('dist').by('code').sort(){it.e}
 
 
 [e:4736, c:LHR]     [e:6410, c:NRT]
@@ -5203,7 +5262,8 @@ g.V().hasLabel('airport').has('code','DFW').outE().has('dist',gt(4500)).as('e').
 using a step that simplifies the query. First of all let&#8217;s just find all routes longer
 than 8,000 miles. This will includes routes in both directions between airport pairs.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// All outes longer than 8,000 miles
-g.V().as('src').outE('route').has('dist',gt(8000)).inV().as('dest').select('src','dest').by('code')
+g.V().as('src').outE('route').has('dist',gt(8000)).inV().as('dest').
+      select('src','dest').by('code')
 
 
 [src:ATL,dest:JNB]   [src:SIN,dest:SFO]
@@ -5226,7 +5286,8 @@ g.V().as('src').outE('route').has('dist',gt(8000)).inV().as('dest').select('src'
 [src:SYD,dest:DFW]   [src:RUH,dest:LAX]</programlisting>
 <simpara>Now let&#8217;s improve the query by including the distance of each route in the query results.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Find routes longer than 8,000 miles, include the distance in returned values.
-g.V().as('src').outE().has('dist',gt(8000)).as('e').inV().as('dest').select('src','e','dest').by('code').by('dist')
+g.V().as('src').outE().has('dist',gt(8000)).as('e').inV().as('dest').
+      select('src','e','dest').by('code').by('dist')
 
 
 [src:ATL,e:8434,dest:JNB]     [src:SIN,e:8433,dest:SFO]
@@ -5247,8 +5308,8 @@ g.V().as('src').outE().has('dist',gt(8000)).as('e').inV().as('dest').select('src
 [src:SFO,e:8139,dest:AUH]     [src:AUH,e:8139,dest:SFO]
 [src:EWR,e:8047,dest:HKG]     [src:JED,e:8314,dest:LAX]
 [src:SYD,e:8574,dest:DFW]     [src:RUH,e:8246,dest:LAX]</programlisting>
-<simpara>Next let&#8217;s simplify things a bit. While using <emphasis>as</emphasis> and <emphasis>select</emphasis> gets the job done, using
-<emphasis>path</emphasis> and <emphasis>by</emphasis> shortens the query and makes it more readable.</simpara>
+<simpara>Next let&#8217;s simplify things a bit. While using <emphasis>as</emphasis> and <emphasis>select</emphasis> gets the job done,
+using <emphasis>path</emphasis> and <emphasis>by</emphasis> shortens the query and makes it more readable.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Note that this also changes the way the result is returned
 g.V().outE().has('dist',gt(8000)).inV().path().by('code').by('dist')
 
@@ -5269,8 +5330,9 @@ code for the source airport is less than the code for the destination airport. T
 seem a bit odd but it is a way of saying we only want route pairs we have not already
 seen.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// We could avoid returning both directions of travel by refining our query as follows
-g.V().as('a').outE().has('dist',gt(8000)).inV().as('b') \
-     .filter(select('a','b').by('code').where('a', lt('b'))).path().by('code').by('dist')
+g.V().as('a').outE().has('dist',gt(8000)).inV().as('b').
+      filter(select('a','b').by('code').where('a', lt('b'))).
+      path().by('code').by('dist')
 
 [ATL,8434,JNB]
 [DFW,8574,SYD]
@@ -5293,8 +5355,9 @@ g.V().as('a').outE().has('dist',gt(8000)).inV().as('b') \
 <simpara>Lastly, now that we have the routes we want, let&#8217;s tweak the query so that the routes are
 sorted by descending order of distance.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// As above but sorted by route lengths
-g.V().as('a').outE().has('dist',gt(8000)).order().by('dist',decr).inV().as('b') \
-     .filter(select('a','b').by('code').where('a', lt('b'))).path().by('code').by('dist')
+g.V().as('a').outE().has('dist',gt(8000)).order().by('dist',decr).inV().as('b').
+      filter(select('a','b').by('code').where('a', lt('b'))).
+      path().by('code').by('dist')
 
 [AKL,8818,DXB]
 [DFW,8574,SYD]
@@ -5318,8 +5381,8 @@ g.V().as('a').outE().has('dist',gt(8000)).order().by('dist',decr).inV().as('b') 
 followed by a <emphasis>by</emphasis> modulator. This allows us, should we so desire, to simplify our query a
 bit more as follows.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">//Query changed to take advantage of the where().by() construct
-g.V().as('s').outE().has('dist',gt(8000)).order().by('dist',decr).inV().as('f')
-                             .where('f',lt('s')).by('code').path().by('code').by('dist')
+g.V().as('s').outE().has('dist',gt(8000)).order().by('dist',decr).inV().as('f').
+              where('f',lt('s')).by('code').path().by('code').by('dist')
 [DXB,8818,AKL]
 [SYD,8574,DFW]
 [JNB,8434,ATL]
@@ -5342,8 +5405,8 @@ g.V().as('s').outE().has('dist',gt(8000)).order().by('dist',decr).inV().as('f')
 replace the <emphasis>lt</emphasis> with a <emphasis>gt</emphasis> we will get the routes returned in the reverse order. So for
 example, in the prior query the first result was <emphasis>[DXB,8818,AKL]</emphasis>. As you will see below, our
 first result is now <emphasis>[AKL,8818,DXB]</emphasis>.</simpara>
-<programlisting language="groovy" linenumbering="unnumbered">g.V().as('s').outE().has('dist',gt(8000)).order().by('dist',decr).inV().as('f') \
-                    .where('f',gt('s')).by('code').path().by('code').by('dist')
+<programlisting language="groovy" linenumbering="unnumbered">g.V().as('s').outE().has('dist',gt(8000)).order().by('dist',decr).inV().as('f').
+              where('f',gt('s')).by('code').path().by('code').by('dist')
 
 [AKL,8818,DXB]
 [DFW,8574,SYD]
@@ -5692,6 +5755,38 @@ that Dallas is also included!.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">[AUS,PDX,LAS]
 [AUS,ABQ,LAS]
 [AUS,LBB,LAS]
+[AUS,SEA,LAS]
+[AUS,SFO,LAS]
+[AUS,SJC,LAS]
+[AUS,SAN,LAS]
+[AUS,LGB,LAS]
+[AUS,SNA,LAS]
+[AUS,SLC,LAS]
+[AUS,DEN,LAS]
+[AUS,ELP,LAS]
+[AUS,OAK,LAS]</programlisting>
+<simpara>Here is one more example that is similar to the previous one. First of all we store
+the longitude of the Dallas (DFW) airport in the variable <emphasis>dfw</emphasis>. Then we use that
+variable to find routes to Las Vegas (LAS) from Austin (AUS) that have one stop but
+avoid Phoenix (PHX) and Los Angeles (LAX) and only have a plane change either in
+Dallas or to the West of Dallas. Note that we use <emphasis>lte</emphasis> and not <emphasis>lt</emphasis> when testing the
+longitude value. It we used <emphasis>lt</emphasis> instead that would also rule out Dallas as an
+option. This query, as in the prior one,  has the effect of ruling out plane changes
+at airports further to the East of Austin than Dallas.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">dfw = g.V().has('code','DFW').values('lon').next()
+
+g.V().has('airport','code','AUS').as('aus').out().
+      has('country',within('US','CA')).
+      has('lon',lte(dfw)).
+      has('code',without('PHX','LAX')).out().
+      has('code','LAS').path().by('code')</programlisting>
+<simpara>Here is what we get back when we run the query. Still lots of choices even if we
+avoid LAX and PHX it seems.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">[AUS,PDX,LAS]
+[AUS,ONT,LAS]
+[AUS,ABQ,LAS]
+[AUS,LBB,LAS]
+[AUS,DFW,LAS]
 [AUS,SEA,LAS]
 [AUS,SFO,LAS]
 [AUS,SJC,LAS]
@@ -6206,15 +6301,18 @@ such combinations once but I will leave that as an exercise for the reader!</sim
 <title>THIS SECTION IS YET TO BE FULLY TIDIED UP</title>
 <para>Work in progress</para>
 </formalpara>
-<section xml:id="_work_in_progress">
-<title>Work in progress</title>
-<simpara>Using a mathematical expression inside of <emphasis>is</emphasis></simpara>
+<section xml:id="_using_a_calculation_inside_of_an_emphasis_is_emphasis_step">
+<title>Using a calculation inside of an <emphasis>is</emphasis> step</title>
+<simpara>It is possible to use a mathematical expression inside of an <emphasis>is</emphasis> step. At times this
+comes in quite handy. The example below simply divides 500 by 2 as part of a test.
+Clearly you would normally just enter 250 but this shows the capability.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">g.V().hasLabel('airport').where(out().count().is(gt(500/2))).values('code')
 
 CDG
 FRA
 AMS
 IST</programlisting>
+<simpara>The capability becomes more interesting when used in conjunction with a variable.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">a = 500
 
 g.V().hasLabel('airport').where(out().count().is(gt(a/2))).values('code')
@@ -6223,20 +6321,52 @@ CDG
 FRA
 AMS
 IST</programlisting>
-<programlisting language="groovy" linenumbering="unnumbered">g.V().hasLabel('airport').where(out().count().is(gt(a/2))).
+<simpara>Here is one more example where we start by setting the variable <emphasis>a</emphasis> to the value that
+represents the maximum number of routes from any single airport. The we use a query
+to find all the airports that have at least as many outgoing routes as 50 less than
+our value <emphasis>a</emphasis>.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">a = g.V().local(out('route').count()).max().next()
+
+g.V().hasLabel('airport').where(out().count().is(gt(a-50))).
       project('apt','routes').by('code').by(out().count())
 
+[apt:ATL,routes:232]
+[apt:ORD,routes:232]
 [apt:CDG,routes:262]
-[apt:FRA,routes:266]
+[apt:FRA,routes:272]
+[apt:DXB,routes:230]
+[apt:PEK,routes:234]
 [apt:AMS,routes:269]
+[apt:MUC,routes:237]
 [apt:IST,routes:270]</programlisting>
-<programlisting language="groovy" linenumbering="unnumbered">dfw = g.V().has('code','DFW').values('lon').next()
-
-g.V().has('airport','code','AUS').as('aus').out().
-      has('country',within('US','CA')).
-      has('lon',lte(dfw)).
-      has('code',without('PHX','LAX')).out().
-      has('code','LAS').path().by('code')</programlisting>
+</section>
+<section xml:id="_analyzing_where_time_is_spent_introducing_emphasis_profile_emphasis">
+<title>Analyzing where time is spent - introducing <emphasis>profile</emphasis></title>
+<simpara>You can use the <emphasis>profile</emphasis> step to ask Gremlin to give you a summary of where the time
+is spent processing your query. Take a look at the example below.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('region','US-TX').out().has('region','US-CA').
+                            out().has('country','DE').profile()</programlisting>
+<simpara>After you run the query, instead of showing you the results, Gremlin will show you
+where the time was spent processing the components of the query.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">Step                                       Count  Traversers  Time (ms)    % Dur
+===============================================================================
+TinkerGraphStep(vertex,[region.eq(US-TX)])   26          26      1.810     9.71
+VertexStep(OUT,vertex)                      701         701      0.877     4.70
+HasStep([region.eq(US-CA)])                  47          47      0.561     3.01
+VertexStep(OUT,vertex)                     3464        3464     12.035    64.54
+NoOpBarrierStep(2500)                      3464         224      3.157    16.93
+HasStep([country.eq(DE)])                    59           4      0.206     1.11
+   &gt;TOTAL                                     -           -     18.650        -</programlisting>
+</section>
+<section xml:id="_introducing_emphasis_cyclicpath_emphasis">
+<title>Introducing <emphasis>cyclicPath</emphasis></title>
+<simpara>You can use cyclicPath to find paths through the graph that end up back where they
+started. The example below finds routes that both start and end in Austin (AUS).</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">// From Austin and back again
+g.V().has('code','AUS').out().out().cyclicPath().path().by('code')</programlisting>
+</section>
+<section xml:id="_work_in_progress">
+<title>Work in progress</title>
 <programlisting language="groovy" linenumbering="unnumbered">a=g.V().has('region','US-OK').values('code').withIndex().toList()
 [OKC,0]
 [TUL,1]
@@ -6292,8 +6422,6 @@ g.V().has('code','AUS').as('a').repeat(out().where(neq('a'))).times(3).simplePat
 g.V().has('code','AUS').as('a').repeat(out().where(neq('a'))).times(4).simplePath().has('code','LAX').path().by('code').count()
 122329
 
-// From Austin and back again
-g.V().has('code','AUS').out().out().cyclicPath().path().by('code')
 
 // Ugly query! Look at every property of every node and see if it contains "R."
 g.V().as('a').values().filter{it.toString().contains('R.')}.select('a').dedup().valueMap()</programlisting>
@@ -6574,9 +6702,10 @@ specific action if an exception does happen. Assuming we did not get an exceptio
 can go ahead and create our graph traversal object</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">println "Loading the air-routes graph...\n"
 
+// Load the air-routes graph
 try
 {
-  tg.io(IoCore.graphml()).readGraph("/Users/kelvin/krl/code/graph/air-routes.graphml");
+  tg.io(IoCore.graphml()).readGraph("air-routes.graphml");
 }
 catch (IOException e)
 {
@@ -6584,6 +6713,7 @@ catch (IOException e)
   System.exit(0);
 }
 
+// Create a graph traversal source object and find the Austin airport vertex
 def g = tg.traversal()
 
 def aus = g.V().has('code','AUS').valueMap().next()
@@ -6618,24 +6748,32 @@ ADDL=$GREMLIN/ext/tinkergraph-gremlin/lib/*
 export CLASSPATH=$CLASSPATH:$LIBPATH/*:$EXTPATH/*:$ADDL
 
 # Compile
-groovyc GraphTest.groovy</screen>
+groovyc TinkerGraphTest.groovy</screen>
 </section>
 <section xml:id="_running_our_groovy_application">
 <title>Running our Groovy application</title>
 <simpara>Assuming everything compiled cleanly we can now run our Groovy application.</simpara>
-<programlisting language="groovy" linenumbering="unnumbered">groovy GraphTest
-
-Gremlin version is 3.2.4
+<programlisting language="groovy" linenumbering="unnumbered">groovy TinkerGraphTest</programlisting>
+<simpara>And here is the output we should get back.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">Gremlin version is 3.2.4
 Loading the air-routes graph...
 
 [country:[US], code:[AUS], longest:[12250], city:[Austin], elev:[542], icao:[KAUS], lon:[-97.6698989868164], type:[airport], region:[US-TX], runways:[2], lat:[30.1944999694824], desc:[Austin Bergstrom International Airport]]</programlisting>
+<simpara>Now that we have a small skeleton of a test program running, we can start to add a
+few more interesting features to it.</simpara>
 </section>
 <section xml:id="_adding_to_our_groovy_application">
 <title>Adding to our Groovy application</title>
-<programlisting language="groovy" linenumbering="unnumbered">def city = aus['city']
+<simpara>The code below demonstrates how to work with the <emphasis>valueMap</emphasis> for the Austin vertex
+that we created a few lines back in our program.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">// Retieve the city name property and display it
+def city = aus['city']
 println "\nThe AUS airport is in ${city[0]}\n"
 
+// Iterate through the keys we got back and print them along with their values
 aus.each {println "${it.key} : ${it.value[0]}"}</programlisting>
+<simpara>If we were to re-compile and run our program now, the lines that we added will
+generate the following output.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">The AUS airport is in Austin
 
 country : US
@@ -6718,6 +6856,10 @@ graph store that provides capabilities such as reliable persistence, the ability
 define schemas and support for ACID transactions. The Janus Graph project, which
 began in 2016 as an open source fork of the popular Titan graph database, is hosted by
 the Linux Foundation and provides these advanced capabilities.</simpara>
+<simpara>In this book I have attempted to provide a reasonable amount of Janus Graph
+coverage of but it is still recommended to become familiar with the official
+Janus Graph documentation where you will find more in depth discussions of advanced
+topics.</simpara>
 <simpara>Janus Graph can run on a laptop, which is useful for learning and experimenting, but
 it is designed to handle very large graphs stored on distributed clusters. It can
 handle graphs containing billions of vertices and edges. As we shall discuss, Janus
@@ -6918,7 +7060,7 @@ xyz = graph.addVertex()
 // Add a property
 xyz.property("name", "XYZ")
 
-// Commit the transaction
+// Rollback the transaction
 graph.tx().rollback()
 
 // Nothing will be returned
@@ -7148,7 +7290,9 @@ mgmt.commit()</programlisting>
 </section>
 <section xml:id="_defining_vertex_labels">
 <title>Defining vertex labels</title>
-<simpara>To be written</simpara>
+<simpara>Now let&#8217;s tell Janus Graph about the vertex labels that we are going to be using. The
+<emphasis>air-routes</emphasis> graph has four different vertex types, namely, <emphasis>version</emphasis>, <emphasis>airport</emphasis>,
+<emphasis>country</emphasis> and <emphasis>continent</emphasis> so we will create a label for each of those.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Define vertex labels
 mgmt = graph.openManagement()
 mgmt.makeVertexLabel('version').make()
@@ -7159,7 +7303,8 @@ mgmt.commit()</programlisting>
 </section>
 <section xml:id="_defining_vertex_property_keys">
 <title>Defining vertex property keys</title>
-<simpara>To be written</simpara>
+<simpara>Next we need to define the property keys and data types that our vertices will be
+using. The air-routes graph only uses properties that have a cardinality of SINGLE.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Define vertex property keys
 mgmt = graph.openManagement()
 mgmt.makePropertyKey('code').dataType(String.class).cardinality(Cardinality.SINGLE).make()
@@ -7177,12 +7322,17 @@ mgmt.commit()</programlisting>
 </section>
 <section xml:id="_defining_edge_property_keys">
 <title>Defining edge property keys</title>
-<simpara>To be written</simpara>
+<simpara>We also need to define the property keys and data types that will be used on edges.
+Currently the <emphasis>air-routes</emphasis> graph only has one edge property, <emphasis>dist</emphasis> that is used to
+store the distance between two airports.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Define edge property keys
 mgmt = graph.openManagement()
 mgmt.makePropertyKey('dist').dataType(Integer.class).cardinality(Cardinality.SINGLE).make()
 mgmt.commit()</programlisting>
-<simpara>To be written</simpara>
+<simpara>Now that we have defined our schema, we can use the management API to double check
+that everything we just did looks correct. The snippet of code below can be run from
+within the Gremlin console and will display the property keys along with their data
+types and cardinality settings.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Look at the properties
 mgmt = graph.openManagement()
 types = mgmt.getRelationTypes(PropertyKey.class)
@@ -7191,7 +7341,8 @@ types.each{println "$it\t: " +
                     " " + mgmt.getPropertyKey("$it").cardinality()}
 
 mgmt.commit()</programlisting>
-<simpara>To be written</simpara>
+<simpara>This is the output we should get back if our schema creation has succeeded. Note that
+both the edge and vertex property keys are displayed.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">lat     : class java.lang.Double SINGLE
 lon     : class java.lang.Double SINGLE
 dist    : class java.lang.Integer SINGLE
@@ -7216,14 +7367,15 @@ XML file we then call <emphasis>commit</emphasis> to finalize the transaction.</
 <programlisting language="groovy" linenumbering="unnumbered">graph.io(graphml()).readGraph('air-routes.graphml')
 graph.tx().commit()</programlisting>
 <simpara>Note that as we have not defined a schema before loading the air-routes graph that
-Janus Graph will create vertices, edges and properties using default types and settings.
-A bit later we will look at creating a schema for air-routes and then loading it
-again to see the differences. It is strongly recommended to create the schema before
-loading the data but lets examine a few things before we discuss how to do that.</simpara>
+Janus Graph will create vertices, edges and properties using default types and
+settings.  A bit later we will look at creating a schema for air-routes and then
+loading it again to see the differences. It is strongly recommended to create the
+schema before loading the data but lets examine a few things before we discuss how to
+do that.</simpara>
 <simpara>Unlike TinkerGraph, Janus Graph does not, by default,  guarantee to respect user
-provided node and edge ID values. Instead it creates its own ID values as vertices and
-edges are added to the graph. You may have noticed from earlier in the document or
-from the air-routes.graphml file if you happened to look in there, that the ID
+provided node and edge ID values. Instead it creates its own ID values as vertices
+and edges are added to the graph. You may have noticed from earlier in the document
+or from the air-routes.graphml file if you happened to look in there, that the ID
 provided for Austin in the GraphML markup is 3. However, having loaded air-routes
 into Janus Graph if we query the ID for the Austin node we can see that it is no
 longer 3. There is a setting that can be changed to force Janus Graph to honor user
@@ -7236,8 +7388,8 @@ option this please refer to the Janus Graph documentation.</simpara>
 <simpara>Having the graph system allocate its own ID values is not a big problem as we can
 always query the graph to get the ID but it is a reminder that you should not get
 into the habit of relying on any user provided ID values as you work with graphs.</simpara>
-<simpara>If necessary, as we  discussed earlier in the document, we can always store important
-ID values in a variable for later use.</simpara>
+<simpara>If necessary, as discussed earlier, we can always store important ID values in a
+variable for later use.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">ausid = g.V().has('code','AUS').id().next()
 
 g.V(ausid).values('city','desc','region').join(',')
