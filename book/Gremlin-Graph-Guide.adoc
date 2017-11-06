@@ -1,11 +1,11 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v272, Nov 03, 2017
-// Fri Nov 03, 2017 15:29:15 CDT
+v272, Nov 06, 2017
+// Mon Nov 06, 2017 14:56:16 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Nov 03 2017
+//:Date:      Nov 06 2017
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -264,8 +264,8 @@ the cloud.
 
 While you can certainly run a graph database on your laptop, I do just that every
 day, the reality is that in production, at scale, they are big data systems. Large
-graphs commonly have many billions of vertices and edges in them taking up petabytes of
-data on disk. Graph algorithms can be both compute and memory intensive and it is
+graphs commonly have many billions of vertices and edges in them taking up petabytes
+of data on disk. Graph algorithms can be both compute and memory intensive and it is
 only fairly recently that deploying the necessary resources for such big data systems
 has made financial sense for more everyday uses in business and not just in
 government or academia. Graph databases are becoming much more broadly adopted across
@@ -277,16 +277,16 @@ source projects addressing everything from the databases you need to store the g
 data to the query languages used to traverse them all the way up to visually
 displaying graphs as part of the user interface layer. In particular, it is so called
 'property graphs' where we are seeing the broadest development and uptake. In a
-property graph both vertices and edges can have properties (effectively key,value pairs)
-associated with them. There are many styles of graph that you may end up building and
-there have been whole books written on these various design patterns but the property
-graph technology we will be focussed on in this document can support all of the most
-common usage patterns. If you hear phrases such as 'directed graph' and 'undirected
-graph' or 'cyclic' and 'acyclic' graph and many more as you work with graph databases
-a quick on-line search will get you to a place where you can get familiar with that
-terminology. A deep discussion of these patterns is beyond the scope of this document
-and it's in no way essential to have a full background in graph theory to get
-productive quickly.
+property graph both vertices and edges can have properties (effectively key,value
+pairs) associated with them. There are many styles of graph that you may end up
+building and there have been whole books written on these various design patterns but
+the property graph technology we will be focussed on in this document can support all
+of the most common usage patterns. If you hear phrases such as 'directed graph' and
+'undirected graph' or 'cyclic' and 'acyclic' graph and many more as you work with
+graph databases a quick on-line search will get you to a place where you can get
+familiar with that terminology. A deep discussion of these patterns is beyond the
+scope of this document and it's in no way essential to have a full background in
+graph theory to get productive quickly.
 
 A third, and equally important factor, in the growth we are seeing in graph database
 adoption is the low barrier of entry for programmers. As you will see from the
@@ -800,10 +800,10 @@ The full details of all the features contained in the air-routes graph can be le
 by reading the comments at the start of the 'air-routes.graphml' file or reading the
 README.txt file.
 
-The graph currently contains a total of 3,612 vertices and 49,894 edges. Of these 3,367
-vertices are airports, and 43,160 of the edges represent routes. While in big data terms
-this is really a tiny graph, it is plenty big enough for us to build up and
-experiment with some very interesting Gremlin queries.
+The graph currently contains a total of 3,612 vertices and 49,894 edges. Of these
+3,367 vertices are airports, and 43,160 of the edges represent routes. While in big
+data terms this is really a tiny graph, it is plenty big enough for us to build up
+and experiment with some very interesting Gremlin queries.
 
 Lastly, here is are some statistics and facts about the air-routes graph. If you want
 to see a lot more statistics check the README.txt file that is included with the
@@ -1098,6 +1098,7 @@ then we will look at some fairly basic queries and finally get into some more
 advanced concepts. Hopefully each set of examples presented by building upon things
 previously discussed will be easy to understand.
 
+[[gremlinintro]]
 Introducing Gremlin
 ~~~~~~~~~~~~~~~~~~~
 
@@ -1108,6 +1109,7 @@ more declarative constructs as well. Using Gremlin we can traverse a graph looki
 for values, patterns and relationships we can add or delete vertices and edges, we can
 create sub-graphs and lots more.
 
+[[gremlinandsql]]
 A quick look at Gremlin and SQL
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1365,10 +1367,10 @@ a list of all the methods and their types supported by the 'TinkerVertex' class.
 Retrieving property values from a vertex
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-There are several different ways of working with vertex properties. We can add, delete
-and query properties for any vertex or edge in the graph. We will explore each of these
-topics in detail over the course of this document. Initially, let's look at a couple
-of simple ways that we can look up the property values of a given vertex.
+There are several different ways of working with vertex properties. We can add,
+delete and query properties for any vertex or edge in the graph. We will explore each
+of these topics in detail over the course of this document. Initially, let's look at
+a couple of simple ways that we can look up the property values of a given vertex.
 
 [source,groovy]
 ----
@@ -1823,25 +1825,54 @@ g.V().hasLabel('airport').range(0,20).values('code')
 ----
 
 We can also limit based on time taken. The following query has a maximum limit of ten
-milliseconds. All of the parts of this query are explained in detail later on in this
-document but I think what they do is fairly clear.
+milliseconds. The query looks for routes from Austin (AUS) to London Heathrow
+(LHR). All the parts of this query are explained in detail later on in this
+book but I think what they do is fairly clear.
 
 [source,groovy]
 ----
 // Limit the query to however much can be processed within 10 milliseconds
-g.V().has('airport','code','AUS')
-     .repeat(timeLimit(10).out()).until(has('code','LHR')).path().by('code')
+g.V().has('airport','code','AUS').
+      repeat(timeLimit(10).out()).until(has('code','LHR')).path().by('code')
 ----
 
+Here is what the query above returned when run on my laptop.
+
+[source,groovy]
+----
+[AUS,LHR]
+[AUS,YYZ,LHR]
+[AUS,FRA,LHR]
+[AUS,MEX,LHR]
+----
+
+If we give the query another 10 milliseconds to run, so 20 in total, you can see that
+a few more routes were found.
+
+[source,groovy]
+----
+// Limit the query to 20 milliseconds
+g.V().has('airport','code','AUS').
+      repeat(timeLimit(20).out()).until(has('code','LHR')).path().by('code')
+
+[AUS,LHR]
+[AUS,YYZ,LHR]
+[AUS,FRA,LHR]
+[AUS,MEX,LHR]
+[AUS,PDX,LHR]
+[AUS,CLT,LHR]
+----
+
+[[retrrange]]
 Retrieving a range of vertices
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Gremlin provides various ways to return a sequence of vertices. We have already seen the
-'limit' and 'range' steps used in the previous section to return the first 20
+Gremlin provides various ways to return a sequence of vertices. We have already seen
+the 'limit' and 'range' steps used in the previous section to return the first 20
 elements of a query result. We can also use the 'range' step to select different
-range of vertices by giving a non zero starting offset and an ending offset. The 'range'
-offsets are zero based, and while the official documentation states that the ranges
-are inclusive/inclusive it actually appears from my testing that they are
+range of vertices by giving a non zero starting offset and an ending offset. The
+'range' offsets are zero based, and while the official documentation states that the
+ranges are inclusive/inclusive it actually appears from my testing that they are
 inclusive/exclusive.
 
 [source,groovy]
@@ -1849,23 +1880,57 @@ inclusive/exclusive.
 // Return the first two airport vertices found 
 g.V().hasLabel('airport').range(0,2)
 
+v[1]
+v[2]
+----
+
+The starting value given to a 'range' step does not have to be '0'. In the example
+below we ask for the 3rd, 4th and 5th results found by specifying a range of
+'"(3,6)"'.
+
+[source,groovy]
+----
 // Return the fourth, fifth and sixth airport vertices found (zero based)
 g.V().hasLabel('airport').range(3,6)
 
+v[4]
+v[5]
+v[6]
+----
+
+Here is an example of how we can use the index '-1' to mean '"until the end of the
+list"'. This is similar to the convention used in many programming languages when
+working with arrays and list. 
+
+[source,groovy]
+----
 // Return all the remaining vertices starting at the 3500th one
 g.V().range(3500,-1)
 ----
 
-NOTE: There is no guarantee as to which airport vertices will be selected as
-this depends upon how they are stored by the back end graph. Using Tinkergraph the
+Here is another example that uses the 'range' step, this time looking only at nodes
+with a label of 'country'. Notice how this time we found vertices with much higher ID
+values.
+
+[source,groovy]
+----
+g.V().hasLabel('country').range(0,2)
+
+v[3376]
+v[3377]
+
+----
+
+NOTE: There is no guarantee as to which airport vertices will be selected as this
+depends upon how they are stored by the back end graph. Using TinkerGraph the
 airports will most likely come back in the order they are put into the graph. This is
-not likely to be the case with other graph stores such as Titan and IBM Graph. So do
-not rely on any sort of expectation of order when using 'range' to process sets of
-vertices.
+not likely to be the case with other graph stores such as Janus Graph. So do not rely
+on any sort of expectation of order when using 'range' to process sets of vertices.
 
 There are many other ways to specify a range of values using Gremlin. You will find
 several additional examples in the "<<tranges>>" section.
 
+[[aselproj]]
 Using 'as', 'select' and 'project' to name and refer back to prior steps
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
