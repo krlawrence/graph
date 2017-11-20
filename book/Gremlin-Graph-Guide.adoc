@@ -2729,7 +2729,7 @@ g.V().has('airport','code','SAT').
 ----
 
 In a similar way, 'within' allows us to specifically give a list of things that we
-are interested in. The query below again looks from routes from SAT to SLC with one
+*are* interested in. The query below again looks at routes from SAT to SLC with one
 stop but this time only returns routes that stop in one of the designated airports.
 
 [source,groovy]
@@ -6068,7 +6068,7 @@ Using Lambda functions
 ~~~~~~~~~~~~~~~~~~~~~~
 
 Gremlin allows you to put a code fragment (sometimes called a Lambda function or a
-closure) as part of a query. This is typically done as part of a 'filter' or
+closure) as part of a query. This is typically done as part of a 'filter', 'map' or
 'sideEffect' step but there are other places where you will find this concept used.
 This technique provides a lot of additional flexibility in how queries can be
 written. However, care should be used. When processing your query, Gremlin will try
