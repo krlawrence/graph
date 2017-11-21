@@ -2,7 +2,7 @@ GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v272, Nov 21, 2017
-// Tue Nov 21, 2017 11:40:21 CST
+// Tue Nov 21, 2017 14:03:57 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Nov 21 2017
@@ -3687,16 +3687,17 @@ combine parts of a query into a single result. Just as with the boolean 'and' an
 using 'union' but it does offer some very useful capability.
 
 By way of a simple example, the following query returns flights that arrive in AUS
-from the UK of that leave AUS and arrive in Mexico.
+from the UK or that leave AUS and arrive in Mexico.
 
 [source,groovy]
 ----
 // Flights to AUS from the UK or from AUS to Mexico
-g.V().has('code','AUS').union(__.in().has('country','UK')
-                              ,out().has('country','MX')).path().by('code')
+g.V().has('code','AUS').union(__.in().has('country','UK'),
+                                out().has('country','MX')).path().by('code')
 ----
 
-When we run that query, we get the following results
+When we run that query, we get the following results showing that there are routes
+from LHR in the UK and to the three airports MEX, CUN and GDL in Mexico.
 
 [source,groovy]
 ----
