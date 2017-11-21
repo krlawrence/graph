@@ -1,11 +1,11 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v272, Nov 09, 2017
-// Thu Nov 09, 2017 11:26:56 CST
+v272, Nov 21, 2017
+// Tue Nov 21, 2017 11:40:21 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Nov 09 2017
+//:Date:      Nov 21 2017
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -1500,10 +1500,10 @@ Counting groups of things
 
 Sometimes it is useful to count how many of each type (or group) of things there are
 in the graph. This can be done using the 'group' and 'groupCount' steps. While for a
-very large graph it is not recommended to run queries that look at all of the vertices
-or all of the edges in a graph, for smaller graphs this can be quite useful. For the
-air routes graph we could easily count the number of different vertex and edge types in
-the graph as follows.
+very large graph it is not recommended to run queries that look at all of the
+vertices or all of the edges in a graph, for smaller graphs this can be quite useful.
+For the air routes graph we could easily count the number of different vertex and
+edge types in the graph as follows.
 
 [source,groovy]
 ----
@@ -1618,35 +1618,37 @@ will find a lot more examples of grouping and counting things in the section cal
 Starting to walk the graph
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-So far we have mostly just explored queries that look at properties on a vertex or count
-how many things we can find of a certain type. Where the power of a graph really
-comes into play is when we start to 'walk' or 'traverse' the graph by looking at the
-connections (edges) between vertices. The term 'walking the graph' is used to describe
-moving from one vertex to another vertex via an edge. Typically when using the phrase
-'walking a graph' the intent is to describe starting at a vertex traversing one or more
-vertices and edges and ending up at a different vertex or sometimes, back where you
-started in the case of a 'circular walk'. It is very easy to traverse a graph in this
-way using Gremlin. The journey we took while on our 'walk' is often referred to as
-our 'path'. There are also cases when all you want to do is return edges or some
-combination of vertices and edges as the result of a query and Gremlin allows this as
-well. We will explore a lot of ways to modify the way a graph is traversed in the
-upcoming sections.  To get us started, here are some simple examples.
+So far we have mostly just explored queries that look at properties on a vertex or
+count how many things we can find of a certain type. Where the power of a graph
+really comes into play is when we start to 'walk' or 'traverse' the graph by looking
+at the connections (edges) between vertices. The term 'walking the graph' is used to
+describe moving from one vertex to another vertex via an edge. Typically when using
+the phrase 'walking a graph' the intent is to describe starting at a vertex
+traversing one or more vertices and edges and ending up at a different vertex or
+sometimes, back where you started in the case of a 'circular walk'. It is very easy
+to traverse a graph in this way using Gremlin. The journey we took while on our
+'walk' is often referred to as our 'path'. There are also cases when all you want to
+do is return edges or some combination of vertices and edges as the result of a query
+and Gremlin allows this as well. We will explore a lot of ways to modify the way a
+graph is traversed in the upcoming sections.  To get us started, here are some simple
+examples.
      
 The 'out' step is used to find vertices connected by an outgoing edge to that vertex
-and the 'outE' 'step' is used to explore outgoing edges from a given vertex. Conversely
-the 'in' and 'inE' steps can be used to look for incoming vertices and edges. The 'outE'
-and 'inE' steps are especially useful when you want to look at the properties of an
-edge. There are several other steps that we can use when traversing a graph to move
-between vertices and edges. We will encounter those in the "<<otherv>>" section of this
-document. 
+and the 'outE' 'step' is used to explore outgoing edges from a given vertex.
+Conversely the 'in' and 'inE' steps can be used to look for incoming vertices and
+edges. The 'outE' and 'inE' steps are especially useful when you want to look at the
+properties of an edge. There are several other steps that we can use when traversing
+a graph to move between vertices and edges. We will encounter those in the
+"<<otherv>>" section of this document. 
 
-This first query does a few interesting things. Firstly we find the vertex representing
-the Austin airport (the airport with a property of 'code' containing the value 'AUS').
-Having found that vertex we then go 'out' from there. This will find all of the vertices
-connected to Austin by an outgoing edge. Having found those airports we then ask for
-the values of their 'code' properties using the 'values' step. Finally the 'fold'
-step puts all of the results into a list for us. This just makes it easier for us to
-inspect the results in the console.
+This first query does a few interesting things. Firstly we find the vertex
+representing the Austin airport (the airport with a property of 'code' containing the
+value 'AUS').  Having found that vertex we then go 'out' from there. This will find
+all of the vertices connected to Austin by an outgoing edge. Having found those
+airports we then ask for the values of their 'code' properties using the 'values'
+step. Finally the 'fold' step puts all of the results into a list for us. This just
+makes it easier for us to inspect the results in the console.
+
 [source,groovy]
 ----
 // Where can I fly to from Austin?
@@ -1677,9 +1679,9 @@ g.V().has('airport','code','AUS').out('route').values('code').fold()
 ----
 
 Despite having just stated consistently referencing labels is a good idea, unless you
-truly do want to get back all edges or all connected vertices, I will break my own rule
-quite a bit in this document. The reason for this is purely to save space and make
-the queries I present shorter.
+truly do want to get back all edges or all connected vertices, I will break my own
+rule quite a bit in this document. The reason for this is purely to save space and
+make the queries I present shorter.
 
 Here are a few more simple queries similar to the previous one.
 
@@ -2908,7 +2910,6 @@ g.V(x).values('code')
 PHO 
 ----
 
-
 This simple experiment shows that the numbers being generated using the 'Math.random'
 approach appears to be a lot more evenly distributed across all of the possible airports.
 
@@ -3516,7 +3517,22 @@ Using 'option' to write case/switch type queries
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When 'option' is combined with 'choose' the result is similar to the 'case' or
-'switch' style construct found in most programming languages.
+'switch' style construct found in most programming languages. In Java for example, we
+might code a 'switch' statement as follows.
+
+[source,java]
+----
+  switch(airport)
+  {
+    case "DFW": System.out.println(desc); break;
+    case "AUS": System.out.println(region); break;
+    case "LAX": System.out.println(runways);
+  }
+----
+
+We can write a Gremlin query that follows the same pattern as our Java 'switch'
+statement. As in the Java example I decided to lay out query out across multiple
+lines to aid readability and clarity.
 
 [source,groovy]
 ----
@@ -3526,9 +3542,14 @@ g.V().hasLabel('airport').choose(values('code')).
                             option('AUS',values('region')).
                             option('LAX',values('runways'))
 
+----
 
-// This example has three options - note the default case of 'none' used as the catchall
-// Note how for ease of reading the query can be split across multiple lines.
+The example below shows a 'choose' followed by four options. Note the default case
+of 'none' is used as the catchall. Notice how in this case, the values returned are constants.
+
+[source,groovy]
+----
+// You can return constant values of you need to
 g.V().hasLabel('airport').limit(10).choose(values('runways')).
                                       option(1,constant('just one')).
                                       option(2,constant('a couple')).
