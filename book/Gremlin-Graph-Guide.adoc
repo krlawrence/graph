@@ -1,11 +1,11 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v272, Nov 21, 2017
-// Tue Nov 21, 2017 14:03:57 CST
+v272, Nov 23, 2017
+// Thu Nov 23, 2017 13:56:39 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Nov 21 2017
+//:Date:      Nov 23 2017
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -4472,8 +4472,9 @@ g.V().hasLabel("airport").filter(outE("route").count().is(gt(200))).values('code
 ----
 
 Here are two more queries that look for things that meet a specific criteria. The
-first finds routes where the distance is exactly 100 miles. The second one looks for
-the airports that have an elevation above 10,000 feet.
+first finds routes where the distance is exactly 100 miles and returns the source and
+destination airport codes. The first query uses 'as' and 'select' while the second
+one uses 'path' and includes the distance in the result.
 
 [source,groovy]
 ----
@@ -4481,9 +4482,78 @@ the airports that have an elevation above 10,000 feet.
 g.V().as('a').outE().has('dist',eq(100)).limit(10).inV().as('b').
       select('a','b').by('code')
 
+[a:IAD,b:RIC]
+[a:HNL,b:OGG]
+[a:OGG,b:HNL]
+[a:SJO,b:LIR]
+[a:SVG,b:KRS]
+[a:RIC,b:IAD]
+[a:LIR,b:SJO]
+[a:KRS,b:SVG]
+[a:CYB,b:GCM]
+[a:GCM,b:CYB]
+----
+
+Similar to the prior query but using 'path' and displaying the distance as well as
+the airport codes.
+
+[source,groovy]
+----
+g.V().outE().has('dist',eq(100)).limit(10).inV().path().by('code').by('dist')      
+
+[IAD,100,RIC]
+[HNL,100,OGG]
+[OGG,100,HNL]
+[SJO,100,LIR]
+[SVG,100,KRS]
+[RIC,100,IAD]
+[LIR,100,SJO]
+[KRS,100,SVG]
+[CYB,100,GCM]
+[GCM,100,CYB]
+----
+
+This query looks for any airports that have an elevation above 10,000 feet. Two ways
+of achieving the more or less the same result are shown. The first uses 'valueMap'
+and the second uses a 'project' step instead.
+
+[source,groovy]
+----
 // Airports above 10,000ft sorted by ascending elevation
 g.V().has('airport','elev', gt(10000)).
       order().by('elev',incr).valueMap('city','elev')
+
+
+g.V().has('airport','elev', gt(10000)).order().by('elev',incr).
+      project('city','elevation').by('city').by('elev')
+----
+
+If we ran the query that uses the 'project' step here is what we should get back.
+
+[source,groovy]
+----
+[city:Xiahe,elevation:10510]
+[city:Leh,elevation:10682]
+[city:Shangri-La,elevation:10761]
+[city:Cusco,elevation:10860]
+[city:Jauja,elevation:11034]
+[city:Andahuaylas,elevation:11300]
+[city:Jiuzhaigou,elevation:11327]
+[city:Navoi,elevation:11420]
+[city:Hongyuan,elevation:11598]
+[city:Lhasa,elevation:11713]
+[city:Oruro,elevation:12152]
+[city:Xigaze,elevation:12408]
+[city:Golog,elevation:12427]
+[city:Juliaca,elevation:12552]
+[city:Yushu,elevation:12816]
+[city:Potosi,elevation:12913]
+[city:Quijarro,elevation:12972]
+[city:La Paz / El Alto,elevation:13355]
+[city:Shiquanhe,elevation:14022]
+[city:Kangding,elevation:14042]
+[city:Bangda,elevation:14219]
+[city:Daocheng,elevation:14472]
 ----
 
 The next query finds any routes between Austin and Sydney that only require one
