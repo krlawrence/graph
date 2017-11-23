@@ -9,7 +9,7 @@ This repository is the new home for the source materials, sample code and exampl
 
 The site is currently being setup and populated - Please check back again regularly
 
-LATEST NEWS:  
+**LATEST NEWS:**  
 [Nov-03-2017] Revision 271 was just published in all formats. Several improvements and additions.  
 [Oct-27-2017] Revision 270 was just published in all formats. Fixes issue #6 and adds more to Janus section.  
 [Oct-23-2017] Quite a lot has been added to the Janus Graph section - more to come soon  
@@ -17,6 +17,8 @@ LATEST NEWS:
 [Oct-10-2017] Several sections have been improved, I also made updates to reflect changes made in Tinkerpop 3.3
 
 To read the book in a browser click [here](http://kelvinlawrence.net/book/Gremlin-Graph-Guide.html) or for a PDF version click [here](http://kelvinlawrence.net/book/Gremlin-Graph-Guide.pdf).
+
+Details of how to build the various output formats from the Asciidoc source are contained in the README.md under the *book* folder.
 
 ## How this book came to be
 
