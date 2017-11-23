@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 1.5.5">
+<meta name="generator" content="Asciidoctor 1.5.4">
 <meta name="author" content="Kelvin R. Lawrence">
 <title>GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
@@ -18,6 +18,7 @@ audio:not([controls]){display:none;height:0}
 [hidden],template{display:none}
 script{display:none!important}
 html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}
+body{margin:0}
 a{background:transparent}
 a:focus{outline:thin dotted}
 a:active,a:hover{outline:0}
@@ -52,7 +53,7 @@ textarea{overflow:auto;vertical-align:top}
 table{border-collapse:collapse;border-spacing:0}
 *,*:before,*:after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}
 html,body{font-size:100%}
-body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto;tab-size:4;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto}
 a:hover{cursor:pointer}
 img,object,embed{max-width:100%;height:auto}
 object,embed{height:100%}
@@ -64,6 +65,7 @@ img{-ms-interpolation-mode:bicubic}
 .text-center{text-align:center!important}
 .text-justify{text-align:justify!important}
 .hide{display:none}
+body{-webkit-font-smoothing:antialiased}
 img,object,svg{display:inline-block;vertical-align:middle}
 textarea{height:auto;min-height:50px}
 select{width:100%}
@@ -118,16 +120,13 @@ table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:
 table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
 table tr.even,table tr.alt,table tr:nth-of-type(even){background:#f8f8f7}
 table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{display:table-cell;line-height:1.6}
+body{tab-size:4}
 h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
 h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
 .clearfix:before,.clearfix:after,.float-group:before,.float-group:after{content:" ";display:table}
 .clearfix:after,.float-group:after{clear:both}
-*:not(pre)>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background-color:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed;word-wrap:break-word}
-*:not(pre)>code.nobreak{word-wrap:normal}
-*:not(pre)>code.nowrap{white-space:nowrap}
+*:not(pre)>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background-color:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
 pre,pre>code{line-height:1.45;color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;text-rendering:optimizeSpeed}
-em em{font-style:normal}
-strong strong{font-weight:400}
 .keyseq{color:rgba(51,51,51,.8)}
 kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background-color:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
 .keyseq kbd:first-child{margin-left:0}
@@ -420,7 +419,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </style>
 <style>
 .listingblock .pygments .hll { background-color: #4f424c }
-.listingblock .pygments, .listingblock .pygments code { background: #2f1e2e; color: #FFFFFF }
+.listingblock .pygments  { background: #2f1e2e; color: #e7e9db }
 .listingblock .pygments .tok-c { color: #776e71 } /* Comment */
 .listingblock .pygments .tok-err { color: #ef6155 } /* Error */
 .listingblock .pygments .tok-k { color: #815ba4 } /* Keyword */
@@ -465,16 +464,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .listingblock .pygments .tok-nt { color: #5bc4bf } /* Name.Tag */
 .listingblock .pygments .tok-nv { color: #ef6155 } /* Name.Variable */
 .listingblock .pygments .tok-ow { color: #5bc4bf } /* Operator.Word */
-.listingblock .pygments .tok-w { color: #FFFFFF } /* Text.Whitespace */
+.listingblock .pygments .tok-w { color: #e7e9db } /* Text.Whitespace */
 .listingblock .pygments .tok-mb { color: #f99b15 } /* Literal.Number.Bin */
 .listingblock .pygments .tok-mf { color: #f99b15 } /* Literal.Number.Float */
 .listingblock .pygments .tok-mh { color: #f99b15 } /* Literal.Number.Hex */
 .listingblock .pygments .tok-mi { color: #f99b15 } /* Literal.Number.Integer */
 .listingblock .pygments .tok-mo { color: #f99b15 } /* Literal.Number.Oct */
-.listingblock .pygments .tok-sa { color: #48b685 } /* Literal.String.Affix */
 .listingblock .pygments .tok-sb { color: #48b685 } /* Literal.String.Backtick */
 .listingblock .pygments .tok-sc { color: #e7e9db } /* Literal.String.Char */
-.listingblock .pygments .tok-dl { color: #48b685 } /* Literal.String.Delimiter */
 .listingblock .pygments .tok-sd { color: #776e71 } /* Literal.String.Doc */
 .listingblock .pygments .tok-s2 { color: #48b685 } /* Literal.String.Double */
 .listingblock .pygments .tok-se { color: #f99b15 } /* Literal.String.Escape */
@@ -485,11 +482,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .listingblock .pygments .tok-s1 { color: #48b685 } /* Literal.String.Single */
 .listingblock .pygments .tok-ss { color: #48b685 } /* Literal.String.Symbol */
 .listingblock .pygments .tok-bp { color: #e7e9db } /* Name.Builtin.Pseudo */
-.listingblock .pygments .tok-fm { color: #06b6ef } /* Name.Function.Magic */
 .listingblock .pygments .tok-vc { color: #ef6155 } /* Name.Variable.Class */
 .listingblock .pygments .tok-vg { color: #ef6155 } /* Name.Variable.Global */
 .listingblock .pygments .tok-vi { color: #ef6155 } /* Name.Variable.Instance */
-.listingblock .pygments .tok-vm { color: #ef6155 } /* Name.Variable.Magic */
 .listingblock .pygments .tok-il { color: #f99b15 } /* Literal.Number.Integer.Long */
 </style>
 </head>
@@ -499,8 +494,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Kelvin R. Lawrence</span><br>
 <span id="email" class="email"><a href="mailto:klawrenc@us.ibm.com">klawrenc@us.ibm.com</a></span><br>
-<span id="revnumber">version 271,</span>
-<span id="revdate">Nov 02, 2017</span>
+<span id="revnumber">version 272,</span>
+<span id="revdate">Nov 23, 2017</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
@@ -540,9 +535,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#sq">3. WRITING GREMLIN QUERIES</a>
 <ul class="sectlevel2">
-<li><a href="#_introducing_gremlin">3.1. Introducing Gremlin</a>
+<li><a href="#gremlinintro">3.1. Introducing Gremlin</a>
 <ul class="sectlevel3">
-<li><a href="#_a_quick_look_at_gremlin_and_sql">3.1.1. A quick look at Gremlin and SQL</a></li>
+<li><a href="#gremlinandsql">3.1.1. A quick look at Gremlin and SQL</a></li>
 </ul>
 </li>
 <li><a href="#bq">3.2. Some fairly basic Gremlin queries</a>
@@ -555,8 +550,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#pathintro">3.2.6. What vertices and edges did I visit? - Introducing <em>path</em></a></li>
 <li><a href="#edgeexist">3.2.7. Does an edge exist between two vertices?</a></li>
 <li><a href="#limit">3.2.8. Limiting the amount of data returned</a></li>
-<li><a href="#_retrieving_a_range_of_vertices">3.2.9. Retrieving a range of vertices</a></li>
-<li><a href="#_using_em_as_em_em_select_em_and_em_project_em_to_name_and_refer_back_to_prior_steps">3.2.10. Using <em>as</em>, <em>select</em> and <em>project</em> to name and refer back to prior steps</a></li>
+<li><a href="#retrrange">3.2.9. Retrieving a range of vertices</a></li>
+<li><a href="#aselproj">3.2.10. Using <em>as</em>, <em>select</em> and <em>project</em> to name and refer back to prior steps</a></li>
 </ul>
 </li>
 <li><a href="#vm">3.3. Using <em>valueMap</em> to explore the properties of a vertex or element</a></li>
@@ -602,7 +597,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#nd">3.22. Calculating node degree</a></li>
-<li><a href="#sx">3.23. More examples using what we have covered so far</a></li>
+<li><a href="#sx">3.23. More examples using concepts we have covered so far</a></li>
 </ul>
 </li>
 <li><a href="#beq">4. BEYOND BASIC QUERIES</a>
@@ -632,7 +627,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#deleting">4.6. Deleting vertices, edges and properties</a>
 <ul class="sectlevel3">
-<li><a href="#_deleting_a_node">4.6.1. Deleting a node</a></li>
+<li><a href="#_deleting_a_vertex">4.6.1. Deleting a vertex</a></li>
 <li><a href="#_deleting_an_edge">4.6.2. Deleting an edge</a></li>
 <li><a href="#_deleting_a_property">4.6.3. Deleting a property</a></li>
 <li><a href="#_removing_all_the_edges_or_vertices_in_the_graph">4.6.4. Removing all the edges or vertices in the graph</a></li>
@@ -670,12 +665,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#countmore">5.1. Counting more things</a>
 <ul class="sectlevel3">
 <li><a href="#groupvar">5.1.1. Using groupCount with a traversal variable</a></li>
-<li><a href="#eu-usa">5.1.2. Analysis of routes between Europe and the USA</a></li>
-<li><a href="#mapreduce">5.1.3. Using <em>fold</em> to do simple Map-Reduce computations</a></li>
-<li><a href="#meanmode">5.1.4. Distribution of routes in the graph (mode and mean)</a></li>
-<li><a href="#_how_many_routes_are_there_from_airports_in_london_uk">5.1.5. How many routes are there from airports in London (UK)?</a></li>
-<li><a href="#topten">5.1.6. What are the top ten airports by route count?</a></li>
-<li><a href="#localfold">5.1.7. Using <em>local</em> while counting things</a></li>
+<li><a href="#gcconstant">5.1.2. Combining <em>groupCount</em> and <em>constant</em></a></li>
+<li><a href="#chainchoose">5.1.3. Combining <em>choose</em> and <em>groupCount</em></a></li>
+<li><a href="#eu-usa">5.1.4. Analysis of routes between Europe and the USA</a></li>
+<li><a href="#mapreduce">5.1.5. Using <em>fold</em> to do simple Map-Reduce computations</a></li>
+<li><a href="#meanmode">5.1.6. Distribution of routes in the graph (mode and mean)</a></li>
+<li><a href="#_how_many_routes_are_there_from_airports_in_london_uk">5.1.7. How many routes are there from airports in London (UK)?</a></li>
+<li><a href="#topten">5.1.8. What are the top ten airports by route count?</a></li>
+<li><a href="#localfold">5.1.9. Using <em>local</em> while counting things</a></li>
 </ul>
 </li>
 <li><a href="#wherefly">5.2. Where can I fly to from here?</a></li>
@@ -851,7 +848,7 @@ October 5th, 2017<br></p>
 free to send me feedback of any sort. Suggested improvements are especially welcome.
 A good way to provide feedback is by opening an issue in the GitHub repository
 located at <a href="https://github.com/krlawrence/graph" class="bare">https://github.com/krlawrence/graph</a>. You are currently reading revision
-271 of the document.</p>
+272 of the document.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1124,8 +1121,8 @@ the cloud.</p>
 <div class="paragraph">
 <p>While you can certainly run a graph database on your laptop, I do just that every
 day, the reality is that in production, at scale, they are big data systems. Large
-graphs commonly have many billions of vertices and edges in them taking up petabytes of
-data on disk. Graph algorithms can be both compute and memory intensive and it is
+graphs commonly have many billions of vertices and edges in them taking up petabytes
+of data on disk. Graph algorithms can be both compute and memory intensive and it is
 only fairly recently that deploying the necessary resources for such big data systems
 has made financial sense for more everyday uses in business and not just in
 government or academia. Graph databases are becoming much more broadly adopted across
@@ -1138,16 +1135,16 @@ source projects addressing everything from the databases you need to store the g
 data to the query languages used to traverse them all the way up to visually
 displaying graphs as part of the user interface layer. In particular, it is so called
 <em>property graphs</em> where we are seeing the broadest development and uptake. In a
-property graph both vertices and edges can have properties (effectively key,value pairs)
-associated with them. There are many styles of graph that you may end up building and
-there have been whole books written on these various design patterns but the property
-graph technology we will be focussed on in this document can support all of the most
-common usage patterns. If you hear phrases such as <em>directed graph</em> and <em>undirected
-graph</em> or <em>cyclic</em> and <em>acyclic</em> graph and many more as you work with graph databases
-a quick on-line search will get you to a place where you can get familiar with that
-terminology. A deep discussion of these patterns is beyond the scope of this document
-and it&#8217;s in no way essential to have a full background in graph theory to get
-productive quickly.</p>
+property graph both vertices and edges can have properties (effectively key,value
+pairs) associated with them. There are many styles of graph that you may end up
+building and there have been whole books written on these various design patterns but
+the property graph technology we will be focussed on in this document can support all
+of the most common usage patterns. If you hear phrases such as <em>directed graph</em> and
+<em>undirected graph</em> or <em>cyclic</em> and <em>acyclic</em> graph and many more as you work with
+graph databases a quick on-line search will get you to a place where you can get
+familiar with that terminology. A deep discussion of these patterns is beyond the
+scope of this document and it&#8217;s in no way essential to have a full background in
+graph theory to get productive quickly.</p>
 </div>
 <div class="paragraph">
 <p>A third, and equally important factor, in the growth we are seeing in graph database
@@ -1783,10 +1780,10 @@ by reading the comments at the start of the <em>air-routes.graphml</em> file or 
 README.txt file.</p>
 </div>
 <div class="paragraph">
-<p>The graph currently contains a total of 3,612 vertices and 49,894 edges. Of these 3,367
-vertices are airports, and 43,160 of the edges represent routes. While in big data terms
-this is really a tiny graph, it is plenty big enough for us to build up and
-experiment with some very interesting Gremlin queries.</p>
+<p>The graph currently contains a total of 3,612 vertices and 49,894 edges. Of these
+3,367 vertices are airports, and 43,160 of the edges represent routes. While in big
+data terms this is really a tiny graph, it is plenty big enough for us to build up
+and experiment with some very interesting Gremlin queries.</p>
 </div>
 <div class="paragraph">
 <p>Lastly, here is are some statistics and facts about the air-routes graph. If you want
@@ -2164,7 +2161,7 @@ advanced concepts. Hopefully each set of examples presented by building upon thi
 previously discussed will be easy to understand.</p>
 </div>
 <div class="sect2">
-<h3 id="_introducing_gremlin">3.1. Introducing Gremlin</h3>
+<h3 id="gremlinintro">3.1. Introducing Gremlin</h3>
 <div class="paragraph">
 <p>Gremlin is the name of the graph traversal and query language that TinkerPop provides
 for working with property graphs. Gremlin can be used with any graph store that is
@@ -2174,7 +2171,7 @@ for values, patterns and relationships we can add or delete vertices and edges, 
 create sub-graphs and lots more.</p>
 </div>
 <div class="sect3">
-<h4 id="_a_quick_look_at_gremlin_and_sql">3.1.1. A quick look at Gremlin and SQL</h4>
+<h4 id="gremlinandsql">3.1.1. A quick look at Gremlin and SQL</h4>
 <div class="paragraph">
 <p>While it is not required to know SQL in order to be productive with Gremlin, if you
 do have some experience with SQL you will notice many of the same keywords and
@@ -2474,10 +2471,10 @@ a list of all the methods and their types supported by the <em>TinkerVertex</em>
 <div class="sect3">
 <h4 id="values">3.2.1. Retrieving property values from a vertex</h4>
 <div class="paragraph">
-<p>There are several different ways of working with vertex properties. We can add, delete
-and query properties for any vertex or edge in the graph. We will explore each of these
-topics in detail over the course of this document. Initially, let&#8217;s look at a couple
-of simple ways that we can look up the property values of a given vertex.</p>
+<p>There are several different ways of working with vertex properties. We can add,
+delete and query properties for any vertex or edge in the graph. We will explore each
+of these topics in detail over the course of this document. Initially, let&#8217;s look at
+a couple of simple ways that we can look up the property values of a given vertex.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2613,10 +2610,10 @@ however in the "<a href="#walk">Starting to walk the graph</a>" section.</p>
 <div class="paragraph">
 <p>Sometimes it is useful to count how many of each type (or group) of things there are
 in the graph. This can be done using the <em>group</em> and <em>groupCount</em> steps. While for a
-very large graph it is not recommended to run queries that look at all of the vertices
-or all of the edges in a graph, for smaller graphs this can be quite useful. For the
-air routes graph we could easily count the number of different vertex and edge types in
-the graph as follows.</p>
+very large graph it is not recommended to run queries that look at all of the
+vertices or all of the edges in a graph, for smaller graphs this can be quite useful.
+For the air routes graph we could easily count the number of different vertex and
+edge types in the graph as follows.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2740,37 +2737,38 @@ will find a lot more examples of grouping and counting things in the section cal
 <div class="sect3">
 <h4 id="walk">3.2.5. Starting to walk the graph</h4>
 <div class="paragraph">
-<p>So far we have mostly just explored queries that look at properties on a vertex or count
-how many things we can find of a certain type. Where the power of a graph really
-comes into play is when we start to <em>walk</em> or <em>traverse</em> the graph by looking at the
-connections (edges) between vertices. The term <em>walking the graph</em> is used to describe
-moving from one vertex to another vertex via an edge. Typically when using the phrase
-<em>walking a graph</em> the intent is to describe starting at a vertex traversing one or more
-vertices and edges and ending up at a different vertex or sometimes, back where you
-started in the case of a <em>circular walk</em>. It is very easy to traverse a graph in this
-way using Gremlin. The journey we took while on our <em>walk</em> is often referred to as
-our <em>path</em>. There are also cases when all you want to do is return edges or some
-combination of vertices and edges as the result of a query and Gremlin allows this as
-well. We will explore a lot of ways to modify the way a graph is traversed in the
-upcoming sections.  To get us started, here are some simple examples.</p>
+<p>So far we have mostly just explored queries that look at properties on a vertex or
+count how many things we can find of a certain type. Where the power of a graph
+really comes into play is when we start to <em>walk</em> or <em>traverse</em> the graph by looking
+at the connections (edges) between vertices. The term <em>walking the graph</em> is used to
+describe moving from one vertex to another vertex via an edge. Typically when using
+the phrase <em>walking a graph</em> the intent is to describe starting at a vertex
+traversing one or more vertices and edges and ending up at a different vertex or
+sometimes, back where you started in the case of a <em>circular walk</em>. It is very easy
+to traverse a graph in this way using Gremlin. The journey we took while on our
+<em>walk</em> is often referred to as our <em>path</em>. There are also cases when all you want to
+do is return edges or some combination of vertices and edges as the result of a query
+and Gremlin allows this as well. We will explore a lot of ways to modify the way a
+graph is traversed in the upcoming sections.  To get us started, here are some simple
+examples.</p>
 </div>
 <div class="paragraph">
 <p>The <em>out</em> step is used to find vertices connected by an outgoing edge to that vertex
-and the <em>outE</em> <em>step</em> is used to explore outgoing edges from a given vertex. Conversely
-the <em>in</em> and <em>inE</em> steps can be used to look for incoming vertices and edges. The <em>outE</em>
-and <em>inE</em> steps are especially useful when you want to look at the properties of an
-edge. There are several other steps that we can use when traversing a graph to move
-between vertices and edges. We will encounter those in the "<a href="#otherv">Other ways to explore vertices and edges using <em>both</em>, <em>bothE</em>, <em>bothV</em> and <em>otherV</em></a>" section of this
-document.</p>
+and the <em>outE</em> <em>step</em> is used to explore outgoing edges from a given vertex.
+Conversely the <em>in</em> and <em>inE</em> steps can be used to look for incoming vertices and
+edges. The <em>outE</em> and <em>inE</em> steps are especially useful when you want to look at the
+properties of an edge. There are several other steps that we can use when traversing
+a graph to move between vertices and edges. We will encounter those in the
+"<a href="#otherv">Other ways to explore vertices and edges using <em>both</em>, <em>bothE</em>, <em>bothV</em> and <em>otherV</em></a>" section of this document.</p>
 </div>
 <div class="paragraph">
-<p>This first query does a few interesting things. Firstly we find the vertex representing
-the Austin airport (the airport with a property of <em>code</em> containing the value <em>AUS</em>).
-Having found that vertex we then go <em>out</em> from there. This will find all of the vertices
-connected to Austin by an outgoing edge. Having found those airports we then ask for
-the values of their <em>code</em> properties using the <em>values</em> step. Finally the <em>fold</em>
-step puts all of the results into a list for us. This just makes it easier for us to
-inspect the results in the console.</p>
+<p>This first query does a few interesting things. Firstly we find the vertex
+representing the Austin airport (the airport with a property of <em>code</em> containing the
+value <em>AUS</em>).  Having found that vertex we then go <em>out</em> from there. This will find
+all of the vertices connected to Austin by an outgoing edge. Having found those
+airports we then ask for the values of their <em>code</em> properties using the <em>values</em>
+step. Finally the <em>fold</em> step puts all of the results into a list for us. This just
+makes it easier for us to inspect the results in the console.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2805,9 +2803,9 @@ queries. So we could change our query just a bit by adding a label reference on 
 </div>
 <div class="paragraph">
 <p>Despite having just stated consistently referencing labels is a good idea, unless you
-truly do want to get back all edges or all connected vertices, I will break my own rule
-quite a bit in this document. The reason for this is purely to save space and make
-the queries I present shorter.</p>
+truly do want to get back all edges or all connected vertices, I will break my own
+rule quite a bit in this document. The reason for this is purely to save space and
+make the queries I present shorter.</p>
 </div>
 <div class="paragraph">
 <p>Here are a few more simple queries similar to the previous one.</p>
@@ -2962,26 +2960,56 @@ the two examples above could have been written as follows.</p>
 </div>
 <div class="paragraph">
 <p>We can also limit based on time taken. The following query has a maximum limit of ten
-milliseconds. All of the parts of this query are explained in detail later on in this
-document but I think what they do is fairly clear.</p>
+milliseconds. The query looks for routes from Austin (AUS) to London Heathrow
+(LHR). All the parts of this query are explained in detail later on in this
+book but I think what they do is fairly clear.</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// Limit the query to however much can be processed within 10 milliseconds</span>
-<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;airport&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">)</span>
-     <span class="tok-o">.</span><span class="tok-na">repeat</span><span class="tok-o">(</span><span class="tok-n">timeLimit</span><span class="tok-o">(</span><span class="tok-mi">10</span><span class="tok-o">).</span><span class="tok-na">out</span><span class="tok-o">()).</span><span class="tok-na">until</span><span class="tok-o">(</span><span class="tok-n">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;LHR&#39;</span><span class="tok-o">)).</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">)</span></code></pre>
+<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;airport&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span>
+      <span class="tok-n">repeat</span><span class="tok-o">(</span><span class="tok-n">timeLimit</span><span class="tok-o">(</span><span class="tok-mi">10</span><span class="tok-o">).</span><span class="tok-na">out</span><span class="tok-o">()).</span><span class="tok-na">until</span><span class="tok-o">(</span><span class="tok-n">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;LHR&#39;</span><span class="tok-o">)).</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here is what the query above returned when run on my laptop.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">LHR</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">YYZ</span><span class="tok-o">,</span><span class="tok-n">LHR</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">FRA</span><span class="tok-o">,</span><span class="tok-n">LHR</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">MEX</span><span class="tok-o">,</span><span class="tok-n">LHR</span><span class="tok-o">]</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If we give the query another 10 milliseconds to run, so 20 in total, you can see that
+a few more routes were found.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// Limit the query to 20 milliseconds</span>
+<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;airport&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span>
+      <span class="tok-n">repeat</span><span class="tok-o">(</span><span class="tok-n">timeLimit</span><span class="tok-o">(</span><span class="tok-mi">20</span><span class="tok-o">).</span><span class="tok-na">out</span><span class="tok-o">()).</span><span class="tok-na">until</span><span class="tok-o">(</span><span class="tok-n">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;LHR&#39;</span><span class="tok-o">)).</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">)</span>
+
+<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">LHR</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">YYZ</span><span class="tok-o">,</span><span class="tok-n">LHR</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">FRA</span><span class="tok-o">,</span><span class="tok-n">LHR</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">MEX</span><span class="tok-o">,</span><span class="tok-n">LHR</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">PDX</span><span class="tok-o">,</span><span class="tok-n">LHR</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">AUS</span><span class="tok-o">,</span><span class="tok-n">CLT</span><span class="tok-o">,</span><span class="tok-n">LHR</span><span class="tok-o">]</span></code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_retrieving_a_range_of_vertices">3.2.9. Retrieving a range of vertices</h4>
+<h4 id="retrrange">3.2.9. Retrieving a range of vertices</h4>
 <div class="paragraph">
-<p>Gremlin provides various ways to return a sequence of vertices. We have already seen the
-<em>limit</em> and <em>range</em> steps used in the previous section to return the first 20
+<p>Gremlin provides various ways to return a sequence of vertices. We have already seen
+the <em>limit</em> and <em>range</em> steps used in the previous section to return the first 20
 elements of a query result. We can also use the <em>range</em> step to select different
-range of vertices by giving a non zero starting offset and an ending offset. The <em>range</em>
-offsets are zero based, and while the official documentation states that the ranges
-are inclusive/inclusive it actually appears from my testing that they are
+range of vertices by giving a non zero starting offset and an ending offset. The
+<em>range</em> offsets are zero based, and while the official documentation states that the
+ranges are inclusive/inclusive it actually appears from my testing that they are
 inclusive/exclusive.</p>
 </div>
 <div class="listingblock">
@@ -2989,11 +3017,47 @@ inclusive/exclusive.</p>
 <pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// Return the first two airport vertices found</span>
 <span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">hasLabel</span><span class="tok-o">(</span><span class="tok-s1">&#39;airport&#39;</span><span class="tok-o">).</span><span class="tok-na">range</span><span class="tok-o">(</span><span class="tok-mi">0</span><span class="tok-o">,</span><span class="tok-mi">2</span><span class="tok-o">)</span>
 
-<span class="tok-c1">// Return the fourth, fifth and sixth airport vertices found (zero based)</span>
+<span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">1</span><span class="tok-o">]</span>
+<span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">2</span><span class="tok-o">]</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The starting value given to a <em>range</em> step does not have to be <em>0</em>. In the example
+below we ask for the 3rd, 4th and 5th results found by specifying a range of
+<em>"(3,6)"</em>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// Return the fourth, fifth and sixth airport vertices found (zero based)</span>
 <span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">hasLabel</span><span class="tok-o">(</span><span class="tok-s1">&#39;airport&#39;</span><span class="tok-o">).</span><span class="tok-na">range</span><span class="tok-o">(</span><span class="tok-mi">3</span><span class="tok-o">,</span><span class="tok-mi">6</span><span class="tok-o">)</span>
 
-<span class="tok-c1">// Return all the remaining vertices starting at the 3500th one</span>
+<span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">4</span><span class="tok-o">]</span>
+<span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">5</span><span class="tok-o">]</span>
+<span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">6</span><span class="tok-o">]</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here is an example of how we can use the index <em>-1</em> to mean <em>"until the end of the
+list"</em>. This is similar to the convention used in many programming languages when
+working with arrays and list.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// Return all the remaining vertices starting at the 3500th one</span>
 <span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">range</span><span class="tok-o">(</span><span class="tok-mi">3500</span><span class="tok-o">,-</span><span class="tok-mi">1</span><span class="tok-o">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here is another example that uses the <em>range</em> step, this time looking only at nodes
+with a label of <em>country</em>. Notice how this time we found vertices with much higher ID
+values.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">hasLabel</span><span class="tok-o">(</span><span class="tok-s1">&#39;country&#39;</span><span class="tok-o">).</span><span class="tok-na">range</span><span class="tok-o">(</span><span class="tok-mi">0</span><span class="tok-o">,</span><span class="tok-mi">2</span><span class="tok-o">)</span>
+
+<span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">3376</span><span class="tok-o">]</span>
+<span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">3377</span><span class="tok-o">]</span></code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -3003,12 +3067,11 @@ inclusive/exclusive.</p>
 <div class="title">Note</div>
 </td>
 <td class="content">
-There is no guarantee as to which airport vertices will be selected as
-this depends upon how they are stored by the back end graph. Using Tinkergraph the
+There is no guarantee as to which airport vertices will be selected as this
+depends upon how they are stored by the back end graph. Using TinkerGraph the
 airports will most likely come back in the order they are put into the graph. This is
-not likely to be the case with other graph stores such as Titan and IBM Graph. So do
-not rely on any sort of expectation of order when using <em>range</em> to process sets of
-vertices.
+not likely to be the case with other graph stores such as Janus Graph. So do not rely
+on any sort of expectation of order when using <em>range</em> to process sets of vertices.
 </td>
 </tr>
 </table>
@@ -3019,7 +3082,7 @@ several additional examples in the "<a href="#tranges">Testing values and ranges
 </div>
 </div>
 <div class="sect3">
-<h4 id="_using_em_as_em_em_select_em_and_em_project_em_to_name_and_refer_back_to_prior_steps">3.2.10. Using <em>as</em>, <em>select</em> and <em>project</em> to name and refer back to prior steps</h4>
+<h4 id="aselproj">3.2.10. Using <em>as</em>, <em>select</em> and <em>project</em> to name and refer back to prior steps</h4>
 <div class="paragraph">
 <p>Sometimes it is useful to be able to remember a point of a traversal and refer back
 to it later on. This ability was more essential in TinkerPop 2 than it is in
@@ -3974,7 +4037,7 @@ but avoids any routes that pass through a list of specified airports.</p>
 </div>
 <div class="paragraph">
 <p>In a similar way, <em>within</em> allows us to specifically give a list of things that we
-are interested in. The query below again looks from routes from SAT to SLC with one
+<strong>are</strong> interested in. The query below again looks at routes from SAT to SLC with one
 stop but this time only returns routes that stop in one of the designated airports.</p>
 </div>
 <div class="listingblock">
@@ -4871,7 +4934,23 @@ part of the result by adding a <em>select(values)</em> to the end of the query a
 <h3 id="option">3.13. Using <em>option</em> to write case/switch type queries</h3>
 <div class="paragraph">
 <p>When <em>option</em> is combined with <em>choose</em> the result is similar to the <em>case</em> or
-<em>switch</em> style construct found in most programming languages.</p>
+<em>switch</em> style construct found in most programming languages. In Java for example, we
+might code a <em>switch</em> statement as follows.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java">  <span class="tok-k">switch</span><span class="tok-o">(</span><span class="tok-n">airport</span><span class="tok-o">)</span>
+  <span class="tok-o">{</span>
+    <span class="tok-k">case</span> <span class="tok-s">&quot;DFW&quot;</span><span class="tok-o">:</span> <span class="tok-n">System</span><span class="tok-o">.</span><span class="tok-na">out</span><span class="tok-o">.</span><span class="tok-na">println</span><span class="tok-o">(</span><span class="tok-n">desc</span><span class="tok-o">);</span> <span class="tok-k">break</span><span class="tok-o">;</span>
+    <span class="tok-k">case</span> <span class="tok-s">&quot;AUS&quot;</span><span class="tok-o">:</span> <span class="tok-n">System</span><span class="tok-o">.</span><span class="tok-na">out</span><span class="tok-o">.</span><span class="tok-na">println</span><span class="tok-o">(</span><span class="tok-n">region</span><span class="tok-o">);</span> <span class="tok-k">break</span><span class="tok-o">;</span>
+    <span class="tok-k">case</span> <span class="tok-s">&quot;LAX&quot;</span><span class="tok-o">:</span> <span class="tok-n">System</span><span class="tok-o">.</span><span class="tok-na">out</span><span class="tok-o">.</span><span class="tok-na">println</span><span class="tok-o">(</span><span class="tok-n">runways</span><span class="tok-o">);</span>
+  <span class="tok-o">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can write a Gremlin query that follows the same pattern as our Java <em>switch</em>
+statement. As in the Java example I decided to lay out query out across multiple
+lines to aid readability and clarity.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4879,11 +4958,16 @@ part of the result by adding a <em>select(values)</em> to the end of the query a
 <span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">hasLabel</span><span class="tok-o">(</span><span class="tok-s1">&#39;airport&#39;</span><span class="tok-o">).</span><span class="tok-na">choose</span><span class="tok-o">(</span><span class="tok-n">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">)).</span>
                             <span class="tok-n">option</span><span class="tok-o">(</span><span class="tok-s1">&#39;DFW&#39;</span><span class="tok-o">,</span><span class="tok-n">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;desc&#39;</span><span class="tok-o">)).</span>
                             <span class="tok-n">option</span><span class="tok-o">(</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">,</span><span class="tok-n">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;region&#39;</span><span class="tok-o">)).</span>
-                            <span class="tok-n">option</span><span class="tok-o">(</span><span class="tok-s1">&#39;LAX&#39;</span><span class="tok-o">,</span><span class="tok-n">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;runways&#39;</span><span class="tok-o">))</span>
-
-
-<span class="tok-c1">// This example has three options - note the default case of &#39;none&#39; used as the catchall</span>
-<span class="tok-c1">// Note how for ease of reading the query can be split across multiple lines.</span>
+                            <span class="tok-n">option</span><span class="tok-o">(</span><span class="tok-s1">&#39;LAX&#39;</span><span class="tok-o">,</span><span class="tok-n">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;runways&#39;</span><span class="tok-o">))</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The example below shows a <em>choose</em> followed by four options. Note the default case
+of <em>none</em> is used as the catchall. Notice how in this case, the values returned are constants.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// You can return constant values of you need to</span>
 <span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">hasLabel</span><span class="tok-o">(</span><span class="tok-s1">&#39;airport&#39;</span><span class="tok-o">).</span><span class="tok-na">limit</span><span class="tok-o">(</span><span class="tok-mi">10</span><span class="tok-o">).</span><span class="tok-na">choose</span><span class="tok-o">(</span><span class="tok-n">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;runways&#39;</span><span class="tok-o">)).</span>
                                       <span class="tok-n">option</span><span class="tok-o">(</span><span class="tok-mi">1</span><span class="tok-o">,</span><span class="tok-n">constant</span><span class="tok-o">(</span><span class="tok-s1">&#39;just one&#39;</span><span class="tok-o">)).</span>
                                       <span class="tok-n">option</span><span class="tok-o">(</span><span class="tok-mi">2</span><span class="tok-o">,</span><span class="tok-n">constant</span><span class="tok-o">(</span><span class="tok-s1">&#39;a couple&#39;</span><span class="tok-o">)).</span>
@@ -5027,17 +5111,18 @@ using <em>union</em> but it does offer some very useful capability.</p>
 </div>
 <div class="paragraph">
 <p>By way of a simple example, the following query returns flights that arrive in AUS
-from the UK of that leave AUS and arrive in Mexico.</p>
+from the UK or that leave AUS and arrive in Mexico.</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// Flights to AUS from the UK or from AUS to Mexico</span>
-<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span><span class="tok-na">union</span><span class="tok-o">(</span><span class="tok-n">__</span><span class="tok-o">.</span><span class="tok-na">in</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;country&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;UK&#39;</span><span class="tok-o">)</span>
-                              <span class="tok-o">,</span><span class="tok-n">out</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;country&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;MX&#39;</span><span class="tok-o">)).</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">)</span></code></pre>
+<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span><span class="tok-na">union</span><span class="tok-o">(</span><span class="tok-n">__</span><span class="tok-o">.</span><span class="tok-na">in</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;country&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;UK&#39;</span><span class="tok-o">),</span>
+                                <span class="tok-n">out</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;country&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;MX&#39;</span><span class="tok-o">)).</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">)</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>When we run that query, we get the following results</p>
+<p>When we run that query, we get the following results showing that there are routes
+from LHR in the UK and to the three airports MEX, CUN and GDL in Mexico.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5732,18 +5817,58 @@ the examples below show.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="sx">3.23. More examples using what we have covered so far</h3>
+<h3 id="sx">3.23. More examples using concepts we have covered so far</h3>
 <div class="paragraph">
-<p>The queries in this section build upon the topics that we have covered so far.</p>
+<p>The examples in this section build upon the topics that we have covered so far. The
+query below finds cities that can be flown to from any airport in the Hawaiian
+islands.</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// Which cities can I fly to from any airport in the Hawaiian islands?</span>
-<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;airport&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;region&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;US-HI&#39;</span><span class="tok-o">).</span><span class="tok-na">out</span><span class="tok-o">().</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">)</span>
-
-<span class="tok-c1">// Find all the airports that are in Europe (The graph stores continent information</span>
+<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;airport&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;region&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;US-HI&#39;</span><span class="tok-o">).</span><span class="tok-na">out</span><span class="tok-o">().</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If we run the query we would get back results similar to those below. Only a few of the
+full result set are shown.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-o">[</span><span class="tok-n">Honolulu</span><span class="tok-o">,</span><span class="tok-n">San</span> <span class="tok-n">Francisco</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">Honolulu</span><span class="tok-o">,</span><span class="tok-n">Osaka</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">Honolulu</span><span class="tok-o">,</span><span class="tok-n">San</span> <span class="tok-n">Diego</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">Honolulu</span><span class="tok-o">,</span><span class="tok-n">Sapporo</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">Honolulu</span><span class="tok-o">,</span><span class="tok-n">Las</span> <span class="tok-n">Vegas</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">Honolulu</span><span class="tok-o">,</span><span class="tok-n">Sacramento</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">Honolulu</span><span class="tok-o">,</span><span class="tok-n">Denver</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">Kahului</span><span class="tok-o">,</span><span class="tok-n">Portland</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">Kahului</span><span class="tok-o">,</span><span class="tok-n">Sacramento</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">Kahului</span><span class="tok-o">,</span><span class="tok-n">Lahaina</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">Lihue</span><span class="tok-o">,</span><span class="tok-n">Oakland</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">Lihue</span><span class="tok-o">,</span><span class="tok-n">Vancouver</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">Lihue</span><span class="tok-o">,</span><span class="tok-n">Seattle</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">Lihue</span><span class="tok-o">,</span><span class="tok-n">San</span> <span class="tok-n">Francisco</span><span class="tok-o">]</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The query below looks for airports in Europe using the continent node with a code of
+<em>EU</em> as the starting point. The results are sorted in ascending order  and folded
+into a list.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// Find all the airports that are in Europe (The graph stores continent information</span>
 <span class="tok-c1">// as &quot;contains&quot; edges connected from a &quot;continent&quot; node to each airport node.</span>
 <span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;continent&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;EU&#39;</span><span class="tok-o">).</span><span class="tok-na">out</span><span class="tok-o">(</span><span class="tok-s1">&#39;contains&#39;</span><span class="tok-o">).</span><span class="tok-na">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">order</span><span class="tok-o">().</span><span class="tok-na">fold</span><span class="tok-o">()</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here is what we get back from running the query.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-o">[</span><span class="tok-n">AAL</span><span class="tok-o">,</span><span class="tok-n">AAQ</span><span class="tok-o">,</span><span class="tok-n">AAR</span><span class="tok-o">,</span><span class="tok-n">ABZ</span><span class="tok-o">,</span><span class="tok-n">ACE</span><span class="tok-o">,</span><span class="tok-n">ACH</span><span class="tok-o">,</span><span class="tok-n">ACI</span><span class="tok-o">,</span><span class="tok-n">AER</span><span class="tok-o">,</span><span class="tok-n">AES</span><span class="tok-o">,</span><span class="tok-n">AEY</span><span class="tok-o">,</span><span class="tok-n">AGB</span><span class="tok-o">,</span><span class="tok-n">AGF</span><span class="tok-o">,</span><span class="tok-n">AGH</span><span class="tok-o">,</span><span class="tok-n">AGP</span><span class="tok-o">,</span><span class="tok-n">AHO</span><span class="tok-o">,</span><span class="tok-n">AJA</span><span class="tok-o">,</span><span class="tok-n">AJR</span><span class="tok-o">,</span><span class="tok-n">ALC</span><span class="tok-o">,</span><span class="tok-n">ALF</span><span class="tok-o">,</span><span class="tok-n">AMS</span><span class="tok-o">,</span><span class="tok-n">ANE</span><span class="tok-o">,</span><span class="tok-n">ANG</span><span class="tok-o">,</span><span class="tok-n">ANR</span><span class="tok-o">,</span><span class="tok-n">ANX</span><span class="tok-o">,</span><span class="tok-n">AOI</span><span class="tok-o">,</span><span class="tok-n">AOK</span><span class="tok-o">,</span><span class="tok-n">ARH</span><span class="tok-o">,</span><span class="tok-n">ARN</span><span class="tok-o">,</span><span class="tok-n">ARW</span><span class="tok-o">,</span><span class="tok-n">ASF</span><span class="tok-o">,</span><span class="tok-n">ATH</span><span class="tok-o">,</span><span class="tok-n">AUR</span><span class="tok-o">,</span><span class="tok-n">AVN</span><span class="tok-o">,</span><span class="tok-n">AXD</span><span class="tok-o">,</span><span class="tok-n">BAY</span><span class="tok-o">,</span><span class="tok-n">BCM</span><span class="tok-o">,</span><span class="tok-n">BCN</span><span class="tok-o">,</span><span class="tok-n">BDS</span><span class="tok-o">,</span><span class="tok-n">BDU</span><span class="tok-o">,</span><span class="tok-n">BEB</span><span class="tok-o">,</span><span class="tok-n">BEG</span><span class="tok-o">,</span><span class="tok-n">BES</span><span class="tok-o">,</span><span class="tok-n">BFS</span><span class="tok-o">,</span><span class="tok-n">BGO</span><span class="tok-o">,</span><span class="tok-n">BGY</span><span class="tok-o">,</span><span class="tok-n">BHD</span><span class="tok-o">,</span><span class="tok-n">BHX</span><span class="tok-o">,</span><span class="tok-n">BIA</span><span class="tok-o">,</span><span class="tok-n">BIO</span><span class="tok-o">,</span><span class="tok-n">BIQ</span><span class="tok-o">,</span><span class="tok-n">BJF</span><span class="tok-o">,</span><span class="tok-n">BJZ</span><span class="tok-o">,</span><span class="tok-n">BLE</span><span class="tok-o">,</span><span class="tok-n">BLK</span><span class="tok-o">,</span><span class="tok-n">BLL</span><span class="tok-o">,</span><span class="tok-n">BLQ</span><span class="tok-o">,</span><span class="tok-n">BMA</span><span class="tok-o">,</span><span class="tok-n">BNN</span><span class="tok-o">,</span><span class="tok-n">BNX</span><span class="tok-o">,</span><span class="tok-n">BOD</span><span class="tok-o">,</span><span class="tok-n">BOH</span><span class="tok-o">,</span><span class="tok-n">BOJ</span><span class="tok-o">,</span><span class="tok-n">BOO</span><span class="tok-o">,</span><span class="tok-n">BRE</span><span class="tok-o">,</span><span class="tok-n">BRI</span><span class="tok-o">,</span><span class="tok-n">BRN</span><span class="tok-o">,</span><span class="tok-n">BRQ</span><span class="tok-o">,</span><span class="tok-n">BRR</span><span class="tok-o">,</span><span class="tok-n">BRS</span><span class="tok-o">,</span><span class="tok-n">BRU</span><span class="tok-o">,</span><span class="tok-n">BSL</span><span class="tok-o">,</span><span class="tok-n">BTS</span><span class="tok-o">,</span><span class="tok-n">BUD</span><span class="tok-o">,</span><span class="tok-n">BVA</span><span class="tok-o">,</span><span class="tok-n">BVE</span><span class="tok-o">,</span><span class="tok-n">BVG</span><span class="tok-o">,</span><span class="tok-n">BWK</span><span class="tok-o">,</span><span class="tok-n">BZG</span><span class="tok-o">,</span><span class="tok-n">BZK</span><span class="tok-o">,</span><span class="tok-n">BZO</span><span class="tok-o">,</span><span class="tok-n">BZR</span><span class="tok-o">,</span><span class="tok-n">BZZ</span><span class="tok-o">,</span><span class="tok-n">CAG</span><span class="tok-o">,</span><span class="tok-n">CAL</span><span class="tok-o">,</span><span class="tok-n">CCF</span><span class="tok-o">,</span><span class="tok-n">CDG</span><span class="tok-o">,</span><span class="tok-n">CDT</span><span class="tok-o">,</span><span class="tok-n">CEE</span><span class="tok-o">,</span><span class="tok-n">CEG</span><span class="tok-o">,</span><span class="tok-n">CFE</span><span class="tok-o">,</span><span class="tok-n">CFN</span><span class="tok-o">,</span><span class="tok-n">CFR</span><span class="tok-o">,</span><span class="tok-n">CFU</span><span class="tok-o">,</span><span class="tok-n">CGN</span><span class="tok-o">,</span><span class="tok-n">CHQ</span><span class="tok-o">,</span><span class="tok-n">CIA</span><span class="tok-o">,</span><span class="tok-n">CIY</span><span class="tok-o">,</span><span class="tok-n">CLJ</span><span class="tok-o">,</span><span class="tok-n">CLY</span><span class="tok-o">,</span><span class="tok-n">CMF</span><span class="tok-o">,</span><span class="tok-n">CND</span><span class="tok-o">,</span><span class="tok-n">CPH</span><span class="tok-o">,</span><span class="tok-n">CRA</span><span class="tok-o">,</span><span class="tok-n">CRL</span><span class="tok-o">,</span><span class="tok-n">CSH</span><span class="tok-o">,</span><span class="tok-n">CSY</span><span class="tok-o">,</span><span class="tok-n">CTA</span><span class="tok-o">,</span><span class="tok-n">CUF</span><span class="tok-o">,</span><span class="tok-n">CVT</span><span class="tok-o">,</span><span class="tok-n">CVU</span><span class="tok-o">,</span><span class="tok-n">CWC</span><span class="tok-o">,</span><span class="tok-n">CWL</span><span class="tok-o">,</span><span class="tok-n">DBV</span><span class="tok-o">,</span><span class="tok-n">DCM</span><span class="tok-o">,</span><span class="tok-n">DEB</span><span class="tok-o">,</span><span class="tok-n">DIJ</span><span class="tok-o">,</span><span class="tok-n">DLE</span><span class="tok-o">,</span><span class="tok-n">DME</span><span class="tok-o">,</span><span class="tok-n">DND</span><span class="tok-o">,</span><span class="tok-n">DNK</span><span class="tok-o">,</span><span class="tok-n">DNR</span><span class="tok-o">,</span><span class="tok-n">DOK</span><span class="tok-o">,</span><span class="tok-n">DOL</span><span class="tok-o">,</span><span class="tok-n">DRS</span><span class="tok-o">,</span><span class="tok-n">DSA</span><span class="tok-o">,</span><span class="tok-n">DTM</span><span class="tok-o">,</span><span class="tok-n">DUB</span><span class="tok-o">,</span><span class="tok-n">DUS</span><span class="tok-o">,</span><span class="tok-n">EAS</span><span class="tok-o">,</span><span class="tok-n">EBA</span><span class="tok-o">,</span><span class="tok-n">EBJ</span><span class="tok-o">,</span><span class="tok-n">EBU</span><span class="tok-o">,</span><span class="tok-n">EDI</span><span class="tok-o">,</span><span class="tok-n">EFL</span><span class="tok-o">,</span><span class="tok-n">EGC</span><span class="tok-o">,</span><span class="tok-n">EGO</span><span class="tok-o">,</span><span class="tok-n">EGS</span><span class="tok-o">,</span><span class="tok-n">EIN</span><span class="tok-o">,</span><span class="tok-n">EMA</span><span class="tok-o">,</span><span class="tok-n">ENF</span><span class="tok-o">,</span><span class="tok-n">EOI</span><span class="tok-o">,</span><span class="tok-n">ERF</span><span class="tok-o">,</span><span class="tok-n">ESL</span><span class="tok-o">,</span><span class="tok-n">ETZ</span><span class="tok-o">,</span><span class="tok-n">EVE</span><span class="tok-o">,</span><span class="tok-n">EVG</span><span class="tok-o">,</span><span class="tok-n">EXT</span><span class="tok-o">,</span><span class="tok-n">FAE</span><span class="tok-o">,</span><span class="tok-n">FAO</span><span class="tok-o">,</span><span class="tok-n">FCO</span><span class="tok-o">,</span><span class="tok-n">FDE</span><span class="tok-o">,</span><span class="tok-n">FDH</span><span class="tok-o">,</span><span class="tok-n">FIE</span><span class="tok-o">,</span><span class="tok-n">FKB</span><span class="tok-o">,</span><span class="tok-n">FLR</span><span class="tok-o">,</span><span class="tok-n">FLW</span><span class="tok-o">,</span><span class="tok-n">FMM</span><span class="tok-o">,</span><span class="tok-n">FMO</span><span class="tok-o">,</span><span class="tok-n">FNC</span><span class="tok-o">,</span><span class="tok-n">FNI</span><span class="tok-o">,</span><span class="tok-n">FOA</span><span class="tok-o">,</span><span class="tok-n">FRA</span><span class="tok-o">,</span><span class="tok-n">FRO</span><span class="tok-o">,</span><span class="tok-n">FSC</span><span class="tok-o">,</span><span class="tok-n">FUE</span><span class="tok-o">,</span><span class="tok-n">GCI</span><span class="tok-o">,</span><span class="tok-n">GDN</span><span class="tok-o">,</span><span class="tok-n">GDZ</span><span class="tok-o">,</span><span class="tok-n">GEV</span><span class="tok-o">,</span><span class="tok-n">GIB</span><span class="tok-o">,</span><span class="tok-n">GLA</span><span class="tok-o">,</span><span class="tok-n">GLO</span><span class="tok-o">,</span><span class="tok-n">GMZ</span><span class="tok-o">,</span><span class="tok-n">GNB</span><span class="tok-o">,</span><span class="tok-n">GOA</span><span class="tok-o">,</span><span class="tok-n">GOJ</span><span class="tok-o">,</span><span class="tok-n">GOT</span><span class="tok-o">,</span><span class="tok-n">GPA</span><span class="tok-o">,</span><span class="tok-n">GRO</span><span class="tok-o">,</span><span class="tok-n">GRQ</span><span class="tok-o">,</span><span class="tok-n">GRV</span><span class="tok-o">,</span><span class="tok-n">GRW</span><span class="tok-o">,</span><span class="tok-n">GRX</span><span class="tok-o">,</span><span class="tok-n">GRZ</span><span class="tok-o">,</span><span class="tok-n">GSE</span><span class="tok-o">,</span><span class="tok-n">GVA</span><span class="tok-o">,</span><span class="tok-n">GWT</span><span class="tok-o">,</span><span class="tok-n">HAA</span><span class="tok-o">,</span><span class="tok-n">HAD</span><span class="tok-o">,</span><span class="tok-n">HAJ</span><span class="tok-o">,</span><span class="tok-n">HAM</span><span class="tok-o">,</span><span class="tok-n">HAU</span><span class="tok-o">,</span><span class="tok-n">HDF</span><span class="tok-o">,</span><span class="tok-n">HEL</span><span class="tok-o">,</span><span class="tok-n">HER</span><span class="tok-o">,</span><span class="tok-n">HFS</span><span class="tok-o">,</span><span class="tok-n">HFT</span><span class="tok-o">,</span><span class="tok-n">HHN</span><span class="tok-o">,</span><span class="tok-n">HMV</span><span class="tok-o">,</span><span class="tok-n">HOR</span><span class="tok-o">,</span><span class="tok-n">HOV</span><span class="tok-o">,</span><span class="tok-n">HRK</span><span class="tok-o">,</span><span class="tok-n">HUY</span><span class="tok-o">,</span><span class="tok-n">IAR</span><span class="tok-o">,</span><span class="tok-n">IAS</span><span class="tok-o">,</span><span class="tok-n">IBZ</span><span class="tok-o">,</span><span class="tok-n">IEV</span><span class="tok-o">,</span><span class="tok-n">IFJ</span><span class="tok-o">,</span><span class="tok-n">IFO</span><span class="tok-o">,</span><span class="tok-n">IJK</span><span class="tok-o">,</span><span class="tok-n">ILD</span><span class="tok-o">,</span><span class="tok-n">ILY</span><span class="tok-o">,</span><span class="tok-n">INI</span><span class="tok-o">,</span><span class="tok-n">INN</span><span class="tok-o">,</span><span class="tok-n">INV</span><span class="tok-o">,</span><span class="tok-n">IOA</span><span class="tok-o">,</span><span class="tok-n">IOM</span><span class="tok-o">,</span><span class="tok-n">ISC</span><span class="tok-o">,</span><span class="tok-n">IST</span><span class="tok-o">,</span><span class="tok-n">IVL</span><span class="tok-o">,</span><span class="tok-n">JER</span><span class="tok-o">,</span><span class="tok-n">JIK</span><span class="tok-o">,</span><span class="tok-n">JKG</span><span class="tok-o">,</span><span class="tok-n">JKH</span><span class="tok-o">,</span><span class="tok-n">JKL</span><span class="tok-o">,</span><span class="tok-n">JMK</span><span class="tok-o">,</span><span class="tok-n">JNX</span><span class="tok-o">,</span><span class="tok-n">JOE</span><span class="tok-o">,</span><span class="tok-n">JSH</span><span class="tok-o">,</span><span class="tok-n">JSI</span><span class="tok-o">,</span><span class="tok-n">JSY</span><span class="tok-o">,</span><span class="tok-n">JTR</span><span class="tok-o">,</span><span class="tok-n">JTY</span><span class="tok-o">,</span><span class="tok-n">JYV</span><span class="tok-o">,</span><span class="tok-n">KAJ</span><span class="tok-o">,</span><span class="tok-n">KAO</span><span class="tok-o">,</span><span class="tok-n">KBP</span><span class="tok-o">,</span><span class="tok-n">KEF</span><span class="tok-o">,</span><span class="tok-n">KEM</span><span class="tok-o">,</span><span class="tok-n">KGD</span><span class="tok-o">,</span><span class="tok-n">KGS</span><span class="tok-o">,</span><span class="tok-n">KHE</span><span class="tok-o">,</span><span class="tok-n">KID</span><span class="tok-o">,</span><span class="tok-n">KIR</span><span class="tok-o">,</span><span class="tok-n">KIT</span><span class="tok-o">,</span><span class="tok-n">KIV</span><span class="tok-o">,</span><span class="tok-n">KKN</span><span class="tok-o">,</span><span class="tok-n">KLR</span><span class="tok-o">,</span><span class="tok-n">KLU</span><span class="tok-o">,</span><span class="tok-n">KLV</span><span class="tok-o">,</span><span class="tok-n">KLX</span><span class="tok-o">,</span><span class="tok-n">KOI</span><span class="tok-o">,</span><span class="tok-n">KOK</span><span class="tok-o">,</span><span class="tok-n">KRF</span><span class="tok-o">,</span><span class="tok-n">KRK</span><span class="tok-o">,</span><span class="tok-n">KRN</span><span class="tok-o">,</span><span class="tok-n">KRP</span><span class="tok-o">,</span><span class="tok-n">KRR</span><span class="tok-o">,</span><span class="tok-n">KRS</span><span class="tok-o">,</span><span class="tok-n">KSC</span><span class="tok-o">,</span><span class="tok-n">KSD</span><span class="tok-o">,</span><span class="tok-n">KSF</span><span class="tok-o">,</span><span class="tok-n">KSJ</span><span class="tok-o">,</span><span class="tok-n">KSO</span><span class="tok-o">,</span><span class="tok-n">KSU</span><span class="tok-o">,</span><span class="tok-n">KTT</span><span class="tok-o">,</span><span class="tok-n">KTW</span><span class="tok-o">,</span><span class="tok-n">KUF</span><span class="tok-o">,</span><span class="tok-n">KUN</span><span class="tok-o">,</span><span class="tok-n">KUO</span><span class="tok-o">,</span><span class="tok-n">KVA</span><span class="tok-o">,</span><span class="tok-n">KVK</span><span class="tok-o">,</span><span class="tok-n">KVX</span><span class="tok-o">,</span><span class="tok-n">KZI</span><span class="tok-o">,</span><span class="tok-n">KZN</span><span class="tok-o">,</span><span class="tok-n">KZR</span><span class="tok-o">,</span><span class="tok-n">KZS</span><span class="tok-o">,</span><span class="tok-n">LAI</span><span class="tok-o">,</span><span class="tok-n">LBA</span><span class="tok-o">,</span><span class="tok-n">LBC</span><span class="tok-o">,</span><span class="tok-n">LCG</span><span class="tok-o">,</span><span class="tok-n">LCJ</span><span class="tok-o">,</span><span class="tok-n">LCY</span><span class="tok-o">,</span><span class="tok-n">LDE</span><span class="tok-o">,</span><span class="tok-n">LDY</span><span class="tok-o">,</span><span class="tok-n">LED</span><span class="tok-o">,</span><span class="tok-n">LEH</span><span class="tok-o">,</span><span class="tok-n">LEI</span><span class="tok-o">,</span><span class="tok-n">LEJ</span><span class="tok-o">,</span><span class="tok-n">LEN</span><span class="tok-o">,</span><span class="tok-n">LEQ</span><span class="tok-o">,</span><span class="tok-n">LGG</span><span class="tok-o">,</span><span class="tok-n">LGW</span><span class="tok-o">,</span><span class="tok-n">LHR</span><span class="tok-o">,</span><span class="tok-n">LIG</span><span class="tok-o">,</span><span class="tok-n">LIL</span><span class="tok-o">,</span><span class="tok-n">LIN</span><span class="tok-o">,</span><span class="tok-n">LIS</span><span class="tok-o">,</span><span class="tok-n">LJU</span><span class="tok-o">,</span><span class="tok-n">LKL</span><span class="tok-o">,</span><span class="tok-n">LKN</span><span class="tok-o">,</span><span class="tok-n">LLA</span><span class="tok-o">,</span><span class="tok-n">LMP</span><span class="tok-o">,</span><span class="tok-n">LNZ</span><span class="tok-o">,</span><span class="tok-n">LPA</span><span class="tok-o">,</span><span class="tok-n">LPI</span><span class="tok-o">,</span><span class="tok-n">LPK</span><span class="tok-o">,</span><span class="tok-n">LPL</span><span class="tok-o">,</span><span class="tok-n">LPP</span><span class="tok-o">,</span><span class="tok-n">LPY</span><span class="tok-o">,</span><span class="tok-n">LRH</span><span class="tok-o">,</span><span class="tok-n">LRS</span><span class="tok-o">,</span><span class="tok-n">LRT</span><span class="tok-o">,</span><span class="tok-n">LSI</span><span class="tok-o">,</span><span class="tok-n">LTN</span><span class="tok-o">,</span><span class="tok-n">LUG</span><span class="tok-o">,</span><span class="tok-n">LUX</span><span class="tok-o">,</span><span class="tok-n">LUZ</span><span class="tok-o">,</span><span class="tok-n">LWK</span><span class="tok-o">,</span><span class="tok-n">LWO</span><span class="tok-o">,</span><span class="tok-n">LXS</span><span class="tok-o">,</span><span class="tok-n">LYC</span><span class="tok-o">,</span><span class="tok-n">LYR</span><span class="tok-o">,</span><span class="tok-n">LYS</span><span class="tok-o">,</span><span class="tok-n">MAD</span><span class="tok-o">,</span><span class="tok-n">MAH</span><span class="tok-o">,</span><span class="tok-n">MAN</span><span class="tok-o">,</span><span class="tok-n">MCX</span><span class="tok-o">,</span><span class="tok-n">MEH</span><span class="tok-o">,</span><span class="tok-n">MHG</span><span class="tok-o">,</span><span class="tok-n">MHQ</span><span class="tok-o">,</span><span class="tok-n">MJF</span><span class="tok-o">,</span><span class="tok-n">MJT</span><span class="tok-o">,</span><span class="tok-n">MJV</span><span class="tok-o">,</span><span class="tok-n">MLA</span><span class="tok-o">,</span><span class="tok-n">MLN</span><span class="tok-o">,</span><span class="tok-n">MLO</span><span class="tok-o">,</span><span class="tok-n">MME</span><span class="tok-o">,</span><span class="tok-n">MMK</span><span class="tok-o">,</span><span class="tok-n">MMX</span><span class="tok-o">,</span><span class="tok-n">MOL</span><span class="tok-o">,</span><span class="tok-n">MPL</span><span class="tok-o">,</span><span class="tok-n">MQF</span><span class="tok-o">,</span><span class="tok-n">MQN</span><span class="tok-o">,</span><span class="tok-n">MRS</span><span class="tok-o">,</span><span class="tok-n">MRV</span><span class="tok-o">,</span><span class="tok-n">MSQ</span><span class="tok-o">,</span><span class="tok-n">MST</span><span class="tok-o">,</span><span class="tok-n">MUC</span><span class="tok-o">,</span><span class="tok-n">MXP</span><span class="tok-o">,</span><span class="tok-n">MXX</span><span class="tok-o">,</span><span class="tok-n">NAL</span><span class="tok-o">,</span><span class="tok-n">NAP</span><span class="tok-o">,</span><span class="tok-n">NBC</span><span class="tok-o">,</span><span class="tok-n">NCE</span><span class="tok-o">,</span><span class="tok-n">NCL</span><span class="tok-o">,</span><span class="tok-n">NDY</span><span class="tok-o">,</span><span class="tok-n">NDZ</span><span class="tok-o">,</span><span class="tok-n">NNM</span><span class="tok-o">,</span><span class="tok-n">NOC</span><span class="tok-o">,</span><span class="tok-n">NQY</span><span class="tok-o">,</span><span class="tok-n">NRK</span><span class="tok-o">,</span><span class="tok-n">NRL</span><span class="tok-o">,</span><span class="tok-n">NRN</span><span class="tok-o">,</span><span class="tok-n">NTE</span><span class="tok-o">,</span><span class="tok-n">NUE</span><span class="tok-o">,</span><span class="tok-n">NVK</span><span class="tok-o">,</span><span class="tok-n">NWI</span><span class="tok-o">,</span><span class="tok-n">NYO</span><span class="tok-o">,</span><span class="tok-n">ODS</span><span class="tok-o">,</span><span class="tok-n">OER</span><span class="tok-o">,</span><span class="tok-n">OGZ</span><span class="tok-o">,</span><span class="tok-n">OLA</span><span class="tok-o">,</span><span class="tok-n">OLB</span><span class="tok-o">,</span><span class="tok-n">OMO</span><span class="tok-o">,</span><span class="tok-n">OMR</span><span class="tok-o">,</span><span class="tok-n">OPO</span><span class="tok-o">,</span><span class="tok-n">ORB</span><span class="tok-o">,</span><span class="tok-n">ORK</span><span class="tok-o">,</span><span class="tok-n">ORY</span><span class="tok-o">,</span><span class="tok-n">OSD</span><span class="tok-o">,</span><span class="tok-n">OSI</span><span class="tok-o">,</span><span class="tok-n">OSL</span><span class="tok-o">,</span><span class="tok-n">OSR</span><span class="tok-o">,</span><span class="tok-n">OST</span><span class="tok-o">,</span><span class="tok-n">OSW</span><span class="tok-o">,</span><span class="tok-n">OSY</span><span class="tok-o">,</span><span class="tok-n">OTP</span><span class="tok-o">,</span><span class="tok-n">OUL</span><span class="tok-o">,</span><span class="tok-n">OVD</span><span class="tok-o">,</span><span class="tok-n">OZH</span><span class="tok-o">,</span><span class="tok-n">PAD</span><span class="tok-o">,</span><span class="tok-n">PAS</span><span class="tok-o">,</span><span class="tok-n">PDL</span><span class="tok-o">,</span><span class="tok-n">PDV</span><span class="tok-o">,</span><span class="tok-n">PED</span><span class="tok-o">,</span><span class="tok-n">PEE</span><span class="tok-o">,</span><span class="tok-n">PEG</span><span class="tok-o">,</span><span class="tok-n">PES</span><span class="tok-o">,</span><span class="tok-n">PEZ</span><span class="tok-o">,</span><span class="tok-n">PGF</span><span class="tok-o">,</span><span class="tok-n">PGX</span><span class="tok-o">,</span><span class="tok-n">PIK</span><span class="tok-o">,</span><span class="tok-n">PIS</span><span class="tok-o">,</span><span class="tok-n">PIX</span><span class="tok-o">,</span><span class="tok-n">PJA</span><span class="tok-o">,</span><span class="tok-n">PLQ</span><span class="tok-o">,</span><span class="tok-n">PMF</span><span class="tok-o">,</span><span class="tok-n">PMI</span><span class="tok-o">,</span><span class="tok-n">PMO</span><span class="tok-o">,</span><span class="tok-n">PNA</span><span class="tok-o">,</span><span class="tok-n">PNL</span><span class="tok-o">,</span><span class="tok-n">POR</span><span class="tok-o">,</span><span class="tok-n">POZ</span><span class="tok-o">,</span><span class="tok-n">PPW</span><span class="tok-o">,</span><span class="tok-n">PRG</span><span class="tok-o">,</span><span class="tok-n">PRN</span><span class="tok-o">,</span><span class="tok-n">PSA</span><span class="tok-o">,</span><span class="tok-n">PSR</span><span class="tok-o">,</span><span class="tok-n">PSV</span><span class="tok-o">,</span><span class="tok-n">PUF</span><span class="tok-o">,</span><span class="tok-n">PUY</span><span class="tok-o">,</span><span class="tok-n">PVK</span><span class="tok-o">,</span><span class="tok-n">PXO</span><span class="tok-o">,</span><span class="tok-n">RDZ</span><span class="tok-o">,</span><span class="tok-n">REG</span><span class="tok-o">,</span><span class="tok-n">REN</span><span class="tok-o">,</span><span class="tok-n">RET</span><span class="tok-o">,</span><span class="tok-n">REU</span><span class="tok-o">,</span><span class="tok-n">RGS</span><span class="tok-o">,</span><span class="tok-n">RHO</span><span class="tok-o">,</span><span class="tok-n">RIX</span><span class="tok-o">,</span><span class="tok-n">RJK</span><span class="tok-o">,</span><span class="tok-n">RJL</span><span class="tok-o">,</span><span class="tok-n">RKV</span><span class="tok-o">,</span><span class="tok-n">RLG</span><span class="tok-o">,</span><span class="tok-n">RMI</span><span class="tok-o">,</span><span class="tok-n">RNB</span><span class="tok-o">,</span><span class="tok-n">RNN</span><span class="tok-o">,</span><span class="tok-n">RNS</span><span class="tok-o">,</span><span class="tok-n">ROV</span><span class="tok-o">,</span><span class="tok-n">RRS</span><span class="tok-o">,</span><span class="tok-n">RTM</span><span class="tok-o">,</span><span class="tok-n">RTW</span><span class="tok-o">,</span><span class="tok-n">RVK</span><span class="tok-o">,</span><span class="tok-n">RVN</span><span class="tok-o">,</span><span class="tok-n">RYG</span><span class="tok-o">,</span><span class="tok-n">RZE</span><span class="tok-o">,</span><span class="tok-n">SBZ</span><span class="tok-o">,</span><span class="tok-n">SCN</span><span class="tok-o">,</span><span class="tok-n">SCQ</span><span class="tok-o">,</span><span class="tok-n">SCV</span><span class="tok-o">,</span><span class="tok-n">SCW</span><span class="tok-o">,</span><span class="tok-n">SDL</span><span class="tok-o">,</span><span class="tok-n">SDN</span><span class="tok-o">,</span><span class="tok-n">SDR</span><span class="tok-o">,</span><span class="tok-n">SEN</span><span class="tok-o">,</span><span class="tok-n">SFT</span><span class="tok-o">,</span><span class="tok-n">SGD</span><span class="tok-o">,</span><span class="tok-n">SIP</span><span class="tok-o">,</span><span class="tok-n">SJJ</span><span class="tok-o">,</span><span class="tok-n">SJZ</span><span class="tok-o">,</span><span class="tok-n">SKE</span><span class="tok-o">,</span><span class="tok-n">SKG</span><span class="tok-o">,</span><span class="tok-n">SKN</span><span class="tok-o">,</span><span class="tok-n">SKP</span><span class="tok-o">,</span><span class="tok-n">SKU</span><span class="tok-o">,</span><span class="tok-n">SKX</span><span class="tok-o">,</span><span class="tok-n">SLM</span><span class="tok-o">,</span><span class="tok-n">SMA</span><span class="tok-o">,</span><span class="tok-n">SMI</span><span class="tok-o">,</span><span class="tok-n">SNN</span><span class="tok-o">,</span><span class="tok-n">SOF</span><span class="tok-o">,</span><span class="tok-n">SOG</span><span class="tok-o">,</span><span class="tok-n">SOJ</span><span class="tok-o">,</span><span class="tok-n">SOU</span><span class="tok-o">,</span><span class="tok-n">SOY</span><span class="tok-o">,</span><span class="tok-n">SPC</span><span class="tok-o">,</span><span class="tok-n">SPU</span><span class="tok-o">,</span><span class="tok-n">SRP</span><span class="tok-o">,</span><span class="tok-n">SSJ</span><span class="tok-o">,</span><span class="tok-n">STN</span><span class="tok-o">,</span><span class="tok-n">STR</span><span class="tok-o">,</span><span class="tok-n">STW</span><span class="tok-o">,</span><span class="tok-n">SUF</span><span class="tok-o">,</span><span class="tok-n">SUJ</span><span class="tok-o">,</span><span class="tok-n">SVG</span><span class="tok-o">,</span><span class="tok-n">SVJ</span><span class="tok-o">,</span><span class="tok-n">SVL</span><span class="tok-o">,</span><span class="tok-n">SVO</span><span class="tok-o">,</span><span class="tok-n">SVQ</span><span class="tok-o">,</span><span class="tok-n">SXB</span><span class="tok-o">,</span><span class="tok-n">SXF</span><span class="tok-o">,</span><span class="tok-n">SYY</span><span class="tok-o">,</span><span class="tok-n">SZG</span><span class="tok-o">,</span><span class="tok-n">SZY</span><span class="tok-o">,</span><span class="tok-n">SZZ</span><span class="tok-o">,</span><span class="tok-n">TAY</span><span class="tok-o">,</span><span class="tok-n">TBW</span><span class="tok-o">,</span><span class="tok-n">TEQ</span><span class="tok-o">,</span><span class="tok-n">TER</span><span class="tok-o">,</span><span class="tok-n">TFN</span><span class="tok-o">,</span><span class="tok-n">TFS</span><span class="tok-o">,</span><span class="tok-n">TGD</span><span class="tok-o">,</span><span class="tok-n">TGK</span><span class="tok-o">,</span><span class="tok-n">TGM</span><span class="tok-o">,</span><span class="tok-n">THN</span><span class="tok-o">,</span><span class="tok-n">TIA</span><span class="tok-o">,</span><span class="tok-n">TIV</span><span class="tok-o">,</span><span class="tok-n">TKU</span><span class="tok-o">,</span><span class="tok-n">TLL</span><span class="tok-o">,</span><span class="tok-n">TLN</span><span class="tok-o">,</span><span class="tok-n">TLS</span><span class="tok-o">,</span><span class="tok-n">TMP</span><span class="tok-o">,</span><span class="tok-n">TOS</span><span class="tok-o">,</span><span class="tok-n">TPS</span><span class="tok-o">,</span><span class="tok-n">TRD</span><span class="tok-o">,</span><span class="tok-n">TRE</span><span class="tok-o">,</span><span class="tok-n">TRF</span><span class="tok-o">,</span><span class="tok-n">TRN</span><span class="tok-o">,</span><span class="tok-n">TRS</span><span class="tok-o">,</span><span class="tok-n">TSF</span><span class="tok-o">,</span><span class="tok-n">TSR</span><span class="tok-o">,</span><span class="tok-n">TUF</span><span class="tok-o">,</span><span class="tok-n">TXL</span><span class="tok-o">,</span><span class="tok-n">TYF</span><span class="tok-o">,</span><span class="tok-n">TZL</span><span class="tok-o">,</span><span class="tok-n">UCT</span><span class="tok-o">,</span><span class="tok-n">UDJ</span><span class="tok-o">,</span><span class="tok-n">UFA</span><span class="tok-o">,</span><span class="tok-n">UIP</span><span class="tok-o">,</span><span class="tok-n">UKS</span><span class="tok-o">,</span><span class="tok-n">ULV</span><span class="tok-o">,</span><span class="tok-n">ULY</span><span class="tok-o">,</span><span class="tok-n">UME</span><span class="tok-o">,</span><span class="tok-n">URE</span><span class="tok-o">,</span><span class="tok-n">URO</span><span class="tok-o">,</span><span class="tok-n">URS</span><span class="tok-o">,</span><span class="tok-n">USK</span><span class="tok-o">,</span><span class="tok-n">UTS</span><span class="tok-o">,</span><span class="tok-n">UUA</span><span class="tok-o">,</span><span class="tok-n">VAA</span><span class="tok-o">,</span><span class="tok-n">VAR</span><span class="tok-o">,</span><span class="tok-n">VAW</span><span class="tok-o">,</span><span class="tok-n">VBY</span><span class="tok-o">,</span><span class="tok-n">VCE</span><span class="tok-o">,</span><span class="tok-n">VDB</span><span class="tok-o">,</span><span class="tok-n">VDE</span><span class="tok-o">,</span><span class="tok-n">VDS</span><span class="tok-o">,</span><span class="tok-n">VGO</span><span class="tok-o">,</span><span class="tok-n">VHM</span><span class="tok-o">,</span><span class="tok-n">VIE</span><span class="tok-o">,</span><span class="tok-n">VIN</span><span class="tok-o">,</span><span class="tok-n">VIT</span><span class="tok-o">,</span><span class="tok-n">VKO</span><span class="tok-o">,</span><span class="tok-n">VLC</span><span class="tok-o">,</span><span class="tok-n">VLL</span><span class="tok-o">,</span><span class="tok-n">VLY</span><span class="tok-o">,</span><span class="tok-n">VNO</span><span class="tok-o">,</span><span class="tok-n">VOG</span><span class="tok-o">,</span><span class="tok-n">VOL</span><span class="tok-o">,</span><span class="tok-n">VOZ</span><span class="tok-o">,</span><span class="tok-n">VRN</span><span class="tok-o">,</span><span class="tok-n">VST</span><span class="tok-o">,</span><span class="tok-n">VTB</span><span class="tok-o">,</span><span class="tok-n">VUS</span><span class="tok-o">,</span><span class="tok-n">VXO</span><span class="tok-o">,</span><span class="tok-n">WAT</span><span class="tok-o">,</span><span class="tok-n">WAW</span><span class="tok-o">,</span><span class="tok-n">WIC</span><span class="tok-o">,</span><span class="tok-n">WMI</span><span class="tok-o">,</span><span class="tok-n">WRO</span><span class="tok-o">,</span><span class="tok-n">WRY</span><span class="tok-o">,</span><span class="tok-n">XCR</span><span class="tok-o">,</span><span class="tok-n">XFW</span><span class="tok-o">,</span><span class="tok-n">XRY</span><span class="tok-o">,</span><span class="tok-n">ZAD</span><span class="tok-o">,</span><span class="tok-n">ZAG</span><span class="tok-o">,</span><span class="tok-n">ZAZ</span><span class="tok-o">,</span><span class="tok-n">ZIA</span><span class="tok-o">,</span><span class="tok-n">ZQW</span><span class="tok-o">,</span><span class="tok-n">ZRH</span><span class="tok-o">,</span><span class="tok-n">ZTH</span><span class="tok-o">]</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -5849,8 +5974,9 @@ The second query shows that <em>where</em> is a synonym for <em>filter</em> in m
 </div>
 <div class="paragraph">
 <p>Here are two more queries that look for things that meet a specific criteria. The
-first finds routes where the distance is exactly 100 miles. The second one looks for
-the airports that have an elevation above 10,000 feet.</p>
+first finds routes where the distance is exactly 100 miles and returns the source and
+destination airport codes. The first query uses <em>as</em> and <em>select</em> while the second
+one uses <em>path</em> and includes the distance in the result.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5858,9 +5984,81 @@ the airports that have an elevation above 10,000 feet.</p>
 <span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;a&#39;</span><span class="tok-o">).</span><span class="tok-na">outE</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">,</span><span class="tok-n">eq</span><span class="tok-o">(</span><span class="tok-mi">100</span><span class="tok-o">)).</span><span class="tok-na">limit</span><span class="tok-o">(</span><span class="tok-mi">10</span><span class="tok-o">).</span><span class="tok-na">inV</span><span class="tok-o">().</span><span class="tok-na">as</span><span class="tok-o">(</span><span class="tok-s1">&#39;b&#39;</span><span class="tok-o">).</span>
       <span class="tok-n">select</span><span class="tok-o">(</span><span class="tok-s1">&#39;a&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;b&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">)</span>
 
-<span class="tok-c1">// Airports above 10,000ft sorted by ascending elevation</span>
+<span class="tok-o">[</span><span class="tok-nl">a:</span><span class="tok-n">IAD</span><span class="tok-o">,</span><span class="tok-nl">b:</span><span class="tok-n">RIC</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">a:</span><span class="tok-n">HNL</span><span class="tok-o">,</span><span class="tok-nl">b:</span><span class="tok-n">OGG</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">a:</span><span class="tok-n">OGG</span><span class="tok-o">,</span><span class="tok-nl">b:</span><span class="tok-n">HNL</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">a:</span><span class="tok-n">SJO</span><span class="tok-o">,</span><span class="tok-nl">b:</span><span class="tok-n">LIR</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">a:</span><span class="tok-n">SVG</span><span class="tok-o">,</span><span class="tok-nl">b:</span><span class="tok-n">KRS</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">a:</span><span class="tok-n">RIC</span><span class="tok-o">,</span><span class="tok-nl">b:</span><span class="tok-n">IAD</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">a:</span><span class="tok-n">LIR</span><span class="tok-o">,</span><span class="tok-nl">b:</span><span class="tok-n">SJO</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">a:</span><span class="tok-n">KRS</span><span class="tok-o">,</span><span class="tok-nl">b:</span><span class="tok-n">SVG</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">a:</span><span class="tok-n">CYB</span><span class="tok-o">,</span><span class="tok-nl">b:</span><span class="tok-n">GCM</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">a:</span><span class="tok-n">GCM</span><span class="tok-o">,</span><span class="tok-nl">b:</span><span class="tok-n">CYB</span><span class="tok-o">]</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Similar to the prior query but using <em>path</em> and displaying the distance as well as
+the airport codes.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">outE</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">,</span><span class="tok-n">eq</span><span class="tok-o">(</span><span class="tok-mi">100</span><span class="tok-o">)).</span><span class="tok-na">limit</span><span class="tok-o">(</span><span class="tok-mi">10</span><span class="tok-o">).</span><span class="tok-na">inV</span><span class="tok-o">().</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">)</span>
+
+<span class="tok-o">[</span><span class="tok-n">IAD</span><span class="tok-o">,</span><span class="tok-mi">100</span><span class="tok-o">,</span><span class="tok-n">RIC</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">HNL</span><span class="tok-o">,</span><span class="tok-mi">100</span><span class="tok-o">,</span><span class="tok-n">OGG</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">OGG</span><span class="tok-o">,</span><span class="tok-mi">100</span><span class="tok-o">,</span><span class="tok-n">HNL</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">SJO</span><span class="tok-o">,</span><span class="tok-mi">100</span><span class="tok-o">,</span><span class="tok-n">LIR</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">SVG</span><span class="tok-o">,</span><span class="tok-mi">100</span><span class="tok-o">,</span><span class="tok-n">KRS</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">RIC</span><span class="tok-o">,</span><span class="tok-mi">100</span><span class="tok-o">,</span><span class="tok-n">IAD</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">LIR</span><span class="tok-o">,</span><span class="tok-mi">100</span><span class="tok-o">,</span><span class="tok-n">SJO</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">KRS</span><span class="tok-o">,</span><span class="tok-mi">100</span><span class="tok-o">,</span><span class="tok-n">SVG</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">CYB</span><span class="tok-o">,</span><span class="tok-mi">100</span><span class="tok-o">,</span><span class="tok-n">GCM</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-n">GCM</span><span class="tok-o">,</span><span class="tok-mi">100</span><span class="tok-o">,</span><span class="tok-n">CYB</span><span class="tok-o">]</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This query looks for any airports that have an elevation above 10,000 feet. Two ways
+of achieving the more or less the same result are shown. The first uses <em>valueMap</em>
+and the second uses a <em>project</em> step instead.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// Airports above 10,000ft sorted by ascending elevation</span>
 <span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;airport&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;elev&#39;</span><span class="tok-o">,</span> <span class="tok-n">gt</span><span class="tok-o">(</span><span class="tok-mi">10000</span><span class="tok-o">)).</span>
-      <span class="tok-n">order</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;elev&#39;</span><span class="tok-o">,</span><span class="tok-n">incr</span><span class="tok-o">).</span><span class="tok-na">valueMap</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;elev&#39;</span><span class="tok-o">)</span></code></pre>
+      <span class="tok-n">order</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;elev&#39;</span><span class="tok-o">,</span><span class="tok-n">incr</span><span class="tok-o">).</span><span class="tok-na">valueMap</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;elev&#39;</span><span class="tok-o">)</span>
+
+
+<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;airport&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;elev&#39;</span><span class="tok-o">,</span> <span class="tok-n">gt</span><span class="tok-o">(</span><span class="tok-mi">10000</span><span class="tok-o">)).</span><span class="tok-na">order</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;elev&#39;</span><span class="tok-o">,</span><span class="tok-n">incr</span><span class="tok-o">).</span>
+      <span class="tok-n">project</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;elevation&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;elev&#39;</span><span class="tok-o">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If we ran the query that uses the <em>project</em> step here is what we should get back.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-o">[</span><span class="tok-nl">city:</span><span class="tok-n">Xiahe</span><span class="tok-o">,</span><span class="tok-nl">elevation:</span><span class="tok-mi">10510</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">city:</span><span class="tok-n">Leh</span><span class="tok-o">,</span><span class="tok-nl">elevation:</span><span class="tok-mi">10682</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">city:</span><span class="tok-n">Shangri</span><span class="tok-o">-</span><span class="tok-n">La</span><span class="tok-o">,</span><span class="tok-nl">elevation:</span><span class="tok-mi">10761</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">city:</span><span class="tok-n">Cusco</span><span class="tok-o">,</span><span class="tok-nl">elevation:</span><span class="tok-mi">10860</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">city:</span><span class="tok-n">Jauja</span><span class="tok-o">,</span><span class="tok-nl">elevation:</span><span class="tok-mi">11034</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">city:</span><span class="tok-n">Andahuaylas</span><span class="tok-o">,</span><span class="tok-nl">elevation:</span><span class="tok-mi">11300</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">city:</span><span class="tok-n">Jiuzhaigou</span><span class="tok-o">,</span><span class="tok-nl">elevation:</span><span class="tok-mi">11327</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">city:</span><span class="tok-n">Navoi</span><span class="tok-o">,</span><span class="tok-nl">elevation:</span><span class="tok-mi">11420</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">city:</span><span class="tok-n">Hongyuan</span><span class="tok-o">,</span><span class="tok-nl">elevation:</span><span class="tok-mi">11598</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">city:</span><span class="tok-n">Lhasa</span><span class="tok-o">,</span><span class="tok-nl">elevation:</span><span class="tok-mi">11713</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">city:</span><span class="tok-n">Oruro</span><span class="tok-o">,</span><span class="tok-nl">elevation:</span><span class="tok-mi">12152</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">city:</span><span class="tok-n">Xigaze</span><span class="tok-o">,</span><span class="tok-nl">elevation:</span><span class="tok-mi">12408</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">city:</span><span class="tok-n">Golog</span><span class="tok-o">,</span><span class="tok-nl">elevation:</span><span class="tok-mi">12427</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">city:</span><span class="tok-n">Juliaca</span><span class="tok-o">,</span><span class="tok-nl">elevation:</span><span class="tok-mi">12552</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">city:</span><span class="tok-n">Yushu</span><span class="tok-o">,</span><span class="tok-nl">elevation:</span><span class="tok-mi">12816</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">city:</span><span class="tok-n">Potosi</span><span class="tok-o">,</span><span class="tok-nl">elevation:</span><span class="tok-mi">12913</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">city:</span><span class="tok-n">Quijarro</span><span class="tok-o">,</span><span class="tok-nl">elevation:</span><span class="tok-mi">12972</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">city:</span><span class="tok-n">La</span> <span class="tok-n">Paz</span> <span class="tok-o">/</span> <span class="tok-n">El</span> <span class="tok-n">Alto</span><span class="tok-o">,</span><span class="tok-nl">elevation:</span><span class="tok-mi">13355</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">city:</span><span class="tok-n">Shiquanhe</span><span class="tok-o">,</span><span class="tok-nl">elevation:</span><span class="tok-mi">14022</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">city:</span><span class="tok-n">Kangding</span><span class="tok-o">,</span><span class="tok-nl">elevation:</span><span class="tok-mi">14042</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">city:</span><span class="tok-n">Bangda</span><span class="tok-o">,</span><span class="tok-nl">elevation:</span><span class="tok-mi">14219</span><span class="tok-o">]</span>
+<span class="tok-o">[</span><span class="tok-nl">city:</span><span class="tok-n">Daocheng</span><span class="tok-o">,</span><span class="tok-nl">elevation:</span><span class="tok-mi">14472</span><span class="tok-o">]</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -6838,7 +7036,7 @@ vertices, edges and properties but we have not yet looked at how we can delete t
 Gremlin provides the <em>drop</em> step that we can use to remove things from a graph.</p>
 </div>
 <div class="sect3">
-<h4 id="_deleting_a_node">4.6.1. Deleting a node</h4>
+<h4 id="_deleting_a_vertex">4.6.1. Deleting a vertex</h4>
 <div class="paragraph">
 <p>In some of our earlier examples we created a fictitious airport node with a code of
 <em>XYZ</em> and added it to the air routes graph. If we now wanted to delete it we could
@@ -7642,19 +7840,85 @@ a date or ACL information to individual properties.</p>
 <h3 id="lam">4.8. Using Lambda functions</h3>
 <div class="paragraph">
 <p>Gremlin allows you to put a code fragment (sometimes called a Lambda function or a
-closure) as part of a query. This is typically done as part of a <em>filter</em> or
-<em>sideEffect</em> step but there are other places where you wll find this concept used.
+closure) as part of a query. This is typically done as part of a <em>filter</em>, <em>map</em> or
+<em>sideEffect</em> step but there are other places where you will find this concept used.
 This technique provides a lot of additional flexibility in how queries can be
-written. However, care should be used. When processing your query, Gremlin wil try to
-optimize it as best as it can. For regular traversal steps such as <em>out</em> and
-<em>has</em> Gremlin will do this optimization for you. However for closures (code inside
-braces <em>{}</em>) Gremlin cannot do this and will just pass the closure on to the
-underlying runtime.  With people just getting started with Gremlin there is a great
-temptation to over use in-line code. This is a natural thing to want to do as for
-programmers it feels like the programming they are used to. However, there is often,
-if not always, a pure Gremlin traversal step that can be used to do what is needed.
-Of course with all rules there are exceptions.   Here is an example of a closure
-being used where a <em>has</em> step could and should have been used instead.</p>
+written. However, care should be used. When processing your query, Gremlin will try
+to optimize it as best as it can. For regular traversal steps such as <em>out</em> and <em>has</em>
+Gremlin will do this optimization for you. However for closures (code inside braces
+<em>{}</em>) Gremlin cannot do this and will just pass the closure on to the underlying
+runtime.  With people just getting started with Gremlin there is a great temptation
+to over use in-line code. This is a natural thing to want to do as for programmers it
+feels like the programming they are used to. However, there is often, if not always,
+a pure Gremlin traversal step that can be used to do what is needed.  Of course with
+all rules there are exceptions.</p>
+</div>
+<div class="paragraph">
+<p>By way of a very simple example, the code below declares a variable <em>"c"</em> and
+initializes it to zero. The Gremlin query that follows then adds one to <em>"c"</em> each
+time it finds an airport vertex located in Oregon. We then use a <em>println</em> to display the updated value
+for <em>"c"</em>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">c</span> <span class="tok-o">=</span> <span class="tok-mi">0</span>
+<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;region&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;US-OR&#39;</span><span class="tok-o">).</span><span class="tok-na">sideEffect</span><span class="tok-o">{</span> <span class="tok-n">c</span> <span class="tok-o">+=</span> <span class="tok-mi">1</span> <span class="tok-o">}.</span><span class="tok-na">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">fold</span><span class="tok-o">()</span>
+
+<span class="tok-n">println</span> <span class="tok-s2">&quot;I found ${c} airports in Oregon&quot;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When we run our query here is what comes back.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-o">[</span><span class="tok-n">PDX</span><span class="tok-o">,</span><span class="tok-n">EUG</span><span class="tok-o">,</span><span class="tok-n">LMT</span><span class="tok-o">,</span><span class="tok-n">MFR</span><span class="tok-o">,</span><span class="tok-n">OTH</span><span class="tok-o">,</span><span class="tok-n">RDM</span><span class="tok-o">,</span><span class="tok-n">PDT</span><span class="tok-o">]</span>
+<span class="tok-n">I</span> <span class="tok-n">found</span> <span class="tok-mi">7</span> <span class="tok-n">airports</span> <span class="tok-k">in</span> <span class="tok-n">Oregon</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Of course, in reality we would probably just use a <em>count</em> when counting things or
+put them into a list and look at the size of the list returned  but
+the above example gives a nice, and hopefully easy to understand, example of a
+closure being used as part of a <em>sideEffect</em> step.</p>
+</div>
+<div class="paragraph">
+<p>For completeness, here is the query re-written a couple of different ways without the
+use of a <em>sideEffect</em> or closures. If all we wanted was the count we could do this of
+course.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">num</span> <span class="tok-o">=</span> <span class="tok-n">oregon</span> <span class="tok-o">=</span> <span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;region&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;US-OR&#39;</span><span class="tok-o">).</span><span class="tok-na">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">count</span><span class="tok-o">().</span><span class="tok-na">next</span><span class="tok-o">()</span>
+<span class="tok-n">println</span> <span class="tok-s2">&quot;I found ${num} airports in Oregon&quot;</span>
+
+<span class="tok-n">I</span> <span class="tok-n">found</span> <span class="tok-mi">7</span> <span class="tok-n">airports</span> <span class="tok-k">in</span> <span class="tok-n">Oregon</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If we wanted to save a list of the airport codes found and also count them we could
+do this.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">oregon</span> <span class="tok-o">=</span> <span class="tok-o">[]</span>
+<span class="tok-n">oregon</span> <span class="tok-o">=</span> <span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;region&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;US-OR&#39;</span><span class="tok-o">).</span><span class="tok-na">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">fill</span><span class="tok-o">(</span><span class="tok-n">oregon</span><span class="tok-o">);[]</span>
+<span class="tok-n">println</span> <span class="tok-n">oregon</span>
+<span class="tok-n">println</span> <span class="tok-s2">&quot;I found ${oregon.size} airports in Oregon&quot;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here is the output, this time  with the airport codes and the count.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-o">[</span><span class="tok-n">PDX</span><span class="tok-o">,</span> <span class="tok-n">EUG</span><span class="tok-o">,</span> <span class="tok-n">LMT</span><span class="tok-o">,</span> <span class="tok-n">MFR</span><span class="tok-o">,</span> <span class="tok-n">OTH</span><span class="tok-o">,</span> <span class="tok-n">RDM</span><span class="tok-o">,</span> <span class="tok-n">PDT</span><span class="tok-o">]</span>
+<span class="tok-n">I</span> <span class="tok-n">found</span> <span class="tok-mi">7</span> <span class="tok-n">airports</span> <span class="tok-k">in</span> <span class="tok-n">Oregon</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here is another example of a closure being used where a <em>has</em> step could and should
+have been used instead.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -7678,11 +7942,11 @@ by itself.</p>
 enables Gremlin to do its thing.</p>
 </div>
 <div class="paragraph">
-<p>For completeness, here is an example of a query that contains a <em>sideEffect</em> step.
+<p>Here is one more example of a query that contains a <em>sideEffect</em> step.
 The main part of the query finds airports with 6 runways and counts them. That result
 will still be returned but the side effect will also cause the codes of those
 airports to also be printed. This is a bit of a contrived example but it shows how
-<em>sideEffect</em> behaves.</p>
+<em>sideEffect</em> behaves when combined with a closure.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8273,8 +8537,8 @@ space.</p>
 <div class="paragraph">
 <p>Here are a few more examples that basically just count occurrences of things but are
 a little more complex than the examples we looked at earlier in the document.This
-first query looks for any country vertices that have no outgoing edges.  This indicates
-that there are no airports in the graph for those countries.</p>
+first query looks for any country vertices that have no outgoing edges.  This
+indicates that there are no airports in the graph for those countries.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8521,11 +8785,11 @@ while not actually changing the overall state of the traversal.</p>
 </div>
 <div class="paragraph">
 <p>The example below starts at the vertex <em>V(3)</em> and goes <em>out</em> from there. A
-<em>groupCount</em> step is then used to group the vertices we visited by a count of the number
-of runways each has. We then go <em>out</em> again and count how many vertices we found and
-save that result in the variable <em>b</em>. Note that the <em>groupCount</em> when used in this
-way did not pass anything on to the following step. Finally we use <em>select</em> to return
-our two variables as the results of the query.</p>
+<em>groupCount</em> step is then used to group the vertices we visited by a count of the
+number of runways each has. We then go <em>out</em> again and count how many vertices we
+found and save that result in the variable <em>b</em>. Note that the <em>groupCount</em> when used
+in this way did not pass anything on to the following step. Finally we use <em>select</em>
+to return our two variables as the results of the query.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8535,9 +8799,89 @@ our two variables as the results of the query.</p>
 <span class="tok-o">[</span><span class="tok-nl">a:</span><span class="tok-o">[</span><span class="tok-mi">1</span><span class="tok-o">:</span><span class="tok-mi">2</span><span class="tok-o">,</span><span class="tok-mi">2</span><span class="tok-o">:</span><span class="tok-mi">9</span><span class="tok-o">,</span><span class="tok-mi">3</span><span class="tok-o">:</span><span class="tok-mi">17</span><span class="tok-o">,</span><span class="tok-mi">4</span><span class="tok-o">:</span><span class="tok-mi">22</span><span class="tok-o">,</span><span class="tok-mi">5</span><span class="tok-o">:</span><span class="tok-mi">4</span><span class="tok-o">,</span><span class="tok-mi">6</span><span class="tok-o">:</span><span class="tok-mi">3</span><span class="tok-o">,</span><span class="tok-mi">7</span><span class="tok-o">:</span><span class="tok-mi">1</span><span class="tok-o">,</span><span class="tok-mi">8</span><span class="tok-o">:</span><span class="tok-mi">1</span><span class="tok-o">],</span><span class="tok-nl">b:</span><span class="tok-mi">5913</span><span class="tok-o">]</span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>In the next section we will see another example of a <em>groupCount</em> step that uses a
+traversal variable.</p>
+</div>
 </div>
 <div class="sect3">
-<h4 id="eu-usa">5.1.2. Analysis of routes between Europe and the USA</h4>
+<h4 id="gcconstant">5.1.2. Combining <em>groupCount</em> and <em>constant</em></h4>
+<div class="paragraph">
+<p>You can use a <em>constant</em> value in combination with a <em>groupCount</em> step as one way of
+setting the name of the key that will be used in the result. The example below shows
+a <em>groupCount</em> step that is provided a traversal variable <em>"a"</em> as a parameter and a
+constant as part of the <em>by</em> modulator.  The query starts by finding any airports in
+the US state of Oklahoma. A <em>constant</em> step is used to tell the <em>groupCount</em> step
+what to use as the key name in the result.  At the end of the query a <em>cap</em> step is
+used to close and return the contents of <em>"a"</em>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;airport&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;region&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;US-OK&#39;</span><span class="tok-o">).</span><span class="tok-na">groupCount</span><span class="tok-o">(</span><span class="tok-s1">&#39;a&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-n">constant</span><span class="tok-o">(</span><span class="tok-s1">&#39;OK&#39;</span><span class="tok-o">)).</span><span class="tok-na">cap</span><span class="tok-o">(</span><span class="tok-s1">&#39;a&#39;</span><span class="tok-o">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If we run the query, here is what we will get back. Notice the key is our constant
+value <em>"OK"</em> and the value is the number of airports found in Oklahoma.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-o">[</span><span class="tok-nl">OK:</span><span class="tok-mi">4</span><span class="tok-o">]</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The example above is intended purely to demonstrate the fact that you can use a
+<em>constant</em> value with <em>groupCount</em>. However, for this specific example, you would
+probably code a query something like the one below instead.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;airport&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;region&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;US-OK&#39;</span><span class="tok-o">).</span><span class="tok-na">groupCount</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;region&#39;</span><span class="tok-o">)</span>
+
+<span class="tok-o">[</span><span class="tok-n">US</span><span class="tok-o">-</span><span class="tok-nl">OK:</span><span class="tok-mi">4</span><span class="tok-o">]</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="chainchoose">5.1.3. Combining <em>choose</em> and <em>groupCount</em></h4>
+<div class="paragraph">
+<p>Using the ideas discussed above, we can write a query that chains several
+<em>choose</em> steps together to build a result set made up of various key:value pairs
+representing different things that we are interested in counting. The query below
+looks at all vertices that represent an airport. For each vertex found, various
+properties are examined using a <em>choose</em> step. If the test returns <em>true</em> a count,
+stored in the traversal variable "<em>a"</em> is incremented. Note how each of the choose
+steps is <em>dot chained</em> together. When used in this way <em>choose</em> behaves in the same
+way as a <em>sideEffect</em> in that all of the airport vertices are passed to the next
+choose rather than just those that pass the <em>if</em> test.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">hasLabel</span><span class="tok-o">(</span><span class="tok-s1">&#39;airport&#39;</span><span class="tok-o">).</span>
+      <span class="tok-n">choose</span><span class="tok-o">(</span><span class="tok-n">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;runways&#39;</span><span class="tok-o">,</span><span class="tok-mi">4</span><span class="tok-o">),</span> <span class="tok-n">groupCount</span><span class="tok-o">(</span><span class="tok-s1">&#39;a&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-n">constant</span><span class="tok-o">(</span><span class="tok-s1">&#39;four&#39;</span><span class="tok-o">))).</span>
+      <span class="tok-n">choose</span><span class="tok-o">(</span><span class="tok-n">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;runways&#39;</span><span class="tok-o">,</span><span class="tok-n">lte</span><span class="tok-o">(</span><span class="tok-mi">2</span><span class="tok-o">)),</span> <span class="tok-n">groupCount</span><span class="tok-o">(</span><span class="tok-s1">&#39;a&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-n">constant</span><span class="tok-o">(</span><span class="tok-s1">&#39;low&#39;</span><span class="tok-o">))).</span>
+      <span class="tok-n">choose</span><span class="tok-o">(</span><span class="tok-n">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;runways&#39;</span><span class="tok-o">,</span><span class="tok-n">gte</span><span class="tok-o">(</span><span class="tok-mi">6</span><span class="tok-o">)),</span> <span class="tok-n">groupCount</span><span class="tok-o">(</span><span class="tok-s1">&#39;a&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-n">constant</span><span class="tok-o">(</span><span class="tok-s1">&#39;high&#39;</span><span class="tok-o">))).</span>
+      <span class="tok-n">choose</span><span class="tok-o">(</span><span class="tok-n">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;country&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;FR&#39;</span><span class="tok-o">),</span> <span class="tok-n">groupCount</span><span class="tok-o">(</span><span class="tok-s1">&#39;a&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-n">constant</span><span class="tok-o">(</span><span class="tok-s1">&#39;France&#39;</span><span class="tok-o">))).</span>
+      <span class="tok-n">groupCount</span><span class="tok-o">(</span><span class="tok-s1">&#39;a&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-n">constant</span><span class="tok-o">(</span><span class="tok-s1">&#39;total&#39;</span><span class="tok-o">)).</span><span class="tok-na">cap</span><span class="tok-o">(</span><span class="tok-s1">&#39;a&#39;</span><span class="tok-o">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If we run the query this is what we might get back. We counted 3375 total airports,
+found six airports that have six or more runways, 3079 that have two or less and
+found 58 airports in France.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-o">[</span><span class="tok-nl">total:</span><span class="tok-mi">3375</span><span class="tok-o">,</span><span class="tok-nl">high:</span><span class="tok-mi">6</span><span class="tok-o">,</span><span class="tok-nl">low:</span><span class="tok-mi">3079</span><span class="tok-o">,</span><span class="tok-nl">four:</span><span class="tok-mi">51</span><span class="tok-o">,</span><span class="tok-nl">France:</span><span class="tok-mi">58</span><span class="tok-o">]</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Using <em>choose</em> and <em>groupCount</em> in this way provides a very nice pattern for counting
+somewhat disparate things during a traversal.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="eu-usa">5.1.4. Analysis of routes between Europe and the USA</h4>
 <div class="paragraph">
 <p>The next few queries show how you can use a graph like <em>air-routes</em> do perform
 analysis on a particular industry segment. The following queries analyze the
@@ -8635,7 +8979,7 @@ traversal including the continent code <em>EU</em>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="mapreduce">5.1.3. Using <em>fold</em> to do simple Map-Reduce computations</h4>
+<h4 id="mapreduce">5.1.5. Using <em>fold</em> to do simple Map-Reduce computations</h4>
 <div class="paragraph">
 <p>Earlier in the document we saw examples of <em>sum</em> being used to count a
 collection of values. You can also use <em>fold</em> to do something similar but in a
@@ -8693,7 +9037,7 @@ follows.
 </div>
 </div>
 <div class="sect3">
-<h4 id="meanmode">5.1.4. Distribution of routes in the graph (mode and mean)</h4>
+<h4 id="meanmode">5.1.6. Distribution of routes in the graph (mode and mean)</h4>
 <div class="paragraph">
 <p>An example of a common question we might want to answer with a network graph, of
 which air routes are an example, is "how are the routes in my graph distributed
@@ -8818,7 +9162,7 @@ routes and combined, incoming and outgoing, routes.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_how_many_routes_are_there_from_airports_in_london_uk">5.1.5. How many routes are there from airports in London (UK)?</h4>
+<h4 id="_how_many_routes_are_there_from_airports_in_london_uk">5.1.7. How many routes are there from airports in London (UK)?</h4>
 <div class="paragraph">
 <p>This next query can be used to figure out how many outgoing routes each of the
 airports classified as being in (or near) London, England has. Note that we
@@ -8864,7 +9208,7 @@ to me, this feels more clumsy and somewhat repetitive.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="topten">5.1.6. What are the top ten airports by route count?</h4>
+<h4 id="topten">5.1.8. What are the top ten airports by route count?</h4>
 <div class="paragraph">
 <p>These next three queries produce a table of the top ten airports in terms of
 incoming, outgoing and overall routes. Note that because of the way some airlines
@@ -8940,7 +9284,7 @@ outgoing routes that they have.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="localfold">5.1.7. Using <em>local</em> while counting things</h4>
+<h4 id="localfold">5.1.9. Using <em>local</em> while counting things</h4>
 <div class="paragraph">
 <p>Earlier in this document we saw examples of <em>local</em> being used. Here is another
 example of how <em>local</em> can be used while counting things to achieve a desired result.</p>
@@ -13945,8 +14289,8 @@ are shown.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 271<br>
-Last updated 2017-11-02 18:41:52 CDT
+Version 272<br>
+Last updated 2017-11-23 14:04:53 CST
 </div>
 </div>
 </body>

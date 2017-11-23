@@ -5,7 +5,7 @@
 <info>
 <title>GRAPH DATABASES, GREMLIN and TINKERPOP </title>
 <subtitle>A TUTORIAL</subtitle>
-<date>Nov 02, 2017</date>
+<date>Nov 23, 2017</date>
 <author>
 <personname>
 <firstname>Kelvin</firstname>
@@ -17,8 +17,8 @@
 <authorinitials>KRL</authorinitials>
 <revhistory>
 <revision>
-<revnumber>271</revnumber>
-<date>Nov 02, 2017</date>
+<revnumber>272</revnumber>
+<date>Nov 23, 2017</date>
 <authorinitials>KRL</authorinitials>
 </revision>
 </revhistory>
@@ -57,7 +57,7 @@ October 5th, 2017<?asciidoc-br?></simpara>
 free to send me feedback of any sort. Suggested improvements are especially welcome.
 A good way to provide feedback is by opening an issue in the GitHub repository
 located at <link xl:href="https://github.com/krlawrence/graph">https://github.com/krlawrence/graph</link>. You are currently reading revision
-271 of the document.</simpara>
+272 of the document.</simpara>
 </section>
 <section xml:id="thanks">
 <title>A word of thanks</title>
@@ -274,8 +274,8 @@ because you don&#8217;t have to buy the hardware that your system will run on wh
 the cloud.</simpara>
 <simpara>While you can certainly run a graph database on your laptop, I do just that every
 day, the reality is that in production, at scale, they are big data systems. Large
-graphs commonly have many billions of vertices and edges in them taking up petabytes of
-data on disk. Graph algorithms can be both compute and memory intensive and it is
+graphs commonly have many billions of vertices and edges in them taking up petabytes
+of data on disk. Graph algorithms can be both compute and memory intensive and it is
 only fairly recently that deploying the necessary resources for such big data systems
 has made financial sense for more everyday uses in business and not just in
 government or academia. Graph databases are becoming much more broadly adopted across
@@ -286,16 +286,16 @@ source projects addressing everything from the databases you need to store the g
 data to the query languages used to traverse them all the way up to visually
 displaying graphs as part of the user interface layer. In particular, it is so called
 <emphasis>property graphs</emphasis> where we are seeing the broadest development and uptake. In a
-property graph both vertices and edges can have properties (effectively key,value pairs)
-associated with them. There are many styles of graph that you may end up building and
-there have been whole books written on these various design patterns but the property
-graph technology we will be focussed on in this document can support all of the most
-common usage patterns. If you hear phrases such as <emphasis>directed graph</emphasis> and <emphasis>undirected
-graph</emphasis> or <emphasis>cyclic</emphasis> and <emphasis>acyclic</emphasis> graph and many more as you work with graph databases
-a quick on-line search will get you to a place where you can get familiar with that
-terminology. A deep discussion of these patterns is beyond the scope of this document
-and it&#8217;s in no way essential to have a full background in graph theory to get
-productive quickly.</simpara>
+property graph both vertices and edges can have properties (effectively key,value
+pairs) associated with them. There are many styles of graph that you may end up
+building and there have been whole books written on these various design patterns but
+the property graph technology we will be focussed on in this document can support all
+of the most common usage patterns. If you hear phrases such as <emphasis>directed graph</emphasis> and
+<emphasis>undirected graph</emphasis> or <emphasis>cyclic</emphasis> and <emphasis>acyclic</emphasis> graph and many more as you work with
+graph databases a quick on-line search will get you to a place where you can get
+familiar with that terminology. A deep discussion of these patterns is beyond the
+scope of this document and it&#8217;s in no way essential to have a full background in
+graph theory to get productive quickly.</simpara>
 <simpara>A third, and equally important factor, in the growth we are seeing in graph database
 adoption is the low barrier of entry for programmers. As you will see from the
 examples in this document, someone wanting to experiment with graph technology can
@@ -760,10 +760,10 @@ property. We will explore ways that you can take advantage of this capability in
 <simpara>The full details of all the features contained in the air-routes graph can be learned
 by reading the comments at the start of the <emphasis>air-routes.graphml</emphasis> file or reading the
 README.txt file.</simpara>
-<simpara>The graph currently contains a total of 3,612 vertices and 49,894 edges. Of these 3,367
-vertices are airports, and 43,160 of the edges represent routes. While in big data terms
-this is really a tiny graph, it is plenty big enough for us to build up and
-experiment with some very interesting Gremlin queries.</simpara>
+<simpara>The graph currently contains a total of 3,612 vertices and 49,894 edges. Of these
+3,367 vertices are airports, and 43,160 of the edges represent routes. While in big
+data terms this is really a tiny graph, it is plenty big enough for us to build up
+and experiment with some very interesting Gremlin queries.</simpara>
 <simpara>Lastly, here is are some statistics and facts about the air-routes graph. If you want
 to see a lot more statistics check the README.txt file that is included with the
 air-routes graph.</simpara>
@@ -987,7 +987,7 @@ off with a quick look at how Gremlin and SQL differ and are yet in some ways sim
 then we will look at some fairly basic queries and finally get into some more
 advanced concepts. Hopefully each set of examples presented by building upon things
 previously discussed will be easy to understand.</simpara>
-<section xml:id="_introducing_gremlin">
+<section xml:id="gremlinintro">
 <title>Introducing Gremlin</title>
 <simpara>Gremlin is the name of the graph traversal and query language that TinkerPop provides
 for working with property graphs. Gremlin can be used with any graph store that is
@@ -995,7 +995,7 @@ Apache TinkerPop enabled. Gremlin is a fairly imperative language but also has s
 more declarative constructs as well. Using Gremlin we can traverse a graph looking
 for values, patterns and relationships we can add or delete vertices and edges, we can
 create sub-graphs and lots more.</simpara>
-<section xml:id="_a_quick_look_at_gremlin_and_sql">
+<section xml:id="gremlinandsql">
 <title>A quick look at Gremlin and SQL</title>
 <simpara>While it is not required to know SQL in order to be productive with Gremlin, if you
 do have some experience with SQL you will notice many of the same keywords and
@@ -1173,10 +1173,10 @@ class org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerVertex</programli
 a list of all the methods and their types supported by the <emphasis>TinkerVertex</emphasis> class.</simpara>
 <section xml:id="values">
 <title>Retrieving property values from a vertex</title>
-<simpara>There are several different ways of working with vertex properties. We can add, delete
-and query properties for any vertex or edge in the graph. We will explore each of these
-topics in detail over the course of this document. Initially, let&#8217;s look at a couple
-of simple ways that we can look up the property values of a given vertex.</simpara>
+<simpara>There are several different ways of working with vertex properties. We can add,
+delete and query properties for any vertex or edge in the graph. We will explore each
+of these topics in detail over the course of this document. Initially, let&#8217;s look at
+a couple of simple ways that we can look up the property values of a given vertex.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// What property values are stored in the DFW vertex?
 g.V().has('airport','code','DFW').values()</programlisting>
 <simpara>Here is the output that the query returns. Note that we just get back the values of
@@ -1262,10 +1262,10 @@ however in the "<xref linkend="walk"/>" section.</simpara>
 <title>Counting groups of things</title>
 <simpara>Sometimes it is useful to count how many of each type (or group) of things there are
 in the graph. This can be done using the <emphasis>group</emphasis> and <emphasis>groupCount</emphasis> steps. While for a
-very large graph it is not recommended to run queries that look at all of the vertices
-or all of the edges in a graph, for smaller graphs this can be quite useful. For the
-air routes graph we could easily count the number of different vertex and edge types in
-the graph as follows.</simpara>
+very large graph it is not recommended to run queries that look at all of the
+vertices or all of the edges in a graph, for smaller graphs this can be quite useful.
+For the air routes graph we could easily count the number of different vertex and
+edge types in the graph as follows.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// How many of each type of vertex are there?
 g.V().groupCount().by(label)</programlisting>
 <simpara>If we were to run the query we would get back a map where the keys are label names
@@ -1333,33 +1333,34 @@ will find a lot more examples of grouping and counting things in the section cal
 </section>
 <section xml:id="walk">
 <title>Starting to walk the graph</title>
-<simpara>So far we have mostly just explored queries that look at properties on a vertex or count
-how many things we can find of a certain type. Where the power of a graph really
-comes into play is when we start to <emphasis>walk</emphasis> or <emphasis>traverse</emphasis> the graph by looking at the
-connections (edges) between vertices. The term <emphasis>walking the graph</emphasis> is used to describe
-moving from one vertex to another vertex via an edge. Typically when using the phrase
-<emphasis>walking a graph</emphasis> the intent is to describe starting at a vertex traversing one or more
-vertices and edges and ending up at a different vertex or sometimes, back where you
-started in the case of a <emphasis>circular walk</emphasis>. It is very easy to traverse a graph in this
-way using Gremlin. The journey we took while on our <emphasis>walk</emphasis> is often referred to as
-our <emphasis>path</emphasis>. There are also cases when all you want to do is return edges or some
-combination of vertices and edges as the result of a query and Gremlin allows this as
-well. We will explore a lot of ways to modify the way a graph is traversed in the
-upcoming sections.  To get us started, here are some simple examples.</simpara>
+<simpara>So far we have mostly just explored queries that look at properties on a vertex or
+count how many things we can find of a certain type. Where the power of a graph
+really comes into play is when we start to <emphasis>walk</emphasis> or <emphasis>traverse</emphasis> the graph by looking
+at the connections (edges) between vertices. The term <emphasis>walking the graph</emphasis> is used to
+describe moving from one vertex to another vertex via an edge. Typically when using
+the phrase <emphasis>walking a graph</emphasis> the intent is to describe starting at a vertex
+traversing one or more vertices and edges and ending up at a different vertex or
+sometimes, back where you started in the case of a <emphasis>circular walk</emphasis>. It is very easy
+to traverse a graph in this way using Gremlin. The journey we took while on our
+<emphasis>walk</emphasis> is often referred to as our <emphasis>path</emphasis>. There are also cases when all you want to
+do is return edges or some combination of vertices and edges as the result of a query
+and Gremlin allows this as well. We will explore a lot of ways to modify the way a
+graph is traversed in the upcoming sections.  To get us started, here are some simple
+examples.</simpara>
 <simpara>The <emphasis>out</emphasis> step is used to find vertices connected by an outgoing edge to that vertex
-and the <emphasis>outE</emphasis> <emphasis>step</emphasis> is used to explore outgoing edges from a given vertex. Conversely
-the <emphasis>in</emphasis> and <emphasis>inE</emphasis> steps can be used to look for incoming vertices and edges. The <emphasis>outE</emphasis>
-and <emphasis>inE</emphasis> steps are especially useful when you want to look at the properties of an
-edge. There are several other steps that we can use when traversing a graph to move
-between vertices and edges. We will encounter those in the "<xref linkend="otherv"/>" section of this
-document.</simpara>
-<simpara>This first query does a few interesting things. Firstly we find the vertex representing
-the Austin airport (the airport with a property of <emphasis>code</emphasis> containing the value <emphasis>AUS</emphasis>).
-Having found that vertex we then go <emphasis>out</emphasis> from there. This will find all of the vertices
-connected to Austin by an outgoing edge. Having found those airports we then ask for
-the values of their <emphasis>code</emphasis> properties using the <emphasis>values</emphasis> step. Finally the <emphasis>fold</emphasis>
-step puts all of the results into a list for us. This just makes it easier for us to
-inspect the results in the console.</simpara>
+and the <emphasis>outE</emphasis> <emphasis>step</emphasis> is used to explore outgoing edges from a given vertex.
+Conversely the <emphasis>in</emphasis> and <emphasis>inE</emphasis> steps can be used to look for incoming vertices and
+edges. The <emphasis>outE</emphasis> and <emphasis>inE</emphasis> steps are especially useful when you want to look at the
+properties of an edge. There are several other steps that we can use when traversing
+a graph to move between vertices and edges. We will encounter those in the
+"<xref linkend="otherv"/>" section of this document.</simpara>
+<simpara>This first query does a few interesting things. Firstly we find the vertex
+representing the Austin airport (the airport with a property of <emphasis>code</emphasis> containing the
+value <emphasis>AUS</emphasis>).  Having found that vertex we then go <emphasis>out</emphasis> from there. This will find
+all of the vertices connected to Austin by an outgoing edge. Having found those
+airports we then ask for the values of their <emphasis>code</emphasis> properties using the <emphasis>values</emphasis>
+step. Finally the <emphasis>fold</emphasis> step puts all of the results into a list for us. This just
+makes it easier for us to inspect the results in the console.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Where can I fly to from Austin?
 g.V().has('airport','code','AUS').out().values('code').fold()</programlisting>
 <simpara>Here is what you might get back if you were to run this query in your console.</simpara>
@@ -1376,9 +1377,9 @@ queries. So we could change our query just a bit by adding a label reference on 
 <programlisting language="groovy" linenumbering="unnumbered">// Where can I fly to from Austin?
 g.V().has('airport','code','AUS').out('route').values('code').fold()</programlisting>
 <simpara>Despite having just stated consistently referencing labels is a good idea, unless you
-truly do want to get back all edges or all connected vertices, I will break my own rule
-quite a bit in this document. The reason for this is purely to save space and make
-the queries I present shorter.</simpara>
+truly do want to get back all edges or all connected vertices, I will break my own
+rule quite a bit in this document. The reason for this is purely to save space and
+make the queries I present shorter.</simpara>
 <simpara>Here are a few more simple queries similar to the previous one.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Where can I fly to from Austin, with one stop on the way?
 // Note that, as written, coming back to Austin will be included
@@ -1469,41 +1470,76 @@ the two examples above could have been written as follows.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Only return the FIRST 20 results
 g.V().hasLabel('airport').range(0,20).values('code')</programlisting>
 <simpara>We can also limit based on time taken. The following query has a maximum limit of ten
-milliseconds. All of the parts of this query are explained in detail later on in this
-document but I think what they do is fairly clear.</simpara>
+milliseconds. The query looks for routes from Austin (AUS) to London Heathrow
+(LHR). All the parts of this query are explained in detail later on in this
+book but I think what they do is fairly clear.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Limit the query to however much can be processed within 10 milliseconds
-g.V().has('airport','code','AUS')
-     .repeat(timeLimit(10).out()).until(has('code','LHR')).path().by('code')</programlisting>
+g.V().has('airport','code','AUS').
+      repeat(timeLimit(10).out()).until(has('code','LHR')).path().by('code')</programlisting>
+<simpara>Here is what the query above returned when run on my laptop.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">[AUS,LHR]
+[AUS,YYZ,LHR]
+[AUS,FRA,LHR]
+[AUS,MEX,LHR]</programlisting>
+<simpara>If we give the query another 10 milliseconds to run, so 20 in total, you can see that
+a few more routes were found.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">// Limit the query to 20 milliseconds
+g.V().has('airport','code','AUS').
+      repeat(timeLimit(20).out()).until(has('code','LHR')).path().by('code')
+
+[AUS,LHR]
+[AUS,YYZ,LHR]
+[AUS,FRA,LHR]
+[AUS,MEX,LHR]
+[AUS,PDX,LHR]
+[AUS,CLT,LHR]</programlisting>
 </section>
-<section xml:id="_retrieving_a_range_of_vertices">
+<section xml:id="retrrange">
 <title>Retrieving a range of vertices</title>
-<simpara>Gremlin provides various ways to return a sequence of vertices. We have already seen the
-<emphasis>limit</emphasis> and <emphasis>range</emphasis> steps used in the previous section to return the first 20
+<simpara>Gremlin provides various ways to return a sequence of vertices. We have already seen
+the <emphasis>limit</emphasis> and <emphasis>range</emphasis> steps used in the previous section to return the first 20
 elements of a query result. We can also use the <emphasis>range</emphasis> step to select different
-range of vertices by giving a non zero starting offset and an ending offset. The <emphasis>range</emphasis>
-offsets are zero based, and while the official documentation states that the ranges
-are inclusive/inclusive it actually appears from my testing that they are
+range of vertices by giving a non zero starting offset and an ending offset. The
+<emphasis>range</emphasis> offsets are zero based, and while the official documentation states that the
+ranges are inclusive/inclusive it actually appears from my testing that they are
 inclusive/exclusive.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Return the first two airport vertices found
 g.V().hasLabel('airport').range(0,2)
 
-// Return the fourth, fifth and sixth airport vertices found (zero based)
+v[1]
+v[2]</programlisting>
+<simpara>The starting value given to a <emphasis>range</emphasis> step does not have to be <emphasis>0</emphasis>. In the example
+below we ask for the 3rd, 4th and 5th results found by specifying a range of
+<emphasis>"(3,6)"</emphasis>.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">// Return the fourth, fifth and sixth airport vertices found (zero based)
 g.V().hasLabel('airport').range(3,6)
 
-// Return all the remaining vertices starting at the 3500th one
+v[4]
+v[5]
+v[6]</programlisting>
+<simpara>Here is an example of how we can use the index <emphasis>-1</emphasis> to mean <emphasis>"until the end of the
+list"</emphasis>. This is similar to the convention used in many programming languages when
+working with arrays and list.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">// Return all the remaining vertices starting at the 3500th one
 g.V().range(3500,-1)</programlisting>
+<simpara>Here is another example that uses the <emphasis>range</emphasis> step, this time looking only at nodes
+with a label of <emphasis>country</emphasis>. Notice how this time we found vertices with much higher ID
+values.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().hasLabel('country').range(0,2)
+
+v[3376]
+v[3377]</programlisting>
 <note>
-<simpara>There is no guarantee as to which airport vertices will be selected as
-this depends upon how they are stored by the back end graph. Using Tinkergraph the
+<simpara>There is no guarantee as to which airport vertices will be selected as this
+depends upon how they are stored by the back end graph. Using TinkerGraph the
 airports will most likely come back in the order they are put into the graph. This is
-not likely to be the case with other graph stores such as Titan and IBM Graph. So do
-not rely on any sort of expectation of order when using <emphasis>range</emphasis> to process sets of
-vertices.</simpara>
+not likely to be the case with other graph stores such as Janus Graph. So do not rely
+on any sort of expectation of order when using <emphasis>range</emphasis> to process sets of vertices.</simpara>
 </note>
 <simpara>There are many other ways to specify a range of values using Gremlin. You will find
 several additional examples in the "<xref linkend="tranges"/>" section.</simpara>
 </section>
-<section xml:id="_using_emphasis_as_emphasis_emphasis_select_emphasis_and_emphasis_project_emphasis_to_name_and_refer_back_to_prior_steps">
+<section xml:id="aselproj">
 <title>Using <emphasis>as</emphasis>, <emphasis>select</emphasis> and <emphasis>project</emphasis> to name and refer back to prior steps</title>
 <simpara>Sometimes it is useful to be able to remember a point of a traversal and refer back
 to it later on. This ability was more essential in TinkerPop 2 than it is in
@@ -2075,7 +2111,7 @@ g.V().has('airport','code','SAT').
       out().has('code',without('DFW','LAX','PHX','JFK')).
       out().has('code','SLC').path().by('code')</programlisting>
 <simpara>In a similar way, <emphasis>within</emphasis> allows us to specifically give a list of things that we
-are interested in. The query below again looks from routes from SAT to SLC with one
+<emphasis role="strong">are</emphasis> interested in. The query below again looks at routes from SAT to SLC with one
 stop but this time only returns routes that stop in one of the designated airports.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// From AUS to SLC with a stop in any one of DFW,LAX,PHX or TUS
 g.V().has('airport','code','SAT').
@@ -2582,16 +2618,25 @@ part of the result by adding a <emphasis>select(values)</emphasis> to the end of
 <section xml:id="option">
 <title>Using <emphasis>option</emphasis> to write case/switch type queries</title>
 <simpara>When <emphasis>option</emphasis> is combined with <emphasis>choose</emphasis> the result is similar to the <emphasis>case</emphasis> or
-<emphasis>switch</emphasis> style construct found in most programming languages.</simpara>
+<emphasis>switch</emphasis> style construct found in most programming languages. In Java for example, we
+might code a <emphasis>switch</emphasis> statement as follows.</simpara>
+<programlisting language="java" linenumbering="unnumbered">  switch(airport)
+  {
+    case "DFW": System.out.println(desc); break;
+    case "AUS": System.out.println(region); break;
+    case "LAX": System.out.println(runways);
+  }</programlisting>
+<simpara>We can write a Gremlin query that follows the same pattern as our Java <emphasis>switch</emphasis>
+statement. As in the Java example I decided to lay out query out across multiple
+lines to aid readability and clarity.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// You can combine choose and option to generate a more "case statement" like query
 g.V().hasLabel('airport').choose(values('code')).
                             option('DFW',values('desc')).
                             option('AUS',values('region')).
-                            option('LAX',values('runways'))
-
-
-// This example has three options - note the default case of 'none' used as the catchall
-// Note how for ease of reading the query can be split across multiple lines.
+                            option('LAX',values('runways'))</programlisting>
+<simpara>The example below shows a <emphasis>choose</emphasis> followed by four options. Note the default case
+of <emphasis>none</emphasis> is used as the catchall. Notice how in this case, the values returned are constants.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">// You can return constant values of you need to
 g.V().hasLabel('airport').limit(10).choose(values('runways')).
                                       option(1,constant('just one')).
                                       option(2,constant('a couple')).
@@ -2686,11 +2731,12 @@ combine parts of a query into a single result. Just as with the boolean <emphasi
 <emphasis>or</emphasis> steps it is sometimes possible to find other ways to do the same thing without
 using <emphasis>union</emphasis> but it does offer some very useful capability.</simpara>
 <simpara>By way of a simple example, the following query returns flights that arrive in AUS
-from the UK of that leave AUS and arrive in Mexico.</simpara>
+from the UK or that leave AUS and arrive in Mexico.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Flights to AUS from the UK or from AUS to Mexico
-g.V().has('code','AUS').union(__.in().has('country','UK')
-                              ,out().has('country','MX')).path().by('code')</programlisting>
-<simpara>When we run that query, we get the following results</simpara>
+g.V().has('code','AUS').union(__.in().has('country','UK'),
+                                out().has('country','MX')).path().by('code')</programlisting>
+<simpara>When we run that query, we get the following results showing that there are routes
+from LHR in the UK and to the three airports MEX, CUN and GDL in Mexico.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">[AUS,LHR]
 [AUS,MEX]
 [AUS,CUN]
@@ -3097,14 +3143,36 @@ g.V().hasLabel('airport').limit(10).project("v","degree").by('code').by(bothE().
 g.V().hasLabel('airport').limit(10).group().by('code').by(bothE().count())</programlisting>
 </section>
 <section xml:id="sx">
-<title>More examples using what we have covered so far</title>
-<simpara>The queries in this section build upon the topics that we have covered so far.</simpara>
+<title>More examples using concepts we have covered so far</title>
+<simpara>The examples in this section build upon the topics that we have covered so far. The
+query below finds cities that can be flown to from any airport in the Hawaiian
+islands.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Which cities can I fly to from any airport in the Hawaiian islands?
-g.V().has('airport','region','US-HI').out().path().by('city')
-
-// Find all the airports that are in Europe (The graph stores continent information
+g.V().has('airport','region','US-HI').out().path().by('city')</programlisting>
+<simpara>If we run the query we would get back results similar to those below. Only a few of the
+full result set are shown.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">[Honolulu,San Francisco]
+[Honolulu,Osaka]
+[Honolulu,San Diego]
+[Honolulu,Sapporo]
+[Honolulu,Las Vegas]
+[Honolulu,Sacramento]
+[Honolulu,Denver]
+[Kahului,Portland]
+[Kahului,Sacramento]
+[Kahului,Lahaina]
+[Lihue,Oakland]
+[Lihue,Vancouver]
+[Lihue,Seattle]
+[Lihue,San Francisco]</programlisting>
+<simpara>The query below looks for airports in Europe using the continent node with a code of
+<emphasis>EU</emphasis> as the starting point. The results are sorted in ascending order  and folded
+into a list.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">// Find all the airports that are in Europe (The graph stores continent information
 // as "contains" edges connected from a "continent" node to each airport node.
 g.V().has('continent','code','EU').out('contains').values('code').order().fold()</programlisting>
+<simpara>Here is what we get back from running the query.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">[AAL,AAQ,AAR,ABZ,ACE,ACH,ACI,AER,AES,AEY,AGB,AGF,AGH,AGP,AHO,AJA,AJR,ALC,ALF,AMS,ANE,ANG,ANR,ANX,AOI,AOK,ARH,ARN,ARW,ASF,ATH,AUR,AVN,AXD,BAY,BCM,BCN,BDS,BDU,BEB,BEG,BES,BFS,BGO,BGY,BHD,BHX,BIA,BIO,BIQ,BJF,BJZ,BLE,BLK,BLL,BLQ,BMA,BNN,BNX,BOD,BOH,BOJ,BOO,BRE,BRI,BRN,BRQ,BRR,BRS,BRU,BSL,BTS,BUD,BVA,BVE,BVG,BWK,BZG,BZK,BZO,BZR,BZZ,CAG,CAL,CCF,CDG,CDT,CEE,CEG,CFE,CFN,CFR,CFU,CGN,CHQ,CIA,CIY,CLJ,CLY,CMF,CND,CPH,CRA,CRL,CSH,CSY,CTA,CUF,CVT,CVU,CWC,CWL,DBV,DCM,DEB,DIJ,DLE,DME,DND,DNK,DNR,DOK,DOL,DRS,DSA,DTM,DUB,DUS,EAS,EBA,EBJ,EBU,EDI,EFL,EGC,EGO,EGS,EIN,EMA,ENF,EOI,ERF,ESL,ETZ,EVE,EVG,EXT,FAE,FAO,FCO,FDE,FDH,FIE,FKB,FLR,FLW,FMM,FMO,FNC,FNI,FOA,FRA,FRO,FSC,FUE,GCI,GDN,GDZ,GEV,GIB,GLA,GLO,GMZ,GNB,GOA,GOJ,GOT,GPA,GRO,GRQ,GRV,GRW,GRX,GRZ,GSE,GVA,GWT,HAA,HAD,HAJ,HAM,HAU,HDF,HEL,HER,HFS,HFT,HHN,HMV,HOR,HOV,HRK,HUY,IAR,IAS,IBZ,IEV,IFJ,IFO,IJK,ILD,ILY,INI,INN,INV,IOA,IOM,ISC,IST,IVL,JER,JIK,JKG,JKH,JKL,JMK,JNX,JOE,JSH,JSI,JSY,JTR,JTY,JYV,KAJ,KAO,KBP,KEF,KEM,KGD,KGS,KHE,KID,KIR,KIT,KIV,KKN,KLR,KLU,KLV,KLX,KOI,KOK,KRF,KRK,KRN,KRP,KRR,KRS,KSC,KSD,KSF,KSJ,KSO,KSU,KTT,KTW,KUF,KUN,KUO,KVA,KVK,KVX,KZI,KZN,KZR,KZS,LAI,LBA,LBC,LCG,LCJ,LCY,LDE,LDY,LED,LEH,LEI,LEJ,LEN,LEQ,LGG,LGW,LHR,LIG,LIL,LIN,LIS,LJU,LKL,LKN,LLA,LMP,LNZ,LPA,LPI,LPK,LPL,LPP,LPY,LRH,LRS,LRT,LSI,LTN,LUG,LUX,LUZ,LWK,LWO,LXS,LYC,LYR,LYS,MAD,MAH,MAN,MCX,MEH,MHG,MHQ,MJF,MJT,MJV,MLA,MLN,MLO,MME,MMK,MMX,MOL,MPL,MQF,MQN,MRS,MRV,MSQ,MST,MUC,MXP,MXX,NAL,NAP,NBC,NCE,NCL,NDY,NDZ,NNM,NOC,NQY,NRK,NRL,NRN,NTE,NUE,NVK,NWI,NYO,ODS,OER,OGZ,OLA,OLB,OMO,OMR,OPO,ORB,ORK,ORY,OSD,OSI,OSL,OSR,OST,OSW,OSY,OTP,OUL,OVD,OZH,PAD,PAS,PDL,PDV,PED,PEE,PEG,PES,PEZ,PGF,PGX,PIK,PIS,PIX,PJA,PLQ,PMF,PMI,PMO,PNA,PNL,POR,POZ,PPW,PRG,PRN,PSA,PSR,PSV,PUF,PUY,PVK,PXO,RDZ,REG,REN,RET,REU,RGS,RHO,RIX,RJK,RJL,RKV,RLG,RMI,RNB,RNN,RNS,ROV,RRS,RTM,RTW,RVK,RVN,RYG,RZE,SBZ,SCN,SCQ,SCV,SCW,SDL,SDN,SDR,SEN,SFT,SGD,SIP,SJJ,SJZ,SKE,SKG,SKN,SKP,SKU,SKX,SLM,SMA,SMI,SNN,SOF,SOG,SOJ,SOU,SOY,SPC,SPU,SRP,SSJ,STN,STR,STW,SUF,SUJ,SVG,SVJ,SVL,SVO,SVQ,SXB,SXF,SYY,SZG,SZY,SZZ,TAY,TBW,TEQ,TER,TFN,TFS,TGD,TGK,TGM,THN,TIA,TIV,TKU,TLL,TLN,TLS,TMP,TOS,TPS,TRD,TRE,TRF,TRN,TRS,TSF,TSR,TUF,TXL,TYF,TZL,UCT,UDJ,UFA,UIP,UKS,ULV,ULY,UME,URE,URO,URS,USK,UTS,UUA,VAA,VAR,VAW,VBY,VCE,VDB,VDE,VDS,VGO,VHM,VIE,VIN,VIT,VKO,VLC,VLL,VLY,VNO,VOG,VOL,VOZ,VRN,VST,VTB,VUS,VXO,WAT,WAW,WIC,WMI,WRO,WRY,XCR,XFW,XRY,ZAD,ZAG,ZAZ,ZIA,ZQW,ZRH,ZTH]</programlisting>
 <simpara>The next queries show two ways of finding airports with 6 or more runways.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">g.V().where(values('runways').is(gte(6))).values('code')
 
@@ -3159,15 +3227,70 @@ The second query shows that <emphasis>where</emphasis> is a synonym for <emphasi
 
 g.V().hasLabel("airport").filter(outE("route").count().is(gt(200))).values('code')</programlisting>
 <simpara>Here are two more queries that look for things that meet a specific criteria. The
-first finds routes where the distance is exactly 100 miles. The second one looks for
-the airports that have an elevation above 10,000 feet.</simpara>
+first finds routes where the distance is exactly 100 miles and returns the source and
+destination airport codes. The first query uses <emphasis>as</emphasis> and <emphasis>select</emphasis> while the second
+one uses <emphasis>path</emphasis> and includes the distance in the result.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// List ten (or less) routes where the distance is exactly 100 miles
 g.V().as('a').outE().has('dist',eq(100)).limit(10).inV().as('b').
       select('a','b').by('code')
 
-// Airports above 10,000ft sorted by ascending elevation
+[a:IAD,b:RIC]
+[a:HNL,b:OGG]
+[a:OGG,b:HNL]
+[a:SJO,b:LIR]
+[a:SVG,b:KRS]
+[a:RIC,b:IAD]
+[a:LIR,b:SJO]
+[a:KRS,b:SVG]
+[a:CYB,b:GCM]
+[a:GCM,b:CYB]</programlisting>
+<simpara>Similar to the prior query but using <emphasis>path</emphasis> and displaying the distance as well as
+the airport codes.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().outE().has('dist',eq(100)).limit(10).inV().path().by('code').by('dist')
+
+[IAD,100,RIC]
+[HNL,100,OGG]
+[OGG,100,HNL]
+[SJO,100,LIR]
+[SVG,100,KRS]
+[RIC,100,IAD]
+[LIR,100,SJO]
+[KRS,100,SVG]
+[CYB,100,GCM]
+[GCM,100,CYB]</programlisting>
+<simpara>This query looks for any airports that have an elevation above 10,000 feet. Two ways
+of achieving the more or less the same result are shown. The first uses <emphasis>valueMap</emphasis>
+and the second uses a <emphasis>project</emphasis> step instead.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">// Airports above 10,000ft sorted by ascending elevation
 g.V().has('airport','elev', gt(10000)).
-      order().by('elev',incr).valueMap('city','elev')</programlisting>
+      order().by('elev',incr).valueMap('city','elev')
+
+
+g.V().has('airport','elev', gt(10000)).order().by('elev',incr).
+      project('city','elevation').by('city').by('elev')</programlisting>
+<simpara>If we ran the query that uses the <emphasis>project</emphasis> step here is what we should get back.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">[city:Xiahe,elevation:10510]
+[city:Leh,elevation:10682]
+[city:Shangri-La,elevation:10761]
+[city:Cusco,elevation:10860]
+[city:Jauja,elevation:11034]
+[city:Andahuaylas,elevation:11300]
+[city:Jiuzhaigou,elevation:11327]
+[city:Navoi,elevation:11420]
+[city:Hongyuan,elevation:11598]
+[city:Lhasa,elevation:11713]
+[city:Oruro,elevation:12152]
+[city:Xigaze,elevation:12408]
+[city:Golog,elevation:12427]
+[city:Juliaca,elevation:12552]
+[city:Yushu,elevation:12816]
+[city:Potosi,elevation:12913]
+[city:Quijarro,elevation:12972]
+[city:La Paz / El Alto,elevation:13355]
+[city:Shiquanhe,elevation:14022]
+[city:Kangding,elevation:14042]
+[city:Bangda,elevation:14219]
+[city:Daocheng,elevation:14472]</programlisting>
 <simpara>The next query finds any routes between Austin and Sydney that only require one
 stop.The <emphasis>by</emphasis> step offers a clean way of doing this query by combining it with
 <emphasis>path</emphasis>.</simpara>
@@ -3781,8 +3904,8 @@ task of checking to see if something already exists before we create it.</simpar
 <simpara>So far in this document we have looked at several examples where we created new
 vertices, edges and properties but we have not yet looked at how we can delete them.
 Gremlin provides the <emphasis>drop</emphasis> step that we can use to remove things from a graph.</simpara>
-<section xml:id="_deleting_a_node">
-<title>Deleting a node</title>
+<section xml:id="_deleting_a_vertex">
+<title>Deleting a vertex</title>
 <simpara>In some of our earlier examples we created a fictitious airport node with a code of
 <emphasis>XYZ</emphasis> and added it to the air routes graph. If we now wanted to delete it we could
 use the following Gremlin code. Note that removing the node will also remove any
@@ -4242,19 +4365,51 @@ a date or ACL information to individual properties.</simpara>
 <section xml:id="lam">
 <title>Using Lambda functions</title>
 <simpara>Gremlin allows you to put a code fragment (sometimes called a Lambda function or a
-closure) as part of a query. This is typically done as part of a <emphasis>filter</emphasis> or
-<emphasis>sideEffect</emphasis> step but there are other places where you wll find this concept used.
+closure) as part of a query. This is typically done as part of a <emphasis>filter</emphasis>, <emphasis>map</emphasis> or
+<emphasis>sideEffect</emphasis> step but there are other places where you will find this concept used.
 This technique provides a lot of additional flexibility in how queries can be
-written. However, care should be used. When processing your query, Gremlin wil try to
-optimize it as best as it can. For regular traversal steps such as <emphasis>out</emphasis> and
-<emphasis>has</emphasis> Gremlin will do this optimization for you. However for closures (code inside
-braces <emphasis>{}</emphasis>) Gremlin cannot do this and will just pass the closure on to the
-underlying runtime.  With people just getting started with Gremlin there is a great
-temptation to over use in-line code. This is a natural thing to want to do as for
-programmers it feels like the programming they are used to. However, there is often,
-if not always, a pure Gremlin traversal step that can be used to do what is needed.
-Of course with all rules there are exceptions.   Here is an example of a closure
-being used where a <emphasis>has</emphasis> step could and should have been used instead.</simpara>
+written. However, care should be used. When processing your query, Gremlin will try
+to optimize it as best as it can. For regular traversal steps such as <emphasis>out</emphasis> and <emphasis>has</emphasis>
+Gremlin will do this optimization for you. However for closures (code inside braces
+<emphasis>{}</emphasis>) Gremlin cannot do this and will just pass the closure on to the underlying
+runtime.  With people just getting started with Gremlin there is a great temptation
+to over use in-line code. This is a natural thing to want to do as for programmers it
+feels like the programming they are used to. However, there is often, if not always,
+a pure Gremlin traversal step that can be used to do what is needed.  Of course with
+all rules there are exceptions.</simpara>
+<simpara>By way of a very simple example, the code below declares a variable <emphasis>"c"</emphasis> and
+initializes it to zero. The Gremlin query that follows then adds one to <emphasis>"c"</emphasis> each
+time it finds an airport vertex located in Oregon. We then use a <emphasis>println</emphasis> to display the updated value
+for <emphasis>"c"</emphasis>.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">c = 0
+g.V().has('region','US-OR').sideEffect{ c += 1 }.values('code').fold()
+
+println "I found ${c} airports in Oregon"</programlisting>
+<simpara>When we run our query here is what comes back.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">[PDX,EUG,LMT,MFR,OTH,RDM,PDT]
+I found 7 airports in Oregon</programlisting>
+<simpara>Of course, in reality we would probably just use a <emphasis>count</emphasis> when counting things or
+put them into a list and look at the size of the list returned  but
+the above example gives a nice, and hopefully easy to understand, example of a
+closure being used as part of a <emphasis>sideEffect</emphasis> step.</simpara>
+<simpara>For completeness, here is the query re-written a couple of different ways without the
+use of a <emphasis>sideEffect</emphasis> or closures. If all we wanted was the count we could do this of
+course.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">num = oregon = g.V().has('region','US-OR').values('code').count().next()
+println "I found ${num} airports in Oregon"
+
+I found 7 airports in Oregon</programlisting>
+<simpara>If we wanted to save a list of the airport codes found and also count them we could
+do this.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">oregon = []
+oregon = g.V().has('region','US-OR').values('code').fill(oregon);[]
+println oregon
+println "I found ${oregon.size} airports in Oregon"</programlisting>
+<simpara>Here is the output, this time  with the airport codes and the count.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">[PDX, EUG, LMT, MFR, OTH, RDM, PDT]
+I found 7 airports in Oregon</programlisting>
+<simpara>Here is another example of a closure being used where a <emphasis>has</emphasis> step could and should
+have been used instead.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// What airports are located in London?
 g.V().hasLabel('airport').filter{it.get().property('city').value() =="London"}</programlisting>
 <simpara>Here is the same query just using the <emphasis>has()</emphasis> step. This is a case where we
@@ -4264,11 +4419,11 @@ by itself.</simpara>
 g.V().hasLabel('airport').has('city','London')</programlisting>
 <simpara>I think you will agree that the second version is a lot simpler to read and
 enables Gremlin to do its thing.</simpara>
-<simpara>For completeness, here is an example of a query that contains a <emphasis>sideEffect</emphasis> step.
+<simpara>Here is one more example of a query that contains a <emphasis>sideEffect</emphasis> step.
 The main part of the query finds airports with 6 runways and counts them. That result
 will still be returned but the side effect will also cause the codes of those
 airports to also be printed. This is a bit of a contrived example but it shows how
-<emphasis>sideEffect</emphasis> behaves.</simpara>
+<emphasis>sideEffect</emphasis> behaves when combined with a closure.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Example of the 'sideEffect' step
 g.V().has('runways',6).sideEffect{print it.get().values('code').next()+" "}.count()</programlisting>
 <tip>
@@ -4631,8 +4786,8 @@ space.</simpara>
 <title>Counting more things</title>
 <simpara>Here are a few more examples that basically just count occurrences of things but are
 a little more complex than the examples we looked at earlier in the document.This
-first query looks for any country vertices that have no outgoing edges.  This indicates
-that there are no airports in the graph for those countries.</simpara>
+first query looks for any country vertices that have no outgoing edges.  This
+indicates that there are no airports in the graph for those countries.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">// Are there any countries that have no airports?
 g.V().hasLabel('country').where(out().count().is(0)).values('desc')</programlisting>
 <simpara>Here are the results of running the query.</simpara>
@@ -4766,15 +4921,61 @@ will act the same way as a <emphasis>sideEffect</emphasis> would, nothing is pas
 to the next step. We can use this capability to keep track of things during a query
 while not actually changing the overall state of the traversal.</simpara>
 <simpara>The example below starts at the vertex <emphasis>V(3)</emphasis> and goes <emphasis>out</emphasis> from there. A
-<emphasis>groupCount</emphasis> step is then used to group the vertices we visited by a count of the number
-of runways each has. We then go <emphasis>out</emphasis> again and count how many vertices we found and
-save that result in the variable <emphasis>b</emphasis>. Note that the <emphasis>groupCount</emphasis> when used in this
-way did not pass anything on to the following step. Finally we use <emphasis>select</emphasis> to return
-our two variables as the results of the query.</simpara>
+<emphasis>groupCount</emphasis> step is then used to group the vertices we visited by a count of the
+number of runways each has. We then go <emphasis>out</emphasis> again and count how many vertices we
+found and save that result in the variable <emphasis>b</emphasis>. Note that the <emphasis>groupCount</emphasis> when used
+in this way did not pass anything on to the following step. Finally we use <emphasis>select</emphasis>
+to return our two variables as the results of the query.</simpara>
 <programlisting language="groovy" linenumbering="unnumbered">g.V(3).out().groupCount('a').by('runways').
        out().count().as('b').select('a','b')
 
 [a:[1:2,2:9,3:17,4:22,5:4,6:3,7:1,8:1],b:5913]</programlisting>
+<simpara>In the next section we will see another example of a <emphasis>groupCount</emphasis> step that uses a
+traversal variable.</simpara>
+</section>
+<section xml:id="gcconstant">
+<title>Combining <emphasis>groupCount</emphasis> and <emphasis>constant</emphasis></title>
+<simpara>You can use a <emphasis>constant</emphasis> value in combination with a <emphasis>groupCount</emphasis> step as one way of
+setting the name of the key that will be used in the result. The example below shows
+a <emphasis>groupCount</emphasis> step that is provided a traversal variable <emphasis>"a"</emphasis> as a parameter and a
+constant as part of the <emphasis>by</emphasis> modulator.  The query starts by finding any airports in
+the US state of Oklahoma. A <emphasis>constant</emphasis> step is used to tell the <emphasis>groupCount</emphasis> step
+what to use as the key name in the result.  At the end of the query a <emphasis>cap</emphasis> step is
+used to close and return the contents of <emphasis>"a"</emphasis>.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('airport','region','US-OK').groupCount('a').by(constant('OK')).cap('a')</programlisting>
+<simpara>If we run the query, here is what we will get back. Notice the key is our constant
+value <emphasis>"OK"</emphasis> and the value is the number of airports found in Oklahoma.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">[OK:4]</programlisting>
+<simpara>The example above is intended purely to demonstrate the fact that you can use a
+<emphasis>constant</emphasis> value with <emphasis>groupCount</emphasis>. However, for this specific example, you would
+probably code a query something like the one below instead.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().has('airport','region','US-OK').groupCount().by('region')
+
+[US-OK:4]</programlisting>
+</section>
+<section xml:id="chainchoose">
+<title>Combining <emphasis>choose</emphasis> and <emphasis>groupCount</emphasis></title>
+<simpara>Using the ideas discussed above, we can write a query that chains several
+<emphasis>choose</emphasis> steps together to build a result set made up of various key:value pairs
+representing different things that we are interested in counting. The query below
+looks at all vertices that represent an airport. For each vertex found, various
+properties are examined using a <emphasis>choose</emphasis> step. If the test returns <emphasis>true</emphasis> a count,
+stored in the traversal variable "<emphasis>a"</emphasis> is incremented. Note how each of the choose
+steps is <emphasis>dot chained</emphasis> together. When used in this way <emphasis>choose</emphasis> behaves in the same
+way as a <emphasis>sideEffect</emphasis> in that all of the airport vertices are passed to the next
+choose rather than just those that pass the <emphasis>if</emphasis> test.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">g.V().hasLabel('airport').
+      choose(has('runways',4), groupCount('a').by(constant('four'))).
+      choose(has('runways',lte(2)), groupCount('a').by(constant('low'))).
+      choose(has('runways',gte(6)), groupCount('a').by(constant('high'))).
+      choose(has('country','FR'), groupCount('a').by(constant('France'))).
+      groupCount('a').by(constant('total')).cap('a')</programlisting>
+<simpara>If we run the query this is what we might get back. We counted 3375 total airports,
+found six airports that have six or more runways, 3079 that have two or less and
+found 58 airports in France.</simpara>
+<programlisting language="groovy" linenumbering="unnumbered">[total:3375,high:6,low:3079,four:51,France:58]</programlisting>
+<simpara>Using <emphasis>choose</emphasis> and <emphasis>groupCount</emphasis> in this way provides a very nice pattern for counting
+somewhat disparate things during a traversal.</simpara>
 </section>
 <section xml:id="eu-usa">
 <title>Analysis of routes between Europe and the USA</title>
