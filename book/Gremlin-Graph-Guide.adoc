@@ -4328,19 +4328,55 @@ g.V().hasLabel('airport').limit(10).group().by('code').by(bothE().count())
 ----
 
 [[sx]]
-More examples using what we have covered so far
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+More examples using concepts we have covered so far
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The queries in this section build upon the topics that we have covered so far.
+The examples in this section build upon the topics that we have covered so far. The
+query below finds cities that can be flown to from any airport in the Hawaiian
+islands.
 
 [source,groovy]
 ----
 // Which cities can I fly to from any airport in the Hawaiian islands? 
 g.V().has('airport','region','US-HI').out().path().by('city')
+----
 
+If we run the query we would get back results similar to those below. Only a few of the
+full result set are shown.
+
+[source,groovy]
+----
+[Honolulu,San Francisco]
+[Honolulu,Osaka]
+[Honolulu,San Diego]
+[Honolulu,Sapporo]
+[Honolulu,Las Vegas]
+[Honolulu,Sacramento]
+[Honolulu,Denver]
+[Kahului,Portland]
+[Kahului,Sacramento]
+[Kahului,Lahaina]
+[Lihue,Oakland]
+[Lihue,Vancouver]
+[Lihue,Seattle]
+[Lihue,San Francisco]
+----
+
+The query below looks for airports in Europe using the continent node with a code of
+'EU' as the starting point. The results are sorted in ascending order  and folded
+into a list.
+
+[source,groovy]
+----
 // Find all the airports that are in Europe (The graph stores continent information 
 // as "contains" edges connected from a "continent" node to each airport node.
 g.V().has('continent','code','EU').out('contains').values('code').order().fold()
+----
+
+Here is what we get back from running the query.
+[source,groovy]
+----
+[AAL,AAQ,AAR,ABZ,ACE,ACH,ACI,AER,AES,AEY,AGB,AGF,AGH,AGP,AHO,AJA,AJR,ALC,ALF,AMS,ANE,ANG,ANR,ANX,AOI,AOK,ARH,ARN,ARW,ASF,ATH,AUR,AVN,AXD,BAY,BCM,BCN,BDS,BDU,BEB,BEG,BES,BFS,BGO,BGY,BHD,BHX,BIA,BIO,BIQ,BJF,BJZ,BLE,BLK,BLL,BLQ,BMA,BNN,BNX,BOD,BOH,BOJ,BOO,BRE,BRI,BRN,BRQ,BRR,BRS,BRU,BSL,BTS,BUD,BVA,BVE,BVG,BWK,BZG,BZK,BZO,BZR,BZZ,CAG,CAL,CCF,CDG,CDT,CEE,CEG,CFE,CFN,CFR,CFU,CGN,CHQ,CIA,CIY,CLJ,CLY,CMF,CND,CPH,CRA,CRL,CSH,CSY,CTA,CUF,CVT,CVU,CWC,CWL,DBV,DCM,DEB,DIJ,DLE,DME,DND,DNK,DNR,DOK,DOL,DRS,DSA,DTM,DUB,DUS,EAS,EBA,EBJ,EBU,EDI,EFL,EGC,EGO,EGS,EIN,EMA,ENF,EOI,ERF,ESL,ETZ,EVE,EVG,EXT,FAE,FAO,FCO,FDE,FDH,FIE,FKB,FLR,FLW,FMM,FMO,FNC,FNI,FOA,FRA,FRO,FSC,FUE,GCI,GDN,GDZ,GEV,GIB,GLA,GLO,GMZ,GNB,GOA,GOJ,GOT,GPA,GRO,GRQ,GRV,GRW,GRX,GRZ,GSE,GVA,GWT,HAA,HAD,HAJ,HAM,HAU,HDF,HEL,HER,HFS,HFT,HHN,HMV,HOR,HOV,HRK,HUY,IAR,IAS,IBZ,IEV,IFJ,IFO,IJK,ILD,ILY,INI,INN,INV,IOA,IOM,ISC,IST,IVL,JER,JIK,JKG,JKH,JKL,JMK,JNX,JOE,JSH,JSI,JSY,JTR,JTY,JYV,KAJ,KAO,KBP,KEF,KEM,KGD,KGS,KHE,KID,KIR,KIT,KIV,KKN,KLR,KLU,KLV,KLX,KOI,KOK,KRF,KRK,KRN,KRP,KRR,KRS,KSC,KSD,KSF,KSJ,KSO,KSU,KTT,KTW,KUF,KUN,KUO,KVA,KVK,KVX,KZI,KZN,KZR,KZS,LAI,LBA,LBC,LCG,LCJ,LCY,LDE,LDY,LED,LEH,LEI,LEJ,LEN,LEQ,LGG,LGW,LHR,LIG,LIL,LIN,LIS,LJU,LKL,LKN,LLA,LMP,LNZ,LPA,LPI,LPK,LPL,LPP,LPY,LRH,LRS,LRT,LSI,LTN,LUG,LUX,LUZ,LWK,LWO,LXS,LYC,LYR,LYS,MAD,MAH,MAN,MCX,MEH,MHG,MHQ,MJF,MJT,MJV,MLA,MLN,MLO,MME,MMK,MMX,MOL,MPL,MQF,MQN,MRS,MRV,MSQ,MST,MUC,MXP,MXX,NAL,NAP,NBC,NCE,NCL,NDY,NDZ,NNM,NOC,NQY,NRK,NRL,NRN,NTE,NUE,NVK,NWI,NYO,ODS,OER,OGZ,OLA,OLB,OMO,OMR,OPO,ORB,ORK,ORY,OSD,OSI,OSL,OSR,OST,OSW,OSY,OTP,OUL,OVD,OZH,PAD,PAS,PDL,PDV,PED,PEE,PEG,PES,PEZ,PGF,PGX,PIK,PIS,PIX,PJA,PLQ,PMF,PMI,PMO,PNA,PNL,POR,POZ,PPW,PRG,PRN,PSA,PSR,PSV,PUF,PUY,PVK,PXO,RDZ,REG,REN,RET,REU,RGS,RHO,RIX,RJK,RJL,RKV,RLG,RMI,RNB,RNN,RNS,ROV,RRS,RTM,RTW,RVK,RVN,RYG,RZE,SBZ,SCN,SCQ,SCV,SCW,SDL,SDN,SDR,SEN,SFT,SGD,SIP,SJJ,SJZ,SKE,SKG,SKN,SKP,SKU,SKX,SLM,SMA,SMI,SNN,SOF,SOG,SOJ,SOU,SOY,SPC,SPU,SRP,SSJ,STN,STR,STW,SUF,SUJ,SVG,SVJ,SVL,SVO,SVQ,SXB,SXF,SYY,SZG,SZY,SZZ,TAY,TBW,TEQ,TER,TFN,TFS,TGD,TGK,TGM,THN,TIA,TIV,TKU,TLL,TLN,TLS,TMP,TOS,TPS,TRD,TRE,TRF,TRN,TRS,TSF,TSR,TUF,TXL,TYF,TZL,UCT,UDJ,UFA,UIP,UKS,ULV,ULY,UME,URE,URO,URS,USK,UTS,UUA,VAA,VAR,VAW,VBY,VCE,VDB,VDE,VDS,VGO,VHM,VIE,VIN,VIT,VKO,VLC,VLL,VLY,VNO,VOG,VOL,VOZ,VRN,VST,VTB,VUS,VXO,WAT,WAW,WIC,WMI,WRO,WRY,XCR,XFW,XRY,ZAD,ZAG,ZAZ,ZIA,ZQW,ZRH,ZTH]
 ----
 
 The next queries show two ways of finding airports with 6 or more runways.
