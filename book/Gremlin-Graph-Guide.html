@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 1.5.4">
+<meta name="generator" content="Asciidoctor 1.5.5">
 <meta name="author" content="Kelvin R. Lawrence">
 <title>GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
@@ -18,7 +18,6 @@ audio:not([controls]){display:none;height:0}
 [hidden],template{display:none}
 script{display:none!important}
 html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}
-body{margin:0}
 a{background:transparent}
 a:focus{outline:thin dotted}
 a:active,a:hover{outline:0}
@@ -53,7 +52,7 @@ textarea{overflow:auto;vertical-align:top}
 table{border-collapse:collapse;border-spacing:0}
 *,*:before,*:after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}
 html,body{font-size:100%}
-body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto;tab-size:4;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
 a:hover{cursor:pointer}
 img,object,embed{max-width:100%;height:auto}
 object,embed{height:100%}
@@ -65,7 +64,6 @@ img{-ms-interpolation-mode:bicubic}
 .text-center{text-align:center!important}
 .text-justify{text-align:justify!important}
 .hide{display:none}
-body{-webkit-font-smoothing:antialiased}
 img,object,svg{display:inline-block;vertical-align:middle}
 textarea{height:auto;min-height:50px}
 select{width:100%}
@@ -120,13 +118,16 @@ table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:
 table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
 table tr.even,table tr.alt,table tr:nth-of-type(even){background:#f8f8f7}
 table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{display:table-cell;line-height:1.6}
-body{tab-size:4}
 h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
 h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
 .clearfix:before,.clearfix:after,.float-group:before,.float-group:after{content:" ";display:table}
 .clearfix:after,.float-group:after{clear:both}
-*:not(pre)>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background-color:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
+*:not(pre)>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background-color:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed;word-wrap:break-word}
+*:not(pre)>code.nobreak{word-wrap:normal}
+*:not(pre)>code.nowrap{white-space:nowrap}
 pre,pre>code{line-height:1.45;color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;text-rendering:optimizeSpeed}
+em em{font-style:normal}
+strong strong{font-weight:400}
 .keyseq{color:rgba(51,51,51,.8)}
 kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background-color:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
 .keyseq kbd:first-child{margin-left:0}
@@ -419,7 +420,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </style>
 <style>
 .listingblock .pygments .hll { background-color: #4f424c }
-.listingblock .pygments  { background: #2f1e2e; color: #e7e9db }
+.listingblock .pygments, .listingblock .pygments code { background: #2f1e2e; color: #FFFFFF }
 .listingblock .pygments .tok-c { color: #776e71 } /* Comment */
 .listingblock .pygments .tok-err { color: #ef6155 } /* Error */
 .listingblock .pygments .tok-k { color: #815ba4 } /* Keyword */
@@ -464,14 +465,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .listingblock .pygments .tok-nt { color: #5bc4bf } /* Name.Tag */
 .listingblock .pygments .tok-nv { color: #ef6155 } /* Name.Variable */
 .listingblock .pygments .tok-ow { color: #5bc4bf } /* Operator.Word */
-.listingblock .pygments .tok-w { color: #e7e9db } /* Text.Whitespace */
+.listingblock .pygments .tok-w { color: #FFFFFF } /* Text.Whitespace */
 .listingblock .pygments .tok-mb { color: #f99b15 } /* Literal.Number.Bin */
 .listingblock .pygments .tok-mf { color: #f99b15 } /* Literal.Number.Float */
 .listingblock .pygments .tok-mh { color: #f99b15 } /* Literal.Number.Hex */
 .listingblock .pygments .tok-mi { color: #f99b15 } /* Literal.Number.Integer */
 .listingblock .pygments .tok-mo { color: #f99b15 } /* Literal.Number.Oct */
+.listingblock .pygments .tok-sa { color: #48b685 } /* Literal.String.Affix */
 .listingblock .pygments .tok-sb { color: #48b685 } /* Literal.String.Backtick */
 .listingblock .pygments .tok-sc { color: #e7e9db } /* Literal.String.Char */
+.listingblock .pygments .tok-dl { color: #48b685 } /* Literal.String.Delimiter */
 .listingblock .pygments .tok-sd { color: #776e71 } /* Literal.String.Doc */
 .listingblock .pygments .tok-s2 { color: #48b685 } /* Literal.String.Double */
 .listingblock .pygments .tok-se { color: #f99b15 } /* Literal.String.Escape */
@@ -482,9 +485,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .listingblock .pygments .tok-s1 { color: #48b685 } /* Literal.String.Single */
 .listingblock .pygments .tok-ss { color: #48b685 } /* Literal.String.Symbol */
 .listingblock .pygments .tok-bp { color: #e7e9db } /* Name.Builtin.Pseudo */
+.listingblock .pygments .tok-fm { color: #06b6ef } /* Name.Function.Magic */
 .listingblock .pygments .tok-vc { color: #ef6155 } /* Name.Variable.Class */
 .listingblock .pygments .tok-vg { color: #ef6155 } /* Name.Variable.Global */
 .listingblock .pygments .tok-vi { color: #ef6155 } /* Name.Variable.Instance */
+.listingblock .pygments .tok-vm { color: #ef6155 } /* Name.Variable.Magic */
 .listingblock .pygments .tok-il { color: #f99b15 } /* Literal.Number.Integer.Long */
 </style>
 </head>
@@ -494,7 +499,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Kelvin R. Lawrence</span><br>
 <span id="email" class="email"><a href="mailto:klawrenc@us.ibm.com">klawrenc@us.ibm.com</a></span><br>
-<span id="revnumber">version 272,</span>
+<span id="revnumber">version 273,</span>
 <span id="revdate">Nov 23, 2017</span>
 </div>
 <div id="toc" class="toc">
@@ -848,7 +853,7 @@ October 5th, 2017<br></p>
 free to send me feedback of any sort. Suggested improvements are especially welcome.
 A good way to provide feedback is by opening an issue in the GitHub repository
 located at <a href="https://github.com/krlawrence/graph" class="bare">https://github.com/krlawrence/graph</a>. You are currently reading revision
-272 of the document.</p>
+273 of the document.</p>
 </div>
 </div>
 <div class="sect2">
@@ -9559,24 +9564,24 @@ property of the respective vertices and edges.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// Routes longer than 4,000 miles starting at LGW</span>
-<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;LGW&#39;</span><span class="tok-o">).</span><span class="tok-na">outE</span><span class="tok-o">().</span><span class="tok-na">where</span><span class="tok-o">(</span><span class="tok-n">values</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span><span class="tok-na">is</span><span class="tok-o">(</span><span class="tok-n">gt</span><span class="tok-o">(</span><span class="tok-mi">4000L</span><span class="tok-o">)))</span> <span class="tok-err">\</span>
-     <span class="tok-o">.</span><span class="tok-na">inV</span><span class="tok-o">().</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;dist&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">)</span>
+<pre class="pygments highlight"><code data-lang="text">// Routes longer than 4,000 miles starting at LGW
+g.V().has(&#39;code&#39;,&#39;LGW&#39;).outE().where(values(&#39;dist&#39;).is(gt(4000L))) \
+     .inV().path().by(&#39;code&#39;).by(&#39;dist&#39;).by(&#39;city&#39;)
 
-<span class="tok-o">[</span><span class="tok-n">LGW</span><span class="tok-o">,</span> <span class="tok-mi">5287</span><span class="tok-o">,</span> <span class="tok-n">MalT</span><span class="tok-o">]</span>              <span class="tok-o">[</span><span class="tok-n">LGW</span><span class="tok-o">,</span> <span class="tok-mi">4380</span><span class="tok-o">,</span> <span class="tok-n">Calgary</span><span class="tok-o">]</span>
-<span class="tok-o">[</span><span class="tok-n">LGW</span><span class="tok-o">,</span> <span class="tok-mi">4618</span><span class="tok-o">,</span> <span class="tok-n">Varadero</span><span class="tok-o">]</span>          <span class="tok-o">[</span><span class="tok-n">LGW</span><span class="tok-o">,</span> <span class="tok-mi">5987</span><span class="tok-o">,</span> <span class="tok-n">Cape</span> <span class="tok-n">Town</span><span class="tok-o">]</span>
-<span class="tok-o">[</span><span class="tok-n">LGW</span><span class="tok-o">,</span> <span class="tok-mi">5147</span><span class="tok-o">,</span> <span class="tok-n">Tianjin</span><span class="tok-o">]</span>           <span class="tok-o">[</span><span class="tok-n">LGW</span><span class="tok-o">,</span> <span class="tok-mi">4680</span><span class="tok-o">,</span> <span class="tok-n">Kingston</span><span class="tok-o">]</span>
-<span class="tok-o">[</span><span class="tok-n">LGW</span><span class="tok-o">,</span> <span class="tok-mi">5303</span><span class="tok-o">,</span> <span class="tok-n">Chongqing</span><span class="tok-o">]</span>         <span class="tok-o">[</span><span class="tok-n">LGW</span><span class="tok-o">,</span> <span class="tok-mi">4953</span><span class="tok-o">,</span> <span class="tok-n">Cancun</span><span class="tok-o">]</span>
-<span class="tok-o">[</span><span class="tok-n">LGW</span><span class="tok-o">,</span> <span class="tok-mi">4410</span><span class="tok-o">,</span> <span class="tok-n">Ft</span><span class="tok-o">.</span> <span class="tok-n">Lauderdale</span><span class="tok-o">]</span>    <span class="tok-o">[</span><span class="tok-n">LGW</span><span class="tok-o">,</span> <span class="tok-mi">5399</span><span class="tok-o">,</span> <span class="tok-n">Colombo</span><span class="tok-o">]</span>
-<span class="tok-o">[</span><span class="tok-n">LGW</span><span class="tok-o">,</span> <span class="tok-mi">5463</span><span class="tok-o">,</span> <span class="tok-n">Los</span> <span class="tok-n">Angeles</span><span class="tok-o">]</span>       <span class="tok-o">[</span><span class="tok-n">LGW</span><span class="tok-o">,</span> <span class="tok-mi">4197</span><span class="tok-o">,</span> <span class="tok-n">Bridgetown</span><span class="tok-o">]</span>
-<span class="tok-o">[</span><span class="tok-n">LGW</span><span class="tok-o">,</span> <span class="tok-mi">4341</span><span class="tok-o">,</span> <span class="tok-n">Orlando</span><span class="tok-o">]</span>           <span class="tok-o">[</span><span class="tok-n">LGW</span><span class="tok-o">,</span> <span class="tok-mi">4076</span><span class="tok-o">,</span> <span class="tok-n">St</span><span class="tok-o">.</span> <span class="tok-n">George</span><span class="tok-o">]</span>
-<span class="tok-o">[</span><span class="tok-n">LGW</span><span class="tok-o">,</span> <span class="tok-mi">5374</span><span class="tok-o">,</span> <span class="tok-n">San</span> <span class="tok-n">Francisco</span><span class="tok-o">]</span>     <span class="tok-o">[</span><span class="tok-n">LGW</span><span class="tok-o">,</span> <span class="tok-mi">4408</span><span class="tok-o">,</span> <span class="tok-n">Port</span> <span class="tok-n">of</span> <span class="tok-n">Spain</span><span class="tok-o">]</span>
-<span class="tok-o">[</span><span class="tok-n">LGW</span><span class="tok-o">,</span> <span class="tok-mi">4416</span><span class="tok-o">,</span> <span class="tok-n">Tampa</span><span class="tok-o">]</span>             <span class="tok-o">[</span><span class="tok-n">LGW</span><span class="tok-o">,</span> <span class="tok-mi">4699</span><span class="tok-o">,</span> <span class="tok-n">Montego</span> <span class="tok-n">Bay</span><span class="tok-o">]</span>
-<span class="tok-o">[</span><span class="tok-n">LGW</span><span class="tok-o">,</span> <span class="tok-mi">5236</span><span class="tok-o">,</span> <span class="tok-n">Las</span> <span class="tok-n">Vegas</span><span class="tok-o">]</span>         <span class="tok-o">[</span><span class="tok-n">LGW</span><span class="tok-o">,</span> <span class="tok-mi">4283</span><span class="tok-o">,</span> <span class="tok-n">Punta</span> <span class="tok-n">Cana</span><span class="tok-o">]</span>
-<span class="tok-o">[</span><span class="tok-n">LGW</span><span class="tok-o">,</span> <span class="tok-mi">5364</span><span class="tok-o">,</span> <span class="tok-n">Oakland</span><span class="tok-o">]</span>           <span class="tok-o">[</span><span class="tok-n">LGW</span><span class="tok-o">,</span> <span class="tok-mi">5419</span><span class="tok-o">,</span> <span class="tok-n">San</span> <span class="tok-n">Jose</span><span class="tok-o">]</span>
-<span class="tok-o">[</span><span class="tok-n">LGW</span><span class="tok-o">,</span> <span class="tok-mi">4731</span><span class="tok-o">,</span> <span class="tok-n">Vancouver</span><span class="tok-o">]</span>         <span class="tok-o">[</span><span class="tok-n">LGW</span><span class="tok-o">,</span> <span class="tok-mi">4662</span><span class="tok-o">,</span> <span class="tok-n">Havana</span><span class="tok-o">]</span>
-<span class="tok-o">[</span><span class="tok-n">LGW</span><span class="tok-o">,</span> <span class="tok-mi">5982</span><span class="tok-o">,</span> <span class="tok-n">Hong</span> <span class="tok-n">Kong</span><span class="tok-o">]</span>         <span class="tok-o">[</span><span class="tok-n">LGW</span><span class="tok-o">,</span> <span class="tok-mi">6053</span><span class="tok-o">,</span> <span class="tok-n">Port</span> <span class="tok-n">Louis</span><span class="tok-o">]</span>
-<span class="tok-o">[</span><span class="tok-n">LGW</span><span class="tok-o">,</span> <span class="tok-mi">5070</span><span class="tok-o">,</span> <span class="tok-n">Beijing</span><span class="tok-o">]</span>           <span class="tok-o">[</span><span class="tok-n">LGW</span><span class="tok-o">,</span> <span class="tok-mi">4222</span><span class="tok-o">,</span> <span class="tok-n">Vieux</span> <span class="tok-n">Fort</span><span class="tok-o">]</span></code></pre>
+[LGW, 5287, MalT]              [LGW, 4380, Calgary]
+[LGW, 4618, Varadero]          [LGW, 5987, Cape Town]
+[LGW, 5147, Tianjin]           [LGW, 4680, Kingston]
+[LGW, 5303, Chongqing]         [LGW, 4953, Cancun]
+[LGW, 4410, Ft. Lauderdale]    [LGW, 5399, Colombo]
+[LGW, 5463, Los Angeles]       [LGW, 4197, Bridgetown]
+[LGW, 4341, Orlando]           [LGW, 4076, St. George]
+[LGW, 5374, San Francisco]     [LGW, 4408, Port of Spain]
+[LGW, 4416, Tampa]             [LGW, 4699, Montego Bay]
+[LGW, 5236, Las Vegas]         [LGW, 4283, Punta Cana]
+[LGW, 5364, Oakland]           [LGW, 5419, San Jose]
+[LGW, 4731, Vancouver]         [LGW, 4662, Havana]
+[LGW, 5982, Hong Kong]         [LGW, 6053, Port Louis]
+[LGW, 5070, Beijing]           [LGW, 4222, Vieux Fort]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -12987,7 +12992,7 @@ name so long as it occurs as a stand alone word..</p>
 </div>
 </div>
 <div class="paragraph">
-<p>As you can see in the results below <em>Viex Fort</em> was found as well as all of the
+<p>As you can see in the results below <em>Vieux Fort</em> was found as well as all of the
 cities with names that start with <em>Fort</em>.</p>
 </div>
 <div class="listingblock">
@@ -14289,8 +14294,8 @@ are shown.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 272<br>
-Last updated 2017-11-23 14:04:53 CST
+Version 273<br>
+Last updated 2017-11-23 14:42:32 CST
 </div>
 </div>
 </body>
