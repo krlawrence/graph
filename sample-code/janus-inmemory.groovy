@@ -55,18 +55,28 @@ println "==============\n";[]
 // Construct a composite index for a few commonly used property keys
 graph.tx().rollback()
 mgmt=graph.openManagement()
-idx1=mgmt.buildIndex('airportIndex',Vertex.class)
-idx2 =mgmt.buildIndex('icaoIndex',Vertex.class)
-idx3 =mgmt.buildIndex('cityIndex',Vertex.class)
-idx4 =mgmt.buildIndex('runwayIndex',Vertex.class)
+
+idx1 = mgmt.buildIndex('airportIndex',Vertex.class)
+idx2 = mgmt.buildIndex('icaoIndex',Vertex.class)
+idx3 = mgmt.buildIndex('cityIndex',Vertex.class)
+idx4 = mgmt.buildIndex('runwayIndex',Vertex.class)
+idx5 = mgmt.buildIndex('countryIndex',Vertex.class)
+idx6 = mgmt.buildIndex('regionIndex',Vertex.class)
+
 iata = mgmt.getPropertyKey('code')
 icao = mgmt.getPropertyKey('icao')
 city = mgmt.getPropertyKey('city')
 rway = mgmt.getPropertyKey('runways')
+ctry = mgmt.getPropertyKey('country')
+regn = mgmt.getPropertyKey('region')
+
 idx1.addKey(iata).buildCompositeIndex()
 idx2.addKey(icao).buildCompositeIndex()
 idx3.addKey(city).buildCompositeIndex()
 idx4.addKey(rway).buildCompositeIndex()
+idx5.addKey(ctry).buildCompositeIndex()
+idx6.addKey(regn).buildCompositeIndex()
+
 mgmt.commit()
 
 
@@ -86,28 +96,36 @@ mgmt.awaitGraphIndexStatus(graph, 'cityIndex').
 mgmt.awaitGraphIndexStatus(graph, 'runwayIndex').
      status(SchemaStatus.REGISTERED).call()
 
+mgmt.awaitGraphIndexStatus(graph, 'countryIndex').
+     status(SchemaStatus.REGISTERED).call()
+
+mgmt.awaitGraphIndexStatus(graph, 'regionIndex').
+     status(SchemaStatus.REGISTERED).call()
+
 // Once the index is created force a re-index
 println "\n===========";[]
 println "re-indexing";[]
 println "===========\n";[]
 mgmt = graph.openManagement()
+
 mgmt.awaitGraphIndexStatus(graph, 'airportIndex').call()
 mgmt.updateIndex(mgmt.getGraphIndex('airportIndex'), SchemaAction.REINDEX).get()
-mgmt.commit()
 
-mgmt = graph.openManagement()
 mgmt.awaitGraphIndexStatus(graph, 'icaoIndex').call()
 mgmt.updateIndex(mgmt.getGraphIndex('icaoIndex'), SchemaAction.REINDEX).get()
-mgmt.commit()
 
-mgmt = graph.openManagement()
 mgmt.awaitGraphIndexStatus(graph, 'cityIndex').call()
 mgmt.updateIndex(mgmt.getGraphIndex('cityIndex'), SchemaAction.REINDEX).get()
-mgmt.commit()
 
-mgmt = graph.openManagement()
 mgmt.awaitGraphIndexStatus(graph, 'runwayIndex').call()
 mgmt.updateIndex(mgmt.getGraphIndex('runwayIndex'), SchemaAction.REINDEX).get()
+
+mgmt.awaitGraphIndexStatus(graph, 'countryIndex').call()
+mgmt.updateIndex(mgmt.getGraphIndex('countryIndex'), SchemaAction.REINDEX).get()
+
+mgmt.awaitGraphIndexStatus(graph, 'regionIndex').call()
+mgmt.updateIndex(mgmt.getGraphIndex('regionIndex'), SchemaAction.REINDEX).get()
+
 mgmt.commit()
 
 // Load the air-routes graph
