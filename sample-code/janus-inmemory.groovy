@@ -137,7 +137,8 @@ mgmt.updateIndex(mgmt.getGraphIndex('typeIndex'), SchemaAction.REINDEX).get()
 
 mgmt.commit()
 
-// Load the air-routes graph and display a few statistics
+// Load the air-routes graph and display a few statistics.
+// Not all of these steps use the index so Janus Graph will give us some warnings.
 println "\n========================";[]
 println "Loading air-routes graph";[]
 println "========================\n";[]
