@@ -147,10 +147,13 @@ apt = g.V().has('type','airport').count().next();[]
 cty = g.V().has('type','country').count().next();[]
 cnt = g.V().has('type','continent').count().next();[]
 rts = g.E().hasLabel('route').count().next();[]
+edg = g.E().count().next();[]
+
 println "Airports   : $apt";[]
 println "Countries  : $cty";[]
 println "Continents : $cnt";[]
 println "Routes     : $rts";[]
+println "Edges      : $edg";[]
 
 // Look at the properties, just as an exampl of how to do it!
 println "\n========================";[]
@@ -165,4 +168,4 @@ mgmt.commit()
 g = graph.traversal()
 
 
-v
+
