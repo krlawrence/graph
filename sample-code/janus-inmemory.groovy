@@ -63,6 +63,7 @@ idx4 = mgmt.buildIndex('runwayIndex',Vertex.class)
 idx5 = mgmt.buildIndex('countryIndex',Vertex.class)
 idx6 = mgmt.buildIndex('regionIndex',Vertex.class)
 idx7 = mgmt.buildIndex('typeIndex',Vertex.class)
+idx8 = mgmt.buildIndex('distIndex',Edge.class)
 
 iata = mgmt.getPropertyKey('code')
 icao = mgmt.getPropertyKey('icao')
@@ -71,6 +72,7 @@ rway = mgmt.getPropertyKey('runways')
 ctry = mgmt.getPropertyKey('country')
 regn = mgmt.getPropertyKey('region')
 type = mgmt.getPropertyKey('type')
+dist = mgmt.getPropertyKey('dist')
 
 idx1.addKey(iata).buildCompositeIndex()
 idx2.addKey(icao).buildCompositeIndex()
@@ -79,6 +81,7 @@ idx4.addKey(rway).buildCompositeIndex()
 idx5.addKey(ctry).buildCompositeIndex()
 idx6.addKey(regn).buildCompositeIndex()
 idx7.addKey(type).buildCompositeIndex()
+idx8.addKey(dist).buildCompositeIndex()
 
 mgmt.commit()
 
@@ -108,6 +111,9 @@ mgmt.awaitGraphIndexStatus(graph, 'regionIndex').
 mgmt.awaitGraphIndexStatus(graph, 'typeIndex').
      status(SchemaStatus.REGISTERED).call()
 
+mgmt.awaitGraphIndexStatus(graph, 'distIndex').
+     status(SchemaStatus.REGISTERED).call()
+
 // Once the index is created force a re-index
 println "\n===========";[]
 println "re-indexing";[]
@@ -134,6 +140,9 @@ mgmt.updateIndex(mgmt.getGraphIndex('regionIndex'), SchemaAction.REINDEX).get()
 
 mgmt.awaitGraphIndexStatus(graph, 'typeIndex').call()
 mgmt.updateIndex(mgmt.getGraphIndex('typeIndex'), SchemaAction.REINDEX).get()
+
+mgmt.awaitGraphIndexStatus(graph, 'distIndex').call()
+mgmt.updateIndex(mgmt.getGraphIndex('distIndex'), SchemaAction.REINDEX).get()
 
 mgmt.commit()
 
@@ -167,6 +176,8 @@ mgmt.commit()
 
 // Setup our traversal object
 g = graph.traversal()
+
+
 
 
 
