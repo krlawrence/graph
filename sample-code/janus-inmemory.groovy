@@ -1,10 +1,10 @@
 // Create an in memory Janus Graph instance, define the schema and load air-routes
 // This is intended to be loaded and run inside the Gremlin Console from the Janus
-// Graph download.
+// Graph download. Usage :load janus-inmemory.groovy
 
-println "\n=====================================";[]
+println "\n=======================================";[]
 println "Creating in-memory Janus Graph instance";[]
-println "=====================================\n";[]
+println "=======================================\n";[]
 // Create a new graph instance
 graph = JanusGraphFactory.open('inmemory')
 
@@ -62,6 +62,7 @@ idx3 = mgmt.buildIndex('cityIndex',Vertex.class)
 idx4 = mgmt.buildIndex('runwayIndex',Vertex.class)
 idx5 = mgmt.buildIndex('countryIndex',Vertex.class)
 idx6 = mgmt.buildIndex('regionIndex',Vertex.class)
+idx7 = mgmt.buildIndex('typeIndex',Vertex.class)
 
 iata = mgmt.getPropertyKey('code')
 icao = mgmt.getPropertyKey('icao')
@@ -69,6 +70,7 @@ city = mgmt.getPropertyKey('city')
 rway = mgmt.getPropertyKey('runways')
 ctry = mgmt.getPropertyKey('country')
 regn = mgmt.getPropertyKey('region')
+type = mgmt.getPropertyKey('type')
 
 idx1.addKey(iata).buildCompositeIndex()
 idx2.addKey(icao).buildCompositeIndex()
@@ -76,6 +78,7 @@ idx3.addKey(city).buildCompositeIndex()
 idx4.addKey(rway).buildCompositeIndex()
 idx5.addKey(ctry).buildCompositeIndex()
 idx6.addKey(regn).buildCompositeIndex()
+idx7.addKey(type).buildCompositeIndex()
 
 mgmt.commit()
 
@@ -102,6 +105,9 @@ mgmt.awaitGraphIndexStatus(graph, 'countryIndex').
 mgmt.awaitGraphIndexStatus(graph, 'regionIndex').
      status(SchemaStatus.REGISTERED).call()
 
+mgmt.awaitGraphIndexStatus(graph, 'typeIndex').
+     status(SchemaStatus.REGISTERED).call()
+
 // Once the index is created force a re-index
 println "\n===========";[]
 println "re-indexing";[]
@@ -126,23 +132,37 @@ mgmt.updateIndex(mgmt.getGraphIndex('countryIndex'), SchemaAction.REINDEX).get()
 mgmt.awaitGraphIndexStatus(graph, 'regionIndex').call()
 mgmt.updateIndex(mgmt.getGraphIndex('regionIndex'), SchemaAction.REINDEX).get()
 
+mgmt.awaitGraphIndexStatus(graph, 'typeIndex').call()
+mgmt.updateIndex(mgmt.getGraphIndex('typeIndex'), SchemaAction.REINDEX).get()
+
 mgmt.commit()
 
-// Load the air-routes graph
+// Load the air-routes graph and display a few statistics
 println "\n========================";[]
 println "Loading air-routes graph";[]
 println "========================\n";[]
 graph.io(graphml()).readGraph('air-routes.graphml')
-graph.tx().commit()
+graph.tx().commit();[]
+apt = g.V().has('type','airport').count().next();[]
+cty = g.V().has('type','country').count().next();[]
+cnt = g.V().has('type','continent').count().next();[]
+rts = g.E().hasLabel('route').count().next();[]
+println "Airports   : $apt";[]
+println "Countries  : $cty";[]
+println "Continents : $cnt";[]
+println "Routes     : $rts";[]
 
-// Look at the properties
+// Look at the properties, just as an exampl of how to do it!
+println "\n========================";[]
+println "Retrieving property keys";[]
+println "========================\n";[]
 mgmt = graph.openManagement()
-types = mgmt.getRelationTypes(PropertyKey.class) 
-types.each{println "$it\t: " + mgmt.getPropertyKey("$it").dataType() + " " + mgmt.getPropertyKey("$it").cardinality()}
+types = mgmt.getRelationTypes(PropertyKey.class);[] 
+types.each{println "$it\t: " + mgmt.getPropertyKey("$it").dataType() + " " + mgmt.getPropertyKey("$it").cardinality()};[]
 mgmt.commit()   
 
 // Setup our traversal object
 g = graph.traversal()
 
 
-
+v
