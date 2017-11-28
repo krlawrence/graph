@@ -1,4 +1,4 @@
-// Create an in memory Janus Graph instance, define the schema and load air-routes
+// Create an in memory Janus Graph instance, define the schema and index and load air-routes.
 // This is intended to be loaded and run inside the Gremlin Console from the Janus
 // Graph download. Usage :load janus-inmemory.groovy
 
@@ -153,6 +153,11 @@ println "Loading air-routes graph";[]
 println "========================\n";[]
 graph.io(graphml()).readGraph('air-routes.graphml')
 graph.tx().commit();[]
+
+// Setup our traversal source object
+g = graph.traversal()
+
+// Display a few statistics
 apt = g.V().has('type','airport').count().next();[]
 cty = g.V().has('type','country').count().next();[]
 cnt = g.V().has('type','continent').count().next();[]
@@ -173,11 +178,6 @@ mgmt = graph.openManagement()
 types = mgmt.getRelationTypes(PropertyKey.class);[] 
 types.each{println "$it\t: " + mgmt.getPropertyKey("$it").dataType() + " " + mgmt.getPropertyKey("$it").cardinality()};[]
 mgmt.commit()   
-
-// Setup our traversal object
-g = graph.traversal()
-
-
 
 
 
