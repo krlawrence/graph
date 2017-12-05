@@ -1,11 +1,11 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v272, Nov 23, 2017
-// Thu Nov 23, 2017 13:56:39 CST
+v273, Dec 5, 2017
+// Tue Dec 05, 2017 15:25:44 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Nov 23 2017
+//:Date:      Dec 5 2017
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -18,7 +18,7 @@ v272, Nov 23, 2017
 //:pygments-style: vim
 :toc:
 :toclevels: 4
-:revision: 272
+:revision: 273
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
 //        has a white foreground color. The default was unreadable,
@@ -2192,13 +2192,13 @@ them individually or as a group. Beware that the IDs you provide when loading a 
 from a GraphML or GraphSON file may not in many cases end up being the IDs that the
 back-end graph store actually uses as it builds up your graph.  Tinkergraph for
 example will preserve user provided IDs but most systems like Janus Graph or
-IBM-Graph generate their own IDs. The same is true when you add vertices and edges using
-a graph traversal or using the TinkerPop API. This is a long winded way of saying
-that you should not depend on the IDs in your GraphML or GraphSON file that you just
-loaded remaining unchanged once the data has been loaded into the graph store.  When
-you add new a vertex or edge to your graph, the graph system will automatically
-generate a new, unique ID for it.  If you need to figure out the ID for a vertex or an
-edge you can always get it from a query of the graph itself!
+IBM-Graph generate their own IDs. The same is true when you add vertices and edges
+using a graph traversal or using the TinkerPop API. This is a long winded way of
+saying that you should not depend on the IDs in your GraphML or GraphSON file that
+you just loaded remaining unchanged once the data has been loaded into the graph
+store.  When you add new a vertex or edge to your graph, the graph system will
+automatically generate a new, unique ID for it.  If you need to figure out the ID for
+a vertex or an edge you can always get it from a query of the graph itself!
 
 TIP: Don't rely on the graph preserving the ID values you provide. Write code that
 can query the graph itself for ID values.
@@ -7741,7 +7741,7 @@ demonstrate an alternative way we could do it.  Note that this query uses
 three 'by' modulators as each of the values returned is from a different
 property of the respective vertices and edges.
 
-[source,groovy]
+[source,text]
 ----
 // Routes longer than 4,000 miles starting at LGW
 g.V().has('code','LGW').outE().where(values('dist').is(gt(4000L))) \
@@ -9431,9 +9431,19 @@ g.V().has('code','AUS').out().order().by('code').
                         values('code','icao').fold()
 
 [ABQ,KABQ,ATL,KATL,BKG,KBBG,BNA,KBNA,BOS,KBOS,BWI,KBWI,CLE,KCLE,CLT,KCLT,CUN,MMUN,CVG,KCVG,DAL,KDAL,DCA,KDCA,DEN,KDEN,DFW,KDFW,DTW,KDTW,ELP,KELP,EWR,KEWR,FLL,KFLL,FRA,EDDF,GDL,MMGL,HOU,KHOU,HRL,KHRL,IAD,KIAD,IAH,KIAH,IND,KIND,JFK,KJFK,LAS,KLAS,LAX,KLAX,LBB,KLBB,LGB,KLGB,LHR,EGLL,MCI,KMCI,MCO,KMCO,MDW,KMDW,MEM,KMEM,MEX,MMMX,MIA,KMIA,MSP,KMSP,MSY,KMSY,OAK,KOAK,ORD,KORD,PDX,KPDX,PHL,KPHL,PHX,KPHX,PIE,KPIE,PIT,KPIT,PNS,KPNS,RDU,KRDU,SAN,KSAN,SEA,KSEA,SFB,KSFB,SFO,KSFO,SJC,KSJC,SLC,KSLC,SNA,KSNA,STL,KSTL,TPA,KTPA,VPS,KVPS,YYZ,CYYZ]
-
 ----
 
+[source,groovy]
+----
+g.V().has('code','AUS').outE().inV().path().by('city').by().limit(1)
+[Austin,e[30j5z-9iw-t1-37k][12344-route->4160],Boston]
+
+g.V().has('code','AUS').flatMap(outE().inV()).path().by('city').limit(1)
+[Austin,Boston]
+
+g.V().has('code','AUS').out().path().by('city').limit(1)
+[Austin,Boston]
+----
 
 [source,groovy]
 ----
@@ -10912,7 +10922,7 @@ name so long as it occurs as a stand alone word..
 g.V().has('city',textContains("fort")).values('city')
 ----
 
-As you can see in the results below 'Viex Fort' was found as well as all of the
+As you can see in the results below 'Vieux Fort' was found as well as all of the
 cities with names that start with 'Fort'.
 
 [source,text]
