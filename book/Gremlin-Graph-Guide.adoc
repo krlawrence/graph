@@ -2,7 +2,7 @@ GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v273, Dec 12, 2017
-// Tue Dec 12, 2017 13:01:07 CST
+// Tue Dec 12, 2017 13:32:49 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Dec 12 2017
@@ -1941,7 +1941,7 @@ g.V().has('region','US-TX').skip(5).fold()
 g.V().has('region','US-TX').range(5,-1).fold()
 ----
 
-Here is the output you will get from running either query.
+Here is the output you might get from running either query.
 
 [source,groovy]
 ----
