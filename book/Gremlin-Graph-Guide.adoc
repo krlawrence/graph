@@ -2,7 +2,7 @@ GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v273, Dec 12, 2017
-// Tue Dec 12, 2017 12:24:45 CST
+// Tue Dec 12, 2017 13:01:07 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Dec 12 2017
@@ -1949,7 +1949,9 @@ Here is the output you will get from running either query.
 ----
 
 To prove that the 'skip' and 'range' steps used above worked again, we can run the
-query again with 'skip' removed and look at the results.
+query again with 'skip' removed and look at the results. You will notice, the first
+five vertices listed were not included as part of the results from the prior
+queries.
 
 [source,groovy]
 ----
