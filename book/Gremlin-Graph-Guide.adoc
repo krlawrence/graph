@@ -1928,6 +1928,26 @@ airports will most likely come back in the order they are put into the graph. Th
 not likely to be the case with other graph stores such as Janus Graph. So do not rely
 on any sort of expectation of order when using 'range' to process sets of vertices.
 
+In TinkerPop 3.3 a new 'skip' step was introduced which can be used as an alternative
+to 'range' in some cases. The 'skip' step can be used whenever you would otherwise
+use 'range' where the second parameter would be '-1' meaning "all remaining".
+
+The two examples below will produce the same results.
+
+[source,groovy]
+----
+g.V().has('region','US-TX').skip(5).fold()
+
+g.V().has('region','US-TX').range(5,-1).fold()
+----
+
+Here is the output you will get from running either query.
+
+[source,groovy]
+----
+[v[39],v[186],v[273],v[278],v[289],v[314],v[356],v[357],v[358],v[361],v[368],v[370],v[390],v[394],v[404],v[405],v[423],v[426],v[428],v[1118],v[3313]]
+----
+
 There are many other ways to specify a range of values using Gremlin. You will find
 several additional examples in the "<<tranges>>" section.
 
