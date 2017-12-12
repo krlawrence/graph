@@ -500,7 +500,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author" class="author">Kelvin R. Lawrence</span><br>
 <span id="email" class="email"><a href="mailto:klawrenc@us.ibm.com">klawrenc@us.ibm.com</a></span><br>
 <span id="revnumber">version 273,</span>
-<span id="revdate">Nov 23, 2017</span>
+<span id="revdate">Dec 12, 2017</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
@@ -3082,6 +3082,40 @@ on any sort of expectation of order when using <em>range</em> to process sets of
 </table>
 </div>
 <div class="paragraph">
+<p>In TinkerPop 3.3 a new <em>skip</em> step was introduced which can be used as an alternative
+to <em>range</em> in some cases. The <em>skip</em> step can be used whenever you would otherwise
+use <em>range</em> where the second parameter would be <em>-1</em> meaning "all remaining".</p>
+</div>
+<div class="paragraph">
+<p>The two examples below will produce the same results.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;region&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;US-TX&#39;</span><span class="tok-o">).</span><span class="tok-na">skip</span><span class="tok-o">(</span><span class="tok-mi">5</span><span class="tok-o">).</span><span class="tok-na">fold</span><span class="tok-o">()</span>
+
+<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;region&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;US-TX&#39;</span><span class="tok-o">).</span><span class="tok-na">range</span><span class="tok-o">(</span><span class="tok-mi">5</span><span class="tok-o">,-</span><span class="tok-mi">1</span><span class="tok-o">).</span><span class="tok-na">fold</span><span class="tok-o">()</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here is the output you will get from running either query.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-o">[</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">39</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">186</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">273</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">278</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">289</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">314</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">356</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">357</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">358</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">361</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">368</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">370</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">390</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">394</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">404</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">405</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">423</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">426</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">428</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">1118</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">3313</span><span class="tok-o">]]</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To prove that the <em>skip</em> and <em>range</em> steps used above worked again, we can run the
+query again with <em>skip</em> removed and look at the results.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;region&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;US-TX&#39;</span><span class="tok-o">).</span><span class="tok-na">fold</span><span class="tok-o">()</span>
+
+<span class="tok-o">[</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">3</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">8</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">11</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">33</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">38</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">39</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">186</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">273</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">278</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">289</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">314</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">356</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">357</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">358</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">361</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">368</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">370</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">390</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">394</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">404</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">405</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">423</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">426</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">428</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">1118</span><span class="tok-o">],</span><span class="tok-n">v</span><span class="tok-o">[</span><span class="tok-mi">3313</span><span class="tok-o">]]</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p>There are many other ways to specify a range of values using Gremlin. You will find
 several additional examples in the "<a href="#tranges">Testing values and ranges of values</a>" section.</p>
 </div>
@@ -3401,13 +3435,13 @@ them individually or as a group. Beware that the IDs you provide when loading a 
 from a GraphML or GraphSON file may not in many cases end up being the IDs that the
 back-end graph store actually uses as it builds up your graph.  Tinkergraph for
 example will preserve user provided IDs but most systems like Janus Graph or
-IBM-Graph generate their own IDs. The same is true when you add vertices and edges using
-a graph traversal or using the TinkerPop API. This is a long winded way of saying
-that you should not depend on the IDs in your GraphML or GraphSON file that you just
-loaded remaining unchanged once the data has been loaded into the graph store.  When
-you add new a vertex or edge to your graph, the graph system will automatically
-generate a new, unique ID for it.  If you need to figure out the ID for a vertex or an
-edge you can always get it from a query of the graph itself!</p>
+IBM-Graph generate their own IDs. The same is true when you add vertices and edges
+using a graph traversal or using the TinkerPop API. This is a long winded way of
+saying that you should not depend on the IDs in your GraphML or GraphSON file that
+you just loaded remaining unchanged once the data has been loaded into the graph
+store.  When you add new a vertex or edge to your graph, the graph system will
+automatically generate a new, unique ID for it.  If you need to figure out the ID for
+a vertex or an edge you can always get it from a query of the graph itself!</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -11367,6 +11401,18 @@ started. The example below finds routes that both start and end in Austin (AUS).
 </div>
 <div class="listingblock">
 <div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span><span class="tok-na">outE</span><span class="tok-o">().</span><span class="tok-na">inV</span><span class="tok-o">().</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">).</span><span class="tok-na">by</span><span class="tok-o">().</span><span class="tok-na">limit</span><span class="tok-o">(</span><span class="tok-mi">1</span><span class="tok-o">)</span>
+<span class="tok-o">[</span><span class="tok-n">Austin</span><span class="tok-o">,</span><span class="tok-n">e</span><span class="tok-o">[</span><span class="tok-mi">30</span><span class="tok-n">j5z</span><span class="tok-o">-</span><span class="tok-mi">9</span><span class="tok-n">iw</span><span class="tok-o">-</span><span class="tok-n">t1</span><span class="tok-o">-</span><span class="tok-mi">37</span><span class="tok-n">k</span><span class="tok-o">][</span><span class="tok-mi">12344</span><span class="tok-o">-</span><span class="tok-n">route</span><span class="tok-o">-&gt;</span><span class="tok-mi">4160</span><span class="tok-o">],</span><span class="tok-n">Boston</span><span class="tok-o">]</span>
+
+<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span><span class="tok-na">flatMap</span><span class="tok-o">(</span><span class="tok-n">outE</span><span class="tok-o">().</span><span class="tok-na">inV</span><span class="tok-o">()).</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">).</span><span class="tok-na">limit</span><span class="tok-o">(</span><span class="tok-mi">1</span><span class="tok-o">)</span>
+<span class="tok-o">[</span><span class="tok-n">Austin</span><span class="tok-o">,</span><span class="tok-n">Boston</span><span class="tok-o">]</span>
+
+<span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">has</span><span class="tok-o">(</span><span class="tok-s1">&#39;code&#39;</span><span class="tok-o">,</span><span class="tok-s1">&#39;AUS&#39;</span><span class="tok-o">).</span><span class="tok-na">out</span><span class="tok-o">().</span><span class="tok-na">path</span><span class="tok-o">().</span><span class="tok-na">by</span><span class="tok-o">(</span><span class="tok-s1">&#39;city&#39;</span><span class="tok-o">).</span><span class="tok-na">limit</span><span class="tok-o">(</span><span class="tok-mi">1</span><span class="tok-o">)</span>
+<span class="tok-o">[</span><span class="tok-n">Austin</span><span class="tok-o">,</span><span class="tok-n">Boston</span><span class="tok-o">]</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
 <pre class="pygments highlight"><code data-lang="groovy"><span class="tok-c1">// Using next to iterate through vertices</span>
 <span class="tok-n">t</span><span class="tok-o">=</span><span class="tok-n">g</span><span class="tok-o">.</span><span class="tok-na">V</span><span class="tok-o">().</span><span class="tok-na">hasLabel</span><span class="tok-o">(</span><span class="tok-s1">&#39;airport&#39;</span><span class="tok-o">);[]</span>
 <span class="tok-n">t</span><span class="tok-o">.</span><span class="tok-na">next</span><span class="tok-o">(</span><span class="tok-mi">10</span><span class="tok-o">)</span>
@@ -14295,7 +14341,7 @@ are shown.</p>
 <div id="footer">
 <div id="footer-text">
 Version 273<br>
-Last updated 2017-11-23 14:42:32 CST
+Last updated 2017-12-12 12:24:49 CST
 </div>
 </div>
 </body>
