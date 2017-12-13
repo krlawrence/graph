@@ -1,6 +1,7 @@
 This folder contains the AsciiDoc source file used to produce the HTML, XML (DOCBOOK), EPUB, MOBI and PDF output.
 
 **LATEST NEWS:**   
+[Dec-12-2017] Revision 273 was just published in all formats. Fixes issue #12. Also added additonal clarifications. 
 [Nov-23-2017] Revision 272 was just published in all formats. Many updates to sections 3 and 4.  
 [Nov-03-2017] Revision 271 was just published in all formats. Several improvements and additions.  
 [Oct-27-2017] Revision 270 was just published in all formats. Fixes issue #6 and adds more to Janus section.  
