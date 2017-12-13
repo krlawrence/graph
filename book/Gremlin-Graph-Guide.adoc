@@ -2,7 +2,7 @@ GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v273, Dec 12, 2017
-// Tue Dec 12, 2017 13:46:08 CST
+// Wed Dec 13, 2017 07:38:38 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Dec 12 2017
@@ -5264,16 +5264,18 @@ not viewed as a TinkerPop best practice.
 
 We can now add a route from DFW to XYZ. We are able
 to use our 'xyz' variable to specify the destination of the new route using a 'to'
-step and wrapping the variable inside of a 'V' step.
+step.
 
 [source,groovy]
 ----
 // Add a route from DFW to XYZ
-g.V().has('code','DFW').addE('route').to(V(xyz))
+g.V().has('code','DFW').addE('route').to(xyz)
 ----
 
-We could have written the previous line like this if we had not previously saved
-anything in a variable.
+We could have written the previous line to use a second 'V()' step if we had not
+previously saved anything in a variable. Note that while this use of a second 'V()'
+step will work locally, if you are sending queries to a Gremlin Server (a topic we
+will discuss later in this book) this syntax is not supported and will not work.
 
 [source,groovy]
 ----
@@ -5286,7 +5288,7 @@ using the 'from' step in a similar way as we used the 'to' step above.
 [source,groovy]
 ----
 // Add the return route back to DFW
-g.V().has('code','DFW').addE('route').from(V(xyz))
+g.V().has('code','DFW').addE('route').from(xyz)
 ----
 
 Another way that we could have chosen to create our edge is by naming things using
