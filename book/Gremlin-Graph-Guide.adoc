@@ -2,7 +2,7 @@ GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v273, Dec 19, 2017
-// Tue Dec 19, 2017 16:23:20 CST
+// Tue Dec 19, 2017 17:37:13 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Dec 19 2017
@@ -3020,7 +3020,7 @@ You can use 'order' to sort things in either ascending (the default) or descendi
 order.Note that the sort does not have to be the last step of a query. It is
 perfectly OK to sort things in the middle of a query before moving on to a further
 step. We can see examples of that in the first two queries below. Note that the first
-query will return different results than the second one due to where th e'limit' step
+query will return different results than the second one due to where the 'limit' step
 is placed. I used 'fold' at the end of the query to collect all of the results into a
 nice list. The 'fold' step can also do more than this. It provides a way of doing the
 'reduce' part of map-reduce operations. We will see some other examples of its use
@@ -3032,8 +3032,12 @@ elsewhere in this document such as in the "<<mapreduce>>" section.
 g.V().hasLabel('airport').limit(20).values('code').order().fold()
 
 [ANC,ATL,AUS,BNA,BOS,BWI,DCA,DFW,FLL,IAD,IAH,JFK,LAX,LGA,MCO,MIA,MSP,ORD,PBI,PHX]
+----
 
+As above, but this time perform the 'limit' step after the 'order' step.
 
+[source,groovy]
+----
 // Sort all of the airports in the graph by their code and then return the first 20
 g.V().hasLabel('airport').order().by('code').limit(20).values('code').fold()
 
