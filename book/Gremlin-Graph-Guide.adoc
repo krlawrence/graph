@@ -1,11 +1,11 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v273, Dec 12, 2017
-// Wed Dec 13, 2017 07:38:38 CST
+v273, Dec 19, 2017
+// Tue Dec 19, 2017 16:04:25 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Dec 12 2017
+//:Date:      Dec 19 2017
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -3020,11 +3020,11 @@ You can use 'order' to sort things in either ascending (the default) or descendi
 order.Note that the sort does not have to be the last step of a query. It is
 perfectly OK to sort things in the middle of a query before moving on to a further
 step. We can see examples of that in the first two queries below. Note that the first
-query will return different results than the second one. I used 'fold' at the end of
-the query to collect all of the results into a nice list. The 'fold' step can also do
-more than this. It provides a way of doing the 'reduce' part of map-reduce
-operations. We will see some other examples of its use elsewhere in this document
-such as in the "<<mapreduce>>" section.
+query will return different results than the second one due to where th e'limit' step
+is placed. I used 'fold' at the end of the query to collect all of the results into a
+nice list. The 'fold' step can also do more than this. It provides a way of doing the
+'reduce' part of map-reduce operations. We will see some other examples of its use
+elsewhere in this document such as in the "<<mapreduce>>" section.
 
 [source,groovy]
 ----
@@ -3038,6 +3038,23 @@ g.V().hasLabel('airport').limit(20).values('code').order().fold()
 g.V().hasLabel('airport').order().by('code').limit(20).values('code').fold()
 
 [AAE,AAL,AAN,AAQ,AAR,AAT,AAX,AAY,ABA,ABB,ABD,ABE,ABI,ABJ,ABL,ABM,ABQ,ABR,ABS,ABT]
+----
+
+Here is a similar example to the previous two. We find all of the places you can flky
+to from Austin (AUS) and sort the results, as before using the airport's IATA code,
+but this time we also include the ICAO code for each airport in the result set.
+
+[source,groovy]
+----
+g.V().has('code','AUS').out().order().by('code').
+                        values('code','icao').fold()
+----
+
+Here are the results from running the query.
+
+[source,groovy]
+----
+[ABQ,KABQ,ATL,KATL,BKG,KBBG,BNA,KBNA,BOS,KBOS,BWI,KBWI,CLE,KCLE,CLT,KCLT,CUN,MMUN,CVG,KCVG,DAL,KDAL,DCA,KDCA,DEN,KDEN,DFW,KDFW,DTW,KDTW,ELP,KELP,EWR,KEWR,FLL,KFLL,FRA,EDDF,GDL,MMGL,HOU,KHOU,HRL,KHRL,IAD,KIAD,IAH,KIAH,IND,KIND,JFK,KJFK,LAS,KLAS,LAX,KLAX,LBB,KLBB,LGB,KLGB,LHR,EGLL,MCI,KMCI,MCO,KMCO,MDW,KMDW,MEM,KMEM,MEX,MMMX,MIA,KMIA,MSP,KMSP,MSY,KMSY,OAK,KOAK,ORD,KORD,PDX,KPDX,PHL,KPHL,PHX,KPHX,PIE,KPIE,PIT,KPIT,PNS,KPNS,RDU,KRDU,SAN,KSAN,SEA,KSEA,SFB,KSFB,SFO,KSFO,SJC,KSJC,SLC,KSLC,SNA,KSNA,STL,KSTL,TPA,KTPA,VPS,KVPS,YYZ,CYYZ]
 ----
 
 By default a sort performed using 'order' is performed in ascending order. If we
@@ -9346,11 +9363,10 @@ such combinations once but I will leave that as an exercise for the reader!
 [[miscq]]
 Miscellaneous other queries
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-These queries need to be moved to other sections or deleted.
 
-.THIS SECTION IS YET TO BE FULLY TIDIED UP
-
-Work in progress
+The examples in this section demonstrate a few miscellaneous features and queries
+that we have not yet had a chance to examine. Over time, these queries should
+probably be moved to other ssections.
 
 Using a calculation inside of an 'is' step
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -9446,53 +9462,11 @@ started. The example below finds routes that both start and end in Austin (AUS).
 g.V().has('code','AUS').out().out().cyclicPath().path().by('code')
 ----
 
-
-Work in progress
-^^^^^^^^^^^^^^^^
-
-[source,groovy]
-----
-a=g.V().has('region','US-OK').values('code').withIndex().toList()
-[OKC,0]
-[TUL,1]
-[LAW,2]
-[SWO,3]
-----
+Using 'next' to iterate through vertices
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 [source,groovy]
 ----
-g.V().has('code','DFW').as('dfw').out().as('to').
-      filter(select('dfw','to').by('region').where('dfw',eq('to'))).values('code')
-
-g.V(0L).as('v').values('c').as('val').select('v').properties().as('p').properties('c').
-  value().as('val2').select('p').filter(select('val','val2').where('val',eq('val2')))      
-
-g.V().as("a").properties().has("c").where(eq("a")).by("c")
-----
-
-[source,groovy]
-----
-g.V().has('code','AUS').out().order().by('code').
-                        values('code','icao').fold()
-
-[ABQ,KABQ,ATL,KATL,BKG,KBBG,BNA,KBNA,BOS,KBOS,BWI,KBWI,CLE,KCLE,CLT,KCLT,CUN,MMUN,CVG,KCVG,DAL,KDAL,DCA,KDCA,DEN,KDEN,DFW,KDFW,DTW,KDTW,ELP,KELP,EWR,KEWR,FLL,KFLL,FRA,EDDF,GDL,MMGL,HOU,KHOU,HRL,KHRL,IAD,KIAD,IAH,KIAH,IND,KIND,JFK,KJFK,LAS,KLAS,LAX,KLAX,LBB,KLBB,LGB,KLGB,LHR,EGLL,MCI,KMCI,MCO,KMCO,MDW,KMDW,MEM,KMEM,MEX,MMMX,MIA,KMIA,MSP,KMSP,MSY,KMSY,OAK,KOAK,ORD,KORD,PDX,KPDX,PHL,KPHL,PHX,KPHX,PIE,KPIE,PIT,KPIT,PNS,KPNS,RDU,KRDU,SAN,KSAN,SEA,KSEA,SFB,KSFB,SFO,KSFO,SJC,KSJC,SLC,KSLC,SNA,KSNA,STL,KSTL,TPA,KTPA,VPS,KVPS,YYZ,CYYZ]
-----
-
-[source,groovy]
-----
-g.V().has('code','AUS').outE().inV().path().by('city').by().limit(1)
-[Austin,e[30j5z-9iw-t1-37k][12344-route->4160],Boston]
-
-g.V().has('code','AUS').flatMap(outE().inV()).path().by('city').limit(1)
-[Austin,Boston]
-
-g.V().has('code','AUS').out().path().by('city').limit(1)
-[Austin,Boston]
-----
-
-[source,groovy]
-----
-// Using next to iterate through vertices
 t=g.V().hasLabel('airport');[]
 t.next(10)
 t.next(10)
@@ -9508,6 +9482,52 @@ v[3]
 v[4]
 v[5]
 ----
+
+Including the index value in search results
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+[source,groovy]
+----
+a=g.V().has('region','US-OK').values('code').withIndex().toList()
+[OKC,0]
+[TUL,1]
+[LAW,2]
+[SWO,3]
+----
+
+Work in progress
+^^^^^^^^^^^^^^^^
+
+These queries need to be moved to other sections or deleted.
+
+.THIS SECTION IS YET TO BE FULLY TIDIED UP
+
+Work in progress
+
+[source,groovy]
+----
+g.V().has('code','DFW').as('dfw').out().as('to').
+      filter(select('dfw','to').by('region').where('dfw',eq('to'))).values('code')
+
+g.V(0L).as('v').values('c').as('val').select('v').properties().as('p').properties('c').
+  value().as('val2').select('p').filter(select('val','val2').where('val',eq('val2')))      
+
+g.V().as("a").properties().has("c").where(eq("a")).by("c")
+----
+
+
+[source,groovy]
+----
+g.V().has('code','AUS').outE().inV().path().by('city').by().limit(1)
+[Austin,e[30j5z-9iw-t1-37k][12344-route->4160],Boston]
+
+g.V().has('code','AUS').flatMap(outE().inV()).path().by('city').limit(1)
+[Austin,Boston]
+
+g.V().has('code','AUS').out().path().by('city').limit(1)
+[Austin,Boston]
+----
+
 
 [source,groovy]
 ----
