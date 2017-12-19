@@ -2,7 +2,7 @@ GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v273, Dec 19, 2017
-// Tue Dec 19, 2017 16:04:25 CST
+// Tue Dec 19, 2017 16:23:20 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Dec 19 2017
@@ -9366,7 +9366,7 @@ Miscellaneous other queries
 
 The examples in this section demonstrate a few miscellaneous features and queries
 that we have not yet had a chance to examine. Over time, these queries should
-probably be moved to other ssections.
+probably be moved to other sections.
 
 Using a calculation inside of an 'is' step
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
