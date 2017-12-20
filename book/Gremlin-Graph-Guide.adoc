@@ -1,11 +1,11 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v273, Dec 19, 2017
-// Tue Dec 19, 2017 17:37:13 CST
+v274, Dec 20, 2017
+// Wed Dec 20, 2017 08:54:17 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Dec 19 2017
+//:Date:      Dec 20 2017
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -18,7 +18,7 @@ v273, Dec 19, 2017
 //:pygments-style: vim
 :toc:
 :toclevels: 4
-:revision: 273
+:revision: 274
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
 //        has a white foreground color. The default was unreadable,
@@ -3622,7 +3622,7 @@ g.V().hasLabel('airport').limit(10).choose(values('runways')).
 
 ----
 
-[[ma]]
+[[patmatch]]
 Using 'match' to do pattern matching
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -3742,6 +3742,7 @@ g.V().has('code','AUS').as('aus').values('runways').as('ausr').
 
 ----
 
+[[union]]
 Using 'union' to combine query results
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -3906,6 +3907,7 @@ San Francisco International Airport
 Later in the document will will look at other ways that side effects can be used to
 solve more interesting problems.
 
+[[aggregate]]
 Using 'aggregate' to create a temporary collection
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -3957,7 +3959,7 @@ query which shows the places you can get to non stop were all correctly removed 
 the second query.  This also tells us there are no flights from Austin to places that
 you cannot get to from anywhere else!
 
-
+[[inject]]
 Using 'inject' to insert values into a query
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
