@@ -128,7 +128,7 @@ nothing gets saved to disk automatically, that is shipped as part of the Apache
 TinkerPop 3 download.  The goal of this tutorial is to allow someone with little to
 no prior knowledge to get up and going quickly using the Gremlin console and the
 'air-routes'graph. Later in the document we will discuss using additional
-technologies such as Janus Graph, Apache Cassandra and Apache Elastic Search with
+technologies such as JanusGraph, Apache Cassandra and Apache Elastic Search with
 Gremlin. We will also discuss writing stand alone Java and Groovy applications as
 well as using the Gremlin Console.
 
@@ -167,7 +167,7 @@ Chapter 5 - MISCELLANEOUS QUERIES AND THE RESULTS THEY GENERATE::
 Chapter 6 - MOVING BEYOND THE CONSOLE AND TINKERGRAPH::
 - In Chapter six we move beyond our focus on the Gremlin Console and TinkerGraph. We
   start by looking at how you can write stand alone Java and Groovy applications that
-  can work with a graph. We then introduce Janus Graph and take a fairly detailed
+  can work with a graph. We then introduce JanusGraph and take a fairly detailed
   look at its capabilities such as support for transactions, schemas and external
   indexes. We also explore various technology choices for back end persistent store
   and index as well as introducing the Gremlin Server.
@@ -376,7 +376,7 @@ the majority of this document we will keep things simple and focus on local grap
 
 To follow along with this tutorial you will need to have installed the Gremlin
 console or have access to a TinkerPop3/Gremlin enabled graph store such as
-TinkerGraph or Janus Graph.
+TinkerGraph or JanusGraph.
 
 Regardless of the environment you use, if you work with Apache TinkerPop enabled
 graphs, the Gremlin console should always be installed on your machine!
@@ -586,8 +586,8 @@ Introducing TinkerGraph
 
 As well as the Gremlin Console, the TinkerPop 3 download includes an implementation
 of an in-memory graph store called TinkerGraph. This document was mostly developed
-using TinkerGraph but I also tested everything using Janus Graph. We will introduce
-Janus Graph later in the "<<janusintro>>" section. The nice thing about TinkerGraph
+using TinkerGraph but I also tested everything using JanusGraph. We will introduce
+JanusGraph later in the "<<janusintro>>" section. The nice thing about TinkerGraph
 is that for learning and testing things you can run everything you need on your
 laptop or desktop computer and be up and running very quickly. We will explain how to
 get started with the Gremlin Console and TinkerGraph a bit later in this document.
@@ -660,8 +660,8 @@ used in production deployments if an all in memory graph fits the bill. Typicall
 TinkerGraph us used to explore static (unchanging) graphs but you can also use it
 from a programming language like Java and mutate its contents if you want to.
 However, TinkerGraph does not support some of the more advanced features you will
-find in implementations like Janus Graph such as transactions and external
-indexes. We will cover these topics as part of our discussion of Janus Graph in the
+find in implementations like JanusGraph such as transactions and external
+indexes. We will cover these topics as part of our discussion of JanusGraph in the
 <<janusintro>> section later on. One other thing worth noting in the list above is that
 'UserSuppliedIds' is set to true for vertex and edge ID values. This means that if
 you load a graph file, such as a GraphML format file, that specifies ID values for
@@ -1071,7 +1071,7 @@ and edge 'labels' which are typically not indexed but are sometimes very useful 
 to specify at the start of a query.  As the examples in this document are intended to
 work just fine with a only basic TinkerGraph the subject of indexes is not covered in
 more detail until Section 6 "<<beyond>>" where we will take a look at some other
-technologies such as Janus Graph and we do discuss indexing as part of that coverage.
+technologies such as JanusGraph and we do discuss indexing as part of that coverage.
 You should always refer to the specific documentation for the graph system you are
 using to decide what you need to do about creating an index and schema for your
 graph.  We will explain what TinkerGraph is in the next section.
@@ -1665,6 +1665,7 @@ Note that the steps labelled with an '*' can optionally take the
 name of an edge label as a parameter. If omitted, all relevant edges will be
 traversed.                
 
+
 Some simple graph traversal examples
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -2160,7 +2161,7 @@ v[3377]
 NOTE: There is no guarantee as to which airport vertices will be selected as this
 depends upon how they are stored by the back end graph. Using TinkerGraph the
 airports will most likely come back in the order they are put into the graph. This is
-not likely to be the case with other graph stores such as Janus Graph. So do not rely
+not likely to be the case with other graph stores such as JanusGraph. So do not rely
 on any sort of expectation of order when using 'range' to process sets of vertices.
 
 In TinkerPop 3.3 a new 'skip' step was introduced which can be used as an alternative
@@ -2350,7 +2351,7 @@ Every vertex and every edge in a graph has a unique ID that can be used to refer
 them individually or as a group. Beware that the IDs you provide when loading a graph
 from a GraphML or GraphSON file may not in many cases end up being the IDs that the
 back-end graph store actually uses as it builds up your graph.  Tinkergraph for
-example will preserve user provided IDs but most systems like Janus Graph or
+example will preserve user provided IDs but most systems like JanusGraph or
 IBM-Graph generate their own IDs. The same is true when you add vertices and edges
 using a graph traversal or using the TinkerPop API. This is a long winded way of
 saying that you should not depend on the IDs in your GraphML or GraphSON file that
@@ -6083,7 +6084,7 @@ g.addV('code','AUS','code','KAUS')
 By creating the 'code' property in this way, its cardinality type is now effectively
 'LIST' rather than 'SINGLE'. While working with TinkerGraph we do not need to setup
 explicit schemas for our property types. However, once we start working with a more
-sophisticated graph system such as Janus Graph, that is something that we will both
+sophisticated graph system such as JanusGraph, that is something that we will both
 want and need to be able to do. We cover the topic of cardinality in detail in the
 "<<janusmgmt>>" section later in the document.
 
@@ -8497,7 +8498,7 @@ Using latitude, longitude and geographical region in queries
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The air-routes graph stores the geographic coordinates (latitude and longitude) of
-each airport as floating point numbers.  Some graph systems such as Janus Graph have
+each airport as floating point numbers.  Some graph systems such as JanusGraph have
 some useful geographic coordinate and shape support built in but TinkerGraph does
 not. Moreover, GraphML does not offer any specific geospatial support so to keeps
 things simple and flexible, the air routes data set does not assume any specific back
@@ -8562,7 +8563,7 @@ g.V().hasLabel('airport').has('lat',between(-0.1,0.1)).valueMap('code','lat')
 
 The code below will find all the airports in the geographic area defined by a one
 degree box around London Heathrow. This type of thing can be done using the Geo shape
-classes provided by Janus Graph but given we are not at that part of the document yet
+classes provided by JanusGraph but given we are not at that part of the document yet
 this is the next best way!
 
 [source,groovy]
@@ -8708,7 +8709,7 @@ avoid LAX and PHX it seems.
 ----
 
 We will revisit the topic of performing geospatial queries in the "<<janusgeo>>" 
-section where we look at some additional capabilities that Janus Graph offers to us
+section where we look at some additional capabilities that JanusGraph offers to us
 in this area.
 
 To finish up examples of how the geospatial and region information stored in the
@@ -9875,7 +9876,7 @@ The following lines of Bash shell script will setup what you need to both build 
 run our small test program. Note that the 'GREMLIN' variable should be set to point
 to the root directory of wherever your TinkerPop JAR files are. Later when we start
 using Janus graph you will see that rather than TinkerGraph we will need to adjust
-these settings to point to the Janus Graph JAR files.
+these settings to point to the JanusGraph JAR files.
 
 ----
 # Root directory for Gremlin Console install
@@ -10299,30 +10300,30 @@ Airports in England reachable with no more than one stop from AUS
 ----
 
 [[janusintro]]
-Introducing Janus Graph
+Introducing JanusGraph
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 So far we have been using the TinkerGraph graph that is included with Apache
 TinkerPop in our examples. Once you move beyond learning about Gremlin and its
 related technologies and moving towards a production deployment, you will need a
 graph store that provides capabilities such as reliable persistence, the ability to
-define schemas and support for ACID transactions. The Janus Graph project, which
+define schemas and support for ACID transactions. The JanusGraph project, which
 began in 2016 as an open source fork of the popular Titan graph database, is hosted by
 the Linux Foundation and provides these advanced capabilities.
 
-In this book I have attempted to provide a reasonable amount of Janus Graph 
+In this book I have attempted to provide a reasonable amount of JanusGraph 
 coverage of but it is still recommended to become familiar with the official
-Janus Graph documentation where you will find more in depth discussions of advanced
+JanusGraph documentation where you will find more in depth discussions of advanced
 topics.
 
-Janus Graph can run on a laptop, which is useful for learning and experimenting, but
+JanusGraph can run on a laptop, which is useful for learning and experimenting, but
 it is designed to handle very large graphs stored on distributed clusters. It can
 handle graphs containing billions of vertices and edges. As we shall discuss, Janus
 Graph is designed to work with a variety of persistent storage options including
 Apache Cassandra and Apache HBase as well as indexing technology such as Apache Solr
 and Apache Elastic Search.
 
-.Here are some useful Janus Graph resources
+.Here are some useful JanusGraph resources
 Runtime download (JAR files and more)::
 http://janusgraph.org/
 Documentation::
@@ -10330,84 +10331,84 @@ http://docs.janusgraph.org/latest/.
 API Documentation::
 https://javadoc.io/doc/org.janusgraph/janusgraph-core/0.1.1
 
-In the following sections we will take an in depth look at Janus Graph and other
+In the following sections we will take an in depth look at JanusGraph and other
 technologies that, when combined, provide a way to build and deploy a massively
 scalable graph database solution. We will start by quickly looking at how to install
-Janus Graph and access it from the Gremlin Console before getting into more advanced
+JanusGraph and access it from the Gremlin Console before getting into more advanced
 topics including how to create and manage both schemas and indexes and how to use the
-transactional capabilities provided by Janus Graph.
+transactional capabilities provided by JanusGraph.
 
-It is also recommended that you read and get familiar with the official Janus Graph
+It is also recommended that you read and get familiar with the official JanusGraph
 documentation as well as reading what is presented below.
 
 [[janusinstall]]
-Installing Janus Graph
-^^^^^^^^^^^^^^^^^^^^^^
+Installing JanusGraph
+^^^^^^^^^^^^^^^^^^^^^
 
-Janus Graph itself is very easy to install. You just have to download the ZIP file
+JanusGraph itself is very easy to install. You just have to download the ZIP file
 and unzip it into a convenient location. Having done that you can immediately begin
 to experiment with it if you use the 'inmemory' option which is explained more in the 
 <<janusinmemory>> section below. However, for a production deployment you will
-probably be using Janus Graph in conjunction with some sort of persistent storage, an
+probably be using JanusGraph in conjunction with some sort of persistent storage, an
 indexing service and other components that will also have to be installed. We will
 get into that a bit later on. The download page has information regarding versions of
-related technologies like Apache Cassandra and Apache Solr that Janus Graph has been
+related technologies like Apache Cassandra and Apache Solr that JanusGraph has been
 tested with.
 
-NOTE: It is important to remember that Janus Graph does not have its own process, it
+NOTE: It is important to remember that JanusGraph does not have its own process, it
 is not a delivered as a service that you run, rather it is a set of Java classes that
 have to be invoked either from your own code, the Gremlin Console hosted using
 something like Gremlin Server.
 
-The install package for Janus Graph is located at http://janusgraph.org/ and is a
+The install package for JanusGraph is located at http://janusgraph.org/ and is a
 single ZIP file. Once you have it downloaded and unzipped you are ready to experiment
-using the Gremlin Console. As will be discussed below, when working with Janus Graph
+using the Gremlin Console. As will be discussed below, when working with JanusGraph
 you must use the version of the Gremlin Console that is packaged as part of the Janus
 Graph download.
 
 [[janusconsole]]
-Using Janus Graph from the Gremlin Console
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Using JanusGraph from the Gremlin Console
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-A version of the Gremlin Console is included as part of the Janus Graph download. The
+A version of the Gremlin Console is included as part of the JanusGraph download. The
 only major difference between this version of the console and the one you get as part
 of the standard Apache TinkerPop download is that the console has been preconfigured
-to recognize and find the Janus Graph specific classes. A good example of one such
+to recognize and find the JanusGraph specific classes. A good example of one such
 class is 'JanusGraphFactory' that is used from the Console to create a new Janus
 Graph instance.
 
-NOTE: When working with Janus Graph you must use the version of the Gremlin Console
-that is packaged as part of the Janus Graph download.
+NOTE: When working with JanusGraph you must use the version of the Gremlin Console
+that is packaged as part of the JanusGraph download.
 
-As mentioned above, Janus Graph is not a stand alone service, it is a set of Java
+As mentioned above, JanusGraph is not a stand alone service, it is a set of Java
 classes that a process to invoke it. The Gremlin Console can play that role. After
-you have unzipped Janus Graph you will find the gremlin.sh and gremlin.bat scripts in
-the bin directory under the Janus Graph parent directory. Once you have started the
+you have unzipped JanusGraph you will find the gremlin.sh and gremlin.bat scripts in
+the bin directory under the JanusGraph parent directory. Once you have started the
 Gremlin Console you can, as we will explore in the next few sections, tell Janus
 Graph about the environment you will be operating in in terms of back end store and
 index.
 
 [[janusinmemory]]
-Using Janus Graph with the 'inmemory' option
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Using JanusGraph with the 'inmemory' option
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-For almost all production use cases, you will be using Janus Graph along with a
+For almost all production use cases, you will be using JanusGraph along with a
 persistent back end store such as Apache Cassandra or Apache HBase. However while
 experimenting with Janus graph it is incredibly useful to be able to get up and
 running quickly without having to worry about configuring all of the back end storage
-components.  This is made possible by the 'inmemory' option that Janus Graph
-provides. This essentially allows us to use Janus Graph in the same way as we have
+components.  This is made possible by the 'inmemory' option that JanusGraph
+provides. This essentially allows us to use JanusGraph in the same way as we have
 been using TinkerGraph with all of our graph data stored in the memory of the
-computer. The one big difference however is that Janus Graph, even while using the
+computer. The one big difference however is that JanusGraph, even while using the
 'inmemory' storage model, allows us to experiment with features that TinkerGraph does
 not offer, such as schemas and transactions.  We will get into those topics a bit
-later on. First, let's create an instance of Janus Graph from the Gremlin console
+later on. First, let's create an instance of JanusGraph from the Gremlin console
 that uses the 'inmemory' storage model.
 
-Creating a Janus Graph instance is very similar to the way we created a TinkerGraph
+Creating a JanusGraph instance is very similar to the way we created a TinkerGraph
 instance earlier in the document. The only difference is that we use the
 'JanusGraphFactory' to create the graph and in this case we specify 'inmemory' as the
-only parameter to tell Janus Graph that we want to use the all in memory storage
+only parameter to tell JanusGraph that we want to use the all in memory storage
 model. We create our graph traversal object 'g' in just the same way as before.
 
 [source,groovy]
@@ -10419,11 +10420,11 @@ g = graph.traversal()
 Now that we have a graph instance created, just like with TinkerGraph, we can query
 which features the graph supports. Earlier in the document in the "<<tgintro>>"
 section we looked at the features offered by TinkerGraph. If we compare those
-features to what Janus Graph offers we can spot some key differences.
+features to what JanusGraph offers we can spot some key differences.
 
 We can get the feature set back by calling the 'features' method as shown below. The
 first thing that stands out is that the various features that involve transactions
-are now set to 'true' indicating that Janus Graph supports transactions. We will take
+are now set to 'true' indicating that JanusGraph supports transactions. We will take
 a look at how to use these transactional capabilities in the next section. Note that
 'Persistence' still shows as 'false' as we are using the 'inmemory' mode. Another
 thing to note is that, unlike with TinkerGraph, 'UserSuppliedIds' is set to false,
@@ -10485,9 +10486,9 @@ graph.features()
 >-- UserSuppliedIds: false                                                               
 ----
 
-Now that we have an empty instance of an 'inmemory' Janus Graph we can use it from
+Now that we have an empty instance of an 'inmemory' JanusGraph we can use it from
 the Gremlin Console just as we did with TinkerGraph in our prior examples. Notice
-that the ID values that Janus Graph generates look quite different (as in they don't
+that the ID values that JanusGraph generates look quite different (as in they don't
 start at zero) from what we might expect from TinkerGraph.
 
 [source,groovy]
@@ -10503,14 +10504,14 @@ g.V().has('name','Kelvin').id()
 ----
 
 
-Before we experiment too much more with Janus Graph there are three important
+Before we experiment too much more with JanusGraph there are three important
 subjects we need to discuss. One is transactions, another is defining a schema for
-our vertices, edges and properties and the third is the Janus Graph management API. We
+our vertices, edges and properties and the third is the JanusGraph management API. We
 will cover each of these key subjects in the following sections.
 
 [[janustrans]]
-Janus Graph transactions
-^^^^^^^^^^^^^^^^^^^^^^^^
+JanusGraph transactions
+^^^^^^^^^^^^^^^^^^^^^^^
 
 To be written
 
@@ -10546,7 +10547,7 @@ g.V().has('code','XYZ')
 
 
 [[janusmgmt]]
-The Janus Graph management API
+The JanusGraph management API
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Janus graph includes a management API that is made available via the ManagementSystem
@@ -10564,10 +10565,10 @@ mgmt = graph.openManagement()
 
 In the following sections we will show how to use the management API to create both a
 schema and an index for the air-routes graph and then load it. Before we do that we
-need should take a few minutes to introduce the Janus Graph Management API. For the
-time being, assume we have created an in memory Janus Graph instance and loaded the
+need should take a few minutes to introduce the JanusGraph Management API. For the
+time being, assume we have created an in memory JanusGraph instance and loaded the
 air-routes graph into it but have not defined an index or a schema. In this
-situation, Janus Graph will give us the best defaults it can as it loads the graph
+situation, JanusGraph will give us the best defaults it can as it loads the graph
 for schema types.
 
 The example below uses the Management API to get a list of all the vertex labels
@@ -10750,8 +10751,8 @@ graph.tx().commit()
 ----
 
 [[janusschema]]
-Defining a Janus Graph schema for the air-routes graph
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Defining a JanusGraph schema for the air-routes graph
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You are not required to define the types and labels of your edges, vertices and
 properties ahead of time but it is strongly recommended that you do so. If you do not
@@ -10759,7 +10760,7 @@ define anything and load the air routes data for example, it will work fine but 
 Graph will make assumptions about various things. One thing it will do is default the
 type of all property keys to Java's 'Object.class' which is not ideal if you want the
 graph to help you enforce stricter type checking. Also, without a schema being
-defined, Janus Graph will default the usage constraint or 'multiplicity' setting on
+defined, JanusGraph will default the usage constraint or 'multiplicity' setting on
 all edges to 'MULTI'. We will explain what that means in a minute but in essence it
 means there is no restriction by default on how many edges with the same label that
 can exist between two vertices.
@@ -10768,7 +10769,7 @@ You can use the Management API do define your schema. You can add additional pro
 types at any time but once defined you cannot change their types. The only thing you
 can do once they have been created is to change the names of the keys.
 
-A best practice when working with Janus Graph is to define your labels and property
+A best practice when working with JanusGraph is to define your labels and property
 types before you load any data into the graph. As the graph grows if you find you
 need to add additional property types or labels you are allowed to do that.
 
@@ -10807,7 +10808,7 @@ ONE2ONE::
 Defining edge labels and usage
 ++++++++++++++++++++++++++++++
 
-Let's look at how we can use the Janus Graph Management API to specify the
+Let's look at how we can use the JanusGraph Management API to specify the
 multiplicty for the 'route' and 'contains' edges used by the air-routes graph.
 
 [source,groovy]
@@ -10822,7 +10823,7 @@ mgmt.commit()
 Defining vertex labels
 ++++++++++++++++++++++
 
-Now let's tell Janus Graph about the vertex labels that we are going to be using. The
+Now let's tell JanusGraph about the vertex labels that we are going to be using. The
 'air-routes' graph has four different vertex types, namely, 'version', 'airport',
 'country' and 'continent' so we will create a label for each of those.
 
@@ -10919,11 +10920,11 @@ elev    : class java.lang.Integer SINGLE
 
 
 [[janusload]]
-Loading air-routes into a Janus Graph instance
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Loading air-routes into a JanusGraph instance
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Now that we know how to create a schema and an index for the air-routes graph 
-we can use the same basic steps to load it into a Janus Graph
+we can use the same basic steps to load it into a JanusGraph
 instance that we used with TinkerGraph. Note that after loading the graph from the
 XML file we then call 'commit' to finalize the transaction. 
 
@@ -10934,22 +10935,22 @@ graph.tx().commit()
 ----
 
 Note that as we have not defined a schema before loading the air-routes graph that
-Janus Graph will create vertices, edges and properties using default types and
+JanusGraph will create vertices, edges and properties using default types and
 settings.  A bit later we will look at creating a schema for air-routes and then
 loading it again to see the differences. It is strongly recommended to create the
 schema before loading the data but lets examine a few things before we discuss how to
 do that. 
 
-Unlike TinkerGraph, Janus Graph does not, by default,  guarantee to respect user
+Unlike TinkerGraph, JanusGraph does not, by default,  guarantee to respect user
 provided node and edge ID values. Instead it creates its own ID values as vertices
 and edges are added to the graph. You may have noticed from earlier in the document
 or from the air-routes.graphml file if you happened to look in there, that the ID
 provided for Austin in the GraphML markup is 3. However, having loaded air-routes
-into Janus Graph if we query the ID for the Austin node we can see that it is no
-longer 3. There is a setting that can be changed to force Janus Graph to honor user
+into JanusGraph if we query the ID for the Austin node we can see that it is no
+longer 3. There is a setting that can be changed to force JanusGraph to honor user
 provided ID values but it is not recommended this be used as it will disable some
-other useful Janus Graph features. If you are interested in learning more about this
-option this please refer to the Janus Graph documentation.
+other useful JanusGraph features. If you are interested in learning more about this
+option this please refer to the JanusGraph documentation.
 
 [source,groovy]
 ----
@@ -11032,8 +11033,8 @@ mgmt.commit()
 
 
 [[janpred]]
-Additional Janus Graph text search predicates
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Additional JanusGraph text search predicates
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 We have already looked, in the "<<tranges>> section, at the predicates TinkerPop
 defines such as 'neq', 'gte' and 'lte'. Janus graph offers an additional set of
@@ -11044,10 +11045,10 @@ The methods that include the word 'Contains' in their name look for whole words 
 match the specified search pattern. The methods that do not include 'Contains' in the
 name look at the entire string being inspected for matches.
 
-The table below summarizes the additional text search predicates that Janus Graph
+The table below summarizes the additional text search predicates that JanusGraph
 provides. 
 
-.Additional Janus Graph text search predicates
+.Additional JanusGraph text search predicates
 [cols="^1,4"]
 |==============================================================================
 |textContains           | True if a whole word matches the search string provided.
@@ -11245,7 +11246,7 @@ Losuia
 Regular expression predicates
 +++++++++++++++++++++++++++++
 
-The Janus Graph regular expression predicates recognize the syntax defined as part of
+The JanusGraph regular expression predicates recognize the syntax defined as part of
 the Java 1.8 Pattern class that is documented at
 https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html. The Java
 regular expression syntax may be different than the one you are used to so it is
@@ -11455,8 +11456,8 @@ Dubai
 ----
 
 [[janusgeo]]
-The Janus Graph geospatial API
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The JanusGraph geospatial API
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To be written
 
@@ -11487,8 +11488,8 @@ g.V().hasLabel('airport').
 ----
 
 [[janusstorage]]
-Choosing a persistent storage technology for Janus Graph
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Choosing a persistent storage technology for JanusGraph
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To be written
 
@@ -11509,8 +11510,8 @@ Apache HBase
 
 To be written
 
-Using an external index with Janus Graph
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Using an external index with JanusGraph
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To be written
 
@@ -11555,8 +11556,8 @@ Connecting the Gremlin Console to a remote graph
 To be written
 
 
-Using Janus Graph and Gremlin from a Java program
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Using JanusGraph and Gremlin from a Java program
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To be written 
 
@@ -11887,7 +11888,7 @@ node and its properties are listed first, followed by all of the other vertices 
 connects to and the properties for those edges.
 
 Some graph database systems actually store their graphs to disk using a variation of
-this format. Janus Graph in fact uses a system a lot like this when storing node and
+this format. JanusGraph in fact uses a system a lot like this when storing node and
 edge data to its persistent store.
 
 
@@ -12284,14 +12285,14 @@ http://www.graphenedb.com/
 
 http://www.gremlinbin.com
 
-.Janus Graph home page
+.JanusGraph home page
 http://janusgraph.org/
 
-.Janus Graph overview documentation
+.JanusGraph overview documentation
 http://docs.janusgraph.org/latest/
 
-.Janus Graph API documentation
+.JanusGraph API documentation
 https://javadoc.io/doc/org.janusgraph/janusgraph-core/0.1.1
 
-.Public mailing list for Janus Graph users
+.Public mailing list for JanusGraph users
 https://groups.google.com/forum/#!forum/janusgraph-users
