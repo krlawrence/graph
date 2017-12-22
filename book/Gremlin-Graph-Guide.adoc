@@ -1,11 +1,11 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v274, Dec 20, 2017
-// Wed Dec 20, 2017 08:54:17 CST
+v274, Dec 22, 2017
+// Fri Dec 22, 2017 08:34:06 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Dec 20 2017
+//:Date:      Dec 22 2017
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -657,12 +657,12 @@ TinkerGraph is really useful while learning to work with Gremlin and great for
 testing things out. One common use case where TinkerGraph can be very useful is to
 crate a sub-graph of a larger graph and work with it locally. TinkerGraph can even be
 used in production deployments if an all in memory graph fits the bill. Typically,
-TinkerGraph us used to explore static (no changing) graphs but you can use it from a
-programming language like Java and mutate its contents if you want to. However,
-TinkerGraph does not support some of the more advanced features you will find in
-implementations like Janus Graph such as ACID Transactions and external indexes. We
-will cover these topics as part of our discussion of Janus Graph towards the end of
-the document. One other thing worth noting in the list above is that
+TinkerGraph us used to explore static (unchanging) graphs but you can also use it
+from a programming language like Java and mutate its contents if you want to.
+However, TinkerGraph does not support some of the more advanced features you will
+find in implementations like Janus Graph such as transactions and external
+indexes. We will cover these topics as part of our discussion of Janus Graph in the
+<<janusintro>> section later on. One other thing worth noting in the list above is that
 'UserSuppliedIds' is set to true for vertex and edge ID values. This means that if
 you load a graph file, such as a GraphML format file, that specifies ID values for
 vertices and edges then TinkerGraph will honor those IDs and use them. As we shall
@@ -1055,6 +1055,7 @@ just add an empty list ";[]" to the end of your query as follows.
 a=g.V().has('code','AUS').out().toList();[]
 ----
 
+[[indexschema]]
 A word about indexes and schemas
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1085,7 +1086,7 @@ such as Apache Solr or Apache Elastic Search.
 
 
 
-[[sq]]
+[[gq]]
 WRITING GREMLIN QUERIES
 -----------------------
 
@@ -1458,7 +1459,10 @@ g.V().hasLabel('airport').count()
 ----
 
 Now, looking at edges that have a 'route' label, let's find out how many flight
-routes are stored in the graph.
+routes are stored in the graph. Note that the 'outE' step looks at outgoing edges. In
+this case we could also have used the 'out' step instead.  The various ways that you
+can look at outgoing and incoming edges is discussed in the "<<walk>>" section that
+is coming up soon.
 
 [source,groovy]
 ----
@@ -1616,7 +1620,7 @@ will find a lot more examples of grouping and counting things in the section cal
 
 [[walk]]
 Starting to walk the graph
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 So far we have mostly just explored queries that look at properties on a vertex or
 count how many things we can find of a certain type. Where the power of a graph
@@ -1630,18 +1634,53 @@ to traverse a graph in this way using Gremlin. The journey we took while on our
 'walk' is often referred to as our 'path'. There are also cases when all you want to
 do is return edges or some combination of vertices and edges as the result of a query
 and Gremlin allows this as well. We will explore a lot of ways to modify the way a
-graph is traversed in the upcoming sections.  To get us started, here are some simple
-examples.
-     
-The 'out' step is used to find vertices connected by an outgoing edge to that vertex
-and the 'outE' 'step' is used to explore outgoing edges from a given vertex.
+graph is traversed in the upcoming sections. 
+
+The table below gives a brief summary of all the steps that can be used to 'walk' or
+'traverse' a graph using Gremlin. You will find all of these steps used in various
+ways throughout the book. Think of a graph traversal as moving through the graph from
+one place to one or more other places. These steps tell Gremlin which places to move
+to next next as it traverses a graph for you.  
+
+In order to better understand these steps it is worth defining some terminology. One
+vertex is considered to be 'adjacent' to another vertex if there is an edge
+connecting them. A vertex and an edge are considered 'incident' if they are
+connected to each other. 
+
+.Where to move next while traversing a graph
+[cols="^1,4"]
+|==============================================================================
+|out   * | Outgoing adjacent vertices.
+|in    * | Incoming adjacent vertices.
+|both  * | Both incoming and outgoing adjacent vertices.
+|outE  * | Outgoing incident edges.
+|inE   * | Incoming incident edges.
+|bothE * | Both outgoing and incoming incident edges.
+|outV    | Outgoing vertex.
+|inV     | Incoming vertex.
+|otherV  | The vertex that was not the vertex we came from.
+|==============================================================================
+
+Note that the steps labelled with an '*' can optionally take the
+name of an edge label as a parameter. If omitted, all relevant edges will be
+traversed.                
+
+Some simple graph traversal examples
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To get us started, in this section we will look at some simple graph traversal
+examples that use some of the steps that were just introduced.  The 'out' step is
+used to find vertices connected by an outgoing edge to that vertex and the 'outE'
+'step' is used when you want to examine the outgoing edges from a given vertex.
 Conversely the 'in' and 'inE' steps can be used to look for incoming vertices and
 edges. The 'outE' and 'inE' steps are especially useful when you want to look at the
-properties of an edge. There are several other steps that we can use when traversing
-a graph to move between vertices and edges. We will encounter those in the
-"<<otherv>>" section of this document. 
+properties of an edge as we shall see in the "<<exedge>>" section.  There are several
+other steps that we can use when traversing a graph to move between vertices and
+edges. These include 'bothE', 'bothV' and 'otherV'. We will encounter those in the
+"<<otherv>>" section. 
 
-This first query does a few interesting things. Firstly we find the vertex
+So let's use a few examples to help better understand these graph traversal steps.
+The first query below does a few interesting things. Firstly we find the vertex
 representing the Austin airport (the airport with a property of 'code' containing the
 value 'AUS').  Having found that vertex we then go 'out' from there. This will find
 all of the vertices connected to Austin by an outgoing edge. Having found those
@@ -1666,9 +1705,9 @@ All edges in a graph have a label. However, one thing we did not do in the previ
 query was specify a label for the 'out' step.  If you do not specify a label you will
 get back any connected vertex regardless of its edge label. In this case it does not
 cause us a problem as airports only have one type of outgoing edge, labeled 'route'.
-However, in many cases in graphs you create or are working with your vertices may be
-connected to other vertices by edges with edges with differing labels so it is good
-practice to get into the habit of specifying edge labels as part of your gremlin
+However, in many cases, in graphs you create or are working with, your vertices may be
+connected to other vertices by edges with differing labels so it is good
+practice to get into the habit of specifying edge labels as part of your Gremlin
 queries. So we could change our query just a bit by adding a label reference on the
 'out' step as follows.
 
@@ -1678,23 +1717,37 @@ queries. So we could change our query just a bit by adding a label reference on 
 g.V().has('airport','code','AUS').out('route').values('code').fold()
 ----
 
-Despite having just stated consistently referencing labels is a good idea, unless you
-truly do want to get back all edges or all connected vertices, I will break my own
-rule quite a bit in this document. The reason for this is purely to save space and
-make the queries I present shorter.
+Despite having just stated that consistently using edge labels in queries is a good
+idea, unless you truly do want to get back all edges or all connected vertices, I
+will break my own rule quite a bit in this book. The reason for this is purely to
+save space and make the queries I present shorter.
 
-Here are a few more simple queries similar to the previous one.
+Here are a few more simple queries similar to the previous one. The first example can
+be used to answer the question "Where can I fly to from Austin, with one stop on the
+way?". Note that, as written, coming back to Austin will be included in the results
+as this query does not rule it out!
 
 [source,groovy]
 ----
 // Where can I fly to from Austin, with one stop on the way?
-// Note that, as written, coming back to Austin will be included
-// in the results as this query does not rule it out!
 g.V().has('airport','code','AUS').out('route').out('route').values('code')
+----
 
+This query uses an 'in' step to find all the routes that come into the London City
+Airport (LCY) and returns their IATA codes.
+
+[source,groovy]
+----
 // What routes come in to LCY?
 g.V().has('airport','code','LCY').in('route').values('code')
+----
 
+This query is perhaps a bit more interesting. It finds all the routes from London
+Heathrow airport in England that go to an airport in the United States and returns
+their IATA codes.
+
+[source,groovy]
+----
 // Flights from London Heathrow (LHR) to airports in the USA
 g.V().has('code','LHR').out('route').has('country','US').values('code')
 ----
@@ -1711,7 +1764,8 @@ examples of 'path' being used including in conjunction with 'by' to specify
 how the path should be formatted. This particular query will return the vertices
 and outgoing edges starting at the LCY airport vertex. You can read this query
 like this: "Start at the LCY vertex, find all outgoing edges and also find all
-of the vertices that are on the other ends of those edges".
+of the vertices that are on the other ends of those edges". The 'inV' step gives us
+the vertex at the other end of the outgoing edge.
 
 [source,groovy]
 ----
@@ -1786,9 +1840,190 @@ g.V().has('code','AUS').out('route').has('code','SYD').hasNext()
 false
 ----
 
+[[aselproj]]
+Using 'as', 'select' and 'project' to name and refer back to prior steps
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Sometimes it is useful to be able to remember a point of a traversal and refer back
+to it later on. This ability was more essential in TinkerPop 2 than it is in
+TinkerPop 3 but it still has many uses.
+
+[source,groovy]
+----
+g.V().has('code','DFW').as('from').out().has('region','US-CA').as('to').
+      select('from','to').by('code')
+----
+
+This query, while a bit contrived, and in reality a poor substitute for using 'path'
+returns the following results.
+
+[source,groovy]
+----
+[from:DFW,to:LAX]
+[from:DFW,to:ONT]
+[from:DFW,to:PSP]
+[from:DFW,to:SFO]
+[from:DFW,to:SJC]
+[from:DFW,to:SAN]
+[from:DFW,to:SNA]
+[from:DFW,to:OAK]
+[from:DFW,to:SMF]
+[from:DFW,to:FAT]
+[from:DFW,to:SBA]
+----
+
+While the prior example was perhaps not ideal, it does show how 'as' and 'select'
+work. For completeness, here is the same query but using 'path'.
+
+[source,groovy]
+----
+g.V().has('code','DFW').out().has('region','US-CA').path().by('code')
+----
+
+Which would produce the following results.
+
+[source,groovy]
+----
+[DFW,LAX]
+[DFW,ONT]
+[DFW,PSP]
+[DFW,SFO]
+[DFW,SJC]
+[DFW,SAN]
+[DFW,SNA]
+[DFW,OAK]
+[DFW,SMF]
+[DFW,FAT]
+[DFW,SBA]
+----
+
+You can also give a point of a traversal multiple names and refer to each later on in
+the traversal/query.
+
+[source,groovy]
+----
+g.V().has('type','airport').limit(10).as('a','b','c').
+      select('a','b','c').by('code').by('region').by(out().count())
+----
+
+In the most recent releases of TinkerPop you can also use the new 'project' step and
+achieve the same results that you can get from the combination of 'as' and 'select'
+steps. The example below shows the previous query, rewritten to use 'project' instead
+of 'as' and 'select'.
+
+[source,groovy]
+----
+g.V().has('type','airport').limit(10).project('a','b','c').
+      by('code').by('region').by(out().count())
+----
+
+This query, and the prior query, would return the following results.
+
+[source,groovy]
+----
+[a:ATL,b:US-GA,c:232]
+[a:ANC,b:US-AK,c:39]
+[a:AUS,b:US-TX,c:59]
+[a:BNA,b:US-TN,c:55]
+[a:BOS,b:US-MA,c:129]
+[a:BWI,b:US-MD,c:89]
+[a:DCA,b:US-DC,c:93]
+[a:DFW,b:US-TX,c:221]
+[a:FLL,b:US-FL,c:141]
+[a:IAD,b:US-VA,c:136]
+----
+
+In the prior example we gave our variables simple names like 'a' and 'b'. However, it
+is sometimes useful to give our traversal variables more meaningful names and it is
+perfectly OK to do that. Let's rewrite the query to use some more descriptive variable
+names.
+
+[source,groovy]
+----
+ g.V().has('type','airport').limit(10).project('IATA','Region','Routes').
+      by('code').by('region').by(out().count())
+----
+
+When we run the modified query, here is the output we get.
+
+[source,groovy]
+----
+[IATA:ATL,Region:US-GA,Routes:232]
+[IATA:ANC,Region:US-AK,Routes:39]
+[IATA:AUS,Region:US-TX,Routes:59]
+[IATA:BNA,Region:US-TN,Routes:55]
+[IATA:BOS,Region:US-MA,Routes:129]
+[IATA:BWI,Region:US-MD,Routes:89]
+[IATA:DCA,Region:US-DC,Routes:93]
+[IATA:DFW,Region:US-TX,Routes:221]
+[IATA:FLL,Region:US-FL,Routes:141]
+[IATA:IAD,Region:US-VA,Routes:136]
+----
+
+[[exedge]]
+Examining the edge between two vertices
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Sometimes, it is the edge between two vertices that we are interested in examining
+and not the vertices themselves. Typically this is because we want to look at one or
+more properties associated with that edge. By way of an example, let's imagine we
+anted to know how many miles the flight is between Miami (MIA) and Dallas Fort Worth
+(DFW). In our air routes graph, the distances between vertices are stored using a
+property called 'dist' on any edge that has a 'route' label. We can use the 'outE'
+and 'inV' steps to find the edge connecting Miami and Dallas. We can also use the
+'select' and 'as' steps that we just learned about to help with this task. Take a
+look at the query below. This will find the outgoing 'route' edge from MIA to DFW,
+store it in the traversal variable 'e' and at the end of the query use 'select' to
+return it as the result of the query.
+
+[source,groovy]
+----
+g.V().has('code','MIA').outE().as('e').inV().has('code','DFW').select('e')
+----
+
+If we were to run the query, we would get back something similar to this
+
+[source,groovy]
+----
+e[4127][16-route->8]
+----
+
+So we found the 'route' edge that connects the vertex with an ID of 16 (MIA) with the
+airport that has an ID of 8 (DFW). While interesting, this is not exactly what we set
+out to achieve. What we actually are interested in is the distance property of that
+edge so we can see how far it is from Miami to Dallas Fort Worth. We need to add one
+additional step to our query that will look at the 'dist' property of the edge. Let's
+modify our query to do that.
+
+[source,groovy]
+----
+g.V().has('code','MIA').outE().as('e').inV().has('code','DFW').select('e').values('dist')
+----
+
+If we run the query again we get back what we were looking for. We can see that it is
+1,120 miles from Miami to Dallas Fort Worth.
+
+[source,groovy]
+----
+1120
+----
+
+As a side note, we could have written the query using 'inE' and 'outV' and achieved
+the same result by looking at the edge from Dallas to Miami.
+
+[source,groovy]
+----
+g.V().has('code','MIA').inE().as('e').outV().has('code','DFW').select('e').values('dist')
+
+1120
+----
+
+Throughout the remainder of the book you will find lots of examples that use steps
+such as 'outE', 'inE', 'outV' and 'inV'.
+
 [[limit]]
 Limiting the amount of data returned
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 It is sometimes useful, especially when dealing with large graphs, to limit
 the amount of data that is returned from a query. As shown in the examples
 below, this can be done using the 'limit' and 'tail' steps. A little later in
@@ -1974,125 +2209,6 @@ g.V().has('region','US-TX').fold().skip(local,3)
 There are many other ways to specify a range of values using Gremlin. You will find
 several additional examples in the "<<tranges>>" section.
 
-[[aselproj]]
-Using 'as', 'select' and 'project' to name and refer back to prior steps
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Sometimes it is useful to be able to remember a point of a traversal and refer back
-to it later on. This ability was more essential in TinkerPop 2 than it is in
-TinkerPop 3 but it still has many uses.
-
-[source,groovy]
-----
-g.V().has('code','DFW').as('from').out().has('region','US-CA').as('to').
-      select('from','to').by('code')
-----
-
-This query, while a bit contrived, and in reality a poor substitute for using 'path'
-returns the following results.
-
-[source,groovy]
-----
-[from:DFW,to:LAX]
-[from:DFW,to:ONT]
-[from:DFW,to:PSP]
-[from:DFW,to:SFO]
-[from:DFW,to:SJC]
-[from:DFW,to:SAN]
-[from:DFW,to:SNA]
-[from:DFW,to:OAK]
-[from:DFW,to:SMF]
-[from:DFW,to:FAT]
-[from:DFW,to:SBA]
-----
-
-While the prior example was perhaps not ideal, it does show how 'as' and 'select'
-work. For completeness, here is the same query but using 'path'.
-
-[source,groovy]
-----
-g.V().has('code','DFW').out().has('region','US-CA').path().by('code')
-----
-
-Which would produce the following results.
-
-[source,groovy]
-----
-[DFW,LAX]
-[DFW,ONT]
-[DFW,PSP]
-[DFW,SFO]
-[DFW,SJC]
-[DFW,SAN]
-[DFW,SNA]
-[DFW,OAK]
-[DFW,SMF]
-[DFW,FAT]
-[DFW,SBA]
-----
-
-You can also give a point of a traversal multiple names and refer to each later on in
-the traversal/query.
-
-[source,groovy]
-----
-g.V().has('type','airport').limit(10).as('a','b','c').
-      select('a','b','c').by('code').by('region').by(out().count())
-----
-
-In the most recent releases of TinkerPop you can also use the new 'project' step and
-achieve the same results that you can get from the combination of 'as' and 'select'
-steps. The example below shows the previous query, rewritten to use 'project' instead
-of 'as' and 'select'.
-
-[source,groovy]
-----
-g.V().has('type','airport').limit(10).project('a','b','c').
-      by('code').by('region').by(out().count())
-----
-
-This query, and the prior query, would return the following results.
-
-[source,groovy]
-----
-[a:ATL,b:US-GA,c:232]
-[a:ANC,b:US-AK,c:39]
-[a:AUS,b:US-TX,c:59]
-[a:BNA,b:US-TN,c:55]
-[a:BOS,b:US-MA,c:129]
-[a:BWI,b:US-MD,c:89]
-[a:DCA,b:US-DC,c:93]
-[a:DFW,b:US-TX,c:221]
-[a:FLL,b:US-FL,c:141]
-[a:IAD,b:US-VA,c:136]
-----
-
-In the prior example we gave our variables simple names like 'a' and 'b'. However, it
-is sometimes useful to give our traversal variables more meaningful names and it is
-perfectly OK to do that. Let's rewrite the query to use some more descriptive variable
-names.
-
-[source,groovy]
-----
- g.V().has('type','airport').limit(10).project('IATA','Region','Routes').
-      by('code').by('region').by(out().count())
-----
-
-When we run the modified query, here is the output we get.
-
-[source,groovy]
-----
-[IATA:ATL,Region:US-GA,Routes:232]
-[IATA:ANC,Region:US-AK,Routes:39]
-[IATA:AUS,Region:US-TX,Routes:59]
-[IATA:BNA,Region:US-TN,Routes:55]
-[IATA:BOS,Region:US-MA,Routes:129]
-[IATA:BWI,Region:US-MD,Routes:89]
-[IATA:DCA,Region:US-DC,Routes:93]
-[IATA:DFW,Region:US-TX,Routes:221]
-[IATA:FLL,Region:US-FL,Routes:141]
-[IATA:IAD,Region:US-VA,Routes:136]
-----
 
 
 [[vm]]
