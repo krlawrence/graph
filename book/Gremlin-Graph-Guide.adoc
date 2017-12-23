@@ -193,7 +193,7 @@ we are going to be discussing 'directed property graphs'. At the conceptual leve
 these types of graphs are quite simple to understand. You have three basic building
 blocks.  Vertices (often referred to as nodes), edges and properties. Vertices
 represent "things" such as people or places. Edges represent connections between
-those vertices and properties and information to the vertices and edges as needed.
+those vertices, and properties are information added to the vertices and edges as needed.
 The 'directed' part of the name means that any edge has a direction. It goes 'out'
 from one vertex and 'in' to another. You will sometimes hear people use the word
 'digraph' as shorthand for 'directed graph'.  Consider the relationship "Kelvin knows
