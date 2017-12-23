@@ -250,11 +250,11 @@ credited with demonstrating the first graph problem and inventing the whole conc
 of "Graph Theory" all the way back in 1763 when he investigated the now famous
 "Seven Bridges of Konigsberg" problem.
 
-If you want read a bit more about graph theory and its present day application you
-can find a lot of good information on-line. Here's a Wikipedia link to get you
-started. https://en.wikipedia.org/wiki/Graph_theory
+If you want to read a bit more about graph theory and its present-day application, you
+can find a lot of good information online. Here's a Wikipedia link to get you
+started: https://en.wikipedia.org/wiki/Graph_theory
 
-So given Graph Theory is anything but a new idea, why is it that only recently we are
+So, given Graph Theory is anything but a new idea, why is it that only recently we are
 seeing a massive growth in the building and deployment of graph database systems and
 applications? At least part of the answer is that computer hardware and software has
 reached the point where you can build large big data systems that scale well for a
@@ -262,17 +262,17 @@ reasonable price. In fact, it's even easier than ever to build the large systems
 because you don't have to buy the hardware that your system will run on when you use
 the cloud.
 
-While you can certainly run a graph database on your laptop, I do just that every
-day, the reality is that in production, at scale, they are big data systems. Large
-graphs commonly have many billions of vertices and edges in them taking up petabytes
-of data on disk. Graph algorithms can be both compute and memory intensive and it is
+While you can certainly run a graph database on your laptop--I do just that every
+day--the reality is that in production, at scale, they are big data systems. Large
+graphs commonly have many billions of vertices and edges in them, taking up petabytes
+of data on disk. Graph algorithms can be both compute- and memory-intensive, and it is
 only fairly recently that deploying the necessary resources for such big data systems
-has made financial sense for more everyday uses in business and not just in
+has made financial sense for more everyday uses in business, and not just in
 government or academia. Graph databases are becoming much more broadly adopted across
-the spectrum from high end scientific research to financial networks and beyond.
+the spectrum, from high-end scientific research to financial networks and beyond.
 
 Another factor that has really helped start this graph database revolution is the
-availability of high quality open source technology.  There are a lot of great open
+availability of high-quality open source technology.  There are a lot of great open
 source projects addressing everything from the databases you need to store the graph
 data to the query languages used to traverse them all the way up to visually
 displaying graphs as part of the user interface layer. In particular, it is so called
