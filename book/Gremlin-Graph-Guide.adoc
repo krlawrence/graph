@@ -245,7 +245,7 @@ very nature, the air routes network used as the basis for all of the examples in
 this document being a perfect example of such a situation.
 
 Those of you that looked at graphs as part of a computer science course are correct
-if your reaction was "haven't graphs been around for ages?". Indeed Leonard Euler is
+if your reaction was "haven't graphs been around for ages?" Indeed, Leonard Euler is
 credited with demonstrating the first graph problem and inventing the whole concept
 of "Graph Theory" all the way back in 1763 when he investigated the now famous
 "Seven Bridges of Konigsberg" problem.
