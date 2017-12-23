@@ -1,11 +1,11 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v274, Dec 22, 2017
-// Fri Dec 22, 2017 08:34:06 CST
+v274, Dec 23, 2017
+// Sat Dec 23, 2017 12:53:01
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Dec 22 2017
+//:Date:      Dec 23 2017
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -91,6 +91,9 @@ free to send me feedback of any sort. Suggested improvements are especially welc
 A good way to provide feedback is by opening an issue in the GitHub repository
 located at https://github.com/krlawrence/graph. You are currently reading revision
 {revision} of the document.
+
+I am grateful to those who have already taken the time to review the manuscript and 
+open issues or pull requests.
 
 [[thanks]]
 A word of thanks
@@ -250,24 +253,24 @@ credited with demonstrating the first graph problem and inventing the whole conc
 of "Graph Theory" all the way back in 1763 when he investigated the now famous
 "Seven Bridges of Konigsberg" problem.
 
-If you want to read a bit more about graph theory and its present-day application, you
-can find a lot of good information online. Here's a Wikipedia link to get you
+If you want to read a bit more about graph theory and its present-day application,
+you can find a lot of good information online. Here's a Wikipedia link to get you
 started: https://en.wikipedia.org/wiki/Graph_theory
 
-So, given Graph Theory is anything but a new idea, why is it that only recently we are
-seeing a massive growth in the building and deployment of graph database systems and
-applications? At least part of the answer is that computer hardware and software has
-reached the point where you can build large big data systems that scale well for a
-reasonable price. In fact, it's even easier than ever to build the large systems
+So, given Graph Theory is anything but a new idea, why is it that only recently we
+are seeing a massive growth in the building and deployment of graph database systems
+and applications? At least part of the answer is that computer hardware and software
+has reached the point where you can build large big data systems that scale well for
+a reasonable price. In fact, it's even easier than ever to build the large systems
 because you don't have to buy the hardware that your system will run on when you use
 the cloud.
 
 While you can certainly run a graph database on your laptop--I do just that every
 day--the reality is that in production, at scale, they are big data systems. Large
 graphs commonly have many billions of vertices and edges in them, taking up petabytes
-of data on disk. Graph algorithms can be both compute- and memory-intensive, and it is
-only fairly recently that deploying the necessary resources for such big data systems
-has made financial sense for more everyday uses in business, and not just in
+of data on disk. Graph algorithms can be both compute- and memory-intensive, and it
+is only fairly recently that deploying the necessary resources for such big data
+systems has made financial sense for more everyday uses in business, and not just in
 government or academia. Graph databases are becoming much more broadly adopted across
 the spectrum, from high-end scientific research to financial networks and beyond.
 
@@ -279,11 +282,11 @@ displaying graphs as part of the user interface layer. In particular, it is so-c
 'property graphs' where we are seeing the broadest development and uptake. In a
 property graph, both vertices and edges can have properties (effectively, key-value
 pairs) associated with them. There are many styles of graph that you may end up
-building and there have been whole books written on these various design patterns, but
-the property graph technology we will be focused on in this document can support all
-of the most common usage patterns. If you hear phrases such as 'directed graph' and
-'undirected graph', or 'cyclic' and 'acyclic' graph, and many more as you work with
-graph databases, a quick online search will get you to a place where you can get
+building and there have been whole books written on these various design patterns,
+but the property graph technology we will be focused on in this document can support
+all of the most common usage patterns. If you hear phrases such as 'directed graph'
+and 'undirected graph', or 'cyclic' and 'acyclic' graph, and many more as you work
+with graph databases, a quick online search will get you to a place where you can get
 familiar with that terminology. A deep discussion of these patterns is beyond the
 scope of this document, and it's in no way essential to have a full background in
 graph theory to get productive quickly.
@@ -292,11 +295,11 @@ A third, and equally important, factor in the growth we are seeing in graph data
 adoption is the low barrier of entry for programmers. As you will see from the
 examples in this document, someone wanting to experiment with graph technology can
 download the Apache TinkerPop package and as long as Java 8 is installed, be up and
-running with zero configuration (other than doing an unzip of the files), in as little
-as five minutes.  Graph databases do not force you to define schemas or specify the
-layout of tables and columns before you can get going and start building a graph.
-Programmers also seem to find the graph style of programming quite intuitive as it
-closely models the way they think of the world.
+running with zero configuration (other than doing an unzip of the files), in as
+little as five minutes.  Graph databases do not force you to define schemas or
+specify the layout of tables and columns before you can get going and start building
+a graph.  Programmers also seem to find the graph style of programming quite
+intuitive as it closely models the way they think of the world.
             
 Graph database technology should not be viewed as a "rip and replace" technology, but
 as very much complimentary to other databases that you may already have deployed. One
