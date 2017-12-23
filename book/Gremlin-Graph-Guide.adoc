@@ -274,33 +274,33 @@ the spectrum, from high-end scientific research to financial networks and beyond
 Another factor that has really helped start this graph database revolution is the
 availability of high-quality open source technology.  There are a lot of great open
 source projects addressing everything from the databases you need to store the graph
-data to the query languages used to traverse them all the way up to visually
-displaying graphs as part of the user interface layer. In particular, it is so called
+data, to the query languages used to traverse them, all the way up to visually
+displaying graphs as part of the user interface layer. In particular, it is so-called
 'property graphs' where we are seeing the broadest development and uptake. In a
-property graph both vertices and edges can have properties (effectively key,value
+property graph, both vertices and edges can have properties (effectively, key-value
 pairs) associated with them. There are many styles of graph that you may end up
-building and there have been whole books written on these various design patterns but
-the property graph technology we will be focussed on in this document can support all
+building and there have been whole books written on these various design patterns, but
+the property graph technology we will be focused on in this document can support all
 of the most common usage patterns. If you hear phrases such as 'directed graph' and
-'undirected graph' or 'cyclic' and 'acyclic' graph and many more as you work with
-graph databases a quick on-line search will get you to a place where you can get
+'undirected graph', or 'cyclic' and 'acyclic' graph, and many more as you work with
+graph databases, a quick online search will get you to a place where you can get
 familiar with that terminology. A deep discussion of these patterns is beyond the
-scope of this document and it's in no way essential to have a full background in
+scope of this document, and it's in no way essential to have a full background in
 graph theory to get productive quickly.
 
-A third, and equally important factor, in the growth we are seeing in graph database
+A third, and equally important, factor in the growth we are seeing in graph database
 adoption is the low barrier of entry for programmers. As you will see from the
 examples in this document, someone wanting to experiment with graph technology can
 download the Apache TinkerPop package and as long as Java 8 is installed, be up and
-running with zero configuration, other than doing an unzip of the files, in as little
+running with zero configuration (other than doing an unzip of the files), in as little
 as five minutes.  Graph databases do not force you to define schemas or specify the
 layout of tables and columns before you can get going and start building a graph.
 Programmers also seem to find the graph style of programming quite intuitive as it
 closely models the way they think of the world.
             
-Graph database technology should not be viewed as a "rip and replace" technology but
+Graph database technology should not be viewed as a "rip and replace" technology, but
 as very much complimentary to other databases that you may already have deployed. One
-common use case is for the graph to be uses as a form of smart index into other data
+common use case is for the graph to be used as a form of smart index into other data
 stores. This is sometimes called having a polyglot data architecture.
 
 [[nodevert]]
