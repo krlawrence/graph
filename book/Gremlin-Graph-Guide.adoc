@@ -239,7 +239,7 @@ force it to be. Your videos are probably doing quite nicely living in the object
 store where you currently have them. A sales ledger system built using a relational
 database is probably doing just fine where it is and likewise a document store is
 quite possibly just the right place to be storing your documents. So "use the right
-tool for the job" remains as valid a phrase here as elsewhere". Where graph databases
+tool for the job" remains as valid a phrase here as elsewhere. Where graph databases
 come into their own is when the data you are storing is intrinsically linked by its
 very nature, the air routes network used as the basis for all of the examples in
 this document being a perfect example of such a situation.
