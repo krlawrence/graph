@@ -7,7 +7,7 @@
 
 This repository is the new home for the source materials, sample code and examples for the book "Graph Databases, Gremlin and TinkerPop - a Tutorial"
 
-**Special note about releases**
+**A Special note about releases**
 
 Starting with revision 274 (Dec 24 2017), all of the output files (XML, EPUB, MOBI, HTML and PDF) will now be stored using Git releases. This should significantly reduce the amount of disk space used up for people who have forks of this project. 
 
