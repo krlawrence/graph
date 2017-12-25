@@ -2,7 +2,7 @@ This folder contains the AsciiDoc source file used to produce the HTML, XML (DOC
 
 **A special note about releases**
 
-Starting with revision 274 (Dec 24 2017), all of the output files (XML, EPUB, MOBI, HTML and PDF) will now be stored using Git releases. This should significantly reduce the amount of disk space used up for people who have forks of this project. The releases are located [here](https://github.com/krlawrence/graph/releases).
+Starting with revision 274 (Dec 24 2017), all of the output files (XML, EPUB, MOBI, HTML and PDF) will now be stored using Git releases. Going forward, this should reduce the amount of disk space required for people who create forks of this project. The releases are located [here](https://github.com/krlawrence/graph/releases).
 
 
 **LATEST NEWS:**  
