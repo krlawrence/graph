@@ -1,6 +1,11 @@
 This folder contains the AsciiDoc source file used to produce the HTML, XML (DOCBOOK), EPUB, MOBI and PDF output.
 
-**LATEST NEWS:**   
+**A special note about releases**
+
+Starting with revision 274 (Dec 24 2017), all of the output files (XML, EPUB, MOBI, HTML and PDF) will now be stored using Git releases. This should significantly reduce the amount of disk space used up for people who have forks of this project. 
+
+**LATEST NEWS:**  
+[Dec-24-2017] Revision 274 was just published in all formats. Now using releases to store output files.   
 [Dec-12-2017] Revision 273 was just published in all formats. Fixes issue #12. Also added additonal clarifications.  
 [Nov-23-2017] Revision 272 was just published in all formats. Many updates to sections 3 and 4.  
 [Nov-03-2017] Revision 271 was just published in all formats. Several improvements and additions.  
