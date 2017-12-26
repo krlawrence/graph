@@ -1,11 +1,11 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v274, Dec 23, 2017
-// Sat Dec 23, 2017 12:53:01
+v275, Dec 26, 2017
+// Tue Dec 26, 2017 09:55:36 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Dec 23 2017
+//:Date:      Dec 26 2017
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -18,7 +18,7 @@ v274, Dec 23, 2017
 //:pygments-style: vim
 :toc:
 :toclevels: 4
-:revision: 274
+:revision: 275
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
 //        has a white foreground color. The default was unreadable,
@@ -10317,7 +10317,8 @@ the Linux Foundation and provides these advanced capabilities.
 In this book I have attempted to provide a reasonable amount of JanusGraph 
 coverage of but it is still recommended to become familiar with the official
 JanusGraph documentation where you will find more in depth discussions of advanced
-topics.
+topics and explanations of the many settings that you can manipulate to suit your
+needs.
 
 JanusGraph can run on a laptop, which is useful for learning and experimenting, but
 it is designed to handle very large graphs stored on distributed clusters. It can
@@ -10505,7 +10506,6 @@ v[4232]
 g.V().has('name','Kelvin').id()
 4232
 ----
-
 
 Before we experiment too much more with JanusGraph there are three important
 subjects we need to discuss. One is transactions, another is defining a schema for
@@ -10755,7 +10755,7 @@ graph.tx().commit()
 
 [[janusschema]]
 Defining a JanusGraph schema for the air-routes graph
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You are not required to define the types and labels of your edges, vertices and
 properties ahead of time but it is strongly recommended that you do so. If you do not
@@ -10809,7 +10809,7 @@ ONE2ONE::
   and from any vertex in the graph. 
 
 Defining edge labels and usage
-++++++++++++++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Let's look at how we can use the JanusGraph Management API to specify the
 multiplicty for the 'route' and 'contains' edges used by the air-routes graph.
@@ -10824,7 +10824,7 @@ mgmt.commit()
 ----
 
 Defining vertex labels
-++++++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^^^^
 
 Now let's tell JanusGraph about the vertex labels that we are going to be using. The
 'air-routes' graph has four different vertex types, namely, 'version', 'airport',
@@ -10843,7 +10843,7 @@ mgmt.commit()
 
 
 Defining vertex property keys
-+++++++++++++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Next we need to define the property keys and data types that our vertices will be
 using. The air-routes graph only uses properties that have a cardinality of SINGLE.
@@ -10867,7 +10867,7 @@ mgmt.commit()
 ----
 
 Defining edge property keys
-+++++++++++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 We also need to define the property keys and data types that will be used on edges.
 Currently the 'air-routes' graph only has one edge property, 'dist' that is used to
@@ -10973,16 +10973,79 @@ variable for later use.
 ----
 ausid = g.V().has('code','AUS').id().next()
 
-g.V(ausid).values('city','desc','region').join(',')
+g.V(ausid).values('city','desc','region').join(', ')
 
-Austin Bergstrom International Airport,Austin,US-TX
+Austin Bergstrom International Airport, Austin, US-TX
 ----
 
-[[janindex]]
+Note that property values are not necessarily returned in the order you requested.
+That can be seen by looking at the example above. Our 'values' step had 'city' first
+but in fact the 'desc' properties value was returned first. Gremlin makes no
+guarantees that items will be returned in the specific order you requested. They are
+returned in the order in which they are found during a traversal. You should not
+build in dependencies to your queries on the order things are returned in.  If you
+need a specific ordering you should sort or otherwise manipulate the returned results
+of a query to match your needs.
+
+[[jaindexintro]]
+JanusGraph indexes
+~~~~~~~~~~~~~~~~~~
+
+JanusGraph supports two different types of indexing known as 'graph indexes' and
+'vertex centric indexes' respectively.  JanusGraph also supports the use of
+'composiste' and 'mixed' indexes as well as the use of external indexing
+technologies. All of these concepts will be discussed and explained in the following
+sections. Using an index will greatly improve performance of your graph queries and
+is something you should get familiar with doing for any graphs that you create or
+manage. While in many cases use of an index is optional by default, I strongly
+recommend that you view it as mandatory.
+
+[[graphindexes]]
+Graph indexes
+^^^^^^^^^^^^^
+
+To be written
+
+[[vciintro]]
+Vertex centric indexes
+^^^^^^^^^^^^^^^^^^^^^^
+
+To be written
+
+[[compositeintro]]
+Introducing 'composite' indexes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To be written
+
+[[mixedintro]]
+Introducing 'mixed' indexes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To be written
+
+[[compositeindex]]
 Building a composite index to speed up searching
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To be written
+It is strongly recommended that you create indexes for any property keys that you are
+likely to be using regularly in queries. An index can greatly speed up searching a
+graph as without an index being present JanusGraph has to search your entire graph
+each time you issue a query looking for one or more specific properties. If you issue
+a query that uses property keys that have not been indexed, the query will still work
+but unless warnings have been turned off, JanusGraph will remind you that you should
+consider creating an index to improve the performance of your query. 
+
+NOTE: You should be aware that some graph systems running JanusGraph may have disabled
+the ability to do a full graph search thus requiring that you always have an index
+for any property keys that you use in your queries.
+
+Take a look at the example below. We issue a simple query looking for the airport
+with a 'code' property containing the value 'LHR'. Because we have not yet created an
+index for that property key, JanusGraph gives us a warning before also returning the
+vertex that we are looking for. If the administrator of the JanusGraph system you are
+using has disabled the ability to do full graph searches (a feature that is on by
+default but can be disabled) the query below will fail with an error message.
 
 [source,groovy]
 ----
@@ -10994,6 +11057,19 @@ WARN  org.janusgraph.graphdb.transaction.StandardJanusGraphTx
 
 v[32904]
 ----
+
+If an index is present, before looking at the graph itself, JanusGraph will look at
+the index. If the property key being searched for has been indexed, there will be
+entries in the index pointing to each occurrence of that property key within the
+graph. This enables JanusGraph to directly fetch those elements without having to
+search the entire graph looking for them. With a large graph this can provide a very
+substantial performance improvement. Depending on your indexing needs you may or may
+not need to also use an external indexing technology such as Apache Solr or Apache
+Elastic Search. The subject of using an external index is discussed a bit later.
+First of all let's take a look at the types of index that you can create that
+JanusGraph can manage by itself without needing help from an external index.
+
+Using JanusGraph you can create and manipulate an index using the Management API.
 
 [source,groovy]
 ----
@@ -11037,7 +11113,7 @@ mgmt.commit()
 
 [[janpred]]
 Additional JanusGraph text search predicates
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We have already looked, in the "<<tranges>> section, at the predicates TinkerPop
 defines such as 'neq', 'gte' and 'lte'. Janus graph offers an additional set of
@@ -11069,7 +11145,7 @@ each being used. First off, the query below will find any vertex that has a 'des
 'Dallas' followed by any word break character such as a space or a forward slash.
 
 Text comparison predicates
-++++++++++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The simplest of the search predicates allow you to specify an exact match that string  must
 be present either as a whole word (complete word match) or as part of the entire text
@@ -11247,7 +11323,7 @@ Losuia
 ----
 
 Regular expression predicates
-+++++++++++++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The JanusGraph regular expression predicates recognize the syntax defined as part of
 the Java 1.8 Pattern class that is documented at
@@ -11406,7 +11482,7 @@ Hall Beach Airport
 ----
 
 Fuzzy search predicates
-+++++++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^^^^^
 
 These predicates use the
 https://en.wikipedia.org/wiki/Levenshtein_distance[Levenshtein distance] method to
