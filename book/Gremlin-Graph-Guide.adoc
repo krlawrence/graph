@@ -2,7 +2,7 @@ GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v275, Dec 26, 2017
-// Tue Dec 26, 2017 09:55:36 CST
+// Tue Dec 26, 2017 14:12:37 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Dec 26 2017
@@ -10993,7 +10993,7 @@ JanusGraph indexes
 
 JanusGraph supports two different types of indexing known as 'graph indexes' and
 'vertex centric indexes' respectively.  JanusGraph also supports the use of
-'composiste' and 'mixed' indexes as well as the use of external indexing
+'composite' and 'mixed' indexes as well as the use of external indexing
 technologies. All of these concepts will be discussed and explained in the following
 sections. Using an index will greatly improve performance of your graph queries and
 is something you should get familiar with doing for any graphs that you create or
@@ -11004,7 +11004,12 @@ recommend that you view it as mandatory.
 Graph indexes
 ^^^^^^^^^^^^^
 
-To be written
+If you have used other types of database such as a relational database, you may
+already be familiar with the concept of using an index to speed up random access to
+the entire database. When using JanusGraph that is the role played by a 'graph
+index'. The main job of a 'graph index' is to get you to the starting point of your
+query as efficiently as possible without having to first search the entire graph to
+find the vertices or edges that you are looking for. 
 
 [[vciintro]]
 Vertex centric indexes
@@ -11028,7 +11033,7 @@ To be written
 Building a composite index to speed up searching
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-It is strongly recommended that you create indexes for any property keys that you are
+It is strongly recommended that you create graph indexes for any property keys that you are
 likely to be using regularly in queries. An index can greatly speed up searching a
 graph as without an index being present JanusGraph has to search your entire graph
 each time you issue a query looking for one or more specific properties. If you issue
