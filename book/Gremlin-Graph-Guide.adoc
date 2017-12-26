@@ -2,7 +2,7 @@ GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v275, Dec 26, 2017
-// Tue Dec 26, 2017 14:12:37 CST
+// Tue Dec 26, 2017 17:10:30 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Dec 26 2017
@@ -11009,19 +11009,62 @@ already be familiar with the concept of using an index to speed up random access
 the entire database. When using JanusGraph that is the role played by a 'graph
 index'. The main job of a 'graph index' is to get you to the starting point of your
 query as efficiently as possible without having to first search the entire graph to
-find the vertices or edges that you are looking for. 
+find the vertices or edges that you are looking for.
+
+You should always establish a 'graph index' for the property keys, or combinations of
+keys, you will use regularly in your queries when working with JanusGraph. In some
+situations you will also need to create 'vertex centric indexes', a subject we will
+discuss next, but most likely this will be part of tuning the performance of your
+graph rather than from the start.  Conversely, You should plan on creating your
+'graph indexes' long with your initial graph schema. The simplest form of 'graph
+index' is the composite index that we will see how to create and use soon.
 
 [[vciintro]]
 Vertex centric indexes
 ^^^^^^^^^^^^^^^^^^^^^^
 
-To be written
+A vertex centric index, as the name suggests is an index associated with a vertex.
+These are typically used when the number of incident edges on a given vertex becomes
+significantly large such that it can impact performance. As mentioned above, it is
+likely that when you first create your graph and graph schema that you will just
+create a set of 'graph indexes' and only create 'vertex centric indexes' as the need
+arises.
 
 [[compositeintro]]
 Introducing 'composite' indexes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To be written
+A composite index can be used to speed up queries where an exact match with the value
+for  given property key is sufficient. For example, the query below could take
+advantage of a composite index as we are only looking for exact matches where the
+value associated with the 'city' key is the value 'Paris'.
+
+[source,groovy]
+----
+g.V().has('city','Paris')
+----
+
+A composite index can be defined to support queries that use more than one key. For
+example we could create an index that can be used for queries that look at the 'city'
+and 'country' property keys to help with a query like the one below that will find
+the vertex for the airport in the city of London in Ontario, Canada, but not the ones
+in London, England.
+
+[source,groovy]
+----
+g.V().has('city','London').has('country','CA')
+----
+
+A composite index will not help if we want to get more sophisticated and look for
+partial matches, use predicates other than 'equal to' or use regular expressions in
+our queries. That is where the 'mixed index' comes in to play. So for example, a
+composite index would not help with the following query that looks for airports in
+the air-routes graph with more than five runways.
+
+[source,groovy]
+----
+g.V().has('runways',gt(5))
+----
 
 [[mixedintro]]
 Introducing 'mixed' indexes
@@ -11030,8 +11073,8 @@ Introducing 'mixed' indexes
 To be written
 
 [[compositeindex]]
-Building a composite index to speed up searching
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Building a composite index to speed up exact match searching
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 It is strongly recommended that you create graph indexes for any property keys that you are
 likely to be using regularly in queries. An index can greatly speed up searching a
@@ -11074,25 +11117,56 @@ Elastic Search. The subject of using an external index is discussed a bit later.
 First of all let's take a look at the types of index that you can create that
 JanusGraph can manage by itself without needing help from an external index.
 
-Using JanusGraph you can create and manipulate an index using the Management API.
+Using JanusGraph you can create and manipulate an index using the Management API. The
+JanusGraph documentation strongly recommends that you always make a call to
+'graph().tx().rollback()' before you start to create an index to make sure that no
+other transactions are currently active.
+
+The example below shows how to use the Management API to create a new composite index
+for the airport 'code' property in the air-routes graph.
 
 [source,groovy]
 ----
+// Make sure no other transactions are open
 graph.tx().rollback()
+
+// Open a new management transaction
 mgmt=graph.openManagement()
+
+// Create a composite index for the code key for use with vertices
 idx=mgmt.buildIndex('airportIndex',Vertex.class)
 iata = mgmt.getPropertyKey('code')
 idx.addKey(iata).buildCompositeIndex()
-mgmt.commit()
 
+// All done commit our changes to end the trnsaction
+mgmt.commit()
+----
+
+Having created the index it is important to wait until it is available before trying
+to do anything else. We can do that by calling the 'awaitGraphIndexStatus' method
+that is also part of the JanusGraph Management API.
+
+[source,groovy]
+----
 mgmt.awaitGraphIndexStatus(graph, 'airportIndex').
      status(SchemaStatus.REGISTERED).call()
+----
 
+If we already have data in the graph we also now to tell JanusGraph to perform a
+re-index. Once again we use the Management API to do this but this time using the
+'updateIndex' method.
+
+[source,groovy]
+----
 mgmt = graph.openManagement()
 mgmt.awaitGraphIndexStatus(graph, 'airportIndex').call()
 mgmt.updateIndex(mgmt.getGraphIndex("airportIndex"), SchemaAction.REINDEX).get()
 mgmt.commit()
 ----
+
+If we re-run the same query we used earlier and got the warning about using indexes from
+JanusGraph, this time we get the same result but without the warning. This tells us
+that JanusGraph was able to satisfy our query using the index that we just created.
 
 [source,groovy]
 ----
@@ -11101,19 +11175,39 @@ g.V().has('code','LHR')
 v[32904]
 ----
 
+We can also use the JanusGraph Management API to query information about the index
+that we just defined. As you can see below, as we have only created one index so far,
+that is all that is returned.
+
 [source,groovy]
 ----
 mgmt = graph.openManagement()
+
+// What indexes are defined?
 v_idxes = mgmt.getGraphIndexes(Vertex.class)
 
 airportIndex
 
+// Print the key names they are associated with
 v_idxes.each {println it.getFieldKeys()} 
 
 [code]
 
 mgmt.commit()
 ----
+
+A script to automate schema creation, indexing and graph loading
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In the sample code directory of my GitHub project for this book you will find a small
+Gremlin (Groovy) script in a file called 'janusgraph-inmemory.groovy'. You can get to
+the file by visiting this URL:
+https://github.com/krlawrence/graph/blob/master/sample-code/janus-inmemory.groovy
+
+The script will create an 'inmemory' JanusGraph instance, define the schema, create
+several indexes and load the 'air-routes.graphml' file so that you can try some queries
+using the Gremlin Console. You might find that a good way to experiment with the
+concepts that we have covered in this discussion of JanusGraph so far.
 
 
 [[janpred]]
