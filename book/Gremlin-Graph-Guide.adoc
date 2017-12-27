@@ -2,7 +2,7 @@ GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v275, Dec 26, 2017
-// Tue Dec 26, 2017 17:10:30 CST
+// Tue Dec 26, 2017 18:58:49 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Dec 26 2017
@@ -11194,6 +11194,74 @@ v_idxes.each {println it.getFieldKeys()}
 [code]
 
 mgmt.commit()
+----
+
+It is also possible to define an index that will support a query containing more than
+one key. For example we might want to create an index that would be used to help with
+queries like the one below which is essentially a query looking for any vertex that
+has a 'city' property with a value of of 'London' AND a country property with a value
+of 'CA'.
+
+[source,index]
+----
+g.V().has('city','London').has('country','CA')
+----
+
+We could define an index to support such a query using the code that follows. Note
+that the only differences from the prior example are that we add two keys rather than
+one to the index. Note also that the 'addKey' methods are called with the 'country'
+key coming before the 'city' key which is the reverse order to which we expect the
+Gremlin query to use the keys.
+
+[source,groovy]
+----
+// Make sure no other transactions are active
+graph.tx().rollback() 
+
+// Start a new management transaction
+mgmt = graph.openManagement()
+
+// Find the property keys that we need to index
+city = mgmt.getPropertyKey('city')
+country = mgmt.getPropertyKey('country')
+
+// Create a new index and add our keys
+index = mgmt.buildIndex('byCityAndCountry', Vertex.class)
+index.addKey(country).addKey(city).buildCompositeIndex()
+
+// All done
+mgmt.commit()
+
+// Wait for the index to be active
+mgmt.awaitGraphIndexStatus(graph, 'byCityAndCountry').call()
+
+// Force a re-index
+mgmt = graph.openManagement()
+mgmt.updateIndex(mgmt.getGraphIndex("byCityAndCountry"), SchemaAction.REINDEX).get()
+mgmt.commit()             
+----
+
+We can use the Gremlin 'profile' step to verify that JanusGraph is indeed now using
+our new index. I have truncated some of the output so it will fit on the page but you
+can see from the output that the query did indeed use our new index.
+
+----
+g.V().has('city','London').has('country','CA').profile()
+
+Traversal Metrics
+Step                                              Traversers  Time (ms)
+========================================================================
+JanusGraphStep([],[city.eq(London), country.eq(...      1          1.036
+    \_condition=(city = London AND country = CA)
+    \_isFitted=true
+    \_query=multiKSQ[1]@2147483647
+    \_index=byCityAndCountry
+    \_orders=[]
+    \_isOrdered=true
+  optimization                                                     0.741
+  backend-query                                         1          0.085
+    \_query=byCityAndCountry:multiKSQ[1]@2147483647
+                                            >TOTAL      -          1.036
 ----
 
 A script to automate schema creation, indexing and graph loading
