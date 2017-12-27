@@ -1,4 +1,7 @@
-// Create an index that can help queries such as:
+// This code is intended to be used within the Gremlin Console while using JanusGraph
+// You can invoke it using  :load janus-composite-2key.groovy
+//
+// The code below will create an index that can help queries such as:
 //    g.V().has('city','London').has('country','CA')
 
 // Make sure no other transactions are active
