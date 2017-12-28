@@ -11,8 +11,8 @@ edges = g.E().groupCount().by(label).next();[]
 println "Vertices : ${verts}";[]
 println "Edges    : ${edges}";[]
 
-most = g.V().hasLabel('airport').order().by(out('route').count(),decr).limit(1).
-             project('ap','num','city').by('code').by(out('route').count()).by('city').next();[]
+most = g.V().hasLabel('airport').order().by(bothE('route').count(),decr).limit(1).
+             project('ap','num','city').by('code').by(bothE('route').count()).by('city').next();[]
 
 println "\nThe airport with the most routes (incoming and outgoing) is ${most['ap']}/${most['city']} with ${most['num']}";[]
 
