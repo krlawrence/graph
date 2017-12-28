@@ -2,7 +2,7 @@ GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v275, Dec 26, 2017
-// Thu Dec 28, 2017 10:41:52 CST
+// Thu Dec 28, 2017 13:17:47 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Dec 26 2017
@@ -736,17 +736,22 @@ Along with these notes I have provided what is, in big data terms,a very small, 
 nonetheless real World, graph that is written in GraphML, a standard XML format for
 describing graphs that can be used to move graphs between applications. The graph,
 'air-routes.graphml' is a model I built of the World airline route network that is
-fairly accurate. Of course, in the real World, routes are added and deleted by
-airlines all the time so please don't use this graph to plan your next vacation or
-business trip!  However, as a learning tool I hope you will find it useful and easy
-to relate to. If you feel so inclined you can load the file into a text editor and
-examine how it is laid out. As you work with graphs you will want to become familiar
-with popular graph serialization formats. Two common ones are GraphML and GraphSON.
-The latter is a JSON format that is defined by Apache TinkerPop and heavily used in
-that environment. GraphML is very widely recognized by TinkerPop and many other tools
-as well such as Gephi, a popular open source tool for visualizing graph data.  A lot
-of graph ingestion algorithms also sill use comma separated values (CSV) format
-files. 
+fairly accurate. 
+
+NOTE: The 'air-routes.graphml' file can be downloded from the 'sample-data' folder
+located in the GitHub repository at the following URL:
+https://github.com/krlawrence/graph/tree/master/sample-data
+
+Of course, in the real World, routes are added and deleted by airlines all the time
+so please don't use this graph to plan your next vacation or business trip!  However,
+as a learning tool I hope you will find it useful and easy to relate to. If you feel
+so inclined you can load the file into a text editor and examine how it is laid out.
+As you work with graphs you will want to become familiar with popular graph
+serialization formats. Two common ones are GraphML and GraphSON.  The latter is a
+JSON format that is defined by Apache TinkerPop and heavily used in that environment.
+GraphML is very widely recognized by TinkerPop and many other tools as well such as
+Gephi, a popular open source tool for visualizing graph data.  A lot of graph
+ingestion algorithms also sill use comma separated values (CSV) format files. 
 
 We will briefly look at loading and saving graph data in Sections 2 and 4. We take a
 much deeper look at different ways to work with graph data stored in text format
@@ -888,8 +893,13 @@ graph terminology this is often called the degree of the vertex or just 'vertex 
     15    74   MAD  (384)  out:192 in:192
 ----
 
-Throughout this document you will find the Gremlin queries that can be used to
-generate many of these statistics.
+Throughout this book you will find Gremlin queries that can be used to generate many
+of these statistics.
+
+NOTE: There is a sample script called 'graph-stats.groovy' in
+the GitHub repository located in the 'sample-code' folder that shows how to generate
+some statistics about the graph. The script can be found at the
+following URL: https://github.com/krlawrence/graph/tree/master/sample-code 
 
 [[mn]]
 TinkerPop 3 migration notes
@@ -7656,8 +7666,8 @@ Now let's do the same thing but for outgoing routes.
 [source,groovy]
 ----
 // Find the top ten overall in terms of outgoing routes
-g.V().hasLabel('airport').order().by(out('route').count(),decr).limit(10)
-                         .project('ap','routes').by('code').by(out('route').count())
+g.V().hasLabel('airport').order().by(out('route').count(),decr).limit(10).
+                          project('ap','routes').by('code').by(out('route').count())
 
 [ap:FRA, routes:243]
 [ap:AMS, routes:240]
