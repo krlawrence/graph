@@ -2,7 +2,7 @@ GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v275, Dec 26, 2017
-// Tue Dec 26, 2017 18:58:49 CST
+// Wed Dec 27, 2017 19:28:17 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Dec 26 2017
@@ -181,6 +181,29 @@ Chapter 7 - COMMON GRAPH SERIALIZATION FORMATS::
 Chapter 8 - FURTHER READING::
 - We finish up by providing several links to useful web sites where you can find
   tools and documentation for many of the technologies covered in this document.
+
+[[samplesintro]]
+Introducing the sample programs and data
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The examples in this book make use of a sample graph called 'air-routes.graphml'
+which contains a graph based on the World airline route network between over 3,370
+airports. The sample graph, some sample code and some demo applications can all be
+found at the same Github site where the book manuscript is hosted. You will also find
+the book in various formats (HTML,PDF, DocBook/XML, MOBI and EPUB) at the same GitHub
+location. Below are some links to each.
+
+.Where to find the book, samples and data
+Book manuscript in Asciidoc format::
+- https://github.com/krlawrence/graph/tree/master/book
+Sample data (air-routes.graphml)::
+- https://github.com/krlawrence/graph/tree/master/sample-data
+Sample code::
+- https://github.com/krlawrence/graph/tree/master/sample-code
+Sample applications::
+- https://github.com/krlawrence/graph/tree/master/demos
+Book releases in multiple formats::
+- https://github.com/krlawrence/graph/releases
 
 
 [[whygraph]]
@@ -11202,7 +11225,7 @@ queries like the one below which is essentially a query looking for any vertex t
 has a 'city' property with a value of of 'London' AND a country property with a value
 of 'CA'.
 
-[source,index]
+[source,groovy]
 ----
 g.V().has('city','London').has('country','CA')
 ----
@@ -11245,6 +11268,7 @@ We can use the Gremlin 'profile' step to verify that JanusGraph is indeed now us
 our new index. I have truncated some of the output so it will fit on the page but you
 can see from the output that the query did indeed use our new index.
 
+[source,groovy]
 ----
 g.V().has('city','London').has('country','CA').profile()
 
