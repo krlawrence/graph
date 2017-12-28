@@ -6,6 +6,7 @@ println "\n\nA few statistics about the air-routes graph";[]
 println "===========================================";[]
 
 println "\nDistribution of vertices and edges";[]
+println "----------------------------------";[]
 verts = g.V().groupCount().by(label).next();[]
 edges = g.E().groupCount().by(label).next();[]
 println "Vertices : ${verts}";[]
@@ -22,6 +23,14 @@ most = g.V().hasLabel('airport').order().by(out('route').count(),decr).limit(20)
                      project('ap','num','city').by('code').by(out('route').count()).by('city').toList();[]
 
 most.each {printf("%4s  %15s %5d\n", it.ap, it.city,  it.num)};[]
+
+println "\nTop 20 airports ordered by number of incoming routes";[]
+println "----------------------------------------------------";[]
+most = g.V().hasLabel('airport').order().by(__.in('route').count(),decr).limit(20).
+                     project('ap','num','city').by('code').by(__.in('route').count()).by('city').toList();[]
+
+most.each {printf("%4s  %15s %5d\n", it.ap, it.city,  it.num)};[]
+
 
 longroute = g.E().hasLabel('route').order().by('dist',decr).limit(1).
                   project('from','to','num').
