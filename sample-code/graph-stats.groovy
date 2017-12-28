@@ -16,12 +16,17 @@ most = g.V().hasLabel('airport').order().by(out('route').count(),decr).limit(1).
 
 println "\nThe airport with the most routes (incoming and outgoing) is ${most['ap']}/${most['city']} with ${most['num']}";[]
 
+longroute = g.E().hasLabel('route').order().by('dist',decr).limit(1).
+                  project('from','to','num').by(inV().values('code')).by(outV().values('code')).by('dist').next();[]
+
+println "\nThe longest route in the graph is ${longroute['num']} miles between ${longroute['from']} and ${longroute['to']}";[]
+
 longest = g.V().hasLabel('airport').order().by('longest',decr).limit(1).
                 project('ap','num','city').by('code').by('longest').by('city').next();[]
 
 println "\nThe longest runway in the graph is ${longest['num']} feet at ${longest['ap']}/${longest['city']}";[]
 
-;[] // A different way of doing the above using two queries. Just to show a different approach
+;[] // A different way of doing the above type of query using two queries. Just to show a different approach
 highest = g.V().hasLabel('airport').values('elev').max().next();[]
 aptcity = g.V().has('elev',highest).valueMap('code','city').next();[]
 println "\nThe highest airport in the graph is ${aptcity['code'][0]}/${aptcity['city'][0]} which is at ${highest} feet above sea level";[]
