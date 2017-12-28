@@ -21,10 +21,19 @@ longroute = g.E().hasLabel('route').order().by('dist',decr).limit(1).
 
 println "\nThe longest route in the graph is ${longroute['num']} miles between ${longroute['from']} and ${longroute['to']}";[]
 
+
+meanroute = g.E().hasLabel('route').values('dist').mean().next().round(4);[]
+println "The average route distance is ${meanroute} miles";[]
+
 longest = g.V().hasLabel('airport').order().by('longest',decr).limit(1).
                 project('ap','num','city').by('code').by('longest').by('city').next();[]
 
 println "\nThe longest runway in the graph is ${longest['num']} feet at ${longest['ap']}/${longest['city']}";[]
+
+shortest = g.V().hasLabel('airport').order().by('longest',incr).limit(1).
+                 project('ap','num','city').by('code').by('longest').by('city').next();[]
+
+println "The shortest runway in the graph is ${shortest['num']} feet at ${shortest['ap']}/${shortest['city']}";[]
 
 ;[] // A different way of doing the above type of query using two queries. 
 ;[] // Just to show a different approach
