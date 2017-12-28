@@ -26,7 +26,8 @@ longest = g.V().hasLabel('airport').order().by('longest',decr).limit(1).
 
 println "\nThe longest runway in the graph is ${longest['num']} feet at ${longest['ap']}/${longest['city']}";[]
 
-;[] // A different way of doing the above type of query using two queries. Just to show a different approach
+;[] // A different way of doing the above type of query using two queries. 
+;[] // Just to show a different approach
 highest = g.V().hasLabel('airport').values('elev').max().next();[]
 aptcity = g.V().has('elev',highest).valueMap('code','city').next();[]
 println "\nThe highest airport in the graph is ${aptcity['code'][0]}/${aptcity['city'][0]} which is at ${highest} feet above sea level";[]
