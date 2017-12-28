@@ -2,7 +2,7 @@ GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v275, Dec 26, 2017
-// Wed Dec 27, 2017 19:28:17 CST
+// Thu Dec 28, 2017 10:41:52 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Dec 26 2017
@@ -7656,8 +7656,8 @@ Now let's do the same thing but for outgoing routes.
 [source,groovy]
 ----
 // Find the top ten overall in terms of outgoing routes
-g.V().hasLabel('airport').order().by(out('routes').count(),decr).limit(10)
-                         .project('ap','routes').by('code').by(out('routes').count())
+g.V().hasLabel('airport').order().by(out('route').count(),decr).limit(10)
+                         .project('ap','routes').by('code').by(out('route').count())
 
 [ap:FRA, routes:243]
 [ap:AMS, routes:240]
