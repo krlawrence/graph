@@ -16,14 +16,39 @@ most = g.V().hasLabel('airport').order().by(bothE('route').count(),decr).limit(1
 
 println "\nThe airport with the most routes (incoming and outgoing) is ${most['ap']}/${most['city']} with ${most['num']}";[]
 
+println "\nTop 20 airports ordered by number of outgoing routes";[]
+println "----------------------------------------------------";[]
+most = g.V().hasLabel('airport').order().by(out('route').count(),decr).limit(20).
+                     project('ap','num','city').by('code').by(out('route').count()).by('city').toList();[]
+
+most.each {printf("%4s  %15s %5d\n", it.ap, it.city,  it.num)};[]
+
 longroute = g.E().hasLabel('route').order().by('dist',decr).limit(1).
-                  project('from','to','num').by(inV().values('code')).by(outV().values('code')).by('dist').next();[]
+                  project('from','to','num').
+                  by(inV().values('code')).by(outV().values('code')).by('dist').next();[]
 
 println "\nThe longest route in the graph is ${longroute['num']} miles between ${longroute['from']} and ${longroute['to']}";[]
+
+shortroute = g.E().hasLabel('route').order().by('dist',incr).limit(1).
+                   project('from','to','num').
+                   by(inV().values('code')).by(outV().values('code')).by('dist').next();[]
+
+println "The shortest route in the graph is ${shortroute['num']} miles between ${shortroute['from']} and ${shortroute['to']}";[]
 
 
 meanroute = g.E().hasLabel('route').values('dist').mean().next().round(4);[]
 println "The average route distance is ${meanroute} miles";[]
+
+println "\nTop 20 routes in the graph by distance";[]
+println "--------------------------------------";[]
+
+routes = g.E().hasLabel('route').order().by('dist',decr).limit(40).
+               project('a','b','c').
+               by(inV().values('code')).by('dist').by(outV().values('code')).
+               filter(select('a','c')).where('a',lt('c')).toList();[]
+               
+routes.each {printf("%4s  %5d %4s\n", it.a, it.b,  it.c)};[]
+
 
 longest = g.V().hasLabel('airport').order().by('longest',decr).limit(1).
                 project('ap','num','city').by('code').by('longest').by('city').next();[]
