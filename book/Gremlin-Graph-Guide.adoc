@@ -2,7 +2,7 @@ GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v275, Dec 26, 2017
-// Thu Dec 28, 2017 13:17:47 CST
+// Thu Dec 28, 2017 15:14:16 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Dec 26 2017
@@ -8221,6 +8221,50 @@ g.V().as('s').outE().has('dist',gt(8000)).order().by('dist',decr).inV().as('f').
 [EWR,8047,HKG]
 [DOH,8030,IAH]
 [DFW,8022,DXB]
+----
+
+Finding the 20 longest routes in the graph
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+We could write the query from the previous section a different way looking at edges
+first and using the project instead of using the 'as' and 'select' steps.
+While in general it is not recommended to start a query with 'g.E()' as there
+are typically a lot more edges than vertices in a graph this does illustrate a useful
+pattern. Also, just to change things a bit, this time we just look for the 20 longest
+routes rather than looking for routes longer the 8,000 miles. We again filter the
+results to only show the route inn one direction. Note that the limit step is passed
+a parameter of 40 and not 20 as we know we will be filtering out the same route in
+the return direction.
+
+[source,groovy]
+----
+g.E().hasLabel('route').order().by('dist',decr).limit(40).project('a','b','c').
+      by(inV().values('code')).by('dist').by(outV().values('code')).
+      filter(select('a','c')).where('a',lt('c'))
+----
+
+Here are the results from running the query.
+
+[source,groovy]
+----
+[a:AKL,b:8818,c:DXB]
+[a:CAN,b:8754,c:MEX]
+[a:ATL,b:8434,c:JNB]
+[a:SFO,b:8433,c:SIN]
+[a:AUH,b:8372,c:LAX]
+[a:DXB,b:8321,c:LAX]
+[a:JED,b:8314,c:LAX]
+[a:DOH,b:8287,c:LAX]
+[a:LAX,b:8246,c:RUH]
+[a:DXB,b:8150,c:IAH]
+[a:AUH,b:8139,c:SFO]
+[a:DFW,b:8105,c:HKG]
+[a:DXB,b:8085,c:SFO]
+[a:HKG,b:8054,c:JFK]
+[a:AUH,b:8053,c:DFW]
+[a:EWR,b:8047,c:HKG]
+[a:DOH,b:8030,c:IAH]
+[a:DFW,b:8022,c:DXB]
 ----
 
 Combining 'aggregate', 'union' and 'filter' to compute distances.
