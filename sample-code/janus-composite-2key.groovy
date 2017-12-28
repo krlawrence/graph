@@ -18,8 +18,10 @@ country = mgmt.getPropertyKey('country')
 index = mgmt.buildIndex('byCityAndCountry', Vertex.class)
 index.addKey(country).addKey(city).buildCompositeIndex()
 
+// Wait for our new index to be ready
 mgmt.awaitGraphIndexStatus(graph, 'byCityAndCountry').call()
 
+// Force a re-index
 mgmt = graph.openManagement()
 mgmt.updateIndex(mgmt.getGraphIndex("byCityAndCountry"), SchemaAction.REINDEX).get()
 mgmt.commit()
