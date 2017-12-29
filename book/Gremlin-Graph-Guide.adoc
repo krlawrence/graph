@@ -2,7 +2,7 @@ GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v275, Dec 26, 2017
-// Thu Dec 28, 2017 15:14:16 CST
+// Thu Dec 28, 2017 18:54:11 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Dec 26 2017
@@ -11070,12 +11070,14 @@ JanusGraph indexes
 
 JanusGraph supports two different types of indexing known as 'graph indexes' and
 'vertex centric indexes' respectively.  JanusGraph also supports the use of
-'composite' and 'mixed' indexes as well as the use of external indexing
-technologies. All of these concepts will be discussed and explained in the following
-sections. Using an index will greatly improve performance of your graph queries and
-is something you should get familiar with doing for any graphs that you create or
+'composite' and 'mixed' indexes as well as the use of external indexing technologies.
+All of these concepts will be discussed and explained in the following sections.
+Using an index will greatly improve performance of your graph queries and is
+something you should get familiar with doing for any graphs that you create or
 manage. While in many cases use of an index is optional by default, I strongly
-recommend that you view it as mandatory.
+recommend that you view it as mandatory. The JanusGraph documentation provides some
+fairly in depth coverage of indexing and can be read by visiting the following URL:
+http://docs.janusgraph.org/latest/indexes.html
 
 [[graphindexes]]
 Graph indexes
@@ -11147,19 +11149,23 @@ g.V().has('runways',gt(5))
 Introducing 'mixed' indexes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To be written
+As mentioned above, if the queries that you expect to be writing require more than a
+simple test for equality then you will need to create what is referred to as a 'mixed
+index'. Once you decide to create a mixed index you will also need to configure an
+indexing backend such as Apache Solr or Apache Elastic Search. We will explore the
+use of mixed indexes in the "<<extindex>>" section.
 
 [[compositeindex]]
 Building a composite index to speed up exact match searching
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-It is strongly recommended that you create graph indexes for any property keys that you are
-likely to be using regularly in queries. An index can greatly speed up searching a
-graph as without an index being present JanusGraph has to search your entire graph
-each time you issue a query looking for one or more specific properties. If you issue
-a query that uses property keys that have not been indexed, the query will still work
-but unless warnings have been turned off, JanusGraph will remind you that you should
-consider creating an index to improve the performance of your query. 
+It is strongly recommended that you create graph indexes for any property keys that
+you are likely to be using regularly in queries. An index can greatly speed up
+searching a graph as without an index being present JanusGraph has to search your
+entire graph each time you issue a query looking for one or more specific properties.
+If you issue a query that uses property keys that have not been indexed, the query
+will still work but unless warnings have been turned off, JanusGraph will remind you
+that you should consider creating an index to improve the performance of your query. 
 
 NOTE: You should be aware that some graph systems running JanusGraph may have disabled
 the ability to do a full graph search thus requiring that you always have an index
@@ -11834,6 +11840,7 @@ Apache HBase
 
 To be written
 
+[[extindex]]
 Using an external index with JanusGraph
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
