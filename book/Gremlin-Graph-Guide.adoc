@@ -1,11 +1,11 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v275, Dec 26, 2017
-// Thu Dec 28, 2017 18:54:11 CST
+v275, Dec 29, 2017
+// Fri Dec 29, 2017 10:32:30 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Dec 26 2017
+//:Date:      Dec 29 2017
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -8227,14 +8227,14 @@ Finding the 20 longest routes in the graph
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 We could write the query from the previous section a different way looking at edges
-first and using the project instead of using the 'as' and 'select' steps.
+first and using the 'project' step instead of using the 'as' and 'select' steps.
 While in general it is not recommended to start a query with 'g.E()' as there
 are typically a lot more edges than vertices in a graph this does illustrate a useful
 pattern. Also, just to change things a bit, this time we just look for the 20 longest
 routes rather than looking for routes longer the 8,000 miles. We again filter the
-results to only show the route inn one direction. Note that the limit step is passed
-a parameter of 40 and not 20 as we know we will be filtering out the same route in
-the return direction.
+results to only show the route in one direction. Note that the limit step is passed
+a parameter of 40 rather than 20 as we know we will be filtering out the same route in
+the return direction so we will actually only get 20 routes back.
 
 [source,groovy]
 ----
@@ -8267,16 +8267,16 @@ Here are the results from running the query.
 [a:DFW,b:8022,c:DXB]
 ----
 
+[[aggrunion]]
 Combining 'aggregate', 'union' and 'filter' to compute distances.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This next query is similar to the one we looked <<aggr1,above>> at in the
-"<<wherefly>>" section.  It uses 'aggregate', 'union', 'filter' and
-'where' being used together to factor certain airports in and out of a query.
-We find all airports in London, Munich and Paris and then count the total
-distance of all routes from those airports as the first half of a 'union'. The
-second half of the 'union' only counts the distances of routes that end up in
-one of our three selected cities.
+This next query is similar to the one we looked at in the "<<wherefly>>" section.  It
+uses 'aggregate', 'union', 'filter' and 'where' to factor certain airports in and out
+of a query.  We find all airports in London, Munich and Paris and then count the
+total distance of all routes from those airports as the first half of a 'union'. The
+second half of the 'union' only counts the distances of routes that end up in one of
+our three selected cities.
 
 [source,groovy]
 ----
