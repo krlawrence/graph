@@ -56,7 +56,7 @@ routes = g.E().hasLabel('route').order().by('dist',decr).limit(40).
                by(inV().values('code')).by('dist').by(outV().values('code')).
                filter(select('a','c')).where('a',lt('c')).toList();[]
                
-routes.each {printf("%4s  %5d %4s\n", it.a, it.b,  it.c)};[]
+routes.each {printf("%4s  %4d %4s\n", it.a, it.b,  it.c)};[]
 
 
 longest = g.V().hasLabel('airport').order().by('longest',decr).limit(1).
@@ -74,3 +74,10 @@ println "The shortest runway in the graph is ${shortest['num']} feet at ${shorte
 highest = g.V().hasLabel('airport').values('elev').max().next();[]
 aptcity = g.V().has('elev',highest).valueMap('code','city').next();[]
 println "\nThe highest airport in the graph is ${aptcity['code'][0]}/${aptcity['city'][0]} which is at ${highest} feet above sea level";[]
+
+lowest = g.V().hasLabel('airport').order().by('elev',incr).limit(1).
+                project('ap','num','city').by('code').by('elev').by('city').next();[]
+
+ab = "above";[]
+if (lowest['num'] < 0) ab = "below";[] 
+println "The lowest airport in the graph is ${lowest['ap']}/${lowest['city']} which is at ${lowest['num']} feet ${ab} sea level";[]
