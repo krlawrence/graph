@@ -2,7 +2,7 @@ GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v275, Dec 29, 2017
-// Fri Dec 29, 2017 10:32:30 CST
+// Fri Dec 29, 2017 10:37:00 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Dec 29 2017
@@ -8271,7 +8271,7 @@ Here are the results from running the query.
 Combining 'aggregate', 'union' and 'filter' to compute distances.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This next query is similar to the one we looked at in the "<<wherefly>>" section.  It
+This next query is similar to the one we looked at in the "<<aggr1>>" section.  It
 uses 'aggregate', 'union', 'filter' and 'where' to factor certain airports in and out
 of a query.  We find all airports in London, Munich and Paris and then count the
 total distance of all routes from those airports as the first half of a 'union'. The
