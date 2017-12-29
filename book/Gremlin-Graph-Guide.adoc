@@ -2,7 +2,7 @@ GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v275, Dec 29, 2017
-// Fri Dec 29, 2017 13:50:57 CST
+// Fri Dec 29, 2017 17:06:47 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Dec 29 2017
@@ -8064,7 +8064,6 @@ Here are the, now sorted, results.
 [DFW,5597,FCO]    [DFW,4736,LHR]
 ----
 
-
 This next query also finds all routes longer than 4,000 miles but this time
 originating in London Gatwick.  Note also the use of 'where' to query the edge
 distance. The 'has' form is simpler but I show 'where' being used just to
@@ -8072,12 +8071,17 @@ demonstrate an alternative way we could do it.  Note that this query uses
 three 'by' modulators as each of the values returned is from a different
 property of the respective vertices and edges.
 
-[source,text]
+[source,groovy]
 ----
 // Routes longer than 4,000 miles starting at LGW
 g.V().has('code','LGW').outE().where(values('dist').is(gt(4000L))).
       inV().path().by('code').by('dist').by('city')
+----
 
+Here are the results from running the query.
+
+[source,groovy]
+----
 [LGW, 5287, MalT]              [LGW, 4380, Calgary]         
 [LGW, 4618, Varadero]          [LGW, 5987, Cape Town]       
 [LGW, 5147, Tianjin]           [LGW, 4680, Kingston]        
@@ -8094,20 +8098,19 @@ g.V().has('code','LGW').outE().where(values('dist').is(gt(4000L))).
 [LGW, 5070, Beijing]           [LGW, 4222, Vieux Fort]      
 ----
 
-This query is similar to the previous ones. We look for any routes from DFW
-that are longer than 4,500 miles. However, there are a few differences in this
-query worthy of note. First of all it uses the preferred 'has' technique again
-to test the distance whereas in the previous query we used 'where'.  Also this
-time we just list the distance and the destination airport's code and we sort
-the end result using a 'sort'. We also use 'select' and 'as' rather than the
-perhaps more succinct 'path' and 'by' to show a different way of achieving
-effectively the same results.The 'path' and 'by' combination were introduced
-more recently into TinkerPop and I find that to be a more convenient syntax to
-use most of the time but both ways work and both have their benefits. We
-should also note that I show 'sort' being used here but in most cases we can
-re-write our query to use 'order'. You will find several examples of 'order'
-being used throughout this document. Order is introduced in the "<<sort>>"
-section.
+This next query is similar to the previous ones. We look for any routes from DFW that
+are longer than 4,500 miles. However, there are a few differences in this query
+worthy of note. First of all it uses the preferred 'has' technique again to test the
+distance whereas in the previous query we used 'where'.  Also this time we just list
+the distance and the destination airport's code and we sort the end result using a
+'sort'. We also use 'select' and 'as' rather than the perhaps more succinct 'path'
+and 'by' to show a different way of achieving effectively the same results.The 'path'
+and 'by' combination were introduced more recently into TinkerPop and I find that to
+be a more convenient syntax to use most of the time but both ways work and both have
+their benefits. We should also note that I show 'sort' being used here just to show a
+different way of ordering results, but in most cases we can re-write our query to use
+'order'. You will find several examples of 'order' being used throughout this
+document. Order is introduced in the "<<sort>>" section.
 
 [source,groovy]
 ----
@@ -8116,8 +8119,16 @@ section.
 
 g.V().hasLabel('airport').has('code','DFW').outE().has('dist',gt(4500)).as('e').
       inV().as('c').select('e','c').by('dist').by('code').sort(){it.e}
+----
 
+In general, I find using 'path' rather than 'select' and 'as' to be cleaner. However,
+as discussed in the "<<pathwarn>>" section, there are issues with 'path' consuming
+memory that you will likely run into with more complex queries so it is always good
+to have some options as to how you write your Gremlin queries. Here is the output
+produced by this query.
 
+[source,groovy]
+----
 [e:4736, c:LHR]     [e:6410, c:NRT]
 [e:4884, c:SCL]     [e:6822, c:ICN]
 [e:4905, c:AMS]     [e:6951, c:PEK]
@@ -8127,7 +8138,33 @@ g.V().hasLabel('airport').has('code','DFW').outE().has('dist',gt(4500)).as('e').
 [e:5119, c:GRU]     [e:8053, c:AUH]
 [e:5127, c:FRA]     [e:8105, c:HKG]
 [e:5228, c:GIG]     [e:8574, c:SYD]
-[e:5299, c:EZE]
+[e:5299, c:EZE]     [e:5597, c:FCO]
+----
+
+For the sake of completeness, here is the query re-written to use an 'order' step
+rather than a call to 'sort' as a post processing step at the end of the query. In
+general this is the recommended way of achieving sorted results.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').has('code','DFW').outE().has('dist',gt(4500)).
+      order().by('dist').as('e').inV().as('c').select('e','c').by('dist').by('code')
+----
+
+Here is the output from running the modified query
+
+[source,groovy]
+----
+[e:4736,c:LHR]     [e:5597,c:FCO]
+[e:4884,c:SCL]     [e:6410,c:NRT]
+[e:4905,c:AMS]     [e:6822,c:ICN]
+[e:4933,c:CDG]     [e:6951,c:PEK]
+[e:4950,c:MAD]     [e:7332,c:PVG]
+[e:5015,c:DUS]     [e:7914,c:DOH]
+[e:5119,c:GRU]     [e:8022,c:DXB]
+[e:5127,c:FRA]     [e:8053,c:AUH]
+[e:5228,c:GIG]     [e:8105,c:HKG]
+[e:5299,c:EZE]     [e:8574,c:SYD]
 ----
 
 [[gt8k]]
@@ -8145,8 +8182,12 @@ between airport pairs.
 // All outes longer than 8,000 miles
 g.V().as('src').outE('route').has('dist',gt(8000)).inV().as('dest').
       select('src','dest').by('code')
+----
 
+Here is what our query produces.
 
+[source,groovy]
+----
 [src:ATL,dest:JNB]   [src:SIN,dest:SFO]
 [src:DFW,dest:SYD]   [src:DXB,dest:DFW]
 [src:DFW,dest:DXB]   [src:DXB,dest:IAH]
@@ -8167,15 +8208,20 @@ g.V().as('src').outE('route').has('dist',gt(8000)).inV().as('dest').
 [src:SYD,dest:DFW]   [src:RUH,dest:LAX]
 ----
 
-Now let's improve the query by including the distance of each route in the query results.
+Now let's improve the query by including the distance of each route in the query
+results.
 
 [source,groovy]
 ----
 // Find routes longer than 8,000 miles, include the distance in returned values.
 g.V().as('src').outE().has('dist',gt(8000)).as('e').inV().as('dest').
       select('src','e','dest').by('code').by('dist')
+----
 
+Here is the modified output showing the distance between the airports.
 
+[source,groovy]
+----
 [src:ATL,e:8434,dest:JNB]     [src:SIN,e:8433,dest:SFO]  
 [src:DFW,e:8574,dest:SYD]     [src:DXB,e:8022,dest:DFW]  
 [src:DFW,e:8022,dest:DXB]     [src:DXB,e:8150,dest:IAH]  
@@ -8197,13 +8243,21 @@ g.V().as('src').outE().has('dist',gt(8000)).as('e').inV().as('dest').
 ----
 
 Next let's simplify things a bit. While using 'as' and 'select' gets the job done,
-using 'path' and 'by' shortens the query and makes it more readable.
+using 'path' and 'by' shortens the query and makes it more readable. As before
+remember the warning that in some cases using 'path' can consume large amounts of
+memory. That should not be an issue for us here as we are writing a fairly simple
+query still.
 
 [source,groovy]
 ----
 // Note that this also changes the way the result is returned
 g.V().outE().has('dist',gt(8000)).inV().path().by('code').by('dist')
+----
 
+The output indeed now looks more readable.
+
+[source,groovy]
+----
 [ATL,8434,JNB]   [LAX,8287,DOH]   [SIN,8433,SFO]   [AKL,8818,DXB]
 [DFW,8574,SYD]   [LAX,8372,AUH]   [DXB,8022,DFW]   [DOH,8030,IAH]
 [DFW,8022,DXB]   [LAX,8314,JED]   [DXB,8150,IAH]   [DOH,8287,LAX]
@@ -8215,13 +8269,18 @@ g.V().outE().has('dist',gt(8000)).inV().path().by('code').by('dist')
 [LAX,8321,DXB]   [SYD,8574,DFW]   [HKG,8047,EWR]   [RUH,8246,LAX]
 ----
 
-Our query is looking pretty good but it would be nice to not report the same route pair
-twice.  In other words the distance between two airports in just one direction is all we
-really want. This adds a little complexity to things as we have to find a way to 'filter'
-out the routes that we want to ignore. One way to do this is to filter by making sure the
-code for the source airport is less than the code for the destination airport. This may
-seem a bit odd but it is a way of saying we only want route pairs we have not already
-seen. 
+Our query is looking pretty good but it would be nice to not report the same route
+pair twice.  In other words the distance between two airports in just one direction
+is all we really want. This adds a little complexity to things as we have to find a
+way to 'filter' out the routes that we want to ignore. One way to do this is to
+filter by making sure the code for the source airport is less than the code for the
+destination airport. This may seem a bit odd but it is a way of saying we only want
+route pairs we have not already seen. Consider the case of the route between ATL and
+JNB. The less than ('lt') test works as we will allow the route between ATL and JNB
+through (as ATL is alphabetically less than JNB) but the route between JNB and ATL
+will be filtered out. This is a useful technique that can be very helpful in many
+situations where you are filtering out unwanted results. So let's modify the query as
+shown below to apply this filter.
 
 [source,groovy]
 ----
@@ -8229,7 +8288,14 @@ seen.
 g.V().as('a').outE().has('dist',gt(8000)).inV().as('b'). 
       filter(select('a','b').by('code').where('a', lt('b'))).
       path().by('code').by('dist')
+----
 
+Here is the output from running the modified query. As you can see the route from ATL
+to JNB is still shown but the reverse route from JNB to ATL is now gone. The same is
+true for all the other 'return journey' routes.
+
+[source,groovy]
+----
 [ATL,8434,JNB]
 [DFW,8574,SYD]
 [DFW,8022,DXB]
@@ -8249,8 +8315,10 @@ g.V().as('a').outE().has('dist',gt(8000)).inV().as('b').
 [AUH,8139,SFO]
 [JED,8314,LAX]
 ----
-Lastly, now that we have the routes we want, let's tweak the query so that the routes are
-sorted by descending order of distance.
+
+Lastly, now that we have the routes we want, let's tweak the query so that the routes
+are sorted by descending order of distance.  We can do this by adding an 'order'
+step after finding the routes we are interested in.
 
 [source,groovy]
 ----
@@ -8258,7 +8326,12 @@ sorted by descending order of distance.
 g.V().as('a').outE().has('dist',gt(8000)).order().by('dist',decr).inV().as('b').
       filter(select('a','b').by('code').where('a', lt('b'))).
       path().by('code').by('dist')
+----
 
+Here are the results again, this time sorted by route distance in descending order.
+
+[source,groovy]
+----
 [AKL,8818,DXB]
 [DFW,8574,SYD]
 [ATL,8434,JNB]
@@ -8280,13 +8353,23 @@ g.V().as('a').outE().has('dist',gt(8000)).order().by('dist',decr).inV().as('b').
 ----
 
 TinkerPop 3.2.3 added additional capability to the 'where' step that allows it to be
-followed by a 'by' modulator. This allows us, should we so desire, to simplify our query a
-bit more as follows.
+followed by a 'by' modulator. This allows us, should we so desire, to simplify our
+query a bit more as follows.
+
 [source,groovy]
 ----
 //Query changed to take advantage of the where().by() construct
 g.V().as('s').outE().has('dist',gt(8000)).order().by('dist',decr).inV().as('f').
               where('f',lt('s')).by('code').path().by('code').by('dist')
+----
+
+As you can see, we got the same results from our modified query. Well, almost the same
+results! Notice that we actually got the 'return routes' returned. So for example,
+we got the route from DXB to AKL and not the route from AKL to DXB that we got in the
+prior case. This is because we compared the values in the opposite order!
+
+[source,groovy]
+----
 [DXB,8818,AKL]
 [SYD,8574,DFW]
 [JNB,8434,ATL]
@@ -8306,6 +8389,7 @@ g.V().as('s').outE().has('dist',gt(8000)).order().by('dist',decr).inV().as('f').
 [IAH,8030,DOH]
 [DXB,8022,DFW]
 ----
+
 As an interesting sidenote, and this would be true for the queries above as well, if we
 replace the 'lt' with a 'gt' we will get the routes returned in the reverse order. So for
 example, in the prior query the first result was '[DXB,8818,AKL]'. As you will see below, our
