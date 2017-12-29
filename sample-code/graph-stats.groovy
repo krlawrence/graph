@@ -33,7 +33,7 @@ println "----------------------------------------------------";[]
 most = g.V().hasLabel('airport').order().by(out('route').count(),decr).limit(20).
                      project('ap','num','city').by('code').by(out('route').count()).by('city').toList();[]
 
-most.each {printf("%4s  %15s %5d\n", it.ap, it.city,  it.num)};[]
+most.each {printf("%4s  %15s %5d\n", it.ap, it.city, it.num)};[]
 
 println "\nTop 20 airports ordered by number of incoming routes";[]
 println "----------------------------------------------------";[]
@@ -102,4 +102,13 @@ continents = g.V().hasLabel('continent').group().by('desc').by(out().count()).
 println("\nNumber of airports in each continent");[]
 println("------------------------------------");[]
 continents.each {printf("%15s  %4d\n",it.key,it.value)};[]
+println "";[]
+
+
+countries = g.V().hasLabel('country').order().by(outE().count(),decr).limit(20).
+                  project('airports','name').by(outE().count()).by('desc').toList();[]
+
+println("\nCountries with the most airports");[]
+println("--------------------------------");[]
+countries.each {printf("%20s  %4d\n",it.name,it.airports)};[]
 println "";[]
