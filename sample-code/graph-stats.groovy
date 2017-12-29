@@ -1,6 +1,8 @@
 ;[] // Small Groovy script that can be used from within the Gremlin console after
 ;[] // the air-routes graph has been loaded that will provide statistics about the 
 ;[] // graph. The use of ;[] is just to stop the console printing additional return values.
+;[] // This script demonstrates different ways of doing similar things
+;[] // From the console use :load graph-stats.groovy to run it.
 
 println "\n\nA few statistics about the air-routes graph";[]
 println "===========================================";[]
@@ -16,6 +18,15 @@ most = g.V().hasLabel('airport').order().by(bothE('route').count(),decr).limit(1
              project('ap','num','city').by('code').by(bothE('route').count()).by('city').next();[]
 
 println "\nThe airport with the most routes (incoming and outgoing) is ${most['ap']}/${most['city']} with ${most['num']}";[]
+
+
+println "\nTop 20 airports ordered by overall routes";[]
+println "-----------------------------------------";[]
+most = g.V().hasLabel('airport').order().by(both('route').count(),decr).limit(20).
+                     project('ap','num','city').by('code').by(both('route').count()).by('city').toList();[]
+
+most.each {printf("%4s  %15s %5d\n", it.ap, it.city,  it.num)};[]
+
 
 println "\nTop 20 airports ordered by number of outgoing routes";[]
 println "----------------------------------------------------";[]
@@ -81,3 +92,14 @@ lowest = g.V().hasLabel('airport').order().by('elev',incr).limit(1).
 ab = "above";[]
 if (lowest['num'] < 0) ab = "below";[] 
 println "The lowest airport in the graph is ${lowest['ap']}/${lowest['city']} which is at ${lowest['num']} feet ${ab} sea level";[]
+
+
+;[] // Here is an example of using the group step to perform similar tasks
+continents = g.V().hasLabel('continent').group().by('desc').by(out().count()).
+                                         order(local).by(values,decr).next();[]
+
+
+println("\nNumber of airports in each continent");[]
+println("------------------------------------");[]
+continents.each {printf("%15s  %4d\n",it.key,it.value)};[]
+println "";[]
