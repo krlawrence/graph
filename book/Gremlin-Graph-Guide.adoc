@@ -1,11 +1,11 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v275, Dec 29, 2017
-// Fri Dec 29, 2017 17:06:47 CST
+v275, Jan 1, 2018
+// Mon Jan 01, 2018 10:36:56 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Dec 29 2017
+//:Date:      Jan 01 2019
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
