@@ -8740,7 +8740,59 @@ end capabilities. This said, even having coordinates provided as basic floating 
 numbers offers us a chance to do some interesting geospatial queries. So far in this
 document we have not made us of the latitude and longitude coordinates that are
 stored for each airport so in this section we will experiment a bit with some
-queries that do. This first query just returns the coordinates for London Heathrow.
+queries that do. 
+
+To start us off, here is a simple query that finds any airports located North of 77
+degrees latitude. Note that we could have used 'where' instead of 'filter' as they
+are synonymous in this case.
+
+[source,groovy]
+----
+g.V().filter(values('lat').is(gt(77))).valueMap('city','lat')
+----
+
+It turns out that just two airports in the graph are located that far North as shown
+below in the results from running the query.
+
+[source,groovy]
+----
+[city:[Longyearbyen],lat:[78.2461013793945]]
+[city:[Qaanaaq],lat:[77.4886016846]]
+----
+
+We could modify our query to look for airports with a latitude value outside of a
+provided upper and lower bound thus finding the most Northerly and Southerly airports
+with a single query.  Here is a simple example of such a query.
+
+[source,groovy]
+----
+g.V().has('lat',outside(-50,77)).order().by('lat',incr).valueMap('city','lat')
+----
+
+Here are the airports found by running the query.
+
+[source,groovy]
+----
+[city:[Ushuahia],lat:[-54.8433]]
+[city:[Rio Grande],lat:[-53.7777]]
+[city:[Punta Arenas],lat:[-53.0026016235352]]
+[city:[Mount Pleasant],lat:[-51.8227996826172]]
+[city:[Stanley],lat:[-51.6856994628906]]
+[city:[Puerto Natales],lat:[-51.671501159668]]
+[city:[Rio Gallegos],lat:[-51.6089]]
+[city:[El Calafate],lat:[-50.2803001404]]
+[city:[Qaanaaq],lat:[77.4886016846]]
+[city:[Longyearbyen],lat:[78.2461013793945]]
+----
+
+Note that while writing the above query it might have seemed appropriate to use a
+'without' step with a range such as '-50..77' but that will not work as without looks
+for exact matches against the values in the range and the range generated is of the
+form '-50,-49,-48' and so on, so the only airports that would get filtered out would
+be the ones having a latitude value that exactly matches one of the values generated
+by the range. This is why the 'outside' step is so useful in cases like this.
+
+This next query just returns the coordinates for London Heathrow.
 
 [source,groovy]
 ----
@@ -9654,11 +9706,12 @@ takes a lot of work to get right if you want to handle the case where there coul
 more than one route that is of the maximum length (return flights between the same
 two airports don't count as different routes for this example).
 
-While this (below) might seem like the way obvious and easy to do it, because of the
-way that max() is implemented it will not work. Currently max() and min() cause the
-prior paths that have been taken in a traverasl to be lost. There is a defect open
-against TinkerPop for this that we created but until that defect gets resolved, we
-need to explore other ways of achieving our desired result.
+While using a 'max' step, as shown below, might seem like the obvious and easy to do
+what we need, because of the way that 'max' is implemented it will not work.
+Currently the 'max' and 'min' steps cause the prior paths that have been taken in a
+traversal to be lost. There is an issue open against TinkerPop for this but until
+that issue gets resolved, we need to explore other ways of achieving our desired
+result.
 
 [source,groovy]
 ----
