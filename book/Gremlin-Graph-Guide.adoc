@@ -8751,8 +8751,16 @@ are synonymous in this case.
 g.V().filter(values('lat').is(gt(77))).valueMap('city','lat')
 ----
 
+As discussed earlier in the book, you can often just use 'has' steps instead of
+'where' or 'filter' steps. We could have written the previous query as follows.
+
+[source,groovy]
+----
+g.V().has('lat',gt(77)).valueMap('city','lat')
+----
+
 It turns out that just two airports in the graph are located that far North as shown
-below in the results from running the query.
+below in the results from running either form of the query.
 
 [source,groovy]
 ----
