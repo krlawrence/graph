@@ -11,22 +11,16 @@ This repository is the new home for the source materials, sample code and exampl
 
 To read the book right away in a browser click [here](http://kelvinlawrence.net/book/Gremlin-Graph-Guide.html) or for a PDF version click [here](http://kelvinlawrence.net/book/Gremlin-Graph-Guide.pdf). You will find other formats including MOBI, EPUB and XML (Docbook) in the releases section. If you want to see the absolute latest updates you can always browse the Asciidoc source file (Gremlin-Graph-Guide.adoc) in the /book folder.
 
+**LATEST NEWS:**  
+[Jan-03-2018] Revision 275 was just published in all formats. Lots of updates to book and sample code.  
+[Dec-24-2017] Revision 274 was just published in all formats. Now using releases to store output files.  
+
 **A Special note about releases**
 
 Starting with revision 274 (Dec 24 2017), all of the output files (XML, EPUB, MOBI, HTML and PDF) will now be stored using Git releases. Going forward, this should reduce the amount of disk space required for people who create forks of this project. The releases are located [here](https://github.com/krlawrence/graph/releases).
 
 NOTE: In order to prune the unwanted files from the project the commit history for the output files had to be removed as part of making the v274 release. If you had previously cloned or forked this project please create a new clone or fork. Sorry for the inconvenience but this will get you back approximately 60% (27+ mb) of the disk space that was being taken up and will help anyone else making a clone.
 
-**LATEST NEWS:**  
-[Jan-03-2018] Revision 275 was just published in all formats. Lots of updates to book and sample code.  
-[Dec-24-2017] Revision 274 was just published in all formats. Now using releases to store output files.  
-[Dec-12-2017] Revision 273 was just published in all formats. Fixes issue #12. Also added additonal clarifications.  
-[Nov-23-2017] Revision 272 was just published in all formats. Many updates to sections 3 and 4.  
-[Nov-03-2017] Revision 271 was just published in all formats. Several improvements and additions.  
-[Oct-27-2017] Revision 270 was just published in all formats. Fixes issue #6 and adds more to Janus section.  
-[Oct-23-2017] Quite a lot has been added to the Janus Graph section - more to come soon  
-[Oct-15-2017] Experimental - The /book folder now includes DOCBOOK, EPUB and MOBI format versions of the book.  
-[Oct-10-2017] Several sections have been improved, I also made updates to reflect changes made in Tinkerpop 3.3
 
 Details of how to build the various output formats from the Asciidoc source are contained in the README.md under the *book* folder.
 
@@ -109,3 +103,14 @@ Chapter 7 - COMMON GRAPH SERIALIZATION FORMATS
 Chapter 8 - FURTHER READING
 - We finish up by providing several links to useful web sites where you can find
   tools and documentation for many of the technologies covered in this document.
+
+**NEWS ARCHIVE:**  
+[Jan-03-2018] Revision 275 was just published in all formats. Lots of updates to book and sample code.  
+[Dec-24-2017] Revision 274 was just published in all formats. Now using releases to store output files.  
+[Dec-12-2017] Revision 273 was just published in all formats. Fixes issue #12. Also added additonal clarifications.  
+[Nov-23-2017] Revision 272 was just published in all formats. Many updates to sections 3 and 4.  
+[Nov-03-2017] Revision 271 was just published in all formats. Several improvements and additions.  
+[Oct-27-2017] Revision 270 was just published in all formats. Fixes issue #6 and adds more to Janus section.  
+[Oct-23-2017] Quite a lot has been added to the Janus Graph section - more to come soon  
+[Oct-15-2017] Experimental - The /book folder now includes DOCBOOK, EPUB and MOBI format versions of the book.  
+[Oct-10-2017] Several sections have been improved, I also made updates to reflect changes made in Tinkerpop 3.3
