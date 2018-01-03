@@ -7,6 +7,10 @@
 
 This repository is the new home for the source materials, sample code and examples for the book "Graph Databases, Gremlin and TinkerPop - a Tutorial"
 
+**Quick Start**  
+
+To read the book right away in a browser click [here](http://kelvinlawrence.net/book/Gremlin-Graph-Guide.html) or for a PDF version click [here](http://kelvinlawrence.net/book/Gremlin-Graph-Guide.pdf). You will find other formats including MOBI, EPUB and XML (Docbook) in the releases section. If you want to see the absolute latest updates you can always browse the Asciidoc source file (Gremlin-Graph-Guide.adoc) in the /book folder.
+
 **A Special note about releases**
 
 Starting with revision 274 (Dec 24 2017), all of the output files (XML, EPUB, MOBI, HTML and PDF) will now be stored using Git releases. Going forward, this should reduce the amount of disk space required for people who create forks of this project. The releases are located [here](https://github.com/krlawrence/graph/releases).
@@ -23,8 +27,6 @@ NOTE: In order to prune the unwanted files from the project the commit history f
 [Oct-23-2017] Quite a lot has been added to the Janus Graph section - more to come soon  
 [Oct-15-2017] Experimental - The /book folder now includes DOCBOOK, EPUB and MOBI format versions of the book.  
 [Oct-10-2017] Several sections have been improved, I also made updates to reflect changes made in Tinkerpop 3.3
-
-To read the book in a browser click [here](http://kelvinlawrence.net/book/Gremlin-Graph-Guide.html) or for a PDF version click [here](http://kelvinlawrence.net/book/Gremlin-Graph-Guide.pdf).
 
 Details of how to build the various output formats from the Asciidoc source are contained in the README.md under the *book* folder.
 
