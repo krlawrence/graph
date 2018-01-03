@@ -1,11 +1,11 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v275, Jan 1, 2018
-// Mon Jan 01, 2018 10:36:56 CST
+v276, Jan 3, 2018
+// Wed Jan 03, 2018 11:23:55 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Jan 01 2019
+//:Date:      Jan 03 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -18,7 +18,7 @@ v275, Jan 1, 2018
 //:pygments-style: vim
 :toc:
 :toclevels: 4
-:revision: 275
+:revision: 276
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
 //        has a white foreground color. The default was unreadable,
@@ -681,7 +681,7 @@ Don't worry if not all of these terms makes sense right away - we'll get there s
 
 TinkerGraph is really useful while learning to work with Gremlin and great for
 testing things out. One common use case where TinkerGraph can be very useful is to
-crate a sub-graph of a larger graph and work with it locally. TinkerGraph can even be
+create a sub-graph of a larger graph and work with it locally. TinkerGraph can even be
 used in production deployments if an all in memory graph fits the bill. Typically,
 TinkerGraph us used to explore static (unchanging) graphs but you can also use it
 from a programming language like Java and mutate its contents if you want to.
@@ -11436,7 +11436,7 @@ idx=mgmt.buildIndex('airportIndex',Vertex.class)
 iata = mgmt.getPropertyKey('code')
 idx.addKey(iata).buildCompositeIndex()
 
-// All done commit our changes to end the trnsaction
+// All done commit our changes to end the transaction
 mgmt.commit()
 ----
 
