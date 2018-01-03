@@ -11,9 +11,10 @@ This repository is the new home for the source materials, sample code and exampl
 
 Starting with revision 274 (Dec 24 2017), all of the output files (XML, EPUB, MOBI, HTML and PDF) will now be stored using Git releases. Going forward, this should reduce the amount of disk space required for people who create forks of this project. The releases are located [here](https://github.com/krlawrence/graph/releases).
 
-NOTE: In order to prune the unwanted files from the project the commit history for the output files had to be removed. If you have previously cloned or forked this project please create a new clone or fork. Sorry for the inconvenience but this will get you back approximately 60% (27+ mb) of the disk space that was being taken up and will help anyone else making a clone.
+NOTE: In order to prune the unwanted files from the project the commit history for the output files had to be removed as part of making the v274 release. If you had previously cloned or forked this project please create a new clone or fork. Sorry for the inconvenience but this will get you back approximately 60% (27+ mb) of the disk space that was being taken up and will help anyone else making a clone.
 
 **LATEST NEWS:**  
+[Jan-03-2017] Revision 275 was just published in all formats. Lots of updates to book and sample code.  
 [Dec-24-2017] Revision 274 was just published in all formats. Now using releases to store output files.  
 [Dec-12-2017] Revision 273 was just published in all formats. Fixes issue #12. Also added additonal clarifications.  
 [Nov-23-2017] Revision 272 was just published in all formats. Many updates to sections 3 and 4.  
