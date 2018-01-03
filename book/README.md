@@ -8,16 +8,8 @@ NOTE: In order to prune the unwanted files from the project, as part of the v274
 
 
 **LATEST NEWS:**  
-[Jan-03-2018] Revision 275 was just published in all formats. Lots of updates to book and sample code.
+[Jan-03-2018] Revision 275 was just published in all formats. Lots of updates to book and sample code.  
 [Dec-24-2017] Revision 274 was just published in all formats. Now using releases to store output files.   
-[Dec-12-2017] Revision 273 was just published in all formats. Fixes issue #12. Also added additonal clarifications.  
-[Nov-23-2017] Revision 272 was just published in all formats. Many updates to sections 3 and 4.  
-[Nov-03-2017] Revision 271 was just published in all formats. Several improvements and additions.  
-[Oct-27-2017] Revision 270 was just published in all formats. Fixes issue #6 and adds more to Janus section.  
-[Oct-23-2017] Quite a lot has been added to the Janus Graph section - more to come soon.  
-[Oct-15-2017] Experimental - The /book folder now includes DOCBOOK, EPUB and MOBI format versions of the book. 
-[Oct-11-2017] I improved the section that introduces the 'repeat' step.  
-[Oct-10-2017] Several sections have been improved, I also made updates to reflect changes made in Tinkerpop 3.3
 
 **About the files in this folder**
 
@@ -30,3 +22,16 @@ To view the PDF please either download it and use a PDF viewer or visit http://k
 The XML (DOCBOOK) file is generated using Asciidoctor and can be viewed on Linux using the Yelp tool among many others or used to produce other formats. The EPUB and MOBI files can be viewed using most popular e-book readers and some browsers.
 
 Please note that the DOCBOOK, EPUB and MOBI format files currently do not have all of the nice source code highlighting and colors that the HTML and PDF versions have.
+
+
+**ARCHIVED NEWS:**  
+[Jan-03-2018] Revision 275 was just published in all formats. Lots of updates to book and sample code.  
+[Dec-24-2017] Revision 274 was just published in all formats. Now using releases to store output files.   
+[Dec-12-2017] Revision 273 was just published in all formats. Fixes issue #12. Also added additonal clarifications.  
+[Nov-23-2017] Revision 272 was just published in all formats. Many updates to sections 3 and 4.  
+[Nov-03-2017] Revision 271 was just published in all formats. Several improvements and additions.  
+[Oct-27-2017] Revision 270 was just published in all formats. Fixes issue #6 and adds more to Janus section.  
+[Oct-23-2017] Quite a lot has been added to the Janus Graph section - more to come soon.  
+[Oct-15-2017] Experimental - The /book folder now includes DOCBOOK, EPUB and MOBI format versions of the book. 
+[Oct-11-2017] I improved the section that introduces the 'repeat' step.  
+[Oct-10-2017] Several sections have been improved, I also made updates to reflect changes made in Tinkerpop 3.3
