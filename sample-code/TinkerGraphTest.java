@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
-public class GraphTest 
+public class TinkerGraphTest 
 {
   public static void main(String[] args) 
   {
