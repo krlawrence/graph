@@ -125,6 +125,14 @@ public class GraphStats
     System.out.println("\nThe longest route in the graph is " + longroute.get("num") +   
                        " miles between " + longroute.get("from") + " and " + longroute.get("to"));
 
+    // Find the longest runway in the graph
+
+    Map <String,?> longest = 
+      g.V().hasLabel("airport").order().by("longest",Order.decr).limit(1).
+            project("ap","num","city").by("code").by("longest").by("city").next();  
+
+    System.out.println("The longest runway in the graph is " + longest.get("num") + " feet at " +
+                        longest.get("city") + "/" + longest.get("ap"));        
   }
   
 }
