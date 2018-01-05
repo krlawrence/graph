@@ -1,6 +1,12 @@
-// Create a TinkerGraph instance
-// Load the air routes graph
-// Display some statistics about the graph
+// Simple example of using TinkerGraph with Java
+//
+// This example does the following:
+//   1. Create a TinkerGraph instance
+//   2. Load the air routes graph
+//   3. Display some statistics about the graph
+
+// I have highlighted the places where the Gremlin is slightly different from the 
+// Gremlin we can use in the Gremlin Console.
 
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
@@ -21,6 +27,7 @@ public class GraphStats
 {
   public static void main(String[] args) 
   {
+    // Create a new TinkerGraph and try to load the air-routes graph
     TinkerGraph tg = TinkerGraph.open() ;
     
     System.out.println("Opening air-routes.graphml");
@@ -32,16 +39,19 @@ public class GraphStats
     catch( IOException e )
     {
       System.out.println("GraphStats - Air routes GraphML file not found");
-      System.exit(0);
+      System.exit(1);
     }
     GraphTraversalSource g = tg.traversal();
-                      
+                   
+    // Run some queries and display a few statistics
+
     System.out.println("Collecting stats");
     
     System.out.println("\nDistribution of vertices and edges");
     System.out.println("----------------------------------");
 
     // Display some basic demographics
+    // Note that label has to be prefixed by "T."
     Map verts = g.V().groupCount().by(T.label).next();
     Map edges = g.E().groupCount().by(T.label).next();
     System.out.println("Vertices : " + verts);
@@ -49,7 +59,7 @@ public class GraphStats
 
     // Find the airport with the most overall routes.
     // Note that we have to use the "__." prefix for some steps and that "decr"
-    // has to be prefixed by Order.
+    // has to be prefixed by "Order".
     Map <String,?> most = g.V().hasLabel("airport").
                             order().by(__.bothE("route").count(),Order.decr).limit(1).
                             project("ap","num","city").by("code").by(__.bothE("route").count()).
@@ -58,6 +68,16 @@ public class GraphStats
     String s = "" + most.get("ap") + "/" + most.get("city");
     Long r = (Long) most.get("num");
     System.out.println("\nThe airport with the most routes is " + s + " with " + r + " routes") ;
+
+    System.out.println("\nTop 20 airports by total routes");
+    System.out.println("===============================");
+    List<Map<String,Object>> top = g.V().hasLabel("airport").order().by(__.both("route").count(),Order.decr).limit(20).
+                     project("ap","num","city").
+                     by("code").by(__.both("route").count()).by("city").toList();
+   
+   // Either of these can be used
+   //for(Map a: top) { System.out.format("%4s %12s %4d\n",a.get("ap"),a.get("city"), a.get("num"));}
+   top.forEach((a) -> System.out.format("%4s %12s %4d\n",a.get("ap"),a.get("city"),a.get("num")));
   }
   
 }
