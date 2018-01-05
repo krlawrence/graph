@@ -1,16 +1,16 @@
 // Builds a small ordered Binary (BST) Tree
 graph=TinkerGraph.open()
 g=graph.traversal()
-g.addV(label,'root','data',9).as('root').   
-  addV(label,'node','data',5).as('b').   
-  addV(label,'node','data',2).as('c').   
-  addV(label,'node','data',11).as('d').   
-  addV(label,'node','data',15).as('e').   
-  addV(label,'node','data',10).as('f').   
-  addV(label,'node','data',1).as('g').   
-  addV(label,'node','data',8).as('h').   
-  addV(label,'node','data',22).as('i').   
-  addV(label,'node','data',16).as('j').   
+g.addV('root').property('data',9).as('root').   
+  addV('node').property('data',5).as('b').   
+  addV('node').property('data',2).as('c').   
+  addV('node').property('data',11).as('d').   
+  addV('node').property('data',15).as('e').   
+  addV('node').property('data',10).as('f').   
+  addV('node').property('data',1).as('g').   
+  addV('node').property('data',8).as('h').   
+  addV('node').property('data',22).as('i').   
+  addV('node').property('data',16).as('j').   
   addE('left').from('root').to('b').
   addE('left').from('b').to('c').
   addE('right').from('root').to('d').

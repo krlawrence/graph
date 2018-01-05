@@ -1,10 +1,10 @@
 graph=TinkerGraph.open()
 g=graph.traversal()
-g.addV(label,'airport','code','AUS').as('aus').
-  addV(label,'airport','code','DFW').as('dfw').
-  addV(label,'airport','code','LAX').as('lax').
-  addV(label,'airport','code','JFK').as('jfk').
-  addV(label,'airport','code','ATL').as('atl').
+g.addV('airport').property('code','AUS').as('aus').
+  addV('airport').property('code','DFW').as('dfw').
+  addV('airport').property('code','LAX').as('lax').
+  addV('airport').property('code','JFK').as('jfk').
+  addV('airport').property('code','ATL').as('atl').
   addE('route').from('aus').to('dfw').
   addE('route').from('aus').to('atl').
   addE('route').from('atl').to('dfw').
