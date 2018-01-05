@@ -5549,11 +5549,11 @@ together.
 ----
 graph=TinkerGraph.open()
 g=graph.traversal()
-g.addV(label,'airport','code','AUS').as('aus').
-  addV(label,'airport','code','DFW').as('dfw').
-  addV(label,'airport','code','LAX').as('lax').
-  addV(label,'airport','code','JFK').as('jfk').
-  addV(label,'airport','code','ATL').as('atl').
+g.addV('airport').property('code','AUS').as('aus').
+  addV('airport').property('code','DFW').as('dfw').
+  addV('airport').property('code','LAX').as('lax').
+  addV('airport').property('code','JFK').as('jfk').
+  addV('airport').property('code','ATL').as('atl').
   addE('route').from('aus').to('dfw').
   addE('route').from('aus').to('atl').
   addE('route').from('atl').to('dfw').
@@ -5562,9 +5562,12 @@ g.addV(label,'airport','code','AUS').as('aus').
   addE('route').from('dfw').to('lax').
   addE('route').from('lax').to('jfk').
   addE('route').from('lax').to('aus').
-  addE('route').from('lax').to('dfw')                                                 
+  addE('route').from('lax').to('dfw')                                               
 ----
 
+NOTE: The form of 'addV' that used to allow creation of a node and a property using
+something like 'g.addV(label,'airport','code','AUS')' is now deprecated and should
+not be used.
 
 [[addloop]]
 Adding vertices and edges using a loop
@@ -6114,8 +6117,11 @@ this section.
 
 [source,groovy]
 ----
-g.addV('code','AUS','code','KAUS')
+g.addV().property('code','AUS').property('code','KAUS')
 ----
+
+NOTE: The version of 'addV' that allowed you to specify something like
+'g.addV('code','AUS','code','KAUS')' is now deprecated and should not be used.
 
 By creating the 'code' property in this way, its cardinality type is now effectively
 'LIST' rather than 'SINGLE'. While working with TinkerGraph we do not need to setup
@@ -9329,18 +9335,19 @@ graph as there are clearly many ways to revisit vertices.
 
 [source,groovy]
 ----
+// Builds a small ordered Binary (BST) Tree
 graph=TinkerGraph.open()
 g=graph.traversal()
-g.addV(label,'root','data',9).as('root').   
-  addV(label,'node','data',5).as('b').   
-  addV(label,'node','data',2).as('c').   
-  addV(label,'node','data',11).as('d').   
-  addV(label,'node','data',15).as('e').   
-  addV(label,'node','data',10).as('f').   
-  addV(label,'node','data',1).as('g').   
-  addV(label,'node','data',8).as('h').   
-  addV(label,'node','data',22).as('i').   
-  addV(label,'node','data',16).as('j').   
+g.addV('root').property('data',9).as('root').   
+  addV('node').property('data',5).as('b').   
+  addV('node').property('data',2).as('c').   
+  addV('node').property('data',11).as('d').   
+  addV('node').property('data',15).as('e').   
+  addV('node').property('data',10).as('f').   
+  addV('node').property('data',1).as('g').   
+  addV('node').property('data',8).as('h').   
+  addV('node').property('data',22).as('i').   
+  addV('node').property('data',16).as('j').   
   addE('left').from('root').to('b').
   addE('left').from('b').to('c').
   addE('right').from('root').to('d').
@@ -10789,7 +10796,7 @@ start at zero) from what we might expect from TinkerGraph.
 
 [source,groovy]
 ----
-g.addV(label,'person','name','Kelvin')
+g.addV('person').property('name','Kelvin')
 v[4232]
 
 g.V().has('name','Kelvin')
@@ -12584,14 +12591,13 @@ To be written
 
 [source,groovy]
 ----
-TinkerGraph.open()
+graph=TinkerGraph.open()
 g=graph.traversal()
-
-g.addV(label,'airport','code','AUS').as('aus').
-  addV(label,'airport','code','DFW').as('dfw').
-  addV(label,'airport','code','LAX').as('lax').
-  addV(label,'airport','code','JFK').as('jfk').
-  addV(label,'airport','code','ATL').as('atl').
+g.addV('airport').property('code','AUS').as('aus').
+  addV('airport').property('code','DFW').as('dfw').
+  addV('airport').property('code','LAX').as('lax').
+  addV('airport').property('code','JFK').as('jfk').
+  addV('airport').property('code','ATL').as('atl').
   addE('route').from('aus').to('dfw').
   addE('route').from('aus').to('atl').
   addE('route').from('atl').to('dfw').
