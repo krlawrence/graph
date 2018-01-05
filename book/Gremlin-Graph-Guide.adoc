@@ -4032,7 +4032,7 @@ The 'sideEffect' step allows you to do some additional processing as part of a q
 without changing what gets passed on to the next stage of the query. The example
 below finds the airport vertex V(3) and then uses a 'sideEffect' to count the number of
 places that you can fly to from there and stores it in a traversal variable named 'a' 
-before counting how many places you can get towith one stop and storing that value in
+before counting how many places you can get to with one stop and storing that value in
 'b'. Note that there are other ways we could write this query but it demonstrates
 quite well how 'sideEffect' works.
 
@@ -4057,7 +4057,7 @@ I'm working on it
 San Francisco International Airport
 ----
 
-Later in the document will will look at other ways that side effects can be used to
+Later in the document we will look at other ways that side effects can be used to
 solve more interesting problems.
 
 [[aggregate]]
