@@ -1,11 +1,11 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v276, Jan 3, 2018
-// Wed Jan 03, 2018 11:23:55 CST
+v276, Jan 5, 2018
+// Fri Jan 05, 2018 17:15:48 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Jan 03 2018
+//:Date:      Jan 05 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -6245,7 +6245,7 @@ with the 'dups' property.
 
 [source,groovy]
 ----
-g.addV(label,'test','dups','one','dups','two','dups','one')
+g.addV('test').property('dups','one').property('dups','two').property('dups','one')
 
 g.V().hasLabel('test').valueMap()
 
@@ -10978,7 +10978,7 @@ LIST
 
 mgmt.commit()
 
-n = g.addV('mylist','one','mylist','two').next()
+n = g.addV().property('mylist','one').property('mylist','two').next()
 
 v[3043568]
 
@@ -11018,7 +11018,7 @@ mgmt.commit()
 
 [source,groovy]
 ----
-n = g.addV('numbers',1,'numbers',2,'numbers',3).next()
+n = g.addV().property('numbers',1).property('numbers',2).property('numbers',3).next()
 
 v[2846792]
 
