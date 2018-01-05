@@ -30,7 +30,7 @@ public class GraphStats
     // Create a new TinkerGraph and try to load the air-routes graph
     TinkerGraph tg = TinkerGraph.open() ;
     
-    System.out.println("Opening air-routes.graphml");
+    System.out.println("\nOpening air-routes.graphml");
 
     try
     {
@@ -69,15 +69,62 @@ public class GraphStats
     Long r = (Long) most.get("num");
     System.out.println("\nThe airport with the most routes is " + s + " with " + r + " routes") ;
 
+
+
+    // Find the airports with the most routes overall (incoming + outgoing)
+
     System.out.println("\nTop 20 airports by total routes");
     System.out.println("===============================");
-    List<Map<String,Object>> top = g.V().hasLabel("airport").order().by(__.both("route").count(),Order.decr).limit(20).
-                     project("ap","num","city").
-                     by("code").by(__.both("route").count()).by("city").toList();
+    
+    List<Map<String,Object>> top = 
+      g.V().hasLabel("airport").
+            order().by(__.both("route").count(),Order.decr).limit(20).
+            project("ap","num","city").by("code").by(__.both("route").count()).by("city").
+            toList();
    
-   // Either of these can be used
-   //for(Map a: top) { System.out.format("%4s %12s %4d\n",a.get("ap"),a.get("city"), a.get("num"));}
-   top.forEach((a) -> System.out.format("%4s %12s %4d\n",a.get("ap"),a.get("city"),a.get("num")));
+    // Either of these can be used
+    //for(Map a: top) { System.out.format("%4s %12s %4d\n",a.get("ap"),a.get("city"), a.get("num"));}
+    top.forEach((a) -> System.out.format("%4s %12s %4d\n",a.get("ap"),a.get("city"),a.get("num")));
+    
+
+    // Find the airports with the most outgoing routes
+
+    System.out.println("\nTop 20 airports by outgoing routes");
+    System.out.println("==================================");
+    
+    List<Map<String,Object>> topout = 
+      g.V().hasLabel("airport").
+            order().by(__.out("route").count(),Order.decr).limit(20).
+            project("ap","num","city").by("code").by(__.out("route").count()).by("city").
+            toList();
+   
+    topout.forEach((a) -> System.out.format("%4s %12s %4d\n",a.get("ap"),a.get("city"),a.get("num")));
+
+    // Find the airports with the most incoming routes
+    
+    System.out.println("\nTop 20 airports by incoming routes");
+    System.out.println("==================================");
+    
+    List<Map<String,Object>> topin = 
+      g.V().hasLabel("airport").
+            order().by(__.in("route").count(),Order.decr).limit(20).
+            project("ap","num","city").by("code").by(__.in("route").count()).by("city").
+            toList();
+   
+    topin.forEach((a) -> System.out.format("%4s %12s %4d\n",a.get("ap"),a.get("city"),a.get("num")));
+
+
+    // Find the longest route in the graph
+
+    Map <String,?> longroute = 
+      g.E().hasLabel("route").
+            order().by("dist",Order.decr).limit(1).
+            project("from","to","num").
+            by(__.inV().values("city")).by(__.outV().values("city")).by("dist").next();
+
+    System.out.println("\nThe longest route in the graph is " + longroute.get("num") +   
+                       " miles between " + longroute.get("from") + " and " + longroute.get("to"));
+
   }
   
 }
