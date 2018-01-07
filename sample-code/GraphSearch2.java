@@ -54,7 +54,7 @@ public class GraphSearch2
   // If no route exists between the specified airports return -1
   public Integer getDistance(String from, String to)
   {
-    // The coalesce step avoids an exception when no result is found
+    //The coalesce step avoids an exception when no result is found
     //Integer d = (Integer) 
     //  g.V().has("code",from).outE().as("edge").inV().has("code",to).
     //        select("edge").by("dist").fold().
@@ -76,11 +76,13 @@ public class GraphSearch2
     GraphSearch2 gs = new GraphSearch2();
     boolean loaded = gs.loadGraph("air-routes.graphml");
 
+    // The data below contains a non existent route between XXX and YYY to test the
+    // error handling when a query returns no data.
     if (loaded)
     {
       String[][] places = {{"AUS","LHR"},{"JFK","PHX"},{"SYD","LAX"},
                            {"PEK","HND"},{"HKG","MEL"},{"MIA","SFO"},
-                           {"AUS","BKK"},{"DXB","DFW"},{"DOH","JNB"},
+                           {"MNL","BKK"},{"XXX","YYY"},{"DOH","JNB"},
                            {"NRT","FRA"},{"AMS","GVA"},{"CDG","SIN"}};
 
       System.out.println("\n\nFrom    To   Distance");
