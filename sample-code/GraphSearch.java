@@ -30,9 +30,9 @@ public class GraphSearch
   private TinkerGraph tg;
   private GraphTraversalSource g;
 
+  // Try to create a new graph and load the specified GraphML file
   public boolean loadGraph(String name)
   {
-    // Create a new TinkerGraph and try to load the GraphML
     tg = TinkerGraph.open() ;
     
     try
@@ -48,6 +48,8 @@ public class GraphSearch
     return true;
   }
 
+  // Return the distance between two airports.
+  // Input parameters are the airport IATA codes.
   public Integer getDistance(String from, String to)
   {
     Integer d = (Integer) 
@@ -57,6 +59,7 @@ public class GraphSearch
     return(d);
   }
 
+  // Run some tests
   public static void main(String[] args) 
   {
     GraphSearch gs = new GraphSearch();
@@ -65,6 +68,7 @@ public class GraphSearch
     if (loaded)
     {
       String[][] places = {{"AUS","LHR"},{"JFK","PHX"},{"SYD","LAX"},
+                           {"PEK","HND"},{"HKG","MEL"},{"MIA","SFO"},
                            {"NRT","FRA"},{"AMS","GVA"},{"CDG","SIN"}};
 
       System.out.println("\n\nFrom    To   Distance");
