@@ -2,7 +2,7 @@ GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v276, Jan 7, 2018
-// Sun Jan 07, 2018 09:34:56 CST
+// Sun Jan 07, 2018 10:06:23 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Jan 07 2018
@@ -4120,9 +4120,21 @@ Using 'inject' to insert values into a query
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Sometimes you may want to add something additional to be returned along with the
-results of your query. This can be done using the 'inject' step. In the example
-below, the string 'ABIA', another acronym commonly used when referring to the Austin
-Bergstrom International Airport, is injected into the query.
+results of your query. This can be done using the 'inject' step. To start off, here
+is a simple example showing how 'inject' fundamentally works. We insert some numbers
+and ask Gremlin to give us the mean value.
+
+[source,groovy]
+----
+g.inject(1,2,3,4,5).mean()
+
+3.0
+----
+
+Of course just using 'inject' so we can do a simple mathematical computation is of
+limited use. The next example shows how 'inject' can be used as part of a query. The
+string 'ABIA', another acronym commonly used when referring to the Austin Bergstrom
+International Airport, is injected into the query.
 
 [source,groovy]
 ----
