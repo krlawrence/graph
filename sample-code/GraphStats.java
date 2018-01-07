@@ -1,3 +1,5 @@
+// GraphStats.java
+//
 // Simple example of using TinkerGraph with Java
 //
 // This example does the following:
