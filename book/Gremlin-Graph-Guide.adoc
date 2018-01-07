@@ -1,11 +1,11 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v276, Jan 5, 2018
-// Fri Jan 05, 2018 17:15:48 CST
+v276, Jan 7, 2018
+// Sun Jan 07, 2018 09:34:56 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Jan 05 2018
+//:Date:      Jan 07 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -190,20 +190,23 @@ The examples in this book make use of a sample graph called 'air-routes.graphml'
 which contains a graph based on the World airline route network between over 3,370
 airports. The sample graph, some sample code and some demo applications can all be
 found at the same Github site where the book manuscript is hosted. You will also find
-the book in various formats (HTML,PDF, DocBook/XML, MOBI and EPUB) at the same GitHub
-location. Below are some links to each.
+the book releases in various formats (HTML,PDF, DocBook/XML, MOBI and EPUB) at the
+same GitHub location. The sample programs include stand alone Java and Groovy
+examples as well as many examples that can be run from the Gremlin Console.The sample
+applications area contains a full example HTML and JavaScript application that lets
+you explore the air-routes graph visually. Below are some links to each.
 
 .Where to find the book, samples and data
 Book manuscript in Asciidoc format::
 - https://github.com/krlawrence/graph/tree/master/book
+Book releases in multiple formats::
+- https://github.com/krlawrence/graph/releases
 Sample data (air-routes.graphml)::
 - https://github.com/krlawrence/graph/tree/master/sample-data
 Sample code::
 - https://github.com/krlawrence/graph/tree/master/sample-code
 Sample applications::
 - https://github.com/krlawrence/graph/tree/master/demos
-Book releases in multiple formats::
-- https://github.com/krlawrence/graph/releases
 
 
 [[whygraph]]
