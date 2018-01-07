@@ -1,4 +1,4 @@
-// GraphSearch.java
+// GraphSearch2.java
 //
 // Simple example of using TinkerGraph with Java
 //
@@ -6,6 +6,7 @@
 //   1. Create an empty TinkerGraph instance
 //   2. Load the air-routes graph
 //   3. Perform some searches against the graph
+//   4. Handle error conditions where graph elements are not found
 
 // I have highlighted any places where the Gremlin is slightly different from the 
 // Gremlin we can use in the Gremlin Console.
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
-public class GraphSearch 
+public class GraphSearch2 
 {
   private TinkerGraph tg;
   private GraphTraversalSource g;
@@ -50,11 +51,21 @@ public class GraphSearch
 
   // Return the distance between two airports.
   // Input parameters are the airport IATA codes.
+  // If no route exists between the specified airports return -1
   public Integer getDistance(String from, String to)
   {
-    Integer d = (Integer) 
+    // The coalesce step avoids an exception when no result is found
+    //Integer d = (Integer) 
+    //  g.V().has("code",from).outE().as("edge").inV().has("code",to).
+    //        select("edge").by("dist").fold().
+    //        coalesce(__.unfold(),__.constant(-1)).next();
+
+    // Using toList() is another way to check for no result
+    List result = 
       g.V().has("code",from).outE().as("edge").inV().has("code",to).
-            select("edge").by("dist").next();
+            select("edge").by("dist").toList();
+
+    Integer d = ((result.isEmpty()) ? -1 : (Integer)(result.get(0)));        
 
     return(d);
   }
@@ -62,14 +73,14 @@ public class GraphSearch
   // Run some tests
   public static void main(String[] args) 
   {
-    GraphSearch gs = new GraphSearch();
+    GraphSearch2 gs = new GraphSearch2();
     boolean loaded = gs.loadGraph("air-routes.graphml");
 
     if (loaded)
     {
       String[][] places = {{"AUS","LHR"},{"JFK","PHX"},{"SYD","LAX"},
                            {"PEK","HND"},{"HKG","MEL"},{"MIA","SFO"},
-                           {"MNL","BKK"},{"DXB","DFW"},{"DOH","JNB"},
+                           {"AUS","BKK"},{"DXB","DFW"},{"DOH","JNB"},
                            {"NRT","FRA"},{"AMS","GVA"},{"CDG","SIN"}};
 
       System.out.println("\n\nFrom    To   Distance");
