@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.Set;
 
 public class CreateGraph 
@@ -51,7 +52,30 @@ public class CreateGraph
       addE("route").from("lax").to("aus").
       addE("route").from("lax").to("dfw").iterate();
   
-    System.out.println(g);
-    System.out.println(g.V().valueMap(true).toList());
+    //System.out.println(g);
+    //System.out.println(g.V().valueMap(true).toList());
+
+    // Simple example of how to work with the results we get back from a query
+
+    List<Map<String,Object>> vm = new ArrayList<Map<String,Object>>() ;
+    
+    vm = g.V().valueMap(true).toList();
+
+    // Dislpay the code property as well as the label and id.
+    for( Map m : vm)
+    {
+      System.out.println(((List)(m.get("code"))).get(0) + " " + m.get(T.id) + " " + m.get(T.label));
+    }
+
+    // Display the routes in the graph we just created
+
+    List<Path> paths = new ArrayList<Path>();
+
+    paths = g.V().out().path().by("code").toList();
+
+    for (Path p : paths)
+    {
+      System.out.println(p.toString());
+    }
   }      
 }
