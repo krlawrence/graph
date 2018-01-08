@@ -1,7 +1,11 @@
-// Simple set of examples of using TinkerGraph from a Java application.
-// This program just uses the in memory storage model. The air-routes graph
-// is loaded but a schema is not created by this code. There are other examples
-// provided where the schema is created.
+// TinkereGraphTest.java
+//
+// Simple example of using TinkerGraph with Java
+//
+// This example does the following:
+//   1. Create an empty TinkerGraph instance
+//   2. Loads the air-routes.graphml file
+//   3. Runs a few queries against the newly created graph    .
 //
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;

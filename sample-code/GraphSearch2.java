@@ -42,13 +42,13 @@ public class GraphSearch2
     }
     catch( IOException e )
     {
-      System.out.println("GraphStats - Air routes GraphML file not found");
+      System.out.println("GraphStats - GraphML file not found");
       return false;
     }
     g = tg.traversal();
     return true;
   }
-
+  
   // Return the distance between two airports.
   // Input parameters are the airport IATA codes.
   // If no route exists between the specified airports return -1

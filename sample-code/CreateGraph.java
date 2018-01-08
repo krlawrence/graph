@@ -19,6 +19,7 @@ import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.apache.tinkerpop.gremlin.structure.io.IoCore;
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.*;
 import org.apache.tinkerpop.gremlin.structure.T;
+import org.apache.tinkerpop.gremlin.util.Gremlin;
 import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
@@ -30,6 +31,9 @@ public class CreateGraph
 {
   public static void main(String[] args) 
   {
+    // If you want to check your Gremlin version, uncomment the next line
+    //System.out.println("Gremlin version is: " + Gremlin.version());
+
     // Create a new (empty) TinkerGrap
     TinkerGraph tg = TinkerGraph.open() ;
     
