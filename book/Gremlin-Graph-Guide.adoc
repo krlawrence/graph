@@ -6305,52 +6305,159 @@ sophisticated graph system such as JanusGraph, that is something that we will bo
 want and need to be able to do. We cover the topic of cardinality in detail in the
 "<<janusmgmt>>" section later in the document.
 
-Now that we have created the 'code' property to have a list of values we can query
-either one of the values in the list. If we look at the value map we get back from
+now that we have created the 'code' property to have a list of values we can query
+either one of the values in the list. if we look at the value map we get back from
 the following example queries you can see both values in the list we associated with
 the property 'code'.
 
 [source,groovy]
 ----
-g.V().has('code','AUS').valueMap()
-[code:[AUS,KAUS]]
+g.v().has('code','aus').valuemap()
+[code:[aus,kaus]]
 
-g.V().has('code','KAUS').valueMap()
-[code:[AUS,KAUS]]
+g.v().has('code','kaus').valuemap()
+[code:[aus,kaus]]
 ----
 
-We can also query the values as normal.
+we can also query the values as normal.
 
 [source,groovy]
 ----
-g.V().has('code','AUS').values()
-AUS
-KAUS
+g.v().has('code','aus').values()
+aus
+kaus
 ----
 
-We can also use the 'properties' step to get the result back as vertex properties
-(vp).  We discuss vertex properties in detail in the "<<vertexprop>>" section.
+we can also use the 'properties' step to get the result back as vertex properties
+(vp).  we discuss vertex properties in detail in the "<<vertexprop>>" section.
 
 [source,groovy]
 ----
-g.V().has('code','AUS').properties()
+g.v().has('code','aus').properties()
 
-vp[code->AUS]
-vp[code->KAUS]
+vp[code->aus]
+vp[code->kaus]
 ----
  
-For completeness we could also do this.
+for completeness we could also do this.
 
 [source,groovy]
 ----
-g.V().properties().hasValue('AUS')
+g.v().properties().hasvalue('aus')
 
-vp[code->AUS]
+vp[code->aus] 
 ----
+
+[[propertycaution]]
+A word of caution - behavior differences with 'property'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.Be aware!
+
+There is a subtlety to be aware of when using 'property'. What happens can vary
+depending on the context in which it is used. Only when done as part of an 'addV' step
+immediately followed by multiple 'property' steps using the same key value will a
+list be created. Look at the two examples below. They do not produce the same
+results.
+
+
+[source,groovy]
+----
+g.addV().property('one','hi').
+         property('one','hello').
+         property('two','goodbye').
+         property('one','hello again').
+         valueMap()
+
+[one:[hi,hello,hello again],two:[goodbye]]
+----
+
+So our first query create a property with a key called 'one' followed by a list
+containing '[hi,hello,hello again]'. Let's do the same test again but this time
+create the vertex first and use an already created vertex to add properties to.
+
+[source,groovy]
+----
+v = g.addV().next()
+
+g.V(v).property('one','hi').
+       property('one','hello').
+       property('two','goodbye').
+       property('one','hello again').
+       valueMap()  
+
+[one:[hello again],two:[goodbye]]
+----
+
+This time, as we were not creating the vertex as part of the same set of steps, the
+behavior changes. Each time the property key of 'one' is used the existing value is
+replaced rather than being added as part of a list. I have seen this behavior cause
+confusion more than once and it is something to be aware of! In the next section we
+will ask Gremlin to explain this behavior to us!
+
+[[explainstep]]
+What did Gremlin do? - introducing 'explain'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you ever want to know how Gremlin compiles your query into a form that it is able
+to execute you can ask it to tell you by adding an 'explain' step to the end of your
+query. The query will not execute, instead you will be shown how Gremlin decided to
+optimize your query. It actually shows you all the choices it considered but in the
+examples below I am just going to show the one it picked in each case.
+
+So, thinking about our previous discussion of how 'property' works differently
+depending upon the context, if you were to use the 'explain' step to have Gremlin
+show us the way it is going to execute our query you can see clearly the difference
+between the two forms. I have truncated the output to keep things simple.
+
+Here is what Gremlin shows us for the first query when we use an 'explain' step.
+As you can see our query has been compiled into an 'AddVertexStep' with two
+properties one of which is a list.
+
+[source,groovy]
+----
+g.addV().property('one','hi').
+         property('one','hello').
+         property('two','goodbye').
+         property('one','hello again').
+         explain()
+
+Final Traversal    [AddVertexStartStep({one=[hi, hello, hello
+                      again], two=[goodbye]})]
+----
+
+Now if we look at the case where we have already created a vertex let's see what
+'explain' returns. What we find is that this time Gremlin has compiled our query to a
+'TinkerGraphStep' and is handling each property one by one. This has the result that
+each time the same key is reused, the previous value is replaced.
+
+[source,groovy]
+----
+g.V(v).property('one','hi').
+       property('one','hello').
+       property('two','goodbye').
+       property('one','hello again').
+       explain()
+
+Final Traversal  [TinkerGraphStep(vertex,[v[54800]]),
+                    AddPropertyStep({value=[hi], key=[one]}), 
+                    AddPropertyStep({value=[hello], key=[one]}), 
+                    AddPropertyStep({value=[goodbye], key=[two]}
+                    ), AddPropertyStep({value=[hello again], key=[one]})]
+
+----
+
+If you need to work with properties and treat them as lists once the vertex has been
+created, you need to explicitly add the 'list' keyword as part of the 'propert step'
+as we shall see in the next section.
+
+[[updatelist]]
+Updating properties stored in a list
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 So now we know how to create a node with property values in a list we need a way to
 update those properties. We can do this using a special form of the 'property' step
-where the first paramter is 'list' to show that what follows are updates to the
+where the first parameter is 'list' to show that what follows are updates to the
 existing list and not replacements for the whole list. 
 
 The example below adds another code that is sometimes used when talking about the
@@ -6438,6 +6545,10 @@ g.V().hasLabel('test').valueMap()
 [dups:[one,two,one,two]]
 ----
 
+[[propsets]]
+Creating properties that store sets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 So far we have just created values in a list that have 'LIST' cardinality which means
 that duplicate values are allowed. If we wanted to prevent that from
 happening we can use the 'set' keyword when adding properties to force a cardinality
@@ -6472,6 +6583,9 @@ g.V(3).valueMap('hw')
 [hw:[hello,world,apple]]
 ----
 
+[[setlistnote]]
+One more note about sets and lists
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Note that the other examples we have shown in this section are not the same as just
 adding a list directly as a property value. In the example below the entire list is
