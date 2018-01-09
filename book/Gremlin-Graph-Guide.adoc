@@ -1,11 +1,11 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v276, Jan 8, 2018
-// Mon Jan 08, 2018 15:04:29 CST
+v276, Jan 9, 2018
+// Tue Jan 09, 2018 10:04:15  CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Jan 08 2018
+//:Date:      Jan 09 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -1276,7 +1276,7 @@ g.V().has('code','AUS').repeat(out()).times(3).has('code','AGR').path().by('code
 ----
 
 Gremlin also has a 'repeat ... until' construct that we will see used later in this
-document. When combined with the 'emit' step, 'repeat' provides a nice way of getting
+book. When combined with the 'emit' step, 'repeat' provides a nice way of getting
 back any routes between a source and destination no matter how many hops it might
 take to get there.
 
@@ -2106,7 +2106,8 @@ g.V().hasLabel('airport').range(0,20).values('code')
 We can also limit based on time taken. The following query has a maximum limit of ten
 milliseconds. The query looks for routes from Austin (AUS) to London Heathrow
 (LHR). All the parts of this query are explained in detail later on in this
-book but I think what they do is fairly clear.
+book but I think what they do is fairly clear. The `repeat` step is explained in
+detail in the "<<sp>>" section.
 
 [source,groovy]
 ----
@@ -4460,7 +4461,8 @@ Here are the results from running the query.
 
 We can also specify an explicit number of out steps to try using a 'repeat...times'
 loop but this of course assumes that we know ahead of time how many stops we want to
-look for between airports.
+look for between airports. In the next section we will introduce the 'emit' step that
+gives you more control over the behavior of what is returned from 'repeat' loops.
 
 [source,groovy]
 ----
@@ -4480,8 +4482,164 @@ example we want to next try five hops instead of the current two..
 g.V().has('code','AUS').out().out().has('code','SYD').path().by('code')
 ----
 
-A bit later, in the <<emit>> section, we will look at how 'emit' can be used to
+As is often the case when working with Gremlin there is more than one way to achieve
+the same result. The 'loops' step, that can be
+used to control how long a repeat loop runs, that is essentially equivalent to the
+'times' step. Take a look at the two queries below. Both achieve the same result.
+The first uses 'loops' while the second uses 'times'. I prefer the readability
+offered by the use of 'times'.
+
+[source,groovy]
+----
+g.V(3).repeat(out()).until(loops().is(2)).count()
+
+5894
+
+g.V(3).repeat(out()).times(2).count()
+
+5894
+----
+
+In the next section, we will look at how 'emit' can be used to
 adjust the behavior of a 'repeat...times' loop.
+
+
+[[emit]]
+Using 'emit' to return results during a 'repeat' loop
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Sometimes it is useful to be able to return the results of a traversal as it
+executes. The example below starts at the Santa Fe airport (SAF) and uses a 'repeat'
+to keep going out from there. By placing an 'emit' right after the 'repeat' we will
+be able to see the paths that are taken by the traversal. If we did not put the
+'emit' here this query would run for a very long time as the 'repeat' has no ending
+condition!
+
+
+[source,groovy]
+----
+g.V().has('code','SAF').repeat(out()).emit().path().by('code').limit(10)
+
+[SAF,DFW]
+[SAF,LAX]
+[SAF,PHX]
+[SAF,DEN]
+[SAF,DFW,ATL]
+[SAF,DFW,ANC]
+[SAF,DFW,AUS]
+[SAF,DFW,BNA]
+[SAF,DFW,BOS]
+[SAF,DFW,BWI]
+----
+
+Another place where 'emit' can be useful is when 'repeat' and 'times' are used
+together to find paths between vertices. Ordinarily, if you use a step such as
+'times(3)' then the query will only return results that are three hops out. However
+if we use an 'emit' we can also see results that take less hops. First of all take a
+look at the query below that does not use an 'emit' and the results that it
+generates.
+
+[source,groovy]
+----
+g.V(3).repeat(out()).times(3).has('code','MIA').limit(5).path().by('code')
+
+[AUS,YYZ,MUC,MIA]
+[AUS,YYZ,MAN,MIA]
+[AUS,YYZ,YUL,MIA]
+[AUS,YYZ,SVO,MIA]
+[AUS,YYZ,GRU,MIA]
+----
+
+As you can see, only routes that took three full hops were returned. Now let's change
+the query to use an 'emit'. This time you can think of the query as saying "at most
+three hops".
+
+
+[source,groovy]
+----
+g.V(3).repeat(out()).emit().times(3).has('code','MIA').limit(5).path().by('code')
+
+[AUS,MIA]
+[AUS,YYZ,MIA]
+[AUS,LHR,MIA]
+[AUS,FRA,MIA]
+[AUS,MEX,MIA]
+----
+
+So by adding an 'emit' we got back a quite different set of results. This is a really
+useful and powerful capability. Being able to express ideas such as "at most three"
+provides us a way to write very clean queries in cases like this.
+
+The 'emit' step can also take a parameter such as a 'has' step to filter out
+intermediate results that we are not interested in. The query below will only show
+intermediate results as the 'repeat' operates if they meet a given condition. In this
+case the condition is that the path must have passed through the Prague (PRG)
+airport's node. A 'limit' step is used to only show the first 10 results.
+
+[source,groovy]
+----
+g.V(3).repeat(out().simplePath()).emit(has('code','PRG')).path().by('code').limit(10)
+
+[AUS,YYZ,PRG]
+[AUS,LHR,PRG]
+[AUS,FRA,PRG]
+[AUS,DTW,YYZ,PRG]
+[AUS,DTW,LHR,PRG]
+[AUS,DTW,CDG,PRG]
+[AUS,DTW,FRA,PRG]
+[AUS,DTW,PVG,PRG]
+[AUS,DTW,AMS,PRG]
+[AUS,DTW,MUC,PRG]
+----
+
+Without the condition as part of the 'emit' step we get different results as we are
+shown every path the graph traverser is taking.
+
+[source,groovy]
+----
+g.V(3).repeat(out().simplePath()).emit().path().by('code').limit(10)
+
+[AUS,DTW]
+[AUS,YYZ]
+[AUS,LHR]
+[AUS,FRA]
+[AUS,MEX]
+[AUS,PIT]
+[AUS,PDX]
+[AUS,ONT]
+[AUS,CLT]
+[AUS,CUN]
+----
+
+So far, while interesting, many of the results shown look at first glance as if they
+could have been generated without using an 'emit'. However, the query below
+is more interesting in that we use an 'until' step to specify a target airport of
+Austin (AUS) that we are interested in getting to from Lerwick (LSI) in the Shetland
+Islands. We also specify, as part of the 'emit' step, that we are interested in
+seeing any routes found that involve any airports in New York State regardless of
+whether or not they end up in Austin.
+
+[source,groovy]
+----
+g.V()has('code','LSI').repeat(out().simplePath()).
+                       emit(has('region','US-NY')).
+                       until(has('code','AUS')).
+                       path().by('code').limit(10)
+LSI,EDI,JFK]
+LSI,EDI,EWR]
+LSI,EDI,SWF]
+LSI,GLA,JFK]
+LSI,GLA,EWR]
+LSI,EDI,JFK,AUS]
+LSI,EDI,JFK,ROC]
+LSI,EDI,JFK,BUF]
+LSI,EDI,JFK,SYR]
+LSI,EDI,EWR,ROC]
+----
+
+
+You will see more examples of 'emit' being used in the "<<btree>>" section a bit
+later.
 
 [[pathwarn]]
 A warning that 'path' can be memory and CPU intensive
@@ -9273,71 +9431,6 @@ As you start to work with graphs and start to do more complex querying, this pat
 of query based around 'withSideEffect' is extremely useful to keep in mind.
 
 
-[[emit]]
-Using 'emit' to return results during a traversal
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Sometimes it is useful to be able to return the results of a traversal as it
-executes. The example below starts at the Santa Fe airport (SAF) and uses a 'repeat'
-to keep going out from there. By placing an 'emit' right after the 'repeat' we will
-be able to see the paths that are taken by the traversal. If we did not put the
-'emit' here this query would run for a very long time as the 'repeat' has no ending
-condition!
-
-
-[source,groovy]
-----
-g.V().has('code','SAF').repeat(out()).emit().path().by('code').limit(10)
-
-[SAF,DFW]
-[SAF,LAX]
-[SAF,PHX]
-[SAF,DEN]
-[SAF,DFW,ATL]
-[SAF,DFW,ANC]
-[SAF,DFW,AUS]
-[SAF,DFW,BNA]
-[SAF,DFW,BOS]
-[SAF,DFW,BWI]
-----
-
-Another place where 'emit' can be useful is when 'repeat' and 'times' are used
-together to find paths between vertices. Ordinarily, if you use a step such as
-'times(3)' then the query will only return results that are three hops out. However if we
-use an 'emit' we can also see results that take less hops. First of all take a look at the query
-below that does not use an 'emit' and the results that it generates.
-
-[source,groovy]
-----
-g.V(3).repeat(out()).times(3).has('code','MIA').limit(5).path().by('code')
-
-[AUS,YYZ,MUC,MIA]
-[AUS,YYZ,MAN,MIA]
-[AUS,YYZ,YUL,MIA]
-[AUS,YYZ,SVO,MIA]
-[AUS,YYZ,GRU,MIA]
-----
-
-As you can see, only routes that took three full hops were returned. Now let's change
-the query to use an 'emit'. This time you can think of the query as saying "at most
-three hops".
-
-[source,groovy]
-----
-g.V(3).repeat(out()).emit().times(3).has('code','MIA').limit(5).path().by('code')
-
-[AUS,MIA]
-[AUS,YYZ,MIA]
-[AUS,LHR,MIA]
-[AUS,FRA,MIA]
-[AUS,MEX,MIA]
-----
-
-So by adding an 'emit' we got back a quite different set of results. This is a really
-useful and powerful capability. Being able to express ideas such as "at most three"
-provides us a way to write very clean queries in cases like this.
-
-You will see more examples of 'emit' being used in the next section.
 
 [[btree]]
 Modelling an ordered binary tree as a graph
@@ -9990,16 +10083,6 @@ graph.getIndexedKeys(Vertex.class)
 graph.dropIndex('longest',Vertex.class)
 ----
 
-[source,groovy]
-----
-g.V(3).repeat(out()).until(loops().is(2)).count()
-
-5894
-
-g.V(3).repeat(out()).times(2).count()
-
-5894
-----
 
 [source,groovy]
 ----
