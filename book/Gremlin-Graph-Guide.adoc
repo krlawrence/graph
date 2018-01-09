@@ -2,7 +2,7 @@ GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v276, Jan 9, 2018
-// Tue Jan 09, 2018 10:04:15  CST
+// Tue Jan 09, 2018 12:21:09 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Jan 09 2018
@@ -6448,7 +6448,7 @@ Final Traversal  [TinkerGraphStep(vertex,[v[54800]]),
 ----
 
 If you need to work with properties and treat them as lists once the vertex has been
-created, you need to explicitly add the 'list' keyword as part of the 'propert step'
+created, you need to explicitly add the 'list' keyword as part of the 'property' step
 as we shall see in the next section.
 
 [[updatelist]]
