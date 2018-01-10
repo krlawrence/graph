@@ -10,10 +10,11 @@
 //   4. Displays information about the graph that was created
 
 // The csv file is expected to be of the form:
-//   kelvin,knows,Jack
+//   Kelvin,knows,Jack
 //   Jack,knows,Baxter
 //
-// Each name in the CSV file is assumed to be unique for this simple example
+// Each name in the CSV file is assumed to be unique for this simple examplei, so for
+// example only one node will be created for Jack in the example above.
 
 // I have highlighted any places where the Gremlin is slightly different from the 
 // Gremlin we can use in the Gremlin Console.
@@ -107,7 +108,6 @@ public class GraphFromCSV
     
     if (gcsv.createGraph())
     {
-
       try 
       {
         String line;
