@@ -99,12 +99,11 @@ public class GraphFromCSV
   }
 
 
-  // Run some tests
+  // Open the sample csv file and build a graph based on its contents
 
   public static void main(String[] args) 
   {
     GraphFromCSV gcsv = new GraphFromCSV();
-    
     
     if (gcsv.createGraph())
     {
