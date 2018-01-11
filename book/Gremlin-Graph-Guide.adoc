@@ -1,11 +1,11 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v276, Jan 10, 2018
-// Wed Jan 10, 2018 14:59:08 CST
+v276, Jan 11, 2018
+// Thu Jan 11, 2018 10:15:43 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Jan 10 2018
+//:Date:      Jan 11 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -3469,10 +3469,11 @@ g.V().has(label,neq('airport')).count()
 
 TIP: Depending on the model of your graph and the query itself it may or may not make
 sense to use the boolean steps. Sometimes, as described above chaining 'has' steps
-together may be more efficient or using 'within' and 'without' my make more sense.        
+together may be more efficient or using a step like 'within' or 'without' may make
+more sense.        
 
 Boolean steps such as 'and' can also be dot combined as the example below shows. This
-query finds all the airports that have less than 100 outbound routes but more than 95
+query finds all the airports that have less than 100 outbound routes but more than 94
 and returns them grouped by airport code and route count. Notice how in this case the
 'and' step is added to the 'lt' step using a dot rather than having the 'and' be the
 containing step for the whole test. The results from running the query are shown
@@ -3481,10 +3482,10 @@ below as well.
 [source,groovy]
 ----
 g.V().hasLabel('airport').
-      where(out().count().is(lt(100).and(gt(95)))).
+      where(out().count().is(lt(100).and(gt(94)))).
       group().by('code').by(out().count())
 
-[BUD:96,SZX:99,AUH:97,BGY:99]      
+[BUD:98,STR:95,NCE:97,AUH:97,WAW:98,CRL:95]      
 ----
 
 The query we just looked at could also be written as follows but in this case using
@@ -3494,10 +3495,35 @@ see we get the same result as before.
 [source,groovy]
 ----
 g.V().hasLabel('airport').where(and(out().count().is(lt(100)),
-                out().count().is(gt(95)))).
-      group().by('code').by(out().count())
+                out().count().is(gt(94)))).
+                group().by('code').by(out().count())
 
-[BUD:96,SZX:99,AUH:97,BGY:99]
+[BUD:98,STR:95,NCE:97,AUH:97,WAW:98,CRL:95]
+----
+
+As I have pointed out several times already, there are often many ways to write a
+query that will produce the same result. Here is an example of the previous two
+queries rewritten to use a 'between' step instead of an 'and' step. Remember that
+'between' is inclusive/exclusive, so we have to specify 101 as the upper bound and 95
+as the lower bound.`
+
+[source,groovy]
+----
+g.V().hasLabel('airport').where(out().count().is(between(95,101))).
+                          group().by('code').by(out().count())
+
+[BUD:98,STR:95,NCE:97,AUH:97,WAW:98,CRL:95]
+----
+
+Just for fun, here is the same query but rewritten to use an 'inside' step
+
+
+[source,groovy]
+----
+g.V().hasLabel('airport').where(out().count().is(inside(94,100))).
+                          group().by('code').by(out().count())
+
+[BUD:98,STR:95,NCE:97,AUH:97,WAW:98,CRL:95]]
 ----
 
 As a side note, if we wanted to reverse the grouping so that the airports were
@@ -3506,10 +3532,10 @@ grouped by the counts rather than the codes we could do that as follows.
 [source,groovy]
 ----
 g.V().hasLabel('airport').
-      where(out().count().is(lt(100).and(gt(95)))).
+      where(out().count().is(lt(100).and(gt(94)))).
       group().by(out().count()).by('code')
 
-[96:[BUD],97:[AUH],99:[SZX,BGY]]
+[97:[NCE,AUH],98:[BUD,WAW],95:[STR,CRL]]
 ----
 
 You can also add additional inline 'and' steps to a query as shown below. Notice that
