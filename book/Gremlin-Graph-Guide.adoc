@@ -2570,16 +2570,22 @@ Here are a few more examples of ways we can work with labels.
 // You can explicitly reference a vertex label using the label() method
 g.V().where(label().is(eq('airport'))).count()
 
-// But you would normally just use the hasLabel() method in this case of course
+// Or using the label key word
+g.V().has(label,'airport').count()
+
+// But you would perhaps us the  hasLabel() method in this case instead
 g.V().hasLabel('airport').count()
 
 // How many non airport vertices are there?
-g.V().where(label().is(neq('airport'))).count
+g.V().has(label,neq('airport')).count()
+g.V().where(label().is(neq('airport'))).count()
 
-// Again, it would be more natural to actually write this query like this:
+// Again, it might be more natural to actually write this query like this:
 g.V().not(hasLabel('airport')).count()
 
 // The same basic concepts apply equally to edges
+g.E().has(label,'route').count()
+
 g.E().where(label().is(eq('route'))).count()  
 
 g.E().hasLabel('route').count()
@@ -3539,16 +3545,16 @@ g.V().hasLabel('airport').
 ----
 
 You can also add additional inline 'and' steps to a query as shown below. Notice that
-this time 'AUH' is not part of the result set as it has 97 routes which our new 'and'
-test eliminates.
+this time 'AUH' and 'NCE' are not part of the result set as they have 97 routes which
+our new 'and' test eliminates.
 
 [source,groovy]
 ----
 g.V().hasLabel('airport').
-      where(out().count().is(lt(100).and(gt(95)).and(neq(97)))).
+      where(out().count().is(lt(100).and(gt(94)).and(neq(97)))).
       group().by(out().count()).by('code')
 
-[96:[BUD],99:[SZX,BGY]]
+[98:[BUD,WAW],95:[STR,CRL]]
 ----
 
 We used the 'where' step a lot in the examples above. We will explain in more detail
