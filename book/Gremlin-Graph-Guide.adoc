@@ -1,11 +1,11 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v276, Jan 9, 2018
-// Tue Jan 09, 2018 12:21:09 CST
+v276, Jan 10, 2018
+// Wed Jan 10, 2018 14:59:08 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Jan 09 2018
+//:Date:      Jan 10 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -484,6 +484,10 @@ Available commands:
 For help on a specific command type:
     :help command 
 ----
+
+TIP: Of all the commands listed above :clear (:c for short) is an important one to
+remember. If the console starts acting strangely or you find yourself stuck with a
+prompt like "......1>" , typing ':clear' will reset things nicely.
 
 It is worth noting that as mentioned above, the Gremlin console is based on the
 Groovy console and as such you can enter valid Groovy code directly into the console.
@@ -1391,9 +1395,7 @@ variable for additional processing. Remember that even though we are working wit
 Groovy environment while inside the Gremlin Console, everything we are working with
 here, at its core, is Java code. So we can use the 'getClass' method from Java to
 introspect the object. Note the call to 'next' which turns the result of the
-traversal into an object we can work with. The 'next' step is one of a series of
-steps that the Tinkerpop documentation describes as 'terminal steps'. We will see
-more of these 'terminal steps' in use throughout this document.
+traversal into an object we can work with further.
 
 [source,groovy]
 ----
@@ -1402,8 +1404,16 @@ g.V().has('airport','code','DFW').next().getClass()
 class org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerVertex
 ----
 
-We could even add a call to 'getMethods()' at the end of the query above to get back
-a list of all the methods and their types supported by the 'TinkerVertex' class.
+The 'next' step that we used above is one of a series of steps that the Tinkerpop
+documentation describes as 'terminal steps'. We will see more of these 'terminal
+steps' in use throughout this document. As mentioned above, a terminal step
+essentially ends the graph traversal and returns a concrete object that you can work
+with further in your application. You will see 'next' and other related steps used in
+this way when we start to look at using Gremlin from a stand alone program a bit
+later on. We could even add a call to 'getMethods()' at the end of the query above to
+get back a list of all the methods and their types supported by the 'TinkerVertex'
+class.
+
 
 [[values]]
 Retrieving property values from a vertex
@@ -2361,7 +2371,8 @@ TIP: It is necessary to add a call to 'next' to the end of the query in order fo
 this to work. Forgetting to add the call to 'next' is a very commonly made mistake by
 people getting used to the Gremlin query language. The call to 'next' terminates the
 traversal part of the query and generates a concrete result that can be stored in a
-variable.
+variable. There are other steps such as 'toList' that also perform this traversal
+termination action. We will see those steps used later on.
 
 Once you have some results in a variable you can refer to it as you would in any
 other programming language that supports key:value type maps and dictionaries.  We
@@ -2384,6 +2395,30 @@ property value for the given key, we still have to add the '[0]' when referencin
 otherwise the whole array will be returned if we just used 'aus[+++'city'+++]'. We
 will explore why property values are stored in this way in the "<<listprop>>"
 section.
+
+As a side note, the 'next' step can take a parameter value that tells it how much
+data to return.  For example if you wanted the next three vertices from a query like
+the one below you can add a call to 'next(3)' at the end of the query. Note that
+doing this turns the result into an ArrayList. Each element in the list will contain
+a vertex. We can call the Java 'getClass' method to verify the type of the values
+returned.
+
+[source,groovy]
+----
+verts=g.V().hasLabel('airport').next(3)
+
+v[1]
+v[2]
+v[3]
+
+verts.getClass()
+
+class java.util.ArrayList
+
+verts.get(1).getClass()
+
+class org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerVertex
+----
 
 [[wid]]
 Working with IDs
@@ -5968,13 +6003,13 @@ introduce in this section the concept of a property ID.
 The 'Property' and 'VertexProperty' interfaces
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In a TinkerPop 3 enabled graph, all properties are implementations of the
-Property interface. Vertices implement the 'VertexProperty' interface which itself
-implements 'Property'. These interfaces are documented as part of the Apache
-TinkerPop 3 JavaDoc.  The interface defines the methods that you can use when working
-with a vertex property object in your code. One important thing to note about vertex
-properties is that they are immutable. You can create them but once created they
-cannot be updated.  
+In a TinkerPop 3 enabled graph, all properties are implementations of the 'Property'
+interface. Vertex properties implement the 'VertexProperty' interface which itself
+extends the 'Property' interface. These interfaces are documented as part of the
+Apache TinkerPop 3 JavaDoc.  The interface defines the methods that you can use when
+working with a vertex property object in your code. One important thing to note about
+vertex properties is that they are immutable. You can create them but once created
+they cannot be updated.  
 
 We will look more closely at the Java interfaces that TinkerPop 3 defines in the
 "<<javatinker>>" section a bit later in this document.
@@ -10102,8 +10137,9 @@ HasStep([country.eq(DE)])                    59           4      0.206     1.11
 Introducing 'cyclicPath'
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-You can use cyclicPath to find paths through the graph that end up back where they
-started. The example below finds routes that both start and end in Austin (AUS).
+You can use 'cyclicPath' to find paths through the graph that end up back where they
+started. The rather contrived example below finds routes that both start and end in
+Austin (AUS).
 
 [source,groovy]
 ----
@@ -10111,33 +10147,16 @@ started. The example below finds routes that both start and end in Austin (AUS).
 g.V().has('code','AUS').out().out().cyclicPath().path().by('code')
 ----
 
-Using 'next' to iterate through vertices
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Including an index value in results - introducing 'withIndex'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-[source,groovy]
-----
-t=g.V().hasLabel('airport');[]
-t.next(10)
-t.next(10)
-t.next(10)
-----
-
-[source,groovy]
-----
-a = g.V().hasLabel('airport').next(5)
-v[1]
-v[2]
-v[3]
-v[4]
-v[5]
-----
-
-Including the index value in search results
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+If for any reason you wanted an index value included as part of the results from a
+query you can use the 'withIndex' method as shown below.
 
 [source,groovy]
 ----
 a=g.V().has('region','US-OK').values('code').withIndex().toList()
+
 [OKC,0]
 [TUL,1]
 [LAW,2]
@@ -10155,6 +10174,8 @@ Work in progress
 
 [source,groovy]
 ----
+
+g.V().has('code','DFW').out().has('region','US-TX').values('code')
 g.V().has('code','DFW').as('dfw').out().as('to').
       filter(select('dfw','to').by('region').where('dfw',eq('to'))).values('code')
 
@@ -10162,6 +10183,9 @@ g.V(0L).as('v').values('c').as('val').select('v').properties().as('p').propertie
   value().as('val2').select('p').filter(select('val','val2').where('val',eq('val2')))      
 
 g.V().as("a").properties().has("c").where(eq("a")).by("c")
+
+ g.V().hasLabel('person').as('a').V().hasLabel('dog').as('b').
+       where('a',eq('b')).by('name').by('nick').valueMap()    
 ----
 
 
@@ -10177,11 +10201,6 @@ g.V().has('code','AUS').out().path().by('city').limit(1)
 [Austin,Boston]
 ----
 
-
-[source,groovy]
-----
-g.V().sack(assign).by('code').sack()
-----
 
 [source,groovy]
 ----
@@ -10269,10 +10288,13 @@ that is a long winded way of saying that once you move beyond the basics and hea
 towards putting a system into production, there are a lot of options to consider.
 
 In this section you will a selection of examples from these more sophisticated
-environments. The purpose of this document thus far has been to teach Gremlin using
-the Gremlin Console and TinkerGraph as our learning environment. However, it would be
-remiss to end our discussion without at least touching on some of these other
-environments, how you might configure them and why you might use them.
+environments. The focus of this book so far has been to teach the Gremlin query and
+traversal language, using the Gremlin Console and TinkerGraph as our learning
+environment. However, it would be remiss to end our discussion without at least
+touching on some of these other environments, how you might configure them and why
+you might use them. The following sections are an attempt to whet your appetite for
+moving beyond the Gremlin Console into the world of graph application programming and
+graph system deployment!
 
 
 [[javatinker]]
@@ -10287,14 +10309,17 @@ will want to write stand alone applications that can work with a graph. There ar
 number of different language bindings currently available for TinkerPop 3. One of the
 most widely used is the Java API for TinkerPop. 
 
-As discussed at earlier, when building a commercial application, you may need
-capabilities such as ACID transactions and would not use TinkerGraph as your graph
-database in those cases. There are however, places where TinkerGraph may be just what
-you need. One example might be doing analysis on a static graph that can fit into
-memory on your laptop. The air-routes graph is a good example of such a graph. As a
-first step towards writing stand alone applications that use different graph database
-back ends, lets look at a few examples of how you can create a Java application that
-uses Gremlin and TinkerGraph.
+NOTE: You will find several Java samples at the GitHub repository associated with
+this book. https://github.com/krlawrence/graph 
+
+As discussed earlier in this book, when building a commercial application, you may
+need capabilities such as ACID transactions and would not use TinkerGraph as your
+graph database in those cases. There are however, places where TinkerGraph may be
+just what you need. One example might be doing analysis on a static graph that can
+fit into memory on your laptop. The air-routes graph is a good example of such a
+graph. As a first step towards writing stand alone applications that use different
+graph database back ends, lets look at a few examples of how you can create a Java
+application that uses Gremlin and TinkerGraph.
 
 [[tpinterfaces]]
 The Apache TinkerPop interfaces and classes
@@ -10557,6 +10582,9 @@ Working with TinkerGraph from a Groovy application
 Earlier in this document, in the "<<grv>>" section we explored the ways that you can
 use Groovy code within the Gremlin Console. However, we have not yet looked at how
 you can use a stand alone Groovy application to work with a TinkerGraph.
+
+NOTE: You will find several Groovy samples at the GitHub repository associated with
+this book. https://github.com/krlawrence/graph 
 
 In this section we will rewrite the application we coded in Java above in Groovy. It
 is assumed that you have downloaded and installed Groovy for your environment and
