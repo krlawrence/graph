@@ -3686,6 +3686,42 @@ number of runways that the Austin airport has.
 [code:[MSY],runways:[2]]
 ----
 
+Let's imagine that we want to write a query to find all airports that have the same
+region code as the French airport of Nice. Let's assume for now that we do not know
+what the region code is so we cannot just write a simple query to find all airports
+in that region. So, instead we need to write a query that will first find the region
+code for Nice and then use that region code to find any other airports in the region.
+Finally we want to return the airport code along with the city name and the region
+code. One way of writing this query is to take advantage of the 'where...by'
+construct.
+
+Take a look at the query below and the output it generates.
+
+[source,groovy]
+----
+g.V().has('code','NCE').values('region').as('r').
+  V().hasLabel('airport').as('a').values('region').
+      where(eq('r')).by().
+      local(select('a').values('city','code','region').fold())
+
+[NCE,Nice,FR-U]
+[MRS,Marseille,FR-U]
+[TLN,Toulon/Le Palyvestre,FR-U]
+[AVN,Avignon/Caumont,FR-U]
+----
+
+There are several things about this query that are interesting. Firstly because we
+are comparing the results of two 'values' steps we do not provide a parameter to the
+'by' step as we do not need to provide a property key. Secondly, we use a second
+'V()' step in the query to find all the airports that have the same airport code as
+Nice. Note that this also means that Nice is included in the results. Lastly we wrap
+the part of the query that prepares the output in a form we want in a 'local' step so
+that a separate list is created for each airport.
+
+You could write this query other ways, perhaps using a 'match' step but once you
+understand the pattern used above it is both fairly simple and quite powerful.
+
+
 [[choose]]
 Using 'choose' to write if...then...else type queries
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
