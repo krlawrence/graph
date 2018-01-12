@@ -8,8 +8,8 @@ NOTE: In order to prune the unwanted files from the project, as part of the v274
 
 
 **LATEST NEWS:**  
+[Jan-12-2018] Based on feedback I have decided to rename the book "Practical Gremlin" (see issue #29)  
 [Jan-03-2018] Revision 275 was just published in all formats. Lots of updates to book and sample code.  
-[Dec-24-2017] Revision 274 was just published in all formats. Now using releases to store output files.   
 
 **About the files in this folder**
 
