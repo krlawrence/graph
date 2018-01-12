@@ -12,7 +12,7 @@ This repository is the new home for the source materials, sample code and exampl
 To read the book right away in a browser (HTML format) click [here](http://kelvinlawrence.net/book/Gremlin-Graph-Guide.html) or for a PDF version click [here](http://kelvinlawrence.net/book/Gremlin-Graph-Guide.pdf). You will find other formats including MOBI, EPUB and XML (Docbook) in the releases section. If you want to see the absolute latest updates you can always browse the Asciidoc source file (Gremlin-Graph-Guide.adoc) in the /book folder. The PDF version is currently the "official" version, simply meaning it looks the best!
 
 **LATEST NEWS:**  
-[Jan-12-2018] Revision 276 was just plublished in all formats. Many updates to book and samples.  
+[Jan-12-2018] Revision 276 was just published in all formats. Many updates to book and samples.  
 [Jan-12-2018] Based on feedback I have decided to rename the book "Practical Gremlin" (see issue #29)  
 [Jan-06-2018] Several new Java samples have been added to the sample-code directory and others improved.  
 [Jan-03-2018] Revision 275 was just published in all formats. Lots of updates to book and sample code.  
