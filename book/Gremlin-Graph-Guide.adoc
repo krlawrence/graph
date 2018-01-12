@@ -1,5 +1,5 @@
-GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
-===================================================
+PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
+================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v276, Jan 12, 2018
 // Fri Jan 12, 2018 10:15:36 CST
@@ -19,6 +19,7 @@ v276, Jan 12, 2018
 :toc:
 :toclevels: 4
 :revision: 276
+:doctype: book
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
 //        has a white foreground color. The default was unreadable,
