@@ -1,11 +1,11 @@
 GRAPH DATABASES, GREMLIN and TINKERPOP : A TUTORIAL
 ===================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v276, Jan 11, 2018
-// Thu Jan 11, 2018 10:15:43 CST
+v276, Jan 12, 2018
+// Fri Jan 12, 2018 10:15:36 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Jan 11 2018
+//:Date:      Jan 12 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -1986,9 +1986,9 @@ This query, and the prior query, would return the following results.
 ----
 
 In the prior example we gave our variables simple names like 'a' and 'b'. However, it
-is sometimes useful to give our traversal variables more meaningful names and it is
-perfectly OK to do that. Let's rewrite the query to use some more descriptive variable
-names.
+is sometimes useful to give our traversal variables and named steps more meaningful
+names and it is perfectly OK to do that. Let's rewrite the query to use some more
+descriptive variable names.
 
 [source,groovy]
 ----
@@ -3648,6 +3648,10 @@ g.V().has('code','AUS').as('a').out().out().where(neq('a')).
               path().by('code').limit(10)
 ----
 
+As you work with Gremlin, you will find that the 'where' step is one that you use a
+lot. You will see many more examples of 'where' being used throughout the remainder
+of this book.
+
 [[whereby]]
 Using 'where' and 'by' to filter results
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3709,6 +3713,9 @@ g.V().has('code','NCE').values('region').as('r').
 [TLN,Toulon/Le Palyvestre,FR-U]
 [AVN,Avignon/Caumont,FR-U]
 ----
+
+TIP: In the sample programs folder you will find a program called GraphRegion.java
+that shows how to perform the query shown above in a Java program.
 
 There are several things about this query that are interesting. Firstly because we
 are comparing the results of two 'values' steps we do not provide a parameter to the
@@ -12810,6 +12817,9 @@ g.V().outE().inV().path().by('code').by(label)
 [ATL,route,TRI]
 [ATL,route,TTN]
 ----
+
+TIP: There is a sample program called GraphFromCSV.java in the sample programs folder
+that shows how to read a CSV file like the one above and create a graph from it.
 
 If you wanted to print the list without the containing square brackets you could take
 advantage of the Java 'forEachRemaining' method from the Iterator interface to add a
