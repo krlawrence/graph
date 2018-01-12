@@ -1,4 +1,4 @@
-# Graph Databases, Gremlin and TinkerPop - a Tutorial
+# Practical Gremlin: An Apache TinkerPop Tutorial
 
 
 ![map](https://github.com/krlawrence/graph/raw/master/images/map-snip2.PNG?raw=true, "graph picture")
