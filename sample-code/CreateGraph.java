@@ -61,7 +61,7 @@ public class CreateGraph
 
     // Simple example of how to work with the results we get back from a query
 
-    List<Map<String,Object>> vm = new ArrayList<Map<String,Object>>() ;
+    List<Map<Object,Object>> vm = new ArrayList<Map<Object,Object>>() ;
     
     vm = g.V().valueMap(true).toList();
 
