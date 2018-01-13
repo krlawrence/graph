@@ -2,8 +2,6 @@
 // RouteSearch.java
 //
 // Simple example of using TinkerGraph with Java
-// This code builds upon the examples shown in GraphSearch and GraphSearch2
-// and adds the findLongestRoute method to the class.
 //
 // This example does the following:
 //   1. Create an empty TinkerGraph instance
