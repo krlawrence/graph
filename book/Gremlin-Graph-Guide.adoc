@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v276, Jan 12, 2018
-// Fri Jan 12, 2018 10:15:36 CST
+v277, Jan 13, 2018
+// Sat Jan 13, 2018 22:31:47 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Jan 12 2018
+//:Date:      Jan 13 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -18,7 +18,7 @@ v276, Jan 12, 2018
 //:pygments-style: vim
 :toc:
 :toclevels: 4
-:revision: 276
+:revision: 277
 :doctype: book
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -2673,10 +2673,61 @@ outgoing routes that airport has. Then, when we eventually apply the 'mean' step
 will calculate the average value of our entire collection and give us back the result
 that we were looking for.
 
-There are other ways that 'local' can be used. We will see examples of those
-throughout the document including how local can be used as a parameter to the 'order'
-step when we dig deeper into route analysis in the ""<<meanmode>> section of the
-document.
+Let's look at another example where we can use the 'local' step to change the results
+of a query in a useful way. First of all, take a look at the query below and the
+results that it generates. The query first finds all the airports located in Scotland
+using the region code of 'GB-SCT'. It then creates an ordered list of airport codes
+and city names into a list.
+
+[source,groovy]
+----
+g.V().has('region','GB-SCT').order().by('code').
+      values('code','city').fold()
+----
+
+Here are the results from running the query.
+
+[source,groovy]
+----
+[ABZ,Aberdeen,BEB,Balivanich,BRR,Eoligarry,CAL,Campbeltown,DND,Dundee,EDI,Edinburgh,EOI,Eday,FIE,Fair Isle,FOA,Foula,GLA,Glasgow,ILY,Port Ellen,INV,Inverness,KOI,Orkney Islands,LSI,Lerwick,LWK,Lerwick,NDY,Sanday,NRL,North Ronaldsay,PIK,Glasgow,PPW,Papa Westray,PSV,Papa Stour Island,SOY,Stronsay,SYY,Stornoway,TRE,Balemartine,WIC,Wick,WRY,Westray]
+----
+
+However, it would be more convenient perhaps to have the results be returned as a
+list of lists where each small list contains the airport code and city name with all
+the small lists wrapped inside a big list. We can achieve this by wrapping the second
+half of the query inside of a 'local' step as shown below.
+
+[source,groovy]
+----
+g.V().has('region','GB-SCT').order().by('code').
+      local(values('code','city').fold())
+
+----
+
+Here are the results of running the modified query. I have arranged the results in
+two columns to aid readability.
+
+[source,groovy]
+----
+[ABZ,Aberdeen]          [LSI,Lerwick]                 
+[BEB,Balivanich]        [LWK,Lerwick]                 
+[BRR,Eoligarry]         [NDY,Sanday]                  
+[CAL,Campbeltown]       [NRL,North Ronaldsay]         
+[DND,Dundee]            [PIK,Glasgow]                 
+[EDI,Edinburgh]         [PPW,Papa Westray]            
+[EOI,Eday]              [PSV,Papa Stour Island]       
+[FIE,Fair Isle]         [SOY,Stronsay]                
+[FOA,Foula]             [SYY,Stornoway]               
+[GLA,Glasgow]           [TRE,Balemartine]             
+[ILY,Port Ellen]        [WIC,Wick]                    
+[INV,Inverness]         [WRY,Westray]                 
+[KOI,Orkney Islands]
+----
+
+There are many other ways that 'local' can be used. You will find examples of those
+throughout the book. You will see some that show how local can be used as a parameter
+to the 'order' step when we dig deeper into route analysis in the "<<meanmode>>"
+section.
 
     
 [[st]]
