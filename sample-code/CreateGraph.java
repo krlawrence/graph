@@ -19,6 +19,7 @@ import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.apache.tinkerpop.gremlin.structure.io.IoCore;
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.*;
 import org.apache.tinkerpop.gremlin.structure.T;
+import org.apache.tinkerpop.gremlin.structure.io.Io;
 import org.apache.tinkerpop.gremlin.util.Gremlin;
 import java.io.IOException;
 import java.util.List;
@@ -80,6 +81,20 @@ public class CreateGraph
     for (Path p : paths)
     {
       System.out.println(p.toString());
+    }
+
+    // Save the graph we just created as GraphML (XML) or GraphSON (JSON)
+    try
+    {
+      // If you want to save the graph as GraphML uncomment the next few line
+      //tg.io(IoCore.graphml()).writeGraph("mygraph.graphml");
+      
+      // If you want to save the graph as JSON uncomment the next line
+      //tg.io(IoCore.graphson()).writeGraph("mygraph.json");
+    }
+    catch (IOException ioe)
+    {
+      System.out.println("Graph failed to save");
     }
   }      
 }
