@@ -93,9 +93,9 @@ public class RouteSearch
       System.out.println("\nEnter from and to airport codes, eg DFW");
       Console console = System.console();
       System.out.print("From : ");
-      String from = console.readLine();
+      String from = console.readLine().toUpperCase();
       System.out.print("To   : ");
-      String to = console.readLine();
+      String to = console.readLine().toUpperCase();
       System.out.print("Maximum number of routes to look for : ");
       int max = Integer.parseInt(console.readLine());
       System.out.print("Maximum number of stops : ");
