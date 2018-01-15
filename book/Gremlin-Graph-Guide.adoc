@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v277, Jan 13, 2018
-// Sat Jan 13, 2018 22:31:47 CST
+v277, Jan 15, 2018
+// Mon Jan 15, 2018 11:54:31 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Jan 13 2018
+//:Date:      Jan 15 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -91,7 +91,7 @@ Please let me know about any mistakes you find in this material and also please 
 free to send me feedback of any sort. Suggested improvements are especially welcome.
 A good way to provide feedback is by opening an issue in the GitHub repository
 located at https://github.com/krlawrence/graph. You are currently reading revision
-{revision} of the document.
+{revision} of the book.
 
 I am grateful to those who have already taken the time to review the manuscript and 
 open issues or pull requests.
@@ -102,7 +102,7 @@ A word of thanks
 
 I would like to thank my colleagues at IBM, Graham Wallis, Jason Plurad and Adam
 Holley for their help in refining and improving several of the queries contained in
-this document. Gremlin is definitely a bit of a team sport. We spent many hours over
+this book. Gremlin is definitely a bit of a team sport. We spent many hours over
 the last many months discussing the best way to handle different types of queries and
 traversals!
 
@@ -131,12 +131,12 @@ TinkerGraph is an 'in-memory' graph, meaning
 nothing gets saved to disk automatically, that is shipped as part of the Apache
 TinkerPop 3 download.  The goal of this tutorial is to allow someone with little to
 no prior knowledge to get up and going quickly using the Gremlin console and the
-'air-routes'graph. Later in the document we will discuss using additional
+'air-routes'graph. Later in the book we will discuss using additional
 technologies such as JanusGraph, Apache Cassandra and Apache Elastic Search with
 Gremlin. We will also discuss writing stand alone Java and Groovy applications as
 well as using the Gremlin Console.
 
-NOTE: In the first four sections of this this document we have mainly focussed on
+NOTE: In the first four sections of this this book we have mainly focussed on
 showing the different types of query that you can issue using Gremlin. We have not
 tried to show all of the output that you will get back from entering these queries
 but have selectively shown examples of output. We go a lot deeper into things in
@@ -181,7 +181,7 @@ Chapter 7 - COMMON GRAPH SERIALIZATION FORMATS::
   enabled graphs.
 Chapter 8 - FURTHER READING::
 - We finish up by providing several links to useful web sites where you can find
-  tools and documentation for many of the technologies covered in this document.
+  tools and documentation for many of the technologies covered in this book.
 
 [[samplesintro]]
 Introducing the sample programs and data
@@ -216,11 +216,11 @@ Example applications::
 So what is a graph database and why should I care?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This document is mainly intended to be a tutorial in working with graph databases and
+This book is mainly intended to be a tutorial in working with graph databases and
 related technology using the Gremlin query language. However, it is worth spending
 just a few moments to summarize why it is important to understand what a graph
 database is, what some good use cases for graphs are and why you should care in a
-World that is already full of all kinds of SQL and NoSQL databases. In this document
+World that is already full of all kinds of SQL and NoSQL databases. In this book
 we are going to be discussing 'directed property graphs'. At the conceptual level
 these types of graphs are quite simple to understand. You have three basic building
 blocks.  Vertices (often referred to as nodes), edges and properties. Vertices
@@ -274,7 +274,7 @@ quite possibly just the right place to be storing your documents. So "use the ri
 tool for the job" remains as valid a phrase here as elsewhere. Where graph databases
 come into their own is when the data you are storing is intrinsically linked by its
 very nature, the air routes network used as the basis for all of the examples in
-this document being a perfect example of such a situation.
+this book being a perfect example of such a situation.
 
 Those of you that looked at graphs as part of a computer science course are correct
 if your reaction was "haven't graphs been around for ages?" Indeed, Leonard Euler is
@@ -312,17 +312,17 @@ displaying graphs as part of the user interface layer. In particular, it is so-c
 property graph, both vertices and edges can have properties (effectively, key-value
 pairs) associated with them. There are many styles of graph that you may end up
 building and there have been whole books written on these various design patterns,
-but the property graph technology we will be focused on in this document can support
+but the property graph technology we will be focused on in this book can support
 all of the most common usage patterns. If you hear phrases such as 'directed graph'
 and 'undirected graph', or 'cyclic' and 'acyclic' graph, and many more as you work
 with graph databases, a quick online search will get you to a place where you can get
 familiar with that terminology. A deep discussion of these patterns is beyond the
-scope of this document, and it's in no way essential to have a full background in
+scope of this book, and it's in no way essential to have a full background in
 graph theory to get productive quickly.
 
 A third, and equally important, factor in the growth we are seeing in graph database
 adoption is the low barrier of entry for programmers. As you will see from the
-examples in this document, someone wanting to experiment with graph technology can
+examples in this book, someone wanting to experiment with graph technology can
 download the Apache TinkerPop package and as long as Java 8 is installed, be up and
 running with zero configuration (other than doing an unzip of the files), in as
 little as five minutes.  Graph databases do not force you to define schemas or
@@ -343,8 +343,9 @@ The words 'node' and 'vertex' are synonymous when discussing a graph. Throughout
 book you will find both words used. However, as the Apache TinkerPop documentation
 almost exclusively uses the word 'vertex', as much as possible when discussing
 Gremlin queries and other concepts, I will endeavor to stick to the word 'vertex' or
-the plural form 'vertices'. As this document has evolved I realized my use of these
-terms had become inconsistent and in future updates I plan to standardize on 'vertex'
+the plural form 'vertices'. As this book has evolved I realized my use of these
+terms had become inconsistent and in future updates I plan, with a few exceptions
+such as when discussing binary trees, to standardize on 'vertex'
 rather than 'node' to be consistent with the TinkerPop documentation.
 
 [[gs]]
@@ -380,7 +381,7 @@ Documentation::
 
 The programming interfaces allow providers of graph databases to build systems that
 are TinkerPop enabled. Any such databases can be accessed using the Gremlin query
-language and corresponding API. For most of this document we will be working within
+language and corresponding API. For most of this book we will be working within
 the Gremlin console with a local graph. However in Section 6 we will take a look at
 Gremlin Server and some other TinkerPop 3 enabled environments. Most of Apache
 Tinkerpop has been developed using Java 8 but there are also bindings available for
@@ -404,7 +405,7 @@ environments such as those found with Scala, Python and Ruby you will feel right
 home here. The Console offers a low overhead (you can set it up in seconds) and low
 barrier of entry way to start to play with graphs on your local computer.  The
 console can actually work with graphs that are running locally or remotely but for
-the majority of this document we will keep things simple and focus on local graphs. 
+the majority of this book we will keep things simple and focus on local graphs. 
 
 To follow along with this tutorial you will need to have installed the Gremlin
 console or have access to a TinkerPop3/Gremlin enabled graph store such as
@@ -515,10 +516,10 @@ set of query results. If you are working with a graph system that supports Tinke
 3 but not via the Gremlin console (an example of this would be talking to a Gremlin
 Server using the HTTP REST API) then what you will get back is going to be a JSON
 document that you will need to write some code to parse. We will explore that topic
-much later in this document.
+much later in this book.
 
 If you want to see lots of examples of the output from running various queries you
-will find plenty in the "<<msc>>" section of this document where we have tried to go
+will find plenty in the "<<msc>>" section of this book where we have tried to go
 into more depth on various topics.
 
 Mostly you will run the Gremlin console in its interactive mode. However you can also
@@ -607,7 +608,7 @@ g.V().count().next()
 
 ----
 
-For the remainder of this document I am not going to show the 'gremlin>' prompt or
+For the remainder of this book I am not going to show the 'gremlin>' prompt or
 the '==>' output identifier as part of each example, just to reduce clutter a bit.
 You can assume that each command was entered and tested using the Gremlin console
 however. 
@@ -621,12 +622,12 @@ Introducing TinkerGraph
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 As well as the Gremlin Console, the TinkerPop 3 download includes an implementation
-of an in-memory graph store called TinkerGraph. This document was mostly developed
+of an in-memory graph store called TinkerGraph. This book was mostly developed
 using TinkerGraph but I also tested everything using JanusGraph. We will introduce
 JanusGraph later in the "<<janusintro>>" section. The nice thing about TinkerGraph
 is that for learning and testing things you can run everything you need on your
 laptop or desktop computer and be up and running very quickly. We will explain how to
-get started with the Gremlin Console and TinkerGraph a bit later in this document.
+get started with the Gremlin Console and TinkerGraph a bit later in this book.
 
 Tinkerpop 3 defines a number of capabilities that a graph store should support. Some
 are optional others are not. You can query any TinkerPop 3 enabled graph store to see
@@ -724,7 +725,7 @@ graph = TinkerGraph.open()
 
 In many cases you will want to pass parameters to the 'open' method that give more
 information on how the graph is to be configured. We will explore those options later
-in the document. Before you can start to issue Gremlin queries against the graph you
+in the book. Before you can start to issue Gremlin queries against the graph you
 also need to establish a graph traversal source object by calling the new graph's
 'traversal' method as follows.
 
@@ -733,7 +734,7 @@ also need to establish a graph traversal source object by calling the new graph'
 g = graph.traversal()
 ----
 
-NOTE: Throughout the remainder of this document we will follow the convention that we
+NOTE: Throughout the remainder of this book we will follow the convention that we
 will always use the variable name 'graph' for any variable that represents a graph
 instance and we will always use the variable name 'g' for any variable that
 represents an instance of a graph traversal source object.
@@ -766,7 +767,7 @@ ingestion algorithms also sill use comma separated values (CSV) format files.
 We will briefly look at loading and saving graph data in Sections 2 and 4. We take a
 much deeper look at different ways to work with graph data stored in text format
 files including importing and exporting graph data in the "<<serialize>>" section at
-the end of this document.
+the end of this book.
 
 The air-routes graph contains several vertex types that are specified using labels.
 The most common ones being 'airport' and 'country'. There are also vertices for each
@@ -828,11 +829,11 @@ lon=[-97.6698989868164]
 Even though the airport vertex label is 'airport' I chose to also have a property
 called 'type' that also contains the string 'airport'. This was done to aid with
 indexing when working with other graph database systems and is explained in more
-detail later in this document.
+detail later in this book.
 
 You may have noticed that the values for each property are represented as lists or
 arrays if you prefer, even though each list only contains one element. The reasons
-for this will be explored later in this document but the quick explanation is that
+for this will be explored later in this book but the quick explanation is that
 this is because TinkerPop allows us to associate a list of values with any vertex
 property. We will explore ways that you can take advantage of this capability in the
 "<<listprop>>" section.
@@ -952,7 +953,7 @@ graph.io(graphml()).readGraph('air-routes.graphml') // TinkerPop 3
 ----
 
 The Gremlin language itself changed quite a bit between TinkerPop 2 and TinkerPop 3.
-The remainder of this document only shows TinkerPop 3 examples.                                                          
+The remainder of this book only shows TinkerPop 3 examples.                                                          
 
 [[sugarplugin]]
 A word about the TinkerPop.sugar plugin
@@ -975,9 +976,9 @@ You can enable 'sugar' support from the Gremlin console as follows:
 
 TIP: The Gremlin Console remembers which plugins are enabled between restarts.
 
-In the current revision of this document I have tried to remove any dependence on the
+In the current revision of this book I have tried to remove any dependence on the
 'TinkerPop.sugar' plugin from the examples presented. By not using Sugar, queries
-shown in this document should port very easily to other TinkerPop 3 enabled graph
+shown in this book should port very easily to other TinkerPop 3 enabled graph
 platforms. A few of the queries may not work on versions of TinkerPop prior to 3.2 as
 TinkerPop continues to evolve and new features are being added fairly regularly.  
 
@@ -1001,7 +1002,7 @@ run as efficiently as possible on graph stores that support TinkerPop 3. Also, d
 changes introduced with TinkerPop 3, using sugar will not be as performant as using
 the normal Gremlin syntax.
 
-NOTE: _In earlier versions of this document many of the examples showed the 'sugar'
+NOTE: _In earlier versions of this book many of the examples showed the 'sugar'
 form. In the current revision I have tried to remove all use of that form. It's
 possible that I may have missed a few and I will continue to check for, and fix, any
 that got missed. Please let me know if you find any that slipped through the net!_
@@ -1064,7 +1065,7 @@ GraphML file  resides if at all possible to make sure that the GraphML reading c
 can find it.
 
 Once you have the Gremlin Console up and running and have the graph loaded, if
-you feel like it you can cut and paste queries from this document directly into
+you feel like it you can cut and paste queries from this book directly into
 the console to see them run.
 
 Once the air-routes graph is loaded you can enter the following command and you will
@@ -1072,7 +1073,7 @@ get back information about the graph. In the case of a TinkerGraph you will get 
 a useful message telling you how many vertices and edges the graph contains. Note that
 the contents of this message will vary from one graph system to another and should
 not be relied upon as a way to keep tack of vertex and edge counts. We will look at
-some other ways of doing that later in the document.
+some other ways of doing that later in the book.
 
 [source,groovy]
 ----
@@ -1109,12 +1110,12 @@ Some graph implementations such as IBM-Graph have strict requirements on the use
 an 'index'. This means that a schema and an index must be in place before you can
 work with a graph and that you can only begin a traversal by referencing a property
 in the graph that is included in the index. While that is beyond the scope of this
-document, it should be pointed out that some of the queries included in this material
+book, it should be pointed out that some of the queries included in this material
 will not work on any graph system that requires all queries to be backed by an index
 and does not allow what are sometimes called 'full graph searches' for cases where a
 particular item in a graph is not backed by an index. One example of this is vertex
 and edge 'labels' which are typically not indexed but are sometimes very useful items
-to specify at the start of a query.  As the examples in this document are intended to
+to specify at the start of a query.  As the examples in this book are intended to
 work just fine with a only basic TinkerGraph the subject of indexes is not covered in
 more detail until Section 6 "<<beyond>>" where we will take a look at some other
 technologies such as JanusGraph and we do discuss indexing as part of that coverage.
@@ -1193,7 +1194,7 @@ select country,count(country) from airports group by country;
 ----
 
 We can do this in Gremlin using the air-routes graph with a query like the one below
-(we will explain what all of this means later on in the document). 
+(we will explain what all of this means later on in the book). 
 
 
 [source,groovy]
@@ -1339,7 +1340,7 @@ graph". We then add additional steps to narrow down our search criteria.
 The other steps we need to introduce are the 'has' and 'hasLabel' steps. They can be
 used to test for a certain label or property having a certain value. We will
 introduce a lot of different Gremlin steps as we build up our Gremlin examples
-throughout this document, including may other forms of the 'has' step, but these few
+throughout this book, including may other forms of the 'has' step, but these few
 are enough to get us started. 
 
 You can refer to the official Apache TinkerPop documentation for full details on all
@@ -1391,7 +1392,7 @@ v[8]
 ----
 
 So, what we actually got back from these queries was a TinkerPop 'Vertex' data
-structure.  Later in this document we will look at ways to store that value into a
+structure.  Later in this book we will look at ways to store that value into a
 variable for additional processing. Remember that even though we are working with a
 Groovy environment while inside the Gremlin Console, everything we are working with
 here, at its core, is Java code. So we can use the 'getClass' method from Java to
@@ -1407,7 +1408,7 @@ class org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerVertex
 
 The 'next' step that we used above is one of a series of steps that the Tinkerpop
 documentation describes as 'terminal steps'. We will see more of these 'terminal
-steps' in use throughout this document. As mentioned above, a terminal step
+steps' in use throughout this book. As mentioned above, a terminal step
 essentially ends the graph traversal and returns a concrete object that you can work
 with further in your application. You will see 'next' and other related steps used in
 this way when we start to look at using Gremlin from a stand alone program a bit
@@ -1422,7 +1423,7 @@ Retrieving property values from a vertex
 
 There are several different ways of working with vertex properties. We can add,
 delete and query properties for any vertex or edge in the graph. We will explore each
-of these topics in detail over the course of this document. Initially, let's look at
+of these topics in detail over the course of this book. Initially, let's look at
 a couple of simple ways that we can look up the property values of a given vertex.
 
 [source,groovy]
@@ -1433,7 +1434,7 @@ g.V().has('airport','code','DFW').values()
 
 Here is the output that the query returns. Note that we just get back the values of
 the properties when using the 'values' step, we do not get back the associated keys.
-We will see how to do that later in the document.
+We will see how to do that later in the book.
 
 [source,groovy]
 ----
@@ -1810,9 +1811,9 @@ What vertices and edges did I visit? - Introducing 'path'
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 A Gremlin method (often called a step) that you will see used a lot in this
-document is 'path'. After you have done some graph walking using a query you
+book is 'path'. After you have done some graph walking using a query you
 can use 'path' to get a summary back of where you went. Here is a simple
-example of 'path' being used. Throughout the document you will see numerous
+example of 'path' being used. Throughout the book you will see numerous
 examples of 'path' being used including in conjunction with 'by' to specify
 how the path should be formatted. This particular query will return the vertices
 and outgoing edges starting at the LCY airport vertex. You can read this query
@@ -1846,7 +1847,7 @@ the first and third values are the same. If all three were different, say for
 example that the third value was a different property like a city name then we
 would have to provide an explicit 'by' modulator for it. If this is not fully
 clear yet don't panic. Both 'path' and 'by' are used a lot throughout this
-document.
+book.
 
 [source,groovy]
 ----
@@ -2080,7 +2081,7 @@ Limiting the amount of data returned
 It is sometimes useful, especially when dealing with large graphs, to limit
 the amount of data that is returned from a query. As shown in the examples
 below, this can be done using the 'limit' and 'tail' steps. A little later in
-this document we also introduce the 'coin' step that allows a pseudo random
+this book we also introduce the 'coin' step that allows a pseudo random
 sample of the data to be returned.
 
 
@@ -2199,9 +2200,9 @@ working with arrays and list.
 g.V().range(3500,-1)
 ----
 
-Here is another example that uses the 'range' step, this time looking only at nodes
-with a label of 'country'. Notice how this time we found vertices with much higher ID
-values.
+Here is another example that uses the 'range' step, this time looking only at
+vertices with a label of 'country'. Notice how this time we found vertices with much
+higher ID values.
 
 [source,groovy]
 ----
@@ -2378,9 +2379,9 @@ termination action. We will see those steps used later on.
 Once you have some results in a variable you can refer to it as you would in any
 other programming language that supports key:value type maps and dictionaries.  We
 will explore mixing Java and Groovy code with your Gremlin queries later in this
-document. For now we will just show the Groovy 'println' command being used to
+book. For now we will just show the Groovy 'println' command being used to
 display the results of the query that we stored in 'aus'. We will take a deeper look
-at the use of variables with Gremlin later in the document when we look at mixing
+at the use of variables with Gremlin later in the book when we look at mixing
 Gremlin and Groovy in the "<<grv>>" section.
 
 [source,groovy]
@@ -2738,7 +2739,7 @@ The following queries demonstrate concepts such as calculating the number of a
 particular item that is present in the graph, calculating the average (mean) of a set
 of values and calculating a maximum or minimum value. We will dig a bit deeper into
 some of these capabilities and explain in more detail in the "<<meanmode>>" section
-of the document. Some of these examples also take advantage of the 'local' step that
+of the book. Some of these examples also take advantage of the 'local' step that
 was introduced in the previous section.
 
 [source,groovy]
@@ -2772,7 +2773,7 @@ Testing values and ranges of values
 We have already seen some ways of testing whether a value is within a certain range.
 Gremlin provides a number of different steps that we can use to do range testing. The
 list below provides a summary of the available steps. We will see each of these in use
-throughout this document.
+throughout this book.
 
 .Steps that test values or ranges of values
 [cols="^1,4"]
@@ -3137,8 +3138,8 @@ step instead.
 g.V().hasLabel('airport').sample(20).values('code')
 ----
 
-Using 'Math.random' to more randomly select a single node
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Using 'Math.random' to more randomly select a single vertex
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 While the 'sample' step allows you to select one or more vertices at random, in my
 testing, at least when using a TinkerGraph,  it tends to favor vertices with lower
@@ -3276,7 +3277,7 @@ query will return different results than the second one due to where the 'limit'
 is placed. I used 'fold' at the end of the query to collect all of the results into a
 nice list. The 'fold' step can also do more than this. It provides a way of doing the
 'reduce' part of map-reduce operations. We will see some other examples of its use
-elsewhere in this document such as in the "<<mapreduce>>" section.
+elsewhere in this book such as in the "<<mapreduce>>" section.
 
 [source,groovy]
 ----
@@ -4211,9 +4212,9 @@ g.V(3).sideEffect(out().count().store('a')).out().out().count().as('b').select('
 [a:[59],b:5911]
 ----
 
-Later in the document we will discuss lambda functions, sometimes called closures and
+Later in the book we will discuss lambda functions, sometimes called closures and
 how they can be used. The example below combines a closure with a 'sideEffect' to
-print a message before displaying information about the node that was found. Again
+print a message before displaying information about the vertex that was found. Again
 notice how the 'sideEffect' step has no effect on what is seen by the subsequent
 steps. You can see the output generated below the query.
 
@@ -4225,14 +4226,14 @@ I'm working on it
 San Francisco International Airport
 ----
 
-Later in the document we will look at other ways that side effects can be used to
+Later in the book we will look at other ways that side effects can be used to
 solve more interesting problems.
 
 [[aggregate]]
 Using 'aggregate' to create a temporary collection
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-At the time of writing this document, there were 59 places you could fly to directly
+At the time of writing this book, there were 59 places you could fly to directly
 (non stop) from Austin. We can verify this fact using the following query.
 
 [source,groovy]
@@ -4341,7 +4342,7 @@ not any, any vertices on any incoming edges labelled 'contains' will be returned
 
 [source,groovy]
 ----
-// Return the first step inside coalesce that returns a node
+// Return the first step inside coalesce that returns a vertex
 g.V(3).coalesce(out('fly'),__.in('contains')).valueMap()
 ----
 
@@ -4409,7 +4410,7 @@ edges using steps such as 'out', 'in', 'outE' and 'inE'. In this section we
 introduce some additional ways to explore vertices and edges.
 
 As a quick recap, we have already seen examples of queries like the one below that
-simply counts the number of outgoing edges from the node with an ID of 3.
+simply counts the number of outgoing edges from the vertex with an ID of 3.
 
 [source,groovy]
 ----
@@ -4418,7 +4419,7 @@ g.V(3).outE().count()
 59
 ----
 
-Likewise, this query counts the number of incoming edges to that same node.
+Likewise, this query counts the number of incoming edges to that same vertex.
 
 [source,groovy]
 ----
@@ -4428,7 +4429,7 @@ g.V(3).inE().count()
 ----
 
 The following query introduces the 'bothE' step. What this step does is return all of
-the edges connected to this node whether they are outgoing or incoming. As we can see
+the edges connected to this vertex whether they are outgoing or incoming. As we can see
 the count of 120 lines up with the values we got from counting the number of
 outgoing and incoming edges. We might want to retrieve the edges, as a simple example, to
 examine a property on each of them.
@@ -4441,7 +4442,7 @@ g.V(3).bothE().count()
 ----
 
 If we wanted to return vertices instead of edges, we could use the 'both' step. This
-will return all of the vertices connected to the node with an ID of 3 regardless of
+will return all of the vertices connected to the vertex with an ID of 3 regardless of
 whether they are connected by an outgoing or an incoming edge.
 
 [source,groovy]
@@ -4490,10 +4491,10 @@ and 'otherV' steps. The 'bothV' step returns the vertices at both ends of an edg
 the 'otherV' step returns the vertex at the other end of the edge. This is relative to
 how we are looking at the edge.
 
-The query below starts with our same node with the ID of 3 and then looks at all the
+The query below starts with our same vertex with the ID of 3 and then looks at all the
 edges no matter whether they are incoming or outgoing and retrieves all of the
 vertices at each end of those edges using the 'bothV' step. Notice that this time our
-count is 240. This is because for every one of the 120 edges, we asked for the node
+count is 240. This is because for every one of the 120 edges, we asked for the vertex
 at each end so we ended up with 240 of them.
 
 [source,groovy]
@@ -4736,7 +4737,7 @@ The 'emit' step can also take a parameter such as a 'has' step to filter out
 intermediate results that we are not interested in. The query below will only show
 intermediate results as the 'repeat' operates if they meet a given condition. In this
 case the condition is that the path must have passed through the Prague (PRG)
-airport's node. A 'limit' step is used to only show the first 10 results.
+airport's vertex. A 'limit' step is used to only show the first 10 results.
 
 [source,groovy]
 ----
@@ -4859,23 +4860,23 @@ while the 'path' step is incredibly useful, be aware that in cases like this one
 can get you into trouble if not used with care.
 
 [[nd]]
-Calculating node degree
-~~~~~~~~~~~~~~~~~~~~~~~
+Calculating vertex degree
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 While working with graphs, the word 'degree' is used when discussing the number of
-edges coming into a node, going out from a node or potentially both coming in and
+edges coming into a vertex, going out from a vertex or potentially both coming in and
 going out. It's quite simple with Gremlin to calculate various measures of degree as
 the examples below show.
 
 [source,groovy]
 ----
-// Out degree (number of routes) from each node (airport)
+// Out degree (number of routes) from each vertex (airport)
 g.V().out().groupCount().by('code')
 
 // what is the out degree (number of unique outbound routes) from LHR, JFK and DFW?
  g.V().hasLabel('airport').out().groupCount().by('code').select('LHR','JFK','DFW')
 
-// Calculate degree (in and out) for each node (so counts edges going both ways)
+// Calculate degree (in and out) for each vertex (so counts edges going both ways)
 // Note the project() step was introduced in gremlin 3.2 and is ideal for this!
 g.V().hasLabel('airport').limit(10).project("v","degree").by('code').by(bothE().count())
 
@@ -4918,14 +4919,14 @@ full result set are shown.
 [Lihue,San Francisco]
 ----
 
-The query below looks for airports in Europe using the continent node with a code of
+The query below looks for airports in Europe using the continent vertex with a code of
 'EU' as the starting point. The results are sorted in ascending order  and folded
 into a list.
 
 [source,groovy]
 ----
 // Find all the airports that are in Europe (The graph stores continent information 
-// as "contains" edges connected from a "continent" node to each airport node.
+// as "contains" edges connected from a "continent" vertex to each airport vertex.
 g.V().has('continent','code','EU').out('contains').values('code').order().fold()
 ----
 
@@ -5124,10 +5125,10 @@ g.V().has('code','AUS').out().out().has('code','SYD').path().by('code')
 The following three queries all achieve the same result. They find flights from any
 airport in Africa to any airport in the United States.  These queries are intresting
 as the continent information is represented in the graph as edges connecting an
-airport node with a continent node. This is about as close as Gremlin gets to a SQL
+airport vertex with a continent vertex. This is about as close as Gremlin gets to a SQL
 join statement! 
 
-The first query starts by looking at airports the second starts from the node that
+The first query starts by looking at airports the second starts from the vertex that
 represents Africa. The third query uses 'where' to show an alternate way of achieving
 the same result. 
 
@@ -5164,7 +5165,7 @@ in two columns to save space.
 The query below shows how to use the 'project' step that was introduced in TinkerPop
 3, along with 'order' and 'select' to produce a sorted table of airports you can fly
 to from AUSTIN along with their runway counts. The 'limit' step is used to only
-return the top ten results. You will find several examples elsewhere in this document
+return the top ten results. You will find several examples elsewhere in this book
 that use variations of this collection of steps. 
 
 [source,groovy]
@@ -5214,7 +5215,7 @@ each line with a backslash character or with a character such as a period or a c
 that tells the Gremlin parser that there is more to come.  
 
 The following example shows the query we already looked at in the Boolean operations
-section of this document but this time edited so that it could be copy and pasted
+section of this book but this time edited so that it could be copy and pasted
 directly into the Gremlin console.
 
 [source,groovy]
@@ -5263,7 +5264,7 @@ take a look at the following query.
 g.V().has('code','AUS').in()
 ----
 That query does not cause an error and correctly returns all of the vertices that are
-connected by an incoming edge, to the 'AUS' node. There is no conflict of names here
+connected by an incoming edge, to the 'AUS' vertex. There is no conflict of names here
 because it is clear that the 'in()' reference applies to the result of the has step.
 However, now take a look at this query.
 
@@ -5306,17 +5307,17 @@ to handle.
 Consider this query description. "Find all flight routes that exist between airports
 anywhere in the continent of Africa and the United States". When putting the
 air-routes graph together I decided to model continents as their own vertices. So each
-of the seven continents has a node. Each node is connected to airports within that
+of the seven continents has a vertex. Each vertex is connected to airports within that
 continent by an edge labeled "contains".
 
-I could have chosen to just make the continent a property of each airport node but
+I could have chosen to just make the continent a property of each airport vertex but
 had I done that, to answer the question about "routes starting in Africa" I would
-have to look at every single airport node in the graph just to figure out which
-continent contained it. By giving each continent it's own node I am able to greatly
+have to look at every single airport vertex in the graph just to figure out which
+continent contained it. By giving each continent it's own vertex I am able to greatly
 simplify the query we need to write.
 
 Take a look at the query below. We first look just for vertices that are continents. We
-then only look at the Africa node and the connections it has (each will be to a
+then only look at the Africa vertex and the connections it has (each will be to a
 different airport). By starting the query in this way, we have very efficiently
 avoided looking at a large number of the airports in the graph altogether. Finally we
 look at any routes from airports in Africa that end up in the United States. This
@@ -5355,8 +5356,8 @@ Keeping information in two places within the same graph
 Sometimes, to improve query efficiency I find it is actually worth having the
 data available more than one place within the same graph. An example of this
 in the air routes graph would be the way I decided to model countries. I have
-a unique node for each country but I also store the country code as a property
-of each airport node. In a small graph this perhaps is overkill but I did it
+a unique vertex for each country but I also store the country code as a property
+of each airport vertex. In a small graph this perhaps is overkill but I did it
 to make a point. Look at the following two queries that return the same
 results - the cities in Portugal that have airports in the graph.
 
@@ -5366,18 +5367,18 @@ g.V().has('country','code','PT').out("contains").values('city')
 
 g.V().has('airport','country','PT').values('city')
 ----
-The first query finds the country node for Portugal and then, finds all of the
+The first query finds the country vertex for Portugal and then, finds all of the
 countries connected to it. The second query looks at all airport vertices and
 looks to see if they contain 'PT' as the country property.
 
 In the first example it is likely that a lot less vertices will get looked at
 than the first even though a few edges will also get walked as there are over
 3,000 airport vertices but less than 300 country vertices. Also, in a production
-system with an index in place finding the 'Portugal' node should be very fast.
+system with an index in place finding the 'Portugal' vertex should be very fast.
 
-Conversely, if we were already looking at an airport node for some other
+Conversely, if we were already looking at an airport vertex for some other
 reason and just wanted to see what country it is in, it is more convenient to
-just look at the 'country' property of that node.  
+just look at the 'country' property of that vertex.  
 
 So there is no golden rule here but it is something to think about while
 designing your data model.
@@ -5392,7 +5393,7 @@ about an airport (radio frequencies, runway names, weather information etc.)
 in the airport vertices. That information is available in other places and easy
 to find. In a production system you should consider carefully what needs to be
 in your graph and what more naturally belongs elsewhere. One thing I could do
-is add a URL as a property of each airport node that points to the airports
+is add a URL as a property of each airport vertex that points to the airports
 home page or some other resource that has all of the information. In this way
 the graph becomes a high quality index into other data sources. This is a
 common and useful pattern when working with graphs. This model of having
@@ -5402,19 +5403,19 @@ storage'.
 A few words about 'supernodes'
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When a node in a graph has a large number of edges and is disproportionately
+When a vertex in a graph has a large number of edges and is disproportionately
 connected to many of the other vertices in the graph it is likely that many, if not
-all, graph traversals of any consequence will include that node. Such vertices
+all, graph traversals of any consequence will include that vertex. Such vertices
 (nodes) are often referred to as 'supernodes'. In some cases the presence of
 'supernodes' may be unavoidable but with careful planning as you design your graph
-model you can reduce the likelihood that nodes become 'supernodes'. The reason we
+model you can reduce the likelihood that vertices become 'supernodes'. The reason we
 worry about 'supernodes' is that they can significantly impact the performance of
 graph traversals. This is because it is likely that any graph traversal that goes via
-such a node will have to look at most if not all of the edges connected to that node
+such a vertex will have to look at most if not all of the edges connected to that vertex
 as part of a traversal.
 
 The air-routes graph does not really have anything that could be classed as a
-'supernode'. The node with the most edges is the continent node for North America
+'supernode'. The vertex with the most edges is the continent vertex for North America
 that has approximately 980 edges. The busiest airports are IST and AMS and they both
 have just over 530 total edges. So in the case of the air-routes graph we do not have
 to worry too much.
@@ -5425,19 +5426,19 @@ Without taking some precautions, such a social network, modelled as a graph, cou
 face issues.
 
 As you design your graph model it is worth considering that some things are perhaps
-better modelled as a node property than as a node with lots of edges needing to
+better modelled as a vertex property than as a vertex with lots of edges needing to
 connect to it. For example in the air routes graph there are country vertices and each
 airport is connected to one of the country vertices. In the air routes graph this is not
 a problem as even if all of the airports in the graph were in the same country that
-would still give us less than 3,500 edges connected to that node.  However, imagine
+would still give us less than 3,500 edges connected to that vertex.  However, imagine
 if we were building a graph of containing a very large number  of people. If we had
 several million people in the graph all living in same the country that would be a
 guaranteed way to get a 'supernode' if we modelled that relationship by connecting
-every person node to a country node using a 'lives in' edge. In such situations, it
+every person vertex to a country vertex using a 'lives in' edge. In such situations, it
 would be far more sensible to make the country where a person lives a property of
-their own node.
+their own vertex.
 
-A detailed discussion of 'supernode' mitigation is beyond the scope of this document
+A detailed discussion of 'supernode' mitigation is beyond the scope of this book
 but I encourage you to always be thinking about their possibility as you design your
 graph and also be thinking about how you can prevent them becoming a big issue for
 you.                                                                                 
@@ -5478,11 +5479,11 @@ dist(g,'AUS','MEX')
 ----
 
 This next example shows how to define a slightly longer method that prints out
-information about the degree of a node in a nice, human readable, form.
+information about the degree of a vertex in a nice, human readable, form.
 
 [source,groovy]
 ----
-// Groovy function to display node degree
+// Groovy function to display vertex degree
 def degree(g,s) {
   v = g.V().has('code',s).next();
   o=g.V(v).out().count().next();
@@ -5525,7 +5526,7 @@ Here is another example that makes a Gremlin query inside a 'for' loop.
 ----
 for (a in 1..10) print g.V().has(id,a).values('code').next()+" "
 ----
-This example returns a hash of vertices, with  node labels as the keys and the 
+This example returns a hash of vertices, with  vertex labels as the keys and the 
 code property as the values. It then uses the label names to access the returned
 hash.
                                           
@@ -5568,7 +5569,7 @@ displaying unwanted output.
 // Create a map (a) of all vertices with the code property as the key
 a=g.V().group().by('code').next();[]
 
-// Show the description stored in the JFK node
+// Show the description stored in the JFK vertex
 a['JFK'][0].values('desc')  
 ----
 
@@ -5610,7 +5611,7 @@ g.V(german[1]).out().count()
 237
 ----
 
-Towards the end of the document, in the "<<groovyapp>>" section, we will explore
+Towards the end of the book, in the "<<groovyapp>>" section, we will explore
 writing some stand alone Groovy code that can use the TinkerPop API and issue Gremlin
 queries while running outside of the Gremlin Console as a stand alone application.
 
@@ -5678,7 +5679,7 @@ is more to show another example of mixing Gremlin, Groovy and variables.
 Knowing that you can do this kind of thing may come in useful as you start to write
 more complicated graph database applications that use Gremlin.  You will see this
 type of query done using just Gremlin in the section called "<<unwantededges>>""
-later in this document.
+later in this book.
 
 [source,groovy]
 ----
@@ -5711,7 +5712,7 @@ Here is the output from running the code.
 Adding vertices, edges and properties 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-So far in this document we have largely focussed on loading a graph from a file and
+So far in this book we have largely focussed on loading a graph from a file and
 running queries against it. As you start to build your own graphs you will not always
 start with a graph saved as a text file in GraphML, CSV, GraphSON or some other
 format. You may start with an empty graph and incrementally add vertices and edges. Just
@@ -5767,8 +5768,8 @@ xyz = g.addV('airport').property('code','XYZ').
 ----
 
 Notice, in the code above, how each property step can be chained to the previous one
-when adding multiple properties. Whether you need to do it while creating a node or
-to add and edit properties on a node at a later date you can use the same 'property'
+when adding multiple properties. Whether you need to do it while creating a vertex or
+to add and edit properties on a vertex at a later date you can use the same 'property'
 step.
 
 NOTE: It is strongly recommended that the traversal source object 'g' be used when
@@ -5902,7 +5903,7 @@ g.addV('airport').property('code','AUS').as('aus').
   addE('route').from('lax').to('dfw')                                               
 ----
 
-NOTE: The form of 'addV' that used to allow creation of a node and a property using
+NOTE: The form of 'addV' that used to allow creation of a vertex and a property using
 something like 'g.addV(label,'airport','code','AUS')' is now deprecated and should
 not be used.
 
@@ -5911,11 +5912,11 @@ Adding vertices and edges using a loop
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Sometimes it is more efficient to define the details of the vertices or edges that
-you plan to add to the graph in an array and then add each node or edge using a
+you plan to add to the graph in an array and then add each vertex or edge using a
 simple 'for' loop that iterates over it. The following  example adds our
 imaginary airports directly to the graph using such a loop. Notice that we do
 not have to specify the ID that we want each vertex to have. The graph will
-assign a unique ID to each new node for us.
+assign a unique ID to each new vertex for us.
 
 [source,groovy]
 ----
@@ -5924,7 +5925,7 @@ for (a in vertices) {graph.addVertex(label,"airport","code",a[0],"iata",a[1])}
 ----
 
 We could also have added the vertices using the traversal object 'g' as follows. Notice
-the call to 'next()'.  Without this the node creation will not work as expected.
+the call to 'next()'.  Without this the vertex creation will not work as expected.
 
 [source,groovy]
 ----
@@ -6011,7 +6012,7 @@ task of checking to see if something already exists before we create it.
 Deleting vertices, edges and properties
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-So far in this document we have looked at several examples where we created new
+So far in this book we have looked at several examples where we created new
 vertices, edges and properties but we have not yet looked at how we can delete them.
 Gremlin provides the 'drop' step that we can use to remove things from a graph. 
 
@@ -6019,14 +6020,14 @@ Gremlin provides the 'drop' step that we can use to remove things from a graph.
 Deleting a vertex
 ^^^^^^^^^^^^^^^^^
 
-In some of our earlier examples we created a fictitious airport node with a code of
+In some of our earlier examples we created a fictitious airport vertex with a code of
 'XYZ' and added it to the air routes graph. If we now wanted to delete it we could
-use the following Gremlin code. Note that removing the node will also remove any
-edges we created connected to that node.
+use the following Gremlin code. Note that removing the vertex will also remove any
+edges we created connected to that vertex.
 
 [source,groovy]
 ----
-// Remove the XYZ node
+// Remove the XYZ vertex
 g.V().has('code','XYZ').drop()
 ----
 
@@ -6046,7 +6047,7 @@ g.V().has('code','LHR').outE().as('e').inV().has('code','AUS').select('e').drop(
 Deleting a property
 ^^^^^^^^^^^^^^^^^^^
 
-Lastly, we can use 'drop' to delete a specific property value from a specific node.
+Lastly, we can use 'drop' to delete a specific property value from a specific vertex.
 Let's start by querying the properties defined by the air-routes graph for the San
 Francisco airport.
 
@@ -6070,7 +6071,7 @@ g.V().has('code','SFO').valueMap()
 ----
 
 If we wanted to delete all of the properties currently associated with the SFO
-airport node we could do that as follows.
+airport vertex we could do that as follows.
 
 
 [source,groovy]
@@ -6118,7 +6119,7 @@ g.V().drop()
 Property keys and values revisited
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We have already looked, earlier in the document,  at numerous queries that retrieve,
+We have already looked, earlier in the book,  at numerous queries that retrieve,
 create or manipulate in some way the value of a given property. There are still
 however a few things that we have not covered in any detail concerning properties.
 Most of the property values we have looked at so far have been simple types such as a
@@ -6139,19 +6140,19 @@ vertex properties is that they are immutable. You can create them but once creat
 they cannot be updated.  
 
 We will look more closely at the Java interfaces that TinkerPop 3 defines in the
-"<<javatinker>>" section a bit later in this document.
+"<<javatinker>>" section a bit later in this book.
 
 The VertexProperty interface does not define any "setter" methods
 beyond the basic constructor itself. Your immediate reaction to this is likely to be
 "but I know you can change a property's value using the 'property' step". Indeed we
-have already discussed doing just that in this document. However, behind the scenes,
+have already discussed doing just that in this book. However, behind the scenes,
 what actually happens when you change a property, is that a new property object is
 created and used to replace the prior one. We will examine this more in a minute but
 first let's revisit a few of the basic concepts of properties.
 
 In a 'property graph' both vertices and edges can contain one or more properties. We
 have already seen a query like the one below that retrieves the values from each of
-the property keys associated with the DFW airport node.
+the property keys associated with the DFW airport vertex.
 
 [source,groovy]
 ----
@@ -6193,7 +6194,7 @@ Dallas/Fort Worth International Airport
 ----
 
 If we wanted to retrieve the VertexProperty ('vp') objects for each of the properties
-associated with the DFW node we could do that too. In a lot of cases it will be
+associated with the DFW vertex we could do that too. In a lot of cases it will be
 sufficient just to use 'values' or 'valueMap' to access the values of one or more
 properties but there are some cases, as we shall see when we look at property IDs,
 where having access to the vertex property object itself is useful.
@@ -6268,7 +6269,7 @@ The 'propertyMap' traversal step
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 We have previously used the 'valueMap' step to produce a map of key/value pairs for
-all of the properties associated with a node or edge. There is also a 'propertyMap'
+all of the properties associated with a vertex or edge. There is also a 'propertyMap'
 step that can be used that yields a similar result but the map includes the vertex
 property objects for each property.
 
@@ -6283,9 +6284,9 @@ Properties have IDs too
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 We have seen many examples already that show how both vertices and edges have a unique
-ID. What may not have been obvious however is that properties also an ID. Unlike node
+ID. What may not have been obvious however is that properties also an ID. Unlike vertex
 and edge IDs property IDs are not guaranteed to be unique across the graph. Certainly
-with TinkerGraph I have encountered cases where a node and a property share the same
+with TinkerGraph I have encountered cases where a vertex and a property share the same
 ID. This is not really an issue because they are used in different ways to access
 their associated graph element.
 
@@ -6357,7 +6358,7 @@ g.V().properties().hasId(583).label()
 city
 ----
 
-We can also find out which element (node or edge) that this property belongs to.
+We can also find out which element (vertex or edge) that this property belongs to.
 
 [source,groovy]
 ----
@@ -6438,18 +6439,18 @@ accessing properties, especially in large graphs.
 Attaching multiple values (lists or sets) to a single property
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-A node property value can be a basic type such as a String or an Integer but it can
+A vertex property value can be a basic type such as a String or an Integer but it can
 also be something more sophisticated such as a Set or a List containing multiple
 values.  You can think of these values as being an array but depending on how you
 create them you have to work with them differently. In this section we will look at
 how we can create multiple values for a single property key.  Such values can be
-setup when the node is first created or added afterwards. These more complex type of
+setup when the vertex is first created or added afterwards. These more complex type of
 property values are not supported on edges.
 
 If we wanted to store the IATA amd ICAO codes for the Austin airport in a list
 associated with a single property rather than as separate properties we could have
-created them when we created the Austin node follows. You can also add properties to
-an existing node that have lists of values. We will look at how to do that later in
+created them when we created the Austin vertex follows. You can also add properties to
+an existing vertex that have lists of values. We will look at how to do that later in
 this section.
 
 [source,groovy]
@@ -6465,7 +6466,7 @@ By creating the 'code' property in this way, its cardinality type is now effecti
 explicit schemas for our property types. However, once we start working with a more
 sophisticated graph system such as JanusGraph, that is something that we will both
 want and need to be able to do. We cover the topic of cardinality in detail in the
-"<<janusmgmt>>" section later in the document.
+"<<janusmgmt>>" section later in the book.
 
 now that we have created the 'code' property to have a list of values we can query
 either one of the values in the list. if we look at the value map we get back from
@@ -6617,7 +6618,7 @@ as we shall see in the next section.
 Updating properties stored in a list
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-So now we know how to create a node with property values in a list we need a way to
+So now we know how to create a vertex with property values in a list we need a way to
 update those properties. We can do this using a special form of the 'property' step
 where the first parameter is 'list' to show that what follows are updates to the
 existing list and not replacements for the whole list. 
@@ -6684,7 +6685,7 @@ This technique can be used to update an existing property that already has a lis
 of values or to add a new property with a list of values.
 
 The same value can appear more than once with a property that has LIST cardinality.
-The code fragment below creates a new node, with some duplicate values associated
+The code fragment below creates a new vertex, with some duplicate values associated
 with the 'dups' property.
 
 [source,groovy]
@@ -6696,7 +6697,7 @@ g.V().hasLabel('test').valueMap()
 [dups:[one,two,one]]
 ----
 
-We can add additional duplicate values after the node has been created.
+We can add additional duplicate values after the vertex has been created.
 
 [source,groovy]
 ----
@@ -6845,7 +6846,7 @@ p[user->Kelvin]
 
 You can use 'drop' to remove meta properties but take care when doing so.
 Take a look at the query below, which looks like it might
-drop the meta property 'date', but will in fact drop whole node.
+drop the meta property 'date', but will in fact drop the whole vertex.
 
 [source,groovy]
 ----
@@ -6860,7 +6861,7 @@ To remove a single meta property we need to use drop in this way
 ----
 
 Note that you cannot chain meta properties together endlessly. The main properties on
-a node are 'VertexProperty' types. The meta property is a 'Property' type and you
+a vertex are 'VertexProperty' types. The meta property is a 'Property' type and you
 cannot add another property to those.  You can however add more than one meta
 property to the same vertex property.
 
@@ -7256,19 +7257,19 @@ updated=July 18th 2017
 ----
 
 [[tre]]
-Turning node values into trees
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Turning graphs into trees
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 TinkerPop defines a Tree API but it is not that well fleshed out and has not been
 updated in a long time. The 'tree' step allows you to create a tree from part of a
 graph using a Gremlin traversal. The example below creates a tree, of depth 3, where
-the Austin (AUS) node is the root of the tree. The next level of the tree is all
+the Austin (AUS) vertex is the root of the tree. The next level of the tree is all
 vertices directly connected to AUS. The third level is made up of all the vertices
 connected by routes to the vertices in the previous level. 
 
 [source,groovy]
 ----
-//Generate a tree the AUS node and it's neighbors and their neighbors
+//Generate a tree the AUS vertex and it's neighbors and their neighbors
  t=g.V().has('code','AUS').repeat(out()).times(2).tree().by('code').next()
 ----
 
@@ -7303,7 +7304,7 @@ connect with.
 
 [source,groovy]
 ----
-// Create a subgraph of all vertices and edges directly connected to the AUS node
+// Create a subgraph of all vertices and edges directly connected to the AUS vertex
 // Note that using bothE() means we get incoming and outgoing edges.
 subg = g.V().has('code','AUS').bothE().subgraph('subGraph').cap('subGraph').next()
 
@@ -7371,7 +7372,7 @@ considered lossee.
 
 Saving a graph to a GraphML file can be done using the following Gremlin expression.
 You might want to try it on one of your graphs and look at the output generated. You
-can also take a look at the air-routes.graphml file distribued with this document if
+can also take a look at the air-routes.graphml file distribued with this book if
 you want to look at a well laid out (for human readability) GraphMl file. Bear in
 mind that by default, TinkerPop will save your graph in a way that is not easily
 human readable without using a code beautifier first. Most modern text editors can
@@ -7427,7 +7428,7 @@ rather than having to try and send the entire graph as a potentially huge JSON f
 all in one go.
 
 If you want to learn more about the specifics of the GraphML and GraphSON formats,
-they are covered in detail near the end of this document in the "<<serialize>>"
+they are covered in detail near the end of this book in the "<<serialize>>"
 section.
 
 
@@ -7474,7 +7475,7 @@ Counting more things
 ~~~~~~~~~~~~~~~~~~~~
 
 Here are a few more examples that basically just count occurrences of things but are
-a little more complex than the examples we looked at earlier in the document.This
+a little more complex than the examples we looked at earlier in the book.This
 first query looks for any country vertices that have no outgoing edges.  This
 indicates that there are no airports in the graph for those countries.
 
@@ -7884,7 +7885,7 @@ traversal including the continent code 'EU'.
 Using 'fold' to do simple Map-Reduce computations
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Earlier in the document we saw examples of 'sum' being used to count a
+Earlier in the book we saw examples of 'sum' being used to count a
 collection of values. You can also use 'fold' to do something similar but in a
 more 'map-reduce' type of fashion. 
 
@@ -7903,7 +7904,7 @@ However, what if we wanted to reduce our results further? Take a look at the mod
 version of our query below. It finds all routes from Austin and looks at the names of
 the destination cities.  However, rather than return all the names, 'fold' is used to
 reduce the names to a value. That value being the total number of characters in all
-of those city names. We have seen 'fold' used elsewhere in the document but this time
+of those city names. We have seen 'fold' used elsewhere in the book but this time
 we provide 'fold' with a parameter and a closure. The parameter is passed to the
 closure as the first variable and the name of the city as the second. The closure
 then adds the zero and the length of each name effectively to a running total.
@@ -8163,7 +8164,7 @@ g.V().hasLabel('airport').order().by(both('route').count(),decr).limit(10).
 Using 'local' while counting things
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Earlier in this document we saw examples of 'local' being used. Here is another
+Earlier in this book we saw examples of 'local' being used. Here is another
 example of how 'local' can be used while counting things to achieve a desired result.
 
 Take a look at the query below. It finds any airports that have six or more runways
@@ -8467,8 +8468,8 @@ results into four columns.
 
 This query finds all routes from DFW that are longer than 4,000 miles and returns the
 airport codes and the distances. Notice the use of two 'by' modulators in this query
-to decide which values are returned from the source node, the edge and the
-destination node respectively. Also note that only two were specified but three
+to decide which values are returned from the source vertex, the edge and the
+destination vertex respectively. Also note that only two were specified but three
 values are returned. This works because 'by' is processed in a round robin fashion if
 there are more values than 'by' modulators.
 
@@ -8567,7 +8568,7 @@ be a more convenient syntax to use most of the time but both ways work and both 
 their benefits. We should also note that I show 'sort' being used here just to show a
 different way of ordering results, but in most cases we can re-write our query to use
 'order'. You will find several examples of 'order' being used throughout this
-document. Order is introduced in the "<<sort>>" section.
+book. Order is introduced in the "<<sort>>" section.
 
 [source,groovy]
 ----
@@ -9195,7 +9196,7 @@ not. Moreover, GraphML does not offer any specific geospatial support so to keep
 things simple and flexible, the air routes data set does not assume any specific back
 end capabilities. This said, even having coordinates provided as basic floating point
 numbers offers us a chance to do some interesting geospatial queries. So far in this
-document we have not made us of the latitude and longitude coordinates that are
+book we have not made us of the latitude and longitude coordinates that are
 stored for each airport so in this section we will experiment a bit with some
 queries that do. 
 
@@ -9314,7 +9315,7 @@ g.V().hasLabel('airport').has('lat',between(-0.1,0.1)).valueMap('code','lat')
 
 The code below will find all the airports in the geographic area defined by a one
 degree box around London Heathrow. This type of thing can be done using the Geo shape
-classes provided by JanusGraph but given we are not at that part of the document yet
+classes provided by JanusGraph but given we are not at that part of the book yet
 this is the next best way!
 
 [source,groovy]
@@ -9328,7 +9329,7 @@ g.V().hasLabel('airport').where(and(
                           valueMap('code','lat','lon')
 ----
 
-As we have discussed earlier in this document, it is often possible to avoid use of
+As we have discussed earlier in this book, it is often possible to avoid use of
 'and' step by chaining 'has' steps together. The code below is equivalent to the code
 above but avoids the use of 'where' and 'and'.
 
@@ -9621,7 +9622,7 @@ g.addV("A").as("a").
   addE("knows").from("d").to("f")
 ----
 
-We can see the IDs that were allocated for each node by looking at the 'valueMap'.
+We can see the IDs that were allocated for each vertex by looking at the 'valueMap'.
 
 [source,groovy]
 ----
@@ -9650,8 +9651,8 @@ e[11][3-knows->5]
 ----
 
 Now that we have our test graph created let's take a look at the query we will need
-to develop. The problem we want to solve is to start from node A, find all of the
-edges that go out from node A and also all of the vertices at the other ends of those
+to develop. The problem we want to solve is to start from vertex A, find all of the
+edges that go out from vertex A and also all of the vertices at the other ends of those
 edges. Lastly we also want to find any edges between the vertices that are also
 connected to A but ignore edges that connect to vertices that are not also connected to
 A. In simple terms we want a query that will return all of the relationships except
@@ -9911,7 +9912,7 @@ Randomly walking a graph
 ~~~~~~~~~~~~~~~~~~~~~~~~
 When doing analysis of a graph sometimes you just want to randomly traverse or 'walk'
 parts of the graph. The example below shows a query that starts at the Austin (AUS)
-node and then randomly goes to five connected vertices from there.  The 'random walk' is
+vertex and then randomly goes to five connected vertices from there.  The 'random walk' is
 achieved by picking a sample of one of the possible edges connected to  vertex (node) we are
 currently at and then moving to the vertex at the other end of that edge. Notice how
 to get the effect that we want that the edge is picked inside of a 'local' step.
@@ -10357,7 +10358,7 @@ g.V().has('code','AUS').as('a').repeat(out().where(neq('a'))).times(4).simplePat
 122329
 
 
-// Ugly query! Look at every property of every node and see if it contains "R."
+// Ugly query! Look at every property of every vertex and see if it contains "R."
 g.V().as('a').values().filter{it.toString().contains('R.')}.select('a').dedup().valueMap()
 ----
 
@@ -10428,7 +10429,7 @@ graph system deployment!
 Working with TinkerGraph from Java Application
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-So far in this document we have looked at many ways of working with a TinkerGraph
+So far in this book we have looked at many ways of working with a TinkerGraph
 from within the Gremlin Console. As you start to create more sophisticated
 applications you will find that the Gremlin Console is just one to the tools you will
 need to have available in your toolbox. It is very likely, if not certain, that you
@@ -10474,7 +10475,7 @@ methods such as 'in()' and 'out()' in a traversal where there is no prior step
 to "dot" attach them to (such as inside of a 'repeat' step). If you prefer you
 can statically import the +++"__"+++ class it which will make explicit use of
 +++".__"+++ in your code unnecessary except where you are faced with reserved
-word conflicts as discussed earlier in this document.
+word conflicts as discussed earlier in this book.
 
 [source,java]
 ----
@@ -10504,7 +10505,7 @@ data.  Note that as we are now going to be running as a Java program we have to 
 exceptions. This is another thing that is hidden from you when you are working within
 the Gremlin Console. Lastly in this initial class definition we create a
 'GraphTraversalSource' and we make a Gremlin query to get the property 'valueMap' for
-the Austin airport node and print it. The 'toString' method provided by the 'Map'
+the Austin airport vertex and print it. The 'toString' method provided by the 'Map'
 should give us some useful output.
 
 [source,java]
@@ -10706,7 +10707,7 @@ System.out.println(eng);
 Working with TinkerGraph from a Groovy application
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Earlier in this document, in the "<<grv>>" section we explored the ways that you can
+Earlier in this book, in the "<<grv>>" section we explored the ways that you can
 use Groovy code within the Gremlin Console. However, we have not yet looked at how
 you can use a stand alone Groovy application to work with a TinkerGraph.
 
@@ -11078,7 +11079,7 @@ later on. First, let's create an instance of JanusGraph from the Gremlin console
 that uses the 'inmemory' storage model.
 
 Creating a JanusGraph instance is very similar to the way we created a TinkerGraph
-instance earlier in the document. The only difference is that we use the
+instance earlier in the book. The only difference is that we use the
 'JanusGraphFactory' to create the graph and in this case we specify 'inmemory' as the
 only parameter to tell JanusGraph that we want to use the all in memory storage
 model. We create our graph traversal object 'g' in just the same way as before.
@@ -11090,7 +11091,7 @@ g = graph.traversal()
 ----
 
 Now that we have a graph instance created, just like with TinkerGraph, we can query
-which features the graph supports. Earlier in the document in the "<<tgintro>>"
+which features the graph supports. Earlier in the book in the "<<tgintro>>"
 section we looked at the features offered by TinkerGraph. If we compare those
 features to what JanusGraph offers we can spot some key differences.
 
@@ -11613,11 +11614,11 @@ schema before loading the data but lets examine a few things before we discuss h
 do that. 
 
 Unlike TinkerGraph, JanusGraph does not, by default,  guarantee to respect user
-provided node and edge ID values. Instead it creates its own ID values as vertices
-and edges are added to the graph. You may have noticed from earlier in the document
+provided vertex and edge ID values. Instead it creates its own ID values as vertices
+and edges are added to the graph. You may have noticed from earlier in the book
 or from the air-routes.graphml file if you happened to look in there, that the ID
 provided for Austin in the GraphML markup is 3. However, having loaded air-routes
-into JanusGraph if we query the ID for the Austin node we can see that it is no
+into JanusGraph if we query the ID for the Austin vertex we can see that it is no
 longer 3. There is a setting that can be changed to force JanusGraph to honor user
 provided ID values but it is not recommended this be used as it will disable some
 other useful JanusGraph features. If you are interested in learning more about this
@@ -12541,7 +12542,7 @@ g.V().has('type','airport').or(has('region','US-TX'),has('region','US-OK')).valu
 Tweaking queries to make the JSON returned easier to work with
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Below is a query that we have seen used earlier in this document. It finds all
+Below is a query that we have seen used earlier in this book. It finds all
 routes longer than 8,000 miles and returns the airport pairs and the distance
 between them.
 
@@ -12706,15 +12707,15 @@ Comma Separated Values (CSV)
 There are a number of ways that a graph can be stored using CSV files. There is no
 single preferred format that I am aware of.  However, a common and convenient way,
 especially when vertices contain lots of properties is to use two CSV files. One will
-contain all of the node data and the other will contain all of the edge data.
+contain all of the vertex data and the other will contain all of the edge data.
 
 Using two CSV files to represent the air-routes data
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 If we were to store the airport data from the air-routes graph in CSV format we might
 do something like the example below. Note that to improve readability I have not
 included every property (or indeed every airport) in this example. Notice how each
-node has a unique ID assigned. This is important as when we define the edges we will
-need the node IDs to build the connections. 
+vertex has a unique ID assigned. This is important as when we define the edges we will
+need the vertex IDs to build the connections. 
 
 
 ----
@@ -12771,7 +12772,7 @@ Adjacency matrix format
 The examples shown above of how a CSV file can be used to store data about vertices and
 edges presents a convenient way to do it. However, this is by no means the only way
 you could do it. For graphs that do not contain properties you could lay the graph
-out using an 'adjacency matrix' as shown below. The letters represent the node labels
+out using an 'adjacency matrix' as shown below. The letters represent the vertex labels
 and a 1 indicates there is an edge between them and a zero indicates no edge. This
 format can be useful if your vertices and edges do not have properties and if the graph is
 small but in general is not a great way to try and represent large graphs.
@@ -12792,7 +12793,7 @@ Adjacency List format
 
 The adjacency matrix shown above could also be represented as an 'adjacency list'. In
 this case, the first column of each row represents a vertex. The remaining parts of
-each row represent all of the other vertices that this node is connected to.
+each row represent all of the other vertices that this vertex is connected to.
 
 ----
 A,C,D,F,G
@@ -12806,11 +12807,11 @@ G,A,B,C,E,F
 
 While this is a simple example, it is possible to represent a more complex graph such
 as the air-routes graph in this way. We could build a more complex CSV file where the
-node and its properties are listed first, followed by all of the other vertices it
+vertex and its properties are listed first, followed by all of the other vertices it
 connects to and the properties for those edges.
 
 Some graph database systems actually store their graphs to disk using a variation of
-this format. JanusGraph in fact uses a system a lot like this when storing node and
+this format. JanusGraph in fact uses a system a lot like this when storing vertex and
 edge data to its persistent store.
 
 
