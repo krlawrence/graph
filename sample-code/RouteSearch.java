@@ -90,33 +90,43 @@ public class RouteSearch
 
     if (loaded)
     {
-      System.out.println("\nEnter from and to airport codes, eg DFW");
-      Console console = System.console();
-      System.out.print("From : ");
-      String from = console.readLine().toUpperCase();
-      System.out.print("To   : ");
-      String to = console.readLine().toUpperCase();
-      System.out.print("Maximum number of routes to look for : ");
-      int max = Integer.parseInt(console.readLine());
-      System.out.print("Maximum number of stops : ");
-      int stops = Integer.parseInt(console.readLine());
+      boolean done = false;
+      while( !done )
+      {
+        System.out.println("\nEnter from and to airport codes, eg DFW");
+        Console console = System.console();
+        System.out.print("From : ");
+        String from = console.readLine().toUpperCase();
+        System.out.print("To   : ");
+        String to = console.readLine().toUpperCase();
+        System.out.print("Maximum number of routes to look for : ");
+        int max = Integer.parseInt(console.readLine());
+        System.out.print("Maximum number of stops : ");
+        int stops = Integer.parseInt(console.readLine());
 
-      List<Path> list;
-      list = rs.findRoutes(from,to,max,stops) ;
-      if (list == null)
-      {
-        System.out.println("\nPlease enter valid airport codes");
+        List<Path> list;
+        list = rs.findRoutes(from,to,max,stops) ;
+        if (list == null)
+        {
+          System.out.println("\nPlease enter valid airport codes");
+        }
+        else if (list.isEmpty())
+        {
+          System.out.println("\nSorry, no routes were found, try more stops");
+        }
+        else
+        {
+          list.forEach((v) -> System.out.println(v));
+        }
+        
+        System.out.print("\nAnother search (Y/N)? : ");
+        String again = console.readLine().trim().toUpperCase();
+        
+        if (again.equals("N"))
+        {
+          done = true;
+        }
       }
-      else if (list.isEmpty())
-      {
-        System.out.println("\nSorry, no routes were found, try more stops");
-      }
-      else
-      {
-        list.forEach((v) -> System.out.println(v));
-      }
-      //list = rs.findRoutes("AUS","AGR",15,3) ;
-      //list.forEach((v) -> System.out.println(v));
     }
   }      
 }
