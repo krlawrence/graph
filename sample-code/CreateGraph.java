@@ -86,8 +86,8 @@ public class CreateGraph
     // Save the graph we just created as GraphML (XML) or GraphSON (JSON)
     try
     {
-      // If you want to save the graph as GraphML uncomment the next few line
-      //tg.io(IoCore.graphml()).writeGraph("mygraph.graphml");
+      // If you want to save the graph as GraphML uncomment the next line
+         tg.io(IoCore.graphml()).writeGraph("mygraph.graphml");
       
       // If you want to save the graph as JSON uncomment the next line
       //tg.io(IoCore.graphson()).writeGraph("mygraph.json");

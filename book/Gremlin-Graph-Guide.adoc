@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v277, Jan 15, 2018
-// Mon Jan 15, 2018 11:54:31 CST
+v277-preview, Jan 16, 2018
+// Tue Jan 16, 2018 12:31:27 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Jan 15 2018
+//:Date:      Jan 16 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -18,7 +18,7 @@ v277, Jan 15, 2018
 //:pygments-style: vim
 :toc:
 :toclevels: 4
-:revision: 277
+:revision: 277-preview
 :doctype: book
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -10426,21 +10426,21 @@ graph system deployment!
 
 
 [[javatinker]]
-Working with TinkerGraph from Java Application
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Working with TinkerGraph from a Java Application
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 So far in this book we have looked at many ways of working with a TinkerGraph
 from within the Gremlin Console. As you start to create more sophisticated
-applications you will find that the Gremlin Console is just one to the tools you will
+applications you will find that the Gremlin Console is just one of the tools you will
 need to have available in your toolbox. It is very likely, if not certain, that you
 will want to write stand alone applications that can work with a graph. There are a
 number of different language bindings currently available for TinkerPop 3. One of the
-most widely used is the Java API for TinkerPop. 
+most widely used is the Java API. Apache TinkerPop itself is coded in Java.
 
 NOTE: You will find several Java samples at the GitHub repository associated with
 this book. https://github.com/krlawrence/graph 
 
-As discussed earlier in this book, when building a commercial application, you may
+As briefly discussed already, when building a commercial application, you may
 need capabilities such as ACID transactions and would not use TinkerGraph as your
 graph database in those cases. There are however, places where TinkerGraph may be
 just what you need. One example might be doing analysis on a static graph that can
@@ -10455,15 +10455,20 @@ The Apache TinkerPop interfaces and classes
 
 There are a number of Java interfaces and classes, defined by the Apache TinkerPop
 project, that you will want to become familiar with. The most recent JavaDoc format
-API documentation is always available at http://tinkerpop.apache.org/javadocs/current/full
+API documentation is always available at
+http://tinkerpop.apache.org/javadocs/current/full
 
-The JavaDoc is a bit lacking in terms of English prose but is still a useful source
-of reference information when it comes to methods, parameters and types.
+The TinkerPop JavaDoc is a bit lacking in terms of English prose but is still a
+useful source of reference information when it comes to methods, parameters and
+types. Once you have coded up a couple of test programs and got them running, you
+should find it gets easier to make progress faster. To that end I recommend you take
+a look at the sample code I have included with the book.
 
 When using the Gremlin Console your environment is pre-configured for you so you do
 not have to import any classes or interfaces. However, as soon as you move to the
 domain of the stand alone Java application you will need to start importing the
-relevant classes that your application builds upon.
+relevant classes that your application builds upon and learn to do a few other things
+that you may not have realized that the Gremlin Console was doing on your behalf.
 
 By way of a reasonable start, here are some imports that will enable us to do a
 number of Gremlin tasks from a Java application. As you add more capabilities to your
@@ -10473,7 +10478,7 @@ Take particular note of the rather odd import of the class called +++"__"+++
 (underscore underscore) on the second line. This is required to enable calling
 methods such as 'in()' and 'out()' in a traversal where there is no prior step
 to "dot" attach them to (such as inside of a 'repeat' step). If you prefer you
-can statically import the +++"__"+++ class it which will make explicit use of
+can statically import the +++"__"+++ class which will make explicit use of
 +++".__"+++ in your code unnecessary except where you are faced with reserved
 word conflicts as discussed earlier in this book.
 
@@ -10499,18 +10504,25 @@ Writing our first TinkerPop Java program
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Now that we have some imports in place, we can start to craft the basic outline of a
-Java application. The code below defines a class called 'GraphTest', and defines a
+Java application. The code below defines a class called 'TinkerGraphTest', and defines a
 'main' method that creates an in memory TinkerGraph and loads the air routes GraphML
 data.  Note that as we are now going to be running as a Java program we have to catch
 exceptions. This is another thing that is hidden from you when you are working within
-the Gremlin Console. Lastly in this initial class definition we create a
+the Gremlin Console. 
+
+TIP: The source code for TinkerGraphTest.java is available in the 'sample-code' folder
+located at https://github.com/krlawrence/graph/tree/master/sample-code.
+
+Lastly in this initial class definition we create a
 'GraphTraversalSource' and we make a Gremlin query to get the property 'valueMap' for
 the Austin airport vertex and print it. The 'toString' method provided by the 'Map'
-should give us some useful output.
+should give us some useful output. Take note of the call to 'next()'. This terminates
+the graph traversal and causes the result to be returned. If this call is left off
+you will not get back what you were expecting!
 
 [source,java]
 ----
-public class GraphTest 
+public class TinkerGraphTest 
 {
   public static void main(String[] args) 
   {
@@ -10523,7 +10535,7 @@ public class GraphTest
     catch( IOException e )
     {
       System.out.println("File not found");
-      System.exit(0);
+      System.exit(1);
     }
     GraphTraversalSource g = tg.traversal();
     Map<String,?> aus = g.V().has("code","AUS").valueMap().next();
@@ -10565,19 +10577,20 @@ export CP=$CLASSPATH:$LIBPATH/*:$EXTPATH/*:$ADDL
 
 
 # Compile
-javac -cp $CP GraphTest.java
+javac -cp $CP TinkerGraphTest.java
 ----
 
 Assuming everything we have coded so far compiled OK, then we can run it using the
 same 'classpath' that we created previously.
-the following output.
 
 ----
 # Run
-java -cp $CP GraphTest
+java -cp $CP TinkerGraphTest
 ----
 
-The output we get back should look something like the following.
+The output we get back should look something like the following. If it does, take 30
+seconds to celebrate as you have just successfully built and run your first TinkerPop
+aware Java app!
 
 [source,java]
 ----
@@ -10588,21 +10601,33 @@ Adding to our Java program
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Now that we have a basic skeleton application that compiles and runs, we can start to
-add more experiments to it.
+add more experiments to it. If we add the two lines below we can extract the city
+name from the value map that we just generated. From now on as we add to our program
+I am just going to show the lines that we add and the additional output that those
+new lines will generate.
 
 [source,java]
 ----
-    List city = (List)(aus.get("city"));
-    System.out.println("The AUS airport is in " + city.get(0));  
+List city = (List)(aus.get("city"));
+System.out.println("The AUS airport is in " + city.get(0));  
+----
 
+So when we compile and run again we should now see this additional line of output.
+
+[source,java]
+----
 The AUS airport is in Austin
 ----
+
+If we wanted to nicely print out all of the values returned in our value map we could
+do it as follows.
 
 [source,java]
 ----
 aus.forEach( (k,v) -> System.out.println("Key: " + k + ": Value: " + v));
 ----
 
+Which will generate this output.
 
 [source,java]
 ----
@@ -10620,87 +10645,210 @@ Key: lat: Value: [30.1944999694824]
 Key: desc: Value: [Austin Bergstrom International Airport]
 ----
 
-[source,java]
-----
- Long n = g.V().has("code","DFW").out().count().next();
-    System.out.println("There are " + n + " routes from Dallas");
-----
+So we now know one way to get the property values from a vertex and manipulate them.
+Let's now add something a bit more interesting to our program. The following two
+lines count the number of airports you can fly to non stop starting at
+Dallas Fort Worth (DFW) and print out that result for us.
 
 [source,java]
 ----
-    List fromAus = (g.V().has("code","AUS").out().values("code").toList());
-    System.out.println(fromAus);
-----
-
-[source,java]
-----
-[LHR, FRA, MEX, PHX, PIT, RDU, PDX, SEA, CLT, SFO, CUN, SJC, MEM, JFK, LAX, MCO, YYZ, MIA, MSP, ORD, DAL, STL, LAS, ABQ, DEN, MDW, MSY, LBB, EWR, HRL, HOU, GDL, ELP, PNS, MCI, TPA, CVG, SAN, IND, LGB, SNA, SLC, PIE, SFB, BKG, CLE, VPS, OAK, PHL, DTW, DFW, FLL, IAD, IAH, ATL, BNA, BOS, BWI, DCA]
+Long n = g.V().has("code","DFW").out().count().next();
+System.out.println("There are " + n + " routes from Dallas");
 ----
 
 [source,java]
 ----
-    List <Path> lhrToUsa = g.V().has("code","LHR").outE().inV().
-                                 has("country","US").limit(5).
-                                 path().by("code").by("dist").toList();
-
-    lhrToUsa.forEach((k) -> System.out.println(k));   
+There are 221 routes from Dallas
 ----
 
-[source,java]
-----
-[LHR, 3860, RDU]
-[LHR, 4783, SEA]
-[LHR, 3939, ORD]
-[LHR, 5255, PHX]
-[LHR, 5350, SFO]
-----
+Let's now add some code to retrieve the airport IATA codes of these 221 airports that we
+can fly to non stop from DFW. Note that this time we ended our query with a call to
+the 'toList()' method. This will terminate the traversal, and as the name implies,
+return the results to us in a list. An 'order' step is used in the traversal so that
+we get the airport codes back in ascending order.
 
 [source,java]
 ----
-    ArrayList <Path> routes = new ArrayList<>();
-    g.V().has("code","SAT").out().path().by("icao").fill(routes);
-    System.out.println(routes);
+List fromDfw = g.V().has("code","DFW").out().
+                     order().by("code").values("code").toList();
+
+System.out.println(fromDfw);
 ----
+
+The new output that we get back should look like this.
 
 [source,java]
 ----
-[[KSAT, CYYZ], [KSAT, KCLT], [KSAT, KELP], [KSAT, MMMX], [KSAT, KEWR], [KSAT, KHOU], [KSAT, KMIA], [KSAT, KMSP], [KSAT, KORD], [KSAT, KSEA], [KSAT, KSFO], [KSAT, KSAN], [KSAT, KLAS], [KSAT, KDEN], [KSAT, KSTL], [KSAT, KHRL], [KSAT, KMDW], [KSAT, MMGL], [KSAT, MMMY], [KSAT, MMTO], [KSAT, KSFB], [KSAT, KJFK], [KSAT, KLAX], [KSAT, KMCO], [KSAT, KPHL], [KSAT, KMEM], [KSAT, KDTW], [KSAT, MMUN], [KSAT, KATL], [KSAT, KDAL], [KSAT, KBNA], [KSAT, KMCI], [KSAT, KBWI], [KSAT, KDFW], [KSAT, KIAD], [KSAT, KIAH]]
+[ABI, ABQ, ACT, AEX, AGU, AMA, AMS, ANC, ASE, ATL, AUH, AUS, BDL, BHM, BIL, BIS, BJX, BKG, BMI, BNA, BOG, BOI, BOS, BPT, BRO, BTR, BWI, BZE, BZN, CAE, CCS, CDG, CHA, CHS, CID, CLE, CLL, CLT, CMH, CMI, CNM, COS, COU, CRP, CUN, CUU, CVG, CVN, CZM, DAY, DCA, DEN, DOH, DRO, DSM, DTW, DUS, DXB, EGE, ELP, EVV, EWR, EZE, FAR, FAT, FCO, FLL, FRA, FSD, FSM, FWA, GCK, GCM, GDL, GEG, GGG, GIG, GJT, GLH, GPT, GRI, GRK, GRR, GRU, GSO, GSP, GUA, GUC, HDN, HKG, HNL, HOU, HSV, IAD, IAH, ICN, ICT, IND, JAC, JAN, JAX, JFK, JLN, KOA, LAS, LAW, LAX, LBB, LCH, LEX, LFT, LGA, LHR, LIM, LIR, LIT, LRD, MAD, MAF, MBJ, MCI, MCO, MEI, MEM, MEX, MFE, MGA, MGM, MHK, MIA, MID, MKE, MLI, MLM, MLU, MOB, MSN, MSP, MSY, MTJ, MTY, MYR, MZT, NAS, NRT, OAK, OGG, OKC, OMA, ONT, ORD, ORF, PBC, PBI, PDX, PEK, PHL, PHX, PIA, PIB, PIT, PLS, PNS, PSP, PTY, PUJ, PVG, PVR, QRO, RAP, RDU, RIC, RNO, ROW, RSW, RTB, SAF, SAL, SAN, SAT, SAV, SBA, SCL, SDF, SEA, SFO, SGF, SHV, SJC, SJD, SJO, SJT, SJU, SLC, SLP, SMF, SNA, SPI, SPS, STL, SUX, SWO, SYD, TLH, TPA, TRC, TUL, TUS, TVC, TXK, TYR, TYS, UIO, VPS, XNA, YEG, YUL, YVR, YYC, YYZ, ZCL]
 ----
+
+The next lines will find all routes from London Heathrow to any airport in the United
+States. A list of paths will be returned where each path contains the airport codes
+and the distance between them.
 
 [source,java]
 ----
-    Vertex v = g.V().has("code","FRA").next();
-    Set <String> s = v.keys();
-    for (String k : s) 
-    {
-      System.out.println( k + "\t: " + v.property(k).value());
-    }    
+List <Path> lhrToUsa = g.V().has("code","LHR").outE().inV().
+                             has("country","US").
+                             path().by("code").by("dist").toList();
+
+lhrToUsa.forEach((k) -> System.out.println(k));   
 ----
+
+The output should look like this. I arranged the results in columns to aid
+readability.
 
 [source,java]
 ----
-country : DE
-code    : FRA
-longest : 13123
-city    : Frankfurt
-elev    : 364
-icao    : EDDF
-lon     : 8.54312992096
-type    : airport
-region  : DE-HE
-runways : 4
-lat     : 50.0264015198
-desc    : Frankfurt am Main
+[LHR, 4896, PDX]     [LHR, 4820, IAH]    [LHR, 3665, IAD]
+[LHR, 3980, CLT]     [LHR, 4414, MIA]    [LHR, 3860, RDU]
+[LHR, 3254, BOS]     [LHR, 4001, MSP]    [LHR, 4783, SEA]
+[LHR, 3622, BWI]     [LHR, 3440, JFK]    [LHR, 3939, ORD]
+[LHR, 4198, ATL]     [LHR, 5439, LAX]    [LHR, 5255, PHX]
+[LHR, 4901, AUS]     [LHR, 5469, SAN]    [LHR, 5350, SFO]
+[LHR, 4736, DFW]     [LHR, 4850, SLC]    [LHR, 3753, DTW]
+[LHR, 5352, SJC]     [LHR, 3453, EWR]    [LHR, 4655, DEN]
+[LHR, 4616, MSY]     [LHR, 5213, LAS]    [LHR, 3533, PHL]
 ----
+
+The final part of our first Java program shows how to perform a simple 'repeat'
+operation. The code below will look for any cities in the UK that you can get to from
+Austin with one stop on the way. A key thing to note here is that we have to prefix
+the call to 'out()' with the strangely named class +++"__."+++ that we mentioned at
+the start of this discussion of using Java with TinkerPop. If you do not include the
++++"__."+++ prefix you will get a compilation error as the compiler does not know
+where the 'out' step is from.
 
 [source,java]
 ----
-List eng = g.V().has("code","AUS").repeat(__.out()).times(2).
-               has("region","GB-ENG").dedup().values("code").toList();
+List <Object> eng = 
+      g.V().has("code","AUS").repeat(__.out()).times(2).
+            has("region","GB-ENG").values("city").dedup().toList();
 
-System.out.println(eng); 
+System.out.println("\nPlaces in England I can get to with one stop from AUS.\n");
+eng.forEach( (p) -> System.out.print(p + " ")); 
+----
 
-[LGW, LHR, MAN, LBA, NCL, LCY, BHX, BRS, STN]
+The code we just added should generate output that looks like this.
+
+[source,java]
+----
+Places in England I can get to with one stop from AUS.
+
+Birmingham Bristol London Manchester Leeds Newcastle
+----
+
+[[javacreate]]
+Creating a new graph from a Java application
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The code below creates a new (empty) TinkerGraph instance, creates a graph traversal
+source object and then uses a traversal to create a small graph. 
+
+TIP: The full source code for this sample can be found in the file CreateGraph.java
+located at https://github.com/krlawrence/graph/tree/master/sample-code
+
+Note the call to 'iterate()' and the end of the traversal. When running as a stand
+alone application this is necessary. This is another of those little things that the
+Gremlin Console does for you without you realizing it that we have to remember to do
+ourselves when not running inside the console.
+
+[source,java]
+----
+// Create a new (empty) TinkerGrap
+TinkerGraph tg = TinkerGraph.open() ;
+
+// Create a Traversal source object
+GraphTraversalSource g = tg.traversal();
+               
+// Add some nodes and vertices - Note the use of "iterate".
+g.addV("airport").property("code","AUS").as("aus").
+  addV("airport").property("code","DFW").as("dfw").
+  addV("airport").property("code","LAX").as("lax").
+  addV("airport").property("code","JFK").as("jfk").
+  addV("airport").property("code","ATL").as("atl").
+  addE("route").from("aus").to("dfw").
+  addE("route").from("aus").to("atl").
+  addE("route").from("atl").to("dfw").
+  addE("route").from("atl").to("jfk").
+  addE("route").from("dfw").to("jfk").
+  addE("route").from("dfw").to("lax").
+  addE("route").from("lax").to("jfk").
+  addE("route").from("lax").to("aus").
+  addE("route").from("lax").to("dfw").iterate();
+----
+
+Having created a new graph we can run some queries to make sure it looks correct.
+Firstly, let's check that the vertices were created and look at the IDs that were
+allocated to them. As with prior examples, a call to 'valueMap' with a parameter of
+'true' will return what we need. What we will get back from this code is a list of
+maps, with each map containing keys for the airport code, the vertex ID and the
+vertex label.
+
+[source,java]
+----
+List<Map<Object,Object>> vm = new ArrayList<Map<Object,Object>>() ;
+    
+vm = g.V().valueMap(true).toList();
+----
+
+Having got our list of maps back we can process them. Note that to get the 'id' and
+'label' values from the map I had to prefix the key name with a '"T."'. This is
+because while most of property keys are Strings, IDs and labels are a special
+case.
+
+[source,java]
+----
+// Dislpay the code property as well as the label and id.
+for( Map m : vm)
+{
+  System.out.println(((List)(m.get("code"))).get(0) + " " + 
+                             m.get(T.id) + " " + m.get(T.label));
+}                     
+----
+
+If all has gone well during graph creation, we should get back a list like the one
+below that shows us the ID that has been given to each vertex.
+
+[source,java]
+----
+AUS 0 airport
+DFW 2 airport
+LAX 4 airport
+JFK 6 airport
+ATL 8 airport
+----
+
+Finally, let's check that the edges were created correctly by displaying all of the
+paths between vertices in our new graph.
+
+[source,java]
+----
+// Display the routes in the graph we just created
+
+List<Path> paths = new ArrayList<Path>();
+
+paths = g.V().out().path().by("code").toList();
+
+for (Path p : paths)
+{
+  System.out.println(p.toString());
+}
+----
+
+Once again, if everything has worked as expected, here is what we should get back.
+
+[source,java]
+----
+[AUS, DFW]
+[AUS, ATL]
+[DFW, JFK]
+[DFW, LAX]
+[LAX, JFK]
+[LAX, AUS]
+[LAX, DFW]
+[ATL, DFW]
+[ATL, JFK]
 ----
 
 [[groovyapp]]
