@@ -89,6 +89,7 @@ public class GraphStats
     top.forEach((a) -> System.out.format("%4s %12s %4d\n",a.get("ap"),a.get("city"),a.get("num")));
     
 
+
     // Find the airports with the most outgoing routes
 
     System.out.println("\nTop 20 airports by outgoing routes");
@@ -135,6 +136,33 @@ public class GraphStats
 
     System.out.println("The longest runway in the graph is " + longest.get("num") + " feet at " +
                         longest.get("city") + "/" + longest.get("ap"));        
+
+    
+    // Find the continent with the most airports
+    
+    Map <String,?> cmost; 
+    
+    cmost = g.V().hasLabel("continent").
+                  order().by(__.out("contains").count(),Order.decr).limit(1).
+                  project("num","cont").
+                    by(__.out("contains").count()).
+                    by("desc").next();
+
+    System.out.println("The continent with the most airports: " + 
+                       cmost.get("cont") + " (" + 
+                       cmost.get("num") +")");               
+
+
+    // Find the country with the most airports
+
+    cmost = g.V().hasLabel("country").
+                  order().by(__.out("contains").count(),Order.decr).limit(1).
+                  project("num","country").
+                    by(__.out("contains").count()).
+                    by("desc").next();
+
+    System.out.println("The country with the most airports: " + 
+                       cmost.get("country") + " (" + 
+                       cmost.get("num") +")");               
   }
-  
 }
