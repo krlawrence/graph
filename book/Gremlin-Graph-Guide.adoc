@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v277-preview, Jan 16, 2018
-// Tue Jan 16, 2018 12:31:27 CST
+v277-preview, Jan 17, 2018
+// Wed Jan 17, 2018 08:58:21 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Jan 16 2018
+//:Date:      Jan 17 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -2896,7 +2896,8 @@ returns their code if the name of the city the airport is located in is not 'Hou
 
 [source,groovy]
 ----
-g.V().has('airport','region','US-TX').has('city',neq('Houston')).
+g.V().has('airport','region','US-TX').
+      has('city',neq('Houston')).
       values('code')
 ----
 
@@ -10544,6 +10545,7 @@ public class TinkerGraphTest
 }
 ----
 
+[[javacompile]]
 Compiling our code
 ^^^^^^^^^^^^^^^^^^
 
@@ -10597,6 +10599,7 @@ aware Java app!
 {country=[US], code=[AUS], longest=[12250], city=[Austin], elev=[542], icao=[KAUS], lon=[-97.6698989868164], type=[airport], region=[US-TX], runways=[2], lat=[30.1944999694824], desc=[Austin Bergstrom International Airport]}
 ----
 
+[[javaadd]]
 Adding to our Java program
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -10748,7 +10751,7 @@ source object and then uses a traversal to create a small graph.
 TIP: The full source code for this sample can be found in the file CreateGraph.java
 located at https://github.com/krlawrence/graph/tree/master/sample-code
 
-Note the call to 'iterate()' and the end of the traversal. When running as a stand
+Note the call to 'iterate()' at the end of the traversal. When running as a stand
 alone application this is necessary. This is another of those little things that the
 Gremlin Console does for you without you realizing it that we have to remember to do
 ourselves when not running inside the console.
@@ -10849,6 +10852,34 @@ Once again, if everything has worked as expected, here is what we should get bac
 [LAX, DFW]
 [ATL, DFW]
 [ATL, JFK]
+----
+
+[[javasave]]
+Saving a graph from a Java application
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Having created our new graph, we may want to save it. The code below shows how to
+save the graph as either GraphSON (TinkerPop's JSON format) or as GraphML (XML). This
+is another instance where we have to do a bit more work as we are running in a stand
+alone program and not inside the Gremlin Console. Our attempts to save our data have
+to catch any exceptions that may occur. This code is also included as part of the
+CreateGraph.java sample program.
+
+[source,java]
+----
+// Save the graph we just created as GraphML (XML) or GraphSON (JSON)
+try
+{
+  // If you want to save the graph as GraphML uncomment the next line
+  tg.io(IoCore.graphml()).writeGraph("mygraph.graphml");
+  
+  // If you want to save the graph as JSON uncomment the next line
+  tg.io(IoCore.graphson()).writeGraph("mygraph.json");
+}
+catch (IOException ioe)
+{
+  System.out.println("Graph failed to save");
+}
 ----
 
 [[groovyapp]]
