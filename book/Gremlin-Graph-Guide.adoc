@@ -10712,7 +10712,7 @@ EXTPATH=$GREMLIN/ext/*
 ADDL=$GREMLIN/ext/tinkergraph-gremlin/lib/*
 
 # Classpath
-export CP=$CLASSPATH:$LIBPATH/*:$EXTPATH/*:$ADDL 
+export CP=$CLASSPATH:$LIBPATH:$EXTPATH:$ADDL 
 
 
 # Compile
@@ -11123,7 +11123,7 @@ EXTPATH=$GREMLIN/ext/*
 ADDL=$GREMLIN/ext/tinkergraph-gremlin/lib/*
 
 # Classpath
-export CLASSPATH=$CLASSPATH:$LIBPATH/*:$EXTPATH/*:$ADDL 
+export CLASSPATH=$CLASSPATH:$LIBPATH:$EXTPATH:$ADDL 
 
 # Compile
 groovyc TinkerGraphTest.groovy
