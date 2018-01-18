@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v277-preview, Jan 17, 2018
-// Wed Jan 17, 2018 08:58:21 CST
+v277-preview, Jan 18, 2018
+// Thu Jan 18, 2018 09:37:17  CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Jan 17 2018
+//:Date:      Jan 18 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -6870,8 +6870,145 @@ So as mentioned above, the meta property provides a way to attach metadata to an
 property. This enables a number of important use cases including being able to attach 
 a date or ACL information to individual properties.
 
+[[rbarriers]]
+Collections and reducing barrier steps
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-[[lam]]
+If you look at commonly asked questions about writing Gremlin queries on the Gremlin
+Users discussion list, one area that repeatedly seems to cause people confusion is
+the behavior of certain traversal steps that are known as 'reducing barrier' steps.
+What these steps in essence do is reduce the results of the traversal so far to a
+single traversal, often just a value or a collection of some kind and from that point
+on you cannot refer back to things you did earlier in the query. 
+
+.Reducing barrier steps 
+[cols="^1,4"]
+|==============================================================================
+|max     | Returns the maximum value from a set of values.
+|min     | Returns the minimum value from a set of values.
+|sum     | Returns the sum of a set of values.
+|count   | Counts the number of current elements.
+|fold    | Aggregates current traversal into a map.
+|============================================================================== 
+
+Take a look at the example below. On the surface, you might expect the query to count
+all of the routes originating from the DFW airport and return the count '"b"' along
+with the airport vertex '"a"'.
+
+[source,groovy]
+----
+g.V().has('code','DFW').as('a').outE().count().as('b').select('a','b')
+----
+
+What actually happens is that nothing is returned. This is because the 'count' step
+is a so called 'reducing barrier' step. Once the 'count' has been processed, you have
+crossed the 'barrier' and the traversal variable '"a"' is no longer available to us.
+We can still access 'b' if we reference it by itself  as it is defined after the
+'count' step as shown below.
+
+[source,groovy]
+----
+g.V().has('code','DFW').as('a').outE().count().as('b').select('b')
+
+221
+----
+
+In cases such as this, it is almost always possible to achieve the results that you
+want by changing the way you write the query. It is important to gain an
+understanding of how different traversal steps work. A great way to do that is to
+experiment using the Gremlin Console and look at the way different steps operate. The
+rewritten query below achieves our original goal.
+
+[source,groovy]
+----
+g.V().has('code','DFW').group().by().by(outE().count())
+
+[v[8]:221]
+----
+
+If this was all we needed then our job is done. We have a map containing the vertex
+as the key and its outgoing route count as the value. However, there is still an
+issue if we want to go further with this query. Take a look at the example below.
+Because the query has reduced the prior traversal to essentially a small map,
+including a count, we can no longer refer back to '"a"'.
+
+[source,groovy]
+----
+g.V().has('code','DFW').as('a').group().by().by(outE().count()).select('a')
+----
+
+If for some reason, we wanted to retrieve the vertex that we had stored in '"a"', we
+should instead pull it from the map that the 'group' step created. You can access the
+keys of a map using the 'keys' keyword as a parameter to a 'select' step.
+
+[source,groovy]
+----
+g.V().has('code','DFW').group().by().by(outE().count()).
+                        select(keys)
+
+[v[8]]
+----
+
+We have still not quite got the result we wanted as the vertex is still returned in a
+list. So we can modify the query again to 'unfold' the map before we select the keys
+from it.
+
+[source,groovy]
+----
+g.V().has('code','DFW').group().by().by(outE().count()).
+                        unfold().select(keys)
+v[8]
+----
+
+If we wanted to get the value back instead of the key we can use the 'values' keyword
+as follows.
+
+[source,groovy]
+----
+g.V().has('code','DFW').group().by().by(outE().count()).
+                        unfold().select(values)
+
+221
+----
+
+To prove we could carry on adding to the query from here let's get back the airport
+code that we started with.
+
+[source,groovy]
+----
+g.V().has('code','DFW').group().by().by(outE().count()).
+                        unfold().select(keys).values('code')
+
+DFW
+----
+
+So, lets now add to our query and create a new vertex with a label 'dfwcount' that is
+going to store the number of routes originating in DFW using a property called
+'current_count'.
+
+[source,groovy]
+----
+g.V().has('code','DFW').group().by().by(outE().count()).as('ct').
+      addV('dfwcount').
+      property('current_count',select('ct').unfold().select(values))
+
+v[54931]
+----
+
+We can inspect the new vertex to double check that our query worked as intended.
+
+[source,groovy]
+----
+g.V(54931).valueMap(true)
+
+[id:54931,current_count:[221],label:dfwcount]
+----
+
+Hopefully you are starting to see a pattern here. It is important to understand which
+steps are 'reducing barrier' steps and be able to work with them in a way that allows
+you to write queries that do what you need.
+
+[[lambdas]]
 Using Lambda functions
 ~~~~~~~~~~~~~~~~~~~~~~
 
