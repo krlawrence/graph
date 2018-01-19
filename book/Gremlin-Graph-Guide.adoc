@@ -2,10 +2,10 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v277-preview, Jan 18, 2018
-// Fri Jan 19, 2018 08:22:57 CST
+// Fri Jan 19, 2018 15:12:33 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Jan 18 2018
+//:Date:      Jan 19 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -6911,11 +6911,40 @@ g.V().hasLabel('airport').limit(20).values('runways').
 [2,2,2,3,3,3,3,3,4,4,4,4,4,4,4,5,5,6,7,8]
 ----
 
-We can also generate a set using a 'store' step so that duplicate values are not
-stored. The 'withSideEffect' step can be used to initialize the set. The 'cap' step
-emits the collection resulting from the side effect that we created using the 'store'
-step. Among other things this allows us to return this collection as the final result
-of a query.
+Another way that a map can be created is when the 'project' step is used. 
+
+[source,groovy]
+----
+g.V().has('airport','country','IE').project('loc','iata').by('city').by('code')
+
+[loc:Dublin,iata:DUB]
+[loc:Shannon,iata:SNN]
+[loc:Cork,iata:ORK]
+[loc:Charleston,iata:NOC]
+[loc:Killarney,iata:KIR]
+[loc:Waterford,iata:WAT]
+[loc:Donegal,iata:CFN]
+----
+
+Also using a project step, but a little more complex, this example creates a map with
+two keys. The first, called 'dfw', will contain the vertex for the DFW airport and
+the second, called 'route_count', will contain the number of outgoing routes from
+DFW. Notice how the first 'by' step has no parameters so it returns the actual vertex
+(rather than say a property from the vertex that we could select).
+
+[source,groovy]
+----
+ g.V().has('code','DFW').project('dfw','route_count').
+       by().by(outE().count())
+
+[dfw:v[8],route_count:221]
+----
+
+As well as generating maps, we can also generate a set using a 'store' step so that
+duplicate values are not stored. The 'withSideEffect' step can be used to initialize
+the set. The 'cap' step emits the collection resulting from the side effect that we
+created using the 'store' step. Among other things this allows us to return this
+collection as the final result of a query.
 
 [source,groovy]
 ----
@@ -7116,6 +7145,20 @@ g.V().hasLabel('airport').limit(5).group().by('code').by('city').
       select(values).unfold().unfold().fold()
 
 [Nashville,Anchorage,Boston,Atlanta,Austin]
+----
+
+It is probably worth pointing out that the 'keys' and 'values' keywords can also be
+used with something as simple as a 'valueMap' step. Here is a simple example.
+
+[source,groovy]
+----
+g.V(3).valueMap().select(keys)
+
+[country,code,longest,city,elev,icao,lon,type,region,runways,lat,desc]
+
+g.V(3).valueMap().select(values)
+
+[[US],[AUS],[12250],[Austin],[542],[KAUS],[-97.6698989868164],[airport],[US-TX],[2],[30.1944999694824],[Austin Bergstrom International Airport]]
 ----
 
 In the next section we will continue our look at Gremlin's collections and how they
