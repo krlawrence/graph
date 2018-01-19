@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v277-preview, Jan 18, 2018
-// Fri Jan 19, 2018 15:12:33 CST
+// Fri Jan 19, 2018 16:07:53 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Jan 19 2018
@@ -6926,7 +6926,7 @@ g.V().has('airport','country','IE').project('loc','iata').by('city').by('code')
 [loc:Donegal,iata:CFN]
 ----
 
-Also using a project step, but a little more complex, this example creates a map with
+Also using a 'project' step, but a little more complex, this example creates a map with
 two keys. The first, called 'dfw', will contain the vertex for the DFW airport and
 the second, called 'route_count', will contain the number of outgoing routes from
 DFW. Notice how the first 'by' step has no parameters so it returns the actual vertex
@@ -7050,6 +7050,38 @@ g.V().hasLabel('airport').limit(5).group().by('code').by('city').select(keys)
 g.V().hasLabel('airport').limit(5).group().by('code').by('city').select(values)
 
 [[Nashville],[Anchorage],[Boston],[Atlanta],[Austin]]
+----
+
+We can also extract the keys and values from the results of the 'project' step we
+used earlier in this section. Note that the values comeback as a list containing a
+the DFW vertex and the number of routes from DFW.
+
+[source,groovy]
+----
+g.V().has('code','DFW').project('dfw','route_count').
+      by().by(outE().count()).select(values)
+
+[v[8],221]
+----
+
+Likewise the keys come back in a list.
+
+[source,groovy]
+----
+g.V().has('code','DFW').project('dfw','route_count').
+      by().by(outE().count()).select(keys)
+
+[dfw,route_count]
+----
+
+We could also be even more specific and select which values we are interested in.
+
+[source,groovy]
+----
+ g.V().has('code','DFW').project('dfw','route_count').
+       by().by(outE().count()).select('route_count')
+
+221   
 ----
 
 Sometimes it is desirable to unbundle a collection so that we can work on it further.
