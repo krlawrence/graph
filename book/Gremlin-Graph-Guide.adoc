@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v277-preview, Jan 18, 2018
-// Thu Jan 18, 2018 18:57:46 CST
+// Fri Jan 19, 2018 08:22:57 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Jan 18 2018
@@ -6980,8 +6980,8 @@ g.V().has('airport','country','IE').
 [2,2,2,5,1,1,1]
 ----
 
-If we are ever unsure what type of object has been created can a call to
-'getClass' can be used to find out.
+If we are ever unsure what type of object has been created a call to 'getClass' can
+be used to find out.
 
 [source,groovy]
 ----
@@ -6998,7 +6998,7 @@ Now that we have examined the various ways in which collections may get generate
 during a traversal, it is important to understand how the contents of a collection
 can be accessed and manipulated.
 
-To access the keywords 'keys' and 'values' can be used to access the respective
+The keywords 'keys' and 'values' can be used to access the respective
 parts of a collection that is a map. Take a look at the query below which returns a
 map where airport codes are the keys and their city names are the values.
 
@@ -7042,8 +7042,8 @@ AUS=[Austin]
 ----
 
 If we wanted a list of values we could use 'unfold' again as shown below. You will
-recall from our earlier discussion that vertex properties are stored as arrays even
-if there is only one property - an array of length one in other words. Note that this
+recall from our earlier discussion that vertex properties are stored as lists even
+if there is only one property - a list of length one in other words. Note that this
 shows that a single 'unfold' step will not recursively unbundle elements from a
 collection.
 
@@ -7059,7 +7059,8 @@ g.V().hasLabel('airport').limit(5).group().by('code').by('city').
 [Austin]
 ----
 
-We could add a second 'unfold' to just get the city names back and remove the arrays.
+We could add a second 'unfold' to just get the city names back and remove the
+containing lists.
 
 [source,groovy]
 ----
@@ -7088,9 +7089,9 @@ Atlanta
 Austin
 ----
 
-If we were not sure how many times we need to 'unfold' we can change the query as
-follows. The 'repeat' loop will unfold until there is only a list of arrays left. The
-final unfold will remove the remaining arrays leaving us with just the text values.
+If we were not sure how many times we needed to 'unfold' we could change the query as
+follows. The 'repeat' loop will unfold until there is only a list of lists left. The
+final unfold will remove the remaining lists leaving us with just the text values.
 
 [source,groovy]
 ----
@@ -7155,7 +7156,7 @@ g.V().has('code','DFW').as('a').outE().count().as('b').select('a','b')
 What actually happens is that nothing is returned. This is because the 'count' step
 is a so called 'reducing barrier' step. Once the 'count' has been processed, you have
 crossed the 'barrier' and the traversal variable '"a"' is no longer available to us.
-We can still access 'b' if we reference it by itself  as it is defined after the
+We can still access '"b"' if we reference it by itself  as it is defined after the
 'count' step as shown below.
 
 [source,groovy]
