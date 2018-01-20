@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v277-preview, Jan 18, 2018
-// Fri Jan 19, 2018 18:28:27 CST
+v277-preview, Jan 20, 2018
+// Sat Jan 20, 2018 09:45:58 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Jan 19 2018
+//:Date:      Jan 20 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -7031,6 +7031,10 @@ Now that we have examined the various ways in which collections may get generate
 during a traversal, it is important to understand how the contents of a collection
 can be accessed and manipulated.
 
+[[collaccess]]
+Accessing the contents of a collection
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 The keywords 'keys' and 'values' can be used to access the respective
 parts of a collection that is a map. Take a look at the query below which returns a
 map where airport codes are the keys and their city names are the values.
@@ -7057,8 +7061,8 @@ g.V().hasLabel('airport').limit(5).group().by('code').by('city').select(values)
 ----
 
 We can also extract the keys and values from the results of the 'project' step we
-used earlier in this section. Note that the values comeback as a list containing a
-the DFW vertex and the number of routes from DFW.
+used earlier. Note that the values comeback as a list containing a the DFW vertex and
+the number of routes from DFW.
 
 [source,groovy]
 ----
@@ -7082,11 +7086,38 @@ We could also be even more specific and select which values we are interested in
 
 [source,groovy]
 ----
- g.V().has('code','DFW').project('dfw','route_count').
+g.V().has('code','DFW').project('dfw','route_count').
        by().by(outE().count()).select('route_count')
 
 221   
 ----
+
+We can also access the DFW vertex directly from the map.
+
+[source,groovy]
+----
+g.V().has('code','DFW').project('dfw','route_count').
+      by().by(outE().count()).select('dfw')
+
+v[8]
+----
+
+Having extracted the vertex we can retrieve values from it. A bit later we will look
+at ways, we could continue our traversal from this point if we needed to, perhaps
+looking at outgoing routes from DFW or adding a new route. You will find that
+discussion in the "<<rbarriers>>" section.
+
+[source,groovy]
+----
+g.V().has('code','DFW').project('dfw','route_count').
+      by().by(outE().count()).select('dfw').values('desc')
+
+Dallas/Fort Worth International Airport
+----
+
+As we shall see in the next two sections, sometimes it is necessary to use the
+'unfold' step to access the contents of a collection and it is also sometimes
+necessary to use 'local' scope.
 
 [[unbundle]]
 Using 'unfold' to unbundle a collection
