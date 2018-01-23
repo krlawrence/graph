@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v277-preview, Jan 20, 2018
-// Sat Jan 20, 2018 09:45:58 CST
+v277-preview, Jan 22, 2018
+// Mon Jan 22, 2018 15:45:18 PST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Jan 20 2018
+//:Date:      Jan 22 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -3998,7 +3998,6 @@ g.V().hasLabel('airport').match(__.as('s').out().as('d'),
                                 __.not(__.as('d').out().as('s'))).
                           select('s','d').by('code').count()
 
-
 238
 ----
 
@@ -4069,13 +4068,34 @@ g.V().has('code','AUS').as('aus').values('runways').as('ausr').
 Using 'union' to combine query results
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The 'union' step works just as you would expect from its name. It allows to to
+The 'union' step works just as you would expect from its name. It allows us to
 combine parts of a query into a single result. Just as with the boolean 'and' and
 'or' steps it is sometimes possible to find other ways to do the same thing without
 using 'union' but it does offer some very useful capability.
 
-By way of a simple example, the following query returns flights that arrive in AUS
-from the UK or that leave AUS and arrive in Mexico.
+Here is a simple example that uses a 'union' step to produce a list containing a
+vertex and the number of outgoing routes from that vertex.
+
+[source,groovy]
+----
+g.V().has('airport','code','DFW').as('a').
+      union(select('a'),out().count()).fold()
+
+[v[8],221]
+----
+
+Note that we could also use an 'identity' step to simplify the query a little.
+
+[source,groovy]
+----
+g.V().has('airport','code','DFW').
+      union(identity(),out().count()).fold()
+
+[v[8],221]
+----
+
+By way of another simple example, the following query returns flights that arrive in
+AUS from the UK or that leave AUS and arrive in Mexico.
 
 [source,groovy]
 ----
@@ -6913,6 +6933,39 @@ g.V().hasLabel('airport').limit(20).values('runways').
       fold().order(local)
 
 [2,2,2,3,3,3,3,3,4,4,4,4,4,4,4,5,5,6,7,8]
+----
+
+Here is an example of a 'union' step followed by a 'fold' step that generates a list
+of two values. The 'union' step contains an 'identity' step to indicate that we want
+the value of the incoming vertex as the first item of the union. We union that vertex
+with a count of all routes from that vertex (DFW) and finally use a 'fold' step to
+generate a list.
+
+[source,groovy]
+----
+g.V().has('airport','code','DFW').union(identity(),out().count()).fold()
+
+[v[8],221]
+----
+
+Note that the above syntax, is a shorthand form of the following.
+
+[source,groovy]
+----
+g.V().has('airport','code','DFW').as('a').union(select('a'),out().count()).fold()
+
+[v[8],221]
+----
+
+If we wanted to generate a map with keys and values rather than a list, we could use
+a 'group' step.  In this case the vertex is the keys and the number of outgoing
+routes is the value.
+
+[source,groovy]
+----
+g.V().has('airport','code','DFW').group().by().by(out().count())
+
+[v[8]:221]
 ----
 
 Another way that a map can be created is when the 'project' step is used. 
