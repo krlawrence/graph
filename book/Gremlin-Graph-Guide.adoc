@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v277-preview, Jan 22, 2018
-// Tue Jan 23, 2018 11:53:48 PST
+// Thu Jan 25, 2018 16:16:16 PST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Jan 23 2018
@@ -12836,7 +12836,7 @@ g.V().has('desc',textContains("Dallas")).values('desc')
 
 Here is what the query should return.
 
-[source,text]
+[source,java]
 ----
 Dallas/Fort Worth International Airport
 Dallas Love Field
@@ -12853,7 +12853,7 @@ g.V().has('desc',textContains("Love")).values('desc')
 
 Here is what the query returns.
 
-[source,text]
+[source,java]
 ----
 Dallas Love Field
 Ernest A. Love Field
@@ -12870,7 +12870,7 @@ g.V().has('city',textContains("fort")).values('city')
 As you can see in the results below 'Vieux Fort' was found as well as all of the
 cities with names that start with 'Fort'.
 
-[source,text]
+[source,java]
 ----
 Fort Myers           Fort Worth               
 Fort-de-France       Fort McMurray            
@@ -12910,7 +12910,7 @@ g.V().has('desc',textContainsPrefix("dalla")).values('desc')
 Here is what the query returns. This time we got some results as 'Dallas' starts with
 the characters 'dalla'. Again, remember these are case insensitive queries.
 
-[source,text]
+[source,java]
 ----
 Dallas/Fort Worth International Airport
 Dallas Love Field
@@ -12927,7 +12927,7 @@ g.V().has('desc',textContains('Regional')).values('desc').limit(5)
 
 Here are the descriptions returned by the query.
 
-[source,text]
+[source,java]
 ----
 Rapid City Regional Airport
 Abilene Regional Airport
@@ -12947,7 +12947,7 @@ g.V().has('desc',textContainsPrefix('Reg')).values('desc').limit(5)
 
 We still get the same five results back.
 
-[source,text]
+[source,java]
 ----
 Rapid City Regional Airport
 Abilene Regional Airport
@@ -12971,7 +12971,7 @@ NOTE: Searches using 'textPrefix' *are* case sensitive.
 
 This is what we get back from the query. 
 
-[source,text]
+[source,java]
 ----
 Los Alamos
 Los Angeles
@@ -12991,7 +12991,7 @@ g.V().has('city',textContainsPrefix('Los')).values('city')
 As you can see this time we also found 'Chapelco/San Martin de los Ande' and it is
 part of the results returned. As before the case of the search term is ignored.
 
-[source,text]
+[source,java]
 ----
 Los Alamos
 Chapelco/San Martin de los Andes
@@ -13021,7 +13021,7 @@ Notice how names that start with 'For' such as 'Fort Myers' as well as city name
 containing words that start with the text 'For' in a subsequent word are found. For example
 'La Fortuna'  and 'View Fort' are also found.
 
-[source,text]
+[source,java]
 ----
 Fort Myers                Fort Worth                
 La Fortuna/San Carlos     Fort McMurray             
@@ -13071,7 +13071,7 @@ g.V().has('city',textRegex('(?i)dal.*')).values('city')
 
 This time we get some additional cities back.
 
-[source,text]
+[source,java]
 ----
 Dallas
 Dallas
@@ -13095,7 +13095,7 @@ g.V().has('city',textRegex(".{3}cah.*")).values('city')
 Using our modified, and much more specific search pattern we find just one city that
 matches the pattern.
  
-[source,text]
+[source,java]
 ----
 Dalcahue
 ----
@@ -13110,7 +13110,7 @@ g.V().has('city',textRegex(".{3}(cah|anz).*")).values('city')
 
 Here is what we get back using this regular expression.
 
-[source,text]
+[source,java]
 ----
 Dalcahue
 Dalanzadgad
@@ -13146,7 +13146,7 @@ g.V().has('desc',textContainsRegex("(?i).all?[^(s|k|e|i)]")).values('desc')
 
 Here is the list of airport descriptions that the query returns.
 
-[source,text]
+[source,java]
 ----
 Dinard-Pleurtuit-Saint-Malo Airport
 Walla Walla Regional Airport
@@ -13180,7 +13180,7 @@ The query below uses a fuzzy sort to find any words that are close to the word
 Here are the results from running the query. You can see that airport descriptions
 that contain the whole words 'Paul', 'Palm' and 'Hall' have been found.
 
-[source,text]
+[source,java]
 ----
 Minneapolis-St.Paul International Airport
 Palm Beach International Airport
@@ -13202,7 +13202,7 @@ is more than just single character replacement. Note that not all of the city na
 returned are of the same length. To better understand the 'fuzzy search' algorithm it
 is recommended to look at the Wikipedia page mentioned above.
 
-[source,text]
+[source,java]
 ----
 Yulin
 Hubli
@@ -13271,7 +13271,7 @@ Using Docker to experiment with Cassandra and JanusGraph
 
 To be written
 
-[source,text]
+[source,java]
 ----
 docker pull cassandra
 
