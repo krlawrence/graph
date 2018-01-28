@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v277-preview, Jan 27, 2018
-// Sat Jan 27, 2018 19:16:40 CST
+v277-preview, Jan 28, 2018
+// Sun Jan 28, 2018 09:35:20 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Jan 27 2018
+//:Date:      Jan 28 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -185,25 +185,30 @@ Chapter 8 - FURTHER READING::
   tools and documentation for many of the technologies covered in this book.
 
 [[samplesintro]]
-Introducing the sample programs and data
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Introducing the book sources, sample programs and data
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The examples in this book make use of a sample graph called 'air-routes.graphml'
-which contains a graph based on the World airline route network between over 3,370
-airports.  The sample graph data, quite a bit of sample code and some larger demo
-applications can all be found at the same Github that hosts the book manuscript.  You
-will also find the book releases in various formats (HTML,PDF, DocBook/XML, MOBI and
-EPUB) at the same GitHub location. The sample programs include stand alone Java and
-Groovy examples as well as many examples that can be run from the Gremlin Console.
-There are some differences between using Gremlin from a stand alone program and from
-the Gremlin Console. The sample programs demonstrate several of these differences.
-The sample applications area contains a full example HTML and JavaScript application
-that lets you explore the air-routes graph visually. Below are some links to each.
+All work related to this project is being done in the open at GitHub. A list of where
+to find the key components is provided below. The examples in this book make use of a
+sample graph called 'air-routes.graphml' which contains a graph based on the World
+airline route network between over 3,370 airports.  The sample graph data, quite a
+bit of sample code and some larger demo applications can all be found at the same
+Github that hosts the book manuscript.  You will also find the book releases in
+various formats (HTML,PDF, DocBook/XML, MOBI and EPUB) at the same GitHub location.
+The sample programs include stand alone Java and Groovy examples as well as many
+examples that can be run from the Gremlin Console.  There are some differences
+between using Gremlin from a stand alone program and from the Gremlin Console. The
+sample programs demonstrate several of these differences.  The sample applications
+area contains a full example HTML and JavaScript application that lets you explore
+the air-routes graph visually. Below are some links to each.
 
 .Where to find the book, samples and data
 Book manuscript in Asciidoc format::
 - https://github.com/krlawrence/graph/tree/master/book
-Book releases in multiple formats::
+Latest PDF and HTML snapshots::
+- http://kelvinlawrence.net/book/Gremlin-Graph-Guide.pdf
+- http://kelvinlawrence.net/book/Gremlin-Graph-Guide.html
+Official book releases in multiple formats::
 - https://github.com/krlawrence/graph/releases
 Sample data (air-routes.graphml)::
 - https://github.com/krlawrence/graph/tree/master/sample-data
@@ -13267,6 +13272,11 @@ Apache HBase
 
 To be written
 
+ScyllaDB
+^^^^^^^^
+
+To be written
+
 Using Docker to experiment with Cassandra and JanusGraph
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -13297,25 +13307,6 @@ Apache Solr
 
 To be written
 
-Using the Management API to control the index
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-[source,groovy]
-----
-mgmt = graph.openManagement()
-mgmt.buildIndex('code',Vertex.class)
-----
-
-[source,groovy]
-----
-vindex = mgmt.getGraphIndexes(Vertex.class)
-
-mgmt.updateIndex(vindx.get(0), SchemaAction.REINDEX).get()
-
-mgmt.commit()
-----
-
-To be written
 
 Using Gremlin Server
 ~~~~~~~~~~~~~~~~~~~~
