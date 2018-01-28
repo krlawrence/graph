@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v277-preview, Jan 22, 2018
-// Thu Jan 25, 2018 16:16:16 PST
+v277-preview, Jan 27, 2018
+// Sat Jan 27, 2018 19:16:40 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Jan 23 2018
+//:Date:      Jan 27 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -112,6 +112,7 @@ https://groups.google.com/forum/#!forum/gremlin-users[Gremlin Users Google Group
 Special thanks should go to Daniel Kuppitz, Marko Rodriguez and Stephen Mallette, key
 members of the team that created and maintains Apache TinkerPop.
 
+[[about]]
 What is this book about?
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -11273,7 +11274,7 @@ System.out.println("The AUS airport is in " + city.get(0));
 
 So when we compile and run again we should now see this additional line of output.
 
-[source,java]
+[source,console]
 ----
 The AUS airport is in Austin
 ----
@@ -11315,7 +11316,7 @@ Long n = g.V().has("code","DFW").out().count().next();
 System.out.println("There are " + n + " routes from Dallas");
 ----
 
-[source,java]
+[source,console]
 ----
 There are 221 routes from Dallas
 ----
@@ -11390,7 +11391,7 @@ eng.forEach( (p) -> System.out.print(p + " "));
 
 The code we just added should generate output that looks like this.
 
-[source,java]
+[source,console]
 ----
 Places in England I can get to with one stop from AUS.
 
@@ -13275,7 +13276,9 @@ To be written
 ----
 docker pull cassandra
 
-docker run -d -p 7001:7001 -p 7199:7199 -p 9042:9042 -v /var/lib:/var/lib --name cass cassandra
+docker run -d -p 7001:7001 -p 7199:7199 -p 9042:9042 -p 9160:9160 -v /var/lib/cassandra:/var/lib/cassandra -e CASSANDRA_START_RPC=true --name cass cassandra
+
+JanusGraphFactory.drop(graph)
 ----
 
 [[extindex]]
