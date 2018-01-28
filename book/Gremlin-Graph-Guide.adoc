@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v277-preview, Jan 28, 2018
-// Sun Jan 28, 2018 09:35:20 CST
+// Sun Jan 28, 2018 16:48:50 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Jan 28 2018
@@ -203,6 +203,8 @@ area contains a full example HTML and JavaScript application that lets you explo
 the air-routes graph visually. Below are some links to each.
 
 .Where to find the book, samples and data
+Project home::
+- https://github.com/krlawrence/graph
 Book manuscript in Asciidoc format::
 - https://github.com/krlawrence/graph/tree/master/book
 Latest PDF and HTML snapshots::
