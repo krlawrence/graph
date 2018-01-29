@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v277-preview, Jan 28, 2018
-// Sun Jan 28, 2018 16:48:50 CST
+v277-preview, Jan 29, 2018
+// Mon Jan 29, 2018 12:37:15 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Jan 28 2018
+//:Date:      Jan 29 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -6509,47 +6509,48 @@ sophisticated graph system such as JanusGraph, that is something that we will bo
 want and need to be able to do. We cover the topic of cardinality in detail in the
 "<<janusmgmt>>" section later in the book.
 
-now that we have created the 'code' property to have a list of values we can query
-either one of the values in the list. if we look at the value map we get back from
+Now that we have created the 'code' property to have a list of values we can query
+either one of the values in the list. If we look at the value map we get back from
 the following example queries you can see both values in the list we associated with
 the property 'code'.
 
 [source,groovy]
 ----
-g.v().has('code','aus').valuemap()
-[code:[aus,kaus]]
+g.V().has('code','AUS').valueMap()
+[code:[AUS,KAUS]]
 
-g.v().has('code','kaus').valuemap()
-[code:[aus,kaus]]
+g.v().has('code','KAUS').valueMap()
+[code:[AUS,KAUS]]
 ----
 
 we can also query the values as normal.
 
 [source,groovy]
 ----
-g.v().has('code','aus').values()
-aus
-kaus
+g.V().has('code','AUS').values()
+
+AUS
+KAUS
 ----
 
-we can also use the 'properties' step to get the result back as vertex properties
-(vp).  we discuss vertex properties in detail in the "<<vertexprop>>" section.
+We can also use the 'properties' step to get the result back as vertex properties
+(vp). We discuss vertex properties in detail in the "<<vertexprop>>" section.
 
 [source,groovy]
 ----
-g.v().has('code','aus').properties()
+g.V().has('code','AUS').properties()
 
-vp[code->aus]
-vp[code->kaus]
+vp[code->AUS]
+vp[code->KAUS]
 ----
  
-for completeness we could also do this.
+For completeness we could also do this.
 
 [source,groovy]
 ----
-g.v().properties().hasvalue('aus')
+g.V().properties().hasValue('AUS')
 
-vp[code->aus] 
+vp[code->AUS] 
 ----
 
 [[propertycaution]]
