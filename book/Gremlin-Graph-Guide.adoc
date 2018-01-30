@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v277-preview, Jan 30, 2018
-// Tue Jan 30, 2018 11:15:00 CST
+// Tue Jan 30, 2018 12:49:44 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Jan 30 2018
@@ -11429,9 +11429,9 @@ Java program. The third column shows an example of the context in which they mig
 used in a Java program. You may chose to statically import some of these classes into
 your code. I prefer to use the explicit prefix but that is a matter of personal
 preference in many cases. There is a table of all the available predicates in the
-"<<tranges>>" section.  For the special +++".__"+++ class I have just shown a couple
-of examples.  In general you use this prefix when you have noting prior in the query
-that you can "dot connect" to.
+"<<tranges>>" section.  For the special +++".__"+++ class I have just shown a few
+examples.  In general you use this prefix when you have noting prior in the query
+that you can "dot chain" to.
 
 When local scope needs to be specified as a parameter of sort order direction needs
 to be specified the statics defined in the  'Scope' and 'Order' Enums can be used.
@@ -11477,8 +11477,9 @@ shown below.
 .Anonymous references
 [cols="1,1,3"]
 |==============================================================================
-|out     | __.out         | repeat(__.out())
-|in      | __.in          | order().by(__.in("contains"))
+|out     | +++__+++.out         | repeat(+++__+++.out())
+|in      | +++__+++.in          | order().by(+++__+++.in("contains"))
+|constant| +++__+++.constant    | union(+++__+++.constant("b"),+++__+++.constant("a"))
 |==============================================================================
 
 Whenever we need to use a predicate to perform a test, we can use the static methods
