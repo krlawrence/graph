@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v277-preview, Jan 29, 2018
-// Mon Jan 29, 2018 18:08:22 CST
+v277-preview, Jan 30, 2018
+// Tue Jan 30, 2018 09:58:08 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Jan 29 2018
+//:Date:      Jan 30 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -11406,13 +11406,88 @@ Places in England I can get to with one stop from AUS.
 Birmingham Bristol London Manchester Leeds Newcastle
 ----
 
+[[javastatics]]
+Important Classes and Enums to be aware of
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When you are using the Gremlin Console, as I have already mentioned, a few things are
+done for you that you need to take care of yourself when writing stand alone Java
+code. A key area that I have found that people making the jump from the console to
+Java find confusing is figuring out which Classes and Enums have been statically
+imported "behind the scenes" and how to access those same capabilities from Java.
+
+TIP: There is a sample program called TestImports.java in the 'sample-code' folder
+located at https://github.com/krlawrence/graph/tree/master/sample-code that
+demonstrates these constructs being used.  
+
+The tables below show some commonly used Gremlin keywords in the left column. The
+second column shows how you would reference those same keywords explicitly from a
+Java program. The third column shows an example of the context in which they might be
+used in a Java program. You may chose to statically import some of these classes into
+your code. I prefer to use the explicit prefix but that is a matter of personal
+preference in many cases. For the predicates such as 'neq' and 'within' I have only
+listed a few. There is a table of all the available predicates in the "<<tranges>>"
+section.  For the special +++".__"+++ class I have just shown one example. In general
+you use this prefix when you have noting prior in the query that you can "dot
+connect" to.
+
+.Scope and ordering
+[cols="1,1,3"]
+|==============================================================================
+|local   | Scope.local    | order(Scope.local)
+|decr    | Order.decr     | order().by(Order.decr)
+|incr    | Order.incr     | order().by(Order.incr)
+|==============================================================================
+
+.Keys and values
+[cols="1,1,3"]
+|==============================================================================
+|keys    | Column.keys    | order().by(Column.keys)
+|values  | Column.values  | order().by(Column.values)
+|==============================================================================
+
+.Label and id
+[cols="1,1,3"]
+|==============================================================================
+|label   | T.label        | valueMap(true).next().get(T.label)
+|id      | T.id           | valueMap(true).next().get(T.id)
+|==============================================================================
+
+.Anonymous references
+[cols="1,1,3"]
+|==============================================================================
+|out     | __.out         | repeat(__.out())
+|==============================================================================
+
+.Predicates
+[cols="1,1,3"]
+|==============================================================================
+|gt      | P.gt           | has("runways",P.gt(3))
+|lt      | P.lt           | has("runways",P.lt(2))
+|eq      | P.eq           | has("city",P.eq("Dallas"))
+|neq     | P.neq          | has("city",P.neq("Dallas"))
+|within  | P.within       | has("city",P.within("Dallas","Austin"))
+|without | P.without      | has("city",P.without("Dallas"))
+|inside  | P.inside       | has("runways",P.inside(3,5))
+|outside | P.outside      | has("runways",P.outside(2,5))
+|==============================================================================
+
+.First, last and all
+[cols="1,1,3"]
+|==============================================================================
+|first   | Pop.first      | select(Pop.first,"x")
+|last    | Pop.last       | select(Pop.last,"x")
+|all     | Pop.all        | select(Pop.all,"x")
+|==============================================================================
+
 [[javapredicates]]
 Using Gremlin predicates in a Java application
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When you use a Gremlin predicate such as 'eq' or 'neq' from a Java program you need
-to prefix it with a '"P."' which is a reference to the TinkerPop class of the same
-name where a set of static methods, representing the Gremlin predicates, are defined.
+As discussed in the previous section, when you use a Gremlin predicate such as 'eq'
+or 'neq' from a Java program you need to prefix it with a '"P."' which is a reference
+to the TinkerPop class of the same name where a set of static methods, representing
+the Gremlin predicates, are defined.
 
 TIP: You will find a sample program called GraphRegion.java, which contains the code
 used in this section, in the sample files directory located at
@@ -11612,8 +11687,11 @@ vm = g.V().valueMap(true).toList();
 
 Having got our list of maps back we can process them. Note that to get the 'id' and
 'label' values from the map I had to prefix the key name with a '"T."'. This is
-because while most of property keys are Strings, IDs and labels are a special
-case.
+because while most of property keys are Strings, IDs and labels are a special case.
+If you look at the TinkerPop documentation you will see that T is a Java Enum that
+contains definitions for 'T.id', 'T.label', 'T.value' and 'T.key'. When working with
+Gremlin in Java it is important to remember that we need to use the '"T."' prefix in
+cases where when using the Gremlin Console we would not have to.
 
 [source,java]
 ----
