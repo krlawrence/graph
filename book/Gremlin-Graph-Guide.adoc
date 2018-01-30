@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v277-preview, Jan 30, 2018
-// Tue Jan 30, 2018 09:58:08 CST
+// Tue Jan 30, 2018 11:15:00 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Jan 30 2018
@@ -11414,7 +11414,10 @@ When you are using the Gremlin Console, as I have already mentioned, a few thing
 done for you that you need to take care of yourself when writing stand alone Java
 code. A key area that I have found that people making the jump from the console to
 Java find confusing is figuring out which Classes and Enums have been statically
-imported "behind the scenes" and how to access those same capabilities from Java.
+imported "behind the scenes" and how to access those same capabilities from Java. You
+should also bookmark the TinkerPop javadoc pages as you can find more detail on all
+of the classes and enums covered below there. The latest javadoc is always available
+at http://tinkerpop.apache.org/javadocs/current/full/
 
 TIP: There is a sample program called TestImports.java in the 'sample-code' folder
 located at https://github.com/krlawrence/graph/tree/master/sample-code that
@@ -11425,19 +11428,26 @@ second column shows how you would reference those same keywords explicitly from 
 Java program. The third column shows an example of the context in which they might be
 used in a Java program. You may chose to statically import some of these classes into
 your code. I prefer to use the explicit prefix but that is a matter of personal
-preference in many cases. For the predicates such as 'neq' and 'within' I have only
-listed a few. There is a table of all the available predicates in the "<<tranges>>"
-section.  For the special +++".__"+++ class I have just shown one example. In general
-you use this prefix when you have noting prior in the query that you can "dot
-connect" to.
+preference in many cases. There is a table of all the available predicates in the
+"<<tranges>>" section.  For the special +++".__"+++ class I have just shown a couple
+of examples.  In general you use this prefix when you have noting prior in the query
+that you can "dot connect" to.
+
+When local scope needs to be specified as a parameter of sort order direction needs
+to be specified the statics defined in the  'Scope' and 'Order' Enums can be used.
 
 .Scope and ordering
 [cols="1,1,3"]
 |==============================================================================
 |local   | Scope.local    | order(Scope.local)
+|global  | Scope.global   | order(Scope.global)
 |decr    | Order.decr     | order().by(Order.decr)
 |incr    | Order.incr     | order().by(Order.incr)
+|shuffle | Order.shuffle  | order().by(Order.shuffle)
 |==============================================================================
+
+If you need to access the keys or values from a map data structure you can use the
+statics defined in the 'Column' Enum.
 
 .Keys and values
 [cols="1,1,3"]
@@ -11446,31 +11456,53 @@ connect" to.
 |values  | Column.values  | order().by(Column.values)
 |==============================================================================
 
+When accessing the 'id' and 'label' values from a 'valueMap' you need to use the
+statics defined in the 'T' Enum. The same is true if you want to access the keys and
+values from a set of properties.
+
 .Label and id
 [cols="1,1,3"]
 |==============================================================================
 |label   | T.label        | valueMap(true).next().get(T.label)
 |id      | T.id           | valueMap(true).next().get(T.id)
+|key     | T.key          | properties().order().by(T.key)
+|value   | T.value        | properties().order().by(T.value)
 |==============================================================================
+
+When there is no previous step to "dot chain" to then we can use the +++".__"+++
+class as our prefix. If you look at the javadoc for the class you will see it defines
+static methods that we can use to call Gremlin functionality in cases like the ones
+shown below.
 
 .Anonymous references
 [cols="1,1,3"]
 |==============================================================================
 |out     | __.out         | repeat(__.out())
+|in      | __.in          | order().by(__.in("contains"))
 |==============================================================================
+
+Whenever we need to use a predicate to perform a test, we can use the static methods
+defined in the 'P' class. Not all the methods defined are shown below.
 
 .Predicates
 [cols="1,1,3"]
 |==============================================================================
 |gt      | P.gt           | has("runways",P.gt(3))
+|gte     | P.gte          | has("runways",P.gte(5))
 |lt      | P.lt           | has("runways",P.lt(2))
+|lte     | P.lte          | has("runways",P.lte(2))
 |eq      | P.eq           | has("city",P.eq("Dallas"))
 |neq     | P.neq          | has("city",P.neq("Dallas"))
 |within  | P.within       | has("city",P.within("Dallas","Austin"))
 |without | P.without      | has("city",P.without("Dallas"))
 |inside  | P.inside       | has("runways",P.inside(3,5))
 |outside | P.outside      | has("runways",P.outside(2,5))
+|between | P.between      | has("runways",P.between(2,5))
 |==============================================================================
+
+If a traversal path has multiple values assiciated with a single label, such as '"x"'
+then you can use the 'first', 'last' and 'all' statics that are defined as part of
+the 'Pop' Enum.
 
 .First, last and all
 [cols="1,1,3"]
