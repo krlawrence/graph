@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v277-preview, Jan 29, 2018
-// Mon Jan 29, 2018 12:37:15 CST
+// Mon Jan 29, 2018 18:08:22 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Jan 29 2018
@@ -11405,6 +11405,156 @@ Places in England I can get to with one stop from AUS.
 
 Birmingham Bristol London Manchester Leeds Newcastle
 ----
+
+[[javapredicates]]
+Using Gremlin predicates in a Java application
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When you use a Gremlin predicate such as 'eq' or 'neq' from a Java program you need
+to prefix it with a '"P."' which is a reference to the TinkerPop class of the same
+name where a set of static methods, representing the Gremlin predicates, are defined.
+
+TIP: You will find a sample program called GraphRegion.java, which contains the code
+used in this section, in the sample files directory located at
+https://github.com/krlawrence/graph/tree/master/sample-code.
+
+Take a look at the code below. A method called 'findByRegion' is defined that takes
+a String representing a three character airport IATA code as input. The method then
+uses a Gremlin query to figure out which geographical region the specified airport is
+in and then returns all airports also in that region. Note the use of 'P.eq' as part
+of the 'where' step. This is another case of where, because we are not running inside
+the Gremlin console, we have to more precisely specify things.
+
+[source,java]
+----
+// Find all airports in the region of the specified airport
+public void findByRegion(String iata)
+{
+  System.out.println("\nRegion code lookup for " + iata );
+
+  List<List<Object>> list =  
+  g.V().has("code",iata).values("region").as("r").
+    V().hasLabel("airport").as("a").values("region").
+        where(P.eq("r")).by().
+        local(__.select("a").values("city","code","region").fold()).toList();               
+    
+  for(List t : list)
+  {
+    System.out.println(t);
+  }
+}                                
+----
+
+If we were to call the 'findByRegion' nethod, passing in a parameter of 'DEN',
+representing the airport in Denver Colorado, the following output should be returned.
+
+[source,console]
+----
+Region code lookup for DEN
+[COS, Colorado Springs, US-CO]
+[DEN, Denver, US-CO]
+[DRO, Durango, US-CO]
+[GJT, Grand Junction, US-CO]
+[EGE, Eagle, US-CO]
+[HDN, Hayden, US-CO]
+[APA, Denver, US-CO]
+[TEX, Telluride, US-CO]
+[ASE, Aspen, US-CO]
+[ALS, Alamosa, US-CO]
+[CEZ, Cortez, US-CO]
+[GUC, Gunnison, US-CO]
+[MTJ, Montrose, US-CO]
+[PUB, Pueblo, US-CO]
+----
+
+
+[[javacheck]]
+Checking to see if a query returned a result
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+It is often important to know if a query returned a result before trying to reference
+it to avoid those pesky Java Null Pointer Exceptions. Without worrying about Java for
+a second consider the query below purely from a Gremlin point of view.
+
+[source,groovy]
+----
+g.V().has("code","AUS").outE().as("edge").inV().has("code","SYD").
+                        select("edge").by("dist")
+----
+
+The query finds the Austin (AUS) airport and then looks for an outgoing edge
+connecting Austin with Sydney (SYD) and then returns the distance value from that
+edge. The problem here is that there is no direct route between Austin and Sydney and
+therefore no edge to retrieve the distance from. In other words, this query returns no
+result. Now, within the Gremlin Console this is not a problem as we just get nothing
+back and life goes on. However, take a look at the code below which is a first
+attempt at moving the query into Java code.
+
+
+[source,java]
+----
+Long result = 
+      g.V().has("code","AUS").outE().as("edge").inV().has("code","SYD").
+            select("edge").by("dist").next(); 
+----
+
+On the surface, this looks fine. However, were we to execute this code we would get a
+Null Pointer Exception as when we try to call 'next' there is no result to process as
+there is no edge between Austin and Sydney and hence no distance value to process.
+
+TIP: You will find a sample program called GraphSearch2.java, which contains the code
+used in this section, in the sample files directory located at
+https://github.com/krlawrence/graph/tree/master/sample-code.
+
+
+So we need a way to check to see if we go a valid result. One such way is to store
+the result of the query into a list. Then, worst case, if no results are found, we
+will get an empty list back. So, we can rewrite the query as follows.
+
+[source,java]
+----
+List result = 
+      g.V().has("code","AUS").outE().as("edge").inV().has("code","SYD").
+            select("edge").by("dist").toList();
+----
+
+Now that the resut is in a list we can safely check to see if we got any results.
+
+[source,java]
+----
+if (result.isEmpty())
+{
+  System.out.println("No results were found");
+}
+else
+{
+  System.out.println("The distance is " + result.get(0));
+}
+----
+
+
+If we wanted a "pure Gremlin" solution, without using a List and without doing some
+post processing, one way we could do it is to use the 'coalesce' step and return a
+special constant value, in this case minus one, to indicate that there were no
+results found.
+
+[source,java]
+----
+Integer d = (Integer) 
+    g.V().has("code","AUS").outE().as("edge").inV().has("code","SYD").
+          select("edge").by("dist").fold().
+          coalesce(__.unfold(),__.constant(-1)).next(); 
+----
+
+If the route exists the distance will be found and returned, otherwise a value of
+'"-1"' will be returned. This is really using the same concept as the 'toList'
+example except in this case we generate the list using the 'fold' step within the
+query itself. The 'unfold' will return a result if the list is not null, otherwise
+the constant value will be returned as 'coalesce' returns the first to yield a
+result.
+
+There are of course many other ways that you might come up with to solve this problem
+but using lists often provides a fairly easy to use solution.
 
 [[javacreate]]
 Creating a new graph from a Java application

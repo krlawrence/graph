@@ -68,6 +68,16 @@ public class GraphSearch2
 
     Integer d = ((result.isEmpty()) ? -1 : (Integer)(result.get(0)));        
 
+/*
+    if (result.isEmpty())
+    {
+      System.out.println("No results were found");
+    }
+    else
+    {
+      System.out.println("The distance is " + result.get(0));
+    }
+*/
     return(d);
   }
 
