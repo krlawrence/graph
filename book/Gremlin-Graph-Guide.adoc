@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v277-preview, Jan 30, 2018
-// Tue Jan 30, 2018 12:49:44 CST
+v277-preview, Jan 31, 2018
+// Wed Jan 31, 2018 17:00:49 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Jan 30 2018
+//:Date:      Jan 31 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -126,7 +126,8 @@ covered in the <<gremlininstall>> section below.
 
 NOTE: The examples in this book have now been updated and tested using Apache
 TinkerPop version 3.3 which introduced a few breaking changes. If you find any I
-missed please let me know!
+missed please let me know! The examples have also been tested using the 3.3.1
+release.
 
 TinkerGraph is an 'in-memory' graph, meaning
 nothing gets saved to disk automatically, that is shipped as part of the Apache
@@ -578,6 +579,14 @@ the following command from inside the Gremlin console.
 // What version of Gremlin am I running?
 Gremlin.version()
 ----
+
+One thing that is not at all obvious or apparent is that the Gremlin console quietly
+imports a large number of Java Classes and Enums on you behalf as it starts up. This
+makes writing queries within the console simpler. However, as we shall explore in the
+"<<javastatics>>" section later, once you start writing stand alone programs in Java
+or other languages, you need to actually know what the console did on your behalf. As
+a teaser for what comes later, try typing ':show imports' when using the Gremlin
+Console and see what it returns.
 
 [[gremlinsave]]
 Saving output from the console to a file
@@ -11513,6 +11522,107 @@ the 'Pop' Enum.
 |all     | Pop.all        | select(Pop.all,"x")
 |==============================================================================
 
+Another useful tip, that was shared on the Gremlin Users mailing list, is that you
+can ask the Gremlin Console to show you a list of everything that has been imported
+on your behalf "behind the scenes" using the command ':show imports'. What might
+typically be returned is shown below. I included a version check in the output so in
+case this changes in the future you can see which version of Gremlin I queried.
+
+[source,groovy]
+----
+gremlin> Gremlin.version
+==>3.3.1
+----
+
+Here is the list of imports that the Gremlin Console has setup for us quietly behind
+the scenes when we started it. Take particular note of the ones that are 'static'
+imports as those are the ones that contain the definitions we discussed above.
+
+[source,groovy]
+----
+gremlin> :show imports
+Custom imports:
+  org.apache.tinkerpop.gremlin.structure.*
+  org.apache.tinkerpop.gremlin.structure.util.*
+  org.apache.tinkerpop.gremlin.process.traversal.*
+  org.apache.tinkerpop.gremlin.process.traversal.step.*
+  org.apache.tinkerpop.gremlin.process.remote.*
+  org.apache.tinkerpop.gremlin.structure.util.empty.*
+  org.apache.tinkerpop.gremlin.structure.io.*
+  org.apache.tinkerpop.gremlin.structure.io.graphml.*
+  org.apache.tinkerpop.gremlin.structure.io.graphson.*
+  org.apache.tinkerpop.gremlin.structure.io.gryo.*
+  org.apache.commons.configuration.*
+  org.apache.tinkerpop.gremlin.process.traversal.strategy.decoration.*
+  org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.*
+  org.apache.tinkerpop.gremlin.process.traversal.strategy.finalization.*
+  org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.*
+  org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.*
+  org.apache.tinkerpop.gremlin.process.traversal.util.*
+  org.apache.tinkerpop.gremlin.process.computer.*
+  org.apache.tinkerpop.gremlin.process.computer.bulkdumping.*
+  org.apache.tinkerpop.gremlin.process.computer.bulkloading.*
+  org.apache.tinkerpop.gremlin.process.computer.clustering.peerpressure.*
+  org.apache.tinkerpop.gremlin.process.computer.traversal.*
+  org.apache.tinkerpop.gremlin.process.computer.ranking.pagerank.*
+  org.apache.tinkerpop.gremlin.process.computer.traversal.strategy.optimization.*
+  org.apache.tinkerpop.gremlin.process.computer.traversal.strategy.decoration.*
+  org.apache.tinkerpop.gremlin.util.*
+  org.apache.tinkerpop.gremlin.util.iterator.*
+  org.apache.tinkerpop.gremlin.util.function.*
+  static org.apache.tinkerpop.gremlin.structure.io.IoCore.*
+  static org.apache.tinkerpop.gremlin.process.traversal.P.*
+  static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.*
+  static org.apache.tinkerpop.gremlin.process.computer.Computer.*
+  static org.apache.tinkerpop.gremlin.util.TimeUtil.*
+  static org.apache.tinkerpop.gremlin.util.function.Lambda.*
+  static org.apache.tinkerpop.gremlin.process.traversal.SackFunctions.Barrier.*
+  static org.apache.tinkerpop.gremlin.structure.VertexProperty.Cardinality.*
+  static org.apache.tinkerpop.gremlin.structure.Column.*
+  static org.apache.tinkerpop.gremlin.structure.Direction.*
+  static org.apache.tinkerpop.gremlin.process.traversal.Operator.*
+  static org.apache.tinkerpop.gremlin.process.traversal.Order.*
+  static org.apache.tinkerpop.gremlin.process.traversal.Pop.*
+  static org.apache.tinkerpop.gremlin.process.traversal.Scope.*
+  static org.apache.tinkerpop.gremlin.structure.T.*
+  static org.apache.tinkerpop.gremlin.process.traversal.step.TraversalOptionParent.Pick.*
+  org.apache.tinkerpop.gremlin.driver.*
+  org.apache.tinkerpop.gremlin.driver.exception.*
+  org.apache.tinkerpop.gremlin.driver.message.*
+  org.apache.tinkerpop.gremlin.driver.ser.*
+  org.apache.tinkerpop.gremlin.driver.remote.*
+  groovyx.gbench.*
+  groovyx.gprof.*
+  static groovyx.gprof.ProfileStaticExtension.*
+  org.apache.tinkerpop.gremlin.tinkergraph.structure.*
+  org.apache.tinkerpop.gremlin.tinkergraph.process.computer.*
+----
+
+As discussed earlier, you can always use the 'getClass' method while using the
+Gremlin Console to, in many cases, find out where something is defined. As we saw in
+the examples earlier in this section,  lot of the keywords such as  'values', 'id'
+and 'local' are defined as Enums so you can use 'getClass' on them directly. A few
+examples are shown below. 
+
+[source,groovy]
+----
+gremlin> label.getClass()
+==>class org.apache.tinkerpop.gremlin.structure.T$1
+gremlin> key.getClass()
+==>class org.apache.tinkerpop.gremlin.structure.T$3
+gremlin> keys.getClass()
+==>class org.apache.tinkerpop.gremlin.structure.Column$1
+gremlin> values.getClass()
+==>class org.apache.tinkerpop.gremlin.structure.Column$2
+gremlin> local.getClass()
+==>class org.apache.tinkerpop.gremlin.process.traversal.Scope
+----
+
+If you compare this output to the tables above you can see that we have been able to
+verify that, for example, that 'label' and 'key' are defined in the 'T' Enum. We can
+also see that 'keys' and 'values' are indeed defined in the 'Column' Enum. Lastly, we
+can see that 'local' is, as we expected, defined in the 'Scope' Enum.
+
 [[javapredicates]]
 Using Gremlin predicates in a Java application
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -11819,8 +11929,16 @@ you can use a stand alone Groovy application to work with a TinkerGraph.
 NOTE: You will find several Groovy samples at the GitHub repository associated with
 this book. https://github.com/krlawrence/graph 
 
-In this section we will rewrite the application we coded in Java above in Groovy. It
-is assumed that you have downloaded and installed Groovy for your environment and
+In this section we will rewrite parts of the test application we coded in Java
+earlier in Groovy. A lot of what was covered in the "<<javatinker>>" section is
+equally relevant here and I have not duplicated that material. So even if you are
+writing a Groovy application please also give that section a read. 
+
+TIP: The examples in this section are taken from a sample program called
+TinkerGraphTest.groovy that you will find in the sample code folder located at
+https://github.com/krlawrence/graph/tree/master/sample-code.
+
+It is assumed that you have downloaded and installed Groovy for your environment and
 have set the PATH to point to wherever the Groovy binaries are located.  Just as in
 the Java example, the first thing we need to do is pull in via 'import' all of the
 TinkerPop 3 classes that our program will use.
@@ -11845,7 +11963,7 @@ Initially we are just going to display the version of TinkerPop that we are usin
 
 [source,groovy]
 ----
-println "Gremlin version is ${Gremlin.version()}"
+println "The Gremlin version is ${Gremlin.version()}"
 
 def tg = TinkerGraph.open() 
 ----
@@ -11854,8 +11972,7 @@ We are now ready to create a new TinkerGraph instance and try to load the air ro
 graph. We can do this in Groovy just like we did in the Java example.  Unlike Java,
 however, Groovy does not require you to catch exceptions that may get thrown but as a
 best practice it is probably a good idea to still do so when you need to take some
-specific action if an exception does happen. Assuming we did not get an exception we
-can go ahead and create our graph traversal object
+specific action if an exception does happen.
 
 [source,groovy]
 ----
@@ -11871,28 +11988,44 @@ catch (IOException e)
   println "Could not load the graph file"
   System.exit(0);
 }
+----
 
+Assuming we did not get an exception we can go ahead and create our graph traversal
+object.
+
+[source,groovy]
+----
 // Create a graph traversal source object and find the Austin airport vertex
 def g = tg.traversal()
+----
 
+First we just do a simple query to find the vertex representing the AUS airport and
+use 'println' to display some information about it.
+
+[source,groovy]
+----
 def aus = g.V().has('code','AUS').valueMap().next()
 
 println aus
 ----
 
-Note that just as when we were looking at the Java application, you need to terminate
-your query with a step such as 'next', 'toList' or 'fill' to make sure you get back
-the results that you expect.
+NOTE: Just as when we were looking at building a Java application, you need to
+terminate your query with a step such as 'next', 'toList' or 'fill' to make sure you
+get back the results that you expect.
+
+Now we have the beginnings of an application it's time to make sure we can compile
+it. The key thing we need to do is make sure we pickup the TinkerPop specific JAR
+files as shown in the next section.
 
 [[groovyc]]
 Compiling our Groovy application
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In the Java example, I included the CLASSPATH on the 'javac' invokation using the '-cp'
-flag. That can also be done when using Groovy, however, if you are using Microsoft
-Windows as your build environment you may find that using '-cp' gives unexpected
-errors.  Therefore, it is recommended to define the CLASSPATH variable in your
-environment before running the Groovy compiler.
+In the Java example, I included the CLASSPATH on the 'javac' invokation using the
+'-cp' flag. That can also be done when using Groovy, however, if you are using
+Microsoft Windows as your build environment you may find that using '-cp' gives
+unexpected errors.  Therefore, it is recommended to define the CLASSPATH variable in
+your environment before running the Groovy compiler.
 
 The commands below work in a Bash shell but could be easily ported to other
 environments. The GREMLIN variable should point to wherever you have installed and
@@ -11928,11 +12061,11 @@ Assuming everything compiled cleanly we can now run our Groovy application.
 groovy TinkerGraphTest
 ----
 
-And here is the output we should get back.
+And here is the sort of output we should get back.
 
 [source,groovy]
 ----
-Gremlin version is 3.2.4
+Gremlin version is 3.3.1
 Loading the air-routes graph...
 
 [country:[US], code:[AUS], longest:[12250], city:[Austin], elev:[542], icao:[KAUS], lon:[-97.6698989868164], type:[airport], region:[US-TX], runways:[2], lat:[30.1944999694824], desc:[Austin Bergstrom International Airport]]
@@ -11979,6 +12112,9 @@ lat : 30.1944999694824
 desc : Austin Bergstrom International Airport
 ----
 
+As we did in our Java program earlier, we can add a query to see how many routes
+there are that originate at the DFW airport.
+
 [source,groovy]
 ----
 def n = g.V().has("code","DFW").out().count().next() 
@@ -11987,14 +12123,31 @@ println "\nThere are  ${n} routes from Dallas"
 There are  221 routes from Dallas
 ----
 
+Next we can add some code to find the IATA codes representing the places that we can
+fly to from DFW.
+
 [source,groovy]
 ----
-def fromAus = g.V().has("code","AUS").out().values("code").toList()
-println "\nHere are the places you can fly to from Austin\n"
-println fromAus
-
-[YYZ, LHR, FRA, MEX, PIT, PDX, CLT, CUN, MEM, CVG, IND, MCI, DAL, STL, ABQ, MDW, LBB, HRL, GDL, PNS, VPS, SFB, BKG, PIE, ATL, BNA, BOS, BWI, DCA, DFW, FLL, IAD, IAH, JFK, LAX, MCO, MIA, MSP, ORD, PHX, RDU, SEA, SFO, SJC, TPA, SAN, LGB, SNA, SLC, LAS, DEN, MSY, EWR, HOU, ELP, CLE, OAK, PHL, DTW]
+// Where can I fly to from DFW?
+def fromDfw = g.V().has("code","DFW").out().values("code").toList()
+println "\nHere are the places you can fly to from DFW\n"
+println fromDfw  
 ----
+
+When we run the code we should get back some results that look like this.
+
+[source,groovy]
+----
+Here are the places you can fly to from DFW
+
+[CID, HNL, HOU, SAN, SNA, SLC, LAS, DEN, SAT, MSY, EWR, DTW, ELP, SJU, CLE, OAK, TUS, SAF, PHL, GEG, BZN, JAC, GCM, MEI, PIB, KOA, SUX, SBA, ASE, CVN, BKG, BIS, GUC, MTJ, TVC, CNM, GLH, SWO, BIL, MAF, BDL, RAP, SDF, SHV, BOI, LBB, RNO, CMH, ICT, ACT, CLL, ABI, SGF, RIC, CCS, TXK, PIA, LEX, GUA, CRP, MTY, AMA, BJX, BMI, BOG, BPT, DSM, MYR, AEX, CZM, AGU, COU, DAY, CUU, DRO, BRO, BTR, BZE, CAE, CHA, CHS, CMI, GCK, GDL, GGG, GJT, GPT, EVV, FAR, FAT, FSD, FSM, FWA, JAN, JLN, YYZ, LAW, YVR, LCH, LHR, LFT, CDG, LIR, GRI, GRK, GRR, GSO, GSP, MLI, PEK, MLM, PVG, MLU, FCO, MOB, AMS, MSN, MAD, MZT, RSW, PBC, FRA, LRD, NRT, MFE, SYD, MGM, DXB, MHK, HKG, QRO, ICN, ROW, GIG, SAL, GRU, SAV, EZE, SJD, LIM, SJT, SCL, SLP, MEX, SPI, YUL, PLS, YEG, PNS, YYC, PTY, DOH, OKC, TYS, ONT, VPS, AUH, XNA, CLT, ZCL, CUN, EGE, PSP, HDN, MEM, UIO, CVG, MID, TYR, ATL, ANC, TLH, SPS, PIT, TRC, PDX, ABQ, MKE, OMA, TUL, PVR, OGG, DUS, LGA, NAS, STL, JFK, LAX, AUS, IND, MGA, BNA, MCI, BOS, BWI, DCA, FLL, IAD, IAH, JAX, PUJ, SJO, SMF, RTB, COS, SJC, HSV, TPA, BHM, LIT, ORF, SFO, MCO, MBJ, MIA, MSP, ORD, PBI, PHX, RDU, SEA]
+----
+
+The code below will discover all of the airports in the United States that you can
+fly to from London's Heathrow airport (LHR). Only the first 10 results are selected
+using a 'limit' step. A 'path' step is used to nicely return the airport pairs and
+the distance between them. What we get back is a list of paths so we can use a simple
+Groovy 'each' loop to print the results.
 
 [source,groovy]
 ----
@@ -12003,8 +12156,12 @@ def lhrToUsa = g.V().has("code","LHR").outE().inV().
                      path().by("code").by("dist").toList()
 
 println "\nFrom LHR to airports in the USA (only 10 shown)\n"
+
 lhrToUsa.each {println it}
 ----
+
+Here are the 10 routes that were returned when I ran the code having added this new
+query.
 
 [source,groovy]
 ----
@@ -12022,59 +12179,32 @@ From LHR to airports in the USA (only 10 shown)
 [LHR, 3440, JFK]
 ----
 
-[source,groovy]
-----
-def routes = []
-g.V().has("code","SAT").out().path().by("icao").limit(10).fill(routes);
-println "\nRoutes from San Antonio (only 10 shown)\n"
-routes.each {println it}
-----
+Finally, lets write the code to find the airports in England that you can get to from
+Austin with no more than one stop.
 
 [source,groovy]
 ----
-Routes from San Antonio (only 10 shown)
-
-[KSAT, KHRL]
-[KSAT, MMMY]
-[KSAT, MMGL]
-[KSAT, KATL]
-[KSAT, KSFB]
-[KSAT, KBNA]
-[KSAT, MMTO]
-[KSAT, KBWI]
-[KSAT, KDFW]
-[KSAT, KIAD]
-----
-
-[source,groovy]
-----
-def v = g.V().has('code','FRA').next()
-println "\nKeys found in the FRA vertex"
-println v.keys()
-----
-
-[source,groovy]
-----
-Keys found in the FRA vertex
-
-[country, code, longest, city, elev, icao, lon, type, region, runways, lat, desc]
-----
-
-[source,groovy]
-----
-def eng = g.V().has("code","AUS").repeat(__.out()).times(2).
+def eng = g.V().has("code","AUS").repeat(__.out()).emit().times(2).
                 has("region","GB-ENG").dedup().values("code").toList();
 
 println "\nAirports in England reachable with no more than one stop from AUS"
 println "\n${eng}\n"  
 ----
 
+Here are the results, looks like we can get to a total of nine different airports if
+we make no more than one stop on the way.
+
 [source,groovy]
 ----
 Airports in England reachable with no more than one stop from AUS
 
-[LHR, LGW, MAN, LBA, NCL, LCY, BRS, BHX, STN]
+[LHR, BRS, LGW, STN, MAN, BHX, LBA, NCL, LCY]
 ----
+
+Now that we have a somewhat interesting Groovy application up and running, should you
+so choose, you can build upon this foundation just as we did in the "<<javatinker>>"
+section.
+
 
 [[janusintro]]
 Introducing JanusGraph

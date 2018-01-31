@@ -58,10 +58,10 @@ aus.each {println "${it.key} : ${it.value[0]}"}
 def n = g.V().has("code","DFW").out().count().next() 
 println "\nThere are  ${n} routes from Dallas"
 
-// Where can I fly to from Austin?
-def fromAus = g.V().has("code","AUS").out().values("code").toList()
-println "\nHere are the places you can fly to from Austin\n"
-println fromAus
+// Where can I fly to from DFW?
+def fromDfw = g.V().has("code","DFW").out().values("code").toList()
+println "\nHere are the places you can fly to from DFW\n"
+println fromDfw
 
 // Where in the USA can I fly to from LHR?
 def lhrToUsa = g.V().has("code","LHR").outE().inV().
@@ -86,11 +86,11 @@ println v.keys()
 println "\nValues found in the FRA vertex"
 v.values().each{println it}
 
-// If I start in AUS, and only stop once on the way, where in 
+// If I start in AUS, and only stop at most once on the way, where in 
 // England can I get to?  Note the use of "__." to prefix the
 // call to the out() step.
 
-def eng = g.V().has("code","AUS").repeat(__.out()).times(2).
+def eng = g.V().has("code","AUS").repeat(__.out()).emit().times(2).
                 has("region","GB-ENG").dedup().values("code").toList();
 
 println "\nAirports in England reachable with no more than one stop from AUS"
