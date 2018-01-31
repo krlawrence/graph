@@ -105,6 +105,12 @@ public class TestImports
 
     System.out.println(results + "\n");
 
+    showHeader("Order.incr runways at Texas airports");
+
+    results = g.V().has("region","US-TX").values("runways").
+                    order().by(Order.incr).toList();
+
+    System.out.println(results+"\n");
 
     // ----------------------------
     // Examples of using predicates
