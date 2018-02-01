@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v277-preview, Jan 31, 2018
-// Wed Jan 31, 2018 17:00:49 CST
+v277-preview, Feb 1, 2018
+// Thu Feb 01, 2018 16:06:20 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Jan 31 2018
+//:Date:      Feb 1 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -9688,6 +9688,7 @@ have to travel in each case. That is the topic of the next section!
 [AUS,1294,IAD,3665,LHR]       [AUS,1030,CLT,3980,LHR]  
 ----
 
+[[sackauslhr]]
 Using 'sack' to calculate the shortest AUS-LHR route with one stop
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -11522,6 +11523,20 @@ the 'Pop' Enum.
 |all     | Pop.all        | select(Pop.all,"x")
 |==============================================================================
 
+When working with a 'sack' the operators like 'sum' and 'assign' are defined in the
+'Operator' Enum.
+
+.Operators
+[cols="1,1,3"]
+|==============================================================================
+|sum     | Operator.sum   |sack(Operator.sum)
+|minus   | Operator.minus |sack(Operator.minus)
+|assign  | Operator.assign|sack(Operator.assign).by(__.constant(0))
+|min     | Operator.min   |sack(Operator.min)
+|max     | Operator.max   |sack(Operator.max)
+|mult    | Operator.mult  |sack(Operator.mult)
+|==============================================================================
+
 Another useful tip, that was shared on the Gremlin Users mailing list, is that you
 can ask the Gremlin Console to show you a list of everything that has been imported
 on your behalf "behind the scenes" using the command ':show imports'. What might
@@ -12205,6 +12220,41 @@ Now that we have a somewhat interesting Groovy application up and running, shoul
 so choose, you can build upon this foundation just as we did in the "<<javatinker>>"
 section.
 
+
+[[groovypredicates]]
+Using Gremlin predicates in a Groovy application
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Just as we had to do when writing a stand alone Java application, when you use a
+Gremlin predicate such as 'eq' or 'neq' from a Groovy program you need to prefix it
+with a '"P."' which references the TinkerPop class of the same name where a
+set of static methods, representing the Gremlin predicates, are defined.
+
+TIP: You will find a sample program called GraphRegion.groovy, which contains the
+code used in this section, in the sample files directory located at
+https://github.com/krlawrence/graph/tree/master/sample-code.
+
+In the code below, the 'findByRegion' method that we wrote in Java earlier has been
+ported to Groovy. As before a String representing a three character airport IATA code
+is expected as input. The method then uses a Gremlin query to figure out which
+geographical region the specified airport is in and then returns all airports also in
+that region. Once again, note the use of 'P.eq' as part of the 'where' step. 
+
+[source,groovy]
+----
+def findByRegion(iata)
+{
+  println("\nRegion code lookup for " + iata )
+
+  def list =  
+    g.V().has("code",iata).values("region").as("r").
+      V().hasLabel("airport").as("a").values("region").
+          where(P.eq("r")).by().
+          local(__.select("a").values("city","code","region").fold()).toList()               
+  
+  list.each {println it}
+}
+----
 
 [[janusintro]]
 Introducing JanusGraph
