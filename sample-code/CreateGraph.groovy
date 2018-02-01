@@ -27,10 +27,10 @@ import java.util.Map;
 import java.util.Set;
 
 // Create a new (empty) TinkerGrap
-TinkerGraph tg = TinkerGraph.open() ;
+TinkerGraph tg = TinkerGraph.open()
 
 // Create a Traversal source object
-GraphTraversalSource g = tg.traversal();
+GraphTraversalSource g = tg.traversal()
                
 // Add some nodes and vertices - Note the use of "iterate".
 g.addV("airport").property("code","AUS").as("aus").
@@ -46,7 +46,7 @@ g.addV("airport").property("code","AUS").as("aus").
   addE("route").from("dfw").to("lax").
   addE("route").from("lax").to("jfk").
   addE("route").from("lax").to("aus").
-  addE("route").from("lax").to("dfw").iterate();
+  addE("route").from("lax").to("dfw").iterate()
 
 // Display the vertices created, note we have to use the "T." prefix
 // for label and id as they are not stored as regular strings.
