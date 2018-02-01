@@ -47,7 +47,7 @@ class RegionTest
 
   // Find all airports in the region of the specified airport
   //
-  // Note that when used from Java we have to prefix eq with a "P."
+  // Note that when used from an application we have to prefix eq with a "P."
   // Also select has to be prefixed by "__."
   def findByRegion(iata)
   {
