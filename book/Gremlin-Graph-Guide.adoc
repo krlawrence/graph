@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v277-preview, Feb 2, 2018
-// Fri Feb 02, 2018 13:14:06 CST
+// Fri Feb 02, 2018 17:31:41 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Feb 2 2018
@@ -4331,6 +4331,9 @@ query which shows the places you can get to non stop were all correctly removed 
 the second query.  This also tells us there are no flights from Austin to places that
 you cannot get to from anywhere else!
 
+We will take a more in depth look at the various types of collections that you can
+use as part of a Gremlin query in the "<<collrev>>" section a bit later.
+
 [[inject]]
 Using 'inject' to insert values into a query
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -7558,6 +7561,10 @@ added using addition, multiplication, subtraction or division. Alternatively we 
 store the minimum or maximum value of a pair of values. These and other sack
 operators will be used in different parts of this book. 
 
+[[sackbasics]]
+Basic 'sack' operations
+^^^^^^^^^^^^^^^^^^^^^^^
+
 The 'sack' step, as shown in the examples below, is a side effect step, meaning it
 can store values during a traversal but has no effect on what is passed on to the
 next step.
@@ -7689,9 +7696,13 @@ g.V().sack(assign).by(constant(-1)).has('code','SAF').
 [6,3,2,5]
 ----
 
+[[sackminmax]]
+Using 'min' and 'max' with a 'sack'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 There are many different operators that can be used with sacks. They are defined as
-part of the TinkerPop Java Enum called 'Operator'. Other possible operators that we
-can use include 'div','min' and 'max'. The example below looks at the distances of
+part of the TinkerPop Java Enum called 'Operator'. Two such operators that we
+can use are 'min' and 'max'. The example below looks at the distances of
 all routes that start at SAF and in each case returns the minimum of the distance or
 400 which is assigned to the sack at the start of the query.
 
@@ -7703,7 +7714,7 @@ g.V().sack(assign).by(constant(400)).has('code','SAF').
 [400,400,369,303]
 ----
 
-In a similar vein, this query picks the maximum of the actual `distance or 400.
+In a similar vein, this query picks the maximum of the actual distance or 400.
 
 [source,groovy]
 ----
@@ -7713,10 +7724,16 @@ g.V().sack(assign).by(constant(400)).has('code','SAF').
 [549,708,400,400]
 ----
 
+
+[[sackcalc]]
+Doing calculations using a 'sack'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 Now let's look at a more complex, and hopefully more interesting, example. The
-challenge is to write a query that shows 10 rootes that start at SAF and have one
-stop. We also want to return the distance between each hop and the total distance of
-the two hops. This is a perfect example of a query where using a 'sack' can help.
+challenge is to write a query that shows 10 routes that start at Santa Fe (SAF) and
+have one stop. We also want to return the distance between each hop and the total
+distance of the two hops. This is a perfect example of a query where using a 'sack'
+can help.
 
 [source,groovy]
 ----
@@ -7768,6 +7785,76 @@ also possible to use non primitive types such as maps when working with a sack. 
 will find an example of 'sack' being used to generate a map in the "<<anothersack>>
 section.
 
+
+[[sackbooleans]]
+Using boolean operators with a 'sack'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You can also use the boolean operators 'or' and 'and' when working with a 'sack'. The
+examples below just test the basic functionality using constants of 'true' and
+'false' In the first example the result returned in the 'sack' is 'false' as we used
+an 'and' operator to 'and' together the sack's initial value of 'true' and a constant
+value of 'false'
+
+[source,groovy]
+----
+g.V(3).sack(assign).by(constant(true)).sack(and).by(constant(false)).sack()
+
+false
+----
+
+This time we replace the 'and' operator with an 'or' and the result, as we would
+expect, is 'true'.
+
+[source,groovy]
+----
+g.V(3).sack(assign).by(constant(true)).sack(or).by(constant(false)).sack()
+
+true
+----
+
+While poving we can do boolean operations using constants is interesting it is
+perhaps not that useful. Where this functionality becomes more interesting is if the
+values being used come from, for example, a vertex property. So let's create a couple
+of vertices that each have a boolean property.
+
+[source,groovy]
+----
+g.addV('happy').property('happy',true)
+
+v[54852]
+
+g.addV('sad').property('happy',false)
+
+v[54854]
+----
+
+We can now write a query that uses a boolean operator to generate a result in our
+sack. The example below is a bit arbitrary but is shows how the boolean operators can
+be used. We start at the vertex with an ID of 3, initialize a 'sack' with the
+constant 'true' and the use the 'and' operator against the 'happy' property of the
+vertex with a label of 'happy'. We return the results in a path, which will contain
+the starting vertex and the results of the 'and' operation. The result of the 'and'
+is 'true' as the 'happy' vertex has a value of 'true' for its 'happy' property.
+
+[source,groovy]
+----
+g.V(3).sack(assign).by(constant(true)).sack(and).
+       by(V().hasLabel('happy').values('happy')).sack().path()
+
+[v[3],true]
+----
+
+If we repeat the query but this time use the 'sad' vertex, we get the expected result
+of 'false' from the 'and' operation.
+
+[source,groovy]
+----
+g.V(3).sack(assign).by(constant(true)).sack(and).
+       by(V().hasLabel('sad').values('happy')).sack().path()
+
+[v[3],false]
+----
 
 [[lambdas]]
 Using Lambda functions
@@ -11780,10 +11867,14 @@ When working with a 'sack' the operators like 'sum' and 'assign' are defined in 
 |==============================================================================
 |sum     | Operator.sum   |sack(Operator.sum)
 |minus   | Operator.minus |sack(Operator.minus)
+|mult    | Operator.mult  |sack(Operator.mult)
+|div     | Operator.div   |sack(Operator.div)
 |assign  | Operator.assign|sack(Operator.assign).by(__.constant(0))
 |min     | Operator.min   |sack(Operator.min)
 |max     | Operator.max   |sack(Operator.max)
-|mult    | Operator.mult  |sack(Operator.mult)
+|addAll  | Operator.addAll|sack(Operator.addAll)
+|and     | Operator.and   |sack(Operator.and)
+|or      | Operator.or    |sack(Operator.or)
 |==============================================================================
 
 Another useful tip, that was shared on the Gremlin Users mailing list, is that you
