@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v277-preview, Feb 1, 2018
-// Thu Feb 01, 2018 16:06:20 CST
+v277-preview, Feb 2, 2018
+// Fri Feb 02, 2018 08:52:42 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Feb 1 2018
+//:Date:      Feb 2 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -7545,6 +7545,232 @@ Hopefully you are starting to see a pattern here. It is important to understand 
 steps are 'reducing barrier' steps and be able to work with them in a way that allows
 you to write queries that do what you need.
 
+[[sackintro]]
+Introducing 'sack' as a way to store values
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+As is hopefully now becoming apparent, to efficiently write certain types of query
+you need a way to build up a collection of items as the traversal takes place. We
+have already looked at steps like 'aggregate' and 'store' that can create collections
+of items during a traversal.  However, the 'sack' step offers additional capability
+in that we can specify how items are added to the collection. For example they can be
+added using addition, multiplication, subtraction or division. Alternatively we can
+store the minimum or maximum value of a pair of values. These and other sack
+operators will be used in different parts of this book. 
+
+The 'sack' step, as shown in the examples below, is a side effect step, meaning it
+can store values during a traversal but has no effect on what is passed on to the
+next step.
+
+By way of an introduction, take a look at the example below. All the query does as it
+stands is create a list of the number of runways that each airport that you can fly
+to from Santa Fe (SAF) has. We have not introduced a 'sack' step into the equation
+yet.
+
+[source,groovy]
+----
+g.V().has('code','SAF').out().values('runways').fold()
+
+[7,4,3,6]
+----
+
+Now let's start to introduce some usage of sacks into the query. When working with a
+'sack' we typically initialize the sack in some way. The example below initializes a
+sack with a value of zero but does not yet do anything with it so the result is
+unchanged.
+
+[source,groovy]
+----
+gremlin> g.withSack(0).V().has('code','SAF').out().
+         values('runways').fold()
+                                                                                             `
+[7,4,3,6]
+----
+
+This time we add the runways to our sack using a sum operation but as our starting
+value is zero we are not actually changing the end result in any way as for each
+runway value we essentially perform the operation '0 + runways' in each case. The
+final call to 'sack' with no parameters causes the current contents of the 'sack' to
+be returned. The 'fold' step, as before, puts whatever results we got from the 'sack'
+into a list.
+
+[source,groovy]
+----
+g.withSack(0).V().has('code','SAF').out().
+              values('runways').sack(sum).sack().fold()
+
+[7,4,3,6]
+----
+
+So let's finally do something that will change the result. Let's make the starting
+value one rather than zero and see what happens.
+
+[source,groovy]
+----
+g.withSack(1).V().has('code','SAF').out().
+              values('runways').sack(sum).sack().fold()
+
+[8,5,4,7]
+----
+
+Now, each time the number of runways was added to the sack using a 'sum' operator,
+the operation that was performed was '1 + runways'. As you can see from the results,
+in each case, the value returned is one higher than those from the previous query.
+This is a very dimple example but hopefully you can start to see how useful sacks can
+be.
+
+Before getting into some more interesting examples, it is worth pointing out that you
+can also initialize a sack using the 'assign' operator as shown below. It is also
+important to note that this sack initialization does not have to happen at the start
+of the query when done in this way. In the example below a constant value of one is
+used but we could equally well have used a traversal to initialize that sack as we
+shall see in the next example.
+
+[source,groovy]
+----
+g.V().sack(assign).by(constant(1)).has('code','SAF').
+      out().values('runways').sack(sum).sack().fold()
+
+[8,5,4,7]
+----
+
+Let's now make our query a bit more interesting. There are a couple of interesting
+new twists shown in the query below. Firstly, the sack is initialized to contain the
+number of runways from the AUS vertex whereas before we just used a simple constant.
+Secondly, notice that rather than make an explicit call to 'values' before adding to
+the sack, we can just use a 'by' modulator to specify what we want added to our sack.
+
+[source,groovy]
+----
+g.V().has('code','AUS').sack(assign).by('runways').
+  V().has('code','SAF').out().
+      sack(sum).by('runways').sack().fold()
+
+[9,6,5,8]
+----
+
+This time, as the Austin (AUS) airport has two runways our calculation in effect
+became '2 + runways'.
+
+Before looking at some slightly more complex queries that use multiple 'sack' steps,
+we should take a look at some of the other operators. So far we have just used 'sum'
+The query below uses 'mult' which as its name implies will multiply the values
+together rather than add them.
+
+[source,groovy]
+----
+g.V().has('code','AUS').sack(assign).by('runways').
+  V().has('code','SAF').out().
+      sack(mult).by('runways').sack().fold()
+
+[14,8,6,12]
+----
+
+Likewise, minus will subtract the values before putting them into the sack. Note that
+the values are subtracted *from* the sack's initialization value.
+
+[source,groovy]
+----
+g.V().has('code','AUS').sack(assign).by('runways').
+  V().has('code','SAF').out().
+      sack(mult).by('runways').sack().fold()
+
+[-5,-2,-1,-4]
+----
+
+If we wanted to subtract the sack's initial value from the other values we can simply
+initialize it with a negative value and perform a 'sum' operation.
+
+[source,groovy]
+----
+g.V().sack(assign).by(constant(-1)).has('code','SAF').
+      out().values('runways').sack(sum).sack().fold()
+
+[6,3,2,5]
+----
+
+There are many different operators that can be used with sacks. They are defined as
+part of the TinkerPop Java Enum called 'Operator'. Other possible operators that we
+can use include 'div','min' and 'max'. The example below looks at the distances of
+all routes that start at SAF and in each case returns the minimum of the distance or
+400 which is assigned to the sack at the start of the query.
+
+[source,groovy]
+----
+g.V().sack(assign).by(constant(400)).has('code','SAF').
+      outE().sack(min).by('dist').sack().fold()
+
+[400,400,369,303]
+----
+
+In a similar vein, this query picks the maximum of the actual `distance or 400.
+
+[source,groovy]
+----
+g.V().sack(assign).by(constant(400)).has('code','SAF').
+      outE().sack(max).by('dist').sack().fold()
+
+[549,708,400,400]
+----
+
+Now let's look at a more complex, and hopefully more interesting, example. The
+challenge is to write a query that shows 10 rootes that start at SAF and have one
+stop. We also want to return the distance between each hop and the total distance of
+the two hops. This is a perfect example of a query where using a 'sack' can help.
+
+[source,groovy]
+----
+g.withSack(0).
+  V().has('code','SAF').
+      repeat(outE().limit(10).sack(sum).by('dist').inV()).times(2).
+      sack().path().
+      by('code').by('dist').by('code').by('dist').by('code').by()
+----
+
+If we run our query, we should get back something that looks like the output shown
+below. Notice how the output from the 'sack' (the last item in each row) contains the
+sum of the two prior route distances. So, for example, we can see that the total
+distance from SAF to ATL with a stop in DFW is 1278 miles.
+
+[source,groovy]
+----
+SAF,549,DFW,729,ATL,1278]
+SAF,549,DFW,3030,ANC,3579]
+SAF,549,DFW,190,AUS,739]
+SAF,549,DFW,630,BNA,1179]
+SAF,549,DFW,1560,BOS,2109]
+SAF,549,DFW,1210,BWI,1759]
+SAF,549,DFW,1190,DCA,1739]
+SAF,549,DFW,1120,FLL,1669]
+SAF,549,DFW,1170,IAD,1719]
+SAF,549,DFW,225,IAH,774]
+----
+
+What may not be obvious from the query above is that we are in fact using multiple
+'sack' steps within the same query. If we were to remove the 'repeat' and write the
+query out in full this becomes more obvious.
+
+[source,groovy]
+----
+g.withSack(0).
+  V().has('code','SAF').
+      outE().limit(10).sack(sum).by('dist').inV().
+      outE().limit(10).sack(sum).by('dist').inV().
+      sack().path().
+      by('code').by('dist').by('code').by('dist').by('code').by()  
+----
+
+Later, in the <<sackauslhr>> section, we will again use a 'sack' to help calculate
+multi hop route distances using an approach similar to the example above. 
+
+So far we have just used simple integer values to initialize our sacks. However it is
+also possible to use non primitive types such as maps when working with a sack. You
+will find an example of 'sack' being used to generate a map in the "<<anothersack>>
+section.
+
+
+
+
 [[lambdas]]
 Using Lambda functions
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -9775,6 +10001,7 @@ AUS --> BWI --> LHR 4961 miles
 AUS --> IAH --> LHR 4962 miles
 ----
 
+[[anothersack]]
 Another example of how 'sack' can be used
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
