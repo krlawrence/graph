@@ -5,7 +5,7 @@
 // This example does the following:
 //   1. Create an empty TinkerGraph instance
 //   2. Load the air routes graph
-//   3. Run some tests that show the where...by and multiple V() constructs
+//   3. Run some tests that how to calculate shortest routes using a sack. 
 
 // I have highlighted the places where the Gremlin is slightly different from the 
 // Gremlin we can use in the Gremlin Console.
