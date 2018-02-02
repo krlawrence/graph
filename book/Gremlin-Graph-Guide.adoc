@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v277-preview, Feb 2, 2018
-// Fri Feb 02, 2018 08:52:42 CST
+// Fri Feb 02, 2018 13:14:06 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Feb 2 2018
@@ -7581,9 +7581,9 @@ unchanged.
 
 [source,groovy]
 ----
-gremlin> g.withSack(0).V().has('code','SAF').out().
-         values('runways').fold()
-                                                                                             `
+g.withSack(0).V().has('code','SAF').out().
+              values('runways').fold()
+
 [7,4,3,6]
 ----
 
@@ -7769,8 +7769,6 @@ will find an example of 'sack' being used to generate a map in the "<<anothersac
 section.
 
 
-
-
 [[lambdas]]
 Using Lambda functions
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -7900,7 +7898,7 @@ the 'map' step allows us to do.
 Take a look at the query below. It simply returns us a list containing the IDs of the
 first ten airports in the graph.
 
-[source,groovy]                                
+[source,groovy]
 ----
 g.V().hasLabel('airport').limit(10).id().fold()
 
@@ -7916,7 +7914,7 @@ case a traversal). The 'get' is needed to gain access to the current vertex and 
 properties. Lastly we get the 'id' of the vertex and add one to it. The modified
 values are then passed on to the next step of the traversal where they are made into
 a list by the 'fold' step.
-                                                                                                      gg
+
 [source,groovy]
 ----
 g.V().hasLabel('airport').limit(10).map{it.get().id() + 1}.fold()
@@ -7944,6 +7942,30 @@ g.V().hasLabel('airport').limit(10).map{a=1;b=2;c=a+b;it.get().id() + c}.fold()
 
 Note that only the value from the last expression in the closure is returned from the
 'map'. So in the example above the result of 'c=a+b', 4, is added to each ID.
+
+As we have already seen, there are often multiple ways to achieve the same result
+when working with Gremlin. It is also true that some ways are almost always better
+than others in terms of performance or some other metric. In the "<<sackintro>>" we
+used a 'sack' step to add one to a set of results as follows.
+
+[source,groovy]
+----
+g.withSack(1).V().has('code','SAF').out().
+              sack(sum).by('runways').sack().fold()
+
+[8,5,4,7] 
+----
+
+We could achieve the same result using a 'map' step. However, doing so introduces the
+need to use a closure which the version using 'sack' avoids. Avoiding unnecessary use
+of closures is a Gremlin best practice.
+
+[source,groovy]
+----
+g.V().has('code','SAF').out().values('runways').map{it.get() + 1}.fold()
+
+[8,5,4,7]
+----
 
 In the next section we will take a look at some other cases where lambda expressions
 are very useful.
