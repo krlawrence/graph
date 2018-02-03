@@ -1,6 +1,6 @@
 # Change History
 
-Starting with the upcoming v277 release, this file will contain a record of the major changes and updates made in each release.
+Starting with the v276 release, this file will contain a record of the major changes and updates made in each release.
 
 ## Upcoming Release 277 change history
 
@@ -17,3 +17,18 @@ Major new features in this release.
 - Improved some existing sample apps.
 - Added a sample that shows how to load the air routes graph into JanusGraph backed by Cassandra.
 - Did quite a bit of cleaning up of the text overall and corrected some mistakes and typos.
+
+## Release 276 change History
+
+Major features in this Release
+- Renamed the book to "Practical Gremlin".
+- Added Tip boxes pointing to relevant samples throughout the book.
+- Added to the section on the `where` step.
+- Improved section on boolean steps.
+- Added more Java samples to the sample-code folder.
+- Significantly improved coverage of the `repeat` step.
+- Expanded coverage of working with properties.
+- Added coverage of the `explain` step.
+- Removed use of deprecated `addV` form.
+- Added introductory text to make GitHub material easier to find.
+- Cleanup and fixing of typos.
