@@ -1,4 +1,4 @@
-# Change history
+# Change History
 
 Starting with the upcoming v277 release, this file will contain a record of the major changes and updates made in each release.
 
