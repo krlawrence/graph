@@ -8268,19 +8268,36 @@ g.withSack([:]).V().has('code','SAF').out().
 [DFW:7,LAX:4,PHX:3,DEN:6]
 ----
 
-If all we wanted back was a single list of key value pairs, another way we could do
-it is to use a 'map' and not use a 'sack' step at all as shown below. There are other
-ways you might chose to write a query like this, that avoid the use of closures, but
-this again provides an interesting example.
+If all we wanted back was a single list of key value pairs, such as the one in the
+last line of the output above, we can write a query to do that. One way we could do
+it is to use a 'map' and not use a 'sack' step at all as shown below. 
 
 [source,groovy]
 ----
 g.V().has('code','SAF').out().
       map{m=[:];m[it.get().values('code').next()]=
-      it.get().values('runways').next();m}.unfold().fold()
+      it.get().values('runways').next();m}.unfold().fold().next().getClass()
 
 [DFW=7,LAX=4,PHX=3,DEN=6]
 ----
+
+However, doing it using a 'sack' feels cleaner in my view, as shown below. Note that
+in this case what is returned is a Java LinkedHashMap data structure whereas the
+previous query generated an ArrayList of  LinkedHashMap.Entry objects. Also, it is
+worth noting that all we had to do to get the result that we wanted in this case was
+to add a 'fold' step between the 'sack' steps.
+
+[source,groovy]
+----
+ g.withSack([:]).V().has('code','SAF').out().
+      sack{m,v -> m[v.value('code')]=v.values('runways').next()}.fold().sack()
+
+[DFW:7,LAX:4,PHX:3,DEN:6]
+----
+
+There are other ways that you might chose to write a query like these, that avoid the
+use of closures altogether, but hopefully these examples show some interesting ways
+that closures can be combined with 'sack' steps.
 
 [[fuzzyregs]]
 Using regular expressions to do fuzzy searches
