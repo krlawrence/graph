@@ -7856,23 +7856,141 @@ g.V(3).sack(assign).by(constant(true)).sack(and).
 [v[3],false]
 ----
 
+[[sackaddall]]
+Using 'addAll' and lists with a 'sack'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+So far we have looked at using numbers and boolean values with a sack. However, sacks
+can also contain lists and, as we shall see later, maps.
+
+The example below initializes a sack with an empty list '"[]"' and then uses the
+'addAll' operator to store the same results we have seen generated above in a list.
+Note that a 'fold' step is used to create a list of values that can then be added to
+the sack. Later we shall look at other ways to build up lists with sacks that do not
+first fold all of the traversal results into a list.
+
+[source,groovy]
+----
+g.withSack([]).V().has('code','SAF').out().
+               values('runways').fold().sack(addAll).sack()
+
+[7,4,3,6]
+----
+
+You might be thinking, and you would be right, that we could have achieved the same
+result without using a 'sack' at all and just using a fold 'step' as shown below.
+However, the power of using a 'sack' becomes apparent when you need to build up a list
+containing the results of various parts of the query.
+
+[source,groovy]
+----
+g.V().has('code','SAF').out().values('runways').fold()
+
+[7,4,3,6]
+----
+
+The next example, below, shows how a list can be built up using more than one 'sack'
+step. The 'sack' is initialized with an empty list and the runway counts of the
+airports reachable from SAF are again added initially to the list using the 'addAll'
+operator. Having done that we add the runway counts for the airports reachable from
+AUS to the sack. You can see that the output starts with the same 7,4,3,6 sequence we
+have seen before but is then followed by all the other values that were added by the
+second 'sack' step.
+
+[source,groovy]
+----
+g.withSack([]).V().has('code','SAF').out().
+               values('runways').fold().sack(addAll).
+               V().has('code','AUS').out().values('runways').fold().
+               sack(addAll).sack()
+
+[7,4,3,6,3,4,6,5,2,4,2,4,3,2,4,2,4,4,3,3,3,4,4,5,3,3,2,2,2,1,4,1,4,5,4,6,3,3,7,2,4,5,4,4,4,4,4,8,3,3,3,4,3,3,1,3,2,4,4,6,2,3,4,3,3,4]
+----
+
+Finally, here is the previous query again but this time the 'sack' is initialized
+with a list that already has some values in it. You can see from the output that the
+values we generated above are added after the 1,1,1,1 sequence that the sack was
+initialized with.
+
+[source,groovy]
+----
+g.withSack([1,1,1,1]).
+     V().has('code','SAF').out().
+     values('runways').fold().sack(addAll).
+     V().has('code','AUS').out().values('runways').fold().
+     sack(addAll).sack()
+
+[1,1,1,1,7,4,3,6,3,4,6,5,2,4,2,4,3,2,4,2,4,4,3,3,3,4,4,5,3,3,2,2,2,1,4,1,4,5,4,6,3,3,7,2,4,5,4,4,4,4,4,8,3,3,3,4,3,3,1,3,2,4,4,6,2,3,4,3,3,4]
+----
+
+So far, all of the examples have used a 'fold' step before the 'sack' step. While
+this gives us a useful result, it may not always be the result that we want. To put
+it another way, what we get back is a single list containing all of the values that
+we generated during the traversal. In some cases what we actually want might be a set
+of lists where each list contains whatever the 'sack' was initialized with plus just
+the values specific to each path the traverser takes. In other words, we want the
+'sack' to have more of a local scope and not act like a global variable.
+
+When I was thinking about this and doing some experiments using the Gremlin Console,
+my first thought was "I can use a 'local' step for this". So, I initially tried the
+query shown below. However, as you can see, while this definitely generated some
+different output, it did not generate what I wanted.
+
+[source,groovy]
+----
+g.withSack([1,1,1,1]).V().has('code','SAF').out().
+     values('runways').local(fold().sack(addAll)).sack()
+
+[1,1,1,1,7]
+[1,1,1,1,7,4]
+[1,1,1,1,7,4,3]
+[1,1,1,1,7,4,3,6]
+----
+
+What is happening above is that the 'sack' is still acting more like a global
+variable than a local one. Each 'sack' step generated a list that was based on the
+previous one.
+
+To get the results I wanted, I needed to use a 'clone' operation. This query uses the
+Groovy closure or 'Lambda' syntax. We will investigate that syntax more a bit later
+in the "<<lambdas>>" section but for now all we need to know is that the 'clone' will
+ensure that each traverser gets it's own copy of the original sack and is not affected
+by what other traversers do to their sacks. Remember that a Gremlin query, or
+traversal, in essence causes a set of traversers to follow the paths through the
+graph that your query demands.
+
+[source,groovy]
+----
+g.withSack{[1,1,1,1]}{it.clone()}V().has('code','SAF').
+       out().values('runways').local(fold().sack(addAll)).sack()
+
+[1,1,1,1,7]
+[1,1,1,1,4]
+[1,1,1,1,3]
+[1,1,1,1,6]
+----
+
+Later in the "<<lambdasack>>" section we  will revisit the topic of 'sacks' and
+lambda expressions and see other ways that we could have written the previous query.
+
+
 [[lambdas]]
 Using Lambda functions
 ~~~~~~~~~~~~~~~~~~~~~~
 
 Gremlin allows you to put a code fragment (sometimes called a Lambda function or a
 closure) as part of a query. This is typically done as part of a 'filter', 'map' or
-'sideEffect' step but there are other places where you will find this concept used.
-This technique provides a lot of additional flexibility in how queries can be
-written. However, care should be used. When processing your query, Gremlin will try
-to optimize it as best as it can. For regular traversal steps such as 'out' and 'has'
-Gremlin will do this optimization for you. However for closures (code inside braces
-'{}') Gremlin cannot do this and will just pass the closure on to the underlying
-runtime.  With people just getting started with Gremlin there is a great temptation
-to over use in-line code. This is a natural thing to want to do as for programmers it
-feels like the programming they are used to. However, there is often, if not always,
-a pure Gremlin traversal step that can be used to do what is needed.  Of course with
-all rules there are exceptions.   
+'sideEffect' step but there are other places where you will find this concept used
+such as when working with 'sacks'.  This technique provides a lot of additional
+flexibility in how queries can be written. However, care should be used. When
+processing your query, Gremlin will try to optimize it as best as it can. For regular
+traversal steps such as 'out' and 'has' Gremlin will do this optimization for you.
+However for closures (code inside braces '{}') Gremlin cannot do this and will just
+pass the closure on to the underlying runtime.  With people just getting started with
+Gremlin there is a great temptation to over use in-line code. This is a natural thing
+to want to do as for programmers it feels like the programming they are used to.
+However, there is often, if not always, a pure Gremlin traversal step that can be
+used to do what is needed.  Of course with all rules there are exceptions.   
 
 By way of a very simple example, the code below declares a variable '"c"' and
 initializes it to zero. The Gremlin query that follows then adds one to '"c"' each
@@ -8055,8 +8173,116 @@ g.V().has('code','SAF').out().values('runways').map{it.get() + 1}.fold()
 ----
 
 In the next section we will take a look at some other cases where lambda expressions
-are very useful.
+are very useful as well as a few more examples of the 'map' step being used.
 
+
+[[lambdasack]]
+Using lambdas with 'sack' steps
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In the "<<sackaddall>>" section we introduced ways in which 'sack' steps could
+operate on lists. Now that we know a bit more about the 'map' step and how Gremlin
+can take advantage of Groovy closures (lambda functions) we can explore some
+additional ways of working with sacks.
+
+When we looked at 'sack' steps and lists earlier we used the query below as one of
+the examples.
+
+[source,groovy]
+----
+g.withSack{[1,1,1,1]}{it.clone()}V().has('code','SAF').
+       out().values('runways').local(fold().sack(addAll)).sack()
+
+[1,1,1,1,7]
+[1,1,1,1,4]
+[1,1,1,1,3]
+[1,1,1,1,6]
+----
+
+Now that we have looked at 'map' steps, another way we could write the query, not
+necessarily the best way, but it does illustrate use of a 'map', is shown below.
+
+[source,groovy]
+----
+g.withSack{[1,1,1,1]}{it.clone()}V().has('code','SAF').out().
+     values('runways').map{x->[x]}.sack(addAll).sack()
+
+[1,1,1,1,7]
+[1,1,1,1,4]
+[1,1,1,1,3]
+[1,1,1,1,6]
+----
+
+Just for completeness, here is what would happen if we ran the same query, without
+the 'clone' (or split) being used.
+
+[source,groovy]
+----
+g.withSack([1,1,1,1]).V().has('code','SAF').out().
+     values('runways').map{x->[x]}.sack(addAll).sack()
+
+[1,1,1,1,7]
+[1,1,1,1,7,4]
+[1,1,1,1,7,4,3]
+[1,1,1,1,7,4,3,6]
+----
+
+A different way we could write the query, and this is something that we have not yet
+examined in this book, is to use a closure directly with the 'sack' step itself.
+
+[source,groovy]
+----
+ g.withSack([1,1,1,1]).V().has('code','SAF').out().
+      values('runways').sack{a,v->a+=[v]}.sack()
+
+[1,1,1,1,7]
+[1,1,1,1,4]
+[1,1,1,1,3]
+[1,1,1,1,6]
+----
+
+We could also initialize the sack with a map '"[:]'" instead of a list and use a
+lambda function to manipulate it as shown below.
+
+[source,groovy]
+----
+g.withSack{[:]}{it.clone()}.V().has('code','SAF').out().
+     sack {m,v->m[v.values('code').next()]=v.values('runways').next();m}.sack()
+
+[DFW:7]
+[LAX:4]
+[PHX:3]
+[DEN:6]
+----
+
+Just to show what happens, here is the same query with the 'clone' step removed.
+
+[source,groovy]
+----
+g.withSack([:]).V().has('code','SAF').out().
+     sack {m,v->m[v.values('code').next()]=v.values('runways').next();m}.sack()
+
+[DFW:7]
+[DFW:7,LAX:4]
+[DFW:7,LAX:4,PHX:3]
+[DFW:7,LAX:4,PHX:3,DEN:6]
+----
+
+If all we wanted back was a single list of key value pairs, another way we could do
+it is to use a 'map' and not use a 'sack' step at all as shown below. There are other
+ways you might chose to write a query like this, that avoid the use of closures, but
+this again provides an interesting example.
+
+[source,groovy]
+----
+g.V().has('code','SAF').out().
+      map{m=[:];m[it.get().values('code').next()]=
+      it.get().values('runways').next();m}.unfold().fold()
+
+[DFW=7,LAX=4,PHX=3,DEN=6]
+----
+
+[[fuzzyregs]]
 Using regular expressions to do fuzzy searches
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
