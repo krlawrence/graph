@@ -4,7 +4,7 @@ Starting with the v275 release, this file will contain a record of the major cha
 
 ## Upcoming Release 277 change history (Date TBD)
 
-This is a fairly substantial updated. Lots of new material added to the book and to the sample-code folder.
+This is a fairly substantial update. Lots of new material added to the book and to the sample-code folder.
 
 Major new features in this release.
 - Added a new section dedicated to discussing steps that generate 'collections' and how to operate on them.
