@@ -158,6 +158,19 @@ types = mgmt.getRelationTypes(PropertyKey.class);[]
 types.each{println "$it\t: " + mgmt.getPropertyKey("$it").dataType() + " " + mgmt.getPropertyKey("$it").cardinality()};[]
 mgmt.commit();[]
 
+
+;[]// Query the indexes we created as an example of how to do it!
+println "\n==================";[]
+println "Retrieving indexes";[]
+println "==================\n";[]
+mgmt = graph.openManagement();[]
+v_idxes = mgmt.getGraphIndexes(Vertex.class);[]
+e_idxes = mgmt.getGraphIndexes(Edge.class);[]
+v_idxes.each {println "Name: ${it.name()}, Keys: ${it.getFieldKeys()}, Composite: ${it.isCompositeIndex()}, Backing: ${it.getBackingIndex()}"};[]
+e_idxes.each {println "Name: ${it.name()}, Keys: ${it.getFieldKeys()}, Composite: ${it.isCompositeIndex()}, Backing: ${it.getBackingIndex()}"};[]
+mgmt.commit();[]
+
+
 println "\n===============";[]
 println "Tasks completed";[]
 println "===============\n";[]
