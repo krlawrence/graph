@@ -20,6 +20,7 @@ v277-preview, Feb 3, 2018
 :toclevels: 4
 :revision: 277-preview
 :doctype: book
+:icons: font
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
 //        has a white foreground color. The default was unreadable,
@@ -14309,21 +14310,189 @@ To be written
 
 [[dockercass]]
 Using Docker to experiment with Cassandra and JanusGraph
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To be written
+I find that using Docker containers can be a great way to quickly get things running
+when you are experimenting with new ideas or new technology, or as if often the case,
+both at the same time! There is a very useful containerized implementation of Apache
+Cassandra available that you can download and get running in a few seconds and use to
+test things with JanusGraph. In this section I will walk you through the steps that I
+use to get a single Cassandra node up and running and use it with JanusGraph to setup
+the air-routes graph. I am going to make the assumption that you have already
+downloaded and installed the necessary Docker runtime for your platform. I do most of
+my Docker testing using Linux systems but there are runtimes available for Windows
+and Mac OS as well.  Assuming you have docker installed, Cassandra can be installed
+using a simple 'docker pull' command as shown below.
 
-[source,java]
+[source,console]
 ----
 docker pull cassandra
-
-docker run -d -p 7001:7001 -p 7199:7199 -p 9042:9042 -p 9160:9160 -v /var/lib/cassandra:/var/lib/cassandra -e CASSANDRA_START_RPC=true --name cass cassandra
-
-graph = JanusGraphFactory.open('conf/janusgraph-cql.properties')
-graph = JanusGraphFactory.open('conf/janusgraph-cassandra.properties')
-graph.close()
-JanusGraphFactory.drop(graph)
 ----
+
+Once Docker has downloaded the Cassandra image for you, it is quite simple to get a
+single instance of cassandra up and running. There are different ways that you can
+use to configure Docker. To keep things simple I am going to just use command line
+parameters. The command does several things as shown in the notes below it. I split
+the command over four lines to make it easier to read. 
+
+[source,console]
+----
+docker run -d -p 7001:7001 -p 7199:7199 -p 9042:9042 -p 9160:9160 \  <1> <2> <3>
+-v  /var/lib/cassandra:/var/lib/cassandra \  <4>
+-e CASSANDRA_START_RPC=true \  <5>
+--name cass  cassandra   <6>
+----
+<1> Starts a new instance of the Cassandra container.
+<2> Runs the command in the background using the '"-d"' flag.
+<3> Exposes the key ports that Cassandra uses so that JanusGraph can connect to this
+Cassandra instance ('"-p"' flags).
+<4> Maps (mounts) the Cassandra volume to the local disk. This is where the data will
+be stored. If we did not do this the data would be lost whenever the container gets
+deleted ('"-v"' flag).
+<5> Enables Thrift support using the '-e CASSANDRA_START_RPC=true' setting. This is not
+needed if you use CQL which is enabled by default.
+<6> Names the container "cass" which makes it easier for us to refer to it later.
+
+
+If you want to check on the progress of your new container at any time you can just
+check the logs using the command below.
+
+[source,console]
+----
+docker logs cass
+----
+
+As with other Docker containers, our Cassandra container can be stopped and started
+as needed using the following commands. Care should be taken not to stop the
+container if JanusGraph is still busy writing data.
+
+[source,console]
+----
+docker stop cass
+
+docker start cass
+----
+
+Now that we have an instance of a Cassandra running, it's time to start the Gremlin
+Console that is included with the JanusGraph download and connect to Cassandra.
+Cassandra supports different protocols that can be used when connecting to it. These
+include Astyanax (from Netflix), Thrift and CQL. In this section I am just going to
+discuss Thrift and CQL. An in depth study of these protocols is beyond the scope of
+this book but if you want to read more about them a few web searches will find you
+plenty of documentation. It should be noted that both Thrift and Astyanax are being
+deprecated in favor of CQL. At some point in the future support for the older
+protocols is likely to be dropped so it is probably a good idea to get comfortable
+using CQL as the primary way that you connect JanusGraph to Cassandra,
+
+TIP: A script called 'janus-cassandra.groovy' is available in the sample-programs
+folder at https://github.com/krlawrence/graph/tree/master/sample-code. The script
+will automate everything that we are about to discuss in this section and you are
+encouraged to study it.
+
+A number of properties files are included with the JanusGraph download. They are
+located in the '/conf' folder below the root of the JanusGraph folder. The properties
+files can be used to hep connect JanusGraph to a number of different back end
+technologies. These properties files can be edited as needed but so long as you are
+using the default Cassandra ports with Cassandra running on your local machine
+(localhost) you should not have to edit anything for the purpose of this discussion. 
+
+NOTE: If you decide to run Cassandra on a remote machine, you will need to edit the
+properties file, or create a new one, so that it contains the appropriate host names
+and IP addresses of the remote system.
+
+If you want to connect JanusGraph to Cassandra using the CQL protocol you can use the
+'janusgraph-cql.properties' file as shown below.
+
+[source,groovy]
+----
+graph = JanusGraphFactory.open('conf/janusgraph-cql.properties') 
+----
+
+You may see a warning message followed by a long stack trace when you issue this
+command. Despite looking like something horrible has happened this can be ignored and
+things will still work. I believe that this is a known issue in the community.
+
+If you want to connect JanusGraph to Cassandra using the Thrift protocol you can use
+the 'janusgraph-cassandra.properties' file as shown below.
+
+[source,groovy]
+----
+graph = JanusGraphFactory.open('conf/janusgraph-cassandra.properties')
+----
+
+When either of these commands are run, a new JanusGraph instance will be created and
+JanusGraph will attempt to connect to Cassandra using the specified protocols. The
+first time you connect to a brand new (empty) Cassandra instance you should first
+define the graph's schema by creating key definitions and create any indexes that you
+need before creating any vertices, edges or properties. If you would like to
+experiment with the air-routes data using Cassandra as the backing store, the script
+called 'janus-cassandra.groovy' from the sample-code folder can be used for this. If
+you prefer you can experiment yourself from the console using the JanusGraph
+management API to create keys and indexes and creating a traversal source object
+before adding any vertices and edges.
+
+If you choose run the 'janus-cassandra.groovy' script it will create the keys and
+indexes needed and then load the air-routes graph and also run a few tests to make
+sure everything is working. Note that you only need to do this setup step once as
+next time the data will have already been loaded and the schema defined.
+
+NOTE: As we are storing our graph into an instance of Cassandra where the data is
+being persisted on our local file system, the next time you start JanusGraph and
+re-connect to Cassandra your data will be waiting for you!
+
+To run the script from the Gremlin Console you can just use the ':load' command to
+load it as shown below.
+
+[source,console]
+----
+:load janus-cassandra.groovy
+----
+
+Whenever you are finished working with the graph, it is a good idea to close it. Once
+closed you will have to reconnect using one of the two open steps shown above before
+you can start working with it again.
+
+[source,console]
+----
+graph.close()
+----
+
+If you are reconnecting to your graph, having previously loaded some data and closed
+it, you can use the following commands. If you are using Thrift instead of
+CQL you would use the 'janusgraph-cassandra.properties' file instead.
+
+[source,console]
+----
+// Reconnect using CQL
+graph = JanusGraphFactory.open('conf/janusgraph-cql.properties') 
+
+g = graph.traversal()
+----
+
+A common requirement when testing and experimenting is to throw everything away and
+start again. The easiest way to do this is to use the command shown below. This will
+remove all of your data, indexes and schema definitions so only do this if you really
+want to start over.
+
+[source,groovy]
+----
+JanusGraphFactory.drop(graph) 
+----
+
+Having done a 'drop' operation, if you previously loaded the air-routes data using
+the janus-cassandra.groovy script, you will need to run the script again to get the
+data, indexes and schema back.
+
+One other thing to realize is that using the techniques shown in this section we are
+connecting the Gremlin Console and JanusGraph directly to Cassandra. This means that
+we can issue commands directly from the Gremlin Console without needing to use any
+additional configuration or setup steps other than telling JanusGraph how to connect
+to Cassandra using a properties file. Later in the book we will introduce the Gremlin
+Server that allows you to front end a graph with an HTTP server. Remember also that
+JanusGraph is really a set of Java libraries (JAR files). It does not create any
+processes of its own and does not run as a service. So in this instance JanusGraph is
+running on the process of the Gremlin Console. Cassandra of course is running as a
+stand alone service.
 
 [[extindex]]
 Using an external index with JanusGraph
