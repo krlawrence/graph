@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v277-preview, Feb 2, 2018
-// Fri Feb 02, 2018 17:31:41 CST
+v277-preview, Feb 3, 2018
+// Sat Feb 03, 2018 17:59:53 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Feb 2 2018
+//:Date:      Feb 3 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -66,6 +66,9 @@ I hope people find what follows useful. It remains a work in progress and more w
 be added in the coming weeks and months as time permits. I am hopeful that what is
 presented so far is of some use to folks, who like me, are learning to use the
 Gremlin query and traversal language and related technologies.
+
+A lot of additional material can be found at the
+https://github.com/krlawrence/graph[project's home on GitHub].
 
 How this book came to be
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -14304,6 +14307,7 @@ ScyllaDB
 
 To be written
 
+[[dockercass]]
 Using Docker to experiment with Cassandra and JanusGraph
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -14315,6 +14319,9 @@ docker pull cassandra
 
 docker run -d -p 7001:7001 -p 7199:7199 -p 9042:9042 -p 9160:9160 -v /var/lib/cassandra:/var/lib/cassandra -e CASSANDRA_START_RPC=true --name cass cassandra
 
+graph = JanusGraphFactory.open('conf/janusgraph-cql.properties')
+graph = JanusGraphFactory.open('conf/janusgraph-cassandra.properties')
+graph.close()
 JanusGraphFactory.drop(graph)
 ----
 
