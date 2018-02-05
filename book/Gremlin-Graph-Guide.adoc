@@ -1,8 +1,8 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
-================================================
+===============================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v277-preview, Feb 5, 2018
-// Mon Feb 05, 2018 09:47:45 CST
+// Mon Feb 05, 2018 10:13:12
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Feb 5 2018
@@ -14505,12 +14505,12 @@ and Mac OS as well.  Assuming you have docker installed, Cassandra can be instal
 using a simple 'docker pull' command as shown below.
 
 Note that to make it clearer where commands need to be entered commands that need to
-be entered into the Linux terminal are prefixed with a dollar sign '"$"' and commands
-that are entered into the Gremlin Console have the '"Gremlin>"' prefix.
+be entered into the Linux terminal shell are prefixed with  '"sh>"' and commands
+that are entered into the Gremlin Console have the '"gremlin>"' prefix.
 
 [source,console]
 ----
-$ docker pull cassandra
+sh> docker pull cassandra
 ----
 
 [[cassstart]]
@@ -14525,7 +14525,7 @@ the command over four lines to make it easier to read.
 
 [source,console]
 ----
-$ docker run -d -p 7001:7001 -p 7199:7199 -p 9042:9042 -p 9160:9160 \  <1> <2> <3>
+sh> docker run -d -p 7001:7001 -p 7199:7199 -p 9042:9042 -p 9160:9160 \  <1> <2> <3>
 -v  /var/lib/cassandra:/var/lib/cassandra \  <4>
 -e CASSANDRA_START_RPC=true \  <5>
 --name cass  cassandra   <6>
@@ -14547,7 +14547,7 @@ check the logs using the command below.
 
 [source,console]
 ----
-$ docker logs cass
+sh> docker logs cass
 ----
 
 As with other Docker containers, our Cassandra container can be stopped and started
@@ -14556,9 +14556,9 @@ container if JanusGraph is still busy writing data.
 
 [source,console]
 ----
-$ docker stop cass
+sh> docker stop cass
 
-$ docker start cass
+sh> docker start cass
 ----
 
 [[cassconnect]]
@@ -14717,7 +14717,7 @@ default path. The examples below show how to start a bash session and enter a fe
 
 [source,console]
 ----
-$ docker exec -it cass bash
+sh> docker exec -it cass bash
 ----
 
 Once the shell process has started the prompt will change and you are now running
@@ -14775,7 +14775,7 @@ terminal session we entered the container from.
 ----
 root@115ed53ef189:/# exit
 
-$
+sh>
 ----
 
 
