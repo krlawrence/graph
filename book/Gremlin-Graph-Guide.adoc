@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v277-preview, Feb 4, 2018
-// Sun Feb 04, 2018 18:31:30 CST
+v277-preview, Feb 5, 2018
+// Mon Feb 05, 2018 09:47:45 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Feb 4 2018
+//:Date:      Feb 5 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -14504,10 +14504,18 @@ my Docker testing using Linux systems but there are runtimes available for Windo
 and Mac OS as well.  Assuming you have docker installed, Cassandra can be installed
 using a simple 'docker pull' command as shown below.
 
+Note that to make it clearer where commands need to be entered commands that need to
+be entered into the Linux terminal are prefixed with a dollar sign '"$"' and commands
+that are entered into the Gremlin Console have the '"Gremlin>"' prefix.
+
 [source,console]
 ----
-docker pull cassandra
+$ docker pull cassandra
 ----
+
+[[cassstart]]
+Starting the Cassandra container
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Once Docker has downloaded the Cassandra image for you, it is quite simple to get a
 single instance of Cassandra up and running. There are different ways that you can
@@ -14517,7 +14525,7 @@ the command over four lines to make it easier to read.
 
 [source,console]
 ----
-docker run -d -p 7001:7001 -p 7199:7199 -p 9042:9042 -p 9160:9160 \  <1> <2> <3>
+$ docker run -d -p 7001:7001 -p 7199:7199 -p 9042:9042 -p 9160:9160 \  <1> <2> <3>
 -v  /var/lib/cassandra:/var/lib/cassandra \  <4>
 -e CASSANDRA_START_RPC=true \  <5>
 --name cass  cassandra   <6>
@@ -14539,7 +14547,7 @@ check the logs using the command below.
 
 [source,console]
 ----
-docker logs cass
+$ docker logs cass
 ----
 
 As with other Docker containers, our Cassandra container can be stopped and started
@@ -14548,10 +14556,14 @@ container if JanusGraph is still busy writing data.
 
 [source,console]
 ----
-docker stop cass
+$ docker stop cass
 
-docker start cass
+$ docker start cass
 ----
+
+[[cassconnect]]
+Connecting JanusGraph to Cassandra
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Now that we have an instance of a Cassandra running, it's time to start the Gremlin
 Console that is included with the JanusGraph download and connect to Cassandra.
@@ -14585,19 +14597,36 @@ If you want to connect JanusGraph to Cassandra using the CQL protocol you can us
 
 [source,groovy]
 ----
-graph = JanusGraphFactory.open('conf/janusgraph-cql.properties') 
+gremlin> graph = JanusGraphFactory.open('conf/janusgraph-cql.properties') 
 ----
 
 You may see a warning message followed by a long stack trace when you issue this
 command. Despite looking like something horrible has happened this can be ignored and
 things will still work. I believe that this is a known issue in the community.
 
+Aside from a potential warning message, if all goes well you should see something
+like the output below after the command has run. This shows that we have a CQL
+connection to our Cassandra instance running on or local machine at 127.0.0.1.
+
+[source,groovy]
+----
+graphtraversalsource[standardjanusgraph[cql:[127.0.0.1]], standard]
+----
+
+
 If you want to connect JanusGraph to Cassandra using the Thrift protocol you can use
 the 'janusgraph-cassandra.properties' file as shown below.
 
 [source,groovy]
 ----
-graph = JanusGraphFactory.open('conf/janusgraph-cassandra.properties')
+gremlin> graph = JanusGraphFactory.open('conf/janusgraph-cassandra.properties')
+----
+
+If the command succeeds, you should get back some output that looks like this.
+
+[source,groovy]
+----
+standardjanusgraph[cassandrathrift:[127.0.0.1]]
 ----
 
 When either of these commands are run, a new JanusGraph instance will be created and
@@ -14623,30 +14652,30 @@ re-connect to Cassandra your data will be waiting for you!
 To run the script from the Gremlin Console you can just use the ':load' command to
 load it as shown below.
 
-[source,console]
+[source,groovy]
 ----
-:load janus-cassandra.groovy
+gremlin> :load janus-cassandra.groovy
 ----
 
 Whenever you are finished working with the graph, it is a good idea to close it. Once
 closed you will have to reconnect using one of the two 'open' steps shown above before
 you can start working with it again.
 
-[source,console]
+[source,groovy]
 ----
-graph.close()
+gremlin> graph.close()
 ----
 
 If you are reconnecting to your graph, having previously loaded some data and closed
 it, you can use the following commands. If you are using Thrift instead of
 CQL you would use the 'janusgraph-cassandra.properties' file instead.
 
-[source,console]
+[source,groovy]
 ----
 // Reconnect using CQL
-graph = JanusGraphFactory.open('conf/janusgraph-cql.properties') 
+gremlin> graph = JanusGraphFactory.open('conf/janusgraph-cql.properties') 
 
-g = graph.traversal()
+gremlin> g = graph.traversal()
 ----
 
 A common requirement when testing and experimenting is to throw everything away and
@@ -14656,7 +14685,7 @@ want to start over.
 
 [source,groovy]
 ----
-JanusGraphFactory.drop(graph) 
+gremlin> JanusGraphFactory.drop(graph) 
 ----
 
 Having done a 'drop' operation, if you previously loaded the air-routes data using
@@ -14673,6 +14702,82 @@ JanusGraph is really a set of Java libraries (JAR files). It does not create any
 processes of its own and does not run as a service. So in this instance JanusGraph is
 running on the process of the Gremlin Console. Cassandra of course is running as a
 stand alone service.
+
+[[nodetool]]
+Finding nodetool
+^^^^^^^^^^^^^^^^
+
+If for any reason you need to check on Cassandra settings or overall status, you
+typically use the 'nodetool' command. Because in this case we are using a
+containerized version of the Cassandra code, to run 'nodetool' you need to start a
+shell session inside the container. This can be done using the 'docker exec' command as shown
+below. Once you are inside the container you will find 'nodetool' available on the
+default path. The examples below show how to start a bash session and enter a few
+'nodetool' commands. Finally we exit the session.
+
+[source,console]
+----
+$ docker exec -it cass bash
+----
+
+Once the shell process has started the prompt will change and you are now running
+inside the context of the container.
+
+[source,console]
+----
+root@115ed53ef189:/# 
+----
+
+We can now enter 'nodetool' commands. I have truncated the output a bit to aid
+reading. First, let's check the version of Cassandra we are running.
+
+[source,console]
+----
+root@115ed53ef189:/# nodetool version
+
+ReleaseVersion: 3.11.1
+----
+
+Let's check to see that Thrift is running.
+
+[source,console]
+----
+root@115ed53ef189:/# nodetool statusthrift
+
+running
+----
+
+If you want more information about the overall state of things you can use the
+'nodetool info' command. I have truncated this output.
+
+[source,console]
+----
+root@115ed53ef189:/# nodetool info
+
+ID                     : 094e9a8c-99af-4d32-94da-49ed8c61b9fd
+Gossip active          : true
+Thrift active          : true
+Native Transport active: true
+Load                   : 3.64 MiB
+Generation No          : 1517842270
+Uptime (seconds)       : 2636
+Heap Memory (MB)       : 102.43 / 1956.00
+Off Heap Memory (MB)   : 0.03
+Data Center            : datacenter1
+Rack                   : rack1
+Exceptions             : 0
+----
+
+Once we are done with the container typing 'exit' will return is to the Linux
+terminal session we entered the container from.
+
+[source,console]
+----
+root@115ed53ef189:/# exit
+
+$
+----
+
 
 [[extindex]]
 Using an external index with JanusGraph
