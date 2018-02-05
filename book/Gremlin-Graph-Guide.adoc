@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ================================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v277-preview, Feb 3, 2018
-// Sat Feb 03, 2018 17:59:53 CST
+v277-preview, Feb 4, 2018
+// Sun Feb 04, 2018 18:31:30 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Feb 3 2018
+//:Date:      Feb 4 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -1048,7 +1048,7 @@ see in return from a  query. The default, if this is not specified, is 100.
 TIP: You can use the 'max-iteration' setting to control how much output the Gremlin
 Console displays.
 
-If you are using a different graph environment, if GraphML import is supported, you
+If you are using a different graph environment and GraphML import is supported, you
 can still load the 'air-routes.graphml' file by following the instructions specific
 to that system.  Once loaded, the queries below should still work either unchanged or
 with minor modifications.
@@ -1081,7 +1081,7 @@ writing queries.
 :load mygremlin-setup
 ----
 
-NOTE: As a best practice you should use the full path to the location where the
+TIP: As a best practice you should use the full path to the location where the
 GraphML file  resides if at all possible to make sure that the GraphML reading code
 can find it.
 
@@ -1149,8 +1149,8 @@ index should be considered a best practice. Even TinkerGraph has a way to create
 index should you want to.
 
 NOTE: In production systems, especially those where the graphs are large, the task of
-creating and managing the index is often handed to an additional software component
-such as Apache Solr or Apache Elastic Search.      
+creating and managing the parts of the index is often handed to an additional
+software component such as Apache Solr or Apache Elastic Search.      
 
 
 
@@ -8653,7 +8653,7 @@ enclosing 'vertices' object.
 
 
 
-NOTE: The GraphSON file generated will not be easily human readable without doing 
+NOTE: The GraphSON file generated will not be very human readable without doing 
       some pretty printing on it using something like the Python json tool 
       ('python -m json.tool mygraph.json') or using a text editor that can beautify
       JSON. 
@@ -12874,7 +12874,7 @@ http://janusgraph.org/
 Documentation::
 http://docs.janusgraph.org/latest/.
 API Documentation::
-https://javadoc.io/doc/org.janusgraph/janusgraph-core/0.1.1
+http://javadoc.io/doc/org.janusgraph/janusgraph-core/0.2.0
 
 In the following sections we will take an in depth look at JanusGraph and other
 technologies that, when combined, provide a way to build and deploy a massively
@@ -12959,6 +12959,14 @@ model. We create our graph traversal object 'g' in just the same way as before.
 [source,groovy]
 ----
 graph = JanusGraphFactory.open('inmemory')
+g = graph.traversal()
+----
+
+Note that the 'open' command above is a shorthand form of the command shown below.
+
+[source,groovy]
+----
+graph = JanusGraphFactory.build().set("storage.backend","inmemory").open()
 g = graph.traversal()
 ----
 
@@ -13937,7 +13945,7 @@ If we use 'textContainsPrefix' instead of 'textContains', the search will look f
 whole words that start with the specified text and we will get some results. Take a
 look at the next query and the results it generates.
 
-NOTE: Searches using 'textContains' and 'textContainsPrefix' are *not* case sensitive.
+TIP: Searches using 'textContains' and 'textContainsPrefix' are *not* case sensitive.
 
 [source,groovy]
 ----
@@ -14004,7 +14012,7 @@ with the characters 'Los'.
 g.V().has('city',textPrefix('Los')).values('city')
 ----
 
-NOTE: Searches using 'textPrefix' *are* case sensitive.
+TIP: Searches using 'textPrefix' *are* case sensitive.
 
 This is what we get back from the query. 
 
@@ -14285,28 +14293,200 @@ g.V().hasLabel('airport').
 Choosing a persistent storage technology for JanusGraph
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To be written
+So far we have concentrated on examples where the graph data resides in the memory of
+the computer system. The only form of persistence we have so far looked at is saving
+an entire graph as JSON or XML and reading it back into memory at a future date.
+Clearly, for many production systems, we need a better story for data persistence. As
+delivered, JanusGraph supports a number of different back end databases that can be
+used to persist graph data. A bit later, in the "<<dockercass>>" section, we will
+explore a simple way to experiment with one of these database options.
+
+Once JanusGraph has been downloaded and installed (unzipped) you will find a
+directory called /conf below the directory where JanusGraph was installed. In this
+directory you will find a number of Java properties files that can be used to connect
+JanusGraph to different back end data stores. Depending upon your configuration these
+property files may work unchanged or may need to be edited. Each property file has
+detailed comments that explain what the various setting do.
+
+NOTE: The official JanusGraph documentation provides detailed configuration
+information for each of the currently supported back end stores.
+http://docs.janusgraph.org/latest/storage-backends.html
+
+Let's now take a brief look at some of the persistent storage options available to us
+when using JanusGraph.
+
+[[berkleyintro]]
+Oracle Berkley DB
+^^^^^^^^^^^^^^^^^
+
+Oracle Berkely DB may be a good choice if your application runs on a single machine
+but needs a persistent store. All data is persisted to the same local disk of the
+system where your application runs. Berkley DB is popular with developers who want to
+develop and test graph applications on a single machine using more than an in-memory
+back end.  Assuming you are developing an application using Java or Groovy, the Java
+version of Berkley DB, known as Berkley DB Java Edition, is provided as a set of
+libraries that you embed with your application and run using the same JVM as your
+application. Because Berkley DB JE runs on a single machine, the amount of graph data
+that you can store will depend on the size of the disk available on that machine.
+
+For production systems that only need a modest sized graph this may also be a valid
+choice. If your application is likely to generate very large graphs in excess of 100
+million vertices you will probably need to investigate some of the other, multi node
+cluster capable, storage options that we will discuss next. Berkley DB is probably
+not a good choice if you need multiple users to be accessing and changing the graph
+concurrently.
+
+The JanusGraph '/conf' directory contains a file called
+'janusgraph-berkleyje.properties' that can be used to create a new instance of a
+JanusGraph backed by Berkley as follows.
+
+[source,groovy]
+----
+graph = JanusGraphFactory.open("conf/janusgraph-berkleyje.properties")
+----
+
+Alternatively, as there is not much to configure when using Berkley DB, you could
+decide to pass the properties directly to JanusGraph as follows. The second 'set'
+command specifies where your data will be stored on the disk.
+
+[source,groovy]
+----
+graph = JanusGraphFactory.build().
+          set("storage.backend","berkleyje").
+          set("storage.directory","/mydata").
+          open()
+----
+
+Oracle Berkley DB can be downloaded from the Oracle web site from the following URL.
+http://www.oracle.com/technetwork/database/database-technologies/berkeleydb/overview/index.html
 
 
-Berkley DB
-^^^^^^^^^^
-
-To be written
-
+[[cassandraintro]]
 Apache Cassandra
 ^^^^^^^^^^^^^^^^
 
-To be written
+If a single machine storage solution, such as that offered by Berkley DB, is
+insufficient for your needs then there are several other choices that offer
+horizontal scaling and high availability. Apache Cassandra is one such choice. Which
+storage solution you chose will depend on many factors that go beyond the scope of
+this book. However, if you already have Apache Cassandra deployed in your
+organization or data center and have people that know how to manage and configure it,
+it might be the right choice for your JanusGraph back end storage needs. Like any big
+data system Apache Cassandra requires tuning and maintenance to get the best
+performance for your workload type. That potentially requires developing new skills
+and doing some experimentation. Apache Cassandra is written in Java and it is
+important to keep a careful eye on the amount of garbage collection taking place
+within the virtual machines that are running your Cassandra instances. Excessive
+garbage collection can significantly impact your graph's performance.  There are many
+ways that Cassandra can be deployed ranging from a single instance on your local
+machine to a multi node cluster. How you deploy it will depend on your scalability
+and redundancy needs. Note that Cassandra, like Berkley DB can, if needed, also run
+in embedded mode.
 
-Apache HBase
-^^^^^^^^^^^^
+NOTE: For detailed configuration information you should refer to the official JanusGraph
+documentation located at http://docs.janusgraph.org/latest/storage-backends.html.
 
-To be written
+A bit later we will take a look at deploying a single node instance of Cassandra
+using Docker containers which provides a nice environment for development and
+testing.
 
+The JanusGraph '/conf' directory contains several property files that can be used
+when working with Apache Cassandra. Which one you use will depend on the way you
+chose to deploy Cassandra. Later on we will look at the additional steps you need to
+take to configure your environment when external indexes are used. However, if you
+were using Cassandra without an external index being needed you might connect to it
+as follows.
+
+
+[source,groovy]
+----
+graph = JanusGraphFactory.open("conf/janusgraph-cassandra.properties")
+----
+
+You will need to edit the properties file to contain the host name and IP address of
+your Cassandra system. By default the properties file is configured for use with
+'localhost'.
+
+
+Apache Cassandra can be downloaded from the Apache web site from the following
+URL. http://cassandra.apache.org/
+
+[[scyllaintro]]
 ScyllaDB
 ^^^^^^^^
 
-To be written
+ScyllaDB is API compatible with Apache Cassandra but implemented in C++. The same
+configuration files that you use when working with Apache Cassandra should also work
+with ScyllaDB.
+
+ScyllaDB can be downloaded from the following URL. http://www.scylladb.com/                                           
+
+[[hbaseintro]]
+Apache HBase
+^^^^^^^^^^^^
+
+If you already have a Hadoop and HDFS environment setup or are planning to deploy
+one, then Apache HBase may be a good choice for your JanusGraph data store. Apache
+HBase, like Apache Cassandra, is a database that supports very large tables. There
+are several properties files in the '/conf' directory that can be used to connect
+JanusGraph to an Apache HBase store.
+
+NOTE: For detailed configuration information you should refer to the official JanusGraph
+documentation located at http://docs.janusgraph.org/latest/storage-backends.html.
+
+Which properties file you use will depend on whether or not you need to use an
+external index. However, if you were using HBase without an external index being
+needed you might connect to it as follows.
+
+[source,groovy]
+----
+graph = JanusGraphFactory.open("conf/janusgraph-hbase.properties")
+----
+
+As with the Cassandra properties file, The HBase properties file is preconfigured to
+connect to 'localhost'. You will need to edit it and update the hostname and IP
+address as appropriate before calling 'open' if you want to connect to a different
+machine.
+
+Apache HBase can be downloaded from the Apache web site at the following
+URL. https://hbase.apache.org/ 
+
+Google Bigtable
+^^^^^^^^^^^^^^^
+
+All of the options discussed so far are open source alternatives that you could
+download and run in-house. For the sake of completenes I am including a few pointers
+to some "for fee" alternatives to hosting your JanusGraph data in house. Google
+Bigtable is API compatible with Apache HBase. It offers a hosted alternative to
+hosting your own HBase cluster for use with JanusGraph. Of course you will have to
+decide if paying for a hosted database service is the way you want to go versus
+hosting your graph data in house or setting up your own environment that you manage
+on a hosting service of your choice.
+
+You can read more about Google Bigtable at the following URL. https://cloud.google.com/bigtable/
+
+IBM Compose for JanusGraph
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+IBM offers a hosted and managed JanusGraph environment via its Compose platform. In
+this environment IBM manages the whole environment for you which includes JanusGraph
+backed by a ScyllaDB cluster. As with Google Bigtable this is a hosted service that
+you pay to use. If the idea of managing a Cassandra compatible cluster for use with
+JanusGraph yourself is not something you want to take on this is an option you can
+consider.
+
+You can read more about this service at the following
+URL. https://www.ibm.com/cloud/compose/janusgraph
+
+Other TinkerPop compatible products and services
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+There are now several products and cloud hosted environments that do not offer
+JanusGraph support per-se but do offer TinkerPop and Gremlin support backed by other
+stores. There are a selection of both hosted and in-house options to choose from. The
+Apache TinkerPop project maintains a list of TinkerPop compatible graph stores. You
+can find that list here http://tinkerpop.apache.org/providers.html.
+
 
 [[dockercass]]
 Using Docker to experiment with Cassandra and JanusGraph
@@ -14330,7 +14510,7 @@ docker pull cassandra
 ----
 
 Once Docker has downloaded the Cassandra image for you, it is quite simple to get a
-single instance of cassandra up and running. There are different ways that you can
+single instance of Cassandra up and running. There are different ways that you can
 use to configure Docker. To keep things simple I am going to just use command line
 parameters. The command does several things as shown in the notes below it. I split
 the command over four lines to make it easier to read. 
@@ -14384,7 +14564,7 @@ deprecated in favor of CQL. At some point in the future support for the older
 protocols is likely to be dropped so it is probably a good idea to get comfortable
 using CQL as the primary way that you connect JanusGraph to Cassandra,
 
-TIP: A script called 'janus-cassandra.groovy' is available in the sample-programs
+TIP: A script called 'janus-cassandra.groovy' is available in the sample-code
 folder at https://github.com/krlawrence/graph/tree/master/sample-code. The script
 will automate everything that we are about to discuss in this section and you are
 encouraged to study it.
@@ -14449,7 +14629,7 @@ load it as shown below.
 ----
 
 Whenever you are finished working with the graph, it is a good idea to close it. Once
-closed you will have to reconnect using one of the two open steps shown above before
+closed you will have to reconnect using one of the two 'open' steps shown above before
 you can start working with it again.
 
 [source,console]

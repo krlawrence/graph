@@ -15,6 +15,7 @@ Major new features in this release.
 - Significantly added to the using Gremlin from Java sections.
 - Added detailed coverage of Classses and Enums that you need to include when writing a Java or Groovy app that are hidden from you when using the Gremlin Console.
 - Added to the using Gremlin from Groovy sections.
+- Added coverage of JanusGraph storage options.
 - Added a new section showing how to use Cassandra from a Docker Container with JanusGraph.
 - Added a sample that shows how to load the air routes graph into JanusGraph backed by Cassandra.
 - Added several new Java and Groovy samples to the sample-code folder.
