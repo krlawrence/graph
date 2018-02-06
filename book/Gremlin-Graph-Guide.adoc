@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v277-preview, Feb 5, 2018
-// Mon Feb 05, 2018 14:19:35 CST
+v277-preview, Feb 6, 2018
+// Tue Feb 06, 2018 15:04:29  CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Feb 5 2018
+//:Date:      Feb 6 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -14804,26 +14804,232 @@ Apache Solr
 
 To be written
 
-
+[[gremlinserver]]
 Using Gremlin Server
 ~~~~~~~~~~~~~~~~~~~~
 
+So far in this book we have looked at a few different ways to setup a TinkerPop
+enabled graph store. Initially we focussed on running a TinkerGraph or a JanusGraph
+graph locally with the data kept in memory. We also looked at how to configure
+Cassandra with JanusGraph  so that you could connect to it from the Gremlin Console.
+As you will recall, Cassandra could be running locally or remotely but either way
+successfully making the connection to it required knowing the specific details of the
+back end configuration.  This included knowing the IP addresses, ports and protocols
+being used. 
+
+While this may be acceptable in scenarios where it is OK for the user of the graph to
+have this level of insight and access into the back end there are many scenarios
+where it is desirable to keep most of the implementation detail hidden and access
+secured. This is where Gremlin Server comes in.
+
+Gremlin Server, as its name suggests, offers a way of setting up access to a graph
+that goes via a front end web server. In this way the user of the graph only has to
+know the name or IP address of the Gremlin server in order to communicate with a
+graph. You can set Gremlin Server up on your local machine, which is useful for
+testing but you can also use it to setup a graph on a remote server and allow users
+to access it. Gremlin Server supports a number of different connection protocols and
+methods. You can connect to it from a Gremlin console, from a command line using
+'curl' commands or from an application. Gremlin Server has a second advantage over
+allowing us to hide the graph implementation details. It allows people using
+programming languages that do not yet have Apache TinkerPop language bindings to work
+with a graph using simple HTTP protocols.
+
+
+NOTE: The official Apache TinkerPop documentation includes in depth coverage of
+configuring and using Gremlin Server.
+http://tinkerpop.apache.org/docs/current/reference/#gremlin-server
+
+Gremlin Server offers a lot of valuable capabilities. In this section I am going to
+explain how to take the JanusGraph backed by Cassandra that we built earlier and
+expose it via Gremlin Server. There are many other useful ways that Gremlin Server
+can be configured, deployed and used. If you plan to experiment further with Gremlin
+Server I very much encourage you to read the official documentation.
+
+[[serverconfig]]
+Configuring Gremlin Server
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The simplest way to configure Gremlin Server is to use the YAML files that are
+delivered as part of the Gremlin Server or JanusGraph downloads.
+
 To be written
 
-Connecting the Gremlin Console to a remote graph
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[source,console]
+----
+host: 0.0.0.0
+port: 8182
+scriptEvaluationTimeout: 30000
+channelizer: org.apache.tinkerpop.gremlin.server.channel.WsAndHttpChannelizer
+graphs: {
+  graph: conf/gremlin-server/cassandra-docker.properties
+}
+
+----
+
+[source,console]
+----
+gremlin-server.sh conf/gremlin-server/gremlin-server.yaml
+----
+
+[[serverconsole]]
+Connecting to a Gremlin Server from the Gremlin Console
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To be written
 
+[source,groovy]
+.remote.yaml
+----
+hosts: [localhost]
+port: 8182
+#serializer: { className: org.apache.tinkerpop.gremlin.driver.ser.GryoMessageSerializerV3d0, config: { serializeResultToString: true }}
+serializer: { className: org.apache.tinkerpop.gremlin.driver.ser.GryoMessageSerializerV1d0, config: { serializeResultToString: true }}
 
+----
+
+[source,groovy]
+----
+gremlin> :remote connect tinkerpop.server conf/remote.yaml
+----
+
+[source,groovy]
+----
+gremlin> :> g.V().count()
+
+==>3624
+----
+
+[source,groovy]
+----
+:remote console
+----
+
+[source,groovy]
+----
+gremlin> g.V().count()
+
+==>3624
+----
+
+[source,groovy]
+----
+gremlin> g.V().has('code','AUS').valueMap()
+
+==>{country=[US], code=[AUS], longest=[12250], city=[Austin], elev=[542], icao=[KAUS], lon=[-97.6698989868164], type=[airport], region=[US-TX], runways=[2], lat=[30.1944999694824], desc=[Austin Bergstrom International Airport]}
+----
+
+[[servercli]]
 Connecting to a Gremlin Server from the command line
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To be written
+Now that we have a Gremlin Server up and running that supports both HTTP and Web
+Sockets connections, we can, if we wish,  communicate with it using nothing more than
+a 'curl' command. The 'curl' command below uses an HTTP GET to send a query to our
+Gremlin Server.
+
+[source,console]
+----
+curl "http://localhost:8182?gremlin=g.V().has('code','AUS').valueMap()" 
+----
+
+The following example shows how to send the same query using an HTTP POST. The Apache
+TinkerPop documentation states that this is the recommended way to send queries over
+HTTP to a Gremlin Server. Note how in this case we are sending the query packaged as
+JSON and that we have to escape the quote characters.
+
+[source,console]
+----
+curl -X POST -d "{\"gremlin\":\"g.V().has('code','AUS')\"}" \
+      "http://localhost:8182"
+----
+
+Both of the queries above will cause the following response to be sent back to us
+from the Gremlin Server.  Notice how the query results are packaged as JSON. I have
+formatted the output in a way that makes it easier to read. What was actually
+returned did not have any line breaks in it at all and was quite hard to read..
+
+//[source,json]]
+[source,groovy]
+----
+{"requestId":"a8ad654a-a5a3-4bb9-8474-69aca3c3db1e",
+ "status":{"message":"","code":200,"attributes":{}},
+ "result":{"data":[{"country":["US"],
+                       "code":["AUS"],
+                    "longest":[12250],
+                       "city":["Austin"],
+                       "elev":[542],
+                       "icao":["KAUS"],
+                        "lon":[-97.6698989868164],
+                       "type":["airport"],
+                     "region":["US-TX"],
+                    "runways":[2],
+                        "lat":[30.1944999694824],
+                       "desc":["Austin Bergstrom International Airport"]}],
+           "meta":{}}}
+----
 
 
-Examples of the JSON returned from a Gremlin Server
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[[rubyclient]]
+Connecting to a Gremlin Server from Ruby
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+As far as I know, at time of writing, there is currently no formal Gremlin language
+binding support available for Ruby programmers. This is therefore a perfect use case
+to show how, using a small amount of code, a Ruby programmer can connect to a Gremlin
+Server and issue Gremlin Queries.
+
+TIP: The source code for the Ruby example, 'gremlin-client-http.rb',  as shown below,
+is available in the sample-code folder.
+https://github.com/krlawrence/graph/tree/master/sample-code
+
+The code below represents a complete, stand alone Ruby application. It uses the
+standard Ruby libraries. No additional Ruby Gems or third party libraries should be
+required. The example as shown connects to a Gremlin Server running on your local
+machine. It packages up an HTTP POST request and sends it to the Gremlin Server.  The
+body of the HTTP request is encoded as JSON.
+
+.gremlin-client-http.rb
+[source,ruby,linenums]
+----
+# Simple example of how you can connect to a Gremlin Server and
+# issue queries from a Ruby application.
+
+require 'net/http'
+require 'uri'
+require 'json'
+
+uri = URI.parse("http://localhost:8182")
+
+request = Net::HTTP::Post.new(uri)
+req_options = { use_ssl: uri.scheme == "https", }
+
+query = {"gremlin" => "g.V().has('code','AUS').out().count()"}
+request.body = JSON.dump(query)
+
+response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
+  http.request(request)
+end
+
+puts "Response code from the server was #{response.code}"
+puts response.body  
+----
+
+Here is the output that was returned when I ran the program using Ruby version 2.3.1.
+As you can see the result body contains a JSON object just as when we issued requests
+using the 'curl' command earlier.
+
+[source,groovy]
+----
+Response code from the server was 200
+
+{"requestId":"0129e905-6903-4658-9cfb-23404842ba12",
+ "status":{"message":"","code":200,"attributes":{}},
+ "result":{"data":[62],"meta":{}}}
+----
+
+[[serverjson]]
+More examples of the JSON returned from a Gremlin Server
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 [source,groovy]
 ----
@@ -14870,6 +15076,7 @@ g.V().has('type','airport').or(has('region','US-TX'),has('region','US-OK')).valu
 }
 ----
 
+[[servertweaks]]
 Tweaking queries to make the JSON returned easier to work with
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -15018,14 +15225,17 @@ Using Gremlin within a Python notebook
 To be written
 
 
-
 [[serialize]]
 COMMON GRAPH SERIALIZATION FORMATS
 ----------------------------------
 
-To be written
-
-.This section is still under construction!
+There are a number of ways that graph data can be stored in a file. In this section I
+have provided a brief overview of a few of them. As you will see there are a number
+of ways you can represent graph data using simple CSV files. There are also XML
+format, JSON formats and many more. Of these, the one that still seems to be
+supported across most tools and platforms is GraphML. Not all of the features offered
+by Apache TinkerPop can be expressed using GrapphML however. So let's take a look at
+some of the more commonly used formats.
 
 [[csv]]
 Comma Separated Values (CSV)
@@ -15223,11 +15433,6 @@ ATL,route,SBN
 ATL,route,TRI
 ATL,route,TTN
 ----
-
-Exporting relational database data to a graph using CSV format
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-To be written
 
 GraphML
 ~~~~~~~
