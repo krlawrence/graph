@@ -1,6 +1,3 @@
-// Simple set of examples of using Janus Graph from a Java application.
-// This program connects to a JanusGraph instance backed by Cassandra.
-//
 // JanusCassandra.java
 //
 // Simple example of using JanusGraph with Java (outside the Gremlin console)
