@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v277-preview, Feb 6, 2018
-// Tue Feb 06, 2018 15:04:29  CST
+// Tue Feb 06, 2018 20:21:09 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Feb 6 2018
@@ -15027,9 +15027,230 @@ Response code from the server was 200
  "result":{"data":[62],"meta":{}}}
 ----
 
+
+In the next section we will look at ways to make the JSON returned easier to work
+with and also add to our Ruby program to work with the JSON.
+
+[[servertweaks]]
+Tweaking queries to make the JSON returned easier to work with
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Below is a query that we have seen used earlier in this book. It finds all
+routes longer than 8,000 miles and returns the airport pairs and the distance
+between them.
+
+[source,groovy]
+----
+g.V().as('a').outE().has('dist',gt(8000)).
+      order().by('dist',decr).inV().as('b'). 
+      filter(select('a','b').by('code').where('a', lt('b'))).
+      path().by('code').by('dist')
+----
+
+When we run this query using the Gremlin console with TinkerGraph we get get
+back results that have been to a degree 'pretty printed' by the Console as
+shown below.
+
+[source,groovy]
+----
+[AKL,9025,DOH]    [LAX,8246,RUH]
+[AKL,8818,DXB]    [MEL,8197,YVR]
+[LAX,8756,SIN]    [DXB,8150,IAH]
+[CAN,8754,MEX]    [AUH,8139,SFO]
+[IAH,8591,SYD]    [DFW,8105,HKG]
+[DFW,8574,SYD]    [DXB,8085,SFO]
+[ATL,8434,JNB]    [HKG,8054,JFK]
+[SFO,8433,SIN]    [AUH,8053,DFW]
+[AUH,8372,LAX]    [EWR,8047,HKG]
+[DXB,8321,LAX]    [DOH,8030,IAH]
+[JED,8314,LAX]    [DFW,8022,DXB]
+[DOH,8287,LAX]
+----
+
+However, if you were to use a system that returns the full JSON response, as is the
+case when using a Gremlin Server over an HTTP connection, you will not get the
+benefit '"pretty printing"' that the Gremlin Console does
+for you.  Instead, you will get back something that looks a lot like this from the
+exact same query as the one we used above.
+
+//[source,json]
+[source,groovy]
+----
+{"requestId":"5acca62c-7351-4b3d-bb20-3660f6feb3cc",
+ "status":{"message":"","code":200,"attributes":{}},
+ "result":{"data":
+    [{"labels":[["a"],[],["b"]],"objects":["AKL",9025,"DOH"]},
+    {"labels":[["a"],[],["b"]],"objects":["AKL",8818,"DXB"]},
+    {"labels":[["a"],[],["b"]],"objects":["LAX",8756,"SIN"]},
+    {"labels":[["a"],[],["b"]],"objects":["CAN",8754,"MEX"]},
+    {"labels":[["a"],[],["b"]],"objects":["IAH",8591,"SYD"]},
+    {"labels":[["a"],[],["b"]],"objects":["DFW",8574,"SYD"]},
+    {"labels":[["a"],[],["b"]],"objects":["ATL",8434,"JNB"]},
+    {"labels":[["a"],[],["b"]],"objects":["SFO",8433,"SIN"]},
+    {"labels":[["a"],[],["b"]],"objects":["AUH",8372,"LAX"]},
+    {"labels":[["a"],[],["b"]],"objects":["DXB",8321,"LAX"]},
+    {"labels":[["a"],[],["b"]],"objects":["JED",8314,"LAX"]},
+    {"labels":[["a"],[],["b"]],"objects":["DOH",8287,"LAX"]},
+    {"labels":[["a"],[],["b"]],"objects":["LAX",8246,"RUH"]},
+    {"labels":[["a"],[],["b"]],"objects":["MEL",8197,"YVR"]},
+    {"labels":[["a"],[],["b"]],"objects":["DXB",8150,"IAH"]},
+    {"labels":[["a"],[],["b"]],"objects":["AUH",8139,"SFO"]},
+    {"labels":[["a"],[],["b"]],"objects":["DFW",8105,"HKG"]},
+    {"labels":[["a"],[],["b"]],"objects":["DXB",8085,"SFO"]},
+    {"labels":[["a"],[],["b"]],"objects":["HKG",8054,"JFK"]},
+    {"labels":[["a"],[],["b"]],"objects":["AUH",8053,"DFW"]},
+    {"labels":[["a"],[],["b"]],"objects":["EWR",8047,"HKG"]},
+    {"labels":[["a"],[],["b"]],"objects":["DOH",8030,"IAH"]},
+    {"labels":[["a"],[],["b"]],"objects":["DFW",8022,"DXB"]}],
+    "meta":{}}}
+----
+
+What is being returned is useful in some cases, for examples we can see the
+'a' and 'b' labels that we used in our query but in this case all we really
+wanted was the last part with the airport codes and the distances. We could
+decide to write code to process this JSON as-is (probably using a JSON helper
+class) and that is a valid choice you could make. However by tweaking the
+query slightly, we can enable Gremlin to give us back what we really wanted.
+Let's start by looking at what happens if we add '.toList().toString()' to the
+end of the query. Take a look at the modified form of the query below.
+
+[source,groovy]
+----
+g.V().as('a').outE().has('dist',gt(8000)).
+      order().by('dist',decr).inV().as('b'). 
+      filter(select('a','b').by('code').where('a', lt('b'))). 
+      path().by('code').by('dist').toList().toString()
+----
+
+If we were to send this modified form of the query to our Gremlin Server, we shoulkd
+get back something that looks a lot more like the result we got back when working
+with the Gremlin Console. As shown below, it is certainly a bit easier to process in
+your application now. However, this is still not an ideal result as what we now have
+is a list containing  a single string with all of our routes in it.
+
+[source,groovy]
+//[source,json]
+----
+{"requestId":"63c660d0-28cf-41fc-86cf-5560a4e2fac0","status":{"message":"","code":200,"attributes":{}},"result":{"data":["[[AKL, 9025, DOH], [AKL, 8818, DXB], [LAX, 8756, SIN], [CAN, 8754, MEX], [IAH, 8591, SYD], [DFW, 8574, SYD], [ATL, 8434, JNB], [SFO, 8433, SIN], [AUH, 8372, LAX], [DXB, 8321, LAX], [JED, 8314, LAX], [DOH, 8287, LAX], [LAX, 8246, RUH], [MEL, 8197, YVR], [DXB, 8150, IAH], [AUH, 8139, SFO], [DFW, 8105, HKG], [DXB, 8085, SFO], [HKG, 8054, JFK], [AUH, 8053, DFW], [EWR, 8047, HKG], [DOH, 8030, IAH], [DFW, 8022, DXB]]"],"meta":{}}}
+----
+
+We can add a little more post processing to split up our single string into an
+array of strings where each string is a single route of the form
+'[AKL,9025,DOH]'. One way to do this is to trim off the unwanted characters at
+each end of the string and then use split to divide it up. As there are a lot
+of commas in the string I could not just do a simple 'split(",")' as that
+would not have returned what I wanted. To make the split work, I replaced
+every occurence of '],' in the string with ']x' and then did the split using
+'split("x")'. Here is the modified query.
+
+[source,groovy]
+----
+g.V().as('a').outE().has('dist',gt(8000)).
+      order().by('dist',decr).inV().as('b').
+      filter(select('a','b').by('code').where('a', lt('b'))).
+      path().by('code').by('dist').toList().toString()[1..-2].
+      replaceAll('],',']x').split('x')
+----
+
+Here is what we now get back in the returned JSON. Each route is now a string
+in an array of strings. From here it is a simple task to extract the airport
+names and distances for each route.
+
+[source,groovy]
+----
+{"requestId":"9d8324a8-89e4-4c1e-be59-ff433784a3da",
+ "status":{"message":"","code":200,"attributes":{}},
+ "result":{"data":[ " [AKL, 9025, DOH]",
+                    " [AKL, 8818, DXB]",
+                    " [LAX, 8756, SIN]", 
+                    " [CAN, 8754, MEX]",
+                    " [IAH, 8591, SYD]",
+                    " [DFW, 8574, SYD]",
+                    " [ATL, 8434, JNB]",
+                    " [SFO, 8433, SIN]",
+                    " [AUH, 8372, LAX]",
+                    " [DXB, 8321, LAX]",
+                    " [JED, 8314, LAX]",
+                    " [DOH, 8287, LAX]",
+                    " [LAX, 8246, RUH]",
+                    " [MEL, 8197, YVR]",
+                    " [DXB, 8150, IAH]",
+                    " [AUH, 8139, SFO]",
+                    " [DFW, 8105, HKG]",
+                    " [DXB, 8085, SFO]",
+                    " [HKG, 8054, JFK]",
+                    " [AUH, 8053, DFW]",
+                    " [EWR, 8047, HKG]",
+                    " [DOH, 8030, IAH]",
+                    " [DFW, 8022, DXB]"]
+----
+
+It's really a matter of personal preference whether you decide to have the query
+return less data or just return the full set of data that we got back from the
+initial query. One advantage to having the query limit what is returned is that less
+data, potentially a lot less data, will need to be sent back to your application and
+stored in memory or on disk. However, as, most programming languages have built in
+support that makes it easy de serialize JSON objects into native data structures such
+as maps, you may prefer to just have all the JSON be returned and do the rest of the
+processing yourself. 
+
+By way of a simple example, if we added the following lines to our Ruby application
+that we created in the previous section, and used the original query from before we
+added any post processing, we could easily get at the parts of the JSON that we are
+interested in.
+
+[source,ruby]
+----
+res = JSON.parse(response.body)['result']['data']
+
+res.each do |x|
+  p x['objects']
+end         
+----
+
+The code uses Ruby's 'JSON' class to convert the JSON response from the Gremlin
+Server into a map data structure. We can then access each part of the map by the
+names contained in the JSON. Note that the code as written expects a specific set of
+keywords to be present in the JSON. Not all query results contain these keywords.
+Therefore, it would take a little more work to turn this into a more general purpose
+piece of code that could handle any of the possible JSON return formats the server
+could send to us. Here is the output from running the updated Ruby code. Notice that
+what we have now is a nice collection of lists, each one containing two strings and
+an integer. The data is now in a form that is really easy and convenient to process
+further.
+
+[source,groovy]
+----
+["AKL", 9025, "DOH"]
+["AKL", 8818, "DXB"]
+["LAX", 8756, "SIN"]
+["CAN", 8754, "MEX"]
+["IAH", 8591, "SYD"]
+["DFW", 8574, "SYD"]
+["ATL", 8434, "JNB"]
+["SFO", 8433, "SIN"]
+["AUH", 8372, "LAX"]
+["DXB", 8321, "LAX"]
+["JED", 8314, "LAX"]
+["DOH", 8287, "LAX"]
+["LAX", 8246, "RUH"]
+["MEL", 8197, "YVR"]
+["DXB", 8150, "IAH"]
+["AUH", 8139, "SFO"]
+["DFW", 8105, "HKG"]
+["DXB", 8085, "SFO"]
+["HKG", 8054, "JFK"]
+["AUH", 8053, "DFW"]
+["EWR", 8047, "HKG"]
+["DOH", 8030, "IAH"]
+["DFW", 8022, "DXB"]
+----
+
 [[serverjson]]
 More examples of the JSON returned from a Gremlin Server
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To be written
 
 [source,groovy]
 ----
@@ -15074,151 +15295,8 @@ g.V().has('type','airport').or(has('region','US-TX'),has('region','US-OK')).valu
                   ,"SPS","SWO","TUL","TYR","VCT"]
           ,"meta":{}
 }
+
 ----
-
-[[servertweaks]]
-Tweaking queries to make the JSON returned easier to work with
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Below is a query that we have seen used earlier in this book. It finds all
-routes longer than 8,000 miles and returns the airport pairs and the distance
-between them.
-
-[source,groovy]
-----
-g.V().as('a').outE().has('dist',gt(8000)).order().by('dist',decr).inV().as('b') \
-     .filter(select('a','b').by('code').where('a', lt('b'))).path().by('code').by('dist')
-----
-
-When we run this query using the Gremlin console with TinkerGraph we get get
-back results that have been to a degree 'pretty printed' by the Console as
-shown below.
-
-[source,groovy]
-----
-[AKL,9025,DOH]    [DXB,8150,IAH]
-[AKL,8818,DXB]    [AUH,8139,SFO]
-[DFW,8574,SYD]    [DFW,8105,HKG]
-[ATL,8434,JNB]    [DXB,8085,SFO]
-[SFO,8433,SIN]    [HKG,8054,JFK]
-[AUH,8372,LAX]    [AUH,8053,DFW]
-[DXB,8321,LAX]    [EWR,8047,HKG]
-[JED,8314,LAX]    [DOH,8030,IAH]
-[DOH,8287,LAX]    [DFW,8022,DXB]
-[LAX,8246,RUH]
-----
-
-However, if you were to use a system that returns the full JSON response, for
-example when using Gremlin Server or talking to a hosted graph like IBM Graph, and
-not get the benefit of the 'pretty printing' that the Gremlin Console does
-using TinkerGraph you will get back something that looks a lot like this from
-the exact same query as the one we used above.
-
-//[source,json]
-[source,groovy]
-----
-[{'labels': [['a'], [], ['b']], 'objects': ['AKL', 9025, 'DOH']},
- {'labels': [['a'], [], ['b']], 'objects': ['AKL', 8818, 'DXB']},
- {'labels': [['a'], [], ['b']], 'objects': ['DFW', 8574, 'SYD']},
- {'labels': [['a'], [], ['b']], 'objects': ['ATL', 8434, 'JNB']},
- {'labels': [['a'], [], ['b']], 'objects': ['SFO', 8433, 'SIN']},
- {'labels': [['a'], [], ['b']], 'objects': ['AUH', 8372, 'LAX']},
- {'labels': [['a'], [], ['b']], 'objects': ['DXB', 8321, 'LAX']},
- {'labels': [['a'], [], ['b']], 'objects': ['JED', 8314, 'LAX']},
- {'labels': [['a'], [], ['b']], 'objects': ['DOH', 8287, 'LAX']},
- {'labels': [['a'], [], ['b']], 'objects': ['LAX', 8246, 'RUH']},
- {'labels': [['a'], [], ['b']], 'objects': ['DXB', 8150, 'IAH']},
- {'labels': [['a'], [], ['b']], 'objects': ['AUH', 8139, 'SFO']},
- {'labels': [['a'], [], ['b']], 'objects': ['DFW', 8105, 'HKG']},
- {'labels': [['a'], [], ['b']], 'objects': ['DXB', 8085, 'SFO']},
- {'labels': [['a'], [], ['b']], 'objects': ['HKG', 8054, 'JFK']},
- {'labels': [['a'], [], ['b']], 'objects': ['AUH', 8053, 'DFW']},
- {'labels': [['a'], [], ['b']], 'objects': ['EWR', 8047, 'HKG']},
- {'labels': [['a'], [], ['b']], 'objects': ['DOH', 8030, 'IAH']},
- {'labels': [['a'], [], ['b']], 'objects': ['DFW', 8022, 'DXB']}]
-----
-
-What is being returned is useful in some cases, for examples we can see the
-'a' and 'b' labels that we used in our query but in this case all we really
-wanted was the last part with the airport codes and the distances. We could
-decide to write code to process this JSON as-is (probably using a JSON helper
-class) and that is a valid choice you could make. However by tweaking the
-query slightly, we can enable Gremlin to give us back what we really wanted.
-Let's start by looking at what happens if we add '.toList().toString()' to the
-end of the query. Take a look at the modified form of the query below.
-
-[source,groovy]
-----
-g.V().as('a').outE().has('dist',gt(8000)).order().by('dist',decr).inV().as('b') \
-     .filter(select('a','b').by('code').where('a', lt('b'))) \
-     .path().by('code').by('dist').toList().toString()
-----
-
-When we run the query, we now get back something that looks a lot more like what we
-got back when working with our local TinkerGraph and is certainly a bit easier to
-process in your application. However this is still not an ideal result as what we now
-have is a list containing  a single string with all of our routes in it.
-
-[source,groovy]
-//[source,json]
-----
-['[[AKL, 9025, DOH], [AKL, 8818, DXB], [DFW, 8574, SYD], [ATL, 8434, JNB],
-[SFO, 8433, SIN], [AUH, 8372, LAX], [DXB, 8321, LAX], [JED, 8314, LAX], [DOH,
-8287, LAX], [LAX, 8246, RUH], [DXB, 8150, IAH], [AUH, 8139, SFO], [DFW, 8105,
-HKG], [DXB, 8085, SFO], [HKG, 8054, JFK], [AUH, 8053, DFW], [EWR, 8047, HKG],
-[DOH, 8030, IAH], [DFW, 8022, DXB]]']
-----
-
-We can add a little more post processing to split up our single string into an
-array of strings where each string is a single route of the form
-'[AKL,9025,DOH]'. One way to do this is to trim off the unwanted characters at
-each end of the string and then use split to divide it up. As there are a lot
-of commas in the string I could not just do a simple 'split(",")' as that
-would not have returned what I wanted. To make the split work, I replaced
-every occurence of '],' in the string with ']x' and then did the split using
-'split("x")'. Here is the modified query.
-
-[source,groovy]
-----
-g.V().as('a').outE().has('dist',gt(8000)).order().by('dist',decr).inV().as('b') \
-     .filter(select('a','b').by('code').where('a', lt('b')))\
-     .path().by('code').by('dist').toList().toString()[1..-2].replaceAll("],","]x").split('x')
-----
-
-Here is what we now get back in the returned JSON. Each route is now a string
-in an array of strings. From here it is a simple task to extract the airport
-names and distances for each route.
-
-[source,groovy]
-----
-[' [AKL, 9025, DOH]',
- ' [AKL, 8818, DXB]',
- ' [DFW, 8574, SYD]',
- ' [ATL, 8434, JNB]',
- ' [SFO, 8433, SIN]',
- ' [AUH, 8372, LAX]',
- ' [DXB, 8321, LAX]',
- ' [JED, 8314, LAX]',
- ' [DOH, 8287, LAX]',
- ' [LAX, 8246, RUH]',
- ' [DXB, 8150, IAH]',
- ' [AUH, 8139, SFO]',
- ' [DFW, 8105, HKG]',
- ' [DXB, 8085, SFO]',
- ' [HKG, 8054, JFK]',
- ' [AUH, 8053, DFW]',
- ' [EWR, 8047, HKG]',
- ' [DOH, 8030, IAH]',
- ' [DFW, 8022, DXB]']
-----
-
-It's really a matter of personal preference whether you decide to have the
-query return less data or just return the full set of data that we got back
-from the initial query. One advantage to having the query limit what is
-returned is that less data, potentially a lot less data, will need to be sent
-back to your application and stored in memory or on disk.
-
-
 Using Gremlin within a Python notebook
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
