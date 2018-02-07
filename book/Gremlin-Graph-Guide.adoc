@@ -15270,6 +15270,21 @@ Please note that some of the queries that follow  may not represent the best way
 achieve the specific result. I have deliberately picked queries that show different
 Gremlin steps to give you a feel for the type of JSON result each generates.
 
+No result
++++++++++
+
+The following query does not return any results. The JSON reflects this in the form
+of the 'data' returned being an empty list '"[]"'.
+
+[source,groovy]
+----
+g.V().has('code','AUS').out('route').has('code','SYD')
+
+{"requestId":"e68ce6d6-29a0-4a70-af35-b4e8bb123458",
+ "status":{"message":"","code":200,"attributes":{}},
+ "result":{"data":[],"meta":{}}}
+----
+
 Integer result
 ++++++++++++++
 
