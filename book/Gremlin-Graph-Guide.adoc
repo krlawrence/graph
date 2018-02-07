@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v277-preview, Feb 6, 2018
-// Tue Feb 06, 2018 20:21:09 CST
+v277-preview, Feb 7, 2018
+// Wed Feb 07, 2018 11:41:31 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Feb 6 2018
+//:Date:      Feb 7 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -15246,23 +15246,36 @@ further.
 ["DFW", 8022, "DXB"]
 ----
 
+In the next section you will find more examples of the JSON that can be returned by
+Gremlin Server and also some examples of how to reduce the amount of data that is
+returned.
+
 [[serverjson]]
 More examples of the JSON returned from a Gremlin Server
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The JSON returned by the Gremlin Server depends on query that is used and more
-specifically, what that query returns. Everything that is returned in the JSON will,
-at the outermost level be an array. What is inside that array could be a simple
-number or a string. It could also be a list of strings or other objects including
-maps. If you plan to write some general purpose code that can handle the different
-possible formats it is important to know what they look like. In the examples that
-follow I have attempted to show several of the possible response formats that you may
-encounter. I am mainly going to focus of the parts of the JSON that follow the
-'data' key.  Each example assumes that the query shown was sent to a Gremlin Server
-using the HTTP protocol.
+specifically, what that query returns. Everything that is returned in the 'data' part
+of the 'result'  will, at the outermost level be an array. What is inside that array
+could be a simple number or a string. It could also be a list of strings or other
+objects including maps. If you plan to write some general purpose code that can
+handle the different possible formats it is important to know what they look like. In
+the examples that follow I have attempted to show several of the possible response
+formats that you may encounter. I am mainly going to focus of the parts of the JSON
+that follow the 'data' key.  Each example assumes that the query shown was sent to a
+Gremlin Server using the HTTP protocol. As always, if you are unsure what JSON a
+particular query may generate, you should always run some experiments to find out.
+
+Please note that some of the queries that follow  may not represent the best way to
+achieve the specific result. I have deliberately picked queries that show different
+Gremlin steps to give you a feel for the type of JSON result each generates.
 
 Integer result
 ++++++++++++++
+
+A simple query that just returns a single integer result will generate JSON as shown
+below. The 'result' section of the JSON will contain a 'data' section with the single
+integer value encoded as a list with one member.
 
 [source,groovy]
 ----
@@ -15276,6 +15289,10 @@ g.V().count()
 String result
 +++++++++++++
 
+As with integer results, a query that just returns a single string  result will
+generate JSON as shown below. The 'result' section of the JSON will contain a 'data'
+section with the single string value encoded as a list with one member.  
+
 [source,groovy]
 ----
 g.V().has('code','DFW').values('city')
@@ -15288,6 +15305,9 @@ g.V().has('code','DFW').values('city')
 List of strings
 +++++++++++++++
 
+The query below generates a 'data' array containing a list of strings representing
+airport codes.
+
 [source,groovy]
 ----
 g.V().has('code','SAF').out().values('code')
@@ -15296,6 +15316,43 @@ g.V().has('code','SAF').out().values('code')
 "status":{"message":"","code":200,"attributes":{}},
 "result":{"data":["PHX","DFW","LAX","DEN"],"meta":{}}}
 ----
+
+List of integers
+++++++++++++++++
+
+The query below generates a 'data' array containing a list of integers representing
+runway counts. Note that in reality you would not use a 'sack' for this, a simple
+'values' step will generate the same results, but I wanted to show an example that
+uses a 'sack' step. 
+
+[source,groovy]
+----
+g.withSack(0).V().has('code','SAF').out().sack(sum).by('runways').sack()
+
+{"requestId":"23598951-ffa4-440d-910f-eebc6d5f620a",
+ "status":{"message":"","code":200,"attributes":{}},
+ "result":{"data":[3,7,4,6],"meta":{}}}
+----
+
+List of mixed types
++++++++++++++++++++
+
+It is common for a query result to contain a variety of different data types. The
+example below generates a list containing a string, and integer and a double. Note,
+as we have seen before, TinkerPop does not guarantee the order in which results are
+returned so do not create any dependencies on that.
+
+[source,groovy]
+----
+g.V().has('code','LGW').values('city','lat','runways')
+
+{"requestId":"6043ce66-221b-49b8-a3f9-6131eef3b9c2",
+ "status":{"message":"","code":200,"attributes":{}},
+ "result":{"data":["London",2,51.1481018066406],"meta":{}}}
+----
+
+As you might expect, when a 'valueMap' is used to generate the result from a query,
+the JSON generated also contains a map.
 
 Value map
 +++++++++
@@ -15328,11 +15385,7 @@ Single vertex
 [source,groovy]
 ----
 g.V().has('code','CDG')
-----
 
-//[source,json]
-[source,groovy]
-----
 {"requestId":"a70cab32-73a5-492f-a00b-0c7d66485b18",
     "status":{"message":"","code":200,"attributes":{}},
     "result":{"data":
@@ -15374,24 +15427,55 @@ g.V().has('code','SAF').outE().limit(1)
                  "properties":{"dist":369}}],"meta":{}}}
 ----
 
-Vertex and a path
-+++++++++++++++++
+New vertex
+++++++++++
+
+When a new vertex and some properties are added the returned JSON will contain all of
+the information about the vertex including its ID, label and type as well as its
+properties.
 
 [source,groovy]
 ----
-g.V().has('code','SAF').out().path().limit(1)
+g.addV('test').property('fruit','apple')
 
-{"requestId":"bcdc3113-d1f6-41cf-b2ad-b1409646677e","status":{"message":"","code":200,"attributes":{}},"result":{"data":[{"labels":[[],[]],"objects":[{"id":53352,"label":"airport","type":"vertex","properties":{"country":[{"id":"1s0d-1560-8p1","value":"US"}],"code":[{"id":"1sel-1560-5j9","value":"SAF"}],"longest":[{"id":"1sst-1560-mx1","value":8366}],"city":[{"id":"1t71-1560-7wl","value":"Santa Fe"}],"elev":[{"id":"1tl9-1560-but","value":6348}],"icao":[{"id":"1tzh-1560-6bp","value":"KSAF"}],"lon":[{"id":"1udp-1560-dfp","value":-106.088996887}],"type":[{"id":"1urx-1560-745","value":"airport"}],"region":[{"id":"1v65-1560-9hh","value":"US-NM"}],"runways":[{"id":"1vkd-1560-b2d","value":3}],"lat":[{"id":"1vyl-1560-cn9","value":35.617099762}],"desc":[{"id":"1wct-1560-a9x","value":"Santa Fe"}]}},{"id":4240,"label":"airport","type":"vertex","properties":{"country":[{"id":"176-39s-8p1","value":"US"}],"code":[{"id":"1le-39s-5j9","value":"PHX"}],"longest":[{"id":"1zm-39s-mx1","value":11489}],"city":[{"id":"2du-39s-7wl","value":"Phoenix"}],"elev":[{"id":"2s2-39s-but","value":1135}],"icao":[{"id":"36a-39s-6bp","value":"KPHX"}],"lon":[{"id":"3ki-39s-dfp","value":-112.012001037598}],"type":[{"id":"3yq-39s-745","value":"airport"}],"region":[{"id":"4cy-39s-9hh","value":"US-AZ"}],"runways":[{"id":"4r6-39s-b2d","value":3}],"lat":[{"id":"55e-39s-cn9","value":33.4342994689941}],"desc":[{"id":"5jm-39s-a9x","value":"Phoenix Sky Harbor International Airport"}]}}]}],"meta":{}}}
+{"requestId":"accd4354-0db9-417d-927f-c0945e1721dc",
+ "status":{"message":"","code":200,"attributes":{}},
+ "result":{"data":[{"id":4248,
+          "label":"test",
+           "type":"vertex",
+     "properties":{"fruit":[{"id":"177-3a0-28lh",
+                          "value":"apple"}]}}],"meta":{}}}
+----
+
+New vertex only returning the ID
+++++++++++++++++++++++++++++++++
+
+When adding a new vertex, if you are not really interested in getting back the entire
+new vertex and its properties, you can write the query to only return the ID of the
+new vertex as shown below.
+
+[source,groovy]
+----
+g.addV('test').as('a').property('fruit','apple').select('a').id()
+
+{"requestId":"c50d0fa7-5caa-4294-8eca-310f032b1c42",
+ "status":{"message":"","code":200,"attributes":{}},
+ "result":{"data":[8344],"meta":{}}}
 ----
 
 Path by value (list of strings)
 +++++++++++++++++++++++++++++++
 
+Note the new 'objects' key that is used when the returned JSON represents a path. 
+
 [source,groovy]
 ----
 g.V().has('code','SAF').out().path().by('code').limit(1)
 
-{"requestId":"b9a1655f-1b14-4313-96d0-085858f47de7","status":{"message":"","code":200,"attributes":{}},"result":{"data":[{"labels":[[],[]],"objects":["SAF","PHX"]}],"meta":{}}}
+{"requestId":"b9a1655f-1b14-4313-96d0-085858f47de7",
+ "status":{"message":"","code":200,"attributes":{}},
+ "result":{"data":[{"labels":[[],[]],
+                   "objects":["SAF","PHX"]}],"meta":{}}}
 ----
 
 Path by values (list of strings and integers)
@@ -15402,8 +15486,60 @@ Path by values (list of strings and integers)
 g.V().has('code','SAF').outE().inV().path().by('code').by('dist').limit(1)
 
 
-{"requestId":"c4eb3141-be1e-4335-aa04-50843f73838b","status":{"message":"","code":200,"attributes":{}},"result":{"data":[{"labels":[[],[],[]],"objects":["SAF",369,"PHX"]}],"meta":{}}}
+{"requestId":"c4eb3141-be1e-4335-aa04-50843f73838b",
+    "status":{"message":"","code":200,"attributes":{}},
+    "result":{"data":[{"labels":[[],[],[]],
+                      "objects":["SAF",369,"PHX"]}],"meta":{}}}
 ----
+
+Two vertex path
++++++++++++++++
+
+[source,groovy]
+----
+g.V().has('code','SAF').out().path().limit(1)
+
+{"requestId":"bcdc3113-d1f6-41cf-b2ad-b1409646677e",
+    "status":{"message":"","code":200,"attributes":{}},
+    "result":{"data":[{"labels":[[],[]],
+           "objects":[{
+              "id":53352,
+           "label":"airport",
+            "type":"vertex",
+      "properties":{ 
+         "country":[{"id":"1s0d-1560-8p1","value":"US"}],
+             "code":[{"id":"1sel-1560-5j9","value":"SAF"}],
+          "longest":[{"id":"1sst-1560-mx1","value":8366}],
+             "city":[{"id":"1t71-1560-7wl","value":"Santa Fe"}],
+             "elev":[{"id":"1tl9-1560-but","value":6348}],
+             "icao":[{"id":"1tzh-1560-6bp","value":"KSAF"}],
+              "lon":[{"id":"1udp-1560-dfp","value":-106.088996887}],
+             "type":[{"id":"1urx-1560-745","value":"airport"}],
+           "region":[{"id":"1v65-1560-9hh","value":"US-NM"}],
+          "runways":[{"id":"1vkd-1560-b2d","value":3}],
+              "lat":[{"id":"1vyl-1560-cn9","value":35.617099762}],
+             "desc":[{"id":"1wct-1560-a9x","value":"Santa Fe"}]}},
+
+             {"id":4240,
+           "label":"airport",
+            "type":"vertex",
+      "properties":{
+          "country":[{"id":"176-39s-8p1","value":"US"}],
+             "code":[{"id":"1le-39s-5j9","value":"PHX"}],
+          "longest":[{"id":"1zm-39s-mx1","value":11489}],
+             "city":[{"id":"2du-39s-7wl","value":"Phoenix"}],
+             "elev":[{"id":"2s2-39s-but","value":1135}],
+             "icao":[{"id":"36a-39s-6bp","value":"KPHX"}],
+              "lon":[{"id":"3ki-39s-dfp","value":-112.012001037598}],
+             "type":[{"id":"3yq-39s-745","value":"airport"}],
+           "region":[{"id":"4cy-39s-9hh","value":"US-AZ"}],
+          "runways":[{"id":"4r6-39s-b2d","value":3}],
+              "lat":[{"id":"55e-39s-cn9","value":33.4342994689941}],
+             "desc":[{"id":"5jm-39s-a9x",
+              "value":"Phoenix Sky Harbor International Airport"}]}}]}],
+      "meta":{}}}
+----
+
 
 Path with two vertices and an edge
 ++++++++++++++++++++++++++++++++++
@@ -15413,6 +15549,54 @@ Path with two vertices and an edge
 g.V().has('code','SAF').outE().inV().path().limit(1)
 
 {"requestId":"171d0f30-2f93-4ae6-a421-4601a35388a2","status":{"message":"","code":200,"attributes":{}},"result":{"data":[{"labels":[[],[],[]],"objects":[{"id":53352,"label":"airport","type":"vertex","properties":{"country":[{"id":"1s0d-1560-8p1","value":"US"}],"code":[{"id":"1sel-1560-5j9","value":"SAF"}],"longest":[{"id":"1sst-1560-mx1","value":8366}],"city":[{"id":"1t71-1560-7wl","value":"Santa Fe"}],"elev":[{"id":"1tl9-1560-but","value":6348}],"icao":[{"id":"1tzh-1560-6bp","value":"KSAF"}],"lon":[{"id":"1udp-1560-dfp","value":-106.088996887}],"type":[{"id":"1urx-1560-745","value":"airport"}],"region":[{"id":"1v65-1560-9hh","value":"US-NM"}],"runways":[{"id":"1vkd-1560-b2d","value":3}],"lat":[{"id":"1vyl-1560-cn9","value":35.617099762}],"desc":[{"id":"1wct-1560-a9x","value":"Santa Fe"}]}},{"id":"2xhcd-1560-pat-39s","label":"route","type":"edge","inVLabel":"airport","outVLabel":"airport","inV":4240,"outV":53352,"properties":{"dist":369}},{"id":4240,"label":"airport","type":"vertex","properties":{"country":[{"id":"176-39s-8p1","value":"US"}],"code":[{"id":"1le-39s-5j9","value":"PHX"}],"longest":[{"id":"1zm-39s-mx1","value":11489}],"city":[{"id":"2du-39s-7wl","value":"Phoenix"}],"elev":[{"id":"2s2-39s-but","value":1135}],"icao":[{"id":"36a-39s-6bp","value":"KPHX"}],"lon":[{"id":"3ki-39s-dfp","value":-112.012001037598}],"type":[{"id":"3yq-39s-745","value":"airport"}],"region":[{"id":"4cy-39s-9hh","value":"US-AZ"}],"runways":[{"id":"4r6-39s-b2d","value":3}],"lat":[{"id":"55e-39s-cn9","value":33.4342994689941}],"desc":[{"id":"5jm-39s-a9x","value":"Phoenix Sky Harbor International Airport"}]}}]}],"meta":{}}}
+----
+
+Selection map
++++++++++++++
+
+[source,groovy]
+----
+g.V().has('code','SAF').as('a').out().has('code','DFW').as('b').
+      select('a','b').by('code')
+
+{"requestId":"af8de8e6-4137-4378-bb31-921e134d0661",
+ "status":{"message":"","code":200,"attributes":{}},
+ "result":{"data":[{"a":"SAF","b":"DFW"}],"meta":{}}}
+----
+
+Projected map
++++++++++++++
+
+[source,groovy]
+----
+g.V().has('code','LGW').project('a','b').by('code').by(out().count())
+
+
+{"requestId":"57819d0b-c27e-40d7-a89a-e69a6b4872a1",
+ "status":{"message":"","code":200,"attributes":{}},
+ "result":{"data":[{"a":"LGW","b":204}],"meta":{}}}
+----
+
+Strings and a map
++++++++++++++++++
+
+[source,groovy]
+----
+g.V().has('code','SAF').outE().inV().limit(1).path().by('code').by()
+
+{"requestId":"5102bb14-e594-41ec-8643-89882377b1e7",
+ "status":{"message":"","code":200,"attributes":{}},
+ "result":{"data":[{"labels":[[],[],[]],
+           "objects":["SAF",
+                      {"id":"2xhcd-1560-pat-39s",
+                      "label":"route",
+                      "type":"edge",
+                      "inVLabel":"airport",
+                      "outVLabel":"airport",
+                      "inV":4240,
+                      "outV":53352,
+                      "properties":{"dist":369}},
+                      "PHX"]}],"meta":{}}}
 ----
 
 Nested lists

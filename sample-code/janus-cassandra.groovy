@@ -24,7 +24,6 @@ mgmt.makeEdgeLabel('route').multiplicity(MULTI).make()
 mgmt.makeEdgeLabel('contains').multiplicity(SIMPLE).make()
 
 ;[]// Define vertex labels
-mgmt = graph.openManagement()
 mgmt.makeVertexLabel('version').make()
 mgmt.makeVertexLabel('airport').make()
 mgmt.makeVertexLabel('country').make()
@@ -34,7 +33,6 @@ println "\n=============";[]
 println "Creating keys";[]
 println "=============\n";[]
 ;[]// Define vertex property keys
-mgmt = graph.openManagement()
 mgmt.makePropertyKey('code').dataType(String.class).cardinality(Cardinality.SINGLE).make()
 mgmt.makePropertyKey('icao').dataType(String.class).cardinality(Cardinality.SINGLE).make()
 mgmt.makePropertyKey('type').dataType(String.class).cardinality(Cardinality.SINGLE).make()
