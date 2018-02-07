@@ -15250,7 +15250,80 @@ further.
 More examples of the JSON returned from a Gremlin Server
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To be written
+The JSON returned by the Gremlin Server depends on query that is used and more
+specifically, what that query returns. Everything that is returned in the JSON will,
+at the outermost level be an array. What is inside that array could be a simple
+number or a string. It could also be a list of strings or other objects including
+maps. If you plan to write some general purpose code that can handle the different
+possible formats it is important to know what they look like. In the examples that
+follow I have attempted to show several of the possible response formats that you may
+encounter. I am mainly going to focus of the parts of the JSON that follow the
+'data' key.  Each example assumes that the query shown was sent to a Gremlin Server
+using the HTTP protocol.
+
+Integer result
+++++++++++++++
+
+[source,groovy]
+----
+g.V().count()
+
+{"requestId":"25fc4d45-3e58-4f72-99b1-fe1c6575fdd0",
+ "status":{"message":"","code":200,"attributes":{}},
+ "result":{"data":[3624],"meta":{}}}
+----
+
+String result
++++++++++++++
+
+[source,groovy]
+----
+g.V().has('code','DFW').values('city')
+
+{"requestId":"0ae1e2af-adea-487c-b365-7ef76bb56791",
+ "status":{"message":"","code":200,"attributes":{}},
+ "result":{"data":["Dallas"],"meta":{}}}
+----
+
+List of strings
++++++++++++++++
+
+[source,groovy]
+----
+g.V().has('code','SAF').out().values('code')
+
+{"requestId":"264cbaf8-6679-43b0-936c-f65b9f6fd0ed",
+"status":{"message":"","code":200,"attributes":{}},
+"result":{"data":["PHX","DFW","LAX","DEN"],"meta":{}}}
+----
+
+Value map
++++++++++
+
+[source,groovy]
+----
+g.V().has('code','CDG').valueMap()
+
+{"requestId":"c989a182-aa97-4ed7-bddb-7f0e3ad237d6",
+    "status":{"message":"","code":200,"attributes":{}},
+    "result":{"data":[{
+       "country":["FR"],
+          "code":["CDG"],
+       "longest":[13829],
+          "city":["Paris"],
+          "elev":[392],
+          "icao":["LFPG"],
+           "lon":[2.54999995232],
+          "type":["airport"],
+        "region":["FR-J"],
+       "runways":[4],
+           "lat":[49.0127983093],
+          "desc":["Paris Charles de Gaulle"]}],"meta":{}}}
+----
+
+
+Single vertex
++++++++++++++
 
 [source,groovy]
 ----
@@ -15260,43 +15333,101 @@ g.V().has('code','CDG')
 //[source,json]
 [source,groovy]
 ----
-[{'id': 40972336,
-  'label': 'airport',
-  'properties': {'city': [{'id': 'oeadi-oe6gg-745', 'value': 'Paris'}],
-   'code': [{'id': 'oe9l2-oe6gg-sl', 'value': 'CDG'}],
-   'country': [{'id': 'oe96u-oe6gg-5j9', 'value': 'FR'}],
-   'desc': [{'id': 'oedja-oe6gg-3yd', 'value': 'Paris Charles de Gaulle'}],
-   'elev': [{'id': 'oearq-oe6gg-7wl', 'value': 392}],
-   'icao': [{'id': 'oeb5y-oe6gg-8p1', 'value': 'LFPG'}],
-   'lat': [{'id': 'oed52-oe6gg-but', 'value': 49.0127983093}],
-   'lon': [{'id': 'oebk6-oe6gg-9hh', 'value': 2.54999995232}],
-   'longest': [{'id': 'oe9za-oe6gg-6bp', 'value': 13829}],
-   'region': [{'id': 'oeccm-oe6gg-a9x', 'value': 'FR-J'}],
-   'runways': [{'id': 'oecqu-oe6gg-b2d', 'value': 4}],
-   'type': [{'id': 'oebye-oe6gg-35x', 'value': 'airport'}]},
-  'type': 'vertex'}]
+{"requestId":"a70cab32-73a5-492f-a00b-0c7d66485b18",
+    "status":{"message":"","code":200,"attributes":{}},
+    "result":{"data":
+       [{"id":69736,
+      "label":"airport",
+      "type":"vertex",
+"properties":
+     {"country":[{"id":"2e4t-1ht4-8p1", "value":"FR"}],
+         "code":[{"id":"2ej1-1ht4-5j9","value":"CDG"}],
+      "longest":[{"id":"2ex9-1ht4-mx1","value":13829}],
+         "city":[{"id":"2fbh-1ht4-7wl","value":"Paris"}],
+         "elev":[{"id":"2fpp-1ht4-but","value":392}],
+         "icao":[{"id":"2g3x-1ht4-6bp","value":"LFPG"}],
+         " lon":[{"id":"2gi5-1ht4-dfp","value":2.54999995232}],
+         "type":[{"id":"2gwd-1ht4-745","value":"airport"}],
+       "region":[{"id":"2hal-1ht4-9hh","value":"FR-J"}],
+      "runways":[{"id":"2hot-1ht4-b2d","value":4}],
+          "lat":[{"id":"2i31-1ht4-cn9","value":49.0127983093}],
+         "desc":[{"id":"2ih9-1ht4-a9x","value":"Paris Charles de Gaulle"}]}}],
+    "meta":{}}}
 ----
+
+Single edge
++++++++++++
 
 [source,groovy]
 ----
-g.V().has('type','airport').or(has('region','US-TX'),has('region','US-OK')).values('code').order()
+g.V().has('code','SAF').outE().limit(1)
+
+{"requestId":"cac0a975-33a0-4714-a797-1be782201a27",
+ "status":{"message":"","code":200,"attributes":{}},
+ "result":{"data":[{"
+        id":"2xhcd-1560-pat-39s",
+    "label":"route",
+     "type":"edge","inVLabel":"airport",
+                  "outVLabel":"airport","
+                         inV":4240,
+                       "outV":53352,
+                 "properties":{"dist":369}}],"meta":{}}}
 ----
 
-[source,json]
+Vertex and a path
++++++++++++++++++
+
+[source,groovy]
 ----
-{"requestId":"8602665d-e1c0-488f-b8a1-3343c3a1c0b6"
-,"status":{"message":""
-          ,"code":200
-          ,"attributes":{}}
-,"result":{"data":["ABI","ACT","AMA","AUS","BPT","BRO"
-                  ,"CLL","CRP","DAL","DFW","ELP","GGG"
-                  ,"GRK","HOU","HRL","IAH","LAW","LBB"
-                  ,"LRD","MAF","MFE","OKC","SAT","SJT"
-                  ,"SPS","SWO","TUL","TYR","VCT"]
-          ,"meta":{}
-}
+g.V().has('code','SAF').out().path().limit(1)
+
+{"requestId":"bcdc3113-d1f6-41cf-b2ad-b1409646677e","status":{"message":"","code":200,"attributes":{}},"result":{"data":[{"labels":[[],[]],"objects":[{"id":53352,"label":"airport","type":"vertex","properties":{"country":[{"id":"1s0d-1560-8p1","value":"US"}],"code":[{"id":"1sel-1560-5j9","value":"SAF"}],"longest":[{"id":"1sst-1560-mx1","value":8366}],"city":[{"id":"1t71-1560-7wl","value":"Santa Fe"}],"elev":[{"id":"1tl9-1560-but","value":6348}],"icao":[{"id":"1tzh-1560-6bp","value":"KSAF"}],"lon":[{"id":"1udp-1560-dfp","value":-106.088996887}],"type":[{"id":"1urx-1560-745","value":"airport"}],"region":[{"id":"1v65-1560-9hh","value":"US-NM"}],"runways":[{"id":"1vkd-1560-b2d","value":3}],"lat":[{"id":"1vyl-1560-cn9","value":35.617099762}],"desc":[{"id":"1wct-1560-a9x","value":"Santa Fe"}]}},{"id":4240,"label":"airport","type":"vertex","properties":{"country":[{"id":"176-39s-8p1","value":"US"}],"code":[{"id":"1le-39s-5j9","value":"PHX"}],"longest":[{"id":"1zm-39s-mx1","value":11489}],"city":[{"id":"2du-39s-7wl","value":"Phoenix"}],"elev":[{"id":"2s2-39s-but","value":1135}],"icao":[{"id":"36a-39s-6bp","value":"KPHX"}],"lon":[{"id":"3ki-39s-dfp","value":-112.012001037598}],"type":[{"id":"3yq-39s-745","value":"airport"}],"region":[{"id":"4cy-39s-9hh","value":"US-AZ"}],"runways":[{"id":"4r6-39s-b2d","value":3}],"lat":[{"id":"55e-39s-cn9","value":33.4342994689941}],"desc":[{"id":"5jm-39s-a9x","value":"Phoenix Sky Harbor International Airport"}]}}]}],"meta":{}}}
+----
+
+Path by value (list of strings)
++++++++++++++++++++++++++++++++
+
+[source,groovy]
+----
+g.V().has('code','SAF').out().path().by('code').limit(1)
+
+{"requestId":"b9a1655f-1b14-4313-96d0-085858f47de7","status":{"message":"","code":200,"attributes":{}},"result":{"data":[{"labels":[[],[]],"objects":["SAF","PHX"]}],"meta":{}}}
+----
+
+Path by values (list of strings and integers)
++++++++++++++++++++++++++++++++++++++++++++++
+
+[source,groovy]
+----
+g.V().has('code','SAF').outE().inV().path().by('code').by('dist').limit(1)
+
+
+{"requestId":"c4eb3141-be1e-4335-aa04-50843f73838b","status":{"message":"","code":200,"attributes":{}},"result":{"data":[{"labels":[[],[],[]],"objects":["SAF",369,"PHX"]}],"meta":{}}}
+----
+
+Path with two vertices and an edge
+++++++++++++++++++++++++++++++++++
+
+[source,groovy]
+----
+g.V().has('code','SAF').outE().inV().path().limit(1)
+
+{"requestId":"171d0f30-2f93-4ae6-a421-4601a35388a2","status":{"message":"","code":200,"attributes":{}},"result":{"data":[{"labels":[[],[],[]],"objects":[{"id":53352,"label":"airport","type":"vertex","properties":{"country":[{"id":"1s0d-1560-8p1","value":"US"}],"code":[{"id":"1sel-1560-5j9","value":"SAF"}],"longest":[{"id":"1sst-1560-mx1","value":8366}],"city":[{"id":"1t71-1560-7wl","value":"Santa Fe"}],"elev":[{"id":"1tl9-1560-but","value":6348}],"icao":[{"id":"1tzh-1560-6bp","value":"KSAF"}],"lon":[{"id":"1udp-1560-dfp","value":-106.088996887}],"type":[{"id":"1urx-1560-745","value":"airport"}],"region":[{"id":"1v65-1560-9hh","value":"US-NM"}],"runways":[{"id":"1vkd-1560-b2d","value":3}],"lat":[{"id":"1vyl-1560-cn9","value":35.617099762}],"desc":[{"id":"1wct-1560-a9x","value":"Santa Fe"}]}},{"id":"2xhcd-1560-pat-39s","label":"route","type":"edge","inVLabel":"airport","outVLabel":"airport","inV":4240,"outV":53352,"properties":{"dist":369}},{"id":4240,"label":"airport","type":"vertex","properties":{"country":[{"id":"176-39s-8p1","value":"US"}],"code":[{"id":"1le-39s-5j9","value":"PHX"}],"longest":[{"id":"1zm-39s-mx1","value":11489}],"city":[{"id":"2du-39s-7wl","value":"Phoenix"}],"elev":[{"id":"2s2-39s-but","value":1135}],"icao":[{"id":"36a-39s-6bp","value":"KPHX"}],"lon":[{"id":"3ki-39s-dfp","value":-112.012001037598}],"type":[{"id":"3yq-39s-745","value":"airport"}],"region":[{"id":"4cy-39s-9hh","value":"US-AZ"}],"runways":[{"id":"4r6-39s-b2d","value":3}],"lat":[{"id":"55e-39s-cn9","value":33.4342994689941}],"desc":[{"id":"5jm-39s-a9x","value":"Phoenix Sky Harbor International Airport"}]}}]}],"meta":{}}}
+----
+
+Nested lists
+++++++++++++
+
+[source,groovy]
+----
+g.V().has('region','US-OK').values('code').fold()
+
+
+{"requestId":"edcea305-086d-4f8d-b79a-ff72c5a26847","status":{"message":"","code":200,"attributes":{}},"result":{"data":[["OKC","TUL","LAW","SWO"]],"meta":{}}}
 
 ----
+
+
 Using Gremlin within a Python notebook
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
