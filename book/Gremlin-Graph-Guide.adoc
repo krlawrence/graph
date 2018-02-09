@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v277-preview, Feb 7, 2018
-// Wed Feb 07, 2018 11:41:31 CST
+v277-preview, Feb 8, 2018
+// Thu Feb 08, 2018 18:53:40 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Feb 7 2018
+//:Date:      Feb 8 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -14887,10 +14887,18 @@ serializer: { className: org.apache.tinkerpop.gremlin.driver.ser.GryoMessageSeri
 
 ----
 
+All that we have to do to establish a connection between our Gremlin Console and the
+Gremlin Server is to issue the folowing command once the console is running.
+
 [source,groovy]
 ----
 gremlin> :remote connect tinkerpop.server conf/remote.yaml
 ----
+
+Now that we are connected to the Gremlin Server we can issue some Gremlin commands.
+Given that the air-routes graph s already loaded into our remote graph we can
+immidiately start to issue some queries. In order to make sure the query goes to the
+remote graph, the query needs to be prefixed with '":>"'.
 
 [source,groovy]
 ----
@@ -14899,10 +14907,18 @@ gremlin> :> g.V().count()
 ==>3624
 ----
 
+If you are going to be issuing a lot of queries to the remote graph, I find it more
+conventinet to put the console into '"remote mode"'. This can be done as follows.
+
 [source,groovy]
 ----
 :remote console
+
+All scripts will now be sent to Gremlin Server - [localhost/127.0.0.1:8182] - type ':remote console' to return to local mode
 ----
+
+The console is now in remote mode. All queries that you enter will be sent to the
+Gremlin Server and there is no need to use the '":>"' prefix.
 
 [source,groovy]
 ----
@@ -14911,11 +14927,27 @@ gremlin> g.V().count()
 ==>3624
 ----
 
+One thing to notice is that the output that comes back froma Gremlin Server looks
+a little different from when you use the commands using the Gremlin Console attached
+to a TinkerGraph. This is because Gremlin Server essentially does a 'toString()' on
+the output before it is returned to the console.
+
 [source,groovy]
 ----
 gremlin> g.V().has('code','AUS').valueMap()
 
 ==>{country=[US], code=[AUS], longest=[12250], city=[Austin], elev=[542], icao=[KAUS], lon=[-97.6698989868164], type=[airport], region=[US-TX], runways=[2], lat=[30.1944999694824], desc=[Austin Bergstrom International Airport]}
+----
+
+Once you are done sending all commands to the Gremlin Server you can disable that
+mode as follows.
+
+[source,console]
+----
+:remote console
+
+==>All scripts will now be evaluated locally - type ':remote console' to return to
+remote mode for Gremlin Server - [localhost/127.0.0.1:8182]
 ----
 
 [[servercli]]
