@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v277-preview, Feb 8, 2018
-// Thu Feb 08, 2018 18:53:40 CST
+v277-preview, Feb 9, 2018
+// Fri Feb 09, 2018 15:33:57 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Feb 8 2018
+//:Date:      Feb 9 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -14849,33 +14849,181 @@ Server I very much encourage you to read the official documentation.
 Configuring Gremlin Server
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The simplest way to configure Gremlin Server is to use the YAML files that are
-delivered as part of the Gremlin Server or JanusGraph downloads.
+The Gremlin Server runtime is a separate download available from the Apache TinkerPop
+Web site. However, if you are going to be using Gremlin Server in conjunction with
+JanusGraph you should use the version of Gremlin Server that comes bundled as part of
+the JanusGraph download. The JanusGraph version comes preconfigured to work more
+easily with the JanusGraph runtimes and connect more easily to JanusGraph managed
+back end stores like Cassandra. The simplest way to configure Gremlin Server is to
+use the YAML and properties files that are delivered as part of the Gremlin Server or
+JanusGraph downloads. Depending on your configuration, you may need to edit these
+files.
 
-To be written
+The Apache TinkerPop documentation has detailed instructions and examples showing
+different ways of configuring a Gremlin Server. In this section I am going to focus
+on setting up a Gremlin Server that can front end the JanusGraph and Dockerized
+Cassandra instance that we configured earlier.
 
-[source,console]
+If you look at the files that were installed on your machine when you unzipped the
+JanusGraph download, you will find a path of 'conf/gremlin-server'. Inside this
+directory you will find a set of YAML and properties files that can be used to start
+a Gremlin Server working with JanusGraph and a variety of differnt back end stores. 
+
+For the rest of this discussion I am going to use the 'gremlin-server.yaml' file as
+my starting point and make minor modifications to it.
+
+The Gremlin Server by default is configured for a WebSockets connection and that is
+how the Gremlin Console connects to it. Using WebSockets is the recommended approach
+when possible as it allows for a long running full duplex connection. However, there
+are still many use cases where supporting an HTTP connection is desirable. There is
+also a third option that allows both WebSockets and HTTP connections. In the YAML
+file that is used when starting a Gremlin Server you need to specify one of the
+following.
+
+org.apache.tinkerpop.gremlin.server.channel.WebSocketChannelizer::
+- The server will expect a WebSockets connection (this is the default).
+org.apache.tinkerpop.gremlin.server.channel.HttpChannelizer::
+- The server will expect an HTTP connection.
+org.apache.tinkerpop.gremlin.server.channel.WsAndHttpChannelizer::
+- The server will accept both WebSockets and HTTP connections.
+
+The first part of the 'gremlin-server.yaml' file, modified to meet our needs is shown
+below. I did not modify the parts of the file that are not shown but I encourage you
+to look at the whole file and study the settings. For our current needs the defaults
+are fine. However, in your environment the defaults mayt not meet your needs. The
+TinkerPop documentation has detailed coverage of the settings and what they do.
+
+OK so let's look at the parts of the YAML file that are relevant to this experiment.
+Note that I have chosen to use the 'WsAndHttpChannelizer'. This is because I want to
+allow both the Gremlin Console over WebSockets and other applications such as 'curl'
+and 'Ruby' over HTTP to connect to my new Gremlin Server.
+
+Notice also that the 'janusgraph-cassandra-es.server.properties' file is specified in
+the 'graphs' section. This is a file that is provided as part of the JanusGraph
+download.  This is the file that Gremlin Server will use to connect to our JanusGraph
+backed by Cassandra. Note that the '"-es"' in the properties file name refers to
+Elastic Search. As we did not configure an external index when we setup our
+JanusGraph the lines referring to Elastic Search inside the properties file should be
+commented out.
+
+As well as the YAML file and the properties file, there is a third file that we need
+to provide when starting a Gremlin Server. This file can contain Groovy code that
+will be run when the server starts. For our purposes the default file is all we need.
+These files should be placed in the 'scripts' directory that is part of the standard
+Gremlin Server or JanusGraph install. We will take a look at the default script in a
+moment.
+
+.gremlin-server.yaml
+[source,groovy]
 ----
 host: 0.0.0.0
 port: 8182
 scriptEvaluationTimeout: 30000
 channelizer: org.apache.tinkerpop.gremlin.server.channel.WsAndHttpChannelizer
 graphs: {
-  graph: conf/gremlin-server/cassandra-docker.properties
+  graph: conf/gremlin-server/janusgraph-cassandra-es-server.properties
 }
+plugins:
+  - janusgraph.imports
+scriptEngines: {
+  gremlin-groovy: {
+    imports: [java.lang.Math],
+    staticImports: [java.lang.Math.PI],
+    scripts: [scripts/empty-sample.groovy]}}
 
+# The rest of the file is not shown  
 ----
+
+By default both Gremlin Server and JanusGraph include a Groovy script called
+'empty-sample.groovy'. That name is a bit misleading as the file actually does some
+interesting things. For our purposes the most useful thing that the script does is to
+configure and make available to us in the Gremlin Console, the graph traversal
+source, 'g' object that hopefully by now you are very familiar with. This provides
+you with a template for any other 'global' variables that you may want to make
+available to the user of the console connected to your Gremlin Server. The file also
+configures some default log messages  that will be generated when the server starts
+and stops. Note that you can add your own code to this script or replace it with your
+own script entirely. You will find additional example scripts included as part of the
+Gremlin Server download. These scripts do things such as create a TinkerGraph
+instance and load some graph data as part of the server startup process. Using this
+technique, we could easily add a line to the script so that when the server starts an
+empty TinkerGraph is created and the air-routes data loaded.
+
+.empty-sample.groovy
+[source,groovy]
+----
+// an init script that returns a Map allows explicit setting of global bindings.
+def globals = [:]
+
+// defines a sample LifeCycleHook that prints some output to the Gremlin Server console.
+// note that the name of the key in the "global" map is unimportant.
+globals << [hook : [
+        onStartUp: { ctx ->
+            ctx.logger.info("Executed once at startup of Gremlin Server.")
+        },
+        onShutDown: { ctx ->
+            ctx.logger.info("Executed once at shutdown of Gremlin Server.")
+        }
+] as LifeCycleHook]
+
+// define the default TraversalSource to bind queries to - this one will be named "g".
+globals << [g : graph.traversal()]
+----
+
+Now that we have all of our configuration files in place we can start the Gremlin
+Server by typing the following command into a terminal window. The
+'gremlin-server.sh' file is located in the 'bin' directory of your Gremlin Server or
+JanusGraph installation.
 
 [source,console]
 ----
-gremlin-server.sh conf/gremlin-server/gremlin-server.yaml
+sh> gremlin-server.sh conf/gremlin-server/gremlin-server.yaml
 ----
+
+If all goes well you should see output from the Gremlin Server displayed. The server
+will keep running until you kill it. In this case a simple CTRL-C is all you need to
+do to kill the server. After you press CTRL-C the server will do a bit of cleaning up
+and 
 
 [[serverconsole]]
 Connecting to a Gremlin Server from the Gremlin Console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To be written
+It is fairly straightforward to connect to a running Gremlin Server from a Gremlin
+Console. In this case it should not matter whether you are using the Gremlin Console
+that is part of the Apache TinkerPop download or the one that comes as part of the
+JanusGraph download. This is because the Gremlin Server very nicely hides the back
+end implementation details from us. As far as we are concerned it is just an HTTP or
+WebSockets endpoint that can handle Gremlin queries.
+
+There is one exception, that I am currently aware of, to my statement about not
+needing to worry about server side implementation details. This exception is a result
+of potential version mismatches. Typically, the TinkerPop download, assuming you have
+the very latest, will be at least a few minor point releases ahead of any given graph
+store release. This is purely because whenever TinkerPop has a release, it takes a
+bit of time for the GraphDB maintainers to catch up. I will give a concrete example
+of this in a moment.
+
+As with Gremlin Server, YAML files can be used to configure a remote connection from
+the Gremlin Console. The Gremlin Console as well as the version that comes bundled
+with JanusGraph includes a set of YAML files that can be used as-is or edited as
+needed. In order to connect The Gremlin Console to the Gremlin Server that we just
+configured, the file 'remote.yaml' can be used. I had to make one change, as shown
+below. I commented out the 'serializer' line and replaced it with a slightly modified
+version. I had to do this because of the version issues I mentioned above. At time of
+writing, JanusGraph supports version V1d0 of the GyroMessageSerializer that is used
+as the communication serialization protocol between the Gremlin Console and the
+Gremlin Server. However, my Gremlin Console was pre configured with the newer version
+V3d0 of the serializer. It is essential that the console and the server be using the
+same version. If I did not make this change, the Gremlin Console and the Gremlin
+Server would not be able to correctly communicate. Note that in 'remote.yaml' file we
+also specify the name and port of the Gremlin Server host that we will be connecting
+to.  As we are running everything locally the default host name of 'localhost' is
+fine.  If you are connecting to a remote Gremlin Server the 'hosts' value needs to be
+edited to correctly identify name or IP address of the server where the Gremlin
+Server is running. Also we can use the default port of 8182. By default a Gremlin
+Server listens on port 8182. The only reason you would need to change this value is
+if you are connecting to a Gremlin Server using a different port.
 
 [source,groovy]
 .remote.yaml
@@ -14884,20 +15032,20 @@ hosts: [localhost]
 port: 8182
 #serializer: { className: org.apache.tinkerpop.gremlin.driver.ser.GryoMessageSerializerV3d0, config: { serializeResultToString: true }}
 serializer: { className: org.apache.tinkerpop.gremlin.driver.ser.GryoMessageSerializerV1d0, config: { serializeResultToString: true }}
-
 ----
 
-All that we have to do to establish a connection between our Gremlin Console and the
-Gremlin Server is to issue the folowing command once the console is running.
+Now that we have our YAML file ready, all that we have to do to establish a
+connection between our Gremlin Console and the Gremlin Server is to issue the
+following command once the console is running.
 
-[source,groovy]
+[source,console]
 ----
 gremlin> :remote connect tinkerpop.server conf/remote.yaml
 ----
 
 Now that we are connected to the Gremlin Server we can issue some Gremlin commands.
-Given that the air-routes graph s already loaded into our remote graph we can
-immidiately start to issue some queries. In order to make sure the query goes to the
+Given that the air-routes graph is already loaded into our remote graph we can
+immediately start to issue some queries. In order to make sure the query goes to the
 remote graph, the query needs to be prefixed with '":>"'.
 
 [source,groovy]
@@ -14908,11 +15056,11 @@ gremlin> :> g.V().count()
 ----
 
 If you are going to be issuing a lot of queries to the remote graph, I find it more
-conventinet to put the console into '"remote mode"'. This can be done as follows.
+convenient to put the console into '"remote mode"'. This can be done as follows.
 
-[source,groovy]
+[source,console]
 ----
-:remote console
+gremlin> :remote console
 
 All scripts will now be sent to Gremlin Server - [localhost/127.0.0.1:8182] - type ':remote console' to return to local mode
 ----
@@ -14927,10 +15075,10 @@ gremlin> g.V().count()
 ==>3624
 ----
 
-One thing to notice is that the output that comes back froma Gremlin Server looks
-a little different from when you use the commands using the Gremlin Console attached
-to a TinkerGraph. This is because Gremlin Server essentially does a 'toString()' on
-the output before it is returned to the console.
+One thing to notice is that the output that comes back from a Gremlin Server looks a
+little different at times from when you use the commands using the Gremlin Console
+attached to a local TinkerGraph. This is because Gremlin Console essentially does a
+'toString()' on the output before it is shown to the user in these cases.
 
 [source,groovy]
 ----
@@ -14939,15 +15087,39 @@ gremlin> g.V().has('code','AUS').valueMap()
 ==>{country=[US], code=[AUS], longest=[12250], city=[Austin], elev=[542], icao=[KAUS], lon=[-97.6698989868164], type=[airport], region=[US-TX], runways=[2], lat=[30.1944999694824], desc=[Austin Bergstrom International Airport]}
 ----
 
-Once you are done sending all commands to the Gremlin Server you can disable that
-mode as follows.
+As an example of the slight differences in the output format, below you will find the
+results from the same query when the graph was running as a local, in memory,
+TinkerGraph.
+
+[source,groovy]
+----
+[country:[US],code:[AUS],longest:[12250],city:[Austin],elev:[542],icao:[KAUS],lon:[-97.6698989868164],type:[airport],region:[US-TX],runways:[2],lat:[30.1944999694824],desc:[Austin Bergstrom International Airport]]
+----
+
+Once you are done sending all commands to the Gremlin Server you can switch out of
+that mode as follows. Commands will now be sent to your local console. This means
+that you can work with a local and remote graph at the same time. The ':remote
+console' command is therefore a toggle. Each time you use the command the console
+will switch between local mode and remote mode or vice versa.
 
 [source,console]
 ----
-:remote console
+gremlin> :remote console
 
 ==>All scripts will now be evaluated locally - type ':remote console' to return to
 remote mode for Gremlin Server - [localhost/127.0.0.1:8182]
+----
+
+If you are completely done with the remote connection for this console session you can
+truly close it as follows. Having done this you will need to reestablish the
+connection before the ':remote console' will work again.
+
+[source,console]
+----
+gremlin> :remote close
+
+==>Removed - Gremlin Server - [localhost/127.0.0.1:8182]
+
 ----
 
 [[servercli]]
@@ -14961,7 +15133,7 @@ Gremlin Server.
 
 [source,console]
 ----
-curl "http://localhost:8182?gremlin=g.V().has('code','AUS').valueMap()" 
+sh> curl "http://localhost:8182?gremlin=g.V().has('code','AUS').valueMap()" 
 ----
 
 The following example shows how to send the same query using an HTTP POST. The Apache
@@ -14971,8 +15143,8 @@ JSON and that we have to escape the quote characters.
 
 [source,console]
 ----
-curl -X POST -d "{\"gremlin\":\"g.V().has('code','AUS')\"}" \
-      "http://localhost:8182"
+sh> curl -X POST -d "{\"gremlin\":\"g.V().has('code','AUS')\"}" \
+            "http://localhost:8182"
 ----
 
 Both of the queries above will cause the following response to be sent back to us
@@ -15398,11 +15570,12 @@ g.V().has('code','LGW').values('city','lat','runways')
  "result":{"data":["London",2,51.1481018066406],"meta":{}}}
 ----
 
-As you might expect, when a 'valueMap' is used to generate the result from a query,
-the JSON generated also contains a map.
-
 Value map
 +++++++++
+
+As you might expect, when a 'valueMap' is used to generate the result from a query,
+the JSON generated also contains a map. Note how each property value is encoded in a
+list even if there is only one value.
 
 [source,groovy]
 ----
@@ -15428,6 +15601,14 @@ g.V().has('code','CDG').valueMap()
 
 Single vertex
 +++++++++++++
+
+When your query returns a vertex, unlike in the Gremlin Console where you would get
+back something like "'v[51]'" when talking to the Gremlin Server what you get back is
+a JSON object representing everything that is known about the vertex including its ID
+, label, properties and the ID of each property. If you do not need the entire vertex
+returned it might be worth writing your query in a way such that you only get back
+the properties that you are interested in.  This is especially pertinent if your
+query could potentially return a lot of vertices in the result.
 
 [source,groovy]
 ----
@@ -15455,8 +15636,32 @@ g.V().has('code','CDG')
     "meta":{}}}
 ----
 
+Selected vertex information
++++++++++++++++++++++++++++
+
+One way to limit the amount of JSON we get back is shown below. Let's assume for a
+selection of airport vertices, all we are interested in is the ID, airport code and
+city name. We can construct a query, as shown below, that will return just those
+values for each vertex.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').sample(3).
+      union(id(),values('code','city'))"
+
+{"requestId":"4d308287-9725-4fa6-8c2b-b7e517ca5009",
+ "status":{"message":"","code":200,"attributes":{}},
+ "result":{"data":[45096,"SCL","Santiago",
+                  610336,"YWK","Wabush",
+                  163880,"CAK","Akron"],"meta":{}}}
+----
+
 Single edge
 +++++++++++
+
+Just as when we queried a single vertex, when we query a single edge, we get back a
+lot of information including its label and ID and information about the vertices the
+edge is connected to.
 
 [source,groovy]
 ----
@@ -15513,6 +15718,7 @@ g.addV('test').as('a').property('fruit','apple').select('a').id()
 Path by value (list of strings)
 +++++++++++++++++++++++++++++++
 
+The query below returns a path between two airports as a list of airport codes.
 Note the new 'objects' key that is used when the returned JSON represents a path. 
 
 [source,groovy]
@@ -15528,6 +15734,9 @@ g.V().has('code','SAF').out().path().by('code').limit(1)
 Path by values (list of strings and integers)
 +++++++++++++++++++++++++++++++++++++++++++++
 
+Similar to the previous query but this time the path also includes the distance
+between the airports.
+
 [source,groovy]
 ----
 g.V().has('code','SAF').outE().inV().path().by('code').by('dist').limit(1)
@@ -15538,6 +15747,9 @@ g.V().has('code','SAF').outE().inV().path().by('code').by('dist').limit(1)
     "result":{"data":[{"labels":[[],[],[]],
                       "objects":["SAF",369,"PHX"]}],"meta":{}}}
 ----
+
+The query below returns a path but does not include a 'by' modulator so what is
+returned are the two vertices along with their IDs, labels and properties.
 
 Two vertex path
 +++++++++++++++
@@ -15591,15 +15803,66 @@ g.V().has('code','SAF').out().path().limit(1)
 Path with two vertices and an edge
 ++++++++++++++++++++++++++++++++++
 
+The following query is similar to the previous one but also includes an edge. You can
+hopefully see here how the JSON can rapidly get large if we are not more specific in
+our queries about what results we really need back. Notice how, because this is a
+path result, most of the data is contained inside an 'objects' key.
+
 [source,groovy]
 ----
 g.V().has('code','SAF').outE().inV().path().limit(1)
 
-{"requestId":"171d0f30-2f93-4ae6-a421-4601a35388a2","status":{"message":"","code":200,"attributes":{}},"result":{"data":[{"labels":[[],[],[]],"objects":[{"id":53352,"label":"airport","type":"vertex","properties":{"country":[{"id":"1s0d-1560-8p1","value":"US"}],"code":[{"id":"1sel-1560-5j9","value":"SAF"}],"longest":[{"id":"1sst-1560-mx1","value":8366}],"city":[{"id":"1t71-1560-7wl","value":"Santa Fe"}],"elev":[{"id":"1tl9-1560-but","value":6348}],"icao":[{"id":"1tzh-1560-6bp","value":"KSAF"}],"lon":[{"id":"1udp-1560-dfp","value":-106.088996887}],"type":[{"id":"1urx-1560-745","value":"airport"}],"region":[{"id":"1v65-1560-9hh","value":"US-NM"}],"runways":[{"id":"1vkd-1560-b2d","value":3}],"lat":[{"id":"1vyl-1560-cn9","value":35.617099762}],"desc":[{"id":"1wct-1560-a9x","value":"Santa Fe"}]}},{"id":"2xhcd-1560-pat-39s","label":"route","type":"edge","inVLabel":"airport","outVLabel":"airport","inV":4240,"outV":53352,"properties":{"dist":369}},{"id":4240,"label":"airport","type":"vertex","properties":{"country":[{"id":"176-39s-8p1","value":"US"}],"code":[{"id":"1le-39s-5j9","value":"PHX"}],"longest":[{"id":"1zm-39s-mx1","value":11489}],"city":[{"id":"2du-39s-7wl","value":"Phoenix"}],"elev":[{"id":"2s2-39s-but","value":1135}],"icao":[{"id":"36a-39s-6bp","value":"KPHX"}],"lon":[{"id":"3ki-39s-dfp","value":-112.012001037598}],"type":[{"id":"3yq-39s-745","value":"airport"}],"region":[{"id":"4cy-39s-9hh","value":"US-AZ"}],"runways":[{"id":"4r6-39s-b2d","value":3}],"lat":[{"id":"55e-39s-cn9","value":33.4342994689941}],"desc":[{"id":"5jm-39s-a9x","value":"Phoenix Sky Harbor International Airport"}]}}]}],"meta":{}}}
+{"requestId":"171d0f30-2f93-4ae6-a421-4601a35388a2",
+ "status":{"message":"","code":200,"attributes":{}},
+  "result":{"data":[{"labels":[[],[],[]],
+  "objects":[
+       {"id":53352,"label":"airport","type":"vertex",
+       "properties":
+           {"country":[{"id":"1s0d-1560-8p1","value":"US"}],
+           "code":[{"id":"1sel-1560-5j9","value":"SAF"}],
+           "longest":[{"id":"1sst-1560-mx1","value":8366}],
+           "city":[{"id":"1t71-1560-7wl","value":"Santa Fe"}],
+           "elev":[{"id":"1tl9-1560-but","value":6348}],
+           "icao":[{"id":"1tzh-1560-6bp","value":"KSAF"}],
+           "lon":[{"id":"1udp-1560-dfp","value":-106.088996887}],
+           "type":[{"id":"1urx-1560-745","value":"airport"}],
+           "region":[{"id":"1v65-1560-9hh","value":"US-NM"}],
+           "runways":[{"id":"1vkd-1560-b2d","value":3}],
+           "lat":[{"id":"1vyl-1560-cn9","value":35.617099762}],
+           "desc":[{"id":"1wct-1560-a9x","value":"Santa Fe"}]}},
+           
+       {"id":"2xhcd-1560-pat-39s",
+        "label":"route",
+        "type":"edge",
+        "inVLabel":"airport",
+        "outVLabel":"airport",
+        "inV":4240,"outV":53352,
+            "properties":{"dist":369}},
+            
+       {"id":4240,"label":"airport","type":"vertex",
+       "properties":
+           {"country":[{"id":"176-39s-8p1","value":"US"}],
+            "code":[{"id":"1le-39s-5j9","value":"PHX"}],
+            "longest":[{"id":"1zm-39s-mx1","value":11489}],
+            "city":[{"id":"2du-39s-7wl","value":"Phoenix"}],
+            "elev":[{"id":"2s2-39s-but","value":1135}],
+            "icao":[{"id":"36a-39s-6bp","value":"KPHX"}],
+            "lon":[{"id":"3ki-39s-dfp","value":-112.012001037598}],
+            "type":[{"id":"3yq-39s-745","value":"airport"}],
+            "region":[{"id":"4cy-39s-9hh","value":"US-AZ"}],
+            "runways":[{"id":"4r6-39s-b2d","value":3}],
+            "lat":[{"id":"55e-39s-cn9","value":33.4342994689941}],
+            "desc":[{"id":"5jm-39s-a9x",
+              "value":"Phoenix Sky Harbor International Airport"}]}}]}],
+      "meta":{}}}
 ----
 
 Selection map
 +++++++++++++
+
+If a query ends with a 'select' step that references labels defined earlier in the
+query, whet is returned is a map where the labels are the keys and the values are the
+things that the labels were attached to in the query.
 
 [source,groovy]
 ----
@@ -15614,6 +15877,9 @@ g.V().has('code','SAF').as('a').out().has('code','DFW').as('b').
 Projected map
 +++++++++++++
 
+The 'project' step also generates a map just as the 'select' step did in the previous
+example.
+
 [source,groovy]
 ----
 g.V().has('code','LGW').project('a','b').by('code').by(out().count())
@@ -15626,6 +15892,9 @@ g.V().has('code','LGW').project('a','b').by('code').by(out().count())
 
 Strings and a map
 +++++++++++++++++
+
+The following path query returns a list containing two strings representing airport
+codes and the full JSON object representing an edge.
 
 [source,groovy]
 ----
@@ -15649,12 +15918,21 @@ g.V().has('code','SAF').outE().inV().limit(1).path().by('code').by()
 Nested lists
 ++++++++++++
 
+When using the console or issuing Gremlin commands via the TinkerPop API from an
+application program, ending a query with a 'fold' step can be a nice way to put all
+the results into a list. When working with a Gremlin Server, ending a query with a
+'fold' step in many cases is redundant as the results will be placed in a list inside
+the JSON anyway. In the example below, the 'fold' step simply caused an extra list to
+be nested inside the one that was generated while the JSON was being assembled.
+
 [source,groovy]
 ----
 g.V().has('region','US-OK').values('code').fold()
 
 
-{"requestId":"edcea305-086d-4f8d-b79a-ff72c5a26847","status":{"message":"","code":200,"attributes":{}},"result":{"data":[["OKC","TUL","LAW","SWO"]],"meta":{}}}
+{"requestId":"edcea305-086d-4f8d-b79a-ff72c5a26847",
+ "status":{"message":"","code":200,"attributes":{}},
+ "result":{"data":[["OKC","TUL","LAW","SWO"]],"meta":{}}}
 
 ----
 

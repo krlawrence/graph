@@ -18,8 +18,9 @@ Major new features in this release.
 - Added coverage of JanusGraph storage options.
 - Added a new section showing how to use Cassandra from a Docker Container with JanusGraph.
 - Added a sample that shows how to load the air routes graph into JanusGraph backed by Cassandra.
+- Wrote the first draft of the Gremlin Server section.
+- Added examples of the JSON that is returned from different Gremlin Server queries.
 - Added several new Java and Groovy samples to the sample-code folder.
-- Began writing the Gremlin Server section.
 - Added a new Ruby sample that can connect to a Gremlin Server
 - Improved some existing sample apps.
 - Enabled icons for tips and notes boxes.
