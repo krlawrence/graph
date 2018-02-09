@@ -7,10 +7,12 @@ Starting with the v275 release, this file will contain a record of the major cha
 This is a fairly substantial update. Lots of new material added to the book and to the sample-code folder.
 
 Major new features in this release.
-- Added a new section dedicated to discussing steps that generate 'collections' and how to operate on them.
+- Wrote the first draft of the `Gremlin Server` section.
+- Added examples of the JSON that is returned from different Gremlin Server queries.
+- Added a new section dedicated to discussing steps that generate `collections` and how to operate on them.
 - Added a new section dedicated to the `sack` step.
 - Added additional coverage of the `local` step and scope in general.
-- Added some focused coverage of "reducing barrier" steps.
+- Added some focused coverage of `reducing barrier` steps.
 - Added coverage of the new `skip` step.
 - Significantly added to the using Gremlin from Java sections.
 - Added detailed coverage of Classses and Enums that you need to include when writing a Java or Groovy app that are hidden from you when using the Gremlin Console.
@@ -18,8 +20,6 @@ Major new features in this release.
 - Added coverage of JanusGraph storage options.
 - Added a new section showing how to use Cassandra from a Docker Container with JanusGraph.
 - Added a sample that shows how to load the air routes graph into JanusGraph backed by Cassandra.
-- Wrote the first draft of the Gremlin Server section.
-- Added examples of the JSON that is returned from different Gremlin Server queries.
 - Added several new Java and Groovy samples to the sample-code folder.
 - Added a new Ruby sample that can connect to a Gremlin Server
 - Improved some existing sample apps.
