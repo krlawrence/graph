@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v277-preview, Feb 10, 2018
-// Sat Feb 10, 2018 10:40:04 CST
+// Sat Feb 10, 2018 16:38:05 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Feb 10 2018
@@ -13241,7 +13241,8 @@ mgmt.commit()
 ----
 
 Now that we have created a new key, when can use the Management API to check that its
-cardinality is indeed set to 'LIST'.
+cardinality is indeed set to 'LIST'. As always, whenever we are done using the API we
+should close the transaction with a call to 'commit'.
 
 [source,groovy]
 ----
@@ -13535,12 +13536,12 @@ graph.io(graphml()).readGraph('air-routes.graphml')
 graph.tx().commit()
 ----
 
-Note that as we have not defined a schema before loading the air-routes graph that
-JanusGraph will create vertices, edges and properties using default types and
-settings.  A bit later we will look at creating a schema for air-routes and then
-loading it again to see the differences. It is strongly recommended to create the
-schema before loading the data but lets examine a few things before we discuss how to
-do that. 
+Note that had we not defined a schema before loading the air-routes graph that
+JanusGraph would have still created the vertices, edges and properties but using
+default types and settings.  A bit later we will look at creating an index for the
+air-routes graph as well.  It is strongly recommended to create the index as well as
+the schema before loading the data but lets examine a few more things before we
+discuss how to do that. 
 
 Unlike TinkerGraph, JanusGraph does not, by default,  guarantee to respect user
 provided vertex and edge ID values. Instead it creates its own ID values as vertices
@@ -16517,7 +16518,7 @@ http://janusgraph.org/
 http://docs.janusgraph.org/latest/
 
 .JanusGraph API documentation
-https://javadoc.io/doc/org.janusgraph/janusgraph-core/0.1.1
+http://javadoc.io/doc/org.janusgraph/janusgraph-core/0.2.0
 
 .Public mailing list for JanusGraph users
 https://groups.google.com/forum/#!forum/janusgraph-users
