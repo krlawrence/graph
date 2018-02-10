@@ -13212,8 +13212,14 @@ false
 Creating a property with cardinality LIST
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-
-To be written
+Using the JanusGraph Management API it is possible to specify that a property can
+accept as list of values. This can be done by specifying a cardinality of 'LIST' when
+the property key is created. Unless we explicitly do this, whenever a property is
+created the cardinality will default to 'SINGLE'. The code below can be run from a
+Gremlin Console connected to a JanusGraph instance. A property key called 'myList' is
+created that can accept 'String' values'. Before the key is created, its cardinality
+is specified as 'LIST'. Always remember to 'commit' the management transaction when you
+are done making changes.
 
 [source,groovy]
 ----
@@ -13223,17 +13229,36 @@ maker.dataType(String.class)
 maker.cardinality(LIST)
 maker.make()
 mgmt.commit()
+----
 
+Note that the previous steps could be chained together as shown below.
+
+[source,groovy]
+----
 mgmt = graph.openManagement()
-mgmt.makePropertyKey('anotherlist').dataType(String.class).cardinality(LIST).make()
+mgmt.makePropertyKey('myList').dataType(String.class).cardinality(LIST).make()
+mgmt.commit()
+----
 
+Now that we have created a new key, when can use the Management API to check that its
+cardinality is indeed set to 'LIST'.
+
+[source,groovy]
+----
 mgmt = graph.openManagement()
 mgmt.getPropertyKey('mylist').cardinality()
 
 LIST
 
 mgmt.commit()
+----
 
+We can now create a new vertex and add some values using our new 'myList' property.
+Note that as our cardinality is 'LIST' and not 'SET' that we can have duplicate values
+associated with our new property.
+
+[source,groovy]
+----
 n = g.addV().property('mylist','one').property('mylist','two').next()
 
 v[3043568]
@@ -13252,13 +13277,20 @@ Creating a property with cardinality SET
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
-To be written
+Using the JanusGraph Management API we can also specify that a property can contain a
+'SET' of values. The difference between a cardinality of 'SET' and a cardinality of
+'LIST' is that sets do not allow duplicate values. 
+
+Let's create a new property key called 'numbers' that will accept a set of integer
+values.
 
 [source,groovy]
 ----
 mgmt = graph.openManagement()
 mgmt.makePropertyKey('numbers').dataType(Integer.class).cardinality(SET).make()
 ----
+
+As before we can double check the cardinality of our new property.
 
 [source,groovy]
 ----
@@ -13267,10 +13299,17 @@ mgmt.getPropertyKey('numbers').cardinality()
 SET
 ----
 
+Also as before once we are done making changes we need to commit our management
+transaction.
+
 [source,groovy]
 ----
 mgmt.commit()
 ----
+
+Let's now create a new vertex and do some testing to make sure that JanusGraph does
+enforce the rules we expect from a set. First of all we create a new vertex and put
+the values 1,2 and 3 into the property. This works as expected.
 
 [source,groovy]
 ----
@@ -13283,17 +13322,19 @@ g.V(n).valueMap()
 [numbers:[1,2,3]]
 ----
 
+Now let's try adding a second value of 2 and see what happens. As you can see, our
+second 2 was not added to our set as there was already a 2 present.
 [source,groovy]
 ----
 g.V(n).property(set,'numbers',2)
 g.V(n).valueMap()
-----
 
-[source,groovy]
-----
 // Duplicates not allowed
 [numbers:[1,2,3]]
 ----
+
+Let's try adding a 4 instead. This works as there is no existing value of 4 already
+in the set.
 
 [source,groovy]
 ----
@@ -13302,6 +13343,8 @@ g.V(n).valueMap()
 
 [numbers:[1,2,3,4]]
 ----
+
+Finally we can commit our graph transaction as we are all done creating properties.
 
 [source,groovy]
 ----
@@ -13835,9 +13878,9 @@ the file by visiting this URL:
 https://github.com/krlawrence/graph/blob/master/sample-code/janus-inmemory.groovy
 
 The script will create an 'inmemory' JanusGraph instance, define the schema, create
-several indexes and load the 'air-routes.graphml' file so that you can try some queries
-using the Gremlin Console. You might find that a good way to experiment with the
-concepts that we have covered in this discussion of JanusGraph so far.
+several indexes and load the 'air-routes.graphml' file so that you can try some
+queries using the Gremlin Console. You might find that a good way to experiment with
+the concepts that we have covered in this discussion of JanusGraph so far.
 
 
 [[janpred]]
@@ -13876,9 +13919,9 @@ each being used. First off, the query below will find any vertex that has a 'des
 Text comparison predicates
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The simplest of the search predicates allow you to specify an exact match that string  must
-be present either as a whole word (complete word match) or as part of the entire text
-being examined. These searches are *not* case sensitive.
+The simplest of the search predicates allow you to specify an exact match that string
+must be present either as a whole word (complete word match) or as part of the entire
+text being examined. These searches are *not* case sensitive.
 
 [source,groovy]
 ----
