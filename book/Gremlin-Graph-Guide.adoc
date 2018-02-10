@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v277-preview, Feb 9, 2018
-// Fri Feb 09, 2018 15:33:57 CST
+// Fri Feb 09, 2018 16:44:55 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Feb 9 2018
@@ -1038,6 +1038,10 @@ into the console manually.  These commands will setup the console environment, c
 a TinkerGraph graph and load the 'air-routes.graphml' file into it. Some extra
 console features are also enabled. 
 
+NOTE: There is a file called 'load-air-routes-graph.groovy', that contains the
+commands shown below, available in the '/sample-data' directory.
+https://github.com/krlawrence/graph/tree/master/sample-data
+
 These commands create an in-memory TinkerGraph which will use LONG values for the
 vertex and edge IDs. TinkerPop 3 introduced the concept of a 'traversal'  so as part
 of loading a 'graph' we also setup a graph traversal source called 'g' which we will
@@ -1069,16 +1073,15 @@ NOTE: Setting the ID manager as shown above is important. If you do not do this,
 default, when using TinkerGraph, ID values will have to be specified as strings such
 as '"3"' rather than just the numeral '3'.
 
-If you put the commands given above into a file called something like
-'mygremlin-setup', once the console is up and running you can load that file by
-entering the command below. Doing this will save you a fair bit of time as each time
-you restart the console you can just reload your configuration file and the
-environment will be configured and the graph loaded and you can get straight to
-writing queries.
+If you download the 'load-air-routes-graph.groovy' file, once the console is up and
+running you can load that file by entering the command below. Doing this will save
+you a fair bit of time as each time you restart the console you can just reload your
+configuration file and the environment will be configured and the graph loaded and
+you can get straight to writing queries.
 
 [source,groovy]
 ----
-:load mygremlin-setup
+:load load-air-routes-graph.groovy
 ----
 
 TIP: As a best practice you should use the full path to the location where the
@@ -15748,11 +15751,11 @@ g.V().has('code','SAF').outE().inV().path().by('code').by('dist').limit(1)
                       "objects":["SAF",369,"PHX"]}],"meta":{}}}
 ----
 
-The query below returns a path but does not include a 'by' modulator so what is
-returned are the two vertices along with their IDs, labels and properties.
-
 Two vertex path
 +++++++++++++++
+
+The query below returns a path but does not include a 'by' modulator so what is
+returned is the two vertices along with their IDs, labels and properties.
 
 [source,groovy]
 ----
