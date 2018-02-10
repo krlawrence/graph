@@ -1057,7 +1057,7 @@ can still load the 'air-routes.graphml' file by following the instructions speci
 to that system.  Once loaded, the queries below should still work either unchanged or
 with minor modifications.
 
-
+.load-air-routes-graph.groovy
 [source,groovy]
 ----
 conf = new BaseConfiguration()
