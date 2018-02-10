@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v277-preview, Feb 9, 2018
-// Fri Feb 09, 2018 16:44:55 CST
+v277-preview, Feb 10, 2018
+// Sat Feb 10, 2018 10:40:04 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Feb 9 2018
+//:Date:      Feb 10 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -15864,7 +15864,7 @@ Selection map
 +++++++++++++
 
 If a query ends with a 'select' step that references labels defined earlier in the
-query, whet is returned is a map where the labels are the keys and the values are the
+query, what is returned is a map where the labels are the keys and the values are the
 things that the labels were attached to in the query.
 
 [source,groovy]
