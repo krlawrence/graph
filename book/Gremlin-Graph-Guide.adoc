@@ -652,11 +652,14 @@ get started with the Gremlin Console and TinkerGraph a bit later in this book.
 
 Tinkerpop 3 defines a number of capabilities that a graph store should support. Some
 are optional others are not. You can query any TinkerPop 3 enabled graph store to see
-which features are supported. The following list shows the features supported by
-TinkerGraph. This is what you would get back should you call the 'features' method
-provided by TinkerGraph. We have arranged the list in two columns to aid readability.
-Don't worry if not all of these terms makes sense right away - we'll get there soon!
+which features are supported using a command such as 'graph.features()' once you have
+established the 'graph' object. We will look at how to do that soon. The following
+list shows the features supported by TinkerGraph. This is what you would get back
+should you call the 'features' method provided by TinkerGraph. I have arranged the
+list in two columns to aid readability.  Don't worry if not all of these terms make
+sense right away - we'll get there soon!
 
+.Output from graph.features()
 ----
 > GraphFeatures                          > VertexPropertyFeatures        
 >-- ConcurrentAccess: false              >-- UserSuppliedIds: true       
