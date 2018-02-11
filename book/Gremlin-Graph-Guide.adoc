@@ -14487,8 +14487,10 @@ lhr_circ.intersect(man_circ)
 false
 ----
 
-To prove that the tests work, let's create another 100km circle with Liverpool (LPL)
-in the middle and compare that one with the Manchester circle.
+As you can see the test returns 'false' indicating that there are no shared points.
+To prove that the tests work when points do overlap, let's create another 100km
+circle with Liverpool (LPL) in the middle and compare that one with the Manchester
+circle.
 
 [source,groovy]
 ----
