@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v277, Feb 11, 2018
-// Sun Feb 11, 2018 10:54:54 CST
+// Sun Feb 11, 2018 12:11:42 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Feb 11 2018
@@ -12881,6 +12881,7 @@ http://janusgraph.org/
 Documentation::
 http://docs.janusgraph.org/latest/.
 API Documentation::
+http://docs.janusgraph.org/latest/javadoc.html
 http://javadoc.io/doc/org.janusgraph/janusgraph-core/0.2.0
 
 In the following sections we will take an in depth look at JanusGraph and other
@@ -14366,24 +14367,51 @@ Dubai
 ----
 
 [[janusgeo]]
-The JanusGraph geospatial API
+The JanusGraph GeoSpatial API
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To be written
+Earlier, in the "<<latlonmanual>>" section, I provided a few examples of how we could
+write some queries that took advantage of the fact that the airports in the
+air-routes graph include their latitude and longitude among their properties. When
+working with JanusGraph there are some additional built in capabilities that we can
+take advantage of.
+
+NOTE: The official JanusGraph API documentation is a good place to read up on the
+GeoShape class and related classes. That documentation can always be found by
+starting here: http://docs.janusgraph.org/latest/javadoc.html
+
+The example below shows one way that we could use the GeoSpatial API to find airports
+within a circle having a 100 kilometer radius with London Heathrow (LHR) at the
+center of that circle. A key class to be aware of is the 'Geoshape' class. It can be
+used to create areas that we can use when testing for other coordinates falling
+within that area.
+
+Notice in the code below that for each airport in the graph a 'point' is created
+based on the latitude and longitude of that airport. A test is then performed to see
+if that 'point' lies within our 100km circle. Only airports that do are passed on to
+the 'valueMap' step. Notice also how a 'map' step is used so that we can do some
+calculations inside of a closure while creating the 'point'.
 
 [source,groovy]
 ----
+// Get the lat/lon for LHR
 lon = g.V().has('code','LHR').values('lon').next()
 lat = g.V().has('code','LHR').values('lat').next()
 
+// Create a 100km radius circle with LHR at the center
 boundary = Geoshape.circle(lat,lon,100)
 
+// Find other airports that are within that circle
 g.V().hasLabel('airport').
-    where(map{a=it.get().value('lat'); 
-              b=it.get().value('lon'); 
-              Geoshape.point(a,b).within(boundary)}.is(true)).
-              valueMap('code','lat','lon')
+      where(map{a=it.get().value('lat'); 
+                b=it.get().value('lon'); 
+                Geoshape.point(a,b).within(boundary)}.is(true)).
+                valueMap('code','lat','lon')
 ----
+
+Below is the output that you might bet back from running the above query. The query
+can be run as-is from the Gremlin Console connected to a JanusGraph instance
+containing the air-routes graph.
 
 [source,groovy]
 ----
@@ -14396,6 +14424,55 @@ g.V().hasLabel('airport').
 [code:[LCY],lon:[0.055278],lat:[51.505278]]
 [code:[SEN],lon:[0.695555984973907],lat:[51.5713996887207]]
 ----
+
+There are many ways we could optimize our query to avoid creating a 'point' for every
+single airport in the graph. In this particular case, we might decide, for example,
+that we are only interested in airports in England.  To do this we could add a check
+to our query to make sure that only airports with a region code of 'GB-ENG' are
+tested. Here is the query modified with that check added.
+
+[source,groovy]
+----
+// Find other airports that within 100km of LHR
+g.V().has('airport','region','GB-ENG').
+      where(map{a=it.get().value('lat'); 
+                b=it.get().value('lon'); 
+                Geoshape.point(a,b).within(boundary)}.is(true)).
+                valueMap('code','lat','lon')
+----
+
+Here is the output from running the query again. Other than the order in which
+results were returned being different we got the same results. However this query is
+more efficient as it is able to take advantage of the index that we created earlier
+for the 'region' property to filter out all airports not in the region 'GB-ENG'.
+
+[source,groovy]
+----
+[code:[LGW],lon:[-0.190277993679047],lat:[51.1481018066406]]
+[code:[LHR],lon:[-0.461941003799],lat:[51.4706001282]]
+[code:[LCY],lon:[0.055278],lat:[51.505278]]
+[code:[STN],lon:[0.234999999404],lat:[51.8849983215]]
+[code:[LTN],lon:[-0.368333011865616],lat:[51.874698638916]]
+[code:[SOU],lon:[-1.35679996013641],lat:[50.9502983093262]]
+[code:[SEN],lon:[0.695555984973907],lat:[51.5713996887207]]
+[code:[BZZ],lon:[-1.58361995220184],lat:[51.749964]]
+----
+
+
+The Geoshape class provides a number of useful methods.If we wanted to verify that
+the latitude and longitude values we got back from the LHR vertex were valid, meaning
+they do represent a point somewhere on Earth, we could do so as follows.
+
+[source,groovy]
+----
+Geoshape.isValidCoordinate(lat,lon)
+
+true
+----
+
+I have just shown a few examples of the many things that you can do using the
+JanusGraph GeoSpatial API. If this is an area that interests you I recommend reading
+the API documentation for the Geoshape and related classes. 
 
 [[janusstorage]]
 Choosing a persistent storage technology for JanusGraph
@@ -16576,7 +16653,7 @@ http://janusgraph.org/
 http://docs.janusgraph.org/latest/
 
 .JanusGraph API documentation
-http://javadoc.io/doc/org.janusgraph/janusgraph-core/0.2.0
+http://docs.janusgraph.org/latest/javadoc.html
 
 .Public mailing list for JanusGraph users
 https://groups.google.com/forum/#!forum/janusgraph-users
