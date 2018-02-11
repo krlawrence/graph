@@ -14,8 +14,8 @@ Major new features in this release.
 - Added additional coverage of the `local` step and scope in general.
 - Added some focused coverage of `reducing barrier` steps.
 - Added coverage of the new `skip` step.
-- Added to the JanusGraph cardinality section.
-- Added to the JanusGraph transactions section.
+- Added to the JanusGraph `cardinality` section.
+- Added to the JanusGraph `transactions` section.
 - Significantly added to the using Gremlin from Java sections.
 - Added detailed coverage of Classses and Enums that you need to include when writing a Java or Groovy app that are hidden from you when using the Gremlin Console.
 - Added to the using Gremlin from Groovy sections.

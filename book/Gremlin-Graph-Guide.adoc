@@ -1,8 +1,8 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v277-preview, Feb 11, 2018
-// Sun Feb 11, 2018 09:57:26 CST
+v277, Feb 11, 2018
+// Sun Feb 11, 2018 10:54:54 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Feb 11 2018
@@ -18,7 +18,7 @@ v277-preview, Feb 11, 2018
 //:pygments-style: vim
 :toc:
 :toclevels: 4
-:revision: 277-preview
+:revision: 277
 :doctype: book
 :icons: font
 
@@ -767,7 +767,7 @@ represents an instance of a graph traversal source object.
 Introducing the air-routes graph
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Along with these notes I have provided what is, in big data terms,a very small, but
+Along with this book I have provided what is, in big data terms,a very small, but
 nonetheless real World, graph that is written in GraphML, a standard XML format for
 describing graphs that can be used to move graphs between applications. The graph,
 'air-routes.graphml' is a model I built of the World airline route network that is
@@ -10451,6 +10451,7 @@ g.V().has('code','AUS').sack(assign).by(constant(0)).
 212
 ----
 
+[[latlonmanual]]
 Using latitude, longitude and geographical region in queries
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -12990,6 +12991,7 @@ thing to note is that, unlike with TinkerGraph, 'UserSuppliedIds' is set to fals
 indicating that JanusGraph will create its own ID values and ignore any that we
 provide. The list is formatted in two columns to aid readability.
 
+.JanusGraph features
 ----
 graph.features()
 
@@ -13062,8 +13064,8 @@ g.V().has('name','Kelvin').id()
 4232
 ----
 
-Before we experiment too much more with JanusGraph there are three important
-subjects we need to discuss. One is transactions, another is defining a schema for
+Before we experiment too much more with JanusGraph there are three important subjects
+we need to discuss. One is transactions, another is defining a schema and indexes for
 our vertices, edges and properties and the third is the JanusGraph management API. We
 will cover each of these key subjects in the following sections.
 
@@ -13084,7 +13086,8 @@ used. We will take a look at some of the backend storage options in the
 "<<janusstorage>> section".
 
 NOTE: The official JanusGraph documentation includes detailed coverage of how
-transactions are processed. You will always find the latest version here:
+transactions are processed and techniques to use based on different usage scenarios.
+You will always find the latest version here:
 http://docs.janusgraph.org/latest/tx.html
 
 In many cases, when using JanusGraph, you do not have to explicitly open a new
@@ -14491,9 +14494,9 @@ in embedded mode.
 NOTE: For detailed configuration information you should refer to the official JanusGraph
 documentation located at http://docs.janusgraph.org/latest/storage-backends.html.
 
-A bit later we will take a look at deploying a single node instance of Cassandra
-using Docker containers which provides a nice environment for development and
-testing.
+A bit later, in the "<<dockercass>>" section, we will take a look at deploying a
+single node instance of Cassandra using Docker containers which provides a nice
+environment for development and testing.
 
 The JanusGraph '/conf' directory contains several property files that can be used
 when working with Apache Cassandra. Which one you use will depend on the way you
