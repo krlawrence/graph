@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v277-preview, Feb 10, 2018
-// Sat Feb 10, 2018 16:38:05 CST
+v277-preview, Feb 11, 2018
+// Sun Feb 11, 2018 09:57:26 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Feb 10 2018
+//:Date:      Feb 11 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -13071,38 +13071,93 @@ will cover each of these key subjects in the following sections.
 JanusGraph transactions
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-To be written
+So far we have been mainly using a TinkerGraph to perform our experiments.
+TinkerGraph does not provide support for transactions. To be fair, for the type of
+use cases where TinkerGraph is a good solution this is not really an issue. However,
+a typical use case for JanusGraph might be storing and mutating (updating) a very
+large graph persisted by a back end store. In such an environment, support for
+transactions becomes a lot more important. If you are used to other databases that
+offer transactional support, and as the JanusGraph documentation points out, you
+should not rely on JanusGraph transactions being fully Atomic, Consistent, Isolated
+and Durable (ACID). The amount of ACID support will depend on the backend store being
+used. We will take a look at some of the backend storage options in the
+"<<janusstorage>> section".
+
+NOTE: The official JanusGraph documentation includes detailed coverage of how
+transactions are processed. You will always find the latest version here:
+http://docs.janusgraph.org/latest/tx.html
+
+In many cases, when using JanusGraph, you do not have to explicitly open a new
+transaction. Instead, it will be opened for you as needed. Take a look at the example
+below. A transaction is opened when 'addVertex' is called and remains open until
+'commit' is called. Note also that in order to access the JanusGraph transaction
+capabilities, we use the 'tx' method associated with our 'graph' instance. The
+examples below assume you have the Gremlin Console connected to a JanusGraph
+instance. The 'inmemory' JanusGraph we created earlier will work fine for these
+examples as transactions are supported even with 'inmemory' JanusGraph instances.
+Note that I have not shown the warning message that JanusGraph will display reminding
+us that we have not created an index for our new property. We will explore how to
+create an index in the "<<jaindexintro>>" section.
 
 [source,groovy]
 ----
 // Start a new transaction
 xyz = graph.addVertex()
 
+v[4344]
+
 // Add a property
-xyz.property("name", "XYZ")
+xyz.property('name', 'XYZ')
 
 // Commit the transaction
 graph.tx().commit()
 
+// Check to make sure our new vertex was created
 g.V().has('name','XYZ')
+
 v[4344]
 ----
+
+The example above used the 'graph' object to add a vertex. As discussed earlier in
+this book, the TinkerPop documentation recommends against this. Instead it recommends
+adding vertices as part of a traversal as shown below. Note that the 'graph' object
+is still used to 'commit' the transaction.
 
 [source,groovy]
 ----
 // Start a new transaction
-xyz = graph.addVertex()
+g.addV().property('name','XYZ')
 
-// Add a property
-xyz.property("name", "XYZ")
+v[4216]
+
+// Commit the transaction
+graph.tx().commit()
+
+// Check to make sure our new vertex was created
+g.V().has('name','XYZ')
+
+v[4216]
+----
+
+Sometimes, it may be necessary to undo or 'rollback' what we have done rather than
+continue and 'commit' the transaction. This can be achieved calling the 'rollback'
+method as shown below.
+
+[source,groovy]
+----
+// Start a new transaction
+g.addV().property('name','ABC')
 
 // Rollback the transaction
 graph.tx().rollback()
 
 // Nothing will be returned
-g.V().has('code','XYZ')
+g.V().has('code','ABC')
 ----
 
+Note that the JanusGraph Management system, that is the subject of the next section,
+has its own transaction system that is used when creating schema entries and
+otherwise configuring a graph.
 
 [[janusmgmt]]
 The JanusGraph management API
