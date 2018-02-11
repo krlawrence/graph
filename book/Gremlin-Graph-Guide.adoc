@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v277, Feb 11, 2018
-// Sun Feb 11, 2018 12:11:42 CST
+// Sun Feb 11, 2018 14:00:46 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Feb 11 2018
@@ -14458,10 +14458,57 @@ for the 'region' property to filter out all airports not in the region 'GB-ENG'.
 [code:[BZZ],lon:[-1.58361995220184],lat:[51.749964]]
 ----
 
+Using the GeoSpatial API we can create shapes representing different geographic
+regions and compare them. The example below shows how to create a 100km circle with
+Longdon heathrow (LHR) at the center and a second circle with Manchester (MAN) at the
+center. The 'intersect' method is then used to see if any points appear in both
+circles.
 
-The Geoshape class provides a number of useful methods.If we wanted to verify that
+[source,groovy]
+----
+// Create a 100km radius circle with LHR at the center
+
+lon_lhr = g.V().has('code','LHR').values('lon').next()
+lat_lhr = g.V().has('code','LHR').values('lat').next()
+
+lhr_circ = Geoshape.circle(lat_lhr,lon_lhr,100)
+
+// Create a 100km radius circle with MAN at the center
+
+lat_man = g.V().has('code','MAN').values('lat').next()
+lon_man = g.V().has('code','MAN').values('lon').next()
+
+man_circ = Geoshape.circle(lat_man,lon_man,100)
+
+// Do any points in the two circles intersect?
+
+lhr_circ.intersect(man_circ)
+
+false
+----
+
+To prove that the tests work, let's create another 100km circle with Liverpool (LPL)
+in the middle and compare that one with the Manchester circle.
+
+[source,groovy]
+----
+// Create a 100km radius circle with LPL at the center
+
+lat_lpl = g.V().has('code','LPL').values('lat').next()
+lon_lpl = g.V().has('code','LPL').values('lon').next()
+
+lpl_circ = Geoshape.circle(lat_lpl,lon_lpl,100)  
+
+// Do any points in the two circles intersect?
+
+lpl_circ.intersect(man_circ)
+
+true
+----
+
+The 'Geoshape' class provides a number of useful methods. If we wanted to verify that
 the latitude and longitude values we got back from the LHR vertex were valid, meaning
-they do represent a point somewhere on Earth, we could do so as follows.
+they do indeed represent a point somewhere on Earth, we could do so as follows.
 
 [source,groovy]
 ----
@@ -14472,7 +14519,7 @@ true
 
 I have just shown a few examples of the many things that you can do using the
 JanusGraph GeoSpatial API. If this is an area that interests you I recommend reading
-the API documentation for the Geoshape and related classes. 
+the API documentation for the 'Geoshape' and related classes. 
 
 [[janusstorage]]
 Choosing a persistent storage technology for JanusGraph
