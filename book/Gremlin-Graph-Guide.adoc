@@ -2456,6 +2456,9 @@ verts.get(1).getClass()
 class org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerVertex
 ----
 
+TIP: When using the Gremlin Console, you can check to see what variables you have defined
+using the command ':show variables'.
+
 [[wid]]
 Working with IDs
 ~~~~~~~~~~~~~~~~
