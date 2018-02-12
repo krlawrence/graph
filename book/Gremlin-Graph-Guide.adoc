@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v278-preview, Feb 11, 2018
-// Mon Feb 12, 2018 11:26:16 CST
+v278-preview, Feb 12, 2018
+// Mon Feb 12, 2018 14:57:13 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Feb 11 2018
+//:Date:      Feb 12 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -409,7 +409,7 @@ many other programming languages such as Groovy and Python. Parts of TinkerPop a
 themselves developed in Groovy, most notably the Gremlin Console. The nice thing
 about that is that we can use Groovy syntax along with Gremlin when entering queries
 into the Console or sending them via REST API to a Gremlin Server. All of these
-topics are covered in detail in this boook.
+topics are covered in detail in this book.
 
 The queries used as examples in this book have been tested with Apache TinkerPop
 version 3.3. using the TinkerGraph graph and the Gremlin console as well as some
