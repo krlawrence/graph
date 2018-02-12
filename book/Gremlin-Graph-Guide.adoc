@@ -1,8 +1,8 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v277, Feb 11, 2018
-// Sun Feb 11, 2018 14:00:46 CST
+v278-preview, Feb 11, 2018
+// Mon Feb 12, 2018 11:26:16 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Feb 11 2018
@@ -18,7 +18,7 @@ v277, Feb 11, 2018
 //:pygments-style: vim
 :toc:
 :toclevels: 4
-:revision: 277
+:revision: 278-preview
 :doctype: book
 :icons: font
 
@@ -104,10 +104,10 @@ open issues or pull requests.
 A word of thanks
 ~~~~~~~~~~~~~~~~
 
-I would like to thank my colleagues at IBM, Graham Wallis, Jason Plurad and Adam
-Holley for their help in refining and improving several of the queries contained in
-this book. Gremlin is definitely a bit of a team sport. We spent many hours over
-the last many months discussing the best way to handle different types of queries and
+I would like to thank my colleagues at IBM, Graham Wallis, Jason Plurad and
+Adam Holley for their help in refining and improving several of the queries
+contained in this book. Gremlin is definitely a bit of a team sport. We spent
+many hours discussing the best way to handle different types of queries and
 traversals!
 
 I would also be remiss if I did not give a big shout out to all of the folks that
@@ -133,61 +133,66 @@ TinkerPop version 3.3 which introduced a few breaking changes. If you find any I
 missed please let me know! The examples have also been tested using the 3.3.1
 release.
 
-TinkerGraph is an 'in-memory' graph, meaning
-nothing gets saved to disk automatically, that is shipped as part of the Apache
-TinkerPop 3 download.  The goal of this tutorial is to allow someone with little to
-no prior knowledge to get up and going quickly using the Gremlin console and the
-'air-routes'graph. Later in the book we will discuss using additional
-technologies such as JanusGraph, Apache Cassandra and Apache Elastic Search with
-Gremlin. We will also discuss writing stand alone Java and Groovy applications as
-well as using the Gremlin Console.
+TinkerGraph is an 'in-memory' graph, meaning nothing gets saved to disk
+automatically. It is shipped as part of the Apache TinkerPop 3 download.  The
+goal of this tutorial is to allow someone with little to no prior knowledge to
+get up and going quickly using the Gremlin console and the 'air-routes'graph.
+Later in the book I will discuss using additional technologies such as
+JanusGraph, Apache Cassandra, Gremlin Server and Apache Elastic Search to build
+scalable and persisted graph stores that can still be traversed using Gremlin
+queries. I will also discuss writing stand alone Java and Groovy applications
+as well as using the Gremlin Console. I even slipped a couple of Ruby examples in
+as well!
 
-NOTE: In the first four sections of this this book we have mainly focussed on
-showing the different types of query that you can issue using Gremlin. We have not
+NOTE: In the first four sections of this this book I have mainly focussed on
+showing the different types of query that you can issue using Gremlin. I have not
 tried to show all of the output that you will get back from entering these queries
-but have selectively shown examples of output. We go a lot deeper into things in
+but have selectively shown examples of output. I go a lot deeper into things in
 chapters 5 and 6.
 
 .How this book is organized
 Chapter 1 - INTRODUCTION::
-- We start off by briefly doing a recap on why Graph databases are of interest to us
-  and discuss some good use cases for graphs.
+- I start off by briefly doing a recap on why Graph databases are of interest to us
+  and discuss some good use cases for graphs. I also provide pointers to the sample
+  programs and other additional materials referenced by the book.
 Chapter 2 - GETTING STARTED::
-- In Chapter two we introduce several of the components of Apache TinkerPop 3 and we
-  also introduce the air-routes.graphml file that will be used as the graph we base
-  most of our examples on.
+- In Chapter two I introduce several of the components of Apache TinkerPop  and 
+  also introduce the air-routes.graphml file that will be used as the graph the
+  majority of examples shown in this book are based on.
 Chapter 3 - WRITING GREMLIN QUERIES::
-- In Chapter three we start discussing how to use the Gremlin graph traversal and
-  query language to interrogate the air-routes graph. We begin by comparing how we
+- In Chapter three things start to get a lot more interesting! I start discussing 
+  how to use the Gremlin graph traversal and
+  query language to interrogate the air-routes graph. I begin by comparing how we
   could have built the air-routes graph using a more traditional relational database
   and then look at how SQL and Gremlin are both similar in some ways and very
-  different in others. For the rest of the Chapter, we introduce several of
-  the key Gremlin methods, or as they are often called, "steps". We
+  different in others. For the rest of the Chapter, I introduce several of
+  the key Gremlin methods, or as they are often called, '"steps"'. I
   mostly focus on reading the graph (not adding or deleting things) in this Chapter.
 Chapter 4 - BEYOND BASIC QUERIES::
-- In Chapter four we move beyond just reading the graph and describe how to add
+- In Chapter four the focus moves beyond just reading the graph and I describe how to add
   vertices (nodes),  edges and properties as well as how to delete and update them. 
-  We also present a  discussion of various best practices.We also start to explore
+  I also present a discussion of various best practices. I also start to explore
   some slightly more advanced topics in this chapter.
 Chapter 5 - MISCELLANEOUS QUERIES AND THE RESULTS THEY GENERATE::
-- In Chapter five we focus on using what we have covered in the prior Chapters to write
-  queries that have a more real world feel. We present a lot more examples of the
-  output from running queries in this Chapter. We also start to discuss topics such
+- In Chapter five I focus on using what has been covered in the prior Chapters to write
+  queries that have a more real world feel. I present a lot more examples of the
+  output from running queries in this Chapter. I also start to discuss topics such
   as analyzing distances, route distribution and writing geospatial queries.
 Chapter 6 - MOVING BEYOND THE CONSOLE AND TINKERGRAPH::
-- In Chapter six we move beyond our focus on the Gremlin Console and TinkerGraph. We
+- In Chapter six I start to expand the focus to concepts beyond using the Gremlin
+  Console and a TinkerGraph. I
   start by looking at how you can write stand alone Java and Groovy applications that
-  can work with a graph. We then introduce JanusGraph and take a fairly detailed
-  look at its capabilities such as support for transactions, schemas and external
-  indexes. We also explore various technology choices for back end persistent store
-  and index as well as introducing the Gremlin Server.
+  can work with a graph. I then introduce JanusGraph and take a fairly detailed
+  look at its capabilities such as support for transactions, schemas and indexes. 
+  I also explore various technology choices for back end persistent stores
+  and indexes as well as introducing the Gremlin Server.
 Chapter 7 - COMMON GRAPH SERIALIZATION FORMATS::
 - In Chapter seven a discussion is presented of some common Graph serialization file
   formats along with coverage of how to use them in the context of TinkerPop 3
   enabled graphs.
 Chapter 8 - FURTHER READING::
-- We finish up by providing several links to useful web sites where you can find
-  tools and documentation for many of the technologies covered in this book.
+- I finish up by providing several links to useful web sites where you can find
+  tools and documentation for many of the topics and technologies covered in this book.
 
 [[samplesintro]]
 Introducing the book sources, sample programs and data
@@ -198,14 +203,16 @@ to find the key components is provided below. The examples in this book make use
 sample graph called 'air-routes.graphml' which contains a graph based on the World
 airline route network between over 3,370 airports.  The sample graph data, quite a
 bit of sample code and some larger demo applications can all be found at the same
-Github that hosts the book manuscript.  You will also find the book releases in
-various formats (HTML,PDF, DocBook/XML, MOBI and EPUB) at the same GitHub location.
-The sample programs include stand alone Java and Groovy examples as well as many
-examples that can be run from the Gremlin Console.  There are some differences
-between using Gremlin from a stand alone program and from the Gremlin Console. The
-sample programs demonstrate several of these differences.  The sample applications
-area contains a full example HTML and JavaScript application that lets you explore
-the air-routes graph visually. Below are some links to each.
+GitHub location that hosts the book manuscript.  You will also find releases of the
+the book in various formats (HTML,PDF, DocBook/XML, MOBI and EPUB) at the same GitHub
+location.  The sample programs include stand alone Java, Groovy and Ruby examples as
+well as many examples that can be run from the Gremlin Console.  There are some
+differences between using Gremlin from a stand alone program and from the Gremlin
+Console. The sample programs demonstrate several of these differences.  The sample
+applications area contains a full example HTML and JavaScript application that lets
+you explore the air-routes graph visually. The home page for the GitHub project
+includes a README.md file to help you navigate the site. Below are some links to
+various resources included with this book.
 
 .Where to find the book, samples and data
 Project home::
@@ -11655,7 +11662,6 @@ g.V().hasLabel('airport').pageRank().by(outE('route')).by('r').order().by('r',de
 [[beyond]]
 MOVING BEYOND THE CONSOLE AND TINKERGRAPH
 -----------------------------------------
-.This section is still under construction!
 
 Most of the examples we have looked at so far were produced using the Gremlin console
 and the TinkerGraph in-memory graph all running on a single machine.  However, there
@@ -15058,7 +15064,7 @@ secured. This is where Gremlin Server comes in.
 
 Gremlin Server, as its name suggests, offers a way of setting up access to a graph
 that goes via a front end web server. In this way the user of the graph only has to
-know the name or IP address of the Gremlin server in order to communicate with a
+know the name or IP address of the Gremlin Server in order to communicate with a
 graph. You can set Gremlin Server up on your local machine, which is useful for
 testing but you can also use it to setup a graph on a remote server and allow users
 to access it. Gremlin Server supports a number of different connection protocols and
@@ -15124,7 +15130,7 @@ org.apache.tinkerpop.gremlin.server.channel.WsAndHttpChannelizer::
 The first part of the 'gremlin-server.yaml' file, modified to meet our needs is shown
 below. I did not modify the parts of the file that are not shown but I encourage you
 to look at the whole file and study the settings. For our current needs the defaults
-are fine. However, in your environment the defaults mayt not meet your needs. The
+are fine. However, in your environment the defaults may not meet your needs. The
 TinkerPop documentation has detailed coverage of the settings and what they do.
 
 OK so let's look at the parts of the YAML file that are relevant to this experiment.
