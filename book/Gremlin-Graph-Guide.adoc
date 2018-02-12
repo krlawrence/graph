@@ -14374,7 +14374,7 @@ Dubai
 
 [[janusgeo]]
 The JanusGraph GeoSpatial API
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Earlier, in the "<<latlonmanual>>" section, I provided a few examples of how we could
 write some queries that took advantage of the fact that the airports in the
@@ -14523,6 +14523,64 @@ they do indeed represent a point somewhere on Earth, we could do so as follows.
 Geoshape.isValidCoordinate(lat,lon)
 
 true
+----
+
+Earlier, in the "<<latlonmanual>>" section I demonstrated the query below. The query
+finds all airports within a conceptual rectangle around the London Heathrow (LHR)
+airport. The rectangle is defined by adding or subtracting one degree of latitude and
+longitude to the opposite diagonals with LHR at the center.
+
+[source,groovy]
+----
+lat = g.V().has('code','LHR').values('lat').next()
+lon = g.V().has('code','LHR').values('lon').next()
+
+g.V().hasLabel('airport').has('lon',between(lon-1,lon+1)).
+                          has('lat',between(lat-1,lat+1)).
+                          valueMap('code','lat','lon')   
+----
+
+Here is the output that query produced.
+
+[source,groovy]
+----
+[code:[LHR],lon:[-0.461941003799],lat:[51.4706001282]]
+[code:[LGW],lon:[-0.190277993679047],lat:[51.1481018066406]]
+[code:[LCY],lon:[0.055278],lat:[51.505278]]
+[code:[STN],lon:[0.234999999404],lat:[51.8849983215]]
+[code:[LTN],lon:[-0.368333011865616],lat:[51.874698638916]]
+[code:[SOU],lon:[-1.35679996013641],lat:[50.9502983093262]]
+----
+
+We can use the JanusGraph Geoshape class to rewrite the query as shown below. Instead
+of using a 'circle' this time we will create a 'box' representing a geographical
+region around London Heathrow (LHR).
+
+[source,groovy]
+----
+// Define a box around LHR with opposite diagonal corners 
+// each one degree from LHR.
+box = Geoshape.box(lat_lhr-1,lon_lhr-1,lat_lhr+1,lon_lhr+1)
+
+// Find other airports that within the box
+g.V().has('airport','region','GB-ENG').
+      where(map{a=it.get().value('lat');
+                b=it.get().value('lon');
+                Geoshape.point(a,b).within(box)}.is(true)).
+                valueMap('code','lat','lon')     
+----
+
+The results from running our new query are shown below. As you can see the same
+airports were found.
+
+[source,groovy]
+----
+[code:[LGW],lon:[-0.190277993679047],lat:[51.1481018066406]]
+[code:[LHR],lon:[-0.461941003799],lat:[51.4706001282]]
+[code:[LCY],lon:[0.055278],lat:[51.505278]]
+[code:[STN],lon:[0.234999999404],lat:[51.8849983215]]
+[code:[LTN],lon:[-0.368333011865616],lat:[51.874698638916]]
+[code:[SOU],lon:[-1.35679996013641],lat:[50.9502983093262]]
 ----
 
 I have just shown a few examples of the many things that you can do using the
