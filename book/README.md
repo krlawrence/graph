@@ -2,7 +2,7 @@ This folder contains the AsciiDoc source file used to produce the HTML, XML (DOC
 
 
 **LATEST NEWS:**  
-[Feb-11-2018] Revision 277 was just published in all formats. See change history for details.  
+[Feb-11-2018] Revision 277 was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
 
 
 ## Releases and change history
@@ -38,6 +38,6 @@ Please note that the DOCBOOK, EPUB and MOBI format files currently do not have a
 [Nov-03-2017] Revision 271 was just published in all formats. Several improvements and additions.  
 [Oct-27-2017] Revision 270 was just published in all formats. Fixes issue #6 and adds more to Janus section.  
 [Oct-23-2017] Quite a lot has been added to the Janus Graph section - more to come soon.  
-[Oct-15-2017] Experimental - The /book folder now includes DOCBOOK, EPUB and MOBI format versions of the book. 
+[Oct-15-2017] Experimental - The /book folder now includes DOCBOOK, EPUB and MOBI format versions of the book.  
 [Oct-11-2017] I improved the section that introduces the 'repeat' step.  
 [Oct-10-2017] Several sections have been improved, I also made updates to reflect changes made in Tinkerpop 3.3
