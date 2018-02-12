@@ -1,16 +1,19 @@
 This folder contains the AsciiDoc source file used to produce the HTML, XML (DOCBOOK), EPUB, MOBI and PDF output.
 
+
+**LATEST NEWS:**  
+[Feb-11-2018] Revision 277 was just published in all formats. See change history for details.  
+
+
+## Releases and change history
+
+The most recent changes and additions are now being tracked in the [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) file.
+
 **A special note about releases**
 
 Starting with revision 274 (Dec 24 2017), all of the output files (XML, EPUB, MOBI, HTML and PDF) will now be stored using Git releases. Going forward, this should reduce the amount of disk space required for people who create forks of this project. The releases are located [here](https://github.com/krlawrence/graph/releases).
 
 NOTE: In order to prune the unwanted files from the project, as part of the v274 release,  the commit history for the output files had to be removed. If you had previously cloned or forked this project please create a new clone or fork. Sorry for the inconvenience but this will get you back approximately 60% (27+ mb) of the disk space that was being taken up and will help anyone else making a clone.
-
-
-**LATEST NEWS:**  
-[Jan-12-2018] Revision 276 was just plublished in all formats. Many updates to book and samples.  
-[Jan-12-2018] Based on feedback I have decided to rename the book "Practical Gremlin" (see issue #29)  
-[Jan-03-2018] Revision 275 was just published in all formats. Lots of updates to book and sample code.  
 
 **About the files in this folder**
 
@@ -26,6 +29,8 @@ Please note that the DOCBOOK, EPUB and MOBI format files currently do not have a
 
 
 **ARCHIVED NEWS:**  
+[Jan-12-2018] Revision 276 was just plublished in all formats. Many updates to book and samples.  
+[Jan-12-2018] Based on feedback I have decided to rename the book "Practical Gremlin" (see issue #29)  
 [Jan-03-2018] Revision 275 was just published in all formats. Lots of updates to book and sample code.  
 [Dec-24-2017] Revision 274 was just published in all formats. Now using releases to store output files.   
 [Dec-12-2017] Revision 273 was just published in all formats. Fixes issue #12. Also added additonal clarifications.  

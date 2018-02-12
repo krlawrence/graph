@@ -2,7 +2,7 @@
 
 Starting with the v275 release, this file will contain a record of the major changes and updates made in each release.
 
-## Upcoming Release 277 change history (Date TBD)
+## Release 277 change history (Feb 11, 2018)
 
 This is a fairly substantial update. Lots of new material added to the book and to the sample-code folder.
 
