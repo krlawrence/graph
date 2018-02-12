@@ -6,6 +6,8 @@ Starting with the v275 release, this file will contain a record of the major cha
 
 This is a fairly substantial update. Lots of new material added to the book and to the sample-code folder.
 
+Here is a link to the [Git diffs between v277 and the prior v276 release](https://github.com/krlawrence/graph/compare/v276...v277)
+
 Major new features in this release.
 - Wrote the first draft of the `Gremlin Server` section.
 - Added examples of the JSON that is returned from different Gremlin Server queries.
@@ -30,6 +32,8 @@ Major new features in this release.
 - Did quite a bit of cleaning up of the text overall and corrected some mistakes and typos.
 
 ## Release 276 change history (Jan 12, 2018)
+
+Here is a link to the [Git diffs between v276 and the prior v275 release](https://github.com/krlawrence/graph/compare/v275...v276)
 
 Major features in this Release
 - Renamed the book to "Practical Gremlin".
