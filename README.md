@@ -12,7 +12,7 @@ This repository is the new home for the source materials, sample code and exampl
 To read the latest snapshot of the book right away in a browser (HTML format) click [here](http://kelvinlawrence.net/book/Gremlin-Graph-Guide.html) or for a PDF version click [here](http://kelvinlawrence.net/book/Gremlin-Graph-Guide.pdf). You will find other formats including MOBI, EPUB and XML (Docbook) in the [releases](https://github.com/krlawrence/graph/releases)  section. Formal releases will be published about once a month assuming there is enough new material. If you want to see the absolute latest updates you can always browse the Asciidoc source file (Gremlin-Graph-Guide.adoc) in the /book folder. The PDF version is currently the "official" version, simply meaning it looks the best!
 
 **LATEST NEWS:**  
-[Feb-11-2018] Revision 277 was just published in all formats. See change history for details.  
+[Feb-11-2018] Revision 277 was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
 
 ## Releases and change history
 
