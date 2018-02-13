@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v278-preview, Feb 13, 2018
-// Tue Feb 13, 2018 12:56:50 CST
+// Tue Feb 13, 2018 13:59:03 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Feb 13 2018
@@ -15221,13 +15221,6 @@ index in the graph to allow the query to run faster and hence take less time! If
 want to disable the timeout feature you can do that by specifying a timeout value of
 0 (zero).
 
-As well as the YAML file and the properties file, there is a third file that we need
-to provide when starting a Gremlin Server. This file can contain Groovy code that
-will be run when the server starts. For our purposes the default file is all we need.
-These files should be placed in the 'scripts' directory that is part of the standard
-Gremlin Server or JanusGraph install. We will take a look at the default script in a
-moment.
-
 .gremlin-server.yaml
 [source,groovy]
 ----
@@ -15248,6 +15241,13 @@ scriptEngines: {
 
 # The rest of the file is not shown  
 ----
+
+As well as the YAML file and the properties file, there is a third file that we need
+to provide when starting a Gremlin Server. This file can contain Groovy code that
+will be run when the server starts. For our purposes the default file is all we need.
+These files should be placed in the 'scripts' directory that is part of the standard
+Gremlin Server or JanusGraph install. We will take a look at the default script in a
+moment.
 
 By default both Gremlin Server and JanusGraph include a Groovy script called
 'empty-sample.groovy'. That name is a bit misleading as the file actually does some
