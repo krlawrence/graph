@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v278-preview, Feb 12, 2018
-// Mon Feb 12, 2018 14:57:13 CST
+v278-preview, Feb 13, 2018
+// Tue Feb 13, 2018 12:56:50 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Feb 12 2018
+//:Date:      Feb 13 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -15206,6 +15206,20 @@ backed by Cassandra. Note that the '"-es"' in the properties file name refers to
 Elastic Search. As we did not configure an external index when we setup our
 JanusGraph the lines referring to Elastic Search inside the properties file should be
 commented out.
+
+The 'scriptEvaluationTimeout' setting is important. It tells the Gremlin Server how
+long to let a query run before terminating it. This essentially establishes the
+maximum amount of time any query will be allowed to run, regardless of whether it has
+completed or not. For this experiment the default setting of 30000 should be more
+than adequate. The value represents the number of milliseconds allowed. If you want
+to allow queries sent to the server to run for longer you can increase this value.
+Just keep in mind that if you have multiple users using the same Gremlin Server you
+may not want to allow someone to run a really complex query that might take a long
+time to complete. As a side note, I have seen people increase this value to allow
+queries to complete when in fact what they should have been doing is creating an
+index in the graph to allow the query to run faster and hence take less time! If you
+want to disable the timeout feature you can do that by specifying a timeout value of
+0 (zero).
 
 As well as the YAML file and the properties file, there is a third file that we need
 to provide when starting a Gremlin Server. This file can contain Groovy code that
