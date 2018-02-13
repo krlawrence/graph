@@ -114,7 +114,12 @@ mgmt.awaitGraphIndexStatus(graph, 'typeIndex').
 mgmt.awaitGraphIndexStatus(graph, 'distIndex').
      status(SchemaStatus.REGISTERED).call()
 
-// Once the index is created force a re-index
+// Once the index is created force a re-index Note that a reindex is not strictly
+// necessary here. It could be avoided by creating the keys and index as part of the
+// same transaction. I did it this way just to show an example of re-indexing being
+// done. A reindex is always necessary if the index is added after data has been
+// loaded into the graph.
+
 println "\n===========";[]
 println "re-indexing";[]
 println "===========\n";[]
