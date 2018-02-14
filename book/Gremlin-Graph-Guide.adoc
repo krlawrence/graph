@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v278-preview, Feb 13, 2018
-// Tue Feb 13, 2018 13:59:03 CST
+// Tue Feb 13, 2018 20:53:38 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Feb 13 2018
@@ -396,20 +396,25 @@ TinkerGraph::
 - A small in-memory graph implementation that is great for learning.
 Programming Interfaces::
 - A set of programming interfaces written in Java 
+- http://tinkerpop.apache.org/javadocs/current/full/
 Documentation::
 - A user guide, a tutorial and programming API documentation.
+- http://tinkerpop.apache.org/docs/current/reference/
 
 The programming interfaces allow providers of graph databases to build systems that
-are TinkerPop enabled. Any such databases can be accessed using the Gremlin query
-language and corresponding API. For most of this book we will be working within
-the Gremlin console with a local graph. However in Section 6 we will take a look at
-Gremlin Server and some other TinkerPop 3 enabled environments. Most of Apache
-Tinkerpop has been developed using Java 8 but there are also bindings available for
-many other programming languages such as Groovy and Python. Parts of TinkerPop are
-themselves developed in Groovy, most notably the Gremlin Console. The nice thing
-about that is that we can use Groovy syntax along with Gremlin when entering queries
-into the Console or sending them via REST API to a Gremlin Server. All of these
-topics are covered in detail in this book.
+are TinkerPop enabled. 
+
+Any such databases can be accessed using the Gremlin query language and corresponding
+API. We can also use the TinkerPop API to write client code in languages like Java that
+can talk to a TinkerPop enabled graph.  For most of this book we will be working
+within the Gremlin console with a local graph. However in Section 6 we will take a
+look at Gremlin Server and some other TinkerPop 3 enabled environments. Most of
+Apache Tinkerpop has been developed using Java 8 but there are also bindings
+available for many other programming languages such as Groovy and Python. Parts of
+TinkerPop are themselves developed in Groovy, most notably the Gremlin Console. The
+nice thing about that is that we can use Groovy syntax along with Gremlin when
+entering queries into the Console or sending them via REST API to a Gremlin Server.
+All of these topics are covered in detail in this book.
 
 The queries used as examples in this book have been tested with Apache TinkerPop
 version 3.3. using the TinkerGraph graph and the Gremlin console as well as some
