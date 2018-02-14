@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v278-preview, Feb 13, 2018
-// Tue Feb 13, 2018 20:53:38 CST
+v278-preview, Feb 14, 2018
+// Wed Feb 14, 2018 09:32:25 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Feb 13 2018
+//:Date:      Feb 14 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -390,15 +390,19 @@ Gremlin::
 - A graph traversal (query) language
 Gremlin Console::
 - An interactive shell for working with local or remote graphs.
+- http://tinkerpop.apache.org/docs/current/reference/#gremlin-console
 Gremlin Server::
 - Allows hosting of graphs remotely via an HTTP/Web Sockets connection.
+- http://tinkerpop.apache.org/docs/current/reference/#gremlin-server
 TinkerGraph::
 - A small in-memory graph implementation that is great for learning.
+- http://tinkerpop.apache.org/docs/current/reference/#tinkergraph-gremlin
 Programming Interfaces::
 - A set of programming interfaces written in Java 
 - http://tinkerpop.apache.org/javadocs/current/full/
 Documentation::
 - A user guide, a tutorial and programming API documentation.
+- http://tinkerpop.apache.org/docs/current/
 - http://tinkerpop.apache.org/docs/current/reference/
 
 The programming interfaces allow providers of graph databases to build systems that
@@ -7068,6 +7072,17 @@ g.withSideEffect('s', [] as Set).
       store('s').cap('s').order(local)
 
 [2,3,4,5,6,7,8]
+----
+
+The 'store' step can also be used in conjunction with a 'by' modulator to specify
+exactly what is 'stored'. The query below uses a 'store' step to create a collection
+of runways but avoids the need to use a 'values' step.
+
+[source,groovy]
+----
+g.V().has('region','US-TX').store('r').by('runways').cap('r')
+
+[2,2,2,2,2,2,2,2,7,5,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,1]
 ----
 
 The 'aggregate' step also generates a collection as shown below. The collection is
