@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v278-preview, Feb 15, 2018
-// Thu Feb 15, 2018 08:11:20 CST
+// Thu Feb 15, 2018 10:12:41 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
 //:Date:      Feb 15 2018
@@ -2383,7 +2383,8 @@ g.V().has('code','AUS').valueMap().select('code','icao','desc')
 
 If you are reading the output of queries that use 'valueMap' on the Gremlin console,
 it is sometimes easier to read the output if you add an 'unfold' step to the end of
-the query as follows.
+the query as follows. The 'unfold' step will unbundle a collection for us. You will
+see it used in many parts of this book.
 
 [source,groovy]
 ----
@@ -4884,6 +4885,63 @@ LSI,EDI,EWR,ROC]
 
 You will see more examples of 'emit' being used in the "<<btree>>" section a bit
 later.
+
+[[cyclicpath]]
+Introducing 'cyclicPath'
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+You can use 'cyclicPath' to find paths through the graph that end up back where they
+started. The rather contrived example below finds routes that both start and end in
+Austin (AUS).
+
+[source,groovy]
+----
+// From Austin and back again
+g.V().has('code','AUS').out().out().cyclicPath().
+      limit(10).path().by('code')
+----
+
+Here are the results from running the query.
+
+[source,groovy]
+----
+[AUS,TUS,AUS]
+[AUS,PHL,AUS]
+[AUS,DTW,AUS]
+[AUS,YYZ,AUS]
+[AUS,LHR,AUS]
+[AUS,FRA,AUS]
+[AUS,MEX,AUS]
+[AUS,PIT,AUS]
+[AUS,PDX,AUS]
+[AUS,ONT,AUS]
+----
+
+You can also use 'cyclicPath' as a termination condition for a 'repeat' loop. The
+query below keeps following outbound edges until it ends up back where it started.
+
+[source,groovy]
+----
+g.V().has('code','AUS').repeat(out()).until(cyclicPath()).
+      limit(10).path().by('code')
+----
+
+Here are the results from running the modified query. As you can see the two queries
+generated the same results.
+
+[source,groovy]
+----
+[AUS,TUS,AUS]
+[AUS,PHL,AUS]
+[AUS,DTW,AUS]
+[AUS,YYZ,AUS]
+[AUS,LHR,AUS]
+[AUS,FRA,AUS]
+[AUS,MEX,AUS]
+[AUS,PIT,AUS]
+[AUS,PDX,AUS]
+[AUS,ONT,AUS]
+----
 
 [[pathwarn]]
 A warning that 'path' can be memory and CPU intensive
@@ -8139,8 +8197,101 @@ in the case of Gremlin, the current state of a graph traversal, and modify it in
 way before passing on those results to the next part of the traversal. This is what
 the 'map' step allows us to do.
 
-Take a look at the query below. It simply returns us a list containing the IDs of the
-first ten airports in the graph.
+The 'map' step can accept a traversal or a closure as input. The results of the
+traversal or closure will be passed on to the next step in the overall traversal.
+Below is a simple example of a 'map' step using a traversal to modify what is passed
+on.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').limit(10).map(properties('city'))
+----
+
+When this query is run the output returned is the selected vertex properties for each
+of the 10 airports that were selected.
+
+[source,groovy]
+----
+vp[city->Atlanta]
+vp[city->Anchorage]
+vp[city->Austin]
+vp[city->Nashville]
+vp[city->Boston]
+vp[city->Baltimore]
+vp[city->Washington D.C.]
+vp[city->Dallas]
+vp[city->Fort Lauderdale]
+vp[city->Washington D.C.]
+----
+
+We could go one step further and have the 'map' step produce a key and value map for
+us.
+
+[source,groovy]
+----
+ g.V().hasLabel('airport').limit(10).
+       map(properties('city').group().by(key()).by(value()))
+
+[city:Atlanta]
+[city:Anchorage]
+[city:Austin]
+[city:Nashville]
+[city:Boston]
+[city:Baltimore]
+[city:Washington D.C.]
+[city:Dallas]
+[city:Fort Lauderdale]
+[city:Washington D.C.]
+----
+
+As I mentioned above, in many cases, a 'map' step is used in the middle of a query to
+change what is passed on to the next step. The example below takes the output from
+the 'map' step and sorts the results in descending order based on the city names.
+Obviously there are simpler ways we could write this query but this demonstrates what
+'map' does quite well.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').limit(10).
+      map(properties('city').group().by(key()).by(value())).
+      unfold().order().by(values,incr)
+----
+
+Here is the output from running the query showing the sorted city names.
+
+[source,groovy]
+----
+city=Anchorage
+city=Atlanta
+city=Austin
+city=Baltimore
+city=Boston
+city=Dallas
+city=Fort Lauderdale
+city=Nashville
+city=Washington D.C.
+city=Washington D.C.
+----
+
+In some cases there are other steps, such as the 'values' step that can be used as a
+shorthand form of a 'map' step. The following two queries yield the same results for
+example. There is no need to write an explicit 'map' step when a shorthand form
+exists.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').limit(10).map(values('city')).fold()
+
+[Atlanta,Anchorage,Austin,Nashville,Boston,Baltimore,Washington D.C.,Dallas,Fort Lauderdale,Washington D.C.]
+
+g.V().hasLabel('airport').limit(10).values('city').fold()
+
+[Atlanta,Anchorage,Austin,Nashville,Boston,Baltimore,Washington D.C.,Dallas,Fort Lauderdale,Washington D.C.]
+----
+
+Now let's look at an example where a lambda function (closure) is used. First of
+all, take a look at the query below. It simply returns us a list containing the IDs
+of the first ten airports in the graph.
 
 [source,groovy]
 ----
@@ -8149,7 +8300,7 @@ g.V().hasLabel('airport').limit(10).id().fold()
 [1,2,3,4,5,6,7,8,9,10]
 ----
 
-Let's say we wanted to write a query, similar to the one above, that will modify each
+Imagine we wanted to write a query, similar to the one above, that will modify each
 of those IDs returned in the query above by adding one to each. Take a look at the
 query below. We have introduced a 'map' step. The 'map' step takes as a parameter a
 closure (or lambda) function telling it how we want it to operate on the values
@@ -11776,18 +11927,6 @@ HasStep([country.eq(DE)])                    59           4      0.206     1.11
    >TOTAL                                     -           -     18.650        -
 ----
 
-Introducing 'cyclicPath'
-^^^^^^^^^^^^^^^^^^^^^^^^
-
-You can use 'cyclicPath' to find paths through the graph that end up back where they
-started. The rather contrived example below finds routes that both start and end in
-Austin (AUS).
-
-[source,groovy]
-----
-// From Austin and back again
-g.V().has('code','AUS').out().out().cyclicPath().path().by('code')
-----
 
 Including an index value in results - introducing 'withIndex'
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
