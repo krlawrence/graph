@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v278-preview, Feb 14, 2018
-// Wed Feb 14, 2018 09:32:25 CST
+v278-preview, Feb 15, 2018
+// Thu Feb 15, 2018 08:11:20 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     klawrenc@us.ibm.com
-//:Date:      Feb 14 2018
+//:Date:      Feb 15 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -8765,8 +8765,9 @@ operations.  Typically, an OLTP query takes a few seconds or less to run. They a
 often used in response to a user query where an almost real time answer is needed.
 Because the air routes graph is small - we can do even quite complex queries using
 little more than a TinkerGraph and the Gremlin Console. This is not the case if your
-graph contains billions of vertices and edges. That said, I have some queries that
-can take several minutes to run in that environment.
+graph contains billions of vertices and edges. That said, I have seen some OLTP type
+queries queries, such as those looking for routes to remote airports, that can take
+several minutes to run in the TinkerGraph environment.
 
 NOTE: The TinkerPop documentation has in depth coverage of the various OLAP
 capabilities that are supported.
@@ -8811,8 +8812,8 @@ way it can be used.
 Experiments with Page Rank
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Probably one of, if not the, most famous algorithms in the big data world is `Page
-Rank`. Originally developed at Google, the Page Rank algorithm was created as a way
+Probably one of, if not the, most famous algorithms in the big data world is 'Page
+Rank'. Originally developed at Google, the Page Rank algorithm was created as a way
 to measure the relative importance of web pages. At a high level the algorithm looks
 at the number of connections to a web page and the quality of those connections (as
 in are they from a prominent place). That algorithm ports well to a graph database
@@ -8820,8 +8821,8 @@ environment as a graph, like the Web, is a heavily connected data structure. In 
 graph database environment, we can use a page rank algorithm to assess a graph and
 compute the likelihood in any given traversal that a particular vertex will get
 visited.  Although the new Graph Computer capabilities have been designed from the
-ground up with distributed systems, it is possible to use a stand a alone TinkerGraph
-to experiment with a few of the capabilities.
+ground up with distributed systems in mind, it is possible to use a stand a alone
+TinkerGraph to experiment with a few of the capabilities.
 
 The example below only assumes that you have a TinkerGraph running locally inside the
 Gremlin Console with the air-routes data loaded. You will notice a few differences
@@ -8832,7 +8833,7 @@ created the traversal source we can setup our page rank. The query initially fil
 out any vertex that is not an airport as will only want to rank airport vertices.
 Next a call is made to the 'pageRank' step. The 'by' modulators tell the page rank
 algorithm how we want the ranking done and what label to use for the ranking
-results.In this case we want to look at outgoing 'route' edges and label all results
+results. In this case we want to look at outgoing 'route' edges and label all results
 'r'. Before returning the results, we order based on descending ranking value.
 
 [source,groovy]
@@ -8867,9 +8868,9 @@ incoming routes.
 
 [source,groovy]
 ----
- g.V().hasLabel('airport').
-       order().by(inE('route').count(),decr).limit(10).
-       project('a','b').by('code').by(inE('route').count())
+g.V().hasLabel('airport').
+      order().by(inE('route').count(),decr).limit(10).
+      project('a','b').by('code').by(inE('route').count())
 ----
 
 As you can see there is some correlation between the page rank results and the
@@ -8893,9 +8894,10 @@ degree test did not come up with.
 
 The 'pageRank' step used in the prior query is a nice and convenient way for us to
 quickly generate some rankings. However, it is important to understand how the query
-would be written if we were to use the Graph Computer more directly. The example
-below sets up a 'PageRankVertexProgram' and runs it. Notice that the result we get
-back includes a new graph with 3624 vertices and no edges.
+would be written if we were to use the Graph Computer more directly and submit a
+Vertex Program. The example below sets up a 'PageRankVertexProgram' and runs it.
+Notice that the result we get back includes a new graph with 3624 vertices and no
+edges.
 
 [source,groovy]
 ----
@@ -8907,8 +8909,8 @@ dcr = graph.compute().
 result[tinkergraph[vertices:3624 edges:0],memory[size:0]]
 ----
 
-In case you are curious, we can check the precise type of the result object that is returned
-from creating our vertex program.
+In case you are curious, we can check the precise type of the result object that is
+returned from creating our vertex program.
 
 [source,groovy]
 ----
@@ -8933,7 +8935,7 @@ g2.V().has('code','IST').valueMap(true)
 ----
 
 Just to prove the original graph was untouched, let's check the IST vertex in that
-graph. As you can see there are no new properties in this version.
+graph. As you can see there are no new properties present.
 
 [source,groovy]
 ----
@@ -8944,7 +8946,7 @@ g.V().has('code','IST').valueMap(true)
 
 Finally let's look at the 10 airports sorted by page rank score in descending order.
 As you will observe, the scoring system is different but the selected airports are
-the same.
+the same as the ones returned by the in-line 'pageRank' step.
 
 [source,groovy]
 ----
