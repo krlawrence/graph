@@ -2,6 +2,16 @@
 
 Starting with the v275 release, this file will contain a record of the major changes and updates made in each release.
 
+## Future Release 278 change history (Date TBD)
+
+Major new features in this release
+- Added to the `collections` section.
+- Added a new `OLTP vs OLAP` section.
+- Added to the `Gremlin Server` section.
+- Added to the `JanusGraph GeoSpatial` section and moved the section up a hierarchy level.
+- Added a new sample that demonstrates geospatial queries.
+- General housekeeping and tightening up of some wording.
+
 ## Release 277 change history (Feb 11, 2018)
 
 This is a fairly substantial update. Lots of new material added to the book and to the sample-code folder.
