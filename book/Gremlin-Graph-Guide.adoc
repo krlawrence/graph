@@ -1149,31 +1149,30 @@ a=g.V().has('code','AUS').out().toList();[]
 A word about indexes and schemas
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Some graph implementations such as IBM-Graph have strict requirements on the use of
-an 'index'. This means that a schema and an index must be in place before you can
-work with a graph and that you can only begin a traversal by referencing a property
-in the graph that is included in the index. While that is beyond the scope of this
+Some graph implementations have strict requirements on the use of an 'index'. This
+means that a schema and an index must be in place before you can work with a graph
+and that you can only begin a traversal by referencing a property in the graph that
+is included in the index. While that is, for the most part, outside the scope of this
 book, it should be pointed out that some of the queries included in this material
 will not work on any graph system that requires all queries to be backed by an index
 and does not allow what are sometimes called 'full graph searches' for cases where a
 particular item in a graph is not backed by an index. One example of this is vertex
 and edge 'labels' which are typically not indexed but are sometimes very useful items
 to specify at the start of a query.  As the examples in this book are intended to
-work just fine with a only basic TinkerGraph the subject of indexes is not covered in
+work just fine with only a basic TinkerGraph the subject of indexes is not covered in
 more detail until Section 6 "<<beyond>>" where we will take a look at some other
-technologies such as JanusGraph and we do discuss indexing as part of that coverage.
+technologies such as JanusGraph and I do discuss indexing as part of that coverage.
 You should always refer to the specific documentation for the graph system you are
 using to decide what you need to do about creating an index and schema for your
 graph.  We will explain what TinkerGraph is in the next section.
-
-In general for any graph, regardless of whether it is optional or not,  use of an
-index should be considered a best practice. Even TinkerGraph has a way to create an
-index should you want to.
 
 NOTE: In production systems, especially those where the graphs are large, the task of
 creating and managing the parts of the index is often handed to an additional
 software component such as Apache Solr or Apache Elastic Search.      
 
+In general for any graph, regardless of whether it is optional or not,  use of an
+index should be considered a best practice. Even TinkerGraph has a way to create an
+index should you want to.
 
 
 [[gq]]
@@ -8751,6 +8750,223 @@ If we are loading a GraphSON format file we instead specify 'IoCore.graphson()'.
 // Load a grapSON file
 graph.io(IoCore.graphson()).readGraph('my-graph.json')
 ----
+
+
+[[olapoltp]]
+OLTP vs OLAP
+~~~~~~~~~~~~
+
+When discussing graph processing two terms regularly come up. These terms are Online
+Transaction Processing (OLTP) and Online Analytical Processing (OLAP). Most of the
+queries we have looked at so far definitely fall into the OLTP category. Queries that
+only look at a small part of a graph, often starting at a single node or a small
+group of nodes and traversing out a few hops from there are considered OLTP
+operations.  Typically, an OLTP query takes a few seconds or less to run. They are
+often used in response to a user query where an almost real time answer is needed.
+Because the air routes graph is small - we can do even quite complex queries using
+little more than a TinkerGraph and the Gremlin Console. This is not the case if your
+graph contains billions of vertices and edges. That said, I have some queries that
+can take several minutes to run in that environment.
+
+NOTE: The TinkerPop documentation has in depth coverage of the various OLAP
+capabilities that are supported.
+http://tinkerpop.apache.org/docs/current/reference/#graphcomputer
+
+Where OLAP comes into play is when you want to do detailed analysis across an entire
+graph. This is especially true as graphs get large and require  powerful clusters of
+nodes to underpin them. While OLTP queries typically take seconds or less, OLAP
+queries can often take many minutes or even hours to complete.
+
+Apache TinkerPop provides significant support for OLAP graph processing out of the
+box and is designed to work well with distributed backend systems and software such
+as Apache Spark and Apache Hadoop.
+
+NOTE: While OLAP processing is typically done using powerful clusters, you can run
+simple experiments using nothing more than a stand alone in memory TinkerGraph.
+
+Detailed coverage of doing OLAP processing is beyond the current scope of this book
+but I am going to give a few simple examples below to at least provide a little
+insight into what can be done. The TinkerPop documentation includes in depth coverage
+of how to perform OLAP operations on a TinkerPop enabled graph and I recommend
+reading it if you plan to perform OLAP style graph processing.
+
+[[graphcomputer]]
+Introducing the TinkerPop Graph Computer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+A lot of new capability was added to the TinkerPop framework as part of the version 3
+release. One such new capability is the concept of a 'Graph Computer'.  In concrete
+terms, GraphComputer is a Java interface that other TinkerPop classes implement to
+provide the capability for different back end environments. Along with
+'GraphComputer', the concept of a 'VertexProgram' is also introduced. Vertex Programs
+allow us to specify the operations that we want to be performed across a graph,
+potentially in conjunction with map reduce operations. TinkerPop comes with a set of
+pre configured Vertex Programs and vertex program steps. Of course you can also write
+your own.
+
+One of the pre configured Vertex Programs is Page Rank. Let's take a look next at one
+way it can be used.
+
+[[pagerank]]
+Experiments with Page Rank
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Probably one of, if not the, most famous algorithms in the big data world is `Page
+Rank`. Originally developed at Google, the Page Rank algorithm was created as a way
+to measure the relative importance of web pages. At a high level the algorithm looks
+at the number of connections to a web page and the quality of those connections (as
+in are they from a prominent place). That algorithm ports well to a graph database
+environment as a graph, like the Web, is a heavily connected data structure. In our
+graph database environment, we can use a page rank algorithm to assess a graph and
+compute the likelihood in any given traversal that a particular vertex will get
+visited.  Although the new Graph Computer capabilities have been designed from the
+ground up with distributed systems, it is possible to use a stand a alone TinkerGraph
+to experiment with a few of the capabilities.
+
+The example below only assumes that you have a TinkerGraph running locally inside the
+Gremlin Console with the air-routes data loaded. You will notice a few differences
+from the examples we have seen so far in this book. First of all, when we create our
+graph traversal source object, we add a call to 'withComputer' to indicate that we
+plan to be doing some things that require the Graph Computer capabilities. Having
+created the traversal source we can setup our page rank. The query initially filters
+out any vertex that is not an airport as will only want to rank airport vertices.
+Next a call is made to the 'pageRank' step. The 'by' modulators tell the page rank
+algorithm how we want the ranking done and what label to use for the ranking
+results.In this case we want to look at outgoing 'route' edges and label all results
+'r'. Before returning the results, we order based on descending ranking value.
+
+[source,groovy]
+----
+// Page rank based on outgoing routes
+g = graph.traversal().withComputer()
+
+g3.V().hasLabel('airport').pageRank().by(outE('route')).by('r').
+      order().by('r',decr).valueMap('code','r').limit(10)
+----
+
+Here is the output from running the page rank algorithm. The results show the airport
+code along with the page rank value that was calculated.
+
+[source,groovy]
+----
+[r:[15.527963207609702],code:[IST]]
+[r:[15.005583346944613],code:[DFW]]
+[r:[14.673184454287105],code:[ORD]]
+[r:[14.365370693500969],code:[ATL]]
+[r:[14.099719956639161],code:[PEK]]
+[r:[14.061408826784106],code:[DXB]]
+[r:[13.729782985109942],code:[DEN]]
+[r:[13.552238441619048],code:[DME]]
+[r:[13.502681833743711],code:[FRA]]
+[r:[13.189393240835944],code:[CDG]]
+----
+
+
+Just as a point of reference, the query below finds the top 10 airports with the most
+incoming routes. 
+
+[source,groovy]
+----
+ g.V().hasLabel('airport').
+       order().by(inE('route').count(),decr).limit(10).
+       project('a','b').by('code').by(inE('route').count())
+----
+
+As you can see there is some correlation between the page rank results and the
+airports with the most incoming routes which is perhaps not surprising. However,
+notice that the page rank algorithm came up with some airports that a simple node
+degree test did not come up with.
+
+[source,groovy]
+----
+[a:FRA,b:282]
+[a:AMS,b:275]
+[a:IST,b:271]
+[a:CDG,b:267]
+[a:MUC,b:240]
+[a:PEK,b:239]
+[a:ORD,b:237]
+[a:DXB,b:237]
+[a:ATL,b:235]
+[a:DFW,b:221]
+----
+
+The 'pageRank' step used in the prior query is a nice and convenient way for us to
+quickly generate some rankings. However, it is important to understand how the query
+would be written if we were to use the Graph Computer more directly. The example
+below sets up a 'PageRankVertexProgram' and runs it. Notice that the result we get
+back includes a new graph with 3624 vertices and no edges.
+
+[source,groovy]
+----
+dcr = graph.compute().
+      program(PageRankVertexProgram.build().
+      edges(hasLabel('airport').outE('route')).
+      create()).submit().get()
+
+result[tinkergraph[vertices:3624 edges:0],memory[size:0]]
+----
+
+In case you are curious, we can check the precise type of the result object that is returned
+from creating our vertex program.
+
+[source,groovy]
+----
+dcr.getClass()
+
+class org.apache.tinkerpop.gremlin.
+      process.computer.util.DefaultComputerResult
+----
+
+Given the result we got back was a new graph we can create a new traversal and
+inspect it. Notice that the Istanbul (IST) vertex in this graph contains an
+additional property called 'gremlin.pageRankVertexProgram.pageRank'. This property
+contains the page rank score that was returned for this vertex.
+
+[source,groovy]
+----
+g2 = dcr.graph().traversal()
+
+g2.V().has('code','IST').valueMap(true)
+
+[id:161,country:[TR],code:[IST],longest:[9843],gremlin.pageRankVertexProgram.pageRank:[0.0047038762655771775],city:[Istanbul],lon:[28.8145999908],type:[airport],label:airport,elev:[163],icao:[LTBA],region:[TR-34],runways:[3],lat:[40.9768981934],desc:[Ataturk International Airport]]
+----
+
+Just to prove the original graph was untouched, let's check the IST vertex in that
+graph. As you can see there are no new properties in this version.
+
+[source,groovy]
+----
+g.V().has('code','IST').valueMap(true)
+
+[id:161,country:[TR],code:[IST],longest:[9843],city:[Istanbul],lon:[28.8145999908],type:[airport],label:airport,elev:[163],icao:[LTBA],region:[TR-34],runways:[3],lat:[40.9768981934],desc:[Ataturk International Airport]]
+----
+
+Finally let's look at the 10 airports sorted by page rank score in descending order.
+As you will observe, the scoring system is different but the selected airports are
+the same.
+
+[source,groovy]
+----
+g2.V().order().by('gremlin.pageRankVertexProgram.pageRank',decr).limit(10).
+       valueMap('code','gremlin.pageRankVertexProgram.pageRank')
+
+[code:[IST],gremlin.pageRankVertexProgram.pageRank:[0.004594389373424941]]
+[code:[DFW],gremlin.pageRankVertexProgram.pageRank:[0.004440623428637068]]
+[code:[ORD],gremlin.pageRankVertexProgram.pageRank:[0.004342068075230758]]
+[code:[ATL],gremlin.pageRankVertexProgram.pageRank:[0.004251005124367605]]
+[code:[PEK],gremlin.pageRankVertexProgram.pageRank:[0.004172537469821617]]
+[code:[DXB],gremlin.pageRankVertexProgram.pageRank:[0.004161183557641767]]
+[code:[DEN],gremlin.pageRankVertexProgram.pageRank:[0.004063035588247088]]
+[code:[DME],gremlin.pageRankVertexProgram.pageRank:[0.004009614722586433]]
+[code:[FRA],gremlin.pageRankVertexProgram.pageRank:[0.003994862262812258]]
+[code:[CDG],gremlin.pageRankVertexProgram.pageRank:[0.0039023184469861244]]
+----
+
+I have barely scratched the surface in this section on these new TinkerPop OLAP
+capabilities.  If this is an area that you are interested in I strongly recommend
+reading the official TinkerPop reference documentation.
+
 [[msc]]
 MISCELLANEOUS QUERIES AND THE RESULTS THEY GENERATE
 ---------------------------------------------------
@@ -11658,29 +11874,6 @@ g.V().has('code','AUS').as('a').repeat(out().where(neq('a'))).times(4).simplePat
 g.V().as('a').values().filter{it.toString().contains('R.')}.select('a').dedup().valueMap()
 ----
 
-
-[[pagerank]]
-Experiments with Page Rank
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.This is a placeholder.
-
-[source,groovy]
-----
-// Page rank based on outgoing routes
-g = graph.traversal().withComputer()
-g.V().hasLabel('airport').pageRank().by(outE('route')).by('r').order().by('r',decr).valueMap('code','r').limit(10)
-[r:[15.61824172032977],code:[ATL]]
-[r:[14.922712714789586],code:[DFW]]
-[r:[14.637892542166075],code:[IST]]
-[r:[14.544774102601247],code:[ORD]]
-[r:[13.82927112415382],code:[DEN]]
-[r:[13.794192182285459],code:[DME]]
-[r:[13.46824937434635],code:[AMS]]
-[r:[13.375467729773533],code:[CDG]]
-[r:[13.154068946539626],code:[PEK]]
-[r:[13.047424689334612],code:[FRA]]
-----
 
 [[beyond]]
 MOVING BEYOND THE CONSOLE AND TINKERGRAPH
