@@ -8,6 +8,8 @@ Major new features in this release
 - Added to the `collections` section.
 - Added a new `OLTP vs OLAP` section.
 - Added to the `Gremlin Server` section.
+- Improved coverage of `cyclicPath
+- Improved coverage of `flatMap`
 - Added to the `JanusGraph GeoSpatial` section and moved the section up a hierarchy level.
 - Added a new sample that demonstrates geospatial queries.
 - General housekeeping and tightening up of some wording.
