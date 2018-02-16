@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
-v278-preview, Feb 15, 2018
-// Thu Feb 15, 2018 10:12:41 CST
+v278-preview, Feb 16, 2018
+// Fri Feb 16, 2018 13:58:46 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
-//:Date:      Feb 15 2018
+//:Date:      Feb 16 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -9150,6 +9150,65 @@ clockWithResult(1){
 4266.584279
 
 [[AUS,YYZ,BOM,AGR],[AUS,LHR,BOM,AGR],[AUS,FRA,BOM,AGR],[AUS,EWR,BOM,AGR],[AUS,CLE,YYZ,BOM,AGR],[AUS,CLE,EWR,BOM,AGR],[AUS,OAK,EWR,BOM,AGR],[AUS,PHL,EWR,BOM,AGR],[AUS,PHL,YYZ,BOM,AGR],[AUS,PHL,LHR,BOM,AGR]]
+----
+
+Just for fun, the next four queries look for all the ways you can fly between Austin
+(AUS) and Los Angeles (LAX) with zero,one,two ot three stops. The query avoids any
+routes that revisit Austin and uses 'simplePath' to avoid repeating the same route
+twice. As you can see by the time we get to the last query, that takes three stops,
+the query takes quite a bit of time to complete.
+
+[source,groovy]
+----
+clockWithResult(1){
+    g.V().has('code','AUS').as('a').
+          repeat(out().where(neq('a'))).times(1).simplePath().
+          has('code','LAX').path().by('code').count().next()}
+
+1.698357
+1
+----
+
+As you would expect, looking for routes with exactly one stop, does not take too long.
+
+[source,groovy]
+----
+clockWithResult(1) {
+    g.V().has('code','AUS').as('a').
+          repeat(out().where(neq('a'))).times(2).simplePath().
+          has('code','LAX').path().by('code').count().next()}
+
+7.988092999999999
+51
+----
+
+Looking for routes with exactly two stops takes quite a bit longer but is still
+fairly fast.
+
+[source,groovy]
+----
+clockWithResult(1) {
+    g.V().has('code','AUS').as('a').
+          repeat(out().where(neq('a'))).times(3).simplePath().
+          has('code','LAX').path().by('code').count().next()}
+
+435.423921
+3389
+----
+
+As you can see by the time we get to the last query, that looks for exactly three stops,
+things take a lot longer to complete.
+
+
+[source,groovy]
+----
+clockWithResult(1) {
+    g.V().has('code','AUS').as('a').
+          repeat(out().where(neq('a'))).times(4).simplePath().
+          has('code','LAX').path().by('code').count().next()}
+
+35295.633811
+203359
 ----
 
 Notice that for the 'clock' and 'clockWithReslts' methods to work correctly you need
