@@ -8489,6 +8489,105 @@ There are other ways that you might chose to write a query like these, that avoi
 use of closures altogether, but hopefully these examples show some interesting ways
 that closures can be combined with 'sack' steps.
 
+
+[[flatmap]]
+Introducing the 'flatMap' step
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+There are a set of fundamental steps that the other Gremlin query language steps
+build upon on. One of those is 'map'. Another, that we have not looked at so far in
+this book, is 'flatMap'. The two steps are similar but have a fundamental difference
+that may not be obvious from the examples we have looked at so far. The key
+difference is as follows. If a 'map' step receives multiple inputs it only passes on
+the first one it received to the next step whereas a 'flatMap' step passes them all
+on.  Let's look at a couple of examples that demonstrate this and then look at how we
+can take advantage of this in practice.
+
+The example below shows what happens when an 'out' step is used inside of a 'map'
+step. Only the first vertex that was encountered is returned.
+
+[source,groovy]
+----
+g.V().has('code','SAF').map(out())
+
+v[8]
+----
+
+If we do the same experiment but using a 'flatMap' step you can see that all of the
+vertices are returned.
+
+[source,groovy]
+----
+g.V().has('code','SAF').flatMap(out())
+
+v[8]
+v[13]
+v[20]
+v[31]
+----
+
+Where a flatMap can be useful is in a case like the one below. The example is a bit
+contrived but there are situations where being able to do things like this come in
+quite handy. Take a look at the query below. It starts off by finding the AUS vertex.
+Next it traverses all of the outgoing edges, finds the vertices at the end of those
+edges and returns all  the paths travelled. Notice that both the city names and the
+edge are included in the results.
+
+
+[source,groovy]
+----
+g.V().has('code','AUS').outE().inV().
+      path().by('city').by().limit(3)
+
+[Austin,e[3712][3-route->43],Tucson]
+[Austin,e[3713][3-route->45],Philadelphia]
+[Austin,e[3714][3-route->46],Detroit]
+----
+
+Let's imagine we have a good reason for needing to look at the edge but that we don't
+want the edge to be part of the result. What we can do is put the 'outE().inV()' part
+of the traversal inside a 'flatMap'. As we know from our tests above, a 'flatMap'
+will return all of the results passed into it, which in this case will be the
+incoming vertices connected to the edges. When we now perform the 'path' step, the
+edge details are no longer part of the path because they were essentially removed
+from the path by the 'flatMap' step. This is a useful pattern to be aware of as it
+can come in handy in some cases.
+
+[source,groovy]
+----
+// Hide the edge from the path!
+g.V().has('code','AUS').flatMap(outE().inV()).
+      path().by('city').limit(3)
+
+[Austin,Tucson]
+[Austin,Philadelphia]
+[Austin,Detroit]
+----
+
+We cannot use a 'map' step to achive the same result as it will only return the first
+path as shown below.
+
+[source,groovy]
+----
+g.V().has('code','AUS').map(outE().inV()).
+      path().by('city').limit(3)
+
+[Austin,Tucson]
+----
+
+Of course, if all we really wanted was the result from the prior query we could just
+do this.
+
+[source,groovy]
+----
+g.V().has('code','AUS').out().path().by('city').limit(3)
+
+[Austin,Tucson]
+[Austin,Philadelphia]
+[Austin,Detroit]
+----
+
+
 [[fuzzyregs]]
 Using regular expressions to do fuzzy searches
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -11843,7 +11942,7 @@ Miscellaneous other queries
 
 The examples in this section demonstrate a few miscellaneous features and queries
 that we have not yet had a chance to examine. Over time, these queries should
-probably be moved to other sections.
+probably be moved to other sections of the book.
 
 Using a calculation inside of an 'is' step
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -11942,77 +12041,6 @@ a=g.V().has('region','US-OK').values('code').withIndex().toList()
 [TUL,1]
 [LAW,2]
 [SWO,3]
-----
-
-Work in progress
-^^^^^^^^^^^^^^^^
-
-These queries need to be moved to other sections or deleted.
-
-.THIS SECTION IS YET TO BE FULLY TIDIED UP
-
-Work in progress
-
-[source,groovy]
-----
-
-g.V().has('code','DFW').out().has('region','US-TX').values('code')
-g.V().has('code','DFW').as('dfw').out().as('to').
-      filter(select('dfw','to').by('region').where('dfw',eq('to'))).values('code')
-
-g.V(0L).as('v').values('c').as('val').select('v').properties().as('p').properties('c').
-  value().as('val2').select('p').filter(select('val','val2').where('val',eq('val2')))      
-
-g.V().as("a").properties().has("c").where(eq("a")).by("c")
-
- g.V().hasLabel('person').as('a').V().hasLabel('dog').as('b').
-       where('a',eq('b')).by('name').by('nick').valueMap()    
-----
-
-
-[source,groovy]
-----
-g.V().has('code','AUS').outE().inV().path().by('city').by().limit(1)
-[Austin,e[30j5z-9iw-t1-37k][12344-route->4160],Boston]
-
-g.V().has('code','AUS').flatMap(outE().inV()).path().by('city').limit(1)
-[Austin,Boston]
-
-g.V().has('code','AUS').out().path().by('city').limit(1)
-[Austin,Boston]
-----
-
-
-[source,groovy]
-----
-// Experiments with timing and indexes
-clock(1000) {g.V().has('longest',gt(12000))}
-0.008413653
-
-graph.createIndex('longest',Vertex.class)
-clock(1000) {g.V().has('longest',gt(12000))}
-0.003952521
-
-graph.getIndexedKeys(Vertex.class)
-graph.dropIndex('longest',Vertex.class)
-----
-
-
-[source,groovy]
-----
-// Experiments with how many route permutations are there based on number of hops.
-g.V().has('code','AUS').as('a').repeat(out().where(neq('a'))).times(1).simplePath().has('code','LAX').path().by('code').count()
-1
-g.V().has('code','AUS').as('a').repeat(out().where(neq('a'))).times(2).simplePath().has('code','LAX').path().by('code').count()
-43
-g.V().has('code','AUS').as('a').repeat(out().where(neq('a'))).times(3).simplePath().has('code','LAX').path().by('code').count()
-2351
-g.V().has('code','AUS').as('a').repeat(out().where(neq('a'))).times(4).simplePath().has('code','LAX').path().by('code').count()
-122329
-
-
-// Ugly query! Look at every property of every vertex and see if it contains "R."
-g.V().as('a').values().filter{it.toString().contains('R.')}.select('a').dedup().valueMap()
 ----
 
 
