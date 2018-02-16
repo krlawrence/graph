@@ -5,10 +5,11 @@ Starting with the v275 release, this file will contain a record of the major cha
 ## Future Release 278 change history (Date TBD)
 
 Major new features in this release
+- Added a new section on measuring query performance
 - Added to the `collections` section.
 - Added a new `OLTP vs OLAP` section.
 - Added to the `Gremlin Server` section.
-- Improved coverage of `cyclicPath
+- Improved coverage of `cyclicPath`
 - Improved coverage of `flatMap`
 - Added to the `JanusGraph GeoSpatial` section and moved the section up a hierarchy level.
 - Added a new sample that demonstrates geospatial queries.

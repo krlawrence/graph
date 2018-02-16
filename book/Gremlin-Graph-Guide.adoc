@@ -4,7 +4,7 @@ Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v278-preview, Feb 15, 2018
 // Thu Feb 15, 2018 10:12:41 CST
 //:Author:    Kelvin R. Lawrence
-//:Email:     klawrenc@us.ibm.com
+//:Email:     gfxman@yahoo.com
 //:Date:      Feb 15 2018
 :Numbered:
 :source-highlighter: pygments
@@ -9002,6 +9002,219 @@ graph.io(IoCore.graphson()).readGraph('my-graph.json')
 ----
 
 
+[[performance]]
+Analyzing the performance of your queries
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Apache TinkerPop includes a class called TimeUtil that provides methods that you can
+use to time how long your queries are taking to run. A second class called
+ProfileStep provides a way to get a more fine grained analysis of where the time is
+spent during execution of a query. In this section I am going to provide a few
+examples of how to use the methods provided to analyze the execution time of a few
+queries. I ran the tests on a laptop using the Gremlin Console with the air-routes
+data loaded into an in-memory TinkerGraph.
+
+[[clock]]
+Timing a query - introducing 'clock' and 'clockWithResult'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The 'TimeUtil' class provides several methods that can be used when working with
+time. I am just going to focus on two of them, namely, 'clock' and 'clockWithResult'.
+These methods allow you to have a query run one or more times while the execution
+time is tracked. After all iterations have completed, the average time the query took
+in milliseconds is returned.  Note that, especially for longer queries, the time
+returned will not appear to be the same as if you tried to measure the same 'clock' procedure
+using a stopwatch.  This is because these methods both perform a warm up pass
+before doing the actual timing. The warm up simply consists of running the query one
+time before timing starts. This means that for a single timing iteration, the 'human
+perceived time' will be roughly double the time returned by the 'clock' analysis.
+Let's take a look at a few examples. 
+
+Below is a very simple example of using a 'clock' step to measure the time it takes
+to find all airport vertices in the graph that are in China. Note that the clock step
+takes two parameters. The first is an integer telling it how many times to run the
+query. The second is a query to execute wrapped in braces '"{...}"'. In other words a
+closure. In the example below, the query is only run once as a parameter of 1 is
+passed to the 'clock' method. From the result we can see that running this query one
+time on my laptop took a bit more than 1.3 milliseconds.
+
+[source,groovy]
+----
+clock(1) {g.V().has('airport','country','CN').next()}
+
+1.364199
+----
+
+To get a more accurate assessment of how long a query takes it is sometime a good
+idea to average out the time over multiple attempts. This should reduce the impact of
+any random system events from impacting your overall result. The example below repeats the
+previous query but measures the average time taken across 100 iterations. Note that,
+especially for longer running queries, the time returned will not be the same as if
+you tried to time this process yourself using a stopwatch. This is because the clock
+steps do a warm up pass before doing the actual testing. The warm up step basically
+runs the query one time before it starts timing anything. This means that for a
+single iteration the 'human perceived time' will be roughly double the time returned
+by the 'clock' analysis. You can see from the results that when averaged over 100
+iteration the time taken is a bit less. You should not use these numbers as hard and
+fast answers but rather use them to get a sense of in general how long a query takes.
+If you repeated this test five times you would definitely get five different results
+of a similar but not identical magnitude.
+
+[source,groovy]
+----
+clock(100) {g.V().has('country','CN').next()}
+
+0.70694013
+----
+
+Here is the same query run 1000 times just to verify that the timings stay more or
+less the same.
+
+[source,groovy]
+----
+clock(1000) {g.V().has('country','CN').next()}
+
+0.6931818670000001
+----
+
+We have seen the following query before in the "<<sp>>" section. As you may recall it
+finds 10 routes between Austin and Agra. Because there are not that many ways to get
+to Agra this query requires a lot of graph traversals and so takes a while to
+complete. Let's time how long it takes to execute this query one time.
+
+[source,groovy]
+----
+clock(1){
+    g.V().has('airport','code','AUS').
+          repeat(out()).until(has('code','AGR')).
+          limit(10).path().by('code').toList()}
+
+4643.605562
+----
+
+As you can see it took quite a bit longer to run than our search for Chinese
+airports. In fact it took well over 4 seconds to run. Let's run the same query 100
+times and see what the average time taken looks like.
+
+[source,groovy]
+----
+clock(100){
+    g.V().has('airport','code','AUS').
+          repeat(out()).until(has('code','AGR')).
+          limit(10).path().by('code').toList()}
+
+4816.6515936999995
+----
+
+So running the query 100 times gave a very similar result in this case.  By way of an
+interesting observation, notice the difference in time taken if we start in Agra and
+look for routes to Austin. The average time over 100 iterations is less than 10
+milliseconds. So we have uncovered an interesting possible optimization. Because
+there are a lot more ways to get to Austin, finding 10 routes did not take very long.
+This may not always be possible but keep in mind as you model your graph and design
+your queries that where you start from can make a big difference!
+
+[source,groovy]
+----
+clock(100){
+   g.V().has('airport','code','AGR').
+         repeat(out()).until(has('code','AUS')).
+         limit(10).path().by('code').toList()} 
+
+9.068097369999998         
+----
+
+You may have noticed that the 'clock' method only shows us the time that a query
+takes to run and does not show us the actual result of running the query. This is
+where the 'clockWithResult' method comes into play. We can reuse our 'airports in
+China' query but this time notice that we also get the result of the query back.
+
+[source,groovy]
+----
+clockWithResult(1) {g.V().has('country','CN').count().next()}
+
+0.918276
+209
+----
+
+If we run the 'Austin to Agra' query using 'clockWithResult' you can see that we do
+indeed get the routes back as well as the timing.
+
+[source,groovy]
+----
+clockWithResult(1){
+    g.V().has('airport','code','AUS').
+          repeat(out()).until(has('code','AGR')).
+          limit(10).path().by('code').toList()}
+
+4266.584279
+
+[[AUS,YYZ,BOM,AGR],[AUS,LHR,BOM,AGR],[AUS,FRA,BOM,AGR],[AUS,EWR,BOM,AGR],[AUS,CLE,YYZ,BOM,AGR],[AUS,CLE,EWR,BOM,AGR],[AUS,OAK,EWR,BOM,AGR],[AUS,PHL,EWR,BOM,AGR],[AUS,PHL,YYZ,BOM,AGR],[AUS,PHL,LHR,BOM,AGR]]
+----
+
+Notice that for the 'clock' and 'clockWithReslts' methods to work correctly you need
+to end the query with a termination step such as 'next' or 'toList'. Alternatively
+you can end the query with 'iterate'. In my testing I found things did not always
+work correctly when using 'iterate' so I tend to avoid it.
+
+[[profile]]
+Analyzing where time is spent - introducing 'profile'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You can use the 'profile' step to ask Gremlin to give you a more fine grained summary
+of where the time is spent processing your query. Take a look at the example below.
+
+[source,groovy]
+----
+g.V().has('region','US-TX').out().has('region','US-CA').
+                            out().has('country','DE').profile()
+----
+
+After you run the query, instead of showing you the results, Gremlin will show you
+where the time was spent processing the components of the query.
+
+[source,groovy]
+----
+Step                                       Count  Traversers  Time (ms)    % Dur
+===============================================================================
+TinkerGraphStep(vertex,[region.eq(US-TX)])   26          26      1.810     9.71
+VertexStep(OUT,vertex)                      701         701      0.877     4.70
+HasStep([region.eq(US-CA)])                  47          47      0.561     3.01
+VertexStep(OUT,vertex)                     3464        3464     12.035    64.54
+NoOpBarrierStep(2500)                      3464         224      3.157    16.93
+HasStep([country.eq(DE)])                    59           4      0.206     1.11
+   >TOTAL                                     -           -     18.650        -
+----
+
+If we profile the 'Austin to Agra' query from the previous section you can see that
+almost all the time was spent inside the 'repeat' loop looking for routes. In this
+case that is not surprising but for more complex queries 'profile' can help you to
+refine them.
+
+[source,groovy]
+----
+g.V().has('airport','code','AUS').
+      repeat(out()).until(has('code','AGR')).limit(10).
+      path().by('code').profile()
+----
+
+Here is the 'profile' report. I truncated some of the text with '"..." so that it
+will fit on a single page.
+
+[source,groovy]
+----
+Step                              Count  Traversers       Time (ms)    % Dur
+============================================================================
+TinkerGraphStep(vertex,[~l...         1           1           2.125     0.02
+RepeatStep([VertexStep(OUT,..        11          11        9357.962    99.97
+  HasStep([code.eq(AGR)])                                  2627.621
+  VertexStep(OUT,vertex)        1799981     1799981         509.392
+  RepeatEndStep                      11          11        8848.030
+RangeGlobalStep(0,10)                10          10           0.278     0.00
+PathStep([value(code)])              10          10           0.126     0.00
+   >TOTAL                             -           -        9360.493        -
+----
+
 [[olapoltp]]
 OLTP vs OLAP
 ~~~~~~~~~~~~
@@ -11998,35 +12211,9 @@ g.V().hasLabel('airport').where(out().count().is(gt(a-50))).
 [apt:IST,routes:270]
 ----
 
-Analyzing where time is spent - introducing 'profile'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-You can use the 'profile' step to ask Gremlin to give you a summary of where the time
-is spent processing your query. Take a look at the example below.
-
-[source,groovy]
-----
-g.V().has('region','US-TX').out().has('region','US-CA').
-                            out().has('country','DE').profile()
-----
-
-After you run the query, instead of showing you the results, Gremlin will show you
-where the time was spent processing the components of the query.
-
-[source,groovy]
-----
-Step                                       Count  Traversers  Time (ms)    % Dur
-===============================================================================
-TinkerGraphStep(vertex,[region.eq(US-TX)])   26          26      1.810     9.71
-VertexStep(OUT,vertex)                      701         701      0.877     4.70
-HasStep([region.eq(US-CA)])                  47          47      0.561     3.01
-VertexStep(OUT,vertex)                     3464        3464     12.035    64.54
-NoOpBarrierStep(2500)                      3464         224      3.157    16.93
-HasStep([country.eq(DE)])                    59           4      0.206     1.11
-   >TOTAL                                     -           -     18.650        -
-----
 
 
+[[withindex]]
 Including an index value in results - introducing 'withIndex'
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
