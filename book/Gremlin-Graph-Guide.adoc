@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <klawrenc@us.ibm.com>
 v278-preview, Feb 16, 2018
-// Fri Feb 16, 2018 13:58:46 CST
+// Fri Feb 16, 2018 18:44:38 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Feb 16 2018
@@ -8199,14 +8199,14 @@ searching predicates. That, however, is a topic for quite a bit later on.
 
 [source,groovy]
 ----
-g.V().hasLabel('airport').as('a').values('desc').
-      filter{it.toString().contains('F.')}.select('a').
-      dedup().values('desc')
+g.V()hasLabel('airport').as('a').values('desc').
+     filter{it.toString().contains('F.')}.select('a').
+     local(values('code','desc').fold())
 
-New York John F. Kennedy International Airport
-Bermuda, L.F. Wade International International Airport
-George F. L. Charles Airport
-F. D. Roosevelt Airport
+[JFK,New York John F. Kennedy International Airport]
+[BDA,Bermuda, L.F. Wade International International Airport]
+[SLU,George F. L. Charles Airport]
+[EUX,F. D. Roosevelt Airport]
 ----
 
 [[mapstep]]
