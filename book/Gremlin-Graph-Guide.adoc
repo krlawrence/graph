@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v278-preview, Feb 16, 2018
-// Fri Feb 16, 2018 18:44:38 CST
+v278-preview, Feb 17, 2018
+// Sat Feb 17, 2018 12:14:37 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
-//:Date:      Feb 16 2018
+//:Date:      Feb 17 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -9575,7 +9575,7 @@ either one or two runways.
 // What is the distribution of runways in the graph
 g.V().hasLabel('airport').groupCount().by('runways')
 
-[1:2288, 2:756, 3:224, 4:51, 5:15, 6:4, 7:1, 8:1]
+[1:2316,2:762,3:225,4:51,5:14,6:4,7:1,8:1]
 ----
 
 [[mostroutes]]
@@ -9591,7 +9591,7 @@ returns their IATA codes.
 g.V().hasLabel('airport').
       where(out('route').count().is(gt(180))).values('code').fold()
 
-[ATL,DFW,IAH,JFK,LAX,ORD,DEN,EWR,LHR,LGW,CDG,FRA,DXB,PEK,PVG,FCO,AMS,BCN,MAD,MUC,DME,IST]
+[ATL,DFW,IAH,JFK,LAX,ORD,DEN,EWR,YYZ,LHR,LGW,CDG,FRA,DXB,PEK,PVG,FCO,AMS,BCN,MAD,MUC,MAN,STN,DME,IST]
 ----
 
 We could improve our query a bit to include the IATA code and the exact number of
@@ -9605,7 +9605,7 @@ g.V().hasLabel('airport').
       where(out('route').count().is(gt(180))).
       group().by('code').by(out().count())
 
-[ORD:237,PVG:204,LAX:200,BRU:182,CDG:267,STN:186,JFK:190,DFW:221,LHR:196,MUC:242,DME:216,EWR:183,AMS:272,IST:271,DEN:189,BCN:191,DXB:237,IAH:194,MAD:196,FCO:191,FRA:282,PEK:238,ATL:235,YYZ:183,MAN:186,LGW:204]
+[ORD:232,PVG:201,LAX:195,CDG:262,STN:186,JFK:187,DFW:221,LHR:191,MUC:237,DME:214,EWR:182,AMS:269,IST:270,DEN:188,BCN:190,DXB:229,IAH:192,MAD:192,FCO:189,FRA:272,PEK:234,ATL:232,YYZ:181,MAN:182,LGW:200]
 ----
 
 We can add one further refinement to the query. This time the results are ordered by
@@ -9621,7 +9621,7 @@ g.V().hasLabel('airport').
       group().by('code').by(out().count()).
       order(local).by(values,decr)
 
-[FRA:282,AMS:272,IST:271,CDG:267,MUC:242,PEK:238,ORD:237,DXB:237,ATL:235,DFW:221,DME:216,PVG:204,LGW:204,LAX:200,LHR:196,MAD:196,IAH:194,BCN:191,FCO:191,JFK:190,DEN:189,STN:186,MAN:186,EWR:183,YYZ:183,BRU:182]
+[FRA:272,IST:270,AMS:269,CDG:262,MUC:237,PEK:234,ORD:232,ATL:232,DXB:229,DFW:221,DME:214,PVG:201,LGW:200,LAX:195,IAH:192,MAD:192,LHR:191,BCN:190,FCO:189,DEN:188,JFK:187,STN:186,EWR:182,MAN:182,YYZ:181]
 ----
 
 As I mentioned earlier in the book, the number of incoming and outgoing routes for
@@ -9635,7 +9635,7 @@ routes (inbound and outbound).
 g.V().hasLabel('airport').
       where(both('route').count().is(gt(400))).values('code').fold()
 
-[ATL,DFW,ORD,LGW,CDG,FRA,DXB,PEK,PVG,AMS,MUC,DME,IST]
+[ATL,DFW,ORD,CDG,FRA,DXB,PEK,PVG,AMS,MUC,DME,IST]
 ----
 
 [[oneroute]]
@@ -9650,7 +9650,7 @@ The query below will figure out just how many fall into that category.
 // How many airports have only one route?
 g.V().hasLabel('airport').where(out().count().is(eq(1))).count()
 
-766
+770
 ----
 
 [[ukdist]]
@@ -9664,7 +9664,7 @@ Wales and Northern Ireland?
 ----
 g.V().has('country','code','UK').out('contains').groupCount().by('region')
 
-[GB-ENG:27,GB-WLS:3,GB-NIR:3,GB-SCT:21]
+[GB-ENG:27,GB-WLS:3,GB-NIR:3,GB-SCT:25]
 ----
 
 [[countrydist]]
@@ -9680,8 +9680,7 @@ has.
 // How many airports does each country have in the graph?
 g.V().hasLabel('airport').groupCount().by('country')
 
-[PR:6, PT:14, PW:1, PY:2, QA:1, AE:9, AF:4, AG:1, AI:1, AL:1, AM:2, AO:14, AR:36, AS:1, AT:6, RE:2, AU:113, AW:1, AZ:5, RO:13, BA:4, BB:1, RS:2, BD:7, BE:5, RU:115, BF:2, BG:4, RW:2, BH:1, BI:1, BJ:1, BL:1, BM:1, BN:1, BO:15, SA:26, BQ:3, SB:17, BR:115, SC:2, BS:18, SD:5, SE:39, BT:1, SG:1, BW:4, SI:1, BY:1, BZ:13, SK:2, SL:1, SN:3, SO:5, CA:203, SR:1, SS:1, CC:1, CD:11, ST:1, SV:1, CF:1, CG:3, CH:5, SX:1, CI:1, SY:1, SZ:1, CK:6, CL:16, CM:5, CN:179, CO:50, CR:13, TC:4, TD:1, CU:10, CV:7, TG:1, TH:32, CW:1, CX:1, CY:3, TJ:4, CZ:5, TL:1, TM:1, TN:8, TO:1, TR:44, TT:2, DE:32, TV:1, TW:9, TZ:8, DJ:1, DK:8, DM:1, DO:7, UA:13, UG:4, UK:52, DZ:29, US:566, EC:15, EE:3, EG:10, EH:2, UY:2, UZ:11, ER:1, VC:1, ES:41, ET:14, VE:24, VG:2, VI:2, VN:21, VU:26, FI:19, FJ:10, FM:4, FO:1, FR:54, WF:2, GA:2, WS:1, GD:1, GE:3, GF:1, GG:2, GH:5, GI:1, GL:14, GM:1, GN:1, GP:1, GQ:2, GR:39, GT:2, GU:1, GW:1, GY:2, HK:1, HN:6, HR:8, HT:2, YE:9, HU:2, ID:67, YT:1, IE:7, IL:4, IM:1, IN:72, ZA:20, IQ:6, IR:44, IS:5, IT:36, ZM:8, JE:1, ZW:3, JM:2, JO:2, JP:63, KE:14, KG:2, KH:3, KI:2, KM:1, KN:2, KP:1, KR:15, KS:1, KW:1, KY:3, KZ:18, LA:8, LB:1, LC:2, LK:6, LR:2, LS:1, LT:3, LU:1, LV:1, LY:10, MA:14, MD:1, ME:2, MF:1, MG:13, MH:2, MK:1, ML:1, MM:14, MN:10, MO:1, MP:2, MQ:1, MR:3, MT:1, MU:2, MV:8, MW:2, MX:57, MY:34, MZ:10, NA:4, NC:1, NE:1, NF:1, NG:18, NI:1, NL:5, NO:49, NP:10, NR:1, NZ:25, OM:3, PA:4, PE:20, PF:30, PG:26, PH:37, PK:21, PL:12, PM:1]
-
+[PR:6,PT:14,PW:1,PY:2,QA:1,AE:10,AF:4,AG:1,AI:1,AL:1,AM:2,AO:14,AR:36,AS:1,AT:6,RE:2,AU:124,AW:1,AZ:5,RO:14,BA:4,BB:1,RS:2,BD:7,BE:5,RU:120,BF:2,BG:4,RW:2,BH:1,BI:1,BJ:1,BL:1,BM:1,BN:1,BO:15,SA:26,BQ:3,SB:17,BR:115,SC:2,BS:18,SD:5,SE:39,BT:1,SG:1,BW:4,SH:2,SI:1,BY:2,BZ:13,SK:2,SL:1,SN:3,SO:5,CA:203,SR:1,SS:1,CC:1,CD:11,ST:1,SV:1,CF:1,CG:3,CH:5,SX:1,CI:1,SY:2,SZ:1,CK:6,CL:17,CM:5,CN:209,CO:50,CR:13,TC:4,TD:1,CU:12,CV:7,TG:1,TH:32,CW:1,CX:1,CY:3,TJ:4,CZ:5,TL:1,TM:1,TN:8,TO:1,TR:48,TT:2,DE:33,TV:1,TW:9,TZ:8,DJ:1,DK:8,DM:1,DO:7,UA:15,UG:4,UK:58,DZ:29,US:579,EC:15,EE:3,EG:10,EH:2,UY:2,UZ:11,ER:1,VC:1,ES:42,ET:14,VE:24,VG:2,VI:2,VN:21,VU:26,FI:20,FJ:10,FK:2,FM:4,FO:1,FR:58,WF:2,GA:2,WS:1,GD:1,GE:3,GF:1,GG:2,GH:5,GI:1,GL:14,GM:1,GN:1,GP:1,GQ:2,GR:39,GT:2,GU:1,GW:1,GY:2,HK:1,HN:6,HR:8,HT:2,YE:9,HU:2,ID:67,YT:1,IE:7,IL:5,IM:1,IN:73,ZA:20,IQ:6,IR:44,IS:5,IT:36,ZM:8,JE:1,ZW:3,JM:2,JO:2,JP:63,KE:14,KG:2,KH:3,KI:2,KM:1,KN:2,KP:1,KR:15,KS:1,KW:1,KY:3,KZ:20,LA:8,LB:1,LC:2,LK:6,LR:2,LS:1,LT:3,LU:1,LV:1,LY:10,MA:14,MD:1,ME:2,MF:1,MG:13,MH:2,MK:1,ML:1,MM:14,MN:10,MO:1,MP:2,MQ:1,MR:3,MS:1,MT:1,MU:2,MV:8,MW:2,MX:59,MY:34,MZ:10,NA:4,NC:1,NE:1,NF:1,NG:18,NI:1,NL:5,NO:49,NP:10,NR:1,NZ:25,OM:4,PA:5,PE:20,PF:30,PG:26,PH:38,PK:21,PL:13,PM:1]
 ----
 
 Because the air-routes graph also has country specific vertices, we could chose to write
@@ -9713,7 +9712,7 @@ instead.
 ----
 g.V().hasLabel('airport').groupCount().by('country').order(local).by(keys,incr)
 
-[AE:10, AF:4, AG:1, AI:1, AL:1, AM:2, AO:14, AR:36, AS:1, AT:6, AU:118, AW:1, AZ:5, BA:4, BB:1, BD:7, BE:5, BF:2, BG:4, BH:1, BI:1, BJ:1, BL:1, BM:1, BN:1, BO:15, BQ:3, BR:115, BS:18, BT:1, BW:4, BY:1, BZ:13, CA:203, CC:1, CD:11, CF:1, CG:3, CH:5, CI:1, CK:6, CL:17, CM:5, CN:200, CO:50, CR:13, CU:12, CV:7, CW:1, CX:1, CY:3, CZ:5, DE:32, DJ:1, DK:8, DM:1, DO:7, DZ:29, EC:15, EE:3, EG:10, EH:2, ER:1, ES:41, ET:14, FI:20, FJ:10, FK:2, FM:4, FO:1, FR:56, GA:2, GD:1, GE:3, GF:1, GG:2, GH:5, GI:1, GL:14, GM:1, GN:1, GP:1, GQ:2, GR:39, GT:2, GU:1, GW:1, GY:2, HK:1, HN:6, HR:8, HT:2, HU:2, ID:67, IE:7, IL:5, IM:1, IN:72, IQ:6, IR:44, IS:5, IT:36, JE:1, JM:2, JO:2, JP:63, KE:14, KG:2, KH:3, KI:2, KM:1, KN:2, KP:1, KR:15, KS:1, KW:1, KY:3, KZ:18, LA:8, LB:1, LC:2, LK:6, LR:2, LS:1, LT:3, LU:1, LV:1, LY:10, MA:14, MD:1, ME:2, MF:1, MG:13, MH:2, MK:1, ML:1, MM:14, MN:10, MO:1, MP:2, MQ:1, MR:3, MS:1, MT:1, MU:2, MV:8, MW:2, MX:58, MY:34, MZ:10, NA:4, NC:1, NE:1, NF:1, NG:18, NI:1, NL:5, NO:49, NP:10, NR:1, NZ:25, OM:3, PA:5, PE:20, PF:30, PG:26, PH:38, PK:21, PL:13, PM:1, PR:6, PT:14, PW:1, PY:2, QA:1, RE:2, RO:13, RS:2, RU:118, RW:2, SA:26, SB:17, SC:2, SD:5, SE:39, SG:1, SH:2, SI:1, SK:2, SL:1, SN:3, SO:5, SR:1, SS:1, ST:1, SV:1, SX:1, SY:2, SZ:1, TC:4, TD:1, TG:1, TH:32, TJ:4, TL:1, TM:1, TN:8, TO:1, TR:48, TT:2, TV:1, TW:9, TZ:8, UA:14, UG:4, UK:54, US:578, UY:2, UZ:11, VC:1, VE:24, VG:2, VI:2, VN:21, VU:26, WF:2, WS:1, YE:9, YT:1, ZA:20, ZM:8, ZW:3]
+[AE:10,AF:4,AG:1,AI:1,AL:1,AM:2,AO:14,AR:36,AS:1,AT:6,AU:124,AW:1,AZ:5,BA:4,BB:1,BD:7,BE:5,BF:2,BG:4,BH:1,BI:1,BJ:1,BL:1,BM:1,BN:1,BO:15,BQ:3,BR:115,BS:18,BT:1,BW:4,BY:2,BZ:13,CA:203,CC:1,CD:11,CF:1,CG:3,CH:5,CI:1,CK:6,CL:17,CM:5,CN:209,CO:50,CR:13,CU:12,CV:7,CW:1,CX:1,CY:3,CZ:5,DE:33,DJ:1,DK:8,DM:1,DO:7,DZ:29,EC:15,EE:3,EG:10,EH:2,ER:1,ES:42,ET:14,FI:20,FJ:10,FK:2,FM:4,FO:1,FR:58,GA:2,GD:1,GE:3,GF:1,GG:2,GH:5,GI:1,GL:14,GM:1,GN:1,GP:1,GQ:2,GR:39,GT:2,GU:1,GW:1,GY:2,HK:1,HN:6,HR:8,HT:2,HU:2,ID:67,IE:7,IL:5,IM:1,IN:73,IQ:6,IR:44,IS:5,IT:36,JE:1,JM:2,JO:2,JP:63,KE:14,KG:2,KH:3,KI:2,KM:1,KN:2,KP:1,KR:15,KS:1,KW:1,KY:3,KZ:20,LA:8,LB:1,LC:2,LK:6,LR:2,LS:1,LT:3,LU:1,LV:1,LY:10,MA:14,MD:1,ME:2,MF:1,MG:13,MH:2,MK:1,ML:1,MM:14,MN:10,MO:1,MP:2,MQ:1,MR:3,MS:1,MT:1,MU:2,MV:8,MW:2,MX:59,MY:34,MZ:10,NA:4,NC:1,NE:1,NF:1,NG:18,NI:1,NL:5,NO:49,NP:10,NR:1,NZ:25,OM:4,PA:5,PE:20,PF:30,PG:26,PH:38,PK:21,PL:13,PM:1,PR:6,PT:14,PW:1,PY:2,QA:1,RE:2,RO:14,RS:2,RU:120,RW:2,SA:26,SB:17,SC:2,SD:5,SE:39,SG:1,SH:2,SI:1,SK:2,SL:1,SN:3,SO:5,SR:1,SS:1,ST:1,SV:1,SX:1,SY:2,SZ:1,TC:4,TD:1,TG:1,TH:32,TJ:4,TL:1,TM:1,TN:8,TO:1,TR:48,TT:2,TV:1,TW:9,TZ:8,UA:15,UG:4,UK:58,US:579,UY:2,UZ:11,VC:1,VE:24,VG:2,VI:2,VN:21,VU:26,WF:2,WS:1,YE:9,YT:1,ZA:20,ZM:8,ZW:3]
 ----
 
 Note that we can use 'select' to only return one or more of the full set of key/value
@@ -9742,7 +9741,7 @@ in Antarctica!
 // How many airports are there in each continent?
 g.V().hasLabel('continent').group().by('code').by(out().count())
 
-[EU:561, AS:888, NA:959, OC:274, AF:292, AN:0, SA:300]
+[EU:583,AS:932,NA:978,OC:284,AF:294,AN:0,SA:303]
 ----
 
 Distribution of routes per airport
@@ -9764,7 +9763,7 @@ g.V().hasLabel('airport').out().groupCount().by('code')
 g.V().hasLabel('airport').out().groupCount().by('code').
       select('AUS','AMS','JFK','DUB','MEX')
 
-[AUS:46,AMS:249,JFK:168,DUB:150,MEX:95]
+[AUS:59,AMS:272,JFK:186,DUB:165,MEX:105]
 ----
 
 This next query essentially asks the same question about how many outgoing routes
@@ -9776,24 +9775,28 @@ the query.
 [source,groovy]
 ----
 // Same query except sorted into groups by ascending count
-g.V().hasLabel('airport').group().by(out().count()).by('code')
+g.V().hasLabel('airport').
+      group().by(out().count()).by('code').
+      order(local).by(keys)
 
-77:[MNL,MLA,SXF],79:[BWI,TLV],80:[BUD,CUN],81:[BOM,RUH],82:[CAI,STR,LPA,LYS,SHJ,BGY], 83:[WAW],84:[JNB,CRL],85:[PHX,MRS,TFS],86:[SYD,LTN,CMN,BHX],87:[SLC,YVR],88:[SZX], 89:[DCA,CKG,XIY],90:[HEL,EDI,GRU,HAM],92:[NCE],93:[AUH],94:[SEA],95:[CGN,MEX,KMG], 97:[YUL],98:[ALC,JED],99:[DEL],100:[PRG,SAW],102:[MCO,GVA],103:[LIS,TPE],105:[FLL,OSL], 106:[BOS,ATH],110:[NRT,TXL,CTU],111:[SFO],112:[KUL,MXP],116:[LED],117:[AGP],120:[ORY], 122:[PHL,BKK,CPH],125:[ARN],126:[IAD],127:[DOH],129:[PMI],132:[MSP,SIN],133:[DTW], 134:[LAS],136:[ICN],140:[VIE],142:[HKG,ZRH,CLT],145:[MIA],147:[SVO],148:[BRU,MAN,DUS], 150:[DUB,CAN],155:[YYZ],156:[STN],157:[PVG],159:[EWR],160:[LAX],163:[FCO],164:[BCN], 166:[MAD],167:[DEN],169:[JFK],170:[IAH],171:[LGW],174:[LHR],187:[DXB],189:[DME], 195:[DFW],196:[MUC],207:[ORD],210:[PEK],218:[ATL],229:[IST],236:[CDG],240:[FRA,AMS]
+76:[TPA,BNE,PDX],77:[RIX,WUH],78:[IBZ,PTY],79:[ADD,AYT],80:[MNL,BOG,XMN,CSX],81:[SFB],82:[GLA,HND],83:[CAI,MDW,OTP],84:[VCE,BRS,HGH],85:[JNB,MLA,NAP,RUH],86:[BOM,SHJ],89:[BWI],90:[CMN],91:[LPA,VKO],92:[SXF],93:[DCA,GRU,LYS],94:[SLC,YVR,SYD,MRS,TFS],95:[STR,CRL],97:[NCE,AUH],98:[BUD,WAW],101:[YUL],102:[BGY],104:[LTN,JED,SZX],105:[PHX,MEX,TLV,HAM,XIY],106:[ALC,CUN,CKG],107:[HEL,EDI,KMG],108:[DEL],109:[BHX,SAW],110:[TPE],112:[NRT],113:[GVA],114:[SEA],115:[PRG],116:[CGN,LIS],118:[ATH,TXL],119:[OSL],122:[KUL],123:[MCO],124:[MXP,CTU],126:[AGP],127:[ORY],129:[PHL],130:[BOS],132:[BKK],133:[LED],136:[IAD],137:[DTW],141:[SFO],142:[FLL],143:[ARN,PMI],144:[MSP,ICN],145:[LAS,CPH],146:[SIN],151:[HKG],152:[ZRH],156:[SVO],162:[VIE],163:[DOH],164:[CAN],165:[DUB],166:[DUS],168:[CLT],171:[MIA],180:[BRU],181:[YYZ],182:[EWR,MAN],186:[STN],187:[JFK],188:[DEN],189:[FCO],190:[BCN],191:[LHR],192:[IAH,MAD],195:[LAX],200:[LGW],201:[PVG],214:[DME],221:[DFW],229:[DXB],232:[ATL,ORD],234:[PEK],237:[MUC],262:[CDG],269:[AMS],270:[IST],272:[FRA]]
 
 ----
 
 As the above query returns a lot of data, we can also extract specific values we are
-interested in as follows. Only airports with 110 outgoing routes are selected.
+interested in as follows. Only airports with 105 outgoing routes are selected.
 
 [source,groovy]
 ----
 // Which of these airports have 110 outgoing routes?
 g.V().hasLabel('airport').
-      group().by(out().count()).by('code').next().get(110L)
+      group().by(out().count()).by('code').next().get(105L)
 
-NRT
-TXL
-CTU
+PHX
+MEX
+TLV
+HAM
+XIY
 ----
 
 NOTE: Currently 'select' can only take a string value as the key so we have to
@@ -9824,7 +9827,7 @@ to return our two variables as the results of the query.
 g.V(3).out().groupCount('a').by('runways').
        out().count().as('b').select('a','b')
 
-[a:[1:2,2:9,3:17,4:22,5:4,6:3,7:1,8:1],b:5913]
+[a:[1:2,2:9,3:17,4:22,5:4,6:3,7:1,8:1],b:5942]
 ----
 
 In the next section we will see another example of a 'groupCount' step that uses a
@@ -9896,7 +9899,7 @@ found 58 airports in France.
 
 [source,groovy]
 ----
-[total:3375,high:6,low:3079,four:51,France:58]      
+[total:3374,high:6,low:3078,four:51,France:58]
 ----
 
 Using 'choose' and 'groupCount' in this way provides a very nice pattern for counting
@@ -9917,7 +9920,7 @@ between airports anywhere in Europe and airports in the USA.
 // How many routes from anywhere in Europe to the USA?
 g.V().has('continent','code','EU').out().out().has('country','US').count()
 
-345
+351
 ----
 
 So we now know that there are 345 different routes. Remember though that the
@@ -9946,7 +9949,7 @@ appears to have the most routes from Europe with Newark (EWR) having the second 
 g.V().has('continent','code','EU').out().out().has('country','US').
       groupCount().by('code').order(local).by(values,incr)
 
-[PHX:1,CVG:1,RSW:1,BDL:2,SJC:2,BWI:2,AUS:2,RDU:2,MSY:2,SAN:3,TPA:3,SLC:3,PDX:3,PIT:3,SFB:4,DEN:4,OAK:4,DTW:5,FLL:5,SWF:5,MSP:5,CLT:7,DFW:7,SEA:7,PVD:7,IAH:8,MCO:9,LAS:10,ATL:14,SFO:15,PHL:17,IAD:19,ORD:21,BOS:22,LAX:23,MIA:24,EWR:33,JFK:40]
+[PHX:1,CVG:1,RSW:1,BDL:2,SJC:2,BWI:2,AUS:2,RDU:2,MSY:2,SAN:3,SLC:3,PDX:3,PIT:3,TPA:4,SFB:4,OAK:4,DTW:5,SWF:5,MSP:5,DEN:5,FLL:6,CLT:7,DFW:7,PVD:7,SEA:8,IAH:8,MCO:10,LAS:10,ATL:14,SFO:15,PHL:17,IAD:19,ORD:21,BOS:22,LAX:23,MIA:25,EWR:33,JFK:40]
 ----
 
 Now let's repeat the process but looking at the European end of the routes. First of
@@ -9971,7 +9974,7 @@ most US destinations and Frankfurt (FRA) the second most.
 g.V().has('continent','code','EU').out().as('a').out().has('country','US').
       select('a').groupCount().by('code').order(local).by(values,incr)
 
-[RIX:1,TER:1,BRS:1,STN:1,NCE:1,KRK:1,ORK:1,KBP:1,PDL:1,DME:1,BEG:1,AGP:1,HAM:1,OPO:2,STR:2,VCE:2,BHX:2,ORY:2,ATH:2,MXP:3,BFS:3,BGO:3,GVA:3,VKO:3,HEL:3,WAW:4,SVO:4,GLA:4,EDI:5,SNN:5,CGN:5,TXL:6,VIE:6,LIS:6,BRU:7,ARN:7,OSL:8,BCN:9,LGW:9,IST:9,MAD:11,DUS:11,CPH:11,FCO:12,ZRH:13,MAN:13,DUB:14,MUC:16,KEF:17,AMS:18,CDG:21,FRA:24,LHR:27]
+[RIX:1,TER:1,BRS:1,STN:1,NCE:1,KRK:1,ORK:1,KBP:1,PDL:1,DME:1,BEG:1,AGP:1,HAM:1,OPO:2,STR:2,VCE:2,BHX:2,ORY:2,ATH:2,MXP:3,BFS:3,BGO:3,GVA:3,VKO:3,HEL:3,WAW:4,SVO:4,GLA:4,EDI:5,SNN:5,CGN:5,TXL:6,VIE:6,LIS:6,BRU:7,ARN:7,OSL:8,IST:9,BCN:10,MAD:11,LGW:11,DUS:11,CPH:11,FCO:12,ZRH:13,MAN:13,DUB:15,MUC:16,AMS:18,KEF:18,CDG:22,FRA:24,LHR:27]
 ----
 
 Lastly, we can find out what the list of routes flown is. For this example we just
@@ -9981,7 +9984,8 @@ traversal including the continent code 'EU'.
 [source,groovy]
 ----
 // What are some of these routes?
- g.V().has('continent','code','EU').out().out().has('country','US').path().by('code').limit(10)
+g.V().has('continent','code','EU').out().out().
+      has('country','US').path().by('code').limit(10)
 
 [EU,WAW,JFK]
 [EU,WAW,LAX]
@@ -10011,7 +10015,7 @@ those names.
 ----
 g.V().has('code','AUS').out('route').values('city').fold()
 
-[Harlingen,Guadalajara,Orlando,Atlanta,Los Angeles,Orlando, New York, Nashville,Boston,Baltimore,Washington D.C.,Dallas, Ft. Lauderdale, Washington D.C.,Houston,Toronto,London,Frankfurt, Mexico City,Pittsburgh, San Diego,Long Beach,Santa Ana,Miami,Minneapolis,Chicago,Phoenix,Seattle, San Francisco,San Jose, Tampa,St Louis,Albuquerque,Chicago,Lubbock,Cleveland,Oakland,Philadelphia,Detroit,Portland,Charlotte,Cancun,Memphis,Cincinnati, Dallas,Salt Lake City,Las Vegas,Denver,New Orleans,Newark,Houston, El Paso]
+[Toronto,London,Frankfurt,Mexico City,Pittsburgh,Portland,Charlotte,Cancun,Memphis,Cincinnati,Indianapolis,Kansas City,Dallas,St Louis,Albuquerque,Chicago,Lubbock,Harlingen,Guadalajara,Pensacola,Valparaiso,Orlando,Branson,St Petersburg-Clearwater,Atlanta,Nashville,Boston,Baltimore,Washington D.C.,Dallas,Fort Lauderdale,Washington D.C.,Houston,New York,Los Angeles,Orlando,Miami,Minneapolis,Chicago,Phoenix,Raleigh,Seattle,San Francisco,San Jose,Tampa,San Diego,Long Beach,Santa Ana,Salt Lake City,Las Vegas,Denver,New Orleans,Newark,Houston,El Paso,Cleveland,Oakland,Philadelphia,Detroit]
 ----
 
 However, what if we wanted to reduce our results further? Take a look at the modified
@@ -10025,9 +10029,10 @@ then adds the zero and the length of each name effectively to a running total.
 
 [source,groovy]
 ----
-g.V().has('code','AUS').out('route').values('city').fold(0) {a,b -> a + b.length()}
+g.V().has('code','AUS').out('route').values('city').
+      fold(0) {a,b -> a + b.length()}
 
-449
+530
 ----
 
 NOTE: While this query will work as-is on TinkerGraph within the Gremlin Console,
@@ -10073,7 +10078,7 @@ also see at the other end of the scale that one airport has 237 outgoing routes.
 
 [source,groovy]
 ----
-[1:770,2:652,3:370,4:236,5:148,6:115,7:94,8:81,9:68,10:61,12:42,11:39,13:38,15:30,19:27,16:26,20:25,22:25,14:20,17:17,18:16,0:15,23:14,31:14,33:14,30:13,21:12,32:12,37:12,35:10,24:9,25:9,39:9,42:9,26:8,29:8,47:8,27:7,34:7,36:7,40:7,44:7,45:7,55:7,63:7,67:7,41:6,48:6,50:6,59:6,60:6,105:6,28:5,38:5,43:5,52:5,54:5,61:5,62:5,64:5,94:5,56:4,68:4,70:4,80:4,74:3,77:3,83:3,84:3,85:3,86:3,93:3,106:3,107:3,124:3,144:3,46:2,53:2,57:2,73:2,76:2,78:2,79:2,82:2,91:2,95:2,97:2,98:2,104:2,109:2,116:2,118:2,146:2,166:2,182:2,192:2,232:2,262:1,269:1,270:1,272:1,49:1,51:1,58:1,65:1,66:1,69:1,71:1,72:1,75:1,81:1,89:1,90:1,92:1,101:1,102:1,108:1,110:1,112:1,113:1,114:1,115:1,119:1,122:1,126:1,127:1,129:1,130:1,132:1,133:1,136:1,137:1,141:1,142:1,143:1,145:1,151:1,153:1,156:1,162:1,163:1,164:1,168:1,175:1,180:1,181:1,186:1,187:1,188:1,189:1,190:1,191:1,197:1,200:1,201:1,214:1,221:1,229:1,234:1,237:1]
+[1:770,2:654,3:369,4:234,5:148,6:116,7:93,8:81,9:68,10:61,12:43,11:39,13:39,15:31,16:27,19:25,20:25,22:25,14:19,18:18,0:16,17:15,33:15,23:14,30:13,31:13,21:12,32:12,35:11,37:11,24:9,25:9,39:9,26:8,27:8,36:8,41:8,42:8,47:8,59:8,29:7,34:7,40:7,44:7,55:7,63:7,43:6,48:6,50:6,67:6,28:5,45:5,61:5,62:5,64:5,94:5,105:5,52:4,54:4,68:4,70:4,80:4,85:4,38:3,51:3,53:3,56:3,60:3,74:3,76:3,83:3,84:3,93:3,104:3,106:3,107:3,46:2,57:2,58:2,65:2,73:2,77:2,78:2,79:2,82:2,86:2,91:2,95:2,97:2,98:2,109:2,116:2,118:2,124:2,143:2,144:2,145:2,182:2,192:2,232:2,262:1,269:1,270:1,272:1,49:1,66:1,69:1,71:1,72:1,75:1,81:1,89:1,90:1,92:1,101:1,102:1,108:1,110:1,112:1,113:1,114:1,115:1,119:1,122:1,123:1,126:1,127:1,129:1,130:1,132:1,133:1,136:1,137:1,141:1,142:1,146:1,151:1,152:1,156:1,162:1,163:1,164:1,165:1,166:1,168:1,171:1,180:1,181:1,186:1,187:1,188:1,189:1,190:1,191:1,195:1,200:1,201:1,214:1,221:1,229:1,234:1,237:1]
 ----
 
 We could change our query above, replacing 'out()' with '__.in()' and we could find
@@ -10099,7 +10104,7 @@ outgoing routes at all!
 [source,groovy]
 ----
 
-[0:15, 1:786, 2:654, 3:361, 4:244, 5:149, 6:110, 7:86, 8:80, 9:67, 10:54, 11:45, 12:40, 13:30, 14:28, 15:28, 16:17, 17:23, 18:17, 19:30, 20:18, 21:13, 22:15, 23:19, 24:10, 25:9, 26:12, 27:7, 28:8, 29:13, 30:12, 31:8, 32:10, 33:9, 34:8, 35:11, 36:6, 37:8, 38:7, 39:11, 40:5, 41:7, 42:10, 43:4, 44:4, 45:2, 46:3, 47:5, 48:2, 49:9, 50:6, 51:4, 52:4, 53:4, 54:6, 55:2, 56:4, 57:4, 58:7, 59:6, 60:7, 61:1, 62:5, 63:2, 64:4, 65:4, 66:4, 67:2, 69:3, 70:2, 71:1, 72:3, 74:2, 75:1, 76:3, 77:2, 78:3, 79:1, 80:1, 81:3, 82:2, 83:4, 84:4, 85:2, 86:3, 87:1, 88:1, 89:1, 91:2, 92:4, 93:2, 94:1, 95:1, 96:1, 97:3, 99:2, 100:4, 101:1, 102:1, 103:3, 104:1, 105:1, 106:1, 108:2, 109:1, 110:1, 111:1, 112:1, 115:2, 117:1, 118:1, 119:2, 121:1, 123:1, 125:1, 127:1, 128:2, 129:1, 132:1, 134:3, 140:1, 141:1, 142:3, 146:1, 148:1, 149:1, 153:1, 154:1, 155:1, 157:1, 158:1, 159:1, 166:1, 172:1, 174:2, 176:2, 178:1, 182:1, 183:2, 184:1, 186:1, 191:2, 197:1, 206:1, 216:1, 219:1, 225:1, 226:1, 232:2, 254:2, 257:1, 259:1]
+[0:16,1:770,2:654,3:369,4:234,5:148,6:116,7:93,8:81,9:68,10:61,11:39,12:43,13:39,14:19,15:31,16:27,17:15,18:18,19:25,20:25,21:12,22:25,23:14,24:9,25:9,26:8,27:8,28:5,29:7,30:13,31:13,32:12,33:15,34:7,35:11,36:8,37:11,38:3,39:9,40:7,41:8,42:8,43:6,44:7,45:5,46:2,47:8,48:6,49:1,50:6,51:3,52:4,53:3,54:4,55:7,56:3,57:2,58:2,59:8,60:3,61:5,62:5,63:7,64:5,65:2,66:1,67:6,68:4,69:1,70:4,71:1,72:1,73:2,74:3,75:1,76:3,77:2,78:2,79:2,80:4,81:1,82:2,83:3,84:3,85:4,86:2,89:1,90:1,91:2,92:1,93:3,94:5,95:2,97:2,98:2,101:1,102:1,104:3,105:5,106:3,107:3,108:1,109:2,110:1,112:1,113:1,114:1,115:1,116:2,118:2,119:1,122:1,123:1,124:2,126:1,127:1,129:1,130:1,132:1,133:1,136:1,137:1,141:1,142:1,143:2,144:2,145:2,146:1,151:1,152:1,156:1,162:1,163:1,164:1,165:1,166:1,168:1,171:1,180:1,181:1,182:2,186:1,187:1,188:1,189:1,190:1,191:1,192:2,195:1,200:1,201:1,214:1,221:1,229:1,232:2,234:1,237:1,262:1,269:1,270:1,272:1]
 ----
 
 If we wanted to find the statistical mean number of routes in the graph we could
@@ -10110,15 +10115,16 @@ outgoing routes in total there are in the graph.
 ----
 g.V().hasLabel('airport').union(count(),out('route').count()).fold()
 
-[3340,40662] 
+[3374,43400]
 ----
 
 We could then use the Gremlin Console do the division for us to calculate the mean.
 
 [source,groovy]
 ----
-gremlin> 40662/3340
-==>12.1742514970
+gremlin> 43400/3374
+
+==>12.8630705394
 ----
 
 However, Gremlin also has a 'mean' step that we can take advantage of if we can
@@ -10126,7 +10132,7 @@ figure out a way to use it in this case that will do the work for us. Take a loo
 the next query.  The key thing to note here is the way 'local' has been used. This
 will cause Gremlin to essentially do what we did a bit more manually above. If we did
 not include 'local' the answer would just be the total number of outgoing routes as
-Gremlin would essentially calculate 40662/1. By using local we force Gremlin to in
+Gremlin would essentially calculate 43400/1. By using local we force Gremlin to in
 essence create an array containing the number of routes for each airport, add those
 values up and divide by the number of elements in the array (the number of airports).
 I hope that makes sense. If it is confusing try the query yourself on the gremlin
@@ -10137,7 +10143,7 @@ of the interim values instead!
 ----
 g.V().hasLabel('airport').local(out('route').count()).mean()
 
-12.174251497005988
+12.863070539419088
 ----
 
 So it seems there is an average of just over 12 outgoing routes per airport in
@@ -10152,12 +10158,12 @@ routes and combined, incoming and outgoing, routes.
 // Average number of incoming routes
 g.V().has('type','airport').local(__.in('route').count()).mean()
 
-12.174251497005988
+12.863070539419088
 
 // Average number of outgoing and incoming routes
 g.V().has('type','airport').local(both('route').count()).mean()
 
-24.348502994011977
+25.726141078838175
 ----
 
 How many routes are there from airports in London (UK)?
@@ -10174,7 +10180,7 @@ London, Ontario, in Canada.
 g.V().has('region','GB-ENG').has('city','London').
       group().by('code').by(out().count())
 
-[LCY:37, LHR:176, LTN:91, STN:162, LGW:179]
+[LCY:42,LHR:191,LTN:104,STN:186,LGW:200]
 ----
 
 Here is a twist on the above theme. How many places can I get to from London in two
@@ -10189,7 +10195,7 @@ ruling out any flights that would end up back in London.
 g.V().has('region','GB-ENG').has('city','London').aggregate('lon').
       out().out().dedup().where(without('lon')).count()
 
-2082
+2236
 ----
 
 We could have written the previous query like this and avoided using 'aggregate' but
@@ -10200,7 +10206,7 @@ to me, this feels more clumsy and somewhat repetitive.
 g.V().has('region','GB-ENG').has('city','London').out().out().dedup().
       not(and(has('city','London'),has('region','GB-ENG'))).count()
 
-2240                        
+2236                        
 ----
 
 [[topten]]
@@ -10227,16 +10233,17 @@ g.V().hasLabel('airport').
       order().by(__.in('route').count(),decr).limit(10).
       project('ap','routes').by('code').by(__.in('route').count())
 
-[ap:AMS, routes:249]
-[ap:FRA, routes:243]
-[ap:CDG, routes:239]
-[ap:IST, routes:234]
-[ap:ATL, routes:221]
-[ap:PEK, routes:213]
-[ap:ORD, routes:212]
-[ap:MUC, routes:199]
-[ap:DFW, routes:198]
-[ap:DME, routes:190]
+
+[ap:FRA,routes:272]
+[ap:AMS,routes:272]
+[ap:IST,routes:270]
+[ap:CDG,routes:262]
+[ap:MUC,routes:237]
+[ap:PEK,routes:235]
+[ap:ATL,routes:232]
+[ap:ORD,routes:232]
+[ap:DXB,routes:229]
+[ap:DFW,routes:221]
 ----
 
 Now let's do the same thing but for outgoing routes.
@@ -10248,16 +10255,17 @@ g.V().hasLabel('airport').
       order().by(out('route').count(),decr).limit(10).
       project('ap','routes').by('code').by(out('route').count())
 
-[ap:FRA, routes:243]
-[ap:AMS, routes:240]
-[ap:CDG, routes:239]
-[ap:IST, routes:232]
-[ap:ATL, routes:221]
-[ap:PEK, routes:213]
-[ap:ORD, routes:212]
-[ap:MUC, routes:199]
-[ap:DFW, routes:198]
-[ap:DME, routes:190]
+
+[ap:FRA,routes:272]
+[ap:IST,routes:270]
+[ap:AMS,routes:269]
+[ap:CDG,routes:262]
+[ap:MUC,routes:237]
+[ap:PEK,routes:234]
+[ap:ATL,routes:232]
+[ap:ORD,routes:232]
+[ap:DXB,routes:229]
+[ap:DFW,routes:221]
 ----
 
 Lastly, let's find the top ten airports ordered by the total number of incoming and
@@ -10278,7 +10286,7 @@ g.V().hasLabel('airport').
 [ap:PEK,routes:469]
 [ap:ATL,routes:464]
 [ap:ORD,routes:464]
-[ap:DXB,routes:460]
+[ap:DXB,routes:458]
 [ap:DFW,routes:442]
 ----
 
@@ -10303,7 +10311,7 @@ of airport codes with each followed by its runway count.
 
 [source,groovy]
 ----
-[BOS,6,DFW,7,ORD,8,DEN,6,DTW,6,AMS,6] 
+[BOS,6,DFW,7,ORD,8,DEN,6,DTW,6,AMS,6]
 ----
 
 While the output returned by the previous query is not bad, it might be nice to have
@@ -10357,13 +10365,15 @@ the country code for India "IN" is included in the output.
 
 [source,groovy]
 ----
-[IN,BOM,EWR]
-[IN,DEL,SFO]
-[IN,DEL,EWR]
+[IN,DEL,IAD]
 [IN,DEL,JFK]
 [IN,DEL,ORD]
-[IN,DEL,YVR]
+[IN,DEL,SFO]
+[IN,DEL,EWR]
 [IN,DEL,YYZ]
+[IN,DEL,YVR]
+[IN,BOM,EWR]
+[IN,BOM,YYZ]
 ----
 
 [[flleurope]]
