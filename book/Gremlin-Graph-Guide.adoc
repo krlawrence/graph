@@ -4253,7 +4253,11 @@ Here is what we get back when we run our query
 
 Here is one last example of using union. This query finds the total distance
 of all routes from any airport in Madrid to any airport anywhere and also does
-the same calculation but minus any routes that end up in any Paris airport.
+the same calculation but minus any routes that end up in any Paris airport. We have
+not yet seen the 'filter' step that is used below. It is one of the foundational
+Gremlin steps that many others such as 'where' build upon. A 'filter' step will only
+pass on to the next step in the query incoming elements that meet the criteria
+specified within the 'filter'.
 
 [source,groovy]
 ----
@@ -8187,6 +8191,24 @@ closure to do what you want is easier than figuring out the pure Gremlin way to 
 but if at all possible using just Gremlin steps is still the recommended path to
 take. Lambda functions in general are discouraged.
 
+Finally, here is another example that uses a 'filter' step combined with a closure to
+find any airport vertex that has a description containing the letter '"F"' followed by
+a period, as in '"F."'. While this makes an interesting example, there are other ways
+to achieve this result. One such way would be to used a mixed index and special text
+searching predicates. That, however, is a topic for quite a bit later on.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').as('a').values('desc').
+      filter{it.toString().contains('F.')}.select('a').
+      dedup().values('desc')
+
+New York John F. Kennedy International Airport
+Bermuda, L.F. Wade International International Airport
+George F. L. Charles Airport
+F. D. Roosevelt Airport
+----
+
 [[mapstep]]
 Introducing the 'Map' step
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -9045,20 +9067,20 @@ clock(1) {g.V().has('airport','country','CN').next()}
 1.364199
 ----
 
-To get a more accurate assessment of how long a query takes it is sometime a good
+To get a more accurate assessment of how long a query takes it is sometimes a good
 idea to average out the time over multiple attempts. This should reduce the impact of
-any random system events from impacting your overall result. The example below repeats the
-previous query but measures the average time taken across 100 iterations. Note that,
-especially for longer running queries, the time returned will not be the same as if
-you tried to time this process yourself using a stopwatch. This is because the clock
-steps do a warm up pass before doing the actual testing. The warm up step basically
-runs the query one time before it starts timing anything. This means that for a
-single iteration the 'human perceived time' will be roughly double the time returned
-by the 'clock' analysis. You can see from the results that when averaged over 100
-iteration the time taken is a bit less. You should not use these numbers as hard and
-fast answers but rather use them to get a sense of in general how long a query takes.
-If you repeated this test five times you would definitely get five different results
-of a similar but not identical magnitude.
+any random system events from impacting your overall result. The example below
+repeats the previous query but measures the average time taken across 100 iterations.
+Note that, especially for longer running queries, the time returned will not be the
+same as if you tried to time this process yourself using a stopwatch. This is because
+the clock steps do a warm up pass before doing the actual testing. The warm up step
+basically runs the query one time before it starts timing anything. This means that
+for a single iteration the 'human perceived time' will be roughly double the time
+returned by the 'clock' analysis. You can see from the results that when averaged
+over 100 iteration the time taken is a bit less. You should not use these numbers as
+hard and fast answers but rather use them to get a sense of in general how long a
+query takes.  If you repeated this test five times you would definitely get five
+different results of a similar but not identical magnitude.
 
 [source,groovy]
 ----
@@ -9361,7 +9383,7 @@ results. In this case we want to look at outgoing 'route' edges and label all re
 [source,groovy]
 ----
 // Page rank based on outgoing routes
-g = graph.traversal().withComputer()
+g3 = graph.traversal().withComputer()
 
 g3.V().hasLabel('airport').pageRank().by(outE('route')).by('r').
       order().by('r',decr).valueMap('code','r').limit(10)
