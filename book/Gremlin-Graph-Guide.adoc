@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v278-preview, Feb 17, 2018
-// Sat Feb 17, 2018 12:14:37 CST
+// Sat Feb 17, 2018 17:44:57 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Feb 17 2018
@@ -9302,9 +9302,10 @@ Introducing TinkerGraph indexes
 
 TinkerGraph provides a rudimentary indexing capability but using it can still improve
 overall performance of your queries. Two methods 'createIndex' and 'dropIndex' are
-provided. Any vertex or edge property can be indexed. The example below runs the
-query we used in some of our prior tests with and without an index being present for
-the 'code' vertex property.
+provided. Vertex and Edge properties can be indexed as needed. A third method,
+'getIndexedKeys' can be used to query what indexes have been created. The example
+below runs the query we used in some of our prior tests with and without an index
+being present for the 'code' vertex property.
 
 [source,groovy]
 ----
@@ -9329,6 +9330,15 @@ graph.createIndex('code',Vertex)
 1298.386245
 ----
 
+We can query what indexes we have creates as follows.
+
+[source,groovy]
+----
+graph.getIndexedKeys(Vertex)
+
+code
+----
+
 Now let's drop the index.
 
 [source,groovy]
@@ -9350,7 +9360,18 @@ clockWithResult(100) {g.E().has('dist',1000).count().next()}
 ----
 
 Let's now create an index for the edge property called 'dist' and run the query
-again. This time you can see that our index has made a big difference.
+again.  We can also, as before, check to see what edge indexes have been created.
+
+[source,groovy]
+----
+graph.createIndex('dist',Edge)
+
+graph.getIndexedKeys(Edge)
+
+dist
+----
+
+This time you can see that our index has made a big difference.
 
 [source,groovy]
 ----
@@ -9366,6 +9387,7 @@ second case the index was used to go directly to the edges with a 'dist' of 1000
 no searching of all the edges was required. Note that the index only helps with exact
 comparisons. A query such as the one below will not benefit from the index.
 
+[source,groovy]
 ----
 clockWithResult(100) {g.E().has('dist',gt(1000)).count().next()}
 
@@ -9375,8 +9397,8 @@ clockWithResult(100) {g.E().has('dist',gt(1000)).count().next()}
 
 Later on we will take a look at using an index with JanusGraph and look at external
 indexing technologies such as Apache Solr and Apache Elastic Search that do support
-more complex type of comparison predicates..
-`
+more complex types of comparison predicates.
+
 [[olapoltp]]
 OLTP vs OLAP
 ~~~~~~~~~~~~
