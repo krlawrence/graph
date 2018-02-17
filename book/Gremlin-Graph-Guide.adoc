@@ -9296,6 +9296,87 @@ PathStep([value(code)])              10          10           0.126     0.00
    >TOTAL                             -           -        9360.493        -
 ----
 
+[[tinkerindex]]
+Introducing TinkerGraph indexes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+TinkerGraph provides a rudimentary indexing capability but using it can still improve
+overall performance of your queries. Two methods 'createIndex' and 'dropIndex' are
+provided. Any vertex or edge property can be indexed. The example below runs the
+query we used in some of our prior tests with and without an index being present for
+the 'code' vertex property.
+
+[source,groovy]
+----
+clock(1){
+    g.V().has('code','AUS').repeat(out().simplePath()).
+          until(has('code','AGR')).limit(10).path().by('code').toList()}
+
+2019.8820959999998
+----
+
+Let's now create an index for the 'code' property of every vertex and try the query
+again.Note that 'Vertex' as used below is shorthand for 'Vertex.class'.
+
+[source,groovy]
+----
+graph.createIndex('code',Vertex)
+
+ clock(1){
+     g.V().has('code','AUS').repeat(out().simplePath()).
+           until(has('code','AGR')).limit(10).path().by('code').toList()}
+
+1298.386245
+----
+
+Now let's drop the index.
+
+[source,groovy]
+----
+graph.dropIndex('code',Vertex)
+----
+
+Because the air routes graph is small, a Vertex property index has little effect on
+overall performance. Hoever, as there are a lot more edges, perhaps creating and edge
+property index could help some queries. Let's try an experiment. The following query
+looks for all edges that have a 'dist' property of 1000. 
+
+[source,groovy]
+----
+clockWithResult(100) {g.E().has('dist',1000).count().next()}
+
+9.80906926
+24
+----
+
+Let's now create an index for the edge property called 'dist' and run the query
+again. This time you can see that our index has made a big difference.
+
+[source,groovy]
+----
+clockWithResult(100) {g.E().has('dist',1000).count().next()}
+
+0.046712609999999995
+24
+----
+
+The timing difference between the two queries can be attributed to the index. In the
+first case every edge in the graph (over 50,000 of them) had to be inspected. In the
+second case the index was used to go directly to the edges with a 'dist' of 1000 and
+no searching of all the edges was required. Note that the index only helps with exact
+comparisons. A query such as the one below will not benefit from the index.
+
+----
+clockWithResult(100) {g.E().has('dist',gt(1000)).count().next()}
+
+11.980037119999999
+16430
+----
+
+Later on we will take a look at using an index with JanusGraph and look at external
+indexing technologies such as Apache Solr and Apache Elastic Search that do support
+more complex type of comparison predicates..
+`
 [[olapoltp]]
 OLTP vs OLAP
 ~~~~~~~~~~~~

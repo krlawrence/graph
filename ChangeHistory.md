@@ -6,6 +6,7 @@ Starting with the v275 release, this file will contain a record of the major cha
 
 Major new features in this release
 - Added a new section on measuring query performance
+- Added coverage of TinkerGraph indexing
 - Added to the `collections` section.
 - Added a new `OLTP vs OLAP` section.
 - Added to the `Gremlin Server` section.
