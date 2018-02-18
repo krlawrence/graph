@@ -12,6 +12,7 @@ Major new features in this release
 - Added to the `Gremlin Server` section.
 - Improved coverage of `cyclicPath`
 - Improved coverage of `flatMap`
+- Added coverage of `toSet` in section 3.
 - Improved text and examples in section 5.
 - Added to the `JanusGraph GeoSpatial` section and moved the section up a hierarchy level.
 - Added a new sample that demonstrates geospatial queries.
