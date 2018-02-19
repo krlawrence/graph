@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v278-preview, Feb 18, 2018
-// Sun Feb 18, 2018 19:35:59 CST
+v278-preview, Feb 19, 2018
+// Mon Feb 19, 2018 08:59:25 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
-//:Date:      Feb 18 2018
+//:Date:      Feb 19 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -732,9 +732,9 @@ sense right away - we'll get there soon!
 
 TinkerGraph is really useful while learning to work with Gremlin and great for
 testing things out. One common use case where TinkerGraph can be very useful is to
-create a sub-graph of a larger graph and work with it locally. TinkerGraph can even be
+create a sub-graph of a large graph and work with it locally. TinkerGraph can even be
 used in production deployments if an all in memory graph fits the bill. Typically,
-TinkerGraph us used to explore static (unchanging) graphs but you can also use it
+TinkerGraph is used to explore static (unchanging) graphs but you can also use it
 from a programming language like Java and mutate its contents if you want to.
 However, TinkerGraph does not support some of the more advanced features you will
 find in implementations like JanusGraph such as transactions and external
@@ -16703,29 +16703,18 @@ further.
 
 [source,groovy]
 ----
-["AKL", 9025, "DOH"]
-["AKL", 8818, "DXB"]
-["LAX", 8756, "SIN"]
-["CAN", 8754, "MEX"]
-["IAH", 8591, "SYD"]
-["DFW", 8574, "SYD"]
-["ATL", 8434, "JNB"]
-["SFO", 8433, "SIN"]
-["AUH", 8372, "LAX"]
-["DXB", 8321, "LAX"]
-["JED", 8314, "LAX"]
+["AKL", 9025, "DOH"]     ["LAX", 8246, "RUH"]
+["AKL", 8818, "DXB"]     ["MEL", 8197, "YVR"]
+["LAX", 8756, "SIN"]     ["DXB", 8150, "IAH"]
+["CAN", 8754, "MEX"]     ["AUH", 8139, "SFO"]
+["IAH", 8591, "SYD"]     ["DFW", 8105, "HKG"]
+["DFW", 8574, "SYD"]     ["DXB", 8085, "SFO"]
+["ATL", 8434, "JNB"]     ["HKG", 8054, "JFK"]
+["SFO", 8433, "SIN"]     ["AUH", 8053, "DFW"]
+["AUH", 8372, "LAX"]     ["EWR", 8047, "HKG"]
+["DXB", 8321, "LAX"]     ["DOH", 8030, "IAH"]
+["JED", 8314, "LAX"]     ["DFW", 8022, "DXB"]
 ["DOH", 8287, "LAX"]
-["LAX", 8246, "RUH"]
-["MEL", 8197, "YVR"]
-["DXB", 8150, "IAH"]
-["AUH", 8139, "SFO"]
-["DFW", 8105, "HKG"]
-["DXB", 8085, "SFO"]
-["HKG", 8054, "JFK"]
-["AUH", 8053, "DFW"]
-["EWR", 8047, "HKG"]
-["DOH", 8030, "IAH"]
-["DFW", 8022, "DXB"]
 ----
 
 In the next section you will find more examples of the JSON that can be returned by
