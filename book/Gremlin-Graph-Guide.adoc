@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v278-preview, Feb 18, 2018
-// Sun Feb 18, 2018 08:18:11 CST
+// Sun Feb 18, 2018 19:35:59 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Feb 18 2018
@@ -2472,6 +2472,10 @@ class org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerVertex
 TIP: When using the Gremlin Console, you can check to see what variables you have defined
 using the command ':show variables'.
 
+[[setsandlists]]
+Introducing 'toList', 'toSet', 'bulkSet' and 'fill'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 It is often useful to return the results of a query as a list or as a set. One way to
 do this is to use 'toList' or 'toSet' methods. Below you will find an example of
 each. The call to 'join' is used just to make the results easier to read on a single
@@ -2519,6 +2523,81 @@ listr.size()
 listr[1,3]
 7
 3
+----
+
+TinkerPop also provides a third method called 'bulkSet' that can be used to create a
+collection at the end of a traversal. The difference between a 'bulkSet' and a 'set'
+is that 'bulkSet' is a so called 'weighted set'. A 'bulkSet' stores every value but
+includes a count of how many of each type is present. Let's look at a few examples.
+First of all we can check that the 'bulkSet' does indeed contain all the values.
+
+[source,groovy]
+----
+setb= g.V().has('airport','region','US-TX').values('runways').toBulkSet().join(',')
+2,2,2,2,2,2,2,2,7,5,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,1
+----
+
+A 'bulkSet' offers some additional methods that we can call. One of these is
+'uniqueSize' which will tell us how many unique values are present.
+
+[source,groovy]
+----
+setb= g.V().has('airport','region','US-TX').values('runways').toBulkSet()
+
+// How many unique values are in the set?
+setb.uniqueSize()
+6
+
+// How many total values are present?
+setb.size()
+26
+----
+
+The 'asBulk' method returns a map of key/value pairs where the key is the number and
+the value is the number of time that number appears in the set.
+
+[source,groovy]
+----
+setb.asBulk()
+
+2=8
+7=1
+5=1
+3=11
+4=4
+1=1
+----
+
+There is another way to store the results of a query into a collection. This is
+achieved using the 'fill' method. Unlike 'toList' and the other methods that we just
+looked at, 'fill' will store the results into a pre-existing variable. The query
+below defines a list called 'a' and stores the results of the query into it. This
+will produce the same result as using 'toList'.
+
+[source,groovy]
+----
+a = []
+g.V().has('airport','region','US-TX').values('runways').fill(a)
+
+a.size()
+26
+
+a[1,3]
+7
+3
+----
+
+We can define a variable that is a set and use 'fill' to achieve the same result as
+using 'toSet'.
+
+[source,groovy]
+----
+s = [] as Set
+g.V().has('airport','region','US-TX').values('runways').fill(s)
+
+println s
+
+[2, 7, 5, 3, 4, 1]
 ----
 
 [[wid]]
