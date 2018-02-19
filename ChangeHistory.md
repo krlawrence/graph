@@ -14,8 +14,12 @@ Major new features in this release
 - Improved coverage of `flatMap`
 - Added coverage of `toSet` in section 3.
 - Improved text and examples in section 5.
-- Added to the `JanusGraph GeoSpatial` section and moved the section up a hierarchy level.
+- Examples in section 5 all based on the the same air routes graph now (some used to reflect an older version).
+- Added to the `JanusGraph GeoSpatial` section and moved the
+ section up a hierarchy level.
 - Added a new sample that demonstrates geospatial queries.
+- Improved source highlighting for MOBI and EPUB versions.
+- Added more examples in various places.
 - General housekeeping and tightening up of some wording.
 
 ## Release 277 change history (Feb 11, 2018)
