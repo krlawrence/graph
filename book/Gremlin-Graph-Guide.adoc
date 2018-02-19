@@ -4284,6 +4284,33 @@ g.V().has('airport','code','DFW').group().by().by(out().count())
 [v[8]:221]]
 ----
 
+The following query uses a 'sample' step to select 10 airports at random from the
+graph. For each selected airport, a 'union' step is then used to combine the 'id' of
+the vertex with a few properties. Note that 'local' scope is used so that the results
+of each 'union' step are folded into a list.
+
+[source,groovy]
+----
+g.V().hasLabel("airport").sample(10).
+      local(union(id(),values("code","city")).fold())
+----
+
+Here is the output I got back from running the query.
+
+[source,groovy]
+----
+[83,RSW,Fort Myers]
+[97,GLA,Glasgow]
+[26,SAN,San Diego]
+[57,MEL,Melbourne]
+[136,MEX,Mexico City]
+[163,YHZ,Halifax]
+[44,SAF,Santa Fe]
+[42,OAK,Oakland]
+[92,OSL,Oslo]
+[161,IST,Istanbul] 
+----
+
 By way of another simple example, the following query returns flights that arrive in
 AUS from the UK or that leave AUS and arrive in Mexico.
 
@@ -4293,6 +4320,7 @@ AUS from the UK or that leave AUS and arrive in Mexico.
 g.V().has('code','AUS').union(__.in().has('country','UK'),
                                 out().has('country','MX')).path().by('code')
 ----
+
 
 When we run that query, we get the following results showing that there are routes
 from LHR in the UK and to the three airports MEX, CUN and GDL in Mexico.
