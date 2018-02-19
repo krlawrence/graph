@@ -16097,8 +16097,8 @@ Apache Solr
 To be written
 
 [[gremlinserver]]
-Using Gremlin Server
-~~~~~~~~~~~~~~~~~~~~
+Introducing Gremlin Server
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 So far in this book we have looked at a few different ways to setup a TinkerPop
 enabled graph store. Initially we focussed on running a TinkerGraph or a JanusGraph
