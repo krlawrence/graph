@@ -42,14 +42,22 @@ public class Iterate
     }
     catch( IOException e )
     {
-      System.out.println("Air routes GraphML file not found");
+      System.out.println("Air routes GraphML file not found or invalid");
       System.exit(1);
     }
     GraphTraversalSource g = tg.traversal();
     
     // Default sample size can be overriden by command line parameter.
     int sample_size = 30 ;
-    if (args.length > 0) sample_size = Integer.parseInt(args[0]);
+
+    try 
+    {
+      if (args.length > 0) sample_size = Integer.parseInt(args[0]);
+    }
+    catch (Exception e)
+    {
+      System.out.println("Unrecognized value:(" + args[0] + "). Using defaults");
+    }
 
     // Get an iterator of 30 value maps sampled at random.
     Iterator<Map<Object,Object>> res = 
