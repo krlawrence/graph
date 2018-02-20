@@ -86,7 +86,6 @@ public class Iterate
     while(res2.hasNext())
     {
       vmap2 = res2.next();
-      //System.out.println("here");
       System.out.format( "%4s %5s  %-20s\n",
                          vmap2.get("id"),
                          vmap2.get("iata"), 
