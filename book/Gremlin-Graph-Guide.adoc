@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v278-preview, Feb 19, 2018
-// Mon Feb 19, 2018 08:59:25 CST
+v278-preview, Feb 20, 2018
+// Tue Feb 20, 2018 09:46:38 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
-//:Date:      Feb 19 2018
+//:Date:      Feb 20 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -61,14 +61,23 @@ INTRODUCTION
 The title of this book could equally well be '"A getting started guide for users of
 graph databases and the Gremlin query language featuring hints, tips and sample
 queries"'. It turns out that is a bit too too long to fit on one line for a heading
-but in a single sentence that describes the focus of this work pretty well. 
+but in a single sentence that describes the focus of this work pretty well.
 
-I hope people find what follows useful. It remains a work in progress and more will
-be added in the coming weeks and months as time permits. I am hopeful that what is
-presented so far is of some use to folks, who like me, are learning to use the
-Gremlin query and traversal language and related technologies.
+I have resisted the urge to try and cover every single feature of TinkerPop one after
+the other in a reference manual fashion. Instead, what I have tried to do is capture
+the learning process that I myself have gone through using what I hope is a sensible
+flow from getting started to more advanced topics. To get the most from this book I
+recommend having the Gremlin console open with my sample data loaded as you follow
+along. I have not assumed that anyone reading this has any prior knowledge of Apache
+TinkerPop, the Gremlin query language or related tools. I will introduce everything
+you need to get started in Chapter 2.
 
-A lot of additional material can be found at the
+I hope people find what follows useful. It definitely remains a work in progress and
+more will be added in the coming weeks and months as time permits. I am hopeful that
+what is presented so far is of some use to folks, who like me, are learning to use
+the Gremlin query and traversal language and related technologies.
+
+A lot of additional material, including sample code and data, can be found at the
 https://github.com/krlawrence/graph[project's home on GitHub].
 
 How this book came to be
@@ -104,11 +113,10 @@ open issues or pull requests.
 A word of thanks
 ~~~~~~~~~~~~~~~~
 
-I would like to thank my colleagues at IBM, Graham Wallis, Jason Plurad and
-Adam Holley for their help in refining and improving several of the queries
-contained in this book. Gremlin is definitely a bit of a team sport. We spent
-many hours discussing the best way to handle different types of queries and
-traversals!
+I would like to thank my colleagues, Graham Wallis, Jason Plurad and Adam Holley for
+their help in refining and improving several of the queries contained in this book.
+Gremlin is definitely a bit of a team sport. We spent many fun hours discussing the
+best way to handle different types of queries and traversals!
 
 I would also be remiss if I did not give a big shout out to all of the folks that
 spend a  lot of time replying to questions and suggestions on the
@@ -121,9 +129,10 @@ What is this book about?
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 This book introduces the Apache TinkerPop 3 'Gremlin' graph query and traversal
-language via real examples featuring a real world graph that is also provided along
-with sample code and applications. The graph, 'air-routes.graphml', is a model of the
-world airline route network between 3,373 airports including 43,400 routes. The
+language via real examples featuring real world graph data. That data along with
+sample code and example applications is available for download from the GitHub
+project as well as many other items. The graph, 'air-routes.graphml', is a model of
+the world airline route network between 3,373 airports including 43,400 routes. The
 examples presented will work unmodified with the air-routes.graphml file loaded into
 the Gremlin console running with a TinkerGraph. How to set that environment up is
 covered in the <<gremlininstall>> section below.
@@ -136,19 +145,19 @@ release.
 TinkerGraph is an 'in-memory' graph, meaning nothing gets saved to disk
 automatically. It is shipped as part of the Apache TinkerPop 3 download.  The
 goal of this tutorial is to allow someone with little to no prior knowledge to
-get up and going quickly using the Gremlin console and the 'air-routes'graph.
+get up and going quickly using the Gremlin console and the 'air-routes' graph.
 Later in the book I will discuss using additional technologies such as
 JanusGraph, Apache Cassandra, Gremlin Server and Apache Elastic Search to build
 scalable and persisted graph stores that can still be traversed using Gremlin
 queries. I will also discuss writing stand alone Java and Groovy applications
 as well as using the Gremlin Console. I even slipped a couple of Ruby examples in
-as well!
+too!
 
-NOTE: In the first four sections of this this book I have mainly focussed on
+NOTE: In the first few sections of this this book I have mainly focussed on
 showing the different types of query that you can issue using Gremlin. I have not
 tried to show all of the output that you will get back from entering these queries
 but have selectively shown examples of output. I go a lot deeper into things in
-chapters 5 and 6.
+chapters 4, 5 and 6.
 
 .How this book is organized
 Chapter 1 - INTRODUCTION::
@@ -373,8 +382,10 @@ GETTING STARTED
 ---------------
 
 Let's take a look at what you will need to have installed and what tools you will
-need available to make best use of the examples contained in this guide.  The key
+need available to make best use of the examples contained in this tutorial.  The key
 thing that you will need is the Apache TinkerPop project's Gremlin Console download.
+In the sections below I will walk you through a discussion of what you need to
+download and how to set it up.
 
 
 [[tpintro]]
@@ -406,19 +417,20 @@ Documentation::
 - http://tinkerpop.apache.org/docs/current/reference/
 
 The programming interfaces allow providers of graph databases to build systems that
-are TinkerPop enabled. 
+are TinkerPop enabled and allow application programmers to write programs that talk
+to those systems.
 
-Any such databases can be accessed using the Gremlin query language and corresponding
-API. We can also use the TinkerPop API to write client code in languages like Java that
-can talk to a TinkerPop enabled graph.  For most of this book we will be working
-within the Gremlin console with a local graph. However in Section 6 we will take a
-look at Gremlin Server and some other TinkerPop 3 enabled environments. Most of
-Apache Tinkerpop has been developed using Java 8 but there are also bindings
-available for many other programming languages such as Groovy and Python. Parts of
-TinkerPop are themselves developed in Groovy, most notably the Gremlin Console. The
-nice thing about that is that we can use Groovy syntax along with Gremlin when
-entering queries into the Console or sending them via REST API to a Gremlin Server.
-All of these topics are covered in detail in this book.
+Any such TinkerPop enabled graph databases can be accessed using the Gremlin query
+language and corresponding API. We can also use the TinkerPop API to write client
+code in languages like Java that can talk to a TinkerPop enabled graph.  For most of
+this book we will be working within the Gremlin console with a local graph. However
+in Section 6 we will take a look at Gremlin Server and some other TinkerPop 3 enabled
+environments. Most of Apache Tinkerpop has been developed using Java 8 but there are
+also bindings available for many other programming languages such as Groovy and
+Python. Parts of TinkerPop are themselves developed in Groovy, most notably the
+Gremlin Console. The nice thing about that is that we can use Groovy syntax along
+with Gremlin when entering queries into the Console or sending them via REST API to a
+Gremlin Server.  All of these topics are covered in detail in this book.
 
 The queries used as examples in this book have been tested with Apache TinkerPop
 version 3.3. using the TinkerGraph graph and the Gremlin console as well as some
@@ -456,11 +468,12 @@ just download the ZIP file and 'unzip' it and you are all set. TinkerPop 3 also
 requires a recent version of Java 8 being installed. I have done all of my testing
 using Java 8 version 1.8.0_131. The Gremlin Console will not work with versions prior
 to 1.8.0_45. If you do not have Java 8 installed it is easy to find and download off
-the Web.
+the Web. The download also includes all of the JAR files that are needed to write a
+stand alone Java or Groovy TinkerPop application but that is a topic for later!
 
-When you start Gremlin you will be presented with a banner/logo and a prompt that
-will look something like this. Don't worry about the plugin messages yet we will talk
-about those a bit later.
+When you start the Gremlin console you will be presented with a banner/logo and a
+prompt that will look something like this. Don't worry about the plugin messages yet
+we will talk about those a bit later.
 
 ----
 $ ./gremlin.sh 
@@ -1735,7 +1748,7 @@ The table below gives a brief summary of all the steps that can be used to 'walk
 'traverse' a graph using Gremlin. You will find all of these steps used in various
 ways throughout the book. Think of a graph traversal as moving through the graph from
 one place to one or more other places. These steps tell Gremlin which places to move
-to next next as it traverses a graph for you.  
+to next as it traverses a graph for you.  
 
 In order to better understand these steps it is worth defining some terminology. One
 vertex is considered to be 'adjacent' to another vertex if there is an edge
