@@ -50,9 +50,20 @@ public class Iterate
     Iterator<Map<Object,Object>> res = 
          g.V().hasLabel("airport").sample(30).valueMap(true);
 
-    Map<Object,Object> vmap;
+
+    // Build an iterator of 30 value maps sampled at random.
+    // Note the use of "__." before the call to id().
+    Iterator<Map<String,Object>> res2 = 
+          g.V().hasLabel("airport").sample(30).
+                project("id","iata","city").
+                by(__.id()).by("code").by("city");
+
     
     // For each value map display a few fields.
+    
+    Map<Object,Object> vmap;
+    
+    System.out.println("\n*** Output from valueMap() ***\n\n");
     System.out.format("%4s %5s  %5s","ID","IATA","CITY\n");
 
     while(res.hasNext())
@@ -62,6 +73,24 @@ public class Iterate
                          vmap.get(T.id),
                          ((List)(vmap.get("code"))).get(0), 
                          ((List)(vmap.get("city"))).get(0));
+    }
+    
+
+    // Process the map built using project().
+    // Note that this time the values are not in lists.
+    
+    Map<String,Object> vmap2;
+    
+    System.out.println("\n*** Output from project() ***\n\n");
+    System.out.format("%4s %5s  %5s","ID","IATA","CITY\n");
+    while(res2.hasNext())
+    {
+      vmap2 = res2.next();
+      //System.out.println("here");
+      System.out.format( "%4s %5s  %-20s\n",
+                         vmap2.get("id"),
+                         vmap2.get("iata"), 
+                         vmap2.get("city"));
     }
   }
 }
