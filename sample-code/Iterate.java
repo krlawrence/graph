@@ -6,6 +6,7 @@
 //   1. Create a TinkerGraph instance
 //   2. Load the air routes graph
 //   3. Experiment with maps and iterators
+//   4. Do some privitive analysis of how random the sample step is.
 
 // I have highlighted the places where the Gremlin is slightly different from the 
 // Gremlin we can use in the Gremlin Console.
@@ -46,20 +47,25 @@ public class Iterate
     }
     GraphTraversalSource g = tg.traversal();
     
+    // Default sample size can be overriden by command line parameter.
+    int sample_size = 30 ;
+    if (args.length > 0) sample_size = Integer.parseInt(args[0]);
+
     // Get an iterator of 30 value maps sampled at random.
     Iterator<Map<Object,Object>> res = 
-         g.V().hasLabel("airport").sample(30).valueMap(true);
+         g.V().hasLabel("airport").sample(sample_size).valueMap(true);
 
 
-    // Build an iterator of 30 value maps sampled at random.
+    // Build an iterator of 30 projected maps from a random sample of airports.
     // Note the use of "__." before the call to id().
     Iterator<Map<String,Object>> res2 = 
-          g.V().hasLabel("airport").sample(30).
+          g.V().hasLabel("airport").sample(sample_size).
                 project("id","iata","city").
                 by(__.id()).by("code").by("city");
 
     
     // For each value map display a few fields.
+    // Note how for property values we have to process them as lists.
     
     Map<Object,Object> vmap;
     
@@ -78,18 +84,47 @@ public class Iterate
 
     // Process the map built using project().
     // Note that this time the values are not in lists.
+    // Just for fun let's also see howthe sample was distributed.
     
     Map<String,Object> vmap2;
-    
+    int low = 0,medium = 0,high = 0;
+
     System.out.println("\n*** Output from project() ***\n\n");
     System.out.format("%4s %5s  %5s","ID","IATA","CITY\n");
+    
+    Long num_airports = g.V().hasLabel("airport").count().next();
+    Long low_bar = num_airports/3;
+    Long med_bar = low_bar * 2;
+
     while(res2.hasNext())
     {
+
       vmap2 = res2.next();
-      System.out.format( "%4s %5s  %-20s\n",
-                         vmap2.get("id"),
+      int id = Integer.parseInt((String)(vmap2.get("id")));
+
+      System.out.format( "%4d %5s  %-20s\n",
+                         id,
                          vmap2.get("iata"), 
                          vmap2.get("city"));
+
+      // Track sample distribution                   
+      if (id < num_airports/3)
+      {
+        low += 1;
+      }
+      else if (id < (num_airports/3)*2)
+      {
+        medium += 1;
+      }
+      else
+      {
+        high += 1;
+      }
     }
+    
+    
+    System.out.println("\nGraph contains " + num_airports + " airports.");
+    System.out.println("Low bar= " + low_bar + " med bar=" + med_bar);
+    System.out.println("\nLow=" + low + "  Medium=" + medium + "  High=" + high);
   }
 }
