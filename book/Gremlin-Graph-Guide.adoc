@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v278-preview, Feb 20, 2018
-// Tue Feb 20, 2018 14:59:18 CST
+v278-preview, Feb 21, 2018
+// Wed Feb 21, 2018 13:29:11 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
-//:Date:      Feb 20 2018
+//:Date:      Feb 21 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -5651,8 +5651,8 @@ the graph made it so easy to do.
 [source,groovy]
 ----
 // Flights from any Airport in Africa to any airport in the United States
-g.V().hasLabel('continent').has('code','AF').out().as('a')
-     .out().has('country','US').as('b').select('a','b').by('code')
+g.V().hasLabel('continent').has('code','AF').out().as('a').
+      out().has('country','US').as('b').select('a','b').by('code')
 ----
 
 We could also have started our query by looking at each airport and looking to
@@ -5663,7 +5663,7 @@ always be thinking about the most efficient way to write our queries.
 [source,groovy]
 ----
 // Gives same results but not as efficient
-g.V().hasLabel('airport').as('a').in('contains').has('code','AF')
+g.V().hasLabel('airport').as('a').in('contains').has('code','AF').
      .select('a').out().has('country','US').as('b').select('a','b').by('code')
 ----
 
