@@ -66,12 +66,21 @@ public class Iterate
 
     // Build an iterator of 30 projected maps from a random sample of airports.
     // Note the use of "__." before the call to id().
+    
     Iterator<Map<String,Object>> res2 = 
           g.V().hasLabel("airport").sample(sample_size).
                 project("id","iata","city").
                 by(__.id()).by("code").by("city");
-
     
+
+    // To experiment with the coin step you can use the code below.
+    /*
+    Iterator<Map<String,Object>> res2 = 
+          g.V().hasLabel("airport").coin(0.5).limit(sample_size).
+                project("id","iata","city").
+                by(__.id()).by("code").by("city");
+    */
+
     // For each value map display a few fields.
     // Note how for property values we have to process them as lists.
     
@@ -95,7 +104,7 @@ public class Iterate
     // Just for fun let's also see howthe sample was distributed.
     
     Map<String,Object> vmap2;
-    int low = 0,medium = 0,high = 0;
+    int low = 0, medium = 0, high = 0;
 
     System.out.println("\n*** Output from project() ***\n\n");
     System.out.format("%4s %5s  %5s","ID","IATA","CITY\n");
@@ -116,11 +125,11 @@ public class Iterate
                          vmap2.get("city"));
 
       // Track sample distribution                   
-      if (id < num_airports/3)
+      if (id < low_bar)
       {
         low += 1;
       }
-      else if (id < (num_airports/3)*2)
+      else if (id < med_bar)
       {
         medium += 1;
       }
