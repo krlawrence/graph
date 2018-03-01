@@ -21,6 +21,7 @@ Major new features in this release
 - Improved source highlighting for MOBI and EPUB versions.
 - Added more examples in various places.
 - General housekeeping and tightening up of some wording.
+- Added a gitignore file. PR #36
 
 ## Release 277 change history (Feb 11, 2018)
 
