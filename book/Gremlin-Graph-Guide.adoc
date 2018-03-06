@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v278-preview, Feb 21, 2018
-// Wed Feb 21, 2018 13:29:11 CST
+v278-preview, Mar 06, 2018
+// Tue Mar 06, 2018 11:51:05 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
-//:Date:      Feb 21 2018
+//:Date:      Mar 06 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -2177,11 +2177,12 @@ the two examples above could have been written as follows.
 g.V().hasLabel('airport').range(0,20).values('code')
 ----
 
-We can also limit based on time taken. The following query has a maximum limit of ten
-milliseconds. The query looks for routes from Austin (AUS) to London Heathrow
-(LHR). All the parts of this query are explained in detail later on in this
-book but I think what they do is fairly clear. The `repeat` step is explained in
-detail in the "<<sp>>" section.
+We can also limit a traversal by specifying a maximum amount of time that it is
+allowed to run for. The following query is restricted to a maximum limit of ten
+milliseconds. The query looks for routes from Austin (AUS) to London Heathrow (LHR).
+All the parts of this query are explained in detail later on in this book but I think
+what they do is fairly clear. The 'repeat' step is explained in detail in the
+"<<sp>>" section.
 
 [source,groovy]
 ----
