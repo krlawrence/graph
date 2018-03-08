@@ -73,23 +73,23 @@ public class GroupCounts
     // Count airports in the UK and Ireland by region also
     // using a side effect.
     System.out.println();
-    final Map<String, Long> usmap = new HashMap<>();
-    g.withSideEffect("m", usmap).
+    final Map<String, Long> eumap = new HashMap<>();
+    g.withSideEffect("m", eumap).
       V().has("code",P.within("UK","IE")).out().
           groupCount("m").by("region").iterate();
 
-    usmap.forEach((k,v)->System.out.format("%10s :%3d\n",k,v));
+    eumap.forEach((k,v)->System.out.format("%10s :%3d\n",k,v));
 
     // Count airports in the US by region and sort the results
     // by descending counts. This time the map is populated 
     // using the query result rather than as a side effect.
     System.out.println();
-    Map<Object, Long> usmap2 = new HashMap<>();
-    usmap2 = g.V().has("code","US").out().
+    Map<Object, Long> usmap = new HashMap<>();
+    usmap = g.V().has("code","US").out().
       groupCount().by("region").order(Scope.local).
       by(Column.values, Order.decr).next();  
 
-    usmap2.forEach((k,v)->System.out.format("%10s :%3d\n",k,v));
+    usmap.forEach((k,v)->System.out.format("%10s :%3d\n",k,v));
 
   }
 
