@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v278-preview, Mar 09, 2018
-// Fri Mar 09, 2018 12:54:20 CST
+// Fri Mar 09, 2018 13:52:03 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Mar 09 2018
@@ -5314,7 +5314,7 @@ The table below provides a summary of the available operators sorted alphabetica
 |log     | Natural logarithm (base 'e')
 |log10   | Logarithm (base 10)
 |log2    | Logarithm (base 2)
-|signum  | Returns the 'signum' function of the argument; zero if the argument is zero, 1.0f if the argument is greater than zero, -1.0f if the argument is less than zero.
+|signum  | Returns the 'signum' function of the argument; zero if the argument is zero, 1.0 if the argument is greater than zero, -1.0 if the argument is less than zero.
 |sin     | Sine of angle given in radians. 
 |sinh    | Hyperbolic sine
 |sqrt    | Square root
@@ -5568,9 +5568,7 @@ seven or eight runways are the outliers in this sample and would fall well outsi
 the standard deviation from the mean that we calculated.
 
 Just for fun, let's use the same basic set of steps once again but this time to find
-the standard deviation for the number of outgoing routes in the graph. This time we
-get a much bigger number back as the result. This reflects the differing distribution
-of routes between major and more minor airports.
+the standard deviation for the number of outgoing routes in the graph. 
 
 As before we need to find the mean value for the data set. This time we need to find
 the average number of outgoing routes in the graph. The airport count remains the
@@ -5600,6 +5598,14 @@ g.withSideEffect("m",mean).
 
 28.356862649682018
 ----
+
+This time we got a much bigger number back as the result compared to when we looked
+at runways. This reflects the differing distribution of routes between major and more
+minor airports. 
+
+There are a lot of other operators that I have not provided examples for but
+hopefully this section gives you a feel for ways that the 'math' step can be used to
+create interesting queries.
 
 [[sx]]
 More examples using concepts we have covered so far
