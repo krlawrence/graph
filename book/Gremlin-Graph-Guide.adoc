@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v278-preview, Mar 10, 2018
-// Sat Mar 10, 2018 06:39:08 CST
+// Sat Mar 10, 2018 06:48:07 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Mar 10 2018
@@ -60,7 +60,7 @@ INTRODUCTION
 
 The title of this book could equally well be '"A getting started guide for users of
 graph databases and the Gremlin query language featuring hints, tips and sample
-queries"'. It turns out that is a bit too too long to fit on one line for a heading
+queries"'. It turns out that is a bit too long to fit on one line for a heading
 but in a single sentence that describes the focus of this work pretty well.
 
 I have resisted the urge to try and cover every single feature of TinkerPop one after
