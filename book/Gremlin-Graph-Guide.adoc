@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v278-preview, Mar 09, 2018
-// Fri Mar 09, 2018 13:52:03 CST
+v278-preview, Mar 10, 2018
+// Sat Mar 10, 2018 06:39:08 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
-//:Date:      Mar 09 2018
+//:Date:      Mar 10 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -5917,12 +5917,13 @@ Here are the results we get from running the query.
 BEYOND BASIC QUERIES
 --------------------
 
-So far we have looked mostly at querying the graph. In the following sections we will
-look at some other topics that it is also important to be familiar with when working
-with Gremlin such as mixing in some Groovy or Java code with your queries, adding
-vertices (vertices),and edges and properties to a graph and also how to delete them. We
-will also look at how to create a sub-graph and how to save a graph to and XML or
-JSON file.
+So far we have looked mostly at querying an existing graph. In the following sections
+we will look at many other topics that it is also important to be familiar with when
+working with Gremlin. These topics include mixing in some Groovy or Java code with
+your queries, as well as adding vertices (nodes), edges and properties to a graph and
+also deleting them. We will also look at how to create a sub-graph and how to save a
+graph to an XML or JSON file and a lot more. Let's start off with a short discussion
+of query layout, reserved words and data modelling.
 
 [[indents]]
 A word about layout and indentation
