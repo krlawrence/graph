@@ -15,8 +15,10 @@ Major new features in this release
 - Improved coverage of `flatMap`
 - Added coverage of `toSet` in section 3.
 - Expanded the `vertex degree` section.
-- Improved text and examples in section 5.
-- Examples in section 5 all based on the the same air routes graph now (some used to reflect an older version).
+- Improved existing text and examples in section 5.
+- Added more examples to section 5
+- Improved coverage of `indexed` and `withIndex`
+- Examples in section 5 all based on the same air routes graph now (some used to reflect an older version).
 - Added to the `JanusGraph GeoSpatial` section and moved the
  section up a hierarchy level.
 - Added a new sample that demonstrates geospatial queries.

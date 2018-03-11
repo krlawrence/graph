@@ -10374,6 +10374,38 @@ is that three of the top five busiest single runway airports are in England.
 [apt:XIY,city:Xianyang,routes:105]
 ----
 
+[[canadamost]]
+Airports with the most routes in Canada
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following query finds the top 10 airports in Canada sorted by descending number
+of outgoing routes. Just for fun, this time I used the 'index' method to include a
+one based index as part of the results.
+
+[source,groovy]
+----
+g.V().has('country','code','CA').out().
+      order().by(out().count(),decr).limit(10).
+      project('apt','city','routes').
+      by('code').by('city').by(out().count()).indexed(1)
+----
+
+Here are the results of running the query along with the index that we added.
+
+[source,groovy]
+----
+[1,[apt:YYZ,city:Toronto,routes:181]]
+[2,[apt:YUL,city:Montreal,routes:101]]
+[3,[apt:YVR,city:Vancouver,routes:94]]
+[4,[apt:YYC,city:Calgary,routes:68]]
+[5,[apt:YEG,city:Edmonton,routes:41]]
+[6,[apt:YHZ,city:Halifax,routes:40]]
+[7,[apt:YWG,city:Winnipeg,routes:32]]
+[8,[apt:YOW,city:Ottawa,routes:31]]
+[9,[apt:YZF,city:Yellowknife,routes:20]]
+[10,[apt:YQB,city:Quebec City,routes:19]]
+----
+
 [[ukdist]]
 Distribution of UK airports
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -13094,20 +13126,49 @@ g.V().hasLabel('airport').where(out().count().is(gt(a-50))).
 
 
 [[withindex]]
-Including an index value in results - introducing 'withIndex'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Including an index with results - introducing 'withIndex' and 'index'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If for any reason you wanted an index value included as part of the results from a
-query you can use the 'withIndex' method as shown below.
+query you can use the Groovy 'withIndex' or 'index' methods as shown below. The
+'withIndex' method adds the index value at the end of a list whereas the 'indexed'
+method adds it at the start. You can provide a starting index value as a parameter.
+If not value is provided the default value for the first index will be zero.
+
 
 [source,groovy]
 ----
-a=g.V().has('region','US-OK').values('code').withIndex().toList()
+g.V().has('region','US-OK').values('code').withIndex()
 
 [OKC,0]
 [TUL,1]
 [LAW,2]
 [SWO,3]
+----
+Here is the same query but using 1 as the starting index.
+
+[source,groovy]
+----
+g.V().has('region','US-OK').values('code').withIndex(1)
+
+[OKC,1]
+[TUL,2]
+[LAW,3]
+[SWO,4]
+----
+
+
+Below is the query used again but this time with the 'indexed' method being used to
+generate the index value.
+
+[source,groovy]
+----
+g.V().has('region','US-OK').values('code').indexed(1)
+
+[1,OKC]
+[2,TUL]
+[3,LAW]
+[4,SWO]
 ----
 
 
