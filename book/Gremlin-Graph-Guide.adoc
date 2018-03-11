@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v278-preview, Mar 11, 2018
-// Sun Mar 11, 2018 08:39:30 CDT
+// Sun Mar 11, 2018 08:53:12 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Mar 11 2018
@@ -10355,7 +10355,13 @@ g.V().or(has('airport','runways',1),has('code','LGW')).
       order().by(out().count(),decr).limit(10).
       project('apt','city','routes').
       by('code').by('city').by(out().count())
+----
 
+When we run the query here are the results we get back. One interesting observation
+is that three of the top five busiest single runway airports are in England.
+
+[source,groovy]
+----
 [apt:LGW,city:London,routes:200]
 [apt:STN,city:London,routes:186]
 [apt:CTU,city:Chengdu,routes:124]
