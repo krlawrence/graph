@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v278-preview, Mar 11, 2018
-// Sun Mar 11, 2018 10:16:42 CDT
+// Sun Mar 11, 2018 10:42:52 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Mar 11 2018
@@ -10587,7 +10587,7 @@ interested in as follows. Only airports with 105 outgoing routes are selected.
 
 [source,groovy]
 ----
-// Which of these airports have 110 outgoing routes?
+// Which of these airports have 105 outgoing routes?
 g.V().hasLabel('airport').
       group().by(out().count()).by('code').next().get(105L)
 
