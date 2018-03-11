@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v278-preview, Mar 11, 2018
-// Sun Mar 11, 2018 08:53:12 CDT
+// Sun Mar 11, 2018 10:16:42 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Mar 11 2018
@@ -5607,7 +5607,53 @@ There are a lot of other operators that I have not provided examples for but
 hopefully this section gives you a feel for ways that the 'math' step can be used to
 create interesting queries.
 
+[[withindex]]
+Including an index with results - introducing 'withIndex' and 'index'
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If for any reason you wanted an index value included as part of the results from a
+query you can use the Groovy 'withIndex' or 'index' methods as shown below. The
+'withIndex' method adds the index value at the end of a list whereas the 'indexed'
+method adds it at the start. You can provide a starting index value as a parameter.
+If no value is provided the default value for the first index will be zero.
+
+
+[source,groovy]
+----
+g.V().has('region','US-OK').values('code').withIndex()
+
+[OKC,0]
+[TUL,1]
+[LAW,2]
+[SWO,3]
+----
+Here is the same query but using 1 as the starting index.
+
+[source,groovy]
+----
+g.V().has('region','US-OK').values('code').withIndex(1)
+
+[OKC,1]
+[TUL,2]
+[LAW,3]
+[SWO,4]
+----
+
+
+Below is the query used again but this time with the 'indexed' method being used to
+generate the index value.
+
+[source,groovy]
+----
+g.V().has('region','US-OK').values('code').indexed(1)
+
+[1,OKC]
+[2,TUL]
+[3,LAW]
+[4,SWO]
+----
 [[sx]]
+
 More examples using concepts we have covered so far
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -13125,51 +13171,6 @@ g.V().hasLabel('airport').where(out().count().is(gt(a-50))).
 
 
 
-[[withindex]]
-Including an index with results - introducing 'withIndex' and 'index'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-If for any reason you wanted an index value included as part of the results from a
-query you can use the Groovy 'withIndex' or 'index' methods as shown below. The
-'withIndex' method adds the index value at the end of a list whereas the 'indexed'
-method adds it at the start. You can provide a starting index value as a parameter.
-If not value is provided the default value for the first index will be zero.
-
-
-[source,groovy]
-----
-g.V().has('region','US-OK').values('code').withIndex()
-
-[OKC,0]
-[TUL,1]
-[LAW,2]
-[SWO,3]
-----
-Here is the same query but using 1 as the starting index.
-
-[source,groovy]
-----
-g.V().has('region','US-OK').values('code').withIndex(1)
-
-[OKC,1]
-[TUL,2]
-[LAW,3]
-[SWO,4]
-----
-
-
-Below is the query used again but this time with the 'indexed' method being used to
-generate the index value.
-
-[source,groovy]
-----
-g.V().has('region','US-OK').values('code').indexed(1)
-
-[1,OKC]
-[2,TUL]
-[3,LAW]
-[4,SWO]
-----
 
 
 [[beyond]]
