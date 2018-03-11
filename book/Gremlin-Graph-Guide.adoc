@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v278-preview, Mar 10, 2018
-// Sat Mar 10, 2018 18:15:30 CST
+v278-preview, Mar 11, 2018
+// Sun Mar 11, 2018 08:39:30 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
-//:Date:      Mar 10 2018
+//:Date:      Mar 11 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -10353,18 +10353,19 @@ runway airport. This also makes the query a bit more interesting!
 ----
 g.V().or(has('airport','runways',1),has('code','LGW')).
       order().by(out().count(),decr).limit(10).
-      project('airport','routes').by('code').by(out().count())
+      project('apt','city','routes').
+      by('code').by('city').by(out().count())
 
-[airport:LGW,routes:200]
-[airport:STN,routes:186]
-[airport:CTU,routes:124]
-[airport:LIS,routes:116]
-[airport:BHX,routes:109]
-[airport:SAW,routes:109]
-[airport:KMG,routes:107]
-[airport:ALC,routes:106]
-[airport:CKG,routes:106]
-[airport:XIY,routes:105]
+[apt:LGW,city:London,routes:200]
+[apt:STN,city:London,routes:186]
+[apt:CTU,city:Chengdu,routes:124]
+[apt:LIS,city:Lisbon,routes:116]
+[apt:BHX,city:Birmingham,routes:109]
+[apt:SAW,city:Istanbul,routes:109]
+[apt:KMG,city:Kunming,routes:107]
+[apt:ALC,city:Alicante,routes:106]
+[apt:CKG,city:Chongqing,routes:106]
+[apt:XIY,city:Xianyang,routes:105]
 ----
 
 [[ukdist]]
