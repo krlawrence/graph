@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v278-preview, Mar 10, 2018
-// Sat Mar 10, 2018 06:48:07 CST
+// Sat Mar 10, 2018 18:15:30 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Mar 10 2018
@@ -10335,6 +10335,36 @@ The query below will figure out just how many fall into that category.
 g.V().hasLabel('airport').where(out().count().is(eq(1))).count()
 
 770
+----
+
+[[onerunway]]
+Single runway airports with the most routes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+It is interesting to look at how busy some single runway airports are. The query
+below looks for the ten airports with just one runway that have the most outgoing
+routes.  You will notice that I have included London Gatwick in the query using an
+'or' step.  This is because while technically Gatwick is listed in the graph as an
+airport with two runways, in practice the second runway is primarily used as a
+taxiway and reserved for emergency use only. Therefore, Gatwick is really a single
+runway airport. This also makes the query a bit more interesting!
+
+[source,groovy]
+----
+g.V().or(has('airport','runways',1),has('code','LGW')).
+      order().by(out().count(),decr).limit(10).
+      project('airport','routes').by('code').by(out().count())
+
+[airport:LGW,routes:200]
+[airport:STN,routes:186]
+[airport:CTU,routes:124]
+[airport:LIS,routes:116]
+[airport:BHX,routes:109]
+[airport:SAW,routes:109]
+[airport:KMG,routes:107]
+[airport:ALC,routes:106]
+[airport:CKG,routes:106]
+[airport:XIY,routes:105]
 ----
 
 [[ukdist]]
