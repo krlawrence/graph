@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v278-preview, Mar 11, 2018
-// Sun Mar 11, 2018 10:42:52 CDT
+v278-preview, Mar 12, 2018
+// Mon Mar 12, 2018 09:49:56  CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
-//:Date:      Mar 11 2018
+//:Date:      Mar 12 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -2511,7 +2511,7 @@ listr = g.V().has('airport','region','US-TX').
 2,7,5,3,4,3,3,3,3,4,2,3,2,3,2,2,3,2,1,3,2,3,4,3,4,2
 ----
 
-Now let's create a set and observes the different result we get back.
+Now let's create a set and observe the different result we get back.
 
 [source,groovy]
 ----
@@ -2520,6 +2520,21 @@ setr = g.V().has('airport','region','US-TX').
              values('runways').toSet().join(',')
 
 1,2,3,4,5,7
+----
+
+As a side note, in many cases we can use the 'dedup' step to remove duplicates from a
+result. However, it is worth knowing that a set can be created as a result type as in
+some cases this can be very useful. The example below performs the same 'runways'
+query using a 'dedup' step. I added an 'order' step so that it is easier to compare
+the results with the previous query.
+
+[source,groovy]
+----
+// Create a list of runway counts in Texas (no duplicates)
+g.V().has('airport','region','US-TX').
+      values('runways').dedup().order().fold()
+
+[1,2,3,4,5,7]
 ----
 
 Finally, let's create the list again, but without the call to 'join', as
@@ -2774,7 +2789,7 @@ g.V().where(label().is(eq('airport'))).count()
 // Or using the label key word
 g.V().has(label,'airport').count()
 
-// But you would perhaps us the  hasLabel() method in this case instead
+// But you would perhaps use the  hasLabel() method in this case instead
 g.V().hasLabel('airport').count()
 
 // How many non airport vertices are there?
@@ -2783,7 +2798,12 @@ g.V().where(label().is(neq('airport'))).count()
 
 // Again, it might be more natural to actually write this query like this:
 g.V().not(hasLabel('airport')).count()
+----
 
+The same concepts apply equally well when looking at edge labels as shown below.
+
+[source,groovy]
+----
 // The same basic concepts apply equally to edges
 g.E().has(label,'route').count()
 
@@ -2934,12 +2954,26 @@ section.
 Basic statistical and numerical operations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The following queries demonstrate concepts such as calculating the number of a
+The following queries demonstrate concepts such as calculating the amount of a
 particular item that is present in the graph, calculating the average (mean) of a set
-of values and calculating a maximum or minimum value. We will dig a bit deeper into
-some of these capabilities and explain in more detail in the "<<meanmode>>" section
-of the book. Some of these examples also take advantage of the 'local' step that
-was introduced in the previous section.
+of values and calculating a maximum or minimum value. The table below summarizes the
+available steps.
+
+.Basic statistical steps
+[cols="^1,4"]
+|==============================================================================
+|count   | Count how many of something exists.
+|sum     | Sum (add up) a collection of values.
+|max     | Find the maximum value in a collection of values.
+|min     | Find the minimum value in a collection of values.
+|mean    | Find the mean (average) value in a collection.
+|==============================================================================
+
+We will dig a bit deeper into some of these capabilities and explain in more detail
+in the "<<meanmode>>" section of the book. Some of these examples also take advantage
+of the 'local' step that was introduced in the previous section. A way of calculating
+the standard deviation within a data set is presented later in the "<<mathstep>>"
+section.
 
 [source,groovy]
 ----
@@ -2948,13 +2982,24 @@ g.V().has("airport","code","AUS").out().count()
 
 // Sum of values - total runways of all airports
 g.V().hasLabel('airport').values('runways').sum()
+----
 
+The 'mean' step allows us to find the mean (average) value in a data set.
+
+[source,groovy]
+----
 // Statistical mean (average) value - average number of runways per airport
 g.V().hasLabel('airport').values('runways').mean()
 
 // Average number of routes to and from an airport
 g.V().hasLabel('airport').local(both('route').count()).mean()
+----
 
+The following queries find maximum and minimum values using the 'max' and 'min'
+steps.
+
+[source,groovy]
+----
 //maximum value - longest runway
 g.V().hasLabel('airport').values('longest').max()
 
