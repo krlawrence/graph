@@ -3012,7 +3012,7 @@ g.V().hasLabel('airport').values('longest').min()
 
 [[tranges]]
 Testing values and ranges of values
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We have already seen some ways of testing whether a value is within a certain range.
 Gremlin provides a number of different steps that we can use to do range testing. The
@@ -3511,8 +3511,8 @@ OSR
 ----
 
 [[sort]]
-Sorting things
-~~~~~~~~~~~~~~
+Sorting things - introducing 'order'
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can use 'order' to sort things in either ascending (the default) or descending
 order.Note that the sort does not have to be the last step of a query. It is
