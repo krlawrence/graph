@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v278-preview, Mar 13, 2018
-// Tue Mar 13, 2018 16:23:56 CDT
+// Tue Mar 13, 2018 16:55:02 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Mar 13 2018
@@ -2364,6 +2364,44 @@ g.V().has('region','GB-ENG').dedup().by('runways').
       values('code','runways').fold()
 
 [LHR,2,LCY,1,BLK,3,LEQ,4]
+----
+
+There is one more form of the 'dedup' step. In this form, one or more strings
+representing labelled steps are provided as parameters. Take a look first of all at
+the query below. It finds vertex 'V(3)' and labels it '+++'+++a+++'+++'. It then
+finds vertex 'V(4)' and labels it '+++'+++c+++'+++'. Next it finds all the vertices
+connected to V(4) and labels those '+++'+++c+++'+++'. Only the first 10 are
+retrieved. Lastly a 'select' step is used to return the results. As expected vertices
+3 and 4 are present in all of the results.
+
+[source,groovy]
+----
+g.V(3).as('a').V(4).as('c').both().as('b').limit(10).
+  select('a','b','c')
+
+[a:v[3],b:v[1],c:v[4]]
+[a:v[3],b:v[3],c:v[4]]
+[a:v[3],b:v[5],c:v[4]]
+[a:v[3],b:v[6],c:v[4]]
+[a:v[3],b:v[7],c:v[4]]
+[a:v[3],b:v[8],c:v[4]]
+[a:v[3],b:v[9],c:v[4]]
+[a:v[3],b:v[10],c:v[4]]
+[a:v[3],b:v[11],c:v[4]]
+[a:v[3],b:v[12],c:v[4]]
+----
+
+Taking the same query but adding a 'dedup' step that references the '+++'+++a+++'+++'
+and '+++'+++c+++'+++' labels, removes all duplicate references that include those
+vertices from the results so this time even though a 'limit' of 10 is used we only
+actually get one result back.
+
+[source,groovy]
+----
+g.V(3).as('a').V(4).as('c').both().as('b').limit(10).
+  dedup('a','c').select('a','b','c')
+
+[a:v[3],b:v[1],c:v[4]]
 ----
 
 A bit later we will take a look at the concept of 'local' scope when working with
