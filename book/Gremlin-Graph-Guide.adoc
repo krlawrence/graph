@@ -2333,9 +2333,10 @@ Removing duplicates - introducing 'dedup'
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 It is often desirable to remove duplicate values from query results. The 'dedup' step
-allows us to do this. In the example below, the number of runways for every airport
-in England is queried.  Note that in the returned results there are many duplicate
-values.
+allows us to do this. If you are already familiar with Groovy collections, the
+'dedup' step is similar to the 'unique' method that Groovy provides. In the example
+below, the number of runways for every airport in England is queried.  Note that in
+the returned results there are many duplicate values.
 
 [source,groovy]
 ----
@@ -6312,15 +6313,16 @@ you would expect to have available while writing Groovy or Java programs are als
 available to you as you work with the Gremlin Console. You can intermix additional
 features from Groovy and Java classes along with the features provided by the
 TinkerPop 3 classes as needed. This capability makes Gremlin additionally powerful.
-You can also take advantages of these features when working with Gremlin Server over HTTP and with
-other TinkerPop based Graph services like IBM Graph with the caveat that some
-features may be blocked if viewed as a potential security risk to the server.
+You can also take advantage of these features when working with Gremlin Server and
+with other TinkerPop enabled graph services with the caveat that some features may be
+blocked if viewed as a potential security risk to the server or simply because they
+are not supported.
 
 Every Gremlin query we have demonstrated so far is also, in reality, valid Groovy. We
 have already shown examples of storing values into variables and looping using Groovy
 constructs as part of a single or multi part Gremlin query.
 
-In this section we are going to go one step further and actualaly define some
+In this section we are going to go one step further and actually define some
 methods, using Groovy syntax, that can be run while still inside the Gremlin Console.
 By way of a simple example, let's define a method that will tell us how far apart two
 airports are and then invoke it.
