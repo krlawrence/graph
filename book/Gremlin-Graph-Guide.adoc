@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v278-preview, Mar 13, 2018
-// Tue Mar 13, 2018 07:35:51 CDT
+// Tue Mar 13, 2018 08:57:14 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Mar 13 2018
@@ -11287,7 +11287,7 @@ g.V().not(bothE()).count()
 ----
 
 The queries above provide a nice shorthand way of writing queries that we could also
-write using 'where' steps. As shown below?
+write using 'where' steps. As shown below.
 
 [source,groovy]
 ----
