@@ -7,7 +7,7 @@ Starting with the v275 release, this file will contain a record of the major cha
 Major new features in this release
 - Added a new section on measuring query performance
 - Added coverage of the new `math` step.
-- Added a new Java sample that demonstrates the `math` step.
+- Added a new Java sample that demonstrates the `math` step (StdDev.java).
 - Added coverage of TinkerGraph indexing
 - Added to the `collections` section.
 - Added a new `OLTP vs OLAP` section.
@@ -23,6 +23,8 @@ Major new features in this release
 - Improved coverage of `indexed` and `withIndex`
 - Moved `indexed` and `withIndex` material up to Section 3 (from 5)
 - Examples in section 5 all based on the same air routes graph now (some used to reflect an older version).
+- Added a new Java sample GroupCounts.java
+- Added a new Java sample that explores the `sample` step (Iterate.java)
 - Added to the `JanusGraph GeoSpatial` section and moved the
  section up a hierarchy level.
 - Added a new Java sample that demonstrates geospatial queries.
