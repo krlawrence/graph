@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v278-preview, Mar 12, 2018
-// Mon Mar 12, 2018 17:53:24 CDT
+v278-preview, Mar 13, 2018
+// Tue Mar 13, 2018 07:35:51 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
-//:Date:      Mar 12 2018
+//:Date:      Mar 13 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -2364,6 +2364,14 @@ g.V().has('region','GB-ENG').dedup().by('runways').
 
 [LHR,2,LCY,1,BLK,3,LEQ,4]
 ----
+
+A bit later we will take a look at the concept of 'local' scope when working with
+traversals. There are some examples of 'local' scope being used in conjunction with
+'dedup' in the "<<localcollect>>" section.
+
+It is also possible to use 'sets' to achieve similar results as we shall see in some
+of the following sections such as the "<<setsandlists>> section that is coming up
+soon.
 
 [[vm]]
 Using 'valueMap' to explore the properties of a vertex or element
@@ -8212,6 +8220,35 @@ g.V().has('airport','country','IE').
       group().by('code').by('runways').select(keys).range(local,3,5)
 
 [KIR,ORK]
+----
+
+Lastly, let's take a look at how 'local' scope can be used with a 'dedup' step. The
+query below finds airports in the US and produces a sorted list of the unique region
+codes by only allowing one airport from each region to proceed to the next steps of
+the traversal.
+
+[source,groovy]
+----
+g.V().has('country','US').dedup().by('region').values('region').order().fold() 
+----
+
+The rewritten version of the query below allows the region codes for every airport to
+be collected and then the 'dedup' is applied to the resultant collection using
+'local' scope. The prior query is likely to be the more efficient way of doing this
+but I wanted to make it clear that existing collections of values can have 'dedup'
+applied to them using 'local' scope.
+
+[source,groovy]
+----
+g.V().has('country','US').values('region').order().fold().dedup(local)
+
+----
+
+When either query is run, here are the results that are returned.
+
+[source,groovy]
+----
+[US-AK,US-AL,US-AR,US-AZ,US-CA,US-CO,US-CT,US-DC,US-DE,US-FL,US-GA,US-HI,US-IA,US-ID,US-IL,US-IN,US-KS,US-KY,US-LA,US-MA,US-MD,US-ME,US-MI,US-MN,US-MO,US-MS,US-MT,US-NC,US-ND,US-NE,US-NH,US-NJ,US-NM,US-NV,US-NY,US-OH,US-OK,US-OR,US-PA,US-RI,US-SC,US-SD,US-TN,US-TX,US-UT,US-VA,US-VT,US-WA,US-WI,US-WV,US-WY]
 ----
 
 In the next section we will continue our look at Gremlin's collections and how they
