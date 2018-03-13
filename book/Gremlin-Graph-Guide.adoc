@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v278-preview, Mar 13, 2018
-// Tue Mar 13, 2018 12:48:57 CDT
+// Tue Mar 13, 2018 16:23:56 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Mar 13 2018
@@ -8013,6 +8013,15 @@ map where airport codes are the keys and their city names are the values.
 g.V().hasLabel('airport').limit(5).group().by('code').by('city')
 
 [BNA:[Nashville],ANC:[Anchorage],BOS:[Boston],ATL:[Atlanta],AUS:[Austin]]
+----
+
+We can use a 'count' step with 'local' scope to find out how big the collection is.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').limit(5).group().by('code').by('city').count(local)
+
+5
 ----
 
 The queries below extract the keys and values from the map that the 'group' step
