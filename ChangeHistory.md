@@ -7,6 +7,7 @@ Starting with the v275 release, this file will contain a record of the major cha
 Major new features in this release
 - Added a new section on measuring query performance
 - Added coverage of the new `math` step.
+- Added a new Java sample that demonstrates the `math` step.
 - Added coverage of TinkerGraph indexing
 - Added to the `collections` section.
 - Added a new `OLTP vs OLAP` section.
@@ -16,6 +17,7 @@ Major new features in this release
 - Added coverage of `toSet` in section 3.
 - Expanded the `vertex degree` section.
 - Added a section to introduce the `dedup` step in Section 3.
+- Expanded the "Basic statistical and numerical operations"  section.
 - Improved existing text and examples in section 5.
 - Added more examples to section 5
 - Improved coverage of `indexed` and `withIndex`
@@ -23,7 +25,7 @@ Major new features in this release
 - Examples in section 5 all based on the same air routes graph now (some used to reflect an older version).
 - Added to the `JanusGraph GeoSpatial` section and moved the
  section up a hierarchy level.
-- Added a new sample that demonstrates geospatial queries.
+- Added a new Java sample that demonstrates geospatial queries.
 - Improved source highlighting for MOBI and EPUB versions.
 - Added more examples in various places.
 - General housekeeping and tightening up of some wording.
