@@ -5421,6 +5421,9 @@ have not attempted to give an example of every single operator being used but th
 examples provided should provide all of the basic building blocks you will need to
 incorporate mathematical operators into your own Gremlin queries.
 
+TIP: These features require that the graph database system you are using supports a
+TinkerPop version of 3.3.1 or higher.  
+
 [[arithmentic]]
 Performing simple arithmetic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -6681,6 +6684,67 @@ g.V().has('code','XYZ').as('a').V().has('code','DFW').addE('route').to('a')
 
 You will see a bigger example that uses 'as' to name steps in the "<<testgraph>>"
 section that is coming up soon.
+
+[[addlabeldynamic]]
+Using a traversal to determine a new label name
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In TinkerPop 3.3.1 a new capability was added to the 'addV' and 'addE' steps. This
+new capability allows us to use a traversal to determine what the label used by a new
+vertex or edge should be. Take a look at the query below. We have seen this type of
+query used earlier in the book. It simply tells us what label the vertex representing
+the Austin (AUS) airport has.
+
+[source,groovy]
+----
+g.V().has('code','AUS').label()
+
+airport
+----
+
+What the new capability added in TinkerPop 3.3.1 allows us to do is include the
+traversal above inside of an 'addV' step as shown below. The first string result
+returned by the provided traversal will be used as the label name.
+
+[source,groovy]
+----
+g.addV(V().has('code','AUS').label()).property('code','XYZ')
+
+v[53768]
+----
+
+We can inspect the new vertex using 'valueMap' to make sure that our label was
+correctly assigned.
+
+[source,groovy]
+----
+g.V(53768).valueMap(true)
+
+[id:53768,code:[XYZ],label:airport]
+----
+
+TIP: These features require that the graph database system you are using to supports
+a TinkerPop version of 3.3.1 or higher.
+
+We can now do something similar to dynamically work out what the label should be for
+an edge between our new airport and Austin.
+
+[source,groovy]
+----
+g.V(53768).addE(V().has('code','AUS').outE().limit(1).label()).
+           to(V().has('code','AUS'))
+
+e[53770][53768-route->3]
+----
+
+Again, we can use a 'valueMap' step to make sure our new edge label looks OK.
+
+[source,groovy]
+----
+g.E(53770).valueMap(true)
+
+[id:53770,label:route]
+----
 
 [[proptraversal]]
 Using a traversal to seed a property with a list

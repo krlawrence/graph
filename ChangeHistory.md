@@ -18,6 +18,7 @@ Major new features in this release
 - Expanded the `vertex degree` section.
 - Added a section to introduce the `dedup` step in Section 3.
 - Expanded the "Basic statistical and numerical operations"  section.
+- Added coverage of dynamically adding labels from `addV` and `addE`
 - Improved existing text and examples in section 5.
 - Added more examples to section 5
 - Improved coverage of `indexed` and `withIndex`
