@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v278-preview, Mar 13, 2018
-// Tue Mar 13, 2018 08:57:14 CDT
+// Tue Mar 13, 2018 12:48:57 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Mar 13 2018
@@ -6723,7 +6723,7 @@ g.V(53768).valueMap(true)
 [id:53768,code:[XYZ],label:airport]
 ----
 
-TIP: These features require that the graph database system you are using to supports
+TIP: These features require that the graph database system you are using supports
 a TinkerPop version of 3.3.1 or higher.
 
 We can now do something similar to dynamically work out what the label should be for
