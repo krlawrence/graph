@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v278-preview, Mar 13, 2018
-// Tue Mar 13, 2018 16:55:02 CDT
+// Tue Mar 13, 2018 18:23:51 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Mar 13 2018
@@ -2413,14 +2413,15 @@ of the following sections such as the "<<setsandlists>> section that is coming u
 soon.
 
 [[vm]]
-Using 'valueMap' to explore the properties of a vertex or element
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Using 'valueMap' to explore the properties of a vertex or edge
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-A call to 'valueMap' will return all of the properties of a vertex or element as an
-array of key:value pairs. Basically a hash map. You can also select which properties
-you want 'valueMap' to return if you do not want them all.  Each element in the map
-can be addressed using the name of the key. By default the ID and label are not
-included in the map unless a parameter of 'true' is provided.
+A call to 'valueMap' will return all of the properties of a vertex or edge as an
+array of key:value pairs. Basically what in Java terms is called a HashMap. You can
+also select which properties you want 'valueMap' to return if you do not want them
+all.  Each element in the map can be addressed using the name of the key. By default
+the ID and label are not included in the map unless a parameter of 'true' is
+provided.
 
 The query below will return the keys and values for all properties associated with
 the Austin airport vertex.
@@ -2440,8 +2441,8 @@ should look something like this.
 ----
 
 NOTE: Notice how each key like 'country' is followed by a value that is returned as
-an element of a list. This is because it is possible (for vertices but not for edges) to
-provide more than one property value for a given key by encoding them as a list.
+an element of a list. This is because it is possible (for vertices but not for edges)
+to provide more than one property value for a given key by encoding them as a list.
 
 Here are some more examples of how 'valueMap' can be used. If a parameter of 'true'
 is provided, then the results returned will include the ID and label of the element
@@ -2473,9 +2474,8 @@ difference, in the SQL World, between selecting just the columns you are interes
 in from a table rather than doing a 'SELECT *'.
 
 As shown above, you can specify which properties you want returned by supplying their
-names as parameters to the 'valueMap' step.
-For completeness, it is worth noting that you can also use a 'select' step to refine
-the results of a 'valueMap'.
+names as parameters to the 'valueMap' step.  For completeness, it is worth noting
+that you can also use a 'select' step to refine the results of a 'valueMap'.
 
 [source,groovy]
 ----
@@ -2500,6 +2500,17 @@ icao=[KAUS]
 id=3
 label=airport
 desc=[Austin Bergstrom International Airport]
+----
+
+You can also use 'valueMap' to inspect the properties associated with an edge. In
+this simple example, the edge with an ID of 5161 is examined. As you can see the edge
+represents a route and has a distance ('dist') property with a value of 1357 miles.
+
+[source,groovy]
+----
+g.E(5161).valueMap(true)
+
+[id:5161,dist:1357,label:route]
 ----
 
 [[var]]
