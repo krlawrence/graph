@@ -15,6 +15,7 @@ Major new features in this release
 - Improved coverage of `flatMap`
 - Added coverage of `toSet` in section 3.
 - Expanded the `vertex degree` section.
+- Added a section to introduce the `dedup` step in Section 3.
 - Improved existing text and examples in section 5.
 - Added more examples to section 5
 - Improved coverage of `indexed` and `withIndex`
