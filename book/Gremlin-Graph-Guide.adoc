@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v278-preview, Mar 13, 2018
-// Tue Mar 13, 2018 18:23:51 CDT
+v278-preview, Mar 14, 2018
+// Wed Mar 14, 2018 08:45:23 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
-//:Date:      Mar 13 2018
+//:Date:      Mar 14 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -3949,9 +3949,9 @@ g.V().hasLabel('airport').
 [98:[BUD,WAW],95:[STR,CRL]]
 ----
 
-We used the 'where' step a lot in the examples above. We will explain in more detail
-how the 'where' step works in the "<<wh>>" section which is coming up soon.
-
+The 'where' step was used lot in the examples above. Hopefully the effect of using it
+was clear. Nonetheless I will explain in more detail how the 'where' step works in
+the next section.
 
 
 [[wh]]
@@ -18566,3 +18566,5 @@ http://docs.janusgraph.org/latest/javadoc.html
 
 .Public mailing list for JanusGraph users
 https://groups.google.com/forum/#!forum/janusgraph-users
+
+// vim: set tw=85 cc=+1 wrap spell:
