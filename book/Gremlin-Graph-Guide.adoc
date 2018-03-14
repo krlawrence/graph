@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v278-preview, Mar 14, 2018
-// Wed Mar 14, 2018 12:33:04 CDT
+// Wed Mar 14, 2018 12:48:45 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Mar 14 2018
@@ -4837,7 +4837,8 @@ Dallas
 ----
 
 Note that the previous queries behave in the same way that the 'coalesce' step would
-behave if used as shown below.
+behave if used as shown below. In this case, an 'identity' step is used to return the
+prior vertex if the provided traversal does not return a result.
 
 [source,groovy]
 ----
