@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v278-preview, Mar 14, 2018
-// Wed Mar 14, 2018 08:45:23 CDT
+// Wed Mar 14, 2018 12:33:04 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Mar 14 2018
@@ -1514,7 +1514,7 @@ US-TX
 Dallas/Fort Worth International Airport
 ----
 
-The 'values' step can take parameters that tell it to only returned the values for
+The 'values' step can take parameters that tell it to only return the values for
 the provided key names. The queries below return the values of some specific
 properties.
 
@@ -4806,6 +4806,51 @@ Austin Bergstrom International Airport
 A bit later in the "<<coaladdv>>" section we will again use 'coalesce' to check to
 see if a vertex already exists before we try to add it.
 
+
+[[optional]]
+Returning one of two possible results - introducing 'optional'
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Sometimes it may be useful to return one of two results depending upon the outcome of
+an attempted traversal. The 'optional' step will return either the results of the
+provided traversal if there is a result or the result of the prior step if there is
+no result.
+
+In the example below, there is no direct route between Austin (AUS) and Sydney (SYD)
+so the Austin vertex is returned by the 'optional' step.
+
+[source,groovy]
+----
+g.V().has('code','AUS').optional(out().has('code','SYD')).values('city')
+
+Austin
+----
+
+However, there is a route between Austin and Dallas Fort Worth (DFW) so as the
+example below shows, this time the 'optional' step returns the DFW vertex.
+
+[source,groovy]
+----
+g.V().has('code','AUS').optional(out().has('code','DFW')).values('city')
+
+Dallas
+----
+
+Note that the previous queries behave in the same way that the 'coalesce' step would
+behave if used as shown below.
+
+[source,groovy]
+----
+g.V().has('code','AUS').
+      coalesce(out().has('code','SYD'),identity()).values('city')
+
+Austin
+
+g.V().has('code','AUS').
+      coalesce(out().has('code','DFW'),identity()).values('city')
+
+Dallas
+----
 
 [[otherv]]
 Other ways to explore vertices and edges using 'both', 'bothE', 'bothV' and 'otherV'
