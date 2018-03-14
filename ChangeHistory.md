@@ -2,7 +2,10 @@
 
 Starting with the v275 release, this file will contain a record of the major changes and updates made in each release.
 
+
 ## Future Release 278 change history (Date TBD)
+
+Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v277...master) between this release and the prior one.
 
 Major new features in this release
 - Added a new section on measuring query performance.
