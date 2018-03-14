@@ -8,6 +8,7 @@ Major new features in this release
 - Added a new section on measuring query performance.
 - Added coverage of the new `math` step. Issue #21.
 - Added a new Java sample that demonstrates the `math` step (StdDev.java).
+- Added coverage of the `optional` step. Issue #40.
 - Added coverage of TinkerGraph indexing.
 - Added to the `collections` section.
 - Added a new `OLTP vs OLAP` section.
