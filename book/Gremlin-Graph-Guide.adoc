@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v278-preview, Mar 15, 2018
-// Thu Mar 15, 2018 07:55:02 CDT
+// Thu Mar 15, 2018 14:21:51 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Mar 15 2018
@@ -4164,7 +4164,10 @@ g.V().hasLabel('airport').choose(values('code').is(within('AUS','DFW')),
                                  values('region')).limit(15)
 ----
 
-Sometimes it is very useful, as the query below demonstrates, to return constant
+Including a constant value - introducing 'constant'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Sometimes it is very useful, as the example below demonstrates, to return constant
 rather than derived values as part of a query. This query will return the string
 "some" if an airport has less than four runways or "lots" if it has more than four.
 
@@ -4236,6 +4239,10 @@ Here is what the output from the modified form of the query.
 [TSF,not so many]
 [HKG,lots]
 ----
+
+The 'constant' step is not limited to use within 'choose' steps. It can be used
+wherever needed. You will find many examples of its use throughout this book
+including in the "<<union>>" section.
 
 [[option]]
 Using 'option' to write case/switch type queries
@@ -4422,12 +4429,28 @@ g.V().has('airport','code','DFW').as('a').
 [v[8],221]
 ----
 
-Note that we could also use an 'identity' step to simplify the query a little.
+Note that we could also use an 'identity' step to simplify the query a little. The
+'identity' step simply returns the entity that was passed in to the current step of a
+traversal (in this case 'union') from the prior step. So, as shown below, using
+'identity' causes the vertex 'V[8]' representing the DFW airport from the prior 'has'
+step to be included in the result.
 
 [source,groovy]
 ----
 g.V().has('airport','code','DFW').
       union(identity(),out().count()).fold()
+
+[v[8],221]
+----
+
+Both of the examples above provide a shorthand way of writing what we could also have
+written as shown below.
+
+[source,groovy]
+----
+g.V().union(has('airport','code','DFW'),
+            has('airport','code','DFW').
+               out().count()).fold()
 
 [v[8],221]
 ----
@@ -4442,6 +4465,24 @@ that best fit the problem you are solving.
 g.V().has('airport','code','DFW').group().by().by(out().count())
 
 [v[8]:221]]
+----
+
+You can also use 'constant' steps within a 'union' step as the two examples below
+show.
+
+[source,groovy]
+----
+g.V(3).union(constant("Hello"),constant("There")).fold()
+
+[Hello,There]
+
+g.V(3).union(constant("Hello"),constant("There"),identity()).fold()
+
+[Hello,There,v[3]]
+
+g.V(3).union(constant("Hello"),constant("There"),values('city')).fold()
+
+[Hello,There,Austin]
 ----
 
 The following query uses a 'sample' step to select 10 airports at random from the
@@ -4539,9 +4580,9 @@ we want routes that meet any of the criteria:
 * Go to Paris and then Barcelona
 * Go to Edinburgh and then Rome 
 
-We also want to return the distances in each case. Note that you can union together as
-many sets of operations as you need to. In this example we combine the results of three
-sets of traversals.
+We also want to return the distances in each case. Note that you can union together
+as many items as you need to. In this example we combine the results of
+three sets of traversals.
 
 
 [source,groovy]
@@ -4549,12 +4590,15 @@ sets of traversals.
 // Returns any paths found along with the distances between airport pairs.
 
 g.V().has('city','London').has('region','GB-ENG').
-      union(outE().inV().has('city','Berlin').outE('route').inV().has('city','Lisbon').                         
-            path().by('code').by('dist').by('code').by('dist'),
-            outE().inV().has('city','Paris').outE('route').inV().has('city','Barcelona').
-            path().by('code').by('dist').by('code').by('dist'),
-            outE().inV().has('city','Edinburgh').outE('route').inV().has('city','Rome').
-            path().by('code').by('dist').by('code').by('dist'))                                
+      union(outE().inV().has('city','Berlin').
+                   outE('route').inV().has('city','Lisbon').                         
+                   path().by('code').by('dist').by('code').by('dist'),
+            outE().inV().has('city','Paris').
+                   outE('route').inV().has('city','Barcelona').
+                   path().by('code').by('dist').by('code').by('dist'),
+            outE().inV().has('city','Edinburgh').
+                   outE('route').inV().has('city','Rome').
+                   path().by('code').by('dist').by('code').by('dist'))                                
 ----
 
 Here is what we get back when we run our query
@@ -4571,13 +4615,12 @@ Here is what we get back when we run our query
 [LTN,236,CDG,533,BCN]      
 ----
 
-Here is one last example of using union. This query finds the total distance
-of all routes from any airport in Madrid to any airport anywhere and also does
-the same calculation but minus any routes that end up in any Paris airport. We have
-not yet seen the 'filter' step that is used below. It is one of the foundational
-Gremlin steps that many others such as 'where' build upon. A 'filter' step will only
-pass on to the next step in the query incoming elements that meet the criteria
-specified within the 'filter'.
+The next query finds the total distance of all routes from any airport in Madrid to
+any airport anywhere and also does the same calculation but minus any routes that end
+up in any Paris airport. We have not yet seen the 'filter' step that is used below.
+It is one of the foundational Gremlin steps that many others such as 'where' build
+upon. A 'filter' step will only pass on to the next step in the query incoming
+elements that meet the criteria specified within the 'filter'.
 
 [source,groovy]
 ----
@@ -4596,21 +4639,56 @@ filtered out from the calculation.
 396410
 ----
 
+It is worth noting that it is not required that every traversal inside of a union
+step returns a result. The returned results will include any of the traversals that
+did return something. The example below demonstrates this. Of course in practice you
+would not write this particular query this way.
+
+[source,groovy]
+----
+g.V().has('airport','code','AUS').
+      union(out().has('code','LHR'),
+            out().has('code','SYD'),
+            out().has('code','DFW')).values('code')
+----
+
+If we run the query, you will see that SYD is not part of the results as there is no
+route between Austin and Sydney.
+
+[source,groovy]
+----
+LHR
+DFW
+----
+
+For completeness, this query would more likely be written as follows rather than
+using a 'union'.
+
+[source,groovy]
+----
+g.V().has('airport','code','AUS').
+      out().has('code',within('LHR','DFW','SYD')).values('code')
+
+LHR
+DFW
+----
+
 [[sideeffect]]
 Using 'sideEffect' to do things on the side
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The 'sideEffect' step allows you to do some additional processing as part of a query
 without changing what gets passed on to the next stage of the query. The example
-below finds the airport vertex V(3) and then uses a 'sideEffect' to count the number of
-places that you can fly to from there and stores it in a traversal variable named 'a' 
-before counting how many places you can get to with one stop and storing that value in
-'b'. Note that there are other ways we could write this query but it demonstrates
-quite well how 'sideEffect' works.
+below finds the airport vertex V(3) and then uses a 'sideEffect' to count the number
+of places that you can fly to from there and stores it in a traversal variable named
+'a' before counting how many places you can get to with one stop and storing that
+value in 'b'. Note that there are other ways we could write this query but it
+demonstrates quite well how 'sideEffect' works.
 
 [source,groovy]
 ----
-g.V(3).sideEffect(out().count().store('a')).out().out().count().as('b').select('a','b')
+g.V(3).sideEffect(out().count().store('a')).
+       out().out().count().as('b').select('a','b')
 
 [a:[59],b:5911]
 ----
@@ -4852,6 +4930,7 @@ g.V().has('code','AUS').
 
 Dallas
 ----
+
 
 [[otherv]]
 Other ways to explore vertices and edges using 'both', 'bothE', 'bothV' and 'otherV'
