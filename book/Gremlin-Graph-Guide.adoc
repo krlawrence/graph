@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v278-preview, Mar 14, 2018
-// Wed Mar 14, 2018 12:48:45 CDT
+v278-preview, Mar 15, 2018
+// Thu Mar 15, 2018 07:55:02 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
-//:Date:      Mar 14 2018
+//:Date:      Mar 15 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -440,7 +440,7 @@ other TinkerPop 3 enabled graph stores.
 The Gremlin console
 ~~~~~~~~~~~~~~~~~~~
 
-The Gremlin Console is a fairly standard REPL (Read Execute Print Loop) shell.  It is
+The Gremlin Console is a fairly standard REPL (Read Eval Print Loop) shell.  It is
 based on the Groovy console and if you have used any of the other console
 environments such as those found with Scala, Python and Ruby you will feel right at
 home here. The Console offers a low overhead (you can set it up in seconds) and low
