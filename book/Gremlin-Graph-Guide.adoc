@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v278-preview, Mar 15, 2018
-// Thu Mar 15, 2018 14:21:51 CDT
+v278-preview, Mar 17, 2018
+// Sat Mar 17, 2018 08:39:33 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
-//:Date:      Mar 15 2018
+//:Date:      Mar 17 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -1961,14 +1961,18 @@ false
 Using 'as', 'select' and 'project' to name and refer back to prior steps
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Sometimes it is useful to be able to remember a point of a traversal and refer back
-to it later on. This ability was more essential in TinkerPop 2 than it is in
-TinkerPop 3 but it still has many uses.
+Sometimes it is useful to be able to remember (label) a point of a traversal and
+refer back to it later on. This ability was more essential in TinkerPop 2 than it is
+in TinkerPop 3 but it still has many uses. The query below uses an 'as' step to
+attach a label at two different parts of the traversal, each representing different
+vertices that were found. A 'select'
+step is later used to refer back to them. 
 
 [source,groovy]
 ----
-g.V().has('code','DFW').as('from').out().has('region','US-CA').as('to').
-      select('from','to').by('code')
+g.V().has('code','DFW').as('from').out().
+      has('region','US-CA').as('to').
+      select('from','to')
 ----
 
 This query, while a bit contrived, and in reality a poor substitute for using 'path'
@@ -1976,21 +1980,50 @@ returns the following results.
 
 [source,groovy]
 ----
+[from:v[8],to:v[13]]
+[from:v[8],to:v[23]]
+[from:v[8],to:v[24]]
+[from:v[8],to:v[26]]
+[from:v[8],to:v[28]]
+[from:v[8],to:v[42]]
+[from:v[8],to:v[151]]
+[from:v[8],to:v[181]]
+[from:v[8],to:v[244]]
+[from:v[8],to:v[384]]
+[from:v[8],to:v[877]]
+----
+
+In the example above only the vertices themselves were selected. We can also use a
+'by' modulator can be used to specify which property to retrieve from the selected
+vertices.
+
+[source,groovy]
+----
+g.V().has('code','DFW').as('from').out().
+      has('region','US-CA').as('to').
+      select('from','to').by('code')
+----
+
+This time the results contain the airport codes.
+
+[source,groovy]
+----
 [from:DFW,to:LAX]
-[from:DFW,to:ONT]
-[from:DFW,to:PSP]
 [from:DFW,to:SFO]
 [from:DFW,to:SJC]
 [from:DFW,to:SAN]
 [from:DFW,to:SNA]
 [from:DFW,to:OAK]
+[from:DFW,to:ONT]
+[from:DFW,to:PSP]
 [from:DFW,to:SMF]
 [from:DFW,to:FAT]
 [from:DFW,to:SBA]
 ----
 
 While the prior example was perhaps not ideal, it does show how 'as' and 'select'
-work. For completeness, here is the same query but using 'path'.
+work. For completeness, here is the same query but using 'path'. You will see the
+both the 'select' and 'path' steps used a lot throughout this book as appropriate.
 
 [source,groovy]
 ----
@@ -2014,8 +2047,13 @@ Which would produce the following results.
 [DFW,SBA]
 ----
 
+While the 'path' step is a lot more convenient, in some cases in can be very
+expensive in terms of memory and CPU usage so it is worth remembering these
+alternative techniques using 'as' and 'select'. That topic is discussed in more
+detail in the "<<pathwarn>> section.
+
 You can also give a point of a traversal multiple names and refer to each later on in
-the traversal/query.
+the traversal/query as shown below.
 
 [source,groovy]
 ----
@@ -2039,7 +2077,7 @@ This query, and the prior query, would return the following results.
 [source,groovy]
 ----
 [a:ATL,b:US-GA,c:232]
-[a:ANC,b:US-AK,c:39]
+[a:ANC,b:US-AK,c:39]                                                              
 [a:AUS,b:US-TX,c:59]
 [a:BNA,b:US-TN,c:55]
 [a:BOS,b:US-MA,c:129]
