@@ -153,7 +153,7 @@ queries. I will also discuss writing stand alone Java and Groovy applications
 as well as using the Gremlin Console. I even slipped a couple of Ruby examples in
 too!
 
-NOTE: In the first few sections of this this book I have mainly focussed on
+NOTE: In the first few sections of this book I have mainly focussed on
 showing the different types of query that you can issue using Gremlin. I have not
 tried to show all of the output that you will get back from entering these queries
 but have selectively shown examples of output. I go a lot deeper into things in
