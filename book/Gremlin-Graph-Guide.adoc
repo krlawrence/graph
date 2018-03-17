@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v278-preview, Mar 17, 2018
-// Sat Mar 17, 2018 12:48:28 CDT
+// Sat Mar 17, 2018 13:43:20 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Mar 17 2018
@@ -2114,6 +2114,39 @@ When we run the modified query, here is the output we get.
 [IATA:FLL,Region:US-FL,Routes:141]
 [IATA:IAD,Region:US-VA,Routes:136]
 ----
+
+It is actually possible using an 'as' step to give more than one part of a traversal
+the same label. In the example below, the label '+++'+++a+++'+++' is used twice but
+you will notice that when the label is selected only the last item added is returned.
+
+[source,groovy]
+----
+g.V(1).as('a').V(2).as('a').select('a')
+
+[2]
+----
+
+There are some special keywords that can be used in conjunction with the 'select'
+step in cases like this one. These keywords are 'first', 'last' and 'all' and their
+usage is shown below.
+
+[source,groovy]
+----
+g.V(1).as('a').V(2).as('a').select(first,'a')
+
+v[1]
+
+g.V(1).as('a').V(2).as('a').select(last,'a')
+
+v[2]
+
+g.V(1).as('a').V(2).as('a').select(all,'a')
+
+[v[1],v[2]]
+----
+
+Keywords such as these are documented in the "<<javastatics>>" section later on in
+the book.
 
 [[exedge]]
 Examining the edge between two vertices
