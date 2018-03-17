@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v278-preview, Mar 17, 2018
-// Sat Mar 17, 2018 08:39:33 CDT
+// Sat Mar 17, 2018 12:48:28 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Mar 17 2018
@@ -3720,7 +3720,8 @@ and the direction we want the sort to take, 'decr' into a single 'by' instructio
 [source,groovy]
 ----
 // List the 10 airports with the longest runways in decreasing order.
-g.V().hasLabel('airport').order().by('longest',decr).valueMap().select('code','longest').limit(10)
+g.V().hasLabel('airport').order().by('longest',decr).valueMap().
+      select('code','longest').limit(10)
 ----
 
 Here is the output from running the query. To save space I have split the results
@@ -4118,6 +4119,16 @@ number of runways that the Austin airport has.
 [code:[FLL],runways:[2]]
 [code:[SNA],runways:[2]]
 [code:[MSY],runways:[2]]
+----
+
+The ability to combine 'where' and 'by' steps together allows us to avoid having to
+write the previous query in more complicated ways such as the one shown below.
+
+[source,groovy]
+----
+g.V().has('code','AUS').as('a').out().as('b').
+      filter(select('a','b').by('runways').where('a',eq('b'))).
+      valueMap('code','runways')
 ----
 
 Let's imagine that we want to write a query to find all airports that have the same
