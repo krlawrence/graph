@@ -7059,7 +7059,7 @@ PIT
 Using 'inject' to specify new vertex ID values
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If the graph you are using supports user provided ID values, you can use an 'inject'
+If the graph database you are using supports user provided ID values, you can use an 'inject'
 step as one way to specify what you want the ID value of a new vertex to be. For
 example consider the example below.
 
