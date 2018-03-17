@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v278-preview, Mar 17, 2018
-// Sat Mar 17, 2018 13:43:20 CDT
+// Sat Mar 17, 2018 16:25:40 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Mar 17 2018
@@ -6837,10 +6837,10 @@ Adding vertices, edges and properties
 So far in this book we have largely focussed on loading a graph from a file and
 running queries against it. As you start to build your own graphs you will not always
 start with a graph saved as a text file in GraphML, CSV, GraphSON or some other
-format. You may start with an empty graph and incrementally add vertices and edges. Just
-as likely you may start with a graph like the air routes graph, read from a file, but
-want to add vertices, edges and properties to it over time. In this section we will
-explore various ways of doing just that.
+format. You may start with an empty graph and incrementally add vertices and edges.
+Just as likely you may start with a graph like the air routes graph, read from a
+file, but want to add vertices, edges and properties to it over time. In this section
+we will explore various ways of doing just that.
 
 Vertices and edges can be added directly to the graph using the 'graph' object or as
 part of a graph traversal. We will look at both of these techniques over course of
@@ -7055,6 +7055,40 @@ MEX
 PIT
 ----
 
+[[injectid]]
+Using 'inject' to specify new vertex ID values
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If the graph you are using supports user provided ID values, you can use an 'inject'
+step as one way to specify what you want the ID value of a new vertex to be. For
+example consider the example below.
+
+[source,groovy]
+----
+g.inject(99999L).addV().property(id,identity())
+
+v[99999]
+----
+
+You can also specify more than one ID value if you want to create multiple vertices.
+
+[source,groovy]
+----
+g.inject(99997L,99998L).addV().property(id,identity())
+
+v[99997]
+v[99998]
+----
+
+Note that if you try to create a vertex using an ID that already exists the operation
+will fail.
+
+[source,groovy]
+----
+g.inject(99999L).addV().property(id,identity())
+
+Vertex with id already exists: 99999
+----
 
 [[testgraph]]
 Quickly building a graph for testing
