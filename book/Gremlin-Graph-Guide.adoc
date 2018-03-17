@@ -2186,7 +2186,8 @@ modify our query to do that.
 
 [source,groovy]
 ----
-g.V().has('code','MIA').outE().as('e').inV().has('code','DFW').select('e').values('dist')
+g.V().has('code','MIA').outE().as('e').
+      inV().has('code','DFW').select('e').values('dist')
 ----
 
 If we run the query again we get back what we were looking for. We can see that it is
@@ -2202,7 +2203,8 @@ the same result by looking at the edge from Dallas to Miami.
 
 [source,groovy]
 ----
-g.V().has('code','MIA').inE().as('e').outV().has('code','DFW').select('e').values('dist')
+g.V().has('code','MIA').inE().as('e').
+      outV().has('code','DFW').select('e').values('dist')
 
 1120
 ----
@@ -2218,7 +2220,6 @@ the amount of data that is returned from a query. As shown in the examples
 below, this can be done using the 'limit' and 'tail' steps. A little later in
 this book we also introduce the 'coin' step that allows a pseudo random
 sample of the data to be returned.
-
 
 [source,groovy]
 ----
