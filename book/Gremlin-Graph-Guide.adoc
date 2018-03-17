@@ -1961,12 +1961,12 @@ false
 Using 'as', 'select' and 'project' to name and refer back to prior steps
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Sometimes it is useful to be able to remember (label) a point of a traversal and
-refer back to it later on. This ability was more essential in TinkerPop 2 than it is
-in TinkerPop 3 but it still has many uses. The query below uses an 'as' step to
-attach a label at two different parts of the traversal, each representing different
-vertices that were found. A 'select'
-step is later used to refer back to them. 
+Sometimes it is useful to be able to remember a point of a traversal by giving it a
+name (label) and refer to it later on in the same query. This ability was more
+essential in TinkerPop 2 than it is in TinkerPop 3 but it still has many uses. The
+query below uses an 'as' step to attach a label at two different parts of the
+traversal, each representing different vertices that were found. A 'select' step is
+later used to refer back to them. 
 
 [source,groovy]
 ----
@@ -1975,8 +1975,8 @@ g.V().has('code','DFW').as('from').out().
       select('from','to')
 ----
 
-This query, while a bit contrived, and in reality a poor substitute for using 'path'
-returns the following results.
+This query, while a bit contrived, and in this case probably a poor substitute for
+using 'path', returns the following results.
 
 [source,groovy]
 ----
@@ -1994,7 +1994,7 @@ returns the following results.
 ----
 
 In the example above only the vertices themselves were selected. We can also use a
-'by' modulator can be used to specify which property to retrieve from the selected
+'by' modulator to specify which property to retrieve from the selected
 vertices.
 
 [source,groovy]
@@ -2022,15 +2022,16 @@ This time the results contain the airport codes.
 ----
 
 While the prior example was perhaps not ideal, it does show how 'as' and 'select'
-work. For completeness, here is the same query but using 'path'. You will see the
-both the 'select' and 'path' steps used a lot throughout this book as appropriate.
+work. For completeness, here is the same query but using 'path'. You will see both
+the 'select' and 'path' steps used a lot throughout this book.
 
 [source,groovy]
 ----
 g.V().has('code','DFW').out().has('region','US-CA').path().by('code')
 ----
 
-Which would produce the following results.
+Which would produce the following results. Notice that this time the results do not
+have labels associated with them but are otherwise the same.
 
 [source,groovy]
 ----
