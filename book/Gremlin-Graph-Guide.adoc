@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v278-preview, Mar 17, 2018
-// Sat Mar 17, 2018 16:25:40 CDT
+v278-preview, Mar 18, 2018
+// Sun Mar 18, 2018 09:16:28 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
-//:Date:      Mar 17 2018
+//:Date:      Mar 18 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -1913,7 +1913,8 @@ book.
 
 [source,groovy]
 ----
-g.V().has('airport','code','LCY').outE().inV().path().by('code').by('dist')
+g.V().has('airport','code','LCY').outE().inV().
+      path().by('code').by('dist')
 ----
 
 When you run this modified version of the query, you will receive a set of results
@@ -1931,7 +1932,24 @@ back around to the first 'by' step and so on.
 
 [source,groovy]
 ----
-g.V().has('airport','code','LCY').outE().inV().path().by('code').by('dist').by('code')
+g.V().has('airport','code','LCY').outE().inV().
+      path().by('code').by('dist').by('code')
+----
+
+Sometimes it is necessary to use a 'by' modulator that has no parameter as shown
+below. This is because the item in the path is not an element containing multiple
+values but rather a single value, in this case, and integer.
+
+[source,groovy]
+----
+g.V().has('airport','code','LCY').out().limit(5).values('runways').
+      path().by('code').by('code').by()
+
+[LCY,AGP,2]
+[LCY,ABZ,4]
+[LCY,JER,1]
+[LCY,BSL,2]
+[LCY,BHD,1]
 ----
 
 There are a few things to be aware of when using 'path'. Those concerns are explained
@@ -11196,8 +11214,8 @@ Analysis of routes between Europe and the USA
 The next few queries show how you can use a graph like 'air-routes' do perform
 analysis on a particular industry segment. The following queries analyze the
 distribution and availability of routes between airports across Europe and airports
-in the United States. First of all let's just find out how many total routes there
-are between airports anywhere in Europe and airports in the USA.
+in the United States. First of all let's just find out how many total routes there are
+between airports anywhere in Europe and airports in the USA.
 
 [source,groovy]
 ----
@@ -12016,13 +12034,13 @@ worthy of note. First of all it uses the preferred 'has' technique again to test
 distance whereas in the previous query we used 'where'.  Also this time we just list
 the distance and the destination airport's code and we sort the end result using a
 'sort'. We also use 'select' and 'as' rather than the perhaps more succinct 'path'
-and 'by' to show a different way of achieving effectively the same results. The
-'path' and 'by' combination were introduced more recently into TinkerPop and I find
-that to be a more convenient syntax to use most of the time but both ways work and
-both have their benefits. We should also note that I show 'sort' being used here just
-to show a different way of ordering results, but in most cases we can re-write our
-query to use 'order'. You will find several examples of 'order' being used throughout
-this book. Order is introduced in the "<<sort>>" section.
+and 'by' to show a different way of achieving effectively the same results. The 'path'
+and 'by' combination were introduced more recently into TinkerPop and I find that to
+be a more convenient syntax to use most of the time but both ways work and both have
+their benefits. We should also note that I show 'sort' being used here just to show a
+different way of ordering results, but in most cases we can re-write our query to use
+'order'. You will find several examples of 'order' being used throughout this
+book. Order is introduced in the "<<sort>>" section.
 
 [source,groovy]
 ----
