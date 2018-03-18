@@ -2063,6 +2063,7 @@ As expected we now have an additional stop added to each of the journeys.
 
 Let's now modify the query to limit which parts of the path are returned.
 
+
 [source,groovy]
 ----
 g.V().has('airport','code','AUS').out().as('a').out().as('b').out().
@@ -2085,22 +2086,48 @@ As you can see, only the parts of the journey that we selected have been returne
 [EWR,YYZ]
 ----
 
+We could also have written the query as shown below to only show the results of each
+path up to a certain point.
+
+[source,groovy]
+----
+g.V().has('airport','code','AUS').as('a').out().out().as('b').out().
+      path().by('code').to('b').limit(10)
+----
+
+This time only the first three airports visited are included in each result.
+
+[source,groovy]
+----
+[AUS,EWR,YYZ]
+[AUS,EWR,YYZ]
+[AUS,EWR,YYZ]
+[AUS,EWR,YYZ]
+[AUS,EWR,YYZ]
+[AUS,EWR,YYZ]
+[AUS,EWR,YYZ]
+[AUS,EWR,YYZ]
+[AUS,EWR,YYZ]
+[AUS,EWR,YYZ]
+----
+
 By way of a side note, in cases like this where more than one of the results is
 identical you may want to remove duplicates. That is where the 'dedup' step is
 useful. You will find coverage of 'dedup' in the "<<dedup>>" section. However, as a
 little taste test, let's add a 'dedup' step to the end of our previous query and see
 what happens.
 
+[source,groovy]
 ----
-g.V().has('airport','code','AUS').out().as('a').out().as('b').out().
-      path().by('code').from('a').to('b').limit(10).dedup()
+g.V().has('airport','code','AUS').as('a').out().out().as('b').out().
+      path().by('code').to('b').limit(10).dedup()
 
-[EWR,YYZ]
+[AUS,EWR,YYZ]
 ----
 
 As you can see all of the duplicate results have now been removed. Hopefully this
 gives you a good basic understanding of the 'path' step. You will see it used a lot
-throughout the remainder of this book. However, here are a few things to be aware of
+throughout the remainder of this book. However, there are a few things to be aware of
 when using 'path'. Those concerns are explained in the <<pathwarn>> section a bit
 later.
 
