@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v278-preview, Mar 18, 2018
-// Sun Mar 18, 2018 10:29:09 CDT
+// Sun Mar 18, 2018 11:00:12 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Mar 18 2018
@@ -1944,7 +1944,13 @@ values but rather a single value, in this case, an integer.
 ----
 g.V().has('airport','code','LCY').out().limit(5).values('runways').
       path().by('code').by('code').by()
+----
 
+The results show the codes for the airports we visited along with a number
+representing the number of runways the second airport has.
+
+[source,groovy]
+----
 [LCY,AGP,2]
 [LCY,ABZ,4]
 [LCY,JER,1]
@@ -2034,7 +2040,7 @@ EWR,HKG]
 EWR,PEK]
 ----
 
-Obviously there are a lot of ways that 'from' and 'to' could be used. By way of one
+Obviously there are a lot of ways that 'from' and 'to' can be used. By way of one
 final example, let's create a version of the query with three 'out' steps. Note that
 a bit later we will see how 'repeat' can be used when the same steps need to be used
 repeatedly like this but that is not important to this specific example. 
@@ -2091,7 +2097,7 @@ path up to a certain point.
 
 [source,groovy]
 ----
-g.V().has('airport','code','AUS').as('a').out().out().as('b').out().
+g.V().has('airport','code','AUS').out().out().as('b').out().
       path().by('code').to('b').limit(10)
 ----
 
@@ -2112,7 +2118,7 @@ This time only the first three airports visited are included in each result.
 ----
 
 By way of a side note, in cases like this where more than one of the results is
-identical you may want to remove duplicates. That is where the 'dedup' step is
+identical, you may want to remove the duplicates. That is where the 'dedup' step is
 useful. You will find coverage of 'dedup' in the "<<dedup>>" section. However, as a
 little taste test, let's add a 'dedup' step to the end of our previous query and see
 what happens.
