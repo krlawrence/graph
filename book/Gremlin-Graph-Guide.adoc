@@ -3636,7 +3636,7 @@ g.V().hasLabel('airport').order().by('code').limit(20).values('code').fold()
 [AAE,AAL,AAN,AAQ,AAR,AAT,AAX,AAY,ABA,ABB,ABD,ABE,ABI,ABJ,ABL,ABM,ABQ,ABR,ABS,ABT]
 ----
 
-Here is a similar example to the previous two. We find all of the places you can flky
+Here is a similar example to the previous two. We find all of the places you can fly
 to from Austin (AUS) and sort the results, as before using the airport's IATA code,
 but this time we also include the ICAO code for each airport in the result set.
 
