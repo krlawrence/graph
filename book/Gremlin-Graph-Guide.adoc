@@ -3436,7 +3436,7 @@ everything will get picked (also not that useful!) and 0.5 means there is an eve
 50/50 chance that an item will get selected.
 
 The following query simply picks airports with a 50/50 coin toss and returns the 
-airport code for the first 20found.
+airport code for the first 20 found.
 
 [source,groovy]
 ----
