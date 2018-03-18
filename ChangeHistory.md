@@ -24,6 +24,8 @@ Major new features in this release
 - Added coverage of `toSet` in section 3.
 - Expanded the `vertex degree` section.
 - Updated the `valueMap` section.
+- Added examples of using `from` and `to` with `path`.
+- Added example of empty `by` modulator to `path` section.
 - Added a section showing how `inject` can supply ID values to `addV`.
 - Added a section to introduce the `dedup` step in Section 3.
 - Expanded the "Basic statistical and numerical operations"  section.

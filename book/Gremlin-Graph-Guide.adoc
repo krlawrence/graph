@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v278-preview, Mar 18, 2018
-// Sun Mar 18, 2018 09:16:28 CDT
+// Sun Mar 18, 2018 10:29:09 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Mar 18 2018
@@ -1938,7 +1938,7 @@ g.V().has('airport','code','LCY').outE().inV().
 
 Sometimes it is necessary to use a 'by' modulator that has no parameter as shown
 below. This is because the item in the path is not an element containing multiple
-values but rather a single value, in this case, and integer.
+values but rather a single value, in this case, an integer.
 
 [source,groovy]
 ----
@@ -1952,8 +1952,157 @@ g.V().has('airport','code','LCY').out().limit(5).values('runways').
 [LCY,BHD,1]
 ----
 
-There are a few things to be aware of when using 'path'. Those concerns are explained
-in the <<pathwarn>> section a bit later.
+In Apache TinkerPop version 3.2.5 the ability to limit what is returned by the 'path'
+step using 'from' and 'to' modulators was added. This enables us to not return the
+entire path of a traversal but instead to be more selective.
+
+First of all, look at the example below. In this case I have just used the same
+'path' constructs used in the prior examples. The query returns the first 10 routes
+found starting at Austin (AUS) with one stop on the way. 
+
+[source,groovy]
+----
+g.V().has('airport','code','AUS').out().out().path().by('code').limit(10)
+----
+
+As expected the results show each airport that was visited.
+
+[source,groovy]
+----
+[AUS,EWR,YYZ]
+[AUS,EWR,YVR]
+[AUS,EWR,LHR]
+[AUS,EWR,CDG]
+[AUS,EWR,FRA]
+[AUS,EWR,NRT]
+[AUS,EWR,DEL]
+[AUS,EWR,DUB]
+[AUS,EWR,HKG]
+[AUS,EWR,PEK]
+----
+
+Given that every journey starts in Austin,  we might not actually want the AUS
+airport code to be part of the returned results. We might just want to capture the
+places that we ended up visiting after leaving Austin. This can be achieved by
+labelling the parts of the traversal that we care about using 'as' steps and then
+using 'from' and 'to' modulators to tell the 'path' step what we are interested in.
+Take a look at the modified version of the query below.
+
+[source,groovy]
+----
+g.V().has('airport','code','AUS').out().as('a').out().as('b').
+      path().by('code').from('a').to('b').limit(10)
+----
+
+This time AUS is not included in the 'path' results.
+
+[source,groovy]
+----
+[EWR,YYZ]
+[EWR,YVR]
+[EWR,LHR]
+[EWR,CDG]
+[EWR,FRA]
+[EWR,NRT]
+[EWR,DEL]
+[EWR,DUB]
+[EWR,HKG]
+[EWR,PEK]
+----
+Because after skipping the AUS part of the path we did in fact want the rest of the
+results we could have left off the 'to' modulator and written the query as follows.
+
+[source,groovy]
+----
+g.V().has('airport','code','AUS').out().as('a').out().
+      path().by('code').from('a').limit(10)
+----
+
+As you can see the results are the same as before.
+
+[source,groovy]
+----
+EWR,YYZ]
+EWR,YVR]
+EWR,LHR]
+EWR,CDG]
+EWR,FRA]
+EWR,NRT]
+EWR,DEL]
+EWR,DUB]
+EWR,HKG]
+EWR,PEK]
+----
+
+Obviously there are a lot of ways that 'from' and 'to' could be used. By way of one
+final example, let's create a version of the query with three 'out' steps. Note that
+a bit later we will see how 'repeat' can be used when the same steps need to be used
+repeatedly like this but that is not important to this specific example. 
+
+[source,groovy]
+----
+g.V().has('airport','code','AUS').out().out().out().
+      path().by('code').limit(10)
+----
+
+As expected we now have an additional stop added to each of the journeys.
+
+[source,groovy]
+----
+[AUS,EWR,YYZ,ATL]
+[AUS,EWR,YYZ,AUS]
+[AUS,EWR,YYZ,BNA]
+[AUS,EWR,YYZ,BOS]
+[AUS,EWR,YYZ,BWI]
+[AUS,EWR,YYZ,DCA]
+[AUS,EWR,YYZ,DFW]
+[AUS,EWR,YYZ,FLL]
+[AUS,EWR,YYZ,IAD]
+[AUS,EWR,YYZ,IAH]
+----
+
+Let's now modify the query to limit which parts of the path are returned.
+
+[source,groovy]
+----
+g.V().has('airport','code','AUS').out().as('a').out().as('b').out().
+      path().by('code').from('a').to('b').limit(10)
+----
+
+As you can see, only the parts of the journey that we selected have been returned.
+
+[source,groovy]
+----
+[EWR,YYZ]
+[EWR,YYZ]
+[EWR,YYZ]
+[EWR,YYZ]
+[EWR,YYZ]
+[EWR,YYZ]
+[EWR,YYZ]
+[EWR,YYZ]
+[EWR,YYZ]
+[EWR,YYZ]
+----
+
+By way of a side note, in cases like this where more than one of the results is
+identical you may want to remove duplicates. That is where the 'dedup' step is
+useful. You will find coverage of 'dedup' in the "<<dedup>>" section. However, as a
+little taste test, let's add a 'dedup' step to the end of our previous query and see
+what happens.
+
+----
+g.V().has('airport','code','AUS').out().as('a').out().as('b').out().
+      path().by('code').from('a').to('b').limit(10).dedup()
+
+[EWR,YYZ]
+----
+
+As you can see all of the duplicate results have now been removed. Hopefully this
+gives you a good basic understanding of the 'path' step. You will see it used a lot
+throughout the remainder of this book. However, here are a few things to be aware of
+when using 'path'. Those concerns are explained in the <<pathwarn>> section a bit
+later.
 
 [[edgeexist]]
 Does an edge exist between two vertices?
