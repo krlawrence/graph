@@ -2777,7 +2777,7 @@ g.V().hasId(8).values('code')
 DFW
 ----
 
-We could also have also written the above query as follows.
+We could also have written the above query as follows.
 
 [source,groovy]
 ----
