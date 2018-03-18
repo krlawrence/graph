@@ -3682,7 +3682,7 @@ Sorting things - introducing 'order'
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can use 'order' to sort things in either ascending (the default) or descending
-order.Note that the sort does not have to be the last step of a query. It is
+order. Note that the sort does not have to be the last step of a query. It is
 perfectly OK to sort things in the middle of a query before moving on to a further
 step. We can see examples of that in the first two queries below. Note that the first
 query will return different results than the second one due to where the 'limit' step
@@ -3773,7 +3773,7 @@ into two columns.
 
 Lastly, let's look at another way we could have coded the query we used earlier to
 find the longest runway in the graph. As you may recall, we used the following
-query.While the query does indeed find the longest runway in the graph. If we wanted
+query. While the query does indeed find the longest runway in the graph. If we wanted
 to know which airport or airports had runways of that length we would have to run a
 second query to find them.
 
@@ -5688,7 +5688,7 @@ Performing simple arithmetic
 
 Let's start by looking at a few basic examples. First of all the query below shows
 that we can perform mathematical operations on literal values as part of a
-traversal.The vertex we found at the start of the traversal is not used by the math
+traversal. The vertex we found at the start of the traversal is not used by the math
 step in this case. 
 
 [source,groovy]
@@ -6795,7 +6795,7 @@ This example, which is admittedly a bit contrived, we use a variable inside of a
 'has' step. We initially create a list containing all of the IATA codes for each
 airport in the graph. We then iterate through that list and calculate how many
 outgoing routes there are from each place and print out a string containing the
-airport IATA code and the count for that airport.Note that this could easily be done
+airport IATA code and the count for that airport. Note that this could easily be done
 just using a Gremlin query with no additional Groovy code. The point of this example
 is more to show another example of mixing Gremlin, Groovy and variables.
 Knowing that you can do this kind of thing may come in useful as you start to write
@@ -11032,7 +11032,7 @@ Distribution of routes per airport
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 We have already examined various ways to calculate the distribution of routes in the
-graph.The following query will, for each airport, return a key value pair where the
+graph. The following query will, for each airport, return a key value pair where the
 key is the airport code and the value is the number of outgoing routes from that
 airport.  Because there are over 3,000 airports in the graph, this query will produce
 a large results. I decided not to include those results here. The second query just
@@ -11196,8 +11196,8 @@ Analysis of routes between Europe and the USA
 The next few queries show how you can use a graph like 'air-routes' do perform
 analysis on a particular industry segment. The following queries analyze the
 distribution and availability of routes between airports across Europe and airports
-in the United States.First of all let's just find out how many total routes there are
-between airports anywhere in Europe and airports in the USA.
+in the United States. First of all let's just find out how many total routes there
+are between airports anywhere in Europe and airports in the USA.
 
 [source,groovy]
 ----
@@ -11891,7 +11891,7 @@ More analysis of distances between airports
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In this section you will find some more queries that examine distances between
-airports.The query below returns a nice list of all the routes from Austin (AUS)
+airports. The query below returns a nice list of all the routes from Austin (AUS)
 along with their distances. The results are sorted in ascending order by distance. 
 
 [source,groovy]
@@ -12016,13 +12016,13 @@ worthy of note. First of all it uses the preferred 'has' technique again to test
 distance whereas in the previous query we used 'where'.  Also this time we just list
 the distance and the destination airport's code and we sort the end result using a
 'sort'. We also use 'select' and 'as' rather than the perhaps more succinct 'path'
-and 'by' to show a different way of achieving effectively the same results.The 'path'
-and 'by' combination were introduced more recently into TinkerPop and I find that to
-be a more convenient syntax to use most of the time but both ways work and both have
-their benefits. We should also note that I show 'sort' being used here just to show a
-different way of ordering results, but in most cases we can re-write our query to use
-'order'. You will find several examples of 'order' being used throughout this
-book. Order is introduced in the "<<sort>>" section.
+and 'by' to show a different way of achieving effectively the same results. The
+'path' and 'by' combination were introduced more recently into TinkerPop and I find
+that to be a more convenient syntax to use most of the time but both ways work and
+both have their benefits. We should also note that I show 'sort' being used here just
+to show a different way of ordering results, but in most cases we can re-write our
+query to use 'order'. You will find several examples of 'order' being used throughout
+this book. Order is introduced in the "<<sort>>" section.
 
 [source,groovy]
 ----
