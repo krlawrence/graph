@@ -2643,7 +2643,7 @@ There is one more form of the 'dedup' step. In this form, one or more strings
 representing labelled steps are provided as parameters. Take a look first of all at
 the query below. It finds vertex 'V(3)' and labels it '+++'+++a+++'+++'. It then
 finds vertex 'V(4)' and labels it '+++'+++c+++'+++'. Next it finds all the vertices
-connected to V(4) and labels those '+++'+++c+++'+++'. Only the first 10 are
+connected to V(4) and labels those '+++'+++b+++'+++'. Only the first 10 are
 retrieved. Lastly a 'select' step is used to return the results. As expected vertices
 3 and 4 are present in all of the results.
 
