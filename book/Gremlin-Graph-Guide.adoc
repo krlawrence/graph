@@ -6873,7 +6873,7 @@ dfw = g.V().has('code','DFW').next()
 xyz.addEdge('route',dfw)
 ----
 
-In many cases it is more convenient, and also recommendd, to perform each of the
+In many cases it is more convenient, and also recommended, to perform each of the
 previous operations using just the traversal object 'g'. The following example does
 just that. We first create a new aiport vertex for our imaginary airport and store it's
 vertex in the variable 'xyz'. We can then use that stored value when we create the
