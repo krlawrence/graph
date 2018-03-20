@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v278-preview, Mar 20, 2018
-// Tue Mar 20, 2018 12:37:42 CDT
+// Tue Mar 20, 2018 13:38:02 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Mar 20 2018
@@ -4462,7 +4462,7 @@ g.V().has('code','AUS').as('a').out().as('b').
 
 There is also a two parameter form of the 'where' step that you may have noticed used
 above. In this case the first parameter refers to a label defined earlier in the
-query. Take a look at the example below. We find the vertex for the Austin ( AUS)
+query. Take a look at the example below. We find the vertex for the Austin (AUS)
 airport and label it '+++'+++a+++'+++'. We then look at all the airports you can fly
 to from there and label them '+++'+++b+++'+++'. We then use a 'where' step to compare
 '+++'+++a+++'+++' and '+++'+++b+++'+++'.  Only airports with less runways than Austin
@@ -4475,7 +4475,7 @@ g.V().has('airport','code','AUS').as('a').out().as('b').
 ----
 
 Austin has two runways so only airports with one runway are returned by this query
-run. 
+when run. 
 
 [source,groovy]
 ----
@@ -5508,8 +5508,10 @@ query for those Austinites wanting to visit the Taj Mahal!
 [source,groovy]
 ----
 // What are some of the ways to travel from AUS to AGR?
-g.V().has('code','AUS').repeat(out().simplePath()).
-                        until(has('code','AGR')).path().by('code').limit(10) 
+g.V().has('code','AUS').
+      repeat(out().simplePath()).
+        until(has('code','AGR')).
+        path().by('code').limit(10) 
 ----
 
 Here are the results from running the query. Notice how, using the 'repeat...until'
@@ -5530,13 +5532,15 @@ construct we did not have to specify how many steps to try.
 ----
 
 
-You can also place the 'repeat' before the 'until' as shown below.
+You can also place the 'until' before the 'repeat' as shown below.
 
 [source,groovy]
 ----
 // Another shortest path example using until...repeat instead  
-g.V().has('code','AUS').until(has('code','SYD')).
-                        repeat(out().simplePath()).limit(10).path().by('code')    
+g.V().has('code','AUS').
+      until(has('code','SYD')).
+        repeat(out().simplePath()).limit(10).
+      path().by('code')    
 ----
 
 Here are the results from running the query.
@@ -5579,11 +5583,10 @@ g.V().has('code','AUS').out().out().has('code','SYD').path().by('code')
 ----
 
 As is often the case when working with Gremlin there is more than one way to achieve
-the same result. The 'loops' step, that can be
-used to control how long a repeat loop runs, that is essentially equivalent to the
-'times' step. Take a look at the two queries below. Both achieve the same result.
-The first uses 'loops' while the second uses 'times'. I prefer the readability
-offered by the use of 'times'.
+the same result. The 'loops' step, that can be used to control how long a repeat loop
+runs, is essentially equivalent to the 'times' step. Take a look at the two queries
+below. Both achieve the same result.  The first uses 'loops' while the second uses
+'times'. I prefer the readability offered by the use of 'times'.
 
 [source,groovy]
 ----
@@ -5608,8 +5611,8 @@ Sometimes it is useful to be able to return the results of a traversal as it
 executes. The example below starts at the Santa Fe airport (SAF) and uses a 'repeat'
 to keep going out from there. By placing an 'emit' right after the 'repeat' we will
 be able to see the paths that are taken by the traversal. If we did not put the
-'emit' here this query would run for a very long time as the 'repeat' has no ending
-condition!
+'emit' here this query would run for a very long time as the 'repeat' has no other
+ending condition!
 
 
 [source,groovy]
@@ -5637,8 +5640,16 @@ generates.
 
 [source,groovy]
 ----
-g.V(3).repeat(out()).times(3).has('code','MIA').limit(5).path().by('code')
+g.V(3).repeat(out()).times(3).has('code','MIA').
+       limit(5).path().by('code')
+----
 
+The paths returned show a selection of ways to get to Miami from Austin with two
+stops but none of the results show less than two stops. Is this what we really
+wanted?
+
+[source,groovy]
+----
 [AUS,YYZ,MUC,MIA]
 [AUS,YYZ,MAN,MIA]
 [AUS,YYZ,YUL,MIA]
@@ -5646,25 +5657,28 @@ g.V(3).repeat(out()).times(3).has('code','MIA').limit(5).path().by('code')
 [AUS,YYZ,GRU,MIA]
 ----
 
-As you can see, only routes that took three full hops were returned. Now let's change
-the query to use an 'emit'. This time you can think of the query as saying "at most
-three hops".
+Now let's change the query to use an 'emit'. This time you can think of the query as
+saying "at most three hops" or in airline terms "at most two stops".
 
 
 [source,groovy]
 ----
-g.V(3).repeat(out()).emit().times(3).has('code','MIA').limit(5).path().by('code')
+g.V(3).repeat(out()).emit().times(3).has('code','MIA').
+       limit(5).path().by('code')
+----
 
+As you can see, by adding an 'emit' we got back a quite different set of results.
+This is a really useful and powerful capability. Being able to express ideas such as
+"at most three" provides us a way to write very clean queries in cases like this.
+
+[source,groovy]
+----
 [AUS,MIA]
 [AUS,YYZ,MIA]
 [AUS,LHR,MIA]
 [AUS,FRA,MIA]
 [AUS,MEX,MIA]
 ----
-
-So by adding an 'emit' we got back a quite different set of results. This is a really
-useful and powerful capability. Being able to express ideas such as "at most three"
-provides us a way to write very clean queries in cases like this.
 
 The 'emit' step can also take a parameter such as a 'has' step to filter out
 intermediate results that we are not interested in. The query below will only show
@@ -5674,8 +5688,14 @@ airport's vertex. A 'limit' step is used to only show the first 10 results.
 
 [source,groovy]
 ----
-g.V(3).repeat(out().simplePath()).emit(has('code','PRG')).path().by('code').limit(10)
+g.V(3).repeat(out().simplePath()).emit(has('code','PRG')).
+       path().by('code').limit(10)
+----
 
+Here are the results from running the query.
+
+[source,groovy]
+----
 [AUS,YYZ,PRG]
 [AUS,LHR,PRG]
 [AUS,FRA,PRG]
@@ -5717,10 +5737,18 @@ whether or not they end up in Austin.
 
 [source,groovy]
 ----
-g.V()has('code','LSI').repeat(out().simplePath()).
-                       emit(has('region','US-NY')).
-                       until(has('code','AUS')).
-                       path().by('code').limit(10)
+g.V()has('code','LSI').
+     repeat(out().simplePath()).
+        emit(has('region','US-NY')).
+        until(has('code','AUS')).
+     path().by('code').limit(10)
+----
+
+Here are the results the query generates, Notice how we got a mixture of New York
+airports as well as Austin as our final destinations.
+
+[source,groovy]
+----
 LSI,EDI,JFK]
 LSI,EDI,EWR]
 LSI,EDI,SWF]
@@ -5733,9 +5761,25 @@ LSI,EDI,JFK,SYR]
 LSI,EDI,EWR,ROC]
 ----
 
+The 'emit' can also be placed before the 'repeat' step. This will cause the
+result of the previous step in the query to be emitted before the results that
+follow. In the example below, we start in Austin and go out two hops using a 'repeat'
+loop. The first ten airport codes of the places we found are returned. Notice how AUS
+is returned as the first value even though that is where we started from due to our
+use of 'emit'.
+
+[source,groovy]
+----
+g.V().has('airport','code','AUS').
+      emit().repeat(out().simplePath()).times(2).limit(10).
+      values('code').fold()
+
+[AUS,YYZ,ZRH,YOW,BRU,MUC,RSW,MAN,YUL,YEG]
+----
 
 You will see more examples of 'emit' being used in the "<<btree>>" section a bit
 later.
+
 
 [[cyclicpath]]
 Introducing 'cyclicPath'

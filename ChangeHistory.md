@@ -22,6 +22,7 @@ Major new features in this release
 - Added to the `Gremlin Server` section.
 - Improved coverage of `cyclicPath`
 - Improved coverage of `flatMap`
+- Improved coverage of `repeat` and `emit`.
 - Added coverage of `toSet` in section 3.
 - Expanded the `vertex degree` section.
 - Updated the `valueMap` section.
