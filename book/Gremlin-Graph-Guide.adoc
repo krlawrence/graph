@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v278-preview, Mar 20, 2018
-// Tue Mar 20, 2018 10:30:48 CDT
+// Tue Mar 20, 2018 12:25:21 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Mar 20 2018
@@ -4228,7 +4228,7 @@ was clear. Nonetheless I will explain in more detail how the 'where' step works 
 the next section.
 
 
-[[wh]]
+[[where]]
 Using 'where' to filter things out of a result
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -4239,8 +4239,8 @@ allows anything that matches the specified constraint to pass on to any followin
 steps. 'Where' can be used by itself, or as we shall see later, in conjunction with a
 'by' modulator or following a 'match' or a 'choose' step.
 
-TIP: It is worth noting that some queries that use 'where' can also be written using 'has'
-instead. 
+TIP: It is worth noting that some queries that use 'where' can also be written using
+'has' instead. 
 
 Let's start by looking at a simple example of how 'has' and 'where' can be
 used to achieve the same result.
@@ -4280,11 +4280,12 @@ the path as the result of our query.
 ----
 // Routes longer than 4,000 miles between airports with and ID less than 47
 g.V().hasId(lt(47)).outE().
-      and(where(inV().id().is(lt(47))),values('dist').is(gt(4000))).inV().
-      path().by('code').by('dist')
+      and(where(inV().id().is(lt(47))),values('dist').is(gt(4000))).
+      inV().path().by('code').by('dist')
 ----
 
 Below is what we get back as a result of running the query.
+
 [source,groovy]
 ----
 [ATL,4502,HNL]
@@ -4303,13 +4304,14 @@ Sometimes you will be looking for results that match the inverse condition of a
 We then look at all incoming 'contains' edges to see which country each airport we
 can fly to is in that do not have the United States country code of 'US' .
 
+[source,groovy]
 ----
 g.V().has('airport','code','AUS').
       out().not(where(__.in('contains').has('code','US'))).
       valueMap('code','city')
 ----
 
-As you can see, when we run the query, only detsinations outside the United States
+As you can see, when we run the query, only destinations outside the United States
 are returned.
 
 [source,groovy]
@@ -4324,7 +4326,7 @@ are returned.
 
 This pattern comes in useful whenever you want to use a traversal inside of a 'where'
 step and negate the results. Of course, there are other ways we could write this
-query but I wanted to show an example of this technique being used. For completeness,
+particular query but I wanted to show an example of this technique being used. For completeness,
 two simpler ways of writing this query that do not use 'where' at all are shown below
 but there will be cases where combining 'not' and 'where' are your best option.
 
@@ -4336,6 +4338,54 @@ g.V().has('airport','code','AUS').
 g.V().has('airport','code','AUS').
       out().not(has('country', 'US')).valueMap('code','city')
 ----
+
+It is also possible to use some special forms of the 'and' and 'or' steps when
+working with a 'where' step. Take a look at the query below. This will match airports
+that you can fly to from Austin (AUS) so long as  they have more than four runways
+and do not have exactly six runways.
+
+[source,groovy]
+----
+g.V().has('airport','code','AUS').out().
+      where(values('runways').is(gt(4).and(neq(6)))).
+      valueMap('code','runways')
+----
+
+Here is what the query returns. As you can see we only found airports that you can
+fly to from AUS that have 5,7 or 8 runways.
+
+[source,groovy]
+----
+[code:[YYZ],runways:[5]]
+[code:[MDW],runways:[5]]
+[code:[ATL],runways:[5]]
+[code:[DFW],runways:[7]]
+[code:[IAH],runways:[5]]
+[code:[ORD],runways:[8]]
+----
+
+The same is true for the 'or' step. We could rewrite our query to find airports we
+can fly to from Austin that have more than six or exactly four runways. 
+
+[source,groovy]
+----
+g.V().has('airport','code','AUS').out().
+      where(values('runways').is(gt(6).or(eq(4)))).
+      valueMap('code','runways')
+----
+
+The above is a shorter form of the following query which demonstrates another way we
+could use the boolean operators within a 'where' step. In this case only two
+traversals are allowed to be compared using the boolean operator (in this case an
+'or' step).
+
+[source,groovy]
+----
+g.V().has('airport','code','AUS').out().
+      where(values('runways').is(gt(6)).or().values('runways').is(4)).
+      valueMap('code','runways')
+----
+
 
 Our last example in this section uses a 'where' step to make sure we don't end up
 back where we started when looking at airline routes with one stop. We find routes
@@ -4409,6 +4459,30 @@ g.V().has('code','AUS').as('a').out().as('b').
       valueMap('code','runways')
 ----
 
+
+There is also a two parameter form of the 'where' step that you may have noticed used
+above. In this case the first parameter refers to a label defined earlier in the
+query. Take a look at the example below. We find the vertex for the Austin ( AUS)
+airport and label it '+++'+++a+++'+++'. We then look at all the airports you can fly
+to from there and label them '+++'+++b+++'+++'. We then use a 'where' step to compare
+'+++'+++a+++'+++' and '+++'+++b+++'+++'.  Only airports with less runways than Austin
+should be returned. 
+
+[source,groovy]
+----
+g.V().has('airport','code','AUS').as('a').out().as('b').
+      where('a',gt('b')).by('runways').valueMap('code','runways')
+----
+
+Austin has two runways so only airports with one runway are returned by this query
+when we run it. 
+
+[source,groovy]
+----
+[code:[BKG],runways:[1]]
+[code:[SAN],runways:[1]]
+----
+
 Let's imagine that we want to write a query to find all airports that have the same
 region code as the French airport of Nice. Let's assume for now that we do not know
 what the region code is so we cannot just write a simple query to find all airports
@@ -4446,6 +4520,7 @@ that a separate list is created for each airport.
 
 You could write this query other ways, perhaps using a 'match' step but once you
 understand the pattern used above it is both fairly simple and quite powerful.
+
 
 
 [[choose]]
