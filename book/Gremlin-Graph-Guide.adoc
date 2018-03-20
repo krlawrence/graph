@@ -5584,7 +5584,7 @@ detail in the "<<mostroutes>>" section.
 ----
 
 The next query will calculate the route degree based on all, incoming and outgoing,
-routes for ten airporta. The query takes advantage of the 'project' step that was
+routes for ten airports. The query takes advantage of the 'project' step that was
 introduced in TinkerPop 3.2. 
 
 [source,groovy]
