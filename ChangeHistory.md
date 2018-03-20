@@ -31,6 +31,7 @@ Major new features in this release
 - Added a section to introduce the `dedup` step in Section 3.
 - Expanded the "Basic statistical and numerical operations"  section.
 - Added coverage of dynamically adding labels using `addV` and `addE` - issue #22.
+- Added an example of nested `group` steps in section 5.
 - Improved existing text and examples in section 5.
 - Added more examples to section 5
 - Improved coverage of `indexed` and `withIndex`.

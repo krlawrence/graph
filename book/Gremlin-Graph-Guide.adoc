@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v278-preview, Mar 20, 2018
-// Tue Mar 20, 2018 12:25:21 CDT
+// Tue Mar 20, 2018 12:37:42 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Mar 20 2018
@@ -4475,7 +4475,7 @@ g.V().has('airport','code','AUS').as('a').out().as('b').
 ----
 
 Austin has two runways so only airports with one runway are returned by this query
-when we run it. 
+run. 
 
 [source,groovy]
 ----
@@ -11506,6 +11506,97 @@ found 58 airports in France.
 
 Using 'choose' and 'groupCount' in this way provides a very nice pattern for counting
 somewhat disparate things during a traversal.
+
+[[nestedgroup]]
+Nesting one 'group' step inside another
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Many examples of both the 'groupCount' and 'group' steps have already been presented
+in this book. However, something I have not touched on so far, which by now may be
+obvious but perhaps not, is that you can nest one 'group' step inside another one.
+This is made possible by the fact that the 'by' modulators that are used to tell the
+'group' step precisely what you want grouped can take arbitrary traversals. Take a
+look at the example below. Hopefully the indentation makes it easier to read. We
+begin by simply finding five airports and starting a group. The key for each group
+will be one of the codes for each of these airports. This is specified by the first
+'by' modulator. For the value part of each group, specified by the second 'by'
+modulator, we start a second traversal. That traversal begins by finding five places
+you can fly to from each of the five airports that we initially found. Then another
+'group' step is used to group each of those airports by the number of total outgoing
+routes they have.
+
+[source,groovy]
+----
+g.V().hasLabel("airport").limit(5).
+      group().
+        by('code').
+        by(out("route").limit(5).
+           group().
+             by('code').
+             by(out("route").count()))
+----
+
+When the query is run here is what we get back. As expected the outer group has keys
+that represent the first five airports that were found. The inner group has the five
+airport destinations as the keys and their total outgoing route counts as their
+values. I pretty printed the output a bit to make it easier to read.
+
+[source,groovy]
+----
+[BNA:[DCA:93,DFW:221,BWI:89,FLL:142,IAD:136],
+ ANC:[IAH:192,LAX:195,DFW:221,PDX:76,FAI:19],
+ BOS:[YVR:94,LHR:191,CDG:262,YYZ:181,LGW:200],
+ ATL:[MEI:4,MLB:6,MSL:2,MCN:2,MBS:4],
+ AUS:[MEX:105,FRA:272,LHR:191,PIT:54,YYZ:181]]
+----
+
+So what we have created is a group, essentially a map, that has airport codes as the
+key and an additional group as the values. Therefore, given each group is made up of
+key value pairs, we can use a 'select' step to only pick a few of the results.
+
+[source,groovy]
+----
+g.V().hasLabel("airport").limit(5).
+      group().
+        by('code').
+        by(out("route").limit(5).
+           group().
+             by('code').
+             by(out("route").count())).
+      select('ANC','ATL')
+----
+
+This time only the selected results are returned
+
+[source,groovy]
+----
+[ANC:[IAH:192,LAX:195,DFW:221,PDX:76,FAI:19],
+ ATL:[MEI:4,MLB:6,MSL:2,MCN:2,MBS:4]]
+----
+
+If you want to select results from one of the inner groups you can do that as well
+using an additional 'select' step.
+
+[source,groovy]
+----
+g.V().hasLabel("airport").limit(5).
+      group().
+        by('code').
+        by(out("route").limit(5).
+           group().
+             by('code').
+             by(out("route").count())).
+      select('ANC').
+      select('IAH','LAX')
+----
+
+This will first select the result with a key of 'ANC' and then from that group select
+the results for the keys of 'IAH' and 'LAX' only.
+
+[source,groovy]
+----
+[IAH:192,LAX:195]
+----
 
 [[eu-usa]]
 Analysis of routes between Europe and the USA
