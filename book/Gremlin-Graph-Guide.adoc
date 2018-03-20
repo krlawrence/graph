@@ -2596,7 +2596,7 @@ called 'aus'.
 
 [source,groovy]
 ----
-// Store the properties for the AUS aiport in the variable aus.
+// Store the properties for the AUS airport in the variable aus.
 aus=g.V().has('code','AUS').valueMap().next()
 ----
 
@@ -6875,9 +6875,9 @@ xyz.addEdge('route',dfw)
 
 In many cases it is more convenient, and also recommendd, to perform each of the
 previous operations using just the traversal object 'g'. The following example does
-just that. We first create a new aiport vertex for our imaginary airport and store it's
-vertex in the variable 'xyz'. We can then use that stored value when we create the
-edge also using a traversal. As with many parts of the Gremlin language, there is
+just that. We first create a new airport vertex for our imaginary airport and store
+it's vertex in the variable 'xyz'. We can then use that stored value when we create
+the edge also using a traversal. As with many parts of the Gremlin language, there is
 more than one way to achieve the same results.
 
 [source,groovy]
