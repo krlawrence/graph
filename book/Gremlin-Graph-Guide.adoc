@@ -8,7 +8,7 @@ v278-preview, Mar 20, 2018
 //:Date:      Mar 20 2018
 :Numbered:
 :source-highlighter: pygments
-:pygments-style: paraiso-dark
+:pygments-style: paraiso-light
 //:pygments-style: lovelace
 //:source-highlighter: rouge
 //:source-highlighter: coderay
