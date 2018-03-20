@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v278-preview, Mar 18, 2018
-// Sun Mar 18, 2018 11:00:12 CDT
+v278-preview, Mar 20, 2018
+// Tue Mar 20, 2018 10:30:48 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
-//:Date:      Mar 18 2018
+//:Date:      Mar 20 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -4297,6 +4297,46 @@ Below is what we get back as a result of running the query.
 [HNL,4950,EWR]
 ----
 
+Sometimes you will be looking for results that match the inverse condition of a
+'where' step. One way this can be achieved is to wrap the 'where' step inside of a
+'not' step, as shown below. We start in Austin (AUS) and find all outgoing routes.
+We then look at all incoming 'contains' edges to see which country each airport we
+can fly to is in that do not have the United States country code of 'US' .
+
+----
+g.V().has('airport','code','AUS').
+      out().not(where(__.in('contains').has('code','US'))).
+      valueMap('code','city')
+----
+
+As you can see, when we run the query, only detsinations outside the United States
+are returned.
+
+[source,groovy]
+----
+[code:[YYZ],city:[Toronto]]
+[code:[LHR],city:[London]]
+[code:[FRA],city:[Frankfurt]]
+[code:[MEX],city:[Mexico City]]
+[code:[CUN],city:[Cancun]]
+[code:[GDL],city:[Guadalajara]]
+----
+
+This pattern comes in useful whenever you want to use a traversal inside of a 'where'
+step and negate the results. Of course, there are other ways we could write this
+query but I wanted to show an example of this technique being used. For completeness,
+two simpler ways of writing this query that do not use 'where' at all are shown below
+but there will be cases where combining 'not' and 'where' are your best option.
+
+[source,groovy]
+----
+g.V().has('airport','code','AUS').
+      out().has('country', neq('US')).valueMap('code','city')
+
+g.V().has('airport','code','AUS').
+      out().not(has('country', 'US')).valueMap('code','city')
+----
+
 Our last example in this section uses a 'where' step to make sure we don't end up
 back where we started when looking at airline routes with one stop. We find routes
 that start in Austin, with one intermediate stop, that then continue to another
@@ -4310,13 +4350,16 @@ AUS->DFW->LHR will be as it does not end up back in Austin.
 ----
 // List 10 places you can fly to with one stop, starting at Austin but 
 // never ending up back in Austin
-g.V().has('code','AUS').as('a').out().out().where(neq('a')).
-              path().by('code').limit(10)
+
+g.V().has('airport','code','AUS').as('a').
+      out().out().where(neq('a')).
+      path().by('code').limit(10)
 ----
 
 As you work with Gremlin, you will find that the 'where' step is one that you use a
 lot. You will see many more examples of 'where' being used throughout the remainder
-of this book.
+of this book. In the next section we will look at some additional ways that 'where'
+can be used.
 
 [[whereby]]
 Using 'where' and 'by' to filter results
