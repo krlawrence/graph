@@ -9405,7 +9405,7 @@ v[54854]
 ----
 
 We can now write a query that uses a boolean operator to generate a result in our
-sack. The example below is a bit arbitrary but is shows how the boolean operators can
+sack. The example below is a bit arbitrary but it shows how the boolean operators can
 be used. We start at the vertex with an ID of 3, initialize a 'sack' with the
 constant 'true' and the use the 'and' operator against the 'happy' property of the
 vertex with a label of 'happy'. We return the results in a path, which will contain
