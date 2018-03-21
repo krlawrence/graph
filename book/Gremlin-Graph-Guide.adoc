@@ -7312,7 +7312,7 @@ g.E().drop()
 
 You could also use the 'graph' object to do this. The code below uses the graph
 object to retrieve all of the edges and then iterates over them dropping them one by
-one. Again for very large graphs this may not be an ideal approach is this requires
+one. Again for very large graphs this may not be an ideal approach as this requires
 reading all of the edge definitions into memory. Note that in this case we call the
 'remove' method rather than use 'drop' as we are not using a graph traversal in this
 case.
