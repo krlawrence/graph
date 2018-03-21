@@ -10518,13 +10518,7 @@ The 'TimeUtil' class provides several methods that can be used when working with
 time. I am just going to focus on two of them, namely, 'clock' and 'clockWithResult'.
 These methods allow you to have a query run one or more times while the execution
 time is tracked. After all iterations have completed, the average time the query took
-in milliseconds is returned.  Note that, especially for longer queries, the time
-returned will not appear to be the same as if you tried to measure the same 'clock' procedure
-using a stopwatch.  This is because these methods both perform a warm up pass
-before doing the actual timing. The warm up simply consists of running the query one
-time before timing starts. This means that for a single timing iteration, the 'human
-perceived time' will be roughly double the time returned by the 'clock' analysis.
-Let's take a look at a few examples. 
+in milliseconds is returned. Let's take a look at a few examples. 
 
 Below is a very simple example of using a 'clock' step to measure the time it takes
 to find all airport vertices in the graph that are in China. Note that the clock step
