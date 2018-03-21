@@ -10887,7 +10887,7 @@ often used in response to a user query where an almost real time answer is neede
 Because the air routes graph is small - we can do even quite complex queries using
 little more than a TinkerGraph and the Gremlin Console. This is not the case if your
 graph contains billions of vertices and edges. That said, I have seen some OLTP type
-queries queries, such as those looking for routes to remote airports, that can take
+queries, such as those looking for routes to remote airports, that can take
 several minutes to run in the TinkerGraph environment.
 
 NOTE: The TinkerPop documentation has in depth coverage of the various OLAP
