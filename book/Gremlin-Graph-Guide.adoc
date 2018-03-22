@@ -7211,7 +7211,7 @@ the following pages.
 Adding an airport (vertex) and a route (edge)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The following code uses the 'graph' object that we created when we fist loaded the
+The following code uses the 'graph' object that we created when we first loaded the
 air-routes graph to create a new airport vertex (node) and then adds a route (edge)
 from it to the existing DFW vertex. We can specify the label name ('airport') and as
 many properties as we wish to while creating the vertex.  In this case we just provide
