@@ -8625,7 +8625,7 @@ g.V().has('airport','country','IE').aggregate('a').limit(2).cap('a')
 ----
 
 Both 'aggregate' and 'store' can be followed by a 'by' modulator to specify more
-precisely what should be collected. For example, it we wanted to store the number of
+precisely what should be collected. For example, if we wanted to store the number of
 runways that each airport in Ireland has we could do so as follows.
 
 [source,groovy]
