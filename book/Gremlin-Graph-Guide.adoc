@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v278-preview, Mar 22, 2018
-// Thu Mar 22, 2018 14:01:25
+// Thu Mar 22, 2018 16:50:28 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Mar 22 2018
@@ -3421,7 +3421,7 @@ Here is the output that we might get from running the query.
 [ATL,5,BOS,6,DFW,7,IAH,5,ORD,8,DEN,6,DTW,6,YYZ,5,AMS,6,SNN,5,MKE,5,MDW,5,GIS,5,HLZ,5,NPE,5,NSN,5,PPQ,5,TRG,5,UFA,5,KRP,5]
 ----
 
-The next three queries show examples of 'lt', 'eq' and 'neq' bing used.
+The next three queries show examples of 'lt', 'eq' and 'neq' being used.
 
 [source,groovy]
 ----
@@ -3433,6 +3433,16 @@ g.V().has('runways',eq(3)).count()
 
 // How many airports have anything but just 1 runway?
 g.V().has('runways',neq(1)).count()
+----
+
+Note that in some cases, such as when using  a simple 'has' step the 'eq' is not
+actually required. For example the query used above could be written as follows
+instead.
+
+[source,groovy]
+----
+// How many airports have 3 runways?
+g.V().has('runways',3).count()   
 ----
 
 Here are examples of 'inside' and 'outside' being used.
