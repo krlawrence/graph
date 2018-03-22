@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v278-preview, Mar 21, 2018
-// Wed Mar 21, 2018 20:20:51 CDT
+v278-preview, Mar 22, 2018
+// Thu Mar 22, 2018 14:01:25
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
-//:Date:      Mar 21 2018
+//:Date:      Mar 22 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -5775,6 +5775,28 @@ g.V().has('airport','code','AUS').
       values('code').fold()
 
 [AUS,YYZ,ZRH,YOW,BRU,MUC,RSW,MAN,YUL,YEG]
+----
+
+In some cases, an 'emit' placed after a 'repeat' step has the same effect as an
+'until' step. Both queries below look for routes between Johannesburg (JNB) and
+Sydney (AUS).
+
+[source,groovy]
+----
+g.V().has('code','JNB').repeat(out()).until(has('code','SYD')).
+      path().by('code').limit(3)
+
+g.V().has('code','JNB').repeat(out()).emit(has('code','SYD')).
+      path().by('code').limit(3)
+----
+
+When either query is run, the following results are returned.
+
+[source,groovy]
+----
+[JNB,SYD]
+[JNB,BKK,SYD]
+[JNB,DOH,SYD]       
 ----
 
 You will see more examples of 'emit' being used in the "<<btree>>" section a bit
@@ -11946,6 +11968,7 @@ g.V().has('region','GB-ENG').has('city','London').out().out().dedup().
 2236                        
 ----
 
+[[englandroutes]]
 How many routes are there between airports in England?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
