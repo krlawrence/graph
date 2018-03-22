@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v278-preview, Mar 22, 2018
-// Thu Mar 22, 2018 16:50:28 CDT
+// Thu Mar 22, 2018 17:09:05 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Mar 22 2018
@@ -7880,8 +7880,9 @@ groups them by property key first and sum of the values second.
 
 [source,groovy]
 ----
-g.V().hasLabel("airport").properties("runways","longest").
-                          group().by(key).by(value().sum())
+g.V().hasLabel("airport").
+      properties("runways","longest").
+      group().by(key).by(value().sum())
 
 [longest:25497644, runways:4816]
 ----
@@ -7898,6 +7899,12 @@ property objects for each property.
 [source,groovy]
 ----
 g.V().has('code','AUS').propertyMap()
+----
+
+Here are the properties returned.
+
+[source,groovy]
+----
 [country:[vp[country->US]], code:[vp[code->AUS]], longest:[vp[longest->12250]], city:[vp[city->Austin]], lon:[vp[lon->-97.6698989868164]], type:[vp[type->airport]], places:[vp[places->[YYZ, LHR, FRA, MEX,]], elev:[vp[elev->542]], icao:[vp[icao->KAUS]], region:[vp[region->US-TX]], runways:[vp[runways->2]], lat:[vp[lat->30.1944999694824]], desc:[vp[desc->Austin Bergstrom Int]]]
 ----
 
@@ -7918,6 +7925,12 @@ that has a value of 'London'.
 [source,groovy]
 ----
 g.V().properties().hasValue('London')
+----
+
+The query finds several London values.
+
+[source,groovy]
+----
 vp[city->London]
 vp[city->London]
 vp[city->London]
@@ -7932,7 +7945,12 @@ now query their ID values.
 [source,groovy]
 ----
 g.V().properties().hasValue('London').id()
+----
 
+As you can see each property has a different, and unique, ID.
+
+[source,groovy]
+----
 583
 595
 1051
@@ -7941,9 +7959,8 @@ g.V().properties().hasValue('London').id()
 7783
 ----
 
-As you can see each property has a different, and unique, ID. We can use these ID
-values in other queries in the same way as we have for vertices and edges in some of our
-earlier examples.
+We can use these ID values in other queries in the same way as we have for vertices
+and edges in some of our earlier examples.
 
 
 [source,groovy]
@@ -8098,9 +8115,11 @@ the property 'code'.
 [source,groovy]
 ----
 g.V().has('code','AUS').valueMap()
+
 [code:[AUS,KAUS]]
 
 g.v().has('code','KAUS').valueMap()
+
 [code:[AUS,KAUS]]
 ----
 
@@ -8141,9 +8160,9 @@ A word of caution - behavior differences with 'property'
 .Be aware!
 
 There is a subtlety to be aware of when using 'property'. What happens can vary
-depending on the context in which it is used. Only when done as part of an 'addV' step
-immediately followed by multiple 'property' steps using the same key value will a
-list be created. Look at the two examples below. They do not produce the same
+depending on the context in which it is used. Only when done as part of an 'addV'
+step immediately followed by multiple 'property' steps using the same key value will
+a list be created. Look at the two examples below. They do not produce the same
 results.
 
 
