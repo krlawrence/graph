@@ -3441,8 +3441,17 @@ instead.
 
 [source,groovy]
 ----
-// How many airports have 3 runways?
 g.V().has('runways',3).count()   
+----
+
+You could also write this query using an 'is' step. You will find the 'is' step used
+a lot in this book but mostly in conjunction with 'where' steps. To me the usage
+below does not feel as elegant as the 'has' step alternative used above.
+
+[source,groovy]
+----
+// How many airports have 3 runways?
+g.V().values('runways').is(3).count()
 ----
 
 Here are examples of 'inside' and 'outside' being used.
@@ -4265,11 +4274,13 @@ g.V().where(values('runways').is(gt(5)))
 ----
 
 In examples like the one above, both queries will yield the exact same results but
-the 'has' step feels simpler and cleaner for such cases. The next example starts to
-show the power of the 'where' step. We can include a traversal inside of the 'where'
-step that does some filtering for us. In this case, we first find all vertices that are
-airports and then use a 'where' step to only keep airports that have more than 60
-outgoing routes. Finally we count how many such airports we found.
+the 'has' step feels simpler and cleaner for such cases. Notice how in the 'where'
+step version the 'gt' predicate has to be placed inside of an 'is' step. The next
+example starts to show the real power of the 'where' step. We can include a traversal
+inside of the 'where' step that does some filtering for us. In this case, we first
+find all vertices that are airports and then use a 'where' step to only keep airports
+that have more than 60 outgoing routes. Finally we count how many such airports we
+found.
 
 [source,groovy]
 ----
