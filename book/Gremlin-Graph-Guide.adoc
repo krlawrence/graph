@@ -10649,7 +10649,7 @@ clockWithResult(1){
 ----
 
 Just for fun, the next four queries look for all the ways you can fly between Austin
-(AUS) and Los Angeles (LAX) with zero,one,two ot three stops. The query avoids any
+(AUS) and Los Angeles (LAX) with zero, one, two or three stops. The query avoids any
 routes that revisit Austin and uses 'simplePath' to avoid repeating the same route
 twice. As you can see by the time we get to the last query, that takes three stops,
 the query takes quite a bit of time to complete.
