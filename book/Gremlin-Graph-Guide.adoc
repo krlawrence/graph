@@ -7863,11 +7863,11 @@ Properties have IDs too
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 We have seen many examples already that show how both vertices and edges have a unique
-ID. What may not have been obvious however is that properties also an ID. Unlike vertex
-and edge IDs property IDs are not guaranteed to be unique across the graph. Certainly
-with TinkerGraph I have encountered cases where a vertex and a property share the same
-ID. This is not really an issue because they are used in different ways to access
-their associated graph element.
+ID. What may not have been obvious however is that properties also have an ID. Unlike
+vertex and edge IDs property IDs are not guaranteed to be unique across the graph.
+Certainly with TinkerGraph I have encountered cases where a vertex and a property
+share the same ID. This is not really an issue because they are used in different
+ways to access their associated graph element.
 
 The query below returns the vertex property object (vp) for any property in the graph
 that has a value of 'London'.
