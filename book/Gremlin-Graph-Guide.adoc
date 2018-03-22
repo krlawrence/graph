@@ -14176,7 +14176,7 @@ you just as likely could use 'curl' or some other HTTP/REST type of technology. 
 that is a long winded way of saying that once you move beyond the basics and head
 towards putting a system into production, there are a lot of options to consider.
 
-In this section you will a selection of examples from these more sophisticated
+In this section you will find a selection of examples from these more sophisticated
 environments. The focus of this book so far has been to teach the Gremlin query and
 traversal language, using the Gremlin Console and TinkerGraph as our learning
 environment. However, it would be remiss to end our discussion without at least
