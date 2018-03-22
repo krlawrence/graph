@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v278-preview, Mar 20, 2018
-// Tue Mar 20, 2018 13:38:02 CDT
+v278-preview, Mar 21, 2018
+// Wed Mar 21, 2018 20:20:51 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
-//:Date:      Mar 20 2018
+//:Date:      Mar 21 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -10519,12 +10519,12 @@ time. I am just going to focus on two of them, namely, 'clock' and 'clockWithRes
 These methods allow you to have a query run one or more times while the execution
 time is tracked. After all iterations have completed, the average time the query took
 in milliseconds is returned.  Note that, especially for longer queries, the time
-returned will not appear to be the same as if you tried to measure the same 'clock' procedure
-using a stopwatch.  This is because these methods both perform a warm up pass
-before doing the actual timing. The warm up simply consists of running the query one
-time before timing starts. This means that for a single timing iteration, the 'human
-perceived time' will be roughly double the time returned by the 'clock' analysis.
-Let's take a look at a few examples. 
+returned will not appear to be the same as if you tried to measure the same 'clock'
+procedure using a stopwatch.  This is because these methods both perform a warm up
+pass before doing the actual timing. The warm up simply consists of running the query
+one time before timing starts. This means that for a single timing iteration, the
+'human perceived time' will be roughly double the time returned by the 'clock'
+analysis.  Let's take a look at a few examples. 
 
 Below is a very simple example of using a 'clock' step to measure the time it takes
 to find all airport vertices in the graph that are in China. Note that the clock step
@@ -11944,6 +11944,70 @@ g.V().has('region','GB-ENG').has('city','London').out().out().dedup().
       not(and(has('city','London'),has('region','GB-ENG'))).count()
 
 2236                        
+----
+
+How many routes are there between airports in England?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+We can use an 'aggregate' step to quite elegantly find the routes that exist between
+airports located in England. The following query finds all airports in England and
+orders them by airport code. It then collects those airports using an 'aggregate'
+step. Finally the aggregated collection is used to find routes to airports also
+within the UK. Note that as written, this query finds routes in both directions if
+they exist.
+
+[source,groovy]
+----
+// Flights within England
+g.V().has('region','GB-ENG').order().by('code').aggregate('a').
+      out().where(within('a')).path().by('code')  
+----
+
+Here are the routes found when the query is run. I arranged the results into columns
+to save space.
+
+[source,groovy]
+----
+[BHX,NCL]   [LBA,SOU]   [MAN,NQY]   [NQY,ISC]
+[BRS,NCL]   [LBA,NQY]   [MAN,NWI]   [NQY,LGW]
+[EMA,SOU]   [LCY,MAN]   [MAN,EXT]   [NQY,MAN]
+[EXT,MAN]   [LEQ,ISC]   [MAN,LHR]   [NQY,LPL]
+[EXT,NQY]   [LGW,NQY]   [MAN,LCY]   [NQY,LBA]
+[EXT,ISC]   [LGW,NCL]   [NCL,SOU]   [NWI,MAN]
+[HUY,NWI]   [LHR,MAN]   [NCL,BRS]   [NWI,HUY]
+[ISC,NQY]   [LHR,LBA]   [NCL,BHX]   [SOU,MAN]
+[ISC,EXT]   [LHR,NCL]   [NCL,LHR]   [SOU,EMA]
+[ISC,LEQ]   [LPL,NQY]   [NCL,LGW]   [SOU,LBA]
+[LBA,LHR]   [MAN,SOU]   [NQY,EXT]   [SOU,NCL]
+----
+
+Here is a different way the query can be written. This time a 'where' step is used to
+filter out the previously seen airport pairs so we only get routes in one direction.
+
+[source,groovy]
+----
+g.V().has('region','GB-ENG').order().by('code').as('a').
+      out().has('region','GB-ENG').as('b').
+      where('a',lt('b')).by('code').
+      path().by('code')
+----
+
+As you can see this time we only get each airport pair back once regardless of route
+direction.
+
+[source,groovy]
+----
+[BHX,NCL]   [LBA,NQY]
+[BRS,NCL]   [LCY,MAN]
+[EMA,SOU]   [LGW,NQY]
+[EXT,MAN]   [LGW,NCL]
+[EXT,NQY]   [LHR,MAN]
+[EXT,ISC]   [LHR,NCL]
+[HUY,NWI]   [LPL,NQY]
+[ISC,NQY]   [MAN,SOU]
+[ISC,LEQ]   [MAN,NQY]
+[LBA,LHR]   [MAN,NWI]
+[LBA,SOU]   [NCL,SOU]
 ----
 
 [[topten]]
