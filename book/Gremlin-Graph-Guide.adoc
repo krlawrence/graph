@@ -9388,7 +9388,7 @@ g.V(3).sack(assign).by(constant(true)).sack(or).by(constant(false)).sack()
 true
 ----
 
-While poving we can do boolean operations using constants is interesting it is
+While proving we can do boolean operations using constants is interesting it is
 perhaps not that useful. Where this functionality becomes more interesting is if the
 values being used come from, for example, a vertex property. So let's create a couple
 of vertices that each have a boolean property.
