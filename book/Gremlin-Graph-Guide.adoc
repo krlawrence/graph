@@ -21,6 +21,7 @@ v278-preview, Mar 23, 2018
 :revision: 278-preview
 :doctype: book
 :icons: font
+//:pdf-page-size: Letter
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
 //        has a white foreground color. The default was unreadable,
@@ -10759,7 +10760,7 @@ As I mentioned, the subject of JSON will come up again when we start looking at
 working with a Gremlin Server. This section has hopefully shown you how to save and
 load an entire graph as either GraphML or GraphSON and should you so desire to see
 the results of your queries as JSON. Remember that if you do save an entire graph as
-JSON, unless you specify otherwise, the default format is not GraphSON 3.0.
+JSON, unless you specify otherwise, the default format is GraphSON 3.0.
 
 
 [[performance]]
