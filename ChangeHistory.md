@@ -40,6 +40,8 @@ Major new features in this release
 - Examples in section 5 now all based on the same air routes graph v0.77 (some used to reflect an older version).
 - Added a new Java sample GroupCounts.java
 - Added a new Java sample that explores the `sample` step (Iterate.java).
+- Expanded the section in chapter 4 that introduces GraphML and Graphson. 
+- Added coverage of GraphSONMapper to the expanded GraphML/GraphSON section. Issue #51
 - Added to the `JanusGraph GeoSpatial` section and moved the
  section up a hierarchy level.
 - Added a new sample that demonstrates geospatial queries (janus-geoshape.groovy).

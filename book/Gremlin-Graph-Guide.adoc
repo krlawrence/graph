@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v278-preview, Mar 22, 2018
-// Thu Mar 22, 2018 17:09:05 CDT
+v278-preview, Mar 23, 2018
+// Fri Mar 23, 2018 17:25:21 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
-//:Date:      Mar 22 2018
+//:Date:      Mar 23 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -10456,10 +10456,35 @@ sg.V().hasLabel('airport').count()
 sg.V().has('code','LHR').out().values('code').join(',')
 ----
 
+[[graphmlandjsonintro]]
+Working with GraphML and GraphSON
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Apache TinkerPop supports loading and saving of entire graphs using GraphML and
+GraphSON. GraphML is a broadly supported XML standard that can be used to represent
+entire graphs. GraphSON is a JSON format defined as part of the Apache TinkerPop
+project that also allows whole graphs to represented. It is also possible to use
+GraphSON to represent the results of a Gremlin graph query in JSON format. In this
+section we will take a look at all of these topics. The whole subject of using
+GraphML and GraphSON will be revisited a few more times later in the book. Knowledge
+of GraphSON becomes especially important once you start working with the Gremlin
+Server. That topic will be covered in detail as part of the "<<gremlinserver>>"
+section quite a bit later. Both GraphML and GraphSON are covered in detail as part of
+the "<<serialize>>" section.
+
+NOTE: The official Apache TinkerPop documentation includes some good coverage of this
+topic. That documentation can be found at
+http://tinkerpop.apache.org/docs/current/reference/#_gremlin_i_o.
+
+There are currently three versions of GraphSON. The original 1.0 version and then
+versions 2.0 and 3.0 that added type information to the format. These were added in
+TinkerPop versions 3.2.2 and 3.3 respectively. The default format
+unless explicitly specified is currently GraphSON 3.0 
+
 
 [[sav]]
 Saving (serializing) a graph as GraphML (XML) or GraphSON (JSON)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Using TinkerPop 3 you can save a graph either in GraphML or Graphson format. GraphML
 is an industry standard XML format for describing a graph and is recognized by many
@@ -10481,16 +10506,18 @@ also beautify XML files well.
 [source,groovy]
 ----
 // Save the graph as GraphML
-graph.io(graphml()).writeGraph('mygraph.graphml')
+graph.io(graphml()).writeGraph('my-graph.graphml')
 ----
 
-TinkerPop 3 offers two flavors of JSON. The default flavor stores each vertex in a
-graph and all of its edges as a single JSON document.  This is repeated for every
-vertex in the graph. This is essentially what is known as 'adjacency list' format. If
-you serialize a graph to file using this method and look at the file afterwards you
-will see that each line (which could be very wide) is a stand alone JSON obect.
+TinkerPop 3 offers two different JSON packaging options. These are not to be confused
+with the three different syntax versions. The default encoding option  stores each
+vertex in a graph and all of its edges as a single JSON document.  This is repeated
+for every vertex in the graph. This is essentially what is known as 'adjacency list'
+format. If you serialize a graph to file using this method and look at the file
+afterwards you will see that each line (which could be very wide) is a stand alone
+JSON obect.
 
-The second flavor is referred to as a 'wrapped adjacency list' format. In this flavor
+The second variant is referred to as a 'wrapped adjacency list' format. In this flavor
 all of the vertices and edges are stored in a single large JSON oject inside of an
 enclosing 'vertices' object.
 
@@ -10517,8 +10544,9 @@ GraphSON.
 [source,groovy]
 ----
 // Create a single (wrapped) JSON file
-os = new FileOutputStream("mygraph.json")
-GraphSONWriter.build().wrapAdjacencyList(true).create().writeGraph(os,graph)
+fos = new FileOutputStream("my-graph.json")
+
+GraphSONWriter.build().wrapAdjacencyList(true).create().writeGraph(fos,graph)
 ----
 
 TIP: If you are ingesting large amounts of data into a TinkerPop 3 enables graph, the
@@ -10527,6 +10555,24 @@ GraphSON. Using this format you can stream data into a graph one vertex at a tim
 rather than having to try and send the entire graph as a potentially huge JSON file
 all in one go.
 
+Note that by default your graph will be saved using the GraphSON 3.0 format. Should
+you wish to use one of the older formats you can still do so but will need to
+explicitly specify which version you want Gremlin to generate. In the example below
+the graph is saved using GraphSON 1.0 format. Doing this requires the creation and
+use of a mapper that will produce the format we need.
+
+[source,groovy]
+----
+fos = new FileOutputStream("my-graph.json")
+
+mapper = graph.io(IoCore.graphson()).
+         mapper().version(GraphSONVersion.V1_0).create()
+
+graph.io(IoCore.graphson()).
+    writer().mapper(mapper).
+    create().writeGraph(fos, graph)
+----
+
 If you want to learn more about the specifics of the GraphML and GraphSON formats,
 they are covered in detail near the end of this book in the "<<serialize>>"
 section.
@@ -10534,7 +10580,7 @@ section.
 
 [[reload]]
 Loading a graph stored as GraphML (XML) or GraphSON (JSON)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In section 2 we saw how to load the 'air-routes.graphml' file. In case you skipped
 that part lets do a quick recap on loading GraphML files and also look at loading
@@ -10558,6 +10604,162 @@ If we are loading a GraphSON format file we instead specify 'IoCore.graphson()'.
 // Load a grapSON file
 graph.io(IoCore.graphson()).readGraph('my-graph.json')
 ----
+
+
+
+[[graphsonmapper]]
+Turning the results of a query into JSON
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In the sections above we explored how to save and load an entire graph using GraphSON
+(JSON) or GraphML (XML). However what we have not looked at so far are any ways to
+see query results expressed as JSON objects within the Gremlin console. As we shall
+explore in the "<<gremlinserver>>" section when you communicate with a Gremlin Server
+from an application or from the command line using a tool such as 'curl' and send
+queries to a graph over HTTP or WebSockets the results are returned as JSON objects.
+
+
+NOTE: There is not an equivalent XML object mapping capability. This is because
+GraphML is designed to contain whole graphs and not query results.
+
+
+When using the Gremlin Console the results of queries are presented to us in
+a nice and fairly terse way and we are not shown any JSON. Most of the time this is
+exactly what we want. However, if for any reason you want to see what the JSON for a
+query result looks like it is possible to do just that.  You can do this using the
+regular Gremlin Console and a TinkerGraph on your laptop. You do not need to be
+connected to a Gremlin Server to use the examples that I am about to present.
+
+The first thing you need to do is create an instance of a GraphSON mapper that can be
+used to generate JSON for us from a query result. Note that since TinkerPop 3.2.2 there
+have been multiple versions of the GraphSON format. The original 1.0 version did not
+contain any type information. Version 2.0 introduced the concept of including data
+types within the JSON. As part of TinkerPop 3.3 GraphSON 3.0 was introduced to add a
+few additional types. All three formats are still supported. The default is now
+GraphSON 3.0.
+
+The example below creates a 'GraphSONMapper' object that will generate GraphSON 1.0
+format JSON.
+
+[source,groovy]
+----
+json_mapper = GraphSONMapper.
+                build().
+                version(GraphSONVersion.V1_0).
+                create().
+                createMapper()
+
+----
+
+Next let's run a simple query that finds the vertex representing the Los Angeles
+(LAX) airport.
+
+[source,groovy]
+----
+lax = g.V().has('code','LAX').next()
+----
+
+The JSON mapper that we just created can now be used to display the query results as
+JSON
+
+[source,groovy]
+----
+json_mapper.writeValueAsString(lax)
+----
+
+Here is the JSON that was generated. I have pretty printed it a bit to make it more
+readable. Notice that the JSON includes the ID values for every property.
+
+[source,json]
+----
+{"id":13,"label":"airport","type":"vertex",
+ "properties":
+   {"country":[{"id":148,"value":"US"}],
+   "code":[{"id":149,"value":"LAX"}],
+   "longest":[{"id":150,"value":12091}],
+   "city":[{"id":151,"value":"Los Angeles"}],
+   "elev":[{"id":152,"value":127}],
+   "icao":[{"id":153,"value":"KLAX"}],
+   "lon":[{"id":154,"value":-118.4079971}],
+   "type":[{"id":155,"value":"airport"}],
+   "region":[{"id":156,"value":"US-CA"}],
+   "runways":[{"id":157,"value":4}],
+   "lat":[{"id":158,"value":33.94250107}],
+   "desc":[{"id":159,"value":"Los Angeles International Airport"}]}}
+----
+
+Let's create another 'GraphSONMapper' instance. This time we will be generating
+version 3.0 GraphSON.
+
+[source,groovy]
+----
+json_mapper_v3 = GraphSONMapper.
+                 build().
+                 version(GraphSONVersion.V3_0).
+                 create().
+                 createMapper()
+----
+
+As there is a lot more information contained in the GraphSON 3.0 format I
+decided to use a somewhat simpler query and just generate a 'valueMap' for a few of
+the properties contained in the LAX vertex to avoid having to show too much output!
+
+[source,groovy]
+----
+lax = g.V().has('code','LAX').valueMap(true,'code','city').next()
+----
+
+As before, we can use the mapper to generate the JSON.
+
+[source,groovy]
+----
+json_mapper_v3.writeValueAsString(lax)
+----
+
+This time, as you can see, the JSON returned contains a lot more information. The key
+thing to notice is the presence of all the '@type' and '@value' keys.
+
+[source,json]
+----
+{
+  "@type": "g:Map",
+  "@value": [
+    {
+      "@type": "g:T",
+      "@value": "id"
+    },
+    {
+      "@type": "g:Int64",
+      "@value": 13
+    },
+    "code",
+    {
+      "@type": "g:List",
+      "@value": [
+        "LAX"
+      ]
+    },
+    "city",
+    {
+      "@type": "g:List",
+      "@value": [
+        "Los Angeles"
+      ]
+    },
+    {
+      "@type": "g:T",
+      "@value": "label"
+    },
+    "airport"
+  ]
+}
+----
+
+As I mentioned, the subject of JSON will come up again when we start looking at
+working with a Gremlin Server. This section has hopefully shown you how to save and
+load an entire graph as either GraphML or GraphSON and should you so desire to see
+the results of your queries as JSON. Remember that if you do save an entire graph as
+JSON, unless you specify otherwise, the default format is not GraphSON 3.0.
 
 
 [[performance]]
@@ -19127,6 +19329,13 @@ To be written
 
 GraphSON
 ~~~~~~~~
+
+As discussed in the "<<graphmlandjsonintro>>" section, since TinkerPop 3.2.2 there
+have been multiple versions of the GraphSON format. The original 1.0 version did not
+contain any type information. Version 2.0 introduced the concept of including data
+types within the JSON. As part of TinkerPop 3.3 GraphSON 3.0 was introduced to add a
+few additional types. All three formats are still supported. The default is now
+GraphSON 3.0.
 
 To be written
 
