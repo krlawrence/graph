@@ -4197,7 +4197,7 @@ As I have pointed out several times already, there are often many ways to write 
 query that will produce the same result. Here is an example of the previous two
 queries rewritten to use a 'between' step instead of an 'and' step. Remember that
 'between' is inclusive/exclusive, so we have to specify 101 as the upper bound and 95
-as the lower bound.`
+as the lower bound.
 
 [source,groovy]
 ----
@@ -4207,7 +4207,7 @@ g.V().hasLabel('airport').where(out().count().is(between(95,101))).
 [BUD:98,STR:95,NCE:97,AUH:97,WAW:98,CRL:95]
 ----
 
-Just for fun, here is the same query but rewritten to use an 'inside' step
+Just for fun, here is the same query but rewritten to use an 'inside' step.
 
 
 [source,groovy]
