@@ -3213,7 +3213,7 @@ g.V().hasLabel('airport').out('route').count().mean()
 43400.0
 ----
 
-As you can see the answer we got back, '42760.0' looks wrong, and indeed it is. That
+As you can see the answer we got back, '43400.0' looks wrong, and indeed it is. That
 number is in fact the total number of outgoing routes in the entire graph. This is
 because as written the query counts all of the routes, adds them all up, but does not
 keep track of how many airports it visited. This means that calling the 'mean' step
