@@ -10,6 +10,7 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
 This release has been tested against Apache TinkerPop at the 3.3.1 level and JanusGraph 0.2 which supports TinkerPop at the 3.2.6 level.
 
 Major new features in this release
+- Added additional background and context to the introduction chapter.
 - Added a new section on measuring query performance.
 - Added coverage of the new `math` step. Issue #21.
 - Added a new Java sample that demonstrates the `math` step (StdDev.java).
@@ -40,7 +41,7 @@ Major new features in this release
 - Examples in section 5 now all based on the same air routes graph v0.77 (some used to reflect an older version).
 - Added a new Java sample GroupCounts.java
 - Added a new Java sample that explores the `sample` step (Iterate.java).
-- Expanded the section in chapter 4 that introduces GraphML and Graphson. 
+- Expanded the section in chapter 4 that introduces GraphML and Graphson.
 - Added coverage of GraphSONMapper to the expanded GraphML/GraphSON section. Issue #51
 - Added to the `JanusGraph GeoSpatial` section and moved the
  section up a hierarchy level.

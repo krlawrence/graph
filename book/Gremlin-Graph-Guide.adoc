@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v278-preview, Mar 23, 2018
-// Fri Mar 23, 2018 17:25:21 CDT
+v278-preview, Mar 24, 2018
+// Sat Mar 24, 2018 09:59:08 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
-//:Date:      Mar 23 2018
+//:Date:      Mar 24 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -78,8 +78,10 @@ more will be added in the coming weeks and months as time permits. I am hopeful 
 what is presented so far is of some use to folks, who like me, are learning to use
 the Gremlin query and traversal language and related technologies.
 
-A lot of additional material, including sample code and data, can be found at the
-https://github.com/krlawrence/graph[project's home on GitHub].
+A lot of additional material, including the book in many different formats such as
+PDF, HTML, ePub and MOBI as well as sample code and data, can be found at the
+https://github.com/krlawrence/graph[project's home on GitHub]. You will find a
+summary of everything that is available in the "<<samplesintro>>" section.
 
 How this book came to be
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -94,10 +96,13 @@ can read it. It is aimed at programmers and anyone using the Gremlin query langu
 to work with graphs. Lots of code examples, sample queries, discussion of best
 practices, lessons I learned the hard way etc. are included.
 
-Thanks to all those that have encouraged me to keep going with this adventure!
+I would like to say very heartfelt *Thank You* to all those that have encouraged me
+to keep going with this adventure! It has required quite a lot of work but also
+remains a lot of fun.
 
 Kelvin R. Lawrence +
-October 5th, 2017 +
+First draft: October 5th, 2017 +
+Current draft: March 24th, 2018 +
 
 Providing feedback
 ~~~~~~~~~~~~~~~~~~
@@ -111,8 +116,8 @@ I am grateful to those who have already taken the time to review the manuscript 
 open issues or pull requests.
 
 [[thanks]]
-A word of thanks
-~~~~~~~~~~~~~~~~
+Some words of thanks
+~~~~~~~~~~~~~~~~~~~~
 
 I would like to thank my colleagues, Graham Wallis, Jason Plurad and Adam Holley for
 their help in refining and improving several of the queries contained in this book.
@@ -124,6 +129,11 @@ spend a  lot of time replying to questions and suggestions on the
 https://groups.google.com/forum/#!forum/gremlin-users[Gremlin Users Google Group].
 Special thanks should go to Daniel Kuppitz, Marko Rodriguez and Stephen Mallette, key
 members of the team that created and maintains Apache TinkerPop.
+
+Lastly, I would like to thank everyone who has submitted feedback and ideas via
+e-mail as well as GitHub issues and pull requests. That is the best part about this
+being a 'living book' we can continue to improve and evolve it just as the technology
+it is about continues to evolve. Your help and support is very much appreciated.
 
 [[about]]
 What is this book about?
@@ -228,11 +238,33 @@ various resources included with this book.
 Project home::
 - https://github.com/krlawrence/graph
 Book manuscript in Asciidoc format::
+- This file can be viewed using the GitHub web interface. It will always represent 
+  the very latest updates.
 - https://github.com/krlawrence/graph/tree/master/book
 Latest PDF and HTML snapshots::
+- These files are regularly updated to reflect any significant changes. These are the
+  only generated formats that are updated outside of the full release cycle. The PDF
+  version includes pagination as well as page numbering and is produced using an A4 
+  page size. The HTML  version does not include these features. Otherwise they are 
+  more or less identical.
 - http://kelvinlawrence.net/book/Gremlin-Graph-Guide.pdf
 - http://kelvinlawrence.net/book/Gremlin-Graph-Guide.html
 Official book releases in multiple formats::
+- Official releases include Asciidoc, HTML, PDF, ePub, MOBI and DocBook versions as
+  well as snapshots of all the samples and other materials in a single package. My
+  goal is to have an official release about once a month providing enough new
+  material has been created to justify doing it. The eBook and MOBI versions are
+  really intended to be read using e-reader devices and for that reason use a white 
+  background for all source code highlighting to make it easier to read on monochrome
+  devices. 
+- I recommend using the PDF version if possible as it has page numbering. If
+  you prefer reading the book as if it were web page then by all means use the HTML
+  version. You will just not get any pagination or page numbers. The DocBook format 
+  can be read  using tools such as Yelp on Linux systems but is primarily included
+  so that people can use it to generate other formats that I do not already provide. 
+  There is currently an issue with the MOBI and ePub versions that causes links to 
+  have the wrong text. Other than that they should work although you may need to 
+  change the font size you use on your device to make things easier to read.
 - https://github.com/krlawrence/graph/releases
 Sample data (air-routes.graphml)::
 - https://github.com/krlawrence/graph/tree/master/sample-data
@@ -240,6 +272,10 @@ Sample code::
 - https://github.com/krlawrence/graph/tree/master/sample-code
 Example applications::
 - https://github.com/krlawrence/graph/tree/master/demos
+Change history::
+- If you want to keep up with the changes being made this is the file to keep an eye
+  on.
+- https://github.com/krlawrence/graph/blob/master/ChangeHistory.md
 
 
 [[whygraph]]
