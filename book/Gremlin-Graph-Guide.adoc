@@ -4608,7 +4608,7 @@ TIP: The 'constant' step can be used to return a constant value as part of a que
 
 Here is one more example that uses a 'sample' step to pick 10 airports and then
 return either "lots" or "not so many" depending on whether the airport has more than
-50 routes or not. Note also how 'as' and 'select' are used to combine the both the
+50 routes or not. Note also how 'as' and 'select' are used to combine both the
 derived and constant parts of the query result that we will ultimately return.
 
 [source,groovy]
