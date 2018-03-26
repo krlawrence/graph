@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v278-preview, Mar 24, 2018
-// Sat Mar 24, 2018 09:59:08 CDT
+v278-preview, Mar 26, 2018
+// Mon Mar 26, 2018 11:21:59 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
-//:Date:      Mar 24 2018
+//:Date:      Mar 26 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -4624,6 +4624,7 @@ g.V().hasLabel('airport').choose(values('code').is(within('AUS','DFW')),
                                  values('region')).limit(15)
 ----
 
+[[chooseconstant]]
 Including a constant value - introducing 'constant'
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -4879,7 +4880,15 @@ combine parts of a query into a single result. Just as with the boolean 'and' an
 using 'union' but it does offer some very useful capability.
 
 Here is a simple example that uses a 'union' step to produce a list containing a
-vertex and the number of outgoing routes from that vertex.
+vertex and the number of outgoing routes from that vertex. Note that in the next
+section we will see that there are simpler ways to write this query while still using
+a 'union' step. The main point to take away from this example is that you can use a
+'union' step to combine the results of multiple traversals. This example combines the
+results of two traversals but you can certainly combine more as needed. Note that the
+'out' step starts from the vertex that was found immediately before the 'union' step
+which in this case is the DFW vertex. So in other words the output from the prior
+step is available to the steps within the 'union' step just as with other Gremlin
+steps we have already looked at.
 
 [source,groovy]
 ----
@@ -4889,22 +4898,10 @@ g.V().has('airport','code','DFW').as('a').
 [v[8],221]
 ----
 
-Note that we could also use an 'identity' step to simplify the query a little. The
-'identity' step simply returns the entity that was passed in to the current step of a
-traversal (in this case 'union') from the prior step. So, as shown below, using
-'identity' causes the vertex 'V[8]' representing the DFW airport from the prior 'has'
-step to be included in the result.
-
-[source,groovy]
-----
-g.V().has('airport','code','DFW').
-      union(identity(),out().count()).fold()
-
-[v[8],221]
-----
-
-Both of the examples above provide a shorthand way of writing what we could also have
-written as shown below.
+Not that this is recommended, but the previous query could also be written as follows
+using two 'has' steps both inside a single 'union' step. This does however
+demonstrate that you can use a 'union' step to combine the results of fairly
+arbitrary graph traversals.
 
 [source,groovy]
 ----
@@ -4922,28 +4919,78 @@ that best fit the problem you are solving.
 
 [source,groovy]
 ----
-g.V().has('airport','code','DFW').group().by().by(out().count())
+g.V().has('airport','code','DFW').
+      group().by().by(out().count())
 
 [v[8]:221]]
 ----
 
-You can also use 'constant' steps within a 'union' step as the two examples below
-show.
+[[unionidentity]]
+Introducing the 'identity' step
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                             
+Gremlin has an 'identity' step that we have not seen used so far in this book.  The
+'identity' step simply returns the entity that was passed in to the current step of a
+traversal (in this case 'union') from the prior step. We can rewrite the query we
+used above to use an 'identity' step. This simplifies the query as it removes the
+need to use the 'as' and 'select' steps. As shown below, using 'identity' causes the
+vertex 'V[8]' representing the DFW airport from the prior 'has' step to be included
+in the result.
 
 [source,groovy]
 ----
-g.V(3).union(constant("Hello"),constant("There")).fold()
+g.V().has('airport','code','DFW').
+      union(identity(),out().count()).fold()
+
+[v[8],221]
+----
+
+[[unionconstant]]
+Using 'constant' values as part of a 'union'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+We have already seen the 'constant' step used in the "<<chooseconstant>>" section.
+As you might expect, you can also use 'constant' steps within a 'union' step as the
+two examples below show.
+
+[source,groovy]
+----
+g.V(3).union(constant("Hello"),
+             constant("There")).fold()
 
 [Hello,There]
+----
 
-g.V(3).union(constant("Hello"),constant("There"),identity()).fold()
+The 'identity' step that was just introduced above could be used to add the 'V[3]'
+vertex to the result. We are now combining three traversal steps together inside of
+the 'union' step.
+
+[source,groovy]
+----
+g.V(3).union(constant("Hello"),
+             constant("There"),
+             identity()).fold()
 
 [Hello,There,v[3]]
+----
 
-g.V(3).union(constant("Hello"),constant("There"),values('city')).fold()
+Finally, let's change the query again to include a city name in the result. Note that
+the 'values' step refers to the property of the vertex that was referenced
+immediately before the 'union' step so it will return the 'city' property of vertex
+'V[3]'.
+
+[source,groovy]
+----
+g.V(3).union(constant("Hello"),
+             constant("There"),
+             values('city')).fold()
 
 [Hello,There,Austin]
 ----
+
+[[unionmore]]
+More examples of the 'union' step
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The following query uses a 'sample' step to select 10 airports at random from the
 graph. For each selected airport, a 'union' step is then used to combine the 'id' of
@@ -4972,14 +5019,26 @@ Here is the output I got back from running the query.
 [161,IST,Istanbul] 
 ----
 
+If 'local' scope had not been used, the result would have been a single list
+containing all of the results as shown below.
+
+[source,groovy]
+----
+g.V().hasLabel("airport").sample(10).
+      union(id(),values("code","city")).fold()
+
+[84,MAN,Manchester,87,CGN,Cologne,35,EWR,Newark,37,HNL,Honolulu,54,NRT,Tokyo,86,YEG,Edmonton,45,PHL,Philadelphia,52,FRA,Frankfurt,85,YUL,Montreal,142,SOF,Sofia]
+----
+
 By way of another simple example, the following query returns flights that arrive in
 AUS from the UK or that leave AUS and arrive in Mexico.
 
 [source,groovy]
 ----
 // Flights to AUS from the UK or from AUS to Mexico
-g.V().has('code','AUS').union(__.in().has('country','UK'),
-                                out().has('country','MX')).path().by('code')
+g.V().has('code','AUS').
+      union(__.in().has('country','UK'),
+            out().has('country','MX')).path().by('code')
 ----
 
 
@@ -5005,7 +5064,8 @@ g.V().has('city','London').has('region','GB-ENG').
               out('route').has('city','Berlin')).path().by('code')
 ----
 
-Here are the results we get back from running the query.
+Here are the results from running the query. Note that routes from five different
+London airports were found.
 
 [source,groovy]
 ----
@@ -5033,8 +5093,13 @@ g.V().has('city','London').has('region','GB-ENG').
       out().has('city',within('Paris','Berlin')).path().by('code')
 ----
 
-This next query is more interesting. We again start from any airport in London, but then
-we want routes that meet any of the criteria:
+[[unionthree]]
+Using 'union' to combine more complex traversal results
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+So far the examples we have looked at mostly show fairly simple traversals being used
+inside of a 'union' step. This next query is a bit more interesting. We again start
+from any airport in London, but then we want routes that meet any of the criteria:
 
 * Go to Berlin and then to Lisbon
 * Go to Paris and then Barcelona
@@ -5042,7 +5107,7 @@ we want routes that meet any of the criteria:
 
 We also want to return the distances in each case. Note that you can union together
 as many items as you need to. In this example we combine the results of
-three sets of traversals.
+three sets of traversals to get the desired results.
 
 
 [source,groovy]
@@ -5102,14 +5167,16 @@ filtered out from the calculation.
 It is worth noting that it is not required that every traversal inside of a union
 step returns a result. The returned results will include any of the traversals that
 did return something. The example below demonstrates this. Of course in practice you
-would not write this particular query this way.
+would not write this particular query this way. However, I think this example
+demonstrates a feature of the 'union' step that it is important to understand.
 
 [source,groovy]
 ----
 g.V().has('airport','code','AUS').
       union(out().has('code','LHR'),
             out().has('code','SYD'),
-            out().has('code','DFW')).values('code')
+            out().has('code','DFW')).
+      values('code')
 ----
 
 If we run the query, you will see that SYD is not part of the results as there is no
@@ -5127,7 +5194,8 @@ using a 'union'.
 [source,groovy]
 ----
 g.V().has('airport','code','AUS').
-      out().has('code',within('LHR','DFW','SYD')).values('code')
+      out().has('code',within('LHR','DFW','SYD')).
+      values('code')
 
 LHR
 DFW

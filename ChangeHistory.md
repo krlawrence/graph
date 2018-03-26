@@ -17,6 +17,8 @@ Major new features in this release
 - Added coverage of the `optional` step. Issue #40.
 - Improved introduction to the `select` step.
 - Expanded the "Using 'where' to filter things out of a result" section and the following section that introduces the 'where' and 'by' pattern.
+- Expanded the section that introduces the `union` step.
+- Added dedicated introduction sections for the `identity` and `constant` steps. Issue #43.
 - Added coverage of TinkerGraph indexing.
 - Added to the `collections` section.
 - Added a new `OLTP vs OLAP` section.
