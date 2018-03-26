@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v278-preview, Mar 26, 2018
-// Mon Mar 26, 2018 11:21:59 CDT
+// Mon Mar 26, 2018 12:44:07 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Mar 26 2018
@@ -11494,10 +11494,10 @@ indicates that there are no airports in the graph for those countries.
 [source,groovy]
 ----
 // Are there any countries that have no airports?
-g.V().hasLabel('country').where(out().count().is(0)).values('desc')
+g.V().hasLabel('country').not(out()).values('desc')
 ----
 
-Here are the results of running the query.
+So it seems there are six countries for which no airports were found.
 
 [source,groovy]
 ----
@@ -11509,9 +11509,19 @@ Pitcairn
 San Marino
 ----
 
+The previous query is a slightly shorter form of the query below which would yield
+the same results.
+
+[source,groovy]
+// Are there any countries that have no airports?
+----
+g.V().hasLabel('country').where(out().count().is(0)).values('desc')
+----
+
 [[runwaydist]]
 What is the distribution of runways?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 We can easily count the distribution per airport of runways. We can observe from the
 results of running the query that the vast majority of airports in the graph have
 either one or two runways.
@@ -11550,8 +11560,19 @@ do this. One way that is quite convenient is to use 'group'.
 g.V().hasLabel('airport').
       where(out('route').count().is(gt(180))).
       group().by('code').by(out().count())
+----
 
-[ORD:232,PVG:201,LAX:195,CDG:262,STN:186,JFK:187,DFW:221,LHR:191,MUC:237,DME:214,EWR:182,AMS:269,IST:270,DEN:188,BCN:190,DXB:229,IAH:192,MAD:192,FCO:189,FRA:272,PEK:234,ATL:232,YYZ:181,MAN:182,LGW:200]
+I have laid the results out in a grid to make them easier to read.
+
+[source,groovy]
+----
+[ORD:232,PVG:201,LAX:195,CDG:262,
+ STN:186,JFK:187,DFW:221,LHR:191,
+ MUC:237,DME:214,EWR:182,AMS:269,
+ IST:270,DEN:188,BCN:190,DXB:229,
+ IAH:192,MAD:192,FCO:189,FRA:272,
+ PEK:234,ATL:232,YYZ:181,MAN:182,
+ LGW:200]
 ----
 
 We can add one further refinement to the query. This time the results are ordered by
@@ -11566,8 +11587,19 @@ g.V().hasLabel('airport').
       where(out('route').count().is(gt(180))).
       group().by('code').by(out().count()).
       order(local).by(values,decr)
+----
 
-[FRA:272,IST:270,AMS:269,CDG:262,MUC:237,PEK:234,ORD:232,ATL:232,DXB:229,DFW:221,DME:214,PVG:201,LGW:200,LAX:195,IAH:192,MAD:192,LHR:191,BCN:190,FCO:189,DEN:188,JFK:187,STN:186,EWR:182,MAN:182,YYZ:181]
+I have again laid the results out in a grid.
+
+[source,groovy]
+----
+[FRA:272,IST:270,AMS:269,CDG:262,
+ MUC:237,PEK:234,ORD:232,ATL:232,
+ DXB:229,DFW:221,DME:214,PVG:201,
+ LGW:200,LAX:195,IAH:192,MAD:192,
+ LHR:191,BCN:190,FCO:189,DEN:188,
+ JFK:187,STN:186,EWR:182,MAN:182,
+ YYZ:181]
 ----
 
 As I mentioned earlier in the book, the number of incoming and outgoing routes for
@@ -11579,7 +11611,8 @@ routes (inbound and outbound).
 ----
 // Airports with more than 400 total routes
 g.V().hasLabel('airport').
-      where(both('route').count().is(gt(400))).values('code').fold()
+      where(both('route').count().is(gt(400))).
+      values('code').fold()
 
 [ATL,DFW,ORD,CDG,FRA,DXB,PEK,PVG,AMS,MUC,DME,IST]
 ----
@@ -11594,7 +11627,8 @@ The query below will figure out just how many fall into that category.
 [source,groovy]
 ----
 // How many airports have only one route?
-g.V().hasLabel('airport').where(out().count().is(eq(1))).count()
+g.V().hasLabel('airport').
+  where(out().count().is(eq(1))).count()
 
 770
 ----
