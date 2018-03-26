@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v278-preview, Mar 26, 2018
-// Mon Mar 26, 2018 12:44:07 CDT
+// Mon Mar 26, 2018 17:00:31 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Mar 26 2018
@@ -6851,9 +6851,10 @@ directly into the Gremlin console.
 
 [source,groovy]
 ----
-g.V().hasLabel('airport').has('region',within('US-TX','US-LA','US-AZ','US-OK'))   \
-                         .order().by('region',incr)   \
-                         .valueMap().select('code','region')
+g.V().hasLabel('airport') \
+     .has('region',within('US-TX','US-LA','US-AZ','US-OK'))   \
+     .order().by('region',incr)   \
+     .valueMap().select('code','region')
 
 ----
 
@@ -6862,19 +6863,39 @@ line ends with a period which tells the parser that there are more steps coming.
 
 [source,groovy]
 ----
-g.V().hasLabel('airport').has('region',within('US-TX','US-LA','US-AZ','US-OK')).
-                          order().by('region',incr).
-                          valueMap().select('code','region')
+g.V().hasLabel('airport').
+      has('region',within('US-TX','US-LA','US-AZ','US-OK')).
+      order().by('region',incr).
+      valueMap().select('code','region')
 
 ----
 
 If we do not give the parser one of these clues that there is more to come, the
 Gremlin console will try and execute each line without waiting for the next line.
 
+Some people find it easier to read queries when each step or modulator is given its
+own line and indented appropriately. So we could layout the query as shown below and
+it will still work just fine.
+
+
+[source,groovy]
+----
+g.V().hasLabel('airport').
+      has('region',within('US-TX','US-LA','US-AZ','US-OK')).
+      order().
+        by('region',incr).
+      valueMap().
+      select('code','region')
+
+----
+
 Whether you decide to use the backslash as a continuation character or leave the
 period on the previous line is really a matter of personal preference. Just be sure
 to do one or the other if you want to use multiple line queries within the Gremlin
-console.
+console.  There is no golden rule as to how many lines and how much indenting you
+should use when laying out your more complex queries. However, whatever you decide to
+do, it is worth remembering that others reading your work may find well laid out and
+appropriately indented steps easier to read and understand.
 
 
 [[rword]]
@@ -11728,34 +11749,39 @@ has.
 ----
 // How many airports does each country have in the graph?
 g.V().hasLabel('airport').groupCount().by('country')
-
-[PR:6,PT:14,PW:1,PY:2,QA:1,AE:10,AF:4,AG:1,AI:1,AL:1,AM:2,AO:14,AR:36,AS:1,AT:6,RE:2,AU:124,AW:1,AZ:5,RO:14,BA:4,BB:1,RS:2,BD:7,BE:5,RU:120,BF:2,BG:4,RW:2,BH:1,BI:1,BJ:1,BL:1,BM:1,BN:1,BO:15,SA:26,BQ:3,SB:17,BR:115,SC:2,BS:18,SD:5,SE:39,BT:1,SG:1,BW:4,SH:2,SI:1,BY:2,BZ:13,SK:2,SL:1,SN:3,SO:5,CA:203,SR:1,SS:1,CC:1,CD:11,ST:1,SV:1,CF:1,CG:3,CH:5,SX:1,CI:1,SY:2,SZ:1,CK:6,CL:17,CM:5,CN:209,CO:50,CR:13,TC:4,TD:1,CU:12,CV:7,TG:1,TH:32,CW:1,CX:1,CY:3,TJ:4,CZ:5,TL:1,TM:1,TN:8,TO:1,TR:48,TT:2,DE:33,TV:1,TW:9,TZ:8,DJ:1,DK:8,DM:1,DO:7,UA:15,UG:4,UK:58,DZ:29,US:579,EC:15,EE:3,EG:10,EH:2,UY:2,UZ:11,ER:1,VC:1,ES:42,ET:14,VE:24,VG:2,VI:2,VN:21,VU:26,FI:20,FJ:10,FK:2,FM:4,FO:1,FR:58,WF:2,GA:2,WS:1,GD:1,GE:3,GF:1,GG:2,GH:5,GI:1,GL:14,GM:1,GN:1,GP:1,GQ:2,GR:39,GT:2,GU:1,GW:1,GY:2,HK:1,HN:6,HR:8,HT:2,YE:9,HU:2,ID:67,YT:1,IE:7,IL:5,IM:1,IN:73,ZA:20,IQ:6,IR:44,IS:5,IT:36,ZM:8,JE:1,ZW:3,JM:2,JO:2,JP:63,KE:14,KG:2,KH:3,KI:2,KM:1,KN:2,KP:1,KR:15,KS:1,KW:1,KY:3,KZ:20,LA:8,LB:1,LC:2,LK:6,LR:2,LS:1,LT:3,LU:1,LV:1,LY:10,MA:14,MD:1,ME:2,MF:1,MG:13,MH:2,MK:1,ML:1,MM:14,MN:10,MO:1,MP:2,MQ:1,MR:3,MS:1,MT:1,MU:2,MV:8,MW:2,MX:59,MY:34,MZ:10,NA:4,NC:1,NE:1,NF:1,NG:18,NI:1,NL:5,NO:49,NP:10,NR:1,NZ:25,OM:4,PA:5,PE:20,PF:30,PG:26,PH:38,PK:21,PL:13,PM:1]
 ----
 
-Because the air-routes graph also has country specific vertices, we could chose to write
-the previous query a different way. We could start by finding country vertices and then
-see how many airport vertices each one is connected to.
+When run the query produces quite a lot of output. As the values are not sorted it is
+hard to find the countries with the most airports. Note that the 'groupCount' step
+does not include countries that had no airports. In other words if the count is zero
+the country was skipped.
 
 [source,groovy]
 ----
-// Another way to ask the question above, this time by counting the edges (degree) from each country
-g.V().hasLabel('country').group().by('code').by(outE().count())
+[PR:6,PT:14,PW:1,PY:2,QA:1,AE:10,AF:4,AG:1,AI:1,AL:1,AM:2,AO:14,AR:36,AS:1,AT:6,RE:2,AU:124,AW:1,AZ:5,RO:14,BA:4,BB:1,RS:2,BD:7,BE:5,RU:120,BF:2,BG:4,RW:2,BH:1,BI:1,BJ:1,BL:1,BM:1,BN:1,BO:15,SA:26,BQ:3,SB:17,BR:115,SC:2,BS:18,SD:5,SE:39,BT:1,SG:1,BW:4,SH:2,SI:1,BY:2,BZ:13,SK:2,SL:1,SN:3,SO:5,CA:203,SR:1,SS:1,CC:1,CD:11,ST:1,SV:1,CF:1,CG:3,CH:5,SX:1,CI:1,SY:2,SZ:1,CK:6,CL:17,CM:5,CN:209,CO:50,CR:13,TC:4,TD:1,CU:12,CV:7,TG:1,TH:32,CW:1,CX:1,CY:3,TJ:4,CZ:5,TL:1,TM:1,TN:8,TO:1,TR:48,TT:2,DE:33,TV:1,TW:9,TZ:8,DJ:1,DK:8,DM:1,DO:7,UA:15,UG:4,UK:58,DZ:29,US:579,EC:15,EE:3,EG:10,EH:2,UY:2,UZ:11,ER:1,VC:1,ES:42,ET:14,VE:24,VG:2,VI:2,VN:21,VU:26,FI:20,FJ:10,FK:2,FM:4,FO:1,FR:58,WF:2,GA:2,WS:1,GD:1,GE:3,GF:1,GG:2,GH:5,GI:1,GL:14,GM:1,GN:1,GP:1,GQ:2,GR:39,GT:2,GU:1,GW:1,GY:2,HK:1,HN:6,HR:8,HT:2,YE:9,HU:2,ID:67,YT:1,IE:7,IL:5,IM:1,IN:73,ZA:20,IQ:6,IR:44,IS:5,IT:36,ZM:8,JE:1,ZW:3,JM:2,JO:2,JP:63,KE:14,KG:2,KH:3,KI:2,KM:1,KN:2,KP:1,KR:15,KS:1,KW:1,KY:3,KZ:20,LA:8,LB:1,LC:2,LK:6,LR:2,LS:1,LT:3,LU:1,LV:1,LY:10,MA:14,MD:1,ME:2,MF:1,MG:13,MH:2,MK:1,ML:1,MM:14,MN:10,MO:1,MP:2,MQ:1,MR:3,MS:1,MT:1,MU:2,MV:8,MW:2,MX:59,MY:34,MZ:10,NA:4,NC:1,NE:1,NF:1,NG:18,NI:1,NL:5,NO:49,NP:10,NR:1,NZ:25,OM:4,PA:5,PE:20,PF:30,PG:26,PH:38,PK:21,PL:13,PM:1]
 ----
 
-If we wanted to sort the list in descending order we could adjust the query as
-follows. Once again note the use of 'local' to specify how the ordering is applied.
+
+If we wanted to sort the list in descending order using the numeric values we could
+adjust the query as follows. Once again note the use of 'local' to specify how the
+ordering is applied.
 
 [source,groovy]
 ----
 g.V().hasLabel('airport').groupCount().by('country').order(local).by(values,decr)
+----
 
+This time it is much easier to see which countries have the most airports.
+
+[source,groovy]
+----
 [US:579,CN:209,CA:203,AU:124,RU:120,BR:115,IN:73,ID:67,JP:63,MX:59,UK:58,FR:58,CO:50,NO:49,TR:48,IR:44,ES:42,SE:39,GR:39,PH:38,AR:36,IT:36,MY:34,DE:33,TH:32,PF:30,DZ:29,SA:26,VU:26,PG:26,NZ:25,VE:24,VN:21,PK:21,FI:20,ZA:20,KZ:20,PE:20,BS:18,NG:18,SB:17,CL:17,BO:15,UA:15,EC:15,KR:15,PT:14,AO:14,RO:14,ET:14,GL:14,KE:14,MA:14,MM:14,BZ:13,CR:13,MG:13,PL:13,CU:12,CD:11,UZ:11,AE:10,EG:10,FJ:10,LY:10,MN:10,MZ:10,NP:10,TW:9,YE:9,TN:8,TZ:8,DK:8,HR:8,ZM:8,LA:8,MV:8,BD:7,CV:7,DO:7,IE:7,PR:6,AT:6,CK:6,HN:6,IQ:6,LK:6,AZ:5,BE:5,SD:5,SO:5,CH:5,CM:5,CZ:5,GH:5,IL:5,IS:5,NL:5,PA:5,AF:4,BA:4,BG:4,BW:4,TC:4,TJ:4,UG:4,FM:4,NA:4,OM:4,BQ:3,SN:3,CG:3,CY:3,EE:3,GE:3,ZW:3,KH:3,KY:3,LT:3,MR:3,PY:2,AM:2,RE:2,RS:2,BF:2,RW:2,SC:2,SH:2,BY:2,SK:2,SY:2,TT:2,EH:2,UY:2,VG:2,VI:2,FK:2,WF:2,GA:2,GG:2,GQ:2,GT:2,GY:2,HT:2,HU:2,JM:2,JO:2,KG:2,KI:2,KN:2,LC:2,LR:2,ME:2,MH:2,MP:2,MU:2,MW:2,PW:1,QA:1,AG:1,AI:1,AL:1,AS:1,AW:1,BB:1,BH:1,BI:1,BJ:1,BL:1,BM:1,BN:1,BT:1,SG:1,SI:1,SL:1,SR:1,SS:1,CC:1,ST:1,SV:1,CF:1,SX:1,CI:1,SZ:1,TD:1,TG:1,CW:1,CX:1,TL:1,TM:1,TO:1,TV:1,DJ:1,DM:1,ER:1,VC:1,FO:1,WS:1,GD:1,GF:1,GI:1,GM:1,GN:1,GP:1,GU:1,GW:1,HK:1,YT:1,IM:1,JE:1,KM:1,KP:1,KS:1,KW:1,LB:1,LS:1,LU:1,LV:1,MD:1,MF:1,MK:1,ML:1,MO:1,MQ:1,MS:1,MT:1,NC:1,NE:1,NF:1,NI:1,NR:1,PM:1]
 ----
 
 If we wanted to sort by the country code, the 'key' in other words, we could change
-the query accordingly. In this case we will use 'by(keys,incr)' to get a sort in ascending
-order. If we wanted to sort in descending order by key we could use 'by(keys,decr)'
-instead.
+the query accordingly. In this case we will use 'by(keys,incr)' to get a sort in
+ascending order. If we wanted to sort in descending order by key we could use
+'by(keys,decr)' instead.
 
 [source,groovy]
 ----
@@ -11770,11 +11796,49 @@ pairs returned. Here is an example of doing just that.
 [source,groovy]
 ----
 // Only return the values for Germany, China, Holland and the US.
-g.V().hasLabel('airport').groupCount().by('country').select('DE','CN','NL','US')
+g.V().hasLabel('airport').
+      groupCount().by('country').
+      select('DE','CN','NL','US')
 
 [DE:32, CN:179, NL:5, US:566]
 ----
 
+Because the air-routes graph also has country specific vertices, we could chose to
+write the previous queries a different way. We could start by finding country
+vertices and then see how many airport vertices each one is connected to. In this
+instance, because a 'group' step is being used, countries with no airports will be
+included.
+
+[source,groovy]
+----
+// Another way to ask the question above, this time by counting the
+// edges (out degree) from each country
+
+g.V().hasLabel('country').
+      group().by('code').by(outE().count()).
+      order(local).by(values,decr)
+----
+
+This time the countries with no airports *are* included in the results.
+
+[source,groovy]
+----
+[US:579,CN:209,CA:204,AU:125,RU:122,BR:115,IN:74,ID:67,JP:63,MX:59,UK:58,FR:58,CO:50,NO:49,TR:48,IR:45,ES:42,SE:39,GR:39,PH:39,AR:37,IT:36,MY:34,DE:33,TH:32,PF:30,DZ:29,SA:26,VU:26,PG:26,NZ:25,VE:24,VN:21,PK:21,FI:20,ZA:20,KZ:20,PE:20,BS:18,NG:18,SB:17,CL:17,BO:15,UA:15,EC:15,KR:15,PT:14,AO:14,RO:14,ET:14,GL:14,KE:14,MA:14,MM:14,BZ:13,CR:13,MG:13,PL:13,CU:12,CD:11,UZ:11,AE:10,EG:10,FJ:10,LY:10,MN:10,MZ:10,NP:10,TW:9,YE:9,TN:8,TZ:8,DK:8,HR:8,ZM:8,LA:8,MV:8,BD:7,CV:7,DO:7,IE:7,PR:6,AT:6,CK:6,HN:6,IQ:6,LK:6,AZ:5,BE:5,SD:5,SO:5,CH:5,CM:5,CZ:5,GH:5,IL:5,IS:5,NA:5,NL:5,PA:5,AF:4,BA:4,BG:4,BW:4,TC:4,TJ:4,UG:4,FM:4,OM:4,BQ:3,SN:3,CG:3,CY:3,EE:3,GE:3,ZW:3,KH:3,KY:3,LT:3,MR:3,PY:2,AM:2,RE:2,RS:2,BF:2,RW:2,SC:2,SH:2,SI:2,BY:2,SK:2,SY:2,TT:2,EH:2,UY:2,VG:2,VI:2,FK:2,WF:2,GA:2,GG:2,GQ:2,GT:2,GY:2,HT:2,HU:2,JM:2,JO:2,KG:2,KI:2,KN:2,LC:2,LR:2,ME:2,MH:2,MP:2,MU:2,MW:2,PW:1,QA:1,AG:1,AI:1,AL:1,AS:1,AW:1,BB:1,BH:1,BI:1,BJ:1,BL:1,BM:1,BN:1,BT:1,SG:1,SL:1,SR:1,CC:1,SS:1,ST:1,CF:1,SV:1,SX:1,CI:1,SZ:1,TD:1,TG:1,CW:1,CX:1,TL:1,TM:1,TO:1,TV:1,DJ:1,DM:1,ER:1,VC:1,FO:1,WS:1,GD:1,GF:1,GI:1,GM:1,GN:1,GP:1,GU:1,GW:1,HK:1,YT:1,IM:1,JE:1,KM:1,KP:1,KS:1,KW:1,LB:1,LS:1,LU:1,LV:1,MD:1,MF:1,MK:1,ML:1,MO:1,MQ:1,MS:1,MT:1,NC:1,NE:1,NF:1,NI:1,NR:1,PM:1,AD:0,SM:0,LI:0,MC:0,PN:0]
+----
+
+If we only wanted to see the last few of the sorted results we could add a 'tail'
+step with 'local' scope to the query.
+
+[source,groovy]
+----
+g.V().hasLabel('country').
+      group().by('code').by(outE().count()).
+      order(local).by(values,decr).
+      tail(local,20)
+
+[LV:1,MD:1,MF:1,MK:1,ML:1,MO:1,MQ:1,MS:1,MT:1,NC:1,NE:1,NF:1,NI:1,NR:1,PM:1,AD:0,SM:0,LI:0,MC:0,PN:0]
+
+----
 
 [[continentdist]]
 Distribution of airports by continent
