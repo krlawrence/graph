@@ -11748,7 +11748,8 @@ has.
 [source,groovy]
 ----
 // How many airports does each country have in the graph?
-g.V().hasLabel('airport').groupCount().by('country')
+g.V().hasLabel('airport').
+      groupCount().by('country')
 ----
 
 When run the query produces quite a lot of output. As the values are not sorted it is
@@ -11768,7 +11769,9 @@ ordering is applied.
 
 [source,groovy]
 ----
-g.V().hasLabel('airport').groupCount().by('country').order(local).by(values,decr)
+g.V().hasLabel('airport').
+      groupCount().by('country').
+      order(local).by(values,decr)
 ----
 
 This time it is much easier to see which countries have the most airports.
@@ -11785,8 +11788,16 @@ ascending order. If we wanted to sort in descending order by key we could use
 
 [source,groovy]
 ----
-g.V().hasLabel('airport').groupCount().by('country').order(local).by(keys,incr)
+g.V().hasLabel('airport').
+      groupCount().by('country').
+      order(local).by(keys,incr)
+----
 
+This time the results are now sorted using the country codes in ascending
+alphabetical order.
+
+[source,groovy]
+----
 [AE:10,AF:4,AG:1,AI:1,AL:1,AM:2,AO:14,AR:36,AS:1,AT:6,AU:124,AW:1,AZ:5,BA:4,BB:1,BD:7,BE:5,BF:2,BG:4,BH:1,BI:1,BJ:1,BL:1,BM:1,BN:1,BO:15,BQ:3,BR:115,BS:18,BT:1,BW:4,BY:2,BZ:13,CA:203,CC:1,CD:11,CF:1,CG:3,CH:5,CI:1,CK:6,CL:17,CM:5,CN:209,CO:50,CR:13,CU:12,CV:7,CW:1,CX:1,CY:3,CZ:5,DE:33,DJ:1,DK:8,DM:1,DO:7,DZ:29,EC:15,EE:3,EG:10,EH:2,ER:1,ES:42,ET:14,FI:20,FJ:10,FK:2,FM:4,FO:1,FR:58,GA:2,GD:1,GE:3,GF:1,GG:2,GH:5,GI:1,GL:14,GM:1,GN:1,GP:1,GQ:2,GR:39,GT:2,GU:1,GW:1,GY:2,HK:1,HN:6,HR:8,HT:2,HU:2,ID:67,IE:7,IL:5,IM:1,IN:73,IQ:6,IR:44,IS:5,IT:36,JE:1,JM:2,JO:2,JP:63,KE:14,KG:2,KH:3,KI:2,KM:1,KN:2,KP:1,KR:15,KS:1,KW:1,KY:3,KZ:20,LA:8,LB:1,LC:2,LK:6,LR:2,LS:1,LT:3,LU:1,LV:1,LY:10,MA:14,MD:1,ME:2,MF:1,MG:13,MH:2,MK:1,ML:1,MM:14,MN:10,MO:1,MP:2,MQ:1,MR:3,MS:1,MT:1,MU:2,MV:8,MW:2,MX:59,MY:34,MZ:10,NA:4,NC:1,NE:1,NF:1,NG:18,NI:1,NL:5,NO:49,NP:10,NR:1,NZ:25,OM:4,PA:5,PE:20,PF:30,PG:26,PH:38,PK:21,PL:13,PM:1,PR:6,PT:14,PW:1,PY:2,QA:1,RE:2,RO:14,RS:2,RU:120,RW:2,SA:26,SB:17,SC:2,SD:5,SE:39,SG:1,SH:2,SI:1,SK:2,SL:1,SN:3,SO:5,SR:1,SS:1,ST:1,SV:1,SX:1,SY:2,SZ:1,TC:4,TD:1,TG:1,TH:32,TJ:4,TL:1,TM:1,TN:8,TO:1,TR:48,TT:2,TV:1,TW:9,TZ:8,UA:15,UG:4,UK:58,US:579,UY:2,UZ:11,VC:1,VE:24,VG:2,VI:2,VN:21,VU:26,WF:2,WS:1,YE:9,YT:1,ZA:20,ZM:8,ZW:3]
 ----
 
@@ -11892,6 +11903,12 @@ g.V().hasLabel('airport').
       group().by(out().count()).by('code').
       order(local).by(keys)
 
+----
+As can be seen this time the count value is the key and the airport codes are the
+values.
+
+[source,groovy]
+----
 76:[TPA,BNE,PDX],77:[RIX,WUH],78:[IBZ,PTY],79:[ADD,AYT],80:[MNL,BOG,XMN,CSX],81:[SFB],82:[GLA,HND],83:[CAI,MDW,OTP],84:[VCE,BRS,HGH],85:[JNB,MLA,NAP,RUH],86:[BOM,SHJ],89:[BWI],90:[CMN],91:[LPA,VKO],92:[SXF],93:[DCA,GRU,LYS],94:[SLC,YVR,SYD,MRS,TFS],95:[STR,CRL],97:[NCE,AUH],98:[BUD,WAW],101:[YUL],102:[BGY],104:[LTN,JED,SZX],105:[PHX,MEX,TLV,HAM,XIY],106:[ALC,CUN,CKG],107:[HEL,EDI,KMG],108:[DEL],109:[BHX,SAW],110:[TPE],112:[NRT],113:[GVA],114:[SEA],115:[PRG],116:[CGN,LIS],118:[ATH,TXL],119:[OSL],122:[KUL],123:[MCO],124:[MXP,CTU],126:[AGP],127:[ORY],129:[PHL],130:[BOS],132:[BKK],133:[LED],136:[IAD],137:[DTW],141:[SFO],142:[FLL],143:[ARN,PMI],144:[MSP,ICN],145:[LAS,CPH],146:[SIN],151:[HKG],152:[ZRH],156:[SVO],162:[VIE],163:[DOH],164:[CAN],165:[DUB],166:[DUS],168:[CLT],171:[MIA],180:[BRU],181:[YYZ],182:[EWR,MAN],186:[STN],187:[JFK],188:[DEN],189:[FCO],190:[BCN],191:[LHR],192:[IAH,MAD],195:[LAX],200:[LGW],201:[PVG],214:[DME],221:[DFW],229:[DXB],232:[ATL,ORD],234:[PEK],237:[MUC],262:[CDG],269:[AMS],270:[IST],272:[FRA]]
 
 ----
