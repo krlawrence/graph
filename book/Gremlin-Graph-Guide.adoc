@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v278-preview, Mar 27, 2018
-// Tue Mar 27, 2018 08:14:10 CDT
+// Tue Mar 27, 2018 11:18:25 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Mar 27 2018
@@ -12561,7 +12561,7 @@ these airports. In each example below the 'project' step is used to generate the
 results in a easily readable form.
        
 First of all, this query will find the ten airports with the most incoming routes,
-sorted by descending order.
+sorted in descending order.
 
 [source,groovy]
 ----
@@ -12569,8 +12569,16 @@ sorted by descending order.
 g.V().hasLabel('airport').
       order().by(__.in('route').count(),decr).limit(10).
       project('ap','routes').by('code').by(__.in('route').count())
+----
 
+So it seems that Frankfurt and Amsterdam are tied for the most incoming routes. It is
+worth remembering that the version of the graph used for the examples in the book
+represents a moment in time. If these queries are re run at a later date on a newer
+version of the graph the results will quite likely be different. This is because
+airlines regularly add, and in some cases drop, routes.
 
+[source,groovy]
+----
 [ap:FRA,routes:272]
 [ap:AMS,routes:272]
 [ap:IST,routes:270]
@@ -12591,8 +12599,17 @@ Now let's do the same thing but for outgoing routes.
 g.V().hasLabel('airport').
       order().by(out('route').count(),decr).limit(10).
       project('ap','routes').by('code').by(out('route').count())
+----
 
+This time Frankfurt has the most routes. This reinforces a point that I made earlier.
+The number of incoming and outgoing routes for a given airport will not always be the
+same. This is because of the way airlines route flights. Some flights continue to
+other destinations before returning so there will not always be direct flights
+between airport pairs in both directions. I know as a passenger this is something
+that I find frustrating!
 
+[source,groovy]
+----
 [ap:FRA,routes:272]
 [ap:IST,routes:270]
 [ap:AMS,routes:269]
@@ -12614,7 +12631,17 @@ outgoing routes that they have.
 g.V().hasLabel('airport').
       order().by(both('route').count(),decr).limit(10).
       project('ap','routes').by('code').by(both('route').count())
+----
 
+As expected, Frankfurt is the airport with the most overall routes. One small
+side note while on the topic of airline routes. The graph does not track the frequency
+at which any given route is operated. What this means is that the airport with the
+most routes is not necessarily also the busiest. This is because many routes are
+operated multiple times a day. I did not try to include this data in the graph as it
+changes too often for me to keep up with.
+
+[source,groovy]
+----
 [ap:FRA,routes:544]
 [ap:AMS,routes:541]
 [ap:IST,routes:540]
@@ -13145,7 +13172,8 @@ between airport pairs.
 [source,groovy]
 ----
 // All outes longer than 8,000 miles
-g.V().as('src').outE('route').has('dist',gt(8000)).inV().as('dest').
+g.V().as('src').outE('route').
+      has('dist',gt(8000)).inV().as('dest').
       select('src','dest').by('code')
 ----
 
@@ -13179,7 +13207,9 @@ results.
 [source,groovy]
 ----
 // Find routes longer than 8,000 miles, include the distance in returned values.
-g.V().as('src').outE().has('dist',gt(8000)).as('e').inV().as('dest').
+g.V().as('src').
+      outE().has('dist',gt(8000)).as('e').
+      inV().as('dest').
       select('src','e','dest').by('code').by('dist')
 ----
 
@@ -13216,7 +13246,8 @@ query still.
 [source,groovy]
 ----
 // Note that this also changes the way the result is returned
-g.V().outE().has('dist',gt(8000)).inV().path().by('code').by('dist')
+g.V().outE().has('dist',gt(8000)).
+       inV().path().by('code').by('dist')
 ----
 
 The output indeed now looks more readable.
@@ -13250,7 +13281,8 @@ shown below to apply this filter.
 [source,groovy]
 ----
 // We could avoid returning both directions of travel by refining our query as follows
-g.V().as('a').outE().has('dist',gt(8000)).inV().as('b'). 
+g.V().as('a').outE().has('dist',gt(8000)).
+      inV().as('b'). 
       filter(select('a','b').by('code').where('a', lt('b'))).
       path().by('code').by('dist')
 ----
@@ -13279,7 +13311,9 @@ step after finding the routes we are interested in.
 [source,groovy]
 ----
 // As above but sorted by route lengths
-g.V().as('a').outE().has('dist',gt(8000)).order().by('dist',decr).inV().as('b').
+g.V().as('a').outE().has('dist',gt(8000)).
+      order().by('dist',decr).
+      inV().as('b').
       filter(select('a','b').by('code').where('a', lt('b'))).
       path().by('code').by('dist')
 ----
@@ -13306,8 +13340,11 @@ query a bit more as follows.
 [source,groovy]
 ----
 //Query changed to take advantage of the where().by() construct
-g.V().as('s').outE().has('dist',gt(8000)).order().by('dist',decr).inV().as('f').
-              where('f',lt('s')).by('code').path().by('code').by('dist')
+g.V().as('s').
+  outE().has('dist',gt(8000)).
+  order().by('dist',decr).inV().as('f').
+  where('f',lt('s')).by('code').
+  path().by('code').by('dist')
 ----
 
 As you can see, we got the same results from our modified query. Well, almost the same
@@ -13328,16 +13365,24 @@ prior case. This is because we compared the values in the opposite order!
 [RUH,8246,LAX]     [DXB,8022,DFW]
 ----
 
-As an interesting sidenote, and this would be true for the queries above as well, if we
-replace the 'lt' with a 'gt' we will get the routes returned in the reverse order. So for
-example, in the prior query the first result was '[DXB,8818,AKL]'. As you will see below, our
-first result is now '[AKL,8818,DXB]'.
+As an interesting sidenote, and this would be true for the queries above as well, if
+we replace the 'lt' with a 'gt' we will get the routes returned in the reverse order.
+
 
 [source,groovy]
 ----
-g.V().as('s').outE().has('dist',gt(8000)).order().by('dist',decr).inV().as('f').
-              where('f',gt('s')).by('code').path().by('code').by('dist')
+g.V().as('s').
+      outE().has('dist',gt(8000)).
+      order().by('dist',decr).inV().as('f').
+      where('f',gt('s')).by('code').
+      path().by('code').by('dist')
+----
 
+Using the prior query the first result was '[DXB,8818,AKL]'. As you will
+see below, our first result is now '[AKL,8818,DXB]'.   
+
+[source,groovy]
+----
 [AKL,8818,DXB]     [DXB,8150,IAH]
 [DFW,8574,SYD]     [AUH,8139,SFO]
 [ATL,8434,JNB]     [DFW,8105,HKG]
@@ -13364,8 +13409,12 @@ the return direction so we will actually only get 20 routes back.
 
 [source,groovy]
 ----
-g.E().hasLabel('route').order().by('dist',decr).limit(40).project('a','b','c').
-      by(inV().values('code')).by('dist').by(outV().values('code')).
+g.E().hasLabel('route').
+      order().by('dist',decr).limit(40).
+      project('a','b','c').
+        by(inV().values('code')).
+        by('dist').
+        by(outV().values('code')).
       filter(select('a','c')).where('a',lt('c'))
 ----
 
@@ -13397,20 +13446,23 @@ our three selected cities.
 
 [source,groovy]
 ----
-g.V().has('city',within('London','Munich','Paris')).aggregate('a')
-     .outE().union(values('dist').sum(),
-                   filter(inV().where((within('a')))).values('dist').sum())
+g.V().has('city',within('London','Munich','Paris')).
+      aggregate('a').
+      outE().
+      union(values('dist').sum(),
+            filter(inV().where((within('a')))).
+              values('dist').sum())
 ----
 
 Here are the results from running the query. As expected the first number is a
-lot biger than the second one as it is the total distance of all routes from
+lot bigger than the second one as it is the total distance of all routes from
 the selected airports whereas the second number only reflects the total
 distance of all routes between those airports.
 
 [source,groovy]
 ----
-2168462
-8950
+2276209
+8906
 ----
 
 More queries that analyze distances
@@ -13425,38 +13477,54 @@ examples below that find the distance between Austin and Mexico City
 [source,groovy]
 ----
 // Distance between the AUS and MEX airports
-g.V().has('code','AUS').outE().as('e').inV().
-      has('code','MEX').select('e').values('dist')
+g.V().has('code','AUS').outE().as('e').
+      inV().has('code','MEX').
+      select('e').values('dist')
 
 748
+----
 
-g.V().has('code','AUS').outE().inV().has('code','MEX').path().by('code').by('dist')
+As above but using 'path' and 'by'.
+
+[source,groovy]
+----
+// Distance between the AUS and MEX airports
+g.V().has('code','AUS').outE().
+      inV().has('code','MEX').
+      path().by('code').by('dist')
 
 [AUS, 748, MEX]
 ----
 
 Here are some more queries that are based on the distance between airports. The first
-query calculates how many routes there are between 100 and 200 miles. If you remove
-the call to 'count' it will list some of the routes.
+query calculates how many routes there are between 100 and 200 miles. As an exercise,
+If you remove the call to 'count' the query will list the routes.  As you can see
+there are a lot of them!
 
 [source,groovy]
 ----
 // Routes Between 100 and 200 miles in length 
-g.V().as('src').outE().has('dist',within(100..200)).inV().as('dest').
-      path().by('code').by('dist').count()
+g.V().as('src').
+      outE().has('dist',within(100..200)).
+      inV().as('dest').
+      path().by('code').by('dist').
+      count()
 
 3029
 ----
 
 The next query is similar to the previous one but only counts routes that are between
-airports located in the United States. As before. if you remove the call to 'count'
-some of the routes will be returned.
+airports located in the United States. As before, if you remove the call to 'count'
+the routes will be returned.
 
 [source,groovy]
 ----
 // Routes Between 100 and 200 miles in length, but only within the US.
-g.V().has('airport','country','US').outE().has('dist',within(100..200)).
-     inV().has('country','US').path().by('code').by('dist').count()
+g.V().has('airport','country','US').
+      outE().has('dist',within(100..200)).
+      inV().has('country','US').
+      path().by('code').by('dist').
+      count()
 
 583 
 ----
@@ -13466,9 +13534,18 @@ distances.  Some of the results are shown.
 
 [source,groovy]
 ----
-// Return a list of routes and their distances, starting from San Antonio (SAT)
-g.V().has('code','SAT').outE('route').inV(). path().by('code').by('dist').count()
+// Return a list of routes and their distances,
+// starting from San Antonio (SAT)
 
+g.V().has('code','SAT').
+  outE('route').inV().
+  path().by('code').by('dist')
+----
+
+Here are just a few of the results that this query returned.
+
+[source,groovy]
+----
 [SAT,872,ATL]      [SAT,1140,MIA]   
 [SAT,820,BNA]      [SAT,698,MEX]    
 [SAT,1410,BWI]     [SAT,1097,MSP]   
@@ -13493,10 +13570,14 @@ the respective route distances.
 
 [source,groovy]
 ----
-// Return all ways of getting from AUS to LHR with one stop. Include the distances between
-// each of the airports in the query result.
-g.V().has('airport','code','AUS').outE().inV().outE().inV().
-      has('code','LHR').path().by('code').by('dist')
+// Return all ways of getting from AUS to LHR with one stop. 
+// Include the distances between each of the airports in the 
+// query result.
+
+g.V().has('airport','code','AUS').
+      outE().inV().outE().inV().
+      has('code','LHR').
+      path().by('code').by('dist')
 ----
 
 The output from running the query produces a nice set of data showing the starting,
@@ -13527,53 +13608,67 @@ Using 'sack' to calculate the shortest AUS-LHR route with one stop
 Consider a typical use case for air travel. We want to calculate the shortest
 distance we will have to travel to go from one airport to another with only one stop.
 Let's take a real example. What are the ten shortest distances from AUS to LHR with
-one stop on the way.  Given what we know of Gremlin so far we can pretty easily come
+one stop on the way?  Given what we know of Gremlin so far we can pretty easily come
 up with a query that will give us routes from AUS to LHR with just one stop like we
 did in the previous section.  However, what is not so obvious, and this is an area
-where the TinkerPop documentation is weak, is working out how to keep a running total
-of values as we traverse a graph. This is where the 'sack' step comes in. It allows
-us to define a place where we can put things as the graph traversal proceeds. You
+where the TinkerPop documentation is a little weak, is working out how to keep a
+running total of values as we traverse a graph. This is where the 'sack' step comes
+in. As you will hopefully recall from some of the earlier sections, a 'sack' allows
+us to define a place where we can put things as the graph traversal proceeds. We can
 give the sack an in initial value and can add to it during the traversal and then use
-it as part of the information that your query will return. Take a look at the
-following query:
+it as part of the information that our query will return.  Take a look at the
+rather lengthy query below. I have laid it out in a way that I hope makes it easy to
+read.
 
 [source,groovy]
 ----
 // Shortest distances from AUS to LHR with one stop
-g.withSack(0).V().has('code','AUS').
-                  outE().sack(sum).by('dist').
-                  inV().outE().sack(sum).by('dist').
-                  inV().has('code','LHR').sack().
-                  order().by(incr).limit(10).
-                  path().by('code').by('dist').by('code').by('dist').by('code').by()
+g.withSack(0).
+  V().has('code','AUS').
+      outE().
+      sack(sum).by('dist').
+      inV().
+      outE().
+      sack(sum).by('dist').
+      inV().has('code','LHR').
+      sack().
+      order().by(incr).limit(10).
+      path().
+        by('code').
+        by('dist').
+        by('code').
+        by('dist').
+        by('code').
+        by()
 ----
 
 On the first line of the query, we initialize our sack with the value zero. During
 the query, each time we take an outgoing edge, we add the distance value for that
-edge to the sack. We filter out routes in the normal way on line 2 by only keeping
-destinations that are 'LHR'. On line 3 we take the values that are stored in our sack
-and sort them in ascending order. Finally on  line 4 we process the paths that we
-have taken. Note that the sack value is included as part of the path. Running the
-query will produce the following results:
+edge to the sack. We filter out routes in the normal way by only keeping destinations
+that are 'LHR'. After finding the routes we care about we take the values that are
+stored in our sack and use them to sort our results in ascending order. Finally on
+we process the paths that we have taken. Note that the sack value is included
+as part of the path output and referenced using a 'by' modulator that has no
+parameter. Running the query will produce the following results:
 
 [source,groovy]
 ----
 [AUS, 1140, DTW, 3753, LHR, 4893]
 [AUS, 1357, YYZ, 3544, LHR, 4901]
-[AUS, 973, ORD, 3939, LHR, 4912]
-[AUS, 183, DFW, 4736, LHR, 4919]
+[AUS, 973,  ORD, 3939, LHR, 4912]
+[AUS, 183,  DFW, 4736, LHR, 4919]
 [AUS, 1690, BOS, 3254, LHR, 4944]
 [AUS, 1500, EWR, 3453, LHR, 4953]
 [AUS, 1294, IAD, 3665, LHR, 4959]
 [AUS, 1520, JFK, 3440, LHR, 4960]
 [AUS, 1339, BWI, 3622, LHR, 4961]
-[AUS, 142, IAH, 4820, LHR, 4962]    
+[AUS, 142,  IAH, 4820, LHR, 4962]    
 ----
 
 NOTE: In Tinkerpop 3.3 the syntax of 'sack' was changed. Where previously you would
 write something like 'sack(sum,''runways'')' you are now required to write
 'sack(sum).by(''runways'')'. The prior format was already deprecated in Tinkerpop
-3.2.5 but is now fully removed in Tinkerpop 3.3.
+3.2.5 but is now fully removed starting with Tinkerpop 3.3.
 
 We could add a little post processing to our query to only output the airport codes
 and the total mileage. Given this is post processing of a small data set, using a bit
@@ -13583,15 +13678,26 @@ of in-line code does not feel too ugly here.
 ----
 g.withSack(0).V().
   has('code','AUS').
-  outE().sack(sum).by('dist').
-  inV().outE().sack(sum).by('dist').
-  inV().has('code','LHR').sack().
+  outE().
+  sack(sum).by('dist').
+  inV().
+  outE().
+  sack(sum).by('dist').
+  inV().has('code','LHR').
+  sack().
   order().by(incr).limit(10).
-  path().by('code').by('dist').by('code').by('dist').by('code').by().
-  toList().each(){println "${it[0]} --> ${it[2]} --> ${it[4]} ${it[5]} miles"}[];
+  path().
+    by('code').
+    by('dist').
+    by('code').
+    by('dist').
+    by('code').
+    by().
+  toList().
+  each(){println "${it[0]} --> ${it[2]} --> ${it[4]} ${it[5]} miles"}[];
 ----
 
-Here is what our modified query produces.
+Here is what our modified query, with the Groovy post processing added, produces.
 
 [source,groovy]
 ----
@@ -13617,33 +13723,49 @@ map of airport code and route count pairs.
 [source,groovy]
 ----
 // Print a table of airports with more than 200 routes and the number of routes
-g.V().hasLabel('airport').where(out().count().is(gt(200))).
-                          group().by('code').by(outE().count())
+g.V().hasLabel('airport').
+      where(out().count().is(gt(200))).
+      group().
+        by('code').
+        by(outE().count())
+----
 
+Here are the results that the query generates.
+
+[source,groovy]
+----
 [ORD:226, DFW:216, FRA:254, CDG:253, PEK:232, AMS:257, ATL:232, MUC:219, IST:259, DME:206, DXB:225]
 ----
 
 The prevous query is a perfectly good way to achieve the desired result. Just for fun
 let's produce the same results using a 'sack'. This is intended just as an example of
 how 'sack' works and is not the way you would actually want to perform this specific
-query. That said, it is useful to have an example where the contents of the
-sack is more complex than a simple integer value. At the start of the query we
-initialize our sack with an empty map '[:]'. Later in the query, for each airport
-that has more than 200 outgoing routes, we update the map by adding the airport code
-and the route count to the map. Note that the value part of each map entry is
-produced using a traversal. So while this query is overkill for the task (as
-demonstrated by the much simpler query above) it does show how you can use sacks in
-powerful ways to store data as your query iterates.
+query. That said, it is useful to have an example where the contents of the sack is
+more complex than a simple integer value. At the start of the query we initialize our
+sack with an empty map '[:]'. Later in the query, for each airport that has more than
+200 outgoing routes, we update the map by adding the airport code and the route count
+to the map. Note that the value part of each map entry is produced using a traversal.
+So while this query is most definitely overkill for the task (as demonstrated by the
+much simpler query above) it does provide us with another example of how you can use
+sacks in powerful ways to store data as your query iterates.
 
 [source,groovy]
 ----
 // The same query but done using the new sack() step in TinkerPop 3
 // shown as an example only. The prior query works just fine for this.
 
-g.withSack([:]).V().hasLabel('airport').where(out().count().is(gt(200))).
-                sack{m,v -> m[v.value('code')]=g.V(v).out().count().next()}.
-                fold().sack()
+g.withSack([:]).
+  V().hasLabel('airport').
+  where(out().count().is(gt(200))).
+  sack{m,v -> m[v.value('code')]=g.V(v).out().count().next()}.
+  fold().sack()
+----
 
+Here are the results that the new query generates. Other than the fact that the
+results came back in a different order they are the same.
+
+[source,groovy]
+----
 [ATL:232, DFW:216, ORD:226, CDG:253, FRA:254, DXB:225, PEK:232, AMS:257, MUC:219, DME:206, IST:259]
 ----
 
@@ -13660,9 +13782,10 @@ route count (values) is shown below.
 
 [source,groovy]
 ----
-g.V().hasLabel('airport').where(out().count().is(gt(200))).
-                          group().by('code').by(outE().count()).
-                          order(local).by(values)
+g.V().hasLabel('airport').
+      where(out().count().is(gt(200))).
+      group().by('code').by(outE().count()).
+      order(local).by(values)
 
 [DME:213,DFW:221,DXB:229,ORD:232,PEK:232,ATL:232,MUC:237,CDG:260,FRA:266,AMS:269,IST:270]
 ----
@@ -13672,9 +13795,12 @@ we will sort the results of the 'sack' based query.
 
 [source,groovy]
 ----
-g.withSack([:]).V().hasLabel('airport').where(out().count().is(gt(200))).
-                sack{m,v -> m[v.value('code')]=g.V(v).out().count().next()}.
-                fold().sack().order(local).by(keys)    
+g.withSack([:]).
+  V().hasLabel('airport').where(out().count().is(gt(200))).
+  sack{m,v -> m[v.value('code')]=g.V(v).out().count().next()}.
+  fold().
+  sack().
+  order(local).by(keys)    
 
 [AMS:269,ATL:232,CDG:260,DFW:221,DME:213,DXB:229,FRA:266,IST:270,MUC:237,ORD:232,PEK:232]                
 ----
@@ -13689,8 +13815,11 @@ need to add all of those to get a single grand total.
 
 [source,groovy]
 ----
-g.V().has('code','AUS').sack(assign).by(constant(0)).
-      out().sack(sum).by('runways').sack().sum()
+g.V().has('code','AUS').
+      sack(assign).by(constant(0)).
+      out().
+      sack(sum).by('runways').
+      sack().sum()
 
 212
 ----
