@@ -1,11 +1,11 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v278-preview, Mar 26, 2018
-// Mon Mar 26, 2018 17:00:31 CDT
+v278-preview, Mar 27, 2018
+// Tue Mar 27, 2018 08:14:10 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
-//:Date:      Mar 26 2018
+//:Date:      Mar 27 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -11921,7 +11921,16 @@ interested in as follows. Only airports with 105 outgoing routes are selected.
 // Which of these airports have 105 outgoing routes?
 g.V().hasLabel('airport').
       group().by(out().count()).by('code').next().get(105L)
+----
 
+NOTE: Currently 'select' can only take a string value as the key so we have to
+use the slightly awkward 'next().get()' syntax to get a numeric key from a
+result.
+
+This time the results only include the airports with 105 outgoing routes.
+
+[source,groovy]
+----
 PHX
 MEX
 TLV
@@ -11929,9 +11938,6 @@ HAM
 XIY
 ----
 
-NOTE: Currently 'select' can only take a string value as the key so we have to
-use the slightly awkward 'next().get()' syntax to get a numeric key from a
-result.
 
 [[groupvar]]
 Using groupCount with a traversal variable
@@ -12139,7 +12145,10 @@ between airports anywhere in Europe and airports in the USA.
 [source,groovy]
 ----
 // How many routes from anywhere in Europe to the USA?
-g.V().has('continent','code','EU').out().out().has('country','US').count()
+
+g.V().has('continent','code','EU').
+      out().out().has('country','US').
+      count()
 
 351
 ----
@@ -12153,23 +12162,33 @@ US airports have flights that arrive from Europe.
 [source,groovy]
 ----
 // How many different US airports have routes from Europe?
-g.V().has('continent','code','EU').out().out().has('country','US').dedup().count()
+
+g.V().has('continent','code','EU').
+      out().out().has('country','US').
+      dedup().count()
 
 38
 ----
 
 So we can now see that the 345 routes from European airports arrive at one of 38
 airports in the United States. We can dig a bit deeper and look at the distribution
-of these routes across the 38 airports. John F. Kennedy airport (JFK) in New York
-appears to have the most routes from Europe with Newark (EWR) having the second most.
+of these routes across the 38 airports. 
 
 [source,groovy]
 ----
 //What is the distribution of the routes amongst those US airports?
 
-g.V().has('continent','code','EU').out().out().has('country','US').
-      groupCount().by('code').order(local).by(values,incr)
+g.V().has('continent','code','EU').
+      out().out().has('country','US').
+      groupCount().by('code').
+      order(local).by(values,incr)
+----
 
+John F. Kennedy airport (JFK) in New York appears to have the most routes from Europe
+with Newark (EWR) having the second most.
+
+[source,groovy]
+----
 [PHX:1,CVG:1,RSW:1,BDL:2,SJC:2,BWI:2,AUS:2,RDU:2,MSY:2,SAN:3,SLC:3,PDX:3,PIT:3,TPA:4,SFB:4,OAK:4,DTW:5,SWF:5,MSP:5,DEN:5,FLL:6,CLT:7,DFW:7,PVD:7,SEA:8,IAH:8,MCO:10,LAS:10,ATL:14,SFO:15,PHL:17,IAD:19,ORD:21,BOS:22,LAX:23,MIA:25,EWR:33,JFK:40]
 ----
 
@@ -12179,35 +12198,58 @@ all, we can calculate how many European airports have flights to the United Stat
 [source,groovy]
 ----
 // How many European airports have service to the USA?
-g.V().has('continent','code','EU').out().as('a').out().has('country','US').
+
+g.V().has('continent','code','EU').
+      out().as('a').
+      out().has('country','US').
       select('a').dedup().count()
 
 53
 ----
 
 Just as we did for the airports in the US we can figure out the distribution of
-routes for the European airports. It appears that London Heathrow (LHR) offers the
-most US destinations and Frankfurt (FRA) the second most.
+routes for the European airports.
 
 [source,groovy]
 ----
-//What is the distribution of these routes amongst the European airports?
-g.V().has('continent','code','EU').out().as('a').out().has('country','US').
-      select('a').groupCount().by('code').order(local).by(values,incr)
+// What is the distribution of US routes amongst 
+// the European airports?
 
+g.V().has('continent','code','EU').
+      out().as('a').
+      out().has('country','US').
+      select('a').groupCount().by('code').
+      order(local).by(values,incr)
+----
+
+It appears that London Heathrow (LHR) offers the
+most US destinations and Frankfurt (FRA) the second most. 
+
+[source,groovy]
+----
 [RIX:1,TER:1,BRS:1,STN:1,NCE:1,KRK:1,ORK:1,KBP:1,PDL:1,DME:1,BEG:1,AGP:1,HAM:1,OPO:2,STR:2,VCE:2,BHX:2,ORY:2,ATH:2,MXP:3,BFS:3,BGO:3,GVA:3,VKO:3,HEL:3,WAW:4,SVO:4,GLA:4,EDI:5,SNN:5,CGN:5,TXL:6,VIE:6,LIS:6,BRU:7,ARN:7,OSL:8,IST:9,BCN:10,MAD:11,LGW:11,DUS:11,CPH:11,FCO:12,ZRH:13,MAN:13,DUB:15,MUC:16,AMS:18,KEF:18,CDG:22,FRA:24,LHR:27]
 ----
 
-Lastly, we can find out what the list of routes flown is. For this example we just
-return 10 of the 345 routes. Note how the 'path' step returns all parts of the
-traversal including the continent code 'EU'.
+Lastly, we can find out what the list of routes flown is. For this example I decided
+to just return 10 of the 345 routes. Note how the 'path' step returns all parts of
+the traversal including the continent code 'EU'. We could remove that part of the
+result by adding a 'from' modulator as shown earlier in the "<<pathintro>>" section.
 
 [source,groovy]
 ----
-// What are some of these routes?
-g.V().has('continent','code','EU').out().out().
-      has('country','US').path().by('code').limit(10)
+// Selected routes from Europe to the USA.
 
+g.V().has('continent','code','EU').
+      out().out().
+      has('country','US').
+      path().by('code').
+      limit(10)
+----
+
+The first 10 results returned feature routes from Warsaw, Belgrade and Istanbul.
+
+[source,groovy]
+----
 [EU,WAW,JFK]
 [EU,WAW,LAX]
 [EU,WAW,ORD]
@@ -12228,25 +12270,34 @@ Earlier in the book we saw examples of 'sum' being used to count a
 collection of values. You can also use 'fold' to do something similar but in a
 more 'map-reduce' type of fashion. 
 
-First of all, here is a query that uses 'fold' in a way that we have already
-seen. We find all routes from Austin and use 'fold' to return a nice list of
-those names. 
+First of all, here is a query that uses 'fold' in a way that we have already seen. It
+will find all routes from Austin and uses a 'fold' step to return a list of those
+names. 
 
 [source,groovy]
 ----
-g.V().has('code','AUS').out('route').values('city').fold()
+g.V().has('code','AUS').
+      out('route').
+      values('city').fold()
+----
 
+As expected the results show all of the cities that you can fly to from Austin
+collected into a single list.
+
+[source,groovy]
+----
 [Toronto,London,Frankfurt,Mexico City,Pittsburgh,Portland,Charlotte,Cancun,Memphis,Cincinnati,Indianapolis,Kansas City,Dallas,St Louis,Albuquerque,Chicago,Lubbock,Harlingen,Guadalajara,Pensacola,Valparaiso,Orlando,Branson,St Petersburg-Clearwater,Atlanta,Nashville,Boston,Baltimore,Washington D.C.,Dallas,Fort Lauderdale,Washington D.C.,Houston,New York,Los Angeles,Orlando,Miami,Minneapolis,Chicago,Phoenix,Raleigh,Seattle,San Francisco,San Jose,Tampa,San Diego,Long Beach,Santa Ana,Salt Lake City,Las Vegas,Denver,New Orleans,Newark,Houston,El Paso,Cleveland,Oakland,Philadelphia,Detroit]
 ----
 
 However, what if we wanted to reduce our results further? Take a look at the modified
 version of our query below. It finds all routes from Austin and looks at the names of
-the destination cities.  However, rather than return all the names, 'fold' is used to
-reduce the names to a value. That value being the total number of characters in all
-of those city names. We have seen 'fold' used elsewhere in the book but this time
-we provide 'fold' with a parameter and a closure. The parameter is passed to the
-closure as the first variable and the name of the city as the second. The closure
-then adds the zero and the length of each name effectively to a running total.
+the destination cities.  However, rather than return all the names, this time the
+'fold' step is used differently and effectively reduces the city names to a single
+value. That value being the total number of characters in all of those city names. We
+have seen 'fold' used elsewhere in the book but this time we provide 'fold' with a
+parameter and a closure. The parameter is passed to the closure as the first variable
+and the name of the city as the second. The closure then adds the zero and the length
+of each name effectively producing a running total.
 
 [source,groovy]
 ----
