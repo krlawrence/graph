@@ -2,7 +2,7 @@ This folder contains the AsciiDoc source file used to produce the HTML, XML (DOC
 
 
 **LATEST NEWS:**  
-[Feb-11-2018] Revision 277 was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
+[Mar-28-2018] Revision 278 (TP 3.3.1) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
 
 
 ## Releases and change history
@@ -28,7 +28,8 @@ The XML (DOCBOOK) file is generated using Asciidoctor and can be viewed on Linux
 Please note that the DOCBOOK, EPUB and MOBI format files currently do not have all of the nice source code highlighting and colors that the HTML and PDF versions have.
 
 
-**ARCHIVED NEWS:**  
+**ARCHIVED NEWS:**
+[Feb-11-2018] Revision 277 was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details. 
 [Jan-12-2018] Revision 276 was just plublished in all formats. Many updates to book and samples.  
 [Jan-12-2018] Based on feedback I have decided to rename the book "Practical Gremlin" (see issue #29)  
 [Jan-03-2018] Revision 275 was just published in all formats. Lots of updates to book and sample code.  
