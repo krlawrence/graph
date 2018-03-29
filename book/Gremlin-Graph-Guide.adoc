@@ -1,12 +1,12 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-//v278-preview, Mar 28, 2018
-v278 (TP 3.3.1), Mar 28, 2018
-// Wed Mar 28, 2018 09:06:24 CDT
+v279-preview, Mar 29, 2018
+//v278 (TP 3.3.1), Mar 28, 2018
+// Thu Mar 29, 2018 11:30:33 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
-//:Date:      Mar 28 2018
+//:Date:      Mar 29 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -19,8 +19,8 @@ v278 (TP 3.3.1), Mar 28, 2018
 //:pygments-style: vim
 :toc:
 :toclevels: 4
-//:revision: 278-preview
-:revision: 278 (TP 3.3.1)
+:revision: 279-preview
+//:revision: 278 (TP 3.3.1)
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
@@ -10677,7 +10677,7 @@ fos = new FileOutputStream("my-graph.json")
 GraphSONWriter.build().wrapAdjacencyList(true).create().writeGraph(fos,graph)
 ----
 
-TIP: If you are ingesting large amounts of data into a TinkerPop 3 enables graph, the
+TIP: If you are ingesting large amounts of data into a TinkerPop 3 enabled graph, the
 unwrapped flavor of GraphSON is probably a much better choice than GraphML or wrapped
 GraphSON. Using this format you can stream data into a graph one vertex at a time
 rather than having to try and send the entire graph as a potentially huge JSON file
