@@ -91,6 +91,7 @@ public class ListAirports
     String city; // City the airport is in.
     String desc; // Airport description.
     String ctry; // 2 character country code.
+    String rgn;  // 5 or 6 character Region code 
 
     for (Vertex v : vlist)
     {
@@ -100,9 +101,10 @@ public class ListAirports
       city = (String)v.values("city").next();
       desc = (String)v.values("desc").next();
       ctry = (String)v.values("country").next();
+      rgn  = (String)v.values("region").next();
 
-      System.out.format("%5d %3s %4s  %2s  %15s  %-50s\n",
-                        id,iata,icao,ctry,city,desc);
+      System.out.format("%5d %3s %4s  %2s  %6s  %15s  %-50s\n",
+                        id,iata,icao,ctry,rgn,city,desc);
     }
   }
 
