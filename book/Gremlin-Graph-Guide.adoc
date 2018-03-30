@@ -3,7 +3,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v279-preview, Mar 29, 2018
 //v278 (TP 3.3.1), Mar 28, 2018
-// Thu Mar 29, 2018 11:30:33 CDT
+// Thu Mar 29, 2018 16:16:28 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Mar 29 2018
@@ -10653,7 +10653,7 @@ enclosing 'vertices' object.
 
 NOTE: The GraphSON file generated will not be very human readable without doing 
       some pretty printing on it using something like the Python json tool 
-      ('python -m json.tool mygraph.json') or using a text editor that can beautify
+      ('python -m json.tool my-graph.json') or using a text editor that can beautify
       JSON. 
 
 
@@ -10663,7 +10663,7 @@ GraphSON.
 [source,groovy]
 ----
 // Save the graph as unwrapped JSON
-graph.io(graphson()).writeGraph("graph.json")
+graph.io(graphson()).writeGraph("my-graph.json")
 ----
 
 The following will create a file containing the 'wrapped adjacency list' form of
@@ -12372,7 +12372,7 @@ g.V().hasLabel('airport').
 
 When we run our query again we get the results below. Looking at the data sorted
 this way helps some new interesting facts stand out. The most interesting thing
-we can immediately spot is that there are 15 airports that currently have no
+we can immediately spot is that there are 16 airports that currently have no
 outgoing routes at all!
 
 [source,groovy]
