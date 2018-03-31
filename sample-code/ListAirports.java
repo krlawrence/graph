@@ -69,10 +69,11 @@ public class ListAirports
     return true;
   }
 
-  // --------------------------------------------
+  // ----------------------------------------------
   // Display some information about the selected 
-  // number of airports.
-  // --------------------------------------------
+  // number of airports. A value of -1 means select
+  // all airports.
+  // ----------------------------------------------
   public void listAirports(int max)
   {
     if (max < -1 ) return;
@@ -114,13 +115,20 @@ public class ListAirports
   public static void main(String[] args) 
   {
     int required = 10;
+    boolean failed = false;
+
     try
     {
       if (args.length > 0) required = Integer.parseInt(args[0]);
     }
     catch (Exception e)
     {
-      System.out.println("Argument must be an integer");
+      failed = true;
+    }
+
+    if (failed || required < -1)
+    {
+      System.out.println("Argument should be -1, 0 or any positive integer");
       System.exit(1);
     }
 
