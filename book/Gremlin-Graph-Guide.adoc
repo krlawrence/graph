@@ -18841,7 +18841,7 @@ exact same query as the one we used above.
     "meta":{}}}
 ----
 
-What is being returned is useful in some cases, for examples we can see the
+What is being returned is useful in some cases, for example we can see the
 'a' and 'b' labels that we used in our query but in this case all we really
 wanted was the last part with the airport codes and the distances. We could
 decide to write code to process this JSON as-is (probably using a JSON helper
