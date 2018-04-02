@@ -19473,7 +19473,7 @@ have provided a brief overview of a few of them. As you will see there are a num
 of ways you can represent graph data using simple CSV files. There are also XML
 format, JSON formats and many more. Of these, the one that still seems to be
 supported across most tools and platforms is GraphML. Not all of the features offered
-by Apache TinkerPop can be expressed using GrapphML however. So let's take a look at
+by Apache TinkerPop can be expressed using GraphML however. So let's take a look at
 some of the more commonly used formats.
 
 [[csv]]
