@@ -18783,7 +18783,7 @@ g.V().as('a').outE().has('dist',gt(8000)).
       path().by('code').by('dist')
 ----
 
-When we run this query using the Gremlin console with TinkerGraph we get get
+When we run this query using the Gremlin console with TinkerGraph we get
 back results that have been to a degree 'pretty printed' by the Console as
 shown below.
 
