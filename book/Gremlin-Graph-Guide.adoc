@@ -18539,7 +18539,7 @@ of this in a moment.
 As with Gremlin Server, YAML files can be used to configure a remote connection from
 the Gremlin Console. The Gremlin Console as well as the version that comes bundled
 with JanusGraph includes a set of YAML files that can be used as-is or edited as
-needed. In order to connect The Gremlin Console to the Gremlin Server that we just
+needed. In order to connect the Gremlin Console to the Gremlin Server that we just
 configured, the file 'remote.yaml' can be used. I had to make one change, as shown
 below. I commented out the 'serializer' line and replaced it with a slightly modified
 version. I had to do this because of the version issues I mentioned above. At time of
