@@ -71,23 +71,42 @@ public class CreateGraph
     {
       System.out.println(((List)(m.get("code"))).get(0) + " " + m.get(T.id) + " " + m.get(T.label));
     }
+    System.out.println();
 
-    // Display the routes in the graph we just created
+    // Display the routes in the graph we just created.
+    // Each path will include the vertex code values and the edge.
 
     List<Path> paths = new ArrayList<Path>();
 
-    paths = g.V().out().path().by("code").toList();
+    paths = g.V().outE().inV().path().by("code").by().toList();
 
     for (Path p : paths)
     {
       System.out.println(p.toString());
     }
 
+    // Count how many vertices and edges we just created.
+    // Using groupCount is overkill when we only have one label
+    // but typically you will have more so this is a useful technique
+    // to be aware of.
+    System.out.println("\nWe just created");
+    List verts  = g.V().groupCount().by(T.label).toList();
+    System.out.println(((Map)verts.get(0)).get("airport") + " airports");
+    List edges  = g.E().groupCount().by(T.label).toList();
+    System.out.println(((Map)edges.get(0)).get("route") + " routes");
+
+    // Note that we could also use the following code for a simple
+    // case where we are only interested in specific labels.
+    Long nv = g.V().hasLabel("airport").count().next();
+    Long ne = g.E().hasLabel("route").count().next();
+    System.out.println("The graph has " + nv + " airports and " + ne + " routes");
+
+
     // Save the graph we just created as GraphML (XML) or GraphSON (JSON)
     try
     {
       // If you want to save the graph as GraphML uncomment the next line
-         tg.io(IoCore.graphml()).writeGraph("mygraph.graphml");
+      tg.io(IoCore.graphml()).writeGraph("mygraph.graphml");
       
       // If you want to save the graph as JSON uncomment the next line
       //tg.io(IoCore.graphson()).writeGraph("mygraph.json");
