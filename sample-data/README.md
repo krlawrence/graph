@@ -8,4 +8,6 @@ There is also a small Groovy script in the *'/sample-code'* folder called *'grap
 
 The *'aircraft.csv'* file is intended to be used with the *'add-airports.groovy'* sample that is located in the *'/sample-code'* folder.
 
+The *'edges.csv'* file is intended to be used with the *'GraphFromCSV.java'* sample that is located in the *'/sample-code'* folder.
+
 Please check back regularly to see more updates as they are uploaded.
