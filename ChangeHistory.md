@@ -10,10 +10,11 @@ This release has been tested against Apache TinkerPop at the 3.3.1 level and Jan
 
 Major new features in this release
 - Sample code and data improvements
-  - Added new sample `add-aircraft.Groovy`
-  - Added new sample data `aircraft.csv`
-  - Added new Java sample `ListAirports.java`
-  - Expanded `CreateGraph.java` sample
+  - Added new sample `add-aircraft.Groovy`.
+  - Added new sample data `aircraft.csv`.
+  - Added new Java sample `ListAirports.java`.
+  - Expanded `CreateGraph.java` sample.
+  - Moved `edges.csv` to `sample-data` folder.
 - Miscellaneous minor corrections.
 
 ## Release 278 change history (March 28th 2018)
