@@ -1,0 +1,92 @@
+ICAO,IATA,MAKER,DESC
+A318,318,Airbus,A318
+A319,319,Airbus,A319
+A320,320,Airbus,A320
+A321,321,Airbus,A321
+A332,332,Airbus,A330-200
+A333,333,Airbus,A330-300
+A338,338,Airbus,A330-800neo
+A339,339,Airbus,A330-900neo
+A342,342,Airbus,A340-200
+A343,343,Airbus,A340-300
+A345,345,Airbus,A340-500
+A346,346,Airbus,A340-600
+A359,359,Airbus,A350-900
+A35K,351,Airbus,A350-1000
+B37M,7M7,Boeing,737 MAX 7
+B38M,7M8,Boeing,737 MAX 8
+B39M,7M9,Boeing,737 MAX 9
+B3JM,7MJ,Boeing,737 MAX 10
+B712,717,Boeing,717
+B721,721,Boeing,727-100
+B722,722,Boeing,727-200
+B732,732,Boeing,737-200
+B733,733,Boeing,737-300
+B734,734,Boeing,737-400
+B735,735,Boeing,737-500
+B736,736,Boeing,737-600
+B737,73G,Boeing,737-700
+B738,738,Boeing,737-800
+B739,739,Boeing,737-900
+B741,741,Boeing,747-100
+B742,742,Boeing,747-200
+B743,743,Boeing,747-300
+B744,744,Boeing,747-400
+B748,748,Boeing,747-8
+B752,752,Boeing,757-200
+B753,753,Boeing,757-300
+B762,762,Boeing,767-200
+B763,763,Boeing,767-300
+B764,764,Boeing,767-400
+B772,772,Boeing,777-200
+B77L,77L,Boeing,777-200LR
+B773,773,Boeing,777-300
+B77W,77W,Boeing,777-300ER
+B788,788,Boeing,787-8
+B789,789,Boeing,787-9
+B78X,78J,Boeing,787-10
+E120,EM2,Embraer,EMB 120 Brasilia
+E135,ER3,Embraer,RJ135
+E135,ERD,Embraer,RJ140
+E145,ER4,Embraer,RJ145
+E170,E70,Embraer,170
+E190,E90,Embraer,190
+E195,E95,Embraer,195
+E75L,E75,Embraer,175 (long wing)
+E75S,E75,Embraer,175 (short wing)
+DC91,D91,McDonnell Douglas,DC-9-10
+DC92,D92,McDonnell Douglas,DC-9-20
+DC93,D93,McDonnell Douglas,DC-9-30
+MD11,M11,McDonnell Douglas,MD-11
+MD81,M81,McDonnell Douglas,MD-81
+MD82,M82,McDonnell Douglas,MD-82
+MD83,M83,McDonnell Douglas,MD-83
+MD87,M87,McDonnell Douglas,MD-87
+MD88,M88,McDonnell Douglas,MD-88
+MD90,M90,McDonnell Douglas,MD-90
+DH8A,DH1,De Havilland Canada,DHC-8-100 Dash 8 / 8Q
+DH8B,DH2,De Havilland Canada,DHC-8-200 Dash 8 / 8Q
+DH8C,DH3,De Havilland Canada,DHC-8-300 Dash 8 / 8Q
+DH8D,DH4,De Havilland Canada,DHC-8-400 Dash 8Q
+DHC2,DHP,De Havilland Canada,DHC-2 Beaver
+DHC3,DHL,De Havilland Canada,DHC-3 Otter
+DHC4,DHC,De Havilland Canada,DHC-4 Caribou
+DHC5,DHC,De Havilland Canada,DHC-5 Buffalo
+DHC6,DHT,De Havilland Canada,DHC-6 Twin Otter
+DHC7,DH7,De Havilland Canada,DHC-7 Dash 7
+BCS1,CS1,Bombardier,CS100
+BCS3,CS3,Bombardier,CS300
+RJ1H,AR1,Avro,RJ100
+RJ70,AR7,Avro,RJ70
+RJ85,AR8,Avro,RJ85
+B461,141,BAe,146-100
+B462,142,BAe,146-200
+B463,143,BAe,146-300
+CRJ1,CR1,Canadair,Regional Jet 100
+CRJX,CRK,Canadair,Regional Jet 1000
+CRJ2,CR2,Canadair,Regional Jet 200
+CRJ7,CR7,Canadair,Regional Jet 700
+CRJ9,CR9,Canadair,Regional Jet 900
+F100,100,Fokker,F100
+F70,F70,Fokker,F70
+IL96,I93,Ilyushin,IL96
