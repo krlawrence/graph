@@ -2,6 +2,19 @@
 
 Starting with the v275 release, this file will contain a record of the major changes and updates made in each release.
 
+## Future Release 279 change history (Date TBD)
+
+Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v278...master) between this release and the prior one.
+
+This release has been tested against Apache TinkerPop at the 3.3.1 level and JanusGraph 0.2 which supports TinkerPop at the 3.2.6 level.
+
+Major new features in this release
+- Sample code and data improvements
+  - Added new sample `add-aircraft.Groovy`
+  - Added new sample data `aircraft.csv`
+  - Added new Java sample `ListAirports.java`
+  - Expanded `CreateGraph.java` sample
+- Miscellaneous minor corrections.
 
 ## Release 278 change history (March 28th 2018)
 
