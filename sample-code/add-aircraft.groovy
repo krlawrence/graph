@@ -11,9 +11,9 @@
 ;[] // created for each aircraft type found in the data. The script will
 ;[] // also create a vertex for each aircraft manufacturer found in the data and
 ;[] // create edges that connect the manufacturers to the planes they make. The main
-;[] // Purpose of this script is to show a CSV file to be used and to show queries
+;[] // Purpose of this script is to show a CSV file being used and to show queries
 ;[] // that also create vertices and edges without prior knowledge of exactly what
-;[] // data will be loaded.
+;[] // data will be loaded from the CSV data.
 ;[] //
 ;[] // The ";[]" notation is used to prevent unwanted output from the Gremlin
 ;[] // Console. 
