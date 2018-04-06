@@ -1,8 +1,15 @@
+;[] // graph-stats.groovy
+;[] //
+;[] // This script is intended to be run within the Gremlin Console.
+;[] //
 ;[] // Small Groovy script that can be used from within the Gremlin console after
 ;[] // the air-routes graph has been loaded that will provide statistics about the 
-;[] // graph. The use of ;[] is just to stop the console printing additional return values.
-;[] // This script demonstrates different ways of doing similar things
+;[] // graph. This script demonstrates different ways of doing similar things
+;[] //
 ;[] // From the console use :load graph-stats.groovy to run it.
+;[] //
+;[] // The ";[]" notation is used to prevent unwanted output from the Gremlin
+;[] // Console. 
 
 println "\n\nA few statistics about the air-routes graph";[]
 println "===========================================";[]
