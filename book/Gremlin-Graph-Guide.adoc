@@ -3,7 +3,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v279-preview, Apr 9, 2018
 //v278 (TP 3.3.1), Mar 28, 2018
-// Mon Apr 09, 2018 08:11:15 CDT
+// Mon Apr 09, 2018 12:43:51 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 //:Date:      Apr 09 2018
@@ -2197,8 +2197,8 @@ false
 
 
 [[aselproj]]
-Using 'as', 'select' and 'project' to name and refer back to prior steps
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Using 'as', 'select' and 'project' to refer to traversal steps
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Sometimes it is useful to be able to remember a point of a traversal by giving it a
 name (label) and refer to it later on in the same query. This ability was more
@@ -2266,7 +2266,9 @@ the 'select' and 'path' steps used a lot throughout this book.
 
 [source,groovy]
 ----
-g.V().has('code','DFW').out().has('region','US-CA').path().by('code')
+g.V().has('code','DFW').out().
+      has('region','US-CA').
+      path().by('code')
 ----
 
 Which would produce the following results. Notice that this time the results do not
@@ -2298,7 +2300,8 @@ the traversal/query as shown below.
 [source,groovy]
 ----
 g.V().has('type','airport').limit(10).as('a','b','c').
-      select('a','b','c').by('code').by('region').by(out().count())
+      select('a','b','c').
+        by('code').by('region').by(out().count())
 ----
 
 In the most recent releases of TinkerPop you can also use the new 'project' step and
@@ -2308,8 +2311,9 @@ of 'as' and 'select'.
 
 [source,groovy]
 ----
-g.V().has('type','airport').limit(10).project('a','b','c').
-      by('code').by('region').by(out().count())
+g.V().has('type','airport').limit(10).
+      project('a','b','c').
+        by('code').by('region').by(out().count())
 ----
 
 This query, and the prior query, would return the following results.
@@ -2335,8 +2339,9 @@ descriptive variable names.
 
 [source,groovy]
 ----
- g.V().has('type','airport').limit(10).project('IATA','Region','Routes').
-      by('code').by('region').by(out().count())
+ g.V().has('type','airport').limit(10).
+       project('IATA','Region','Routes').
+         by('code').by('region').by(out().count())
 ----
 
 When we run the modified query, here is the output we get.
