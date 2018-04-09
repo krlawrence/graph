@@ -1,12 +1,12 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v279-preview, Mar 29, 2018
+v279-preview, Apr 9, 2018
 //v278 (TP 3.3.1), Mar 28, 2018
-// Thu Mar 29, 2018 16:16:28 CDT
+// Mon Apr 09, 2018 08:11:15 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
-//:Date:      Mar 29 2018
+//:Date:      Apr 09 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -4541,6 +4541,54 @@ when run.
 ----
 [code:[BKG],runways:[1]]
 [code:[SAN],runways:[1]]
+----
+
+It is also possible to compare two different properties by adding a second 'by'
+modulator. This is useful when vertex properties have different key names but may
+contain the same values. The query below is definitely contrived, you could achieve
+the same thing in a more simple way, but is does demonstrate two 'by' modulators
+being used. The 'country' property of an airport vertex is compared with the 'code'
+property of a 'country' vertex. The query first finds any airport vertex with a
+'city' property containing the string 'London'. Next any connecting 'country'
+vertices (ones connected by contains edges) are found. The 'where' test compares the
+country code value of the two vertices. Lastly a 'select' is used to pick the
+results that we want to return.
+
+[source,groovy]
+----
+g.V().has('airport','city','London').as('a','r').
+      in('contains').as('b').
+      where('a',eq('b')).by('country').by('code').
+      select('a','r','b').by('code').by('region')
+----
+
+When the query is run we get back all the airports with a city name of 'London' along
+with their region code and country code.
+
+[source,groovy]
+----
+[a:LHR,r:GB-ENG,b:UK]
+[a:LGW,r:GB-ENG,b:UK]
+[a:LCY,r:GB-ENG,b:UK]
+[a:STN,r:GB-ENG,b:UK]
+[a:LTN,r:GB-ENG,b:UK]
+[a:YXU,r:CA-ON,b:CA]
+----
+
+As I mentioned the above query was used just as an example. In reality the following
+query that does not use any 'where' steps would have sufficed in this case.
+
+[source,groovy]
+----
+g.V().has(airport','city','London').
+      valueMap('code','region','country')
+
+[country:[UK],code:[LHR],region:[GB-ENG]]
+[country:[UK],code:[LGW],region:[GB-ENG]]
+[country:[UK],code:[LCY],region:[GB-ENG]]
+[country:[UK],code:[STN],region:[GB-ENG]]
+[country:[UK],code:[LTN],region:[GB-ENG]]
+[country:[CA],code:[YXU],region:[CA-ON]]
 ----
 
 Let's imagine that we want to write a query to find all airports that have the same

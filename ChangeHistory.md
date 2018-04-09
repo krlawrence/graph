@@ -9,6 +9,7 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/V2
 This release has been tested against Apache TinkerPop at the 3.3.1 level and JanusGraph 0.2 which supports TinkerPop at the 3.2.6 level.
 
 Major new features in this release
+- Added examples to the `where` `by` section.
 - Sample code and data improvements
   - Added new sample `add-aircraft.Groovy`.
   - Added new sample data `aircraft.csv`.
