@@ -18721,23 +18721,11 @@ Gremlin Server.
 sh> curl "http://localhost:8182?gremlin=g.V().has('code','AUS').valueMap()" 
 ----
 
-The following example shows how to send the same query using an HTTP POST. The Apache
-TinkerPop documentation states that this is the recommended way to send queries over
-HTTP to a Gremlin Server. Note how in this case we are sending the query packaged as
-JSON and that we have to escape the quote characters.
+In response to the HTTP GET request the server sends back the result packaged as JSON
+as follows. I have formatted the output in a way that makes it easier to read. What
+was actually returned did not have any line breaks in it at all and was quite hard to
+read.. 
 
-[source,console]
-----
-sh> curl -X POST -d "{\"gremlin\":\"g.V().has('code','AUS')\"}" \
-            "http://localhost:8182"
-----
-
-Both of the queries above will cause the following response to be sent back to us
-from the Gremlin Server.  Notice how the query results are packaged as JSON. I have
-formatted the output in a way that makes it easier to read. What was actually
-returned did not have any line breaks in it at all and was quite hard to read..
-
-//[source,json]]
 [source,groovy]
 ----
 {"requestId":"a8ad654a-a5a3-4bb9-8474-69aca3c3db1e",
@@ -18755,8 +18743,59 @@ returned did not have any line breaks in it at all and was quite hard to read..
                         "lat":[30.1944999694824],
                        "desc":["Austin Bergstrom International Airport"]}],
            "meta":{}}}
+
 ----
 
+The following example shows how to send the same query, but with the 'valueMap' step
+removed, using an HTTP POST. The Apache TinkerPop documentation states that using
+POST is the recommended way to send queries over HTTP to a Gremlin Server. Note how
+in this case we are sending the query packaged as JSON and that we have to escape the
+quote characters.
+
+[source,console]
+----
+sh> curl -X POST -d "{\"gremlin\":\"g.V().has('code','AUS')\"}" \
+            "http://localhost:8182"
+----
+
+As with the prior query, the HTTP POST form of the query also returns the result
+packaged as JSON. However, in this case, because I left off the 'valueMap' step,  the
+JSON includes additional information in the form of the ID values and labels for the
+vertex and its properties. This is because the result represents a vertex this time
+rather than a map. I have again formatted the output in a way that is easier
+to read.
+
+
+//[source,json]]
+[source,groovy]
+----
+{"requestId":"64c757b8-27a6-4509-a54c-ea35ba517667",
+ "status":{"message":"","code":200,"attributes":{}},
+ "result":{
+   "data":[
+     {"id":12352, 
+      "label":"airport",
+      "type":"vertex",
+      "properties":
+        {"country":[{"id":"8p4-9j4-8p1", "value":"US"}],
+            "code":[{"id":"93c-9j4-5j9", "value":"AUS"}],
+         "longest":[{"id":"9hk-9j4-mx1", "value":12250}],
+            "city":[{"id":"9vs-9j4-7wl", "value":"Austin"}],
+            "elev":[{"id":"aa0-9j4-but", "value":542}],
+            "icao":[{"id":"ao8-9j4-6bp", "value":"KAUS"}],
+             "lon":[{"id":"b2g-9j4-dfp", "value":-97.6698989868164}],
+            "type":[{"id":"bgo-9j4-745", "value":"airport"}],
+          "region":[{"id":"buw-9j4-9hh", "value":"US-TX"}],
+         "runways":[{"id":"c94-9j4-b2d", "value":2}],
+             "lat":[{"id":"cnc-9j4-cn9", "value":30.1944999694824}],
+            "desc":[{"id":"d1k-9j4-a9x",
+                  "value":"Austin Bergstrom International Airport"}]}}],
+            "meta":{}}}
+
+----
+
+I have included examples of the different types of JSON result that you are likely to
+have to process in the "<<serverjson>>" section that is coming up soon.
 
 [[rubyclient]]
 Connecting to a Gremlin Server from Ruby
