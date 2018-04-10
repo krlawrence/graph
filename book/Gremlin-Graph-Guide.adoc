@@ -1,12 +1,12 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v279-preview, Apr 9, 2018
+v279-preview, Apr 10, 2018
 //v278 (TP 3.3.1), Mar 28, 2018
-// Mon Apr 09, 2018 12:43:51 CDT
+// Tue Apr 10, 2018 11:44:35  CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
-//:Date:      Apr 09 2018
+//:Date:      Apr 10 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -104,7 +104,7 @@ remains a lot of fun.
 
 Kelvin R. Lawrence +
 First draft: October 5th, 2017 +
-Current draft: March 28th, 2018 +
+Current draft: April 10th, 2018 +
 
 Providing feedback
 ~~~~~~~~~~~~~~~~~~
@@ -2360,9 +2360,14 @@ When we run the modified query, here is the output we get.
 [IATA:IAD,Region:US-VA,Routes:136]
 ----
 
+[[multias]]
+Using multiple 'as' steps with the same label
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 It is actually possible using an 'as' step to give more than one part of a traversal
-the same label. In the example below, the label '+++'+++a+++'+++' is used twice but
-you will notice that when the label is selected only the last item added is returned.
+the same label (name). In the example below, the label '+++'+++a+++'+++' is used
+twice but you will notice that when the label is selected only the last item added is
+returned.
 
 [source,groovy]
 ----
@@ -2390,8 +2395,49 @@ g.V(1).as('a').V(2).as('a').select(all,'a')
 [v[1],v[2]]
 ----
 
-Keywords such as these are documented in the "<<javastatics>>" section later on in
-the book.
+Here is another example of a query that labels two different parts of a traversal
+with the same '+++'+++a+++'+++' label. As you can see from the results, only the
+second one is used because of the 'last' keyword that is provided on the 'select'
+step.
+
+[source,groovy]
+----
+g.V().has('code','AUS').as('a').
+      out().as('a').limit(10).
+      select(last,'a').by('code').fold()
+
+[YYZ,LHR,FRA,MEX,PIT,PDX,CLT,CUN,MEM,CVG]
+----
+
+Here is the same query but using the 'first' keyword this time as part of the
+'select' step.
+
+[source,groovy]
+----
+g.V().has('code','AUS').as('a').
+      out().as('a').limit(10).
+      select(first,'a').by('code').fold()
+
+[AUS,AUS,AUS,AUS,AUS,AUS,AUS,AUS,AUS,AUS]
+----
+
+Note that when the same name is used to label a step, the data structure created by
+Gremlin is essentially a List. As such, the 'by' modulator cannot be used when the
+'all' keyword is used on the 'select' step. To get the values of each element in the
+list we can use an 'unfold' step as shown below.
+
+[source,groovy]
+----
+g.V().has('code','AUS').as('a').
+      out().as('a').limit(10).
+      select(all,'a').unfold().values('code').fold()
+
+[AUS,AUS,AUS,AUS,AUS,AUS,AUS,AUS,AUS,AUS,
+ YYZ,LHR,FRA,MEX,PIT,PDX,CLT,CUN,MEM,CVG]
+----
+
+Keywords such as 'all', 'first' and 'last' are discussed further in the
+"<<javastatics>>" section later on in the book.
 
 [[exedge]]
 Examining the edge between two vertices
@@ -15380,16 +15426,20 @@ defined in the 'P' class. Not all the methods defined are shown below.
 |between | P.between      | has("runways",P.between(2,5))
 |==============================================================================
 
-If a traversal path has multiple values assiciated with a single label, such as '"x"'
-then you can use the 'first', 'last' and 'all' statics that are defined as part of
-the 'Pop' Enum.
+If a traversal path has multiple values associated with a single label, such as '"x"'
+then you can use the 'first', 'last' , 'all' and 'mixed' statics that are defined as
+part of the 'Pop' Enum. As the name suggest, 'first' returns the first item in a
+collection. Specifying 'last' returns the last item and 'all' returns all of the
+items in a collection. Specifying 'mixed' will return a 'List' if the collection has
+more than one item. Otherwise an 'Object' will be returned.
 
-.First, last and all
+.First, last, all and mixed
 [cols="1,1,3"]
 |==============================================================================
 |first   | Pop.first      | select(Pop.first,"x")
 |last    | Pop.last       | select(Pop.last,"x")
 |all     | Pop.all        | select(Pop.all,"x")
+|mixed   | Pop.mixed      | select(Pop.mixed,"x")
 |==============================================================================
 
 When working with a 'sack' the operators like 'sum' and 'assign' are defined in the

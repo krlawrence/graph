@@ -10,6 +10,7 @@ This release has been tested against Apache TinkerPop at the 3.3.1 level and Jan
 
 Major new features in this release
 - Added examples to the `where` `by` section.
+- Added more examples of `select` keywords `last`, `first` and `mixed`.
 - Expanded coverage of the results from a Gremlin Server.
 - Sample code and data improvements
   - Added new sample `add-aircraft.Groovy`.
