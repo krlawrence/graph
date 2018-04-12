@@ -3,10 +3,9 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v279-preview, Apr 12, 2018
 //v278 (TP 3.3.1), Mar 28, 2018
-// Thu Apr 12, 2018 12:20:32 CDT
+// Thu Apr 12, 2018 13:13:22 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
-//:Date:      Apr 12 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -24,6 +23,7 @@ v279-preview, Apr 12, 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
+:draftdate: April 12th 2018
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
 //        has a white foreground color. The default was unreadable,
@@ -104,7 +104,7 @@ remains a lot of fun.
 
 Kelvin R. Lawrence +
 First draft: October 5th, 2017 +
-Current draft: April 10th, 2018 +
+Current draft: {draftdate} +
 
 Providing feedback
 ~~~~~~~~~~~~~~~~~~
@@ -4959,8 +4959,9 @@ different way of writing a query we saw earlier. This query starts out by lookin
 how many runways Austin has and then looks at every airport that you can fly to from
 Austin and then looks at how many runways those airports have. Only airports with the
 same number as Austin are returned. Using a 'match' step for this task is overkill.
-However, it does show the basic constructs used by the 'match' step also illustrates
-using values calculated in one part of a query later on in that same query.
+However, it does show the basic constructs used by the 'match' step and again
+illustrates using values calculated in one part of a query later on in that same
+query.
 
 [source,groovy]
 ----
