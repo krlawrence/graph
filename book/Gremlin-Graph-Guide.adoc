@@ -5183,7 +5183,8 @@ AUS from the UK or that leave AUS and arrive in Mexico.
 // Flights to AUS from the UK or from AUS to Mexico
 g.V().has('code','AUS').
       union(__.in().has('country','UK'),
-            out().has('country','MX')).path().by('code')
+            out().has('country','MX')).
+            path().by('code')
 ----
 
 
@@ -5206,7 +5207,8 @@ codes, all airports in the respective cities are considered.
 ----
 g.V().has('city','London').has('region','GB-ENG').
          union(out('route').has('city','Paris'),
-              out('route').has('city','Berlin')).path().by('code')
+               out('route').has('city','Berlin')).
+               path().by('code')
 ----
 
 Here are the results from running the query. Note that routes from five different
@@ -5227,16 +5229,51 @@ London airports were found.
 [LTN,SXF]
 ----
 
-As mentioned above, sometimes, especially for fairly simple queries, there are
-alternatives to using 'union'. The previous query could have been written as follows
-using the 'within' method. 
+As mentioned previously, sometimes, especially for fairly simple queries, there are
+alternatives to using 'union'. Indeed, it is actually not necessary to use a 'union'
+step to achieve the prior result. The re-written version of the query below will
+return the same results as the version that uses a 'union' step. This time a  simple
+'has' step featuring a 'within' predicate is used instead.
 
 [source,groovy]
 ----
-// The above query could have been written without using union() as follows
 g.V().has('city','London').has('region','GB-ENG').
-      out().has('city',within('Paris','Berlin')).path().by('code')
+      out('route').has('city',within('Berlin','Paris')).
+      path().by('code')
 ----
+
+The previous two queries used a 'path' step to essentially show each individual
+route. We can adjust the version of the query that uses a 'union' step just a little
+bit and instead turn the result into a series of lists where the first item in the
+list is the origin airport and the remaining items in the list are the places you can
+fly to from there within our criteria. The double underscore '"__"' is used in the
+way that 'identity' could have been used to refer to the incoming vertex. The 'union'
+step is wrapped in a 'local' step so that each 'union' is individually folded. If the
+'local' step was omitted all of the results would be folded into a single list. In
+this case, the 'union' step makes writing the query relatively easy and this is
+probably a good example of where the 'union' step should be used. Namely, when you
+want to combine multiple traversal results.
+
+[source,groovy]
+----
+g.V().has('city','London').has('region','GB-ENG').
+      local(union(__.values('code'),
+                  out('route').has('city','Paris').values('code'),
+                  out('route').has('city','Berlin').values('code')).
+      fold())
+----
+
+Running the amended query shows us the results in perhaps a more useful form.
+
+[source,groovy]
+----
+[LHR,ORY,CDG,TXL]
+[LGW,CDG,SXF]
+[LCY,ORY,CDG]
+[STN,TXL,SXF]
+[LTN,CDG,SXF]
+----
+
 
 [[unionthree]]
 Using 'union' to combine more complex traversal results
