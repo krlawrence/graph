@@ -1,12 +1,12 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v279-preview, Apr 10, 2018
+v279-preview, Apr 12, 2018
 //v278 (TP 3.3.1), Mar 28, 2018
-// Tue Apr 10, 2018 11:44:35  CDT
+// Thu Apr 12, 2018 12:20:32 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
-//:Date:      Apr 10 2018
+//:Date:      Apr 12 2018
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
@@ -4528,11 +4528,15 @@ Using 'where' and 'by' to filter results
 
 A new capability was added in the Tinkerpop 3.2.4 release that allows a 'where' step
 to be followed with a 'by' modulator. This makes writing certain types of queries a
-lot easier than it was before. The query below starts at the Austin airport and finds
-all the airports that you can fly to from there. A 'where' 'by' step is then used to
-filter the results to just those airports that have the same number of runways that
-Austin has.  What is really nice about this is that we do not have to know ahead of
-time how many runways Austin itself has as that is handled for us by the query.
+lot easier than it was before. Hopefully by now, this capability is supported in many
+TinkerPop enabled graph stores but it is always a good idea to verify the version of
+TinkerPop supported before starting to design queries.
+
+The query below starts at the Austin airport and finds all the airports that you can
+fly to from there. A 'where' 'by' step is then used to filter the results to just
+those airports that have the same number of runways that Austin has.  What is really
+nice about this is that we do not have to know ahead of time how many runways Austin
+itself has as that is handled for us by the query.
 
 [source,groovy]
 ----
@@ -4856,10 +4860,10 @@ g.V().hasLabel('airport').limit(10).choose(values('runways')).
 Using 'match' to do pattern matching
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-'Match' was added in TinkerPop 3 and allows a more declarative style of pattern based
-query to be expressed in Gremlin. 'Match' can be a bit hard to master but once you
-figure it out it can be a very powerful way of traversing a graph looking for
-specific patterns.
+The 'match' step was added in TinkerPop 3 and allows a more declarative style of
+pattern based query to be expressed using Gremlin. 'Match' can be a bit hard to
+master but once you figure it out it can be a very powerful way of traversing a graph
+looking for specific patterns.
 
 Below is an example that uses 'match' to look for airline route patterns where there
 is a flight from one airport to another but no return flight back to the original
@@ -4871,11 +4875,15 @@ not need to stop on the way back because of the trailing wind.
    
 [source,groovy]
 ----
-// Find any cases of where you can fly from JFK non stop to a place you cannot get back from 
-// there non stop.This query should return LCY, as the return flight stops in DUB to refuel.
-g.V().has('code','JFK').match(__.as('s').out().as('d'),
-                              __.not(__.as('d').out().as('s'))).
-                        select('s','d').by('code')
+// Find any cases of where you can fly from JFK non stop 
+// to a place you cannot get back from non stop. This query
+// should return LCY, as the return flight stops in Dublin
+// to refuel.
+
+g.V().has('code','JFK').
+      match(__.as('s').out().as('d'),
+            __.not(__.as('d').out().as('s'))).
+      select('s','d').by('code')
 
 [s:JFK,d:LCY]
 ----
@@ -4889,9 +4897,10 @@ for and Gremlin does the rest.
 [source,groovy]
 ----
 // Same as above but from any airport in the graph.
-g.V().hasLabel('airport').match(__.as('s').out().as('d'),
-                                __.not(__.as('d').out().as('s'))).
-                          select('s','d').by('code')
+g.V().hasLabel('airport').
+      match(__.as('s').out().as('d'),
+            __.not(__.as('d').out().as('s'))).
+      select('s','d').by('code')
 ----
 
 If you were to run the query you would find that there are in fact over 200 places in
@@ -4901,9 +4910,10 @@ find out just how many there are.
 [source,groovy]
 ----
 // How many occurrences of the pattern in the graph are there?
-g.V().hasLabel('airport').match(__.as('s').out().as('d'),
-                                __.not(__.as('d').out().as('s'))).
-                          select('s','d').by('code').count()
+g.V().hasLabel('airport').
+      match(__.as('s').out().as('d'),
+            __.not(__.as('d').out().as('s'))).
+      count()
 
 238
 ----
@@ -4918,10 +4928,11 @@ form A->B->A.
 
 [source,groovy]
 ----
-g.V().hasLabel('airport').match(__.as('a').out().as('b')
-                               ,__.as('b').out().where(neq('a')).as('c')
-                               ,__.not(__.as('a').out().as('c'))).
-                          select('a','b','c').by('code').limit(10)
+g.V().hasLabel('airport').
+      match(__.as('a').out().as('b')
+           ,__.as('b').out().where(neq('a')).as('c')
+           ,__.not(__.as('a').out().as('c'))).
+      select('a','b','c').by('code').limit(10)
 
 ----
 
@@ -4943,12 +4954,13 @@ query.
 [a:ATL,b:TRI,c:PIE]
 ----
 
-Here is another example of using 'match' along with a 'where'. This query starts out
-by looking at how many runways Austin has and then looks at every airport that you
-can fly to from Austin and then looks at how many runways those airports have. Only
-airports with the same number as Austin are returned. While this is a bit of a
-contrived query, it does show the power of 'match' and also illustrates using values
-calculated in one part of a query later on in that same query.
+Here is another example of using 'match' along with a 'where'. This is actually a
+different way of writing a query we saw earlier. This query starts out by looking at
+how many runways Austin has and then looks at every airport that you can fly to from
+Austin and then looks at how many runways those airports have. Only airports with the
+same number as Austin are returned. Using a 'match' step for this task is overkill.
+However, it does show the basic constructs used by the 'match' step also illustrates
+using values calculated in one part of a query later on in that same query.
 
 [source,groovy]
 ----
@@ -4959,17 +4971,48 @@ g.V().has('code','AUS').
       select('outa').valueMap().select('code','runways')                           
 ----
 
-As I mentioned, the example above is a bit contrived and it could actually be done
-without using a 'match' step at all and just using a 'where' step as shown below.
-Hopefully, however, these examples give you an idea of what 'match' can do.
+As I mentioned, the example above is not the best way to write this query and it can
+be done without using a 'match' step at all and just using a 'where' step as shown in
+the three examples below. Each one is simpler than its predecessor.
+
+One way we could choose to write this query is using multiple select steps. This is
+also not a very efficient solution but does work.
 
 [source,groovy]
 ----
 g.V().has('code','AUS').as('aus').values('runways').as('ausr').
       select('aus').out().as('outa').values('runways').as('outr').
-      where('ausr',eq('outr')).select('outa').valueMap().select('code','runways')
-
+      where('ausr',eq('outr')).
+      select('outa').valueMap().select('code','runways')
 ----
+
+A better way than either of the prior two combines a 'filter' step with the 'where'
+and 'select' steps. 
+
+[source,groovy]
+----
+g.V().has('code','AUS').as('a').out().as('b').
+      filter(select('a','b').by('runways').where('a',eq('b'))).
+      valueMap('code','runways')
+----
+
+As mentioned in the "<<whereby>>" section, this query can be simplified further using
+a 'where' step and a 'by' modulator. This capability was introduced in the TinkerPop
+3.2.4 release.
+
+[source,groovy]
+----
+g.V().has('code','AUS').as('a').out().
+       where(eq('a')).by('runways').valueMap('code','runways')
+----
+
+So, while there is often a simpler way to write a query that avoids using the 'match'
+step, for some queries, especially in more complex cases, it provides a useful and
+powerful way to express in a more declarative way, a set of criteria that must be
+met. However, before I resort to using a 'match' step I always think carefully about
+other ways that I could write the query that might be simpler. I do this because the
+syntax of the 'match' step can be tricky to get right without a fair bit of trial and
+error in my experience.
 
 [[union]]
 Using 'union' to combine query results
