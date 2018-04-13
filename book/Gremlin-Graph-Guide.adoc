@@ -3,7 +3,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v279-preview, Apr 12, 2018
 //v278 (TP 3.3.1), Mar 28, 2018
-// Thu Apr 12, 2018 13:13:22 CDT
+// Thu Apr 12, 2018 19:59:58 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -5443,7 +5443,7 @@ those places there are.
 ----
 g.V().has('code','AUS').out().out().dedup().count()
 
-865
+871
 ----
 
 There is however a problem with this query. The 865 places is going to include (some
@@ -5458,7 +5458,7 @@ query below
 g.V().has('code','AUS').out().aggregate('nonstop').
      out().where(without('nonstop')).dedup().count()
 
-806
+812
 ----
 
 After the first 'out' step. all of the vertices that were found are stored in a
@@ -5467,7 +5467,7 @@ collection I chose to  call 'nonstop'. Then, after the second 'out' we can add a
 nonstop collection". We still do the 'dedup' step as otherwise we will still end up
 counting a lot of the remaining airports more than once.
 
-Notice that 806 is precisely 59 less than the 865 number returned by the previous
+Notice that 812 is precisely 59 less than the 871 number returned by the previous
 query which shows the places you can get to non stop were all correctly removed from
 the second query.  This also tells us there are no flights from Austin to places that
 you cannot get to from anywhere else!
