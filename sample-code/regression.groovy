@@ -38,6 +38,10 @@ println "Checking 'group'";[]
 m=g.V().hasLabel('continent').group().by('code').by(out().count()).next();[]
 assert m['EU']==583;[]
 
+println "Checking 'groupCount'";[]
+m=g.V().hasLabel('airport').groupCount().by('runways').next();[]
+assert m[1] == 2316;[]
+
 println "Checking 'groupCount' and 'select'";[]
 m=g.V().hasLabel('airport').
         groupCount().by('country').select('FR','GR','BE').next();[]
@@ -51,6 +55,21 @@ m=g.V().has('airport','country','US').
 assert m.size()==579;[]
 assert m['ABE'][0]==2;[]
 assert m['DFW'][0]==7;[]
+
+println "Checking 'group' with 'count(local)'";[]
+g.V().hasLabel('airport').limit(5).
+      group().by('code').by('city').
+      count(local).next();[]
+assert c == 5;[]
+
+println "Checking 'group' with 'unfold' and 'select(keys)'";[]
+a=g.V().has('airport','country','IE').
+      group().by('code').by('runways').select(keys).
+      unfold().order().fold().next();[]
+assert a.size() == 7;[]
+assert a[0] == 'CFN';[]
+assert a == ['CFN','DUB','KIR','NOC','ORK','SNN','WAT'];[]
+
 
 ;[] //-------------------------------------------------------------------------
 println "Checking 'where' with 'by'";[]
@@ -69,6 +88,12 @@ c=g.V().has('airport','code','AUS').out().
         where(values('runways').is(gt(6)).or().values('runways').is(4)).
         valueMap('code','runways').count().next();[]
 assert c==24;[]
+
+println "Checking 'where' with 'count(local)'" ;[]
+c=g.V().hasLabel('airport').
+        where(out('route').count().is(gt(180))).
+        values('code').fold().count(local).next();[]
+assert c == 25;[]
 
 println "Checking 'filter' and a 'where'  with two parameters" ;[]
 c=g.V().has('code','AUS').as('a').out().as('b').
@@ -172,7 +197,6 @@ g2.addV('root').property('data',9).as('root').
    addE('right').from('b').to('h').
    addE('left').from('c').to('g').iterate();[]
 
-println graph2.toString();[]
 cv = g2.V().count().next();[]
 assert cv == 10;[]
 
@@ -217,7 +241,6 @@ a=g.V().sack(assign).by(constant(1)).
         sack(sum).sack().fold().next();[]
 assert a.flatten() == [8,5,4,7];[]
 
-
 a=g.V().has('code','AUS').
         sack(assign).by('runways').
     V().has('code','SAF').
@@ -225,3 +248,70 @@ a=g.V().has('code','AUS').
         sack(mult).by('runways').
         sack().fold().next();[]
 assert a.flatten() == [14,8,6,12];[]
+
+a=g.withSack([]).
+    V().has('code','SAF').
+        out().values('runways').fold().
+        sack(addAll).sack().next();[]
+assert a.flatten() == [7,4,3,6];[]
+
+a=g.withSack(0).
+    V().has('code','AUS').
+        outE().
+        sack(sum).by('dist').
+        inV().
+        outE().
+        sack(sum).by('dist').
+        inV().has('code','LHR').
+        sack().
+        order().by(incr).limit(10).
+        path().
+          by('code').
+          by('dist').
+          by('code').
+          by('dist').
+          by('code').
+          by().toList();[]
+assert a[0][5] == 4893;[]
+
+;[] //-------------------------------------------------------------------------
+println "Checking side effects and lambdas";[]
+c = 0;[]
+g.V().has('region','US-OR').sideEffect{ c += 1 }.values('code').fold().next();[]
+assert c == 7;[]
+
+c=g.V().hasLabel('airport').
+        filter{it.get().property('city').value() =="London"}.
+        count().next();[]
+assert c == 6;[]      
+
+c=g.V().hasLabel('airport').as('a').values('desc').
+       filter{it.toString().contains('F.')}.select('a').
+       local(values('code','desc').fold()).count().next();[]
+assert c == 4;[]
+
+c=g.V().has('airport','type','airport').
+        filter{it.get().property('city').value ==~/Dallas|Austin/}.
+        values('code').count().next();[]
+assert c == 3;[]
+
+c=g.V().has('airport','type','airport').
+        filter{it.get().property('city').value()==~/^Dal\w*/}.
+        values('city').count().next();[]
+assert c == 7;[]
+
+
+;[] //-------------------------------------------------------------------------
+println "Checking custom predicates";[]
+a = g.V().hasLabel('airport').values('longest').mean().next();[]
+f = {x,y -> x > y*2};[]
+c=g.V().hasLabel('airport').has('longest',test(f,a)).values('code').count().next();[]
+assert c == 9;[]
+
+bp = new java.util.function.BiPredicate<String, String>() {
+         boolean test(String val, String pattern) {
+           return val ==~ pattern  }};[]
+regex = {new P(bp, it)};[]
+c= g.V().has('desc', regex(/^Dal.*/)).count().next();[]
+assert c == 5;[]
+
