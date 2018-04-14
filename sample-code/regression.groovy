@@ -5,7 +5,7 @@
 ;[] // version is released to make sure the examples in the book are still working.
 ;[] // This script will be added to as time permits to increase coverage.
 
-println "-------------";[]
+println "\n\n-------------";[]
 println "Running tests";[]
 println "-------------";[]
 
@@ -207,3 +207,21 @@ a=g.V().has('airport','region','US-CA').
           until(count(local).is(1)).
         unfold().toList();[]
 assert a[1] == 'Bakersfield';[]
+assert a[4] == 'Burbank';[]
+
+;[] //-------------------------------------------------------------------------
+println "Checking 'sack'";[]
+a=g.V().sack(assign).by(constant(1)).
+        has('code','SAF').
+        out().values('runways').
+        sack(sum).sack().fold().next();[]
+assert a.flatten() == [8,5,4,7];[]
+
+
+a=g.V().has('code','AUS').
+        sack(assign).by('runways').
+    V().has('code','SAF').
+        out().
+        sack(mult).by('runways').
+        sack().fold().next();[]
+assert a.flatten() == [14,8,6,12];[]
