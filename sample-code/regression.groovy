@@ -57,7 +57,7 @@ assert m['ABE'][0]==2;[]
 assert m['DFW'][0]==7;[]
 
 println "Checking 'group' with 'count(local)'";[]
-g.V().hasLabel('airport').limit(5).
+c=g.V().hasLabel('airport').limit(5).
       group().by('code').by('city').
       count(local).next();[]
 assert c == 5;[]
