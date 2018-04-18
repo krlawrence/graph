@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v279-preview, Apr 12, 2018
+v279-preview, Apr 18, 2018
 //v278 (TP 3.3.1), Mar 28, 2018
-// Thu Apr 12, 2018 19:59:58 CDT
+// Wed Apr 18, 2018 09:50:29 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -23,7 +23,7 @@ v279-preview, Apr 12, 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: April 12th 2018
+:draftdate: April 18th 2018
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
 //        has a white foreground color. The default was unreadable,
@@ -4201,9 +4201,9 @@ a better approach but this suffices as an example of a bigger 'or' expression.
 g.V().hasLabel('airport').or(has('region','US-TX'),
                              has('region','US-LA'),
                              has('region','US-AZ'),
-                             has('region','US-OK'))
-                          .order().by('region',incr)
-                          .valueMap().select('code','region')
+                             has('region','US-OK')).
+                           order().by('region',incr).
+                           valueMap().select('code','region')
 ----
 
 Using 'within' the example above could be written like this so always keep in mind
