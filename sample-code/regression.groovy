@@ -4,6 +4,7 @@
 ;[] // higher. This script is intended to be run each time a new Apache TinkerPop
 ;[] // version is released to make sure the examples in the book are still working.
 ;[] // This script will be added to as time permits to increase coverage.
+;[] // This script assumes the 'graph' and 'g' variables have been defined.
 
 println "\n\n-------------";[]
 println "Running tests";[]
@@ -24,6 +25,17 @@ d=g.V().has('code','DFW').
         has('code','AUS').
         select('a').values('dist').next();[]
 assert d == 190;[]       
+
+;[] //-------------------------------------------------------------------------
+println "Checking simple 'has' steps";[]
+c=g.V().has('region','US-TX').has('longest',gte(12000)).count().next();[]
+assert c == 6;[]       
+
+c=g.V().hasLabel('airport').count().next();[]
+assert c == 3374;[]
+
+c=g.V().has('region','US-CA').count().next();[]
+assert c==29;[]
 
 ;[] //-------------------------------------------------------------------------
 println "Checking 'order' and 'path'";[]
@@ -70,6 +82,13 @@ assert a.size() == 7;[]
 assert a[0] == 'CFN';[]
 assert a == ['CFN','DUB','KIR','NOC','ORK','SNN','WAT'];[]
 
+println "Checking 'order' with 'valueMap' and 'select'";[]
+a=g.V().hasLabel('airport').
+        order().by('longest',decr).valueMap().
+        select('code','longest').limit(10).toList();[]
+
+assert a[0]['code'][0] == 'BPX';[]      
+assert a[0]['longest'][0] == 18045;[]      
 
 ;[] //-------------------------------------------------------------------------
 println "Checking 'where' with 'by'";[]
@@ -158,10 +177,68 @@ x=g.inject(60*(Math.PI/180)).math('sin(_)').next();[]
 assert x == 0.8660254037844386;[]
 
 ;[] //-------------------------------------------------------------------------
+println "Checking 'without'";[]
+a=g.V().has('airport','code','AUS').
+        out().has('code',without('DFW','LAX')).
+        out().has('code','SYD').path().by('code').toList();[]
+assert a.size() == 1;[]
+assert a[0].flatten() == ['AUS','SFO','SYD'];[]
+
+c=g.V().has('runways',without(3..6)).values('code','runways').fold().count(local).next();[]
+assert c == 6160;[]
+
 println "Checking 'aggregate' and 'without'";[]
 c=g.V().has('code','AUS').out().aggregate('nonstop').
      out().where(without('nonstop')).dedup().count().next();[]
 assert c==812;[]
+
+println "Checking 'within'";[]
+c=g.V().has('runways',within(3..6)).values('code','runways').count().next();[]
+assert c == 588;[]
+
+c=g.V().has('runways',within(1,2,3)).values('code','runways').count().next();[]
+assert c == 6606;[]
+
+a=g.V().has('airport','code','AUS').
+       out().has('code',within('DFW','DAL','IAH','HOU','SAT')).
+       out().has('code','LAS').path().by('code').toList();[]
+assert a.size() == 4;[]
+
+println "Checking 'between'";[]
+c=g.V().has('runways',between(5,8)).values('code','runways').fold().count(local).next();[]
+assert c == 38;[]
+
+;[] //-------------------------------------------------------------------------
+println "Checking boolean 'or', 'and' and 'not' operators";[]
+c=g.V().hasLabel('airport').
+        or(has('region','US-TX'),                                 
+           has('region','US-LA'),                                 
+           has('region','US-AZ'),                                 
+           has('region','US-OK')).                                
+        order().by('region',incr).                               
+        valueMap().select('code','region').count().next();[]    
+assert c == 48;[]
+
+c=g.V().hasLabel('airport').
+        and(has('region','US-TX'),
+            has('longest',gte(12000))).
+        values('code').count().next();[]
+assert c == 6;[]
+
+a=g.V().has('airport','code','AUS').
+        out().and(has('code',neq('DFW')),has('code',neq('LAX'))).
+        out().has('code','SYD').path().by('code').toList();[]
+assert a.size() == 1;[]
+assert a[0].flatten() == ['AUS','SFO','SYD'];[]
+
+c=g.V().not(inE()).count().next();[]
+assert c == 245;[]
+
+c=g.V().not(bothE()).count().next();[]
+assert c == 7;[]
+
+c=g.V().not(hasLabel('airport')).count().next();[]
+assert c == 245;[]
 
 ;[] //-------------------------------------------------------------------------
 println "Checking 'coalesce'";[]
@@ -315,3 +392,26 @@ regex = {new P(bp, it)};[]
 c= g.V().has('desc', regex(/^Dal.*/)).count().next();[]
 assert c == 5;[]
 
+
+;[] //-------------------------------------------------------------------------
+println "Checking classes and types";[]
+assert graph instanceof org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph;[]
+
+cls = g.V().has('airport','code','DFW').next();[]
+assert cls instanceof org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerVertex;[]
+
+edge = g.V().has('airport','code','DFW').outE().limit(1).next();[]
+assert edge instanceof org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerEdge;[]
+
+cls = g.V().has('code','LHR').valueMap().next();[]
+assert cls instanceof java.util.HashMap;[]
+
+assert Pop.values() == [first,last,all,mixed];[]
+
+assert Operator.values() == [sum,minus,mult,div,min,max,assign,and,or,addAll,sumLong];[]
+
+assert T.values() == [label,id,key,value];[]
+
+assert Column.values() == [keys,values];[]
+
+assert Scope.values() == [global,local];[]
