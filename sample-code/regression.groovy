@@ -24,7 +24,17 @@ d=g.V().has('code','DFW').
         outE().as('a').inV().
         has('code','AUS').
         select('a').values('dist').next();[]
-assert d == 190;[]       
+assert d == 190;[] 
+
+c=g.V().has('code','DEN').out().
+        has('country','MX').count().next();[]
+assert c == 7;[]
+
+a=g.V().has('code','DEL').out().as('a').in("contains").
+        has('code','EU').select('a').by('city').toList();[]
+assert a.size() == 17;[]
+assert a.contains('Helsinki');[]
+assert a.sort().subList(0,3).flatten() == ['Amsterdam','Birmingham','Brussels'];[]
 
 ;[] //-------------------------------------------------------------------------
 println "Checking simple 'has' steps";[]
@@ -44,10 +54,12 @@ a=g.V().has('airport','code','LCY').outE().inV().
 assert a[0][0]=='LCY';[] 
 assert a[0][1]==404;[] 
 assert a[0][2]=='ABZ';[] 
+assert a[0] instanceof org.apache.tinkerpop.gremlin.process.traversal.step.util.MutablePath;[]
 
 ;[] //-------------------------------------------------------------------------
 println "Checking 'group'";[]
 m=g.V().hasLabel('continent').group().by('code').by(out().count()).next();[]
+assert m instanceof  java.util.HashMap;[]
 assert m['EU']==583;[]
 
 println "Checking 'groupCount'";[]
@@ -208,6 +220,14 @@ println "Checking 'between'";[]
 c=g.V().has('runways',between(5,8)).values('code','runways').fold().count(local).next();[]
 assert c == 38;[]
 
+println "Checking 'inside'";[]
+c=g.V().has('runways',inside(3,6)).values('code','runways').count().next();[]
+assert c == 130;[]
+
+println "Checking 'outside'";[]
+c=g.V().has('lat',outside(-50,77)).order().by('lat',incr).count().next();[]
+assert c == 10;[]
+
 ;[] //-------------------------------------------------------------------------
 println "Checking boolean 'or', 'and' and 'not' operators";[]
 c=g.V().hasLabel('airport').
@@ -250,6 +270,33 @@ s=g.V().has('code','AUS').
         coalesce(out().has('code','DFW'),identity()).values('city').next();[]
 assert s=='Dallas';[]
 
+
+;[] //-------------------------------------------------------------------------
+println "Checking 'withSideEffect', 'store' and a Set";[]
+s=g.withSideEffect('s', [] as Set).
+  V().hasLabel('airport').values('runways').
+      store('s').cap('s').order(local).next();[]
+assert s instanceof java.util.ArrayList;[]
+assert s.size == 8;[]
+assert s == [1,2,3,4,5,6,7,8];[]
+
+;[] //-------------------------------------------------------------------------
+println "Checking 'BulkSet' from 'store'";[]
+s=g.V().has('region','US-MA').store('r').by('runways').cap('r').next();[]
+assert s instanceof org.apache.tinkerpop.gremlin.process.traversal.step.util.BulkSet;[]
+assert s.size() == 7;[]
+assert s.flatten().size() == 4;[]
+assert s.uniqueSize() == 4;[]
+assert s.contains(6);[]
+assert s.asBulk()[2] == 3;[]
+assert s.asBulk()[3] == 2;[]
+
+println "Checking 'BulkSet' from 'aggregate'";[]
+s=g.V().has('airport','country','IE').aggregate('ireland').cap('ireland').next();[]
+assert s instanceof org.apache.tinkerpop.gremlin.process.traversal.step.util.BulkSet;[]
+assert s.size() == 7;[]
+assert s.uniqueSize() == 7;[]
+
 ;[] //-------------------------------------------------------------------------
 println "Checking vertex and edge creation";[]
 graph2=TinkerGraph.open();[]
@@ -280,26 +327,32 @@ assert cv == 10;[]
 ce = g2.E().count().next();[]
 assert ce == 9;[]
 
+
+
 ;[] //-------------------------------------------------------------------------
-println "Checking 'repeat'";[]
+println "Checking 'repeat until'";[]
 c=g2.V().hasLabel('root').
          repeat(out('right')).
            until(out('right').count().is(0)).
          values('data').next();[]
+
 assert c == 22;[]
 
 c=g2.V().hasLabel('root').
          repeat(out('left')).
            until(__.not(out('left'))).
          values('data').next();[]
+
 assert c == 1;[]
 
 a=g2.V().hasLabel('root').
          repeat(out('left')).
            until(__.not(out('left'))).
          path().by('data').next().toList();[]
+
 assert a.flatten() == [9,5,2,1];[]
 
+println "Checking 'repeat' with 'unfold'";[]
 a=g.V().has('airport','region','US-CA').
         order().by('city').limit(5).
         group().by('code').by('city').
@@ -307,17 +360,41 @@ a=g.V().has('airport','region','US-CA').
         repeat(unfold()).
           until(count(local).is(1)).
         unfold().toList();[]
+
 assert a[1] == 'Bakersfield';[]
 assert a[4] == 'Burbank';[]
 
+println "Checking 'repeat' with 'emit'";[]
+p= g.V().has('airport','code','AUS').
+      repeat(out()).emit().times(3).has('code','MIA').
+      limit(5).path().by('code').next();[]
+
+assert p instanceof org.apache.tinkerpop.gremlin.process.traversal.step.util.MutablePath;[]
+assert p.isSimple();[]
+assert p[0] == 'AUS';[]
+assert p.head() == 'MIA';[]
+assert p.size() == 2;[]
+
 ;[] //-------------------------------------------------------------------------
-println "Checking 'sack'";[]
+println "Checking vertex and edge deletion";[]
+
+g2.V().has('data',15).drop().iterate();[]
+cv = g2.V().count().next();[]
+assert cv == 9;[]
+
+ce = g2.E().count().next();[]
+assert ce == 7;[]                    
+
+
+;[] //-------------------------------------------------------------------------
+println "Checking 'sack' with 'assign' using a 'constant'";[]
 a=g.V().sack(assign).by(constant(1)).
         has('code','SAF').
         out().values('runways').
         sack(sum).sack().fold().next();[]
 assert a.flatten() == [8,5,4,7];[]
 
+println "Checking 'sack' with 'assign' using a property value'";[]
 a=g.V().has('code','AUS').
         sack(assign).by('runways').
     V().has('code','SAF').
@@ -326,12 +403,14 @@ a=g.V().has('code','AUS').
         sack().fold().next();[]
 assert a.flatten() == [14,8,6,12];[]
 
+println "Checking 'sack' with 'addAll'";[]
 a=g.withSack([]).
     V().has('code','SAF').
         out().values('runways').fold().
         sack(addAll).sack().next();[]
 assert a.flatten() == [7,4,3,6];[]
 
+println "Checking 'sack' with zero base and 'sum'";[]
 a=g.withSack(0).
     V().has('code','AUS').
         outE().
@@ -350,6 +429,18 @@ a=g.withSack(0).
           by('code').
           by().toList();[]
 assert a[0][5] == 4893;[]
+
+println "Checking 'sack' with 'assign' using a 'constant' and 'min'";[]
+a=g.V().sack(assign).by(constant(400)).has('code','SAF').
+      outE().sack(min).by('dist').sack().fold().next();[]
+assert a.size == 4;[]
+assert a == [400,400,369,303];[]
+
+println "Checking 'sack' with 'assign' using a 'constant' and 'max'";[]
+a=g.V().sack(assign).by(constant(400)).has('code','SAF').
+      outE().sack(max).by('dist').sack().fold().next();[]
+assert a.size == 4;[]
+assert a ==[549,708,400,400];[]
 
 ;[] //-------------------------------------------------------------------------
 println "Checking side effects and lambdas";[]
