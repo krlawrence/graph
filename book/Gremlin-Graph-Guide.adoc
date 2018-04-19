@@ -854,7 +854,7 @@ serialization formats. Two common ones are GraphML and GraphSON.  The latter is 
 JSON format that is defined by Apache TinkerPop and heavily used in that environment.
 GraphML is very widely recognized by TinkerPop and many other tools as well such as
 Gephi, a popular open source tool for visualizing graph data.  A lot of graph
-ingestion algorithms also sill use comma separated values (CSV) format files. 
+ingestion algorithms also still use comma separated values (CSV) format files. 
 
 We will briefly look at loading and saving graph data in Sections 2 and 4. We take a
 much deeper look at different ways to work with graph data stored in text format
