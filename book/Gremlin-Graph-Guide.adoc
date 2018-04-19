@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v279-preview, Apr 18, 2018
+v279-preview, Apr 19, 2018
 //v278 (TP 3.3.1), Mar 28, 2018
-// Wed Apr 18, 2018 09:50:29 CDT
+// Thu Apr 19, 2018 12:38:36 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -13105,19 +13105,23 @@ Here are the results of running the query.
 
 [source,groovy]
 ----
-Istanbul
-Helsinki
+London
 Paris
 Frankfurt
-London
-Birmingham
+Helsinki
+Rome
+Amsterdam
+Madrid
 Vienna
 Zurich
-Amsterdam
-Moscow
 Brussels
 Munich
-Rome
+Stockholm
+Moscow
+Milan
+Istanbul
+Copenhagen
+Birmingham
 ----
 
 [[aggrroutes]]
