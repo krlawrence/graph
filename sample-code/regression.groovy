@@ -24,17 +24,33 @@ d=g.V().has('code','DFW').
         outE().as('a').inV().
         has('code','AUS').
         select('a').values('dist').next();[]
+
 assert d == 190;[] 
 
 c=g.V().has('code','DEN').out().
         has('country','MX').count().next();[]
+
 assert c == 7;[]
 
 a=g.V().has('code','DEL').out().as('a').in("contains").
         has('code','EU').select('a').by('city').toList();[]
+
 assert a.size() == 17;[]
 assert a.contains('Helsinki');[]
 assert a.sort().subList(0,3).flatten() == ['Amsterdam','Birmingham','Brussels'];[]
+
+
+c=g.V().outE().has('dist',within(100..200)).count().next();[]
+
+assert c == 3029;[]
+
+c=g.V().has('airport','country','US').
+        outE().has('dist',within(100..200)).
+        inV().has('country','US').
+        count().next();[]
+
+assert c == 583;[]        
+
 
 ;[] //-------------------------------------------------------------------------
 println "Checking simple 'has' steps";[]
@@ -55,6 +71,22 @@ assert a[0][0]=='LCY';[]
 assert a[0][1]==404;[] 
 assert a[0][2]=='ABZ';[] 
 assert a[0] instanceof org.apache.tinkerpop.gremlin.process.traversal.step.util.MutablePath;[]
+
+println "Checking 'path'";[]
+p=g.V().has('code','AUS').outE().inV().
+        has('code','MEX').
+        path().by('code').by('dist').next();[]
+
+assert p instanceof org.apache.tinkerpop.gremlin.process.traversal.step.util.MutablePath;[]
+assert p.isSimple();[]
+assert p.head() == 'MEX';[]
+assert p[1] == 748;[]
+
+println "Checking 'cyclicPath'";[]
+p=g.V().has('code','AUS').repeat(out()).until(cyclicPath()).
+        limit(1).path().by('code').next();[]
+assert !p.isSimple();[]
+assert p[0] == p[-1];[]
 
 ;[] //-------------------------------------------------------------------------
 println "Checking 'group'";[]
@@ -270,6 +302,10 @@ s=g.V().has('code','AUS').
         coalesce(out().has('code','DFW'),identity()).values('city').next();[]
 assert s=='Dallas';[]
 
+s=g.V().has('code','AUS').
+        coalesce(out().has('code','SYD'),constant('no route')).next();[]
+assert s == 'no route';[]
+
 
 ;[] //-------------------------------------------------------------------------
 println "Checking 'withSideEffect', 'store' and a Set";[]
@@ -296,6 +332,21 @@ s=g.V().has('airport','country','IE').aggregate('ireland').cap('ireland').next()
 assert s instanceof org.apache.tinkerpop.gremlin.process.traversal.step.util.BulkSet;[]
 assert s.size() == 7;[]
 assert s.uniqueSize() == 7;[]
+
+;[] //-------------------------------------------------------------------------
+println "Checking property keys";[]
+a=g.V().has('airport','code','DFW').properties().key().fold().next();[]
+assert a.size() == 12;[]
+assert a == ['country','code','longest','city','elev','icao','lon','type','region','runways','lat','desc'];[]
+
+
+println "Checking property cardinality of LIST";[]
+g.addV('test').property('a',1).property('a',2).property('a',3).iterate();[]
+g.V().hasLabel('test').property(list,'a',4).iterate();[]
+a=g.V().hasLabel('test').valueMap().select('a').next();[]
+assert a.getClass() == java.util.ArrayList;[]
+assert a == [1,2,3,4];[]
+g.V().hasLabel('test').drop();[]
 
 ;[] //-------------------------------------------------------------------------
 println "Checking vertex and edge creation";[]
@@ -327,7 +378,10 @@ assert cv == 10;[]
 ce = g2.E().count().next();[]
 assert ce == 9;[]
 
-
+println "Checking vertex label creation using a traversal";[]
+v=g.addV(V().has('code','AUS').label()).property('code','XYZ').next();[]
+assert v.label == 'airport';[] 
+g.V(v).drop();
 
 ;[] //-------------------------------------------------------------------------
 println "Checking 'repeat until'";[]
@@ -468,6 +522,11 @@ c=g.V().has('airport','type','airport').
         values('city').count().next();[]
 assert c == 7;[]
 
+println "Checking 'map' and a lambda";[]
+a=g.V().has('airport','region','GB-ENG').
+        map{it.get().value('code')+" "+it.get().value('city')}.toList();[]
+assert a.sort()[0] == 'BHX Birmingham';[]
+
 
 ;[] //-------------------------------------------------------------------------
 println "Checking custom predicates";[]
@@ -506,3 +565,14 @@ assert T.values() == [label,id,key,value];[]
 assert Column.values() == [keys,values];[]
 
 assert Scope.values() == [global,local];[]
+
+
+;[] //-------------------------------------------------------------------------
+println "Checking user defined Groovy methods";[]
+def dist(g,from,to) {
+  d=g.V().has('code',from).outE().as('a').inV().has('code',to)
+         .select('a').values('dist').next()
+  return d };[]
+assert dist(g,'AUS','LHR') ==  4901;[]
+
+
