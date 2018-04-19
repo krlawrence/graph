@@ -13690,9 +13690,8 @@ there are a lot of them!
 [source,groovy]
 ----
 // Routes Between 100 and 200 miles in length 
-g.V().as('src').
-      outE().has('dist',within(100..200)).
-      inV().as('dest').
+g.V().outE().has('dist',within(100..200)).
+      inV().
       path().by('code').by('dist').
       count()
 
