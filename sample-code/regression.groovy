@@ -339,14 +339,29 @@ a=g.V().has('airport','code','DFW').properties().key().fold().next();[]
 assert a.size() == 12;[]
 assert a == ['country','code','longest','city','elev','icao','lon','type','region','runways','lat','desc'];[]
 
-
 println "Checking property cardinality of LIST";[]
 g.addV('test').property('a',1).property('a',2).property('a',3).iterate();[]
 g.V().hasLabel('test').property(list,'a',4).iterate();[]
 a=g.V().hasLabel('test').valueMap().select('a').next();[]
 assert a.getClass() == java.util.ArrayList;[]
 assert a == [1,2,3,4];[]
-g.V().hasLabel('test').drop();[]
+g.V().hasLabel('test').drop().iterate();[]
+
+println "Checking property cardinality of SET";[]
+g.addV('test').property(set,'s',1).iterate();[]
+g.V().hasLabel('test').property(set,'s',2).property(set,'s',1).iterate();[]
+g.V().hasLabel('test').property(set,'s',2).property(set,'s',4).iterate();[]
+s=g.V().hasLabel('test').valueMap().select('s').next();[]
+assert s.sort() == [1,2,4];[]
+g.V().hasLabel('test').drop().iterate();[]
+
+println "Checking meta properties";[]
+g.V().has('code','AUS').
+      properties().hasValue('AUS').
+      property('date','6/6/2017').iterate();[]
+mp=g.V(3).properties('code').properties('date').next();[]
+assert mp instanceof org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerProperty;[]
+assert mp.value() == '6/6/2017';[]
 
 ;[] //-------------------------------------------------------------------------
 println "Checking vertex and edge creation";[]
