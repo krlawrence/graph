@@ -134,6 +134,18 @@ a=g.V().hasLabel('airport').
 assert a[0]['code'][0] == 'BPX';[]      
 assert a[0]['longest'][0] == 18045;[]      
 
+
+;[] //-------------------------------------------------------------------------
+println "Checking 'project'";[]
+a=g.V().has('airport','region','GB-ENG').
+        project('IATA','Routes').
+          by('code').by(out().count()).
+        order().by(select('Routes'),decr).toList();[]
+
+assert a[0]['IATA'] == 'LGW';[]
+assert a[0]['Routes'] == 200;[]
+assert a.size==27;[]
+
 ;[] //-------------------------------------------------------------------------
 println "Checking 'where' with 'by'";[]
 c=g.V().has('airport','code','AUS').as('a').
@@ -181,7 +193,7 @@ c=g.V().has('code','NCE').values('region').as('r').
 assert c==4;[]
 
 ;[] //-------------------------------------------------------------------------
-println "Checking 'choose' with two 'choices'";[]
+println "Checking 'choose' with two choices";[]
 a= g.V().hasLabel('airport').has('country','US').limit(15).
          choose(values('code').is(within('AUS','DFW')),
             values('city'),
@@ -190,6 +202,15 @@ a= g.V().hasLabel('airport').has('country','US').limit(15).
 assert a[0]=='Austin';[]
 assert a[1]=='Dallas';[]
 assert a[2]=='US-AK';[]
+
+println "Checking 'choose' with  three 'options'";[]
+a=g.V().hasLabel('airport').
+        choose(values('code')).
+           option('DFW',values('icao')).
+           option('AUS',values('region')).
+           option('LAX',values('code')).fold().next();[]
+
+assert a.sort() == ['KDFW','LAX','US-TX'];[]                            
 
 ;[] //-------------------------------------------------------------------------
 println "Checking 'match'";[]
@@ -362,6 +383,9 @@ g.V().has('code','AUS').
 mp=g.V(3).properties('code').properties('date').next();[]
 assert mp instanceof org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerProperty;[]
 assert mp.value() == '6/6/2017';[]
+g.V(3).properties('code').properties('date').drop().iterate();[]
+mp=g.V(3).properties('code').properties().fold().next();[]
+assert mp==[];[]
 
 ;[] //-------------------------------------------------------------------------
 println "Checking vertex and edge creation";[]
