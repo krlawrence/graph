@@ -24,7 +24,6 @@ d=g.V().has('code','DFW').
         outE().as('a').inV().
         has('code','AUS').
         select('a').values('dist').next();[]
-
 assert d == 190;[] 
 
 c=g.V().has('code','DEN').out().
@@ -94,11 +93,17 @@ assert p.isSimple();[]
 assert p.head() == 'MEX';[]
 assert p[1] == 748;[]
 
+println "Checking 'path' with 'count(local)'";[]
+c=g.V().has('code','AUS').out().out().out().limit(1).
+        path().count(local).next();[]
+assert c == 4;[]
+
 println "Checking 'cyclicPath'";[]
 p=g.V().has('code','AUS').repeat(out()).until(cyclicPath()).
         limit(1).path().by('code').next();[]
 assert !p.isSimple();[]
 assert p[0] == p[-1];[]
+
 
 ;[] //-------------------------------------------------------------------------
 println "Checking 'group'";[]
@@ -144,7 +149,14 @@ a=g.V().hasLabel('airport').
         select('code','longest').limit(10).toList();[]
 
 assert a[0]['code'][0] == 'BPX';[]      
-assert a[0]['longest'][0] == 18045;[]      
+assert a[0]['longest'][0] == 18045;[]
+
+println "Checking 'group' with 'select(values)'";[]
+a=g.V().has('code','DFW').project('dfw','route_count').
+        by().by(outE().count()).select(values).next();[]
+
+assert a[0] == g.V().has('code','DFW').next();[]
+assert a[1] == 221;[]
 
 
 ;[] //-------------------------------------------------------------------------
@@ -292,6 +304,53 @@ assert c == 130;[]
 println "Checking 'outside'";[]
 c=g.V().has('lat',outside(-50,77)).order().by('lat',incr).count().next();[]
 assert c == 10;[]
+
+;[] //-------------------------------------------------------------------------
+println "Checking 'range(local,3,5)'";[]
+a=g.V().has('airport','country','IE').
+        group().by('code').by('runways').
+        order(local).by(keys).select(keys).
+        range(local,3,5).next();[]
+assert a.size() == 2;[]
+assert a.contains('NOC');[]
+assert a.contains('ORK');[]
+
+println "Checking 'range(local,0,-1)'";[]
+a=g.V().has('airport','country','IE').
+        group().by('code').by('runways').
+        order(local).by(keys).select(keys).
+        range(local,0,-1).next();[]  
+assert a.size() == 7;[]
+assert a.toString() == "[CFN, DUB, KIR, NOC, ORK, SNN, WAT]";[]
+
+println "Checking 'skip(local)'";[]
+a=g.V().has('airport','country','IE').
+        group().by('code').by('runways').
+        order(local).by(keys).select(keys).
+        skip(local,3).next();[]  
+assert a.size() == 4;[]
+assert a.toString()  == "[NOC, ORK, SNN, WAT]";[]
+
+println "Checking 'limit(3)'";[]
+a=g.V().has('country','IE').
+        order().by('code').limit(3).
+        values('code').fold().next();[]
+assert a.size() == 3;[]
+assert a == ['CFN','DUB','KIR'];[]
+
+println "Checking 'tail(2)'";[]
+a=g.V().has('country','IE').
+        order().by('code').tail(2).
+        values('code').fold().next();[]
+assert a.size() == 2;[]
+assert a == ['SNN','WAT'];[]
+
+println "Checking 'skip(5)'";[]
+a=g.V().has('country','IE').
+        order().by('code').skip(5).
+        values('code').fold().next();[]
+assert a.size() == 2;[]
+assert a == ['SNN','WAT'];[] 
 
 ;[] //-------------------------------------------------------------------------
 println "Checking boolean 'or', 'and' and 'not' operators";[]
