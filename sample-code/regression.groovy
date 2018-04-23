@@ -51,6 +51,18 @@ c=g.V().has('airport','country','US').
 
 assert c == 583;[]        
 
+;[] //-------------------------------------------------------------------------
+println "Checking 'hasNext' and 'tryNext'";[]
+assert g.V().has('code','AUS').out('route').hasNext();[]
+assert g.V().has('code','AUS').out('route').next();[]
+assert g.V(3).out('route').tryNext();[]
+
+;[] //-------------------------------------------------------------------------
+println "Checking 'optional'";[]
+s=g.V().has('code','AUS').optional(out().has('code','SYD')).values('city').next();[]
+assert s == 'Austin';[]
+s=g.V().has('code','DFW').optional(out().has('code','SYD')).values('city').next();[]
+assert s == 'Sydney';[]
 
 ;[] //-------------------------------------------------------------------------
 println "Checking simple 'has' steps";[]
