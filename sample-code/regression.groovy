@@ -300,6 +300,31 @@ c=g.V().hasLabel('airport').values('longest').sum().next();[]
 assert c == 25544090;[]
 
 ;[] //-------------------------------------------------------------------------
+n=status( "Checking 'has' with 'eq'",n);[]
+c=g.V().has('runways',eq(3)).count().next();[]
+assert c == 225;[]
+
+n=status( "Checking 'has' with 'neq'",n);[]
+c=g.V().has('runways',neq(1)).count().next();[]
+assert c == 1058;[]
+
+n=status( "Checking 'has' with 'gt'",n);[]
+c=g.V().has('runways',gt(3)).count().next();[]
+assert c == 71;[]
+
+n=status( "Checking 'has' with 'gte'",n);[]
+c=g.V().has('runways',gte(3)).count().next();[]
+assert c == 296;[]
+
+n=status( "Checking 'has' with 'lt'",n);[]
+c=g.V().has('runways',lt(3)).count().next();[]
+assert c == 3078;[]
+
+n=status( "Checking 'has' with 'lte'",n);[]
+c=g.V().has('runways',lte(3)).count().next();[]
+assert c == 3303;[]
+
+;[] //-------------------------------------------------------------------------
 n=status( "Checking 'without('DFW','LAX')'",n);[]
 a=g.V().has('airport','code','AUS').
         out().has('code',without('DFW','LAX')).
@@ -315,27 +340,47 @@ c=g.V().has('code','AUS').out().aggregate('nonstop').
      out().where(without('nonstop')).dedup().count().next();[]
 assert c==812;[]
 
-n=status( "Checking 'within'",n);[]
+n=status( "Checking 'within(3..6)'",n);[]
 c=g.V().has('runways',within(3..6)).values('code','runways').count().next();[]
 assert c == 588;[]
 
+n=status( "Checking 'without(3..6)'",n);[]
+c=g.V().has('runways',without(3..6)).values('code','runways').count().next();[]
+assert c == 6160;[]
+
+n=status( "Checking 'within(1,2,3)'",n);[]
 c=g.V().has('runways',within(1,2,3)).values('code','runways').count().next();[]
 assert c == 6606;[]
 
+n=status( "Checking 'without(1,2,3)'",n);[]
+c=g.V().has('runways',without(1,2,3)).values('code','runways').count().next();[]
+assert c == 142;[]
+
+n=status( "Checking 'within(('DFW','DAL','IAH','HOU','SAT')'",n);[]
 a=g.V().has('airport','code','AUS').
        out().has('code',within('DFW','DAL','IAH','HOU','SAT')).
        out().has('code','LAS').path().by('code').toList();[]
 assert a.size() == 4;[]
 
-n=status( "Checking 'between'",n);[]
+n=status( "Checking 'witout(('DFW','DAL','IAH','HOU','SAT')'",n);[]
+a=g.V().has('airport','code','AUS').
+       out().has('code',without('DFW','DAL','IAH','HOU','SAT')).
+       out().has('code','LAS').path().by('code').toList();[]
+assert a.size() == 48;[]
+
+n=status( "Checking 'hasId(within(1..46)'",n);[]
+c=g.V().hasId(within(1..46)).out().hasId(between(1,47)).count().next();[]
+assert c == 1326;[]
+
+n=status( "Checking 'between(5,8)'",n);[]
 c=g.V().has('runways',between(5,8)).values('code','runways').fold().count(local).next();[]
 assert c == 38;[]
 
-n=status( "Checking 'inside'",n);[]
+n=status( "Checking 'inside(3,6)'",n);[]
 c=g.V().has('runways',inside(3,6)).values('code','runways').count().next();[]
 assert c == 130;[]
 
-n=status( "Checking 'outside'",n);[]
+n=status( "Checking 'outside(-50,77)'",n);[]
 c=g.V().has('lat',outside(-50,77)).order().by('lat',incr).count().next();[]
 assert c == 10;[]
 
@@ -387,7 +432,7 @@ assert a.size() == 2;[]
 assert a == ['SNN','WAT'];[] 
 
 ;[] //-------------------------------------------------------------------------
-n=status( "Checking boolean 'or', 'and' and 'not' operators",n);[]
+n=status( "Checking boolean 'or' operator",n);[]
 c=g.V().hasLabel('airport').
         or(has('region','US-TX'),                                 
            has('region','US-LA'),                                 
@@ -397,6 +442,7 @@ c=g.V().hasLabel('airport').
         valueMap().select('code','region').count().next();[]    
 assert c == 48;[]
 
+n=status( "Checking boolean 'and' operator",n);[]
 c=g.V().hasLabel('airport').
         and(has('region','US-TX'),
             has('longest',gte(12000))).
@@ -409,6 +455,20 @@ a=g.V().has('airport','code','AUS').
 assert a.size() == 1;[]
 assert a[0].flatten() == ['AUS','SFO','SYD'];[]
 
+n=status( "Checking 'is(gt(3).and(lt(6))'",n);[]
+c=g.V().hasLabel('airport').
+      where(values('runways').is(gt(3).and(lt(6)))).count().next();[]
+assert c == 65;[]
+
+c2=g.V().hasLabel('airport').has('runways',between(4,6)).count().next();[]
+assert c == c2;[]
+
+c=status( "Checking 'is(lt(3).and(gt(6))'",n);[]
+c=g.V().hasLabel('airport').
+        where(values('runways').is(lt(3).or(gt(6)))).count().next();[]
+assert c == 3080;[]
+
+n=status( "Checking boolean 'not' operator",n);[]
 c=g.V().not(inE()).count().next();[]
 assert c == 245;[]
 
@@ -418,16 +478,22 @@ assert c == 7;[]
 c=g.V().not(hasLabel('airport')).count().next();[]
 assert c == 245;[]
 
+n=status( "Checking 'hasNot('runways')'",n);[]
+c=g.V().hasNot('runways').count().next();[]
+assert c == 245;[]
+
 ;[] //-------------------------------------------------------------------------
-n=status( "Checking 'coalesce'",n);[]
+n=status( "Checking 'coalesce' where first param is false",n);[]
 s=g.V().has('code','AUS').
         coalesce(out().has('code','SYD'),identity()).values('city').next();[]
 assert s=='Austin';[]
 
+n=status( "Checking 'coalesce' where first param is true",n);[]
 s=g.V().has('code','AUS').
         coalesce(out().has('code','DFW'),identity()).values('city').next();[]
 assert s=='Dallas';[]
 
+n=status( "Checking 'coalesce' with a 'constant' for secon param",n);[]
 s=g.V().has('code','AUS').
         coalesce(out().has('code','SYD'),constant('no route')).next();[]
 assert s == 'no route';[]
@@ -571,10 +637,20 @@ a=g.V().has('airport','region','US-CA').
 assert a[1] == 'Bakersfield';[]
 assert a[4] == 'Burbank';[]
 
-n=status( "Checking 'repeat' with 'emit'",n);[]
+n=status( "Checking 'repeat' with 'emit()'",n);[]
 p= g.V().has('airport','code','AUS').
       repeat(out()).emit().times(3).has('code','MIA').
       limit(5).path().by('code').next();[]
+
+
+n=status( "Checking 'repeat' with 'emit(has(...))'",n);[]
+c=g.V(3).repeat(out()).times(3).
+         emit(has('region','GB-ENG')).
+         has('region','GB-ENG').
+         path().by('city').count().next();[]
+
+assert c == 8502;[]
+
 
 assert p instanceof org.apache.tinkerpop.gremlin.process.traversal.step.util.MutablePath;[]
 assert p.isSimple();[]
