@@ -155,6 +155,20 @@ assert a.size() == 7;[]
 assert a[0] == 'CFN';[]
 assert a == ['CFN','DUB','KIR','NOC','ORK','SNN','WAT'];[]
 
+n=status( "Checking nested 'group' steps",n);[]
+a=g.V().hasLabel("airport").limit(5).
+        group().
+          by('code').
+          by(out("route").limit(5).
+             group().
+               by('code').
+               by(out("route").count())).
+        select('ANC').
+        select('IAH','LAX').next();[]
+assert a['IAH'] == 192;[]
+assert a ['LAX'] == 195;[]
+
+
 n=status( "Checking 'order' with 'valueMap' and 'select'",n);[]
 a=g.V().hasLabel('airport').
         order().by('longest',decr).valueMap().
@@ -170,7 +184,14 @@ a=g.V().has('code','DFW').project('dfw','route_count').
 assert a[0] == g.V().has('code','DFW').next();[]
 assert a[1] == 221;[]
 
+n=status( "Checking 'order by('lobgest',decr)' with 'valueMap' and 'select''",n);[]
+a=g.V().hasLabel('airport').
+        order().by('longest',decr).valueMap().
+        select('code','longest').limit(10).toList();[]
 
+assert a.size() == 10;[]
+assert a[0]['longest'][0] == 18045;[]
+assert a[9]['longest'][0] == 15092;[]
 ;[] //-------------------------------------------------------------------------
 n=status( "Checking 'project'",n);[]
 a=g.V().has('airport','region','GB-ENG').
@@ -247,6 +268,18 @@ a=g.V().hasLabel('airport').
            option('LAX',values('code')).fold().next();[]
 
 assert a.sort() == ['KDFW','LAX','US-TX'];[]                            
+
+n=status( "Checking 'choose' as a side effect with labels",n);[]
+a=g.V().hasLabel('airport').
+        choose(has('runways',4), groupCount('a').by(constant('four'))).
+        choose(has('runways',lte(2)), groupCount('a').by(constant('low'))).
+        choose(has('runways',gte(6)), groupCount('a').by(constant('high'))).
+        choose(has('country','FR'), groupCount('a').by(constant('France'))).
+        groupCount('a').by(constant('total')).cap('a').next();[]
+assert a['total'] == 3374;[]
+assert a['low'] == 3078;[]
+assert a['four'] == 51;[]
+assert a['France'] == 58;[]
 
 ;[] //-------------------------------------------------------------------------
 n=status( "Checking 'match'",n);[]
@@ -611,6 +644,7 @@ c=g2.V().hasLabel('root').
 
 assert c == 22;[]
 
+n=status( "Checking 'repeat until not'",n);[]
 c=g2.V().hasLabel('root').
          repeat(out('left')).
            until(__.not(out('left'))).
@@ -618,6 +652,7 @@ c=g2.V().hasLabel('root').
 
 assert c == 1;[]
 
+n=status( "Checking 'repeat until not' with 'path'",n);[]
 a=g2.V().hasLabel('root').
          repeat(out('left')).
            until(__.not(out('left'))).
@@ -651,7 +686,6 @@ c=g.V(3).repeat(out()).times(3).
 
 assert c == 8502;[]
 
-
 assert p instanceof org.apache.tinkerpop.gremlin.process.traversal.step.util.MutablePath;[]
 assert p.isSimple();[]
 assert p[0] == 'AUS';[]
@@ -659,7 +693,7 @@ assert p.head() == 'MIA';[]
 assert p.size() == 2;[]
 
 ;[] //-------------------------------------------------------------------------
-n=status( "Checking vertex and edge deletion",n);[]
+n=status( "Checking vertex and implicit edge deletion",n);[]
 
 g2.V().has('data',15).drop().iterate();[]
 cv = g2.V().count().next();[]
@@ -728,24 +762,29 @@ assert a ==[549,708,400,400];[]
 ;[] //-------------------------------------------------------------------------
 n=status( "Checking side effects and lambdas",n);[]
 c = 0;[]
+n=status( "Checking 'filter { c += 1 }'",n);[]
 g.V().has('region','US-OR').sideEffect{ c += 1 }.values('code').fold().next();[]
 assert c == 7;[]
 
+n=status( "Checking 'filter with property check in lambda'",n);[]
 c=g.V().hasLabel('airport').
         filter{it.get().property('city').value() =="London"}.
         count().next();[]
 assert c == 6;[]      
 
+n=status( "Checking 'filter with a 'contains()' in a lambda'",n);[]
 c=g.V().hasLabel('airport').as('a').values('desc').
        filter{it.toString().contains('F.')}.select('a').
        local(values('code','desc').fold()).count().next();[]
 assert c == 4;[]
 
+n=status( "Checking 'filter with regex in a lambda'",n);[]
 c=g.V().has('airport','type','airport').
         filter{it.get().property('city').value ==~/Dallas|Austin/}.
         values('code').count().next();[]
 assert c == 3;[]
 
+n=status( "Checking 'filter with more complex regex in a lambda'",n);[]
 c=g.V().has('airport','type','airport').
         filter{it.get().property('city').value()==~/^Dal\w*/}.
         values('city').count().next();[]
@@ -754,8 +793,24 @@ assert c == 7;[]
 n=status( "Checking 'map' and a lambda",n);[]
 a=g.V().has('airport','region','GB-ENG').
         map{it.get().value('code')+" "+it.get().value('city')}.toList();[]
+
 assert a.sort()[0] == 'BHX Birmingham';[]
 
+n=status( "Checking 'map' and a multi statement lambda",n);[]
+a=g.V().hasLabel('airport').limit(10).
+      map{a=1;b=2;c=a+b;it.get().id() + c}.fold().next();[]
+
+assert a == [4,5,6,7,8,9,10,11,12,13];[]
+
+;[] //-------------------------------------------------------------------------
+n=status( "Checking 'map' containing a traversal",n);[]
+a=g.V().hasLabel('airport').has('region','US-NM').
+      order().by('code'). 
+      map(properties('city').group().by(key()).by(value())).toList();[]
+
+assert a.size() == 9;[]
+assert a[0]['city'] == 'Albuquerque';[]
+assert a[5]['city'] == 'Los Alamos';[]
 
 ;[] //-------------------------------------------------------------------------
 n=status( "Checking custom predicates",n);[]
