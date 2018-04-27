@@ -6,7 +6,7 @@ Starting with the v275 release, this file will contain a record of the major cha
 
 Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/V278-3.3.1...master) between this release and the prior one.
 
-The examples in this release have been tested against Apache TinkerPop at the 3.3.1 and at the newly released 3.3.2 level. They has also been tested against JanusGraph 0.2 (where appropriate) which supports TinkerPop at the 3.2.6 level.
+The examples in this release have been tested against Apache TinkerPop at the 3.3.1 and at the newly released 3.3.2 level. They have also been tested against JanusGraph 0.2 (where appropriate) which supports TinkerPop at the 3.2.6 level.
 
 Major new features in this release
 - Added examples to the `where` `by` section.
