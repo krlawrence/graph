@@ -219,18 +219,21 @@ n=status( "Checking 'where' with 'is', 'gt' and inline 'or'",n) ;[]
 c=g.V().has('airport','code','AUS').out().
         where(values('runways').is(gt(6)).or().values('runways').is(4)).
         valueMap('code','runways').count().next();[]
+
 assert c==24;[]
 
 n=status( "Checking 'where' with 'count(local)'",n) ;[]
 c=g.V().hasLabel('airport').
         where(out('route').count().is(gt(180))).
         values('code').fold().count(local).next();[]
+
 assert c == 25;[]
 
 n=status( "Checking 'filter' and a 'where'  with two parameters",n) ;[]
 c=g.V().has('code','AUS').as('a').out().as('b').
         filter(select('a','b').by('runways').where('a',eq('b'))).
         valueMap('code','runways').count().next();[]
+
 assert c==9;[]
 
 n=status( "Checking 'where' with two 'by' steps and 3 parameter 'select'",n);[]
@@ -238,7 +241,21 @@ c=g.V().has('airport','city','London').as('a','r').
         in('contains').as('b').
         where('a',eq('b')).by('country').by('code').
         select('a','r','b').by('code').by('region').count().next();[]
+
 assert c==6;[]
+
+n=status( "Checking 'where('a',lt('b')'",n);[]
+a=g.V().has('region','GB-ENG').order().by('code').as('a').
+        out().has('region','GB-ENG').as('b').
+        where('a',lt('b')).by('code').
+        path().by('code').toList();[]
+
+assert a.size() == 22;[]
+assert a[0][0] == 'BHX';[]
+assert a[0][1] == 'NCL';[]
+assert a[-1][0] == 'NCL';[]
+assert a[-1][1] == 'SOU';[]
+
 
 ;[] //-------------------------------------------------------------------------
 n=status( "Checking two V steps and 'select' inside a 'local' step",n);[]
