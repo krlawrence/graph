@@ -30,25 +30,26 @@ println "Reported version is $ver";[]
 assert ver=='0.77';[]
 
 ;[] //-------------------------------------------------------------------------
-n=status( "Checking simple traversals",n);[]
+n=status( "Checking simple traversals with 'outE' and 'inV'",n);[]
 d=g.V().has('code','DFW').
         outE().as('a').inV().
         has('code','AUS').
         select('a').values('dist').next();[]
 assert d == 190;[] 
 
+n=status( "Checking traversal of form 'has().out().has()'",n);[]
 c=g.V().has('code','DEN').out().
         has('country','MX').count().next();[]
 
 assert c == 7;[]
 
+n=status( "Checking traversal 'has().out().as()' and 'select'",n);[]
 a=g.V().has('code','DEL').out().as('a').in("contains").
         has('code','EU').select('a').by('city').toList();[]
 
 assert a.size() == 17;[]
 assert a.contains('Helsinki');[]
 assert a.sort().subList(0,3).flatten() == ['Amsterdam','Birmingham','Brussels'];[]
-
 
 n=status( "Checking edge dist property 'within(100..200)'",n);[]
 c=g.V().outE().has('dist',within(100..200)).count().next();[]
@@ -69,9 +70,11 @@ assert g.V().has('code','AUS').out('route').next();[]
 assert g.V(3).out('route').tryNext();[]
 
 ;[] //-------------------------------------------------------------------------
-n=status( "Checking 'optional'",n);[]
+n=status( "Checking 'optional' when test fails",n);[]
 s=g.V().has('code','AUS').optional(out().has('code','SYD')).values('city').next();[]
 assert s == 'Austin';[]
+
+n=status( "Checking 'optional' when test matches",n);[]
 s=g.V().has('code','DFW').optional(out().has('code','SYD')).values('city').next();[]
 assert s == 'Sydney';[]
 
@@ -80,9 +83,12 @@ n=status( "Checking simple 'has' steps",n);[]
 c=g.V().has('region','US-TX').has('longest',gte(12000)).count().next();[]
 assert c == 6;[]       
 
+
+n=status( "Checking 'hasLabel' and 'count'",n);[]
 c=g.V().hasLabel('airport').count().next();[]
 assert c == 3374;[]
 
+n=status( "Checking 'has('region','US-CA')' and 'count'" ,n);[]
 c=g.V().has('region','US-CA').count().next();[]
 assert c==29;[]
 
@@ -382,8 +388,6 @@ a=g.V().has('airport','code','AUS').
 assert a.size() == 1;[]
 assert a[0].flatten() == ['AUS','SFO','SYD'];[]
 
-c=g.V().has('runways',without(3..6)).values('code','runways').fold().count(local).next();[]
-assert c == 6160;[]
 
 n=status( "Checking 'aggregate' and 'without'",n);[]
 c=g.V().has('code','AUS').out().aggregate('nonstop').
@@ -396,6 +400,10 @@ assert c == 588;[]
 
 n=status( "Checking 'without(3..6)'",n);[]
 c=g.V().has('runways',without(3..6)).values('code','runways').count().next();[]
+assert c == 6160;[]
+
+n=status( "Checking 'without(3..6)' with 'fold' and 'count(local)'",n);[]
+c=g.V().has('runways',without(3..6)).values('code','runways').fold().count(local).next();[]
 assert c == 6160;[]
 
 n=status( "Checking 'within(1,2,3)'",n);[]
@@ -425,6 +433,14 @@ assert c == 1326;[]
 n=status( "Checking 'between(5,8)'",n);[]
 c=g.V().has('runways',between(5,8)).values('code','runways').fold().count(local).next();[]
 assert c == 38;[]
+
+n=status( "Checking 'between('Dal','Dam')'",n);[]
+a=g.V().hasLabel('airport').
+        has('city',between('Dal','Dam')).
+        values('city').order().dedup().toList();[]
+assert a.size() == 6;[]
+assert a[0] == 'Dalaman';[]
+assert a[5] == 'Dallas';[]
 
 n=status( "Checking 'inside(3,6)'",n);[]
 c=g.V().has('runways',inside(3,6)).values('code','runways').count().next();[]
@@ -574,6 +590,16 @@ s=g.V().has('airport','country','IE').aggregate('ireland').cap('ireland').next()
 assert s instanceof org.apache.tinkerpop.gremlin.process.traversal.step.util.BulkSet;[]
 assert s.size() == 7;[]
 assert s.uniqueSize() == 7;[]
+
+n=status( "Checking 'BulkSet' using 'aggregate' with a 'by' modulator",n);[]
+a=g.V().has('airport','country','IE').
+      aggregate('ireland').by('runways').cap('ireland').next();[] 
+assert a.size() == 7;[]
+assert a.uniqueSize() == 3;[]
+assert a.get(1) == 3;[]
+assert a.get(2) == 3;[]
+assert a.get(4) == 0;[]
+assert a.get(5) == 1;[]
 
 
 ;[] //-------------------------------------------------------------------------
