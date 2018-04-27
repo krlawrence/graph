@@ -13,6 +13,7 @@ Major new features in this release
 - Added more examples of `select` keywords `last`, `first` and `mixed`.
 - Added to the section that discusses the `union` step.
 - Improved the section dedicated to the `match` step.
+- Improved coverage of text comparison predicates.
 - Expanded coverage of the results from a `Gremlin Server`.
 - Sample code and data improvements
   - Added new script `regression.groovy` to check that the book examples work with the most recent Tinkerpop versions.

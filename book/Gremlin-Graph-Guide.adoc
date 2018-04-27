@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v279-preview, Apr 19, 2018
+v279-preview, Apr 27, 2018
 //v278 (TP 3.3.1), Mar 28, 2018
-// Thu Apr 19, 2018 12:38:36 CDT
+// Fri Apr 27, 2018 09:45:31 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -23,7 +23,7 @@ v279-preview, Apr 19, 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: April 18th 2018
+:draftdate: April 27th 2018
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
 //        has a white foreground color. The default was unreadable,
@@ -3472,11 +3472,11 @@ Testing values and ranges of values
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We have already seen some ways of testing whether a value is within a certain range.
-Gremlin provides a number of different steps that we can use to do range testing. The
-list below provides a summary of the available steps. We will see each of these in use
-throughout this book.
+Gremlin provides a number of different predicates that we can use to do range
+testing. The list below provides a summary of the available predicates. We will see
+each of these in use throughout this book.
 
-.Steps that test values or ranges of values
+.Predicates that test values or ranges of values
 [cols="^1,4"]
 |==============================================================================
 |eq      | Equal to
@@ -3682,6 +3682,100 @@ g.V().hasId(within([1,2,3]))
 ----
 
 You will find more examples of these types of queries in the next section.
+
+One thing that may not be obvious is that when using string values with the 'between'
+predicate the values do not have to specify exact matches. Take a look at the query
+below. This will find any airports in cities whose names start with '"Dal"' as it
+looks for strings between '"Dal"' and '"Dam"' in an inclusive/exclusive fashion. The rest
+of the characters following '"Dal"' in the strings being tested are ignored. Note
+that this is a case sensitive comparison. In other words '"Dal"' and '"dal"' are
+different strings in this context. 
+
+TIP: The 'between' predicate can be used to simulate a string 'startsWidth' method.
+
+As discussed more in the "<<fuzzyregs>>" section, Gremlin does not currently support
+any methods for applying regular expressions or even more basic text analysis
+operators to strings. This use of the 'between' predicate can at least be used to
+simulate a 'startsWidth' type of operator.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').
+      has('city',between('Dal','Dam')).
+      values('city')
+----
+
+Here are the results from running the query. As you can see every city name starts
+with the characters '"Dal"'.
+
+[source,groovy]
+----
+Dallas
+Dallas
+Dalaman
+Dalian
+Dalcahue
+Dalat
+Dalanzadgad
+----
+
+You will notice from the results above that '"Dallas"' appears twice as there are tow
+airports with that city name. We could add a 'dedup' step to our query to only return
+unique matches.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').
+      has('city',between('Dal','Dam')).
+      values('city').dedup()
+----
+
+Here are the modified results.
+
+[source,groovy]
+----
+Dallas
+Dalaman
+Dalian
+Dalcahue
+Dalat
+Dalanzadgad                
+----
+
+Here is one more example where the range of values being compared is expanded a
+little. This query will find any cities that start with '"Dal"' through '"Dar"'.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').
+      has('city',between('Dal','Dat')).
+      values('city').order().dedup()
+----
+
+As you can see this time, more cities met our search criteria.
+
+[source,groovy]
+----
+Dalaman
+Dalanzadgad
+Dalat
+Dalcahue
+Dalian
+Dallas
+Damascus
+Dandong
+Dangriga
+Daocheng
+Daqing Shi
+Dar es Salaam
+Daru
+Darwin
+----
+
+While Gremlin does not currently provide any advanced text searching capabilities,
+graph systems such as JanusGraph do offer such capabilities. Those features are
+discussed in the "<<janpred>>" section.
+
 
 [[winout]]
 Refining flight routes analysis using 'not', 'neq', 'within' and 'without'
