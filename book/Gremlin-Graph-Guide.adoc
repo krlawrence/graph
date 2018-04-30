@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v279-preview, Apr 27, 2018
+v279-preview, Apr 30, 2018
 //v278 (TP 3.3.1), Mar 28, 2018
-// Fri Apr 27, 2018 09:45:31 CDT
+// Mon Apr 30, 2018 12:19:55 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -23,7 +23,7 @@ v279-preview, Apr 27, 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: April 27th 2018
+:draftdate: April 30th 2018
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
 //        has a white foreground color. The default was unreadable,
@@ -10793,70 +10793,182 @@ t.getObjectsAtDepth(2)
 
 We will see the  Tree API used again in the "<<btree>>" section later on.
 
-[[sub]]
+[[subgraph]]
 Creating a sub graph
 ~~~~~~~~~~~~~~~~~~~~
 
-You can create a sub graph which is a subset of the vertices and edges in the main
-graph.  Once created, to work with a sub graph, you create a traversal specific to
-that new graph and distinct from the trversal being used to process the main graph.
-Subgraphs are created using the 'subgraph' traversal step. Note that 'subgraph' takes
-edges (not vertices) as input and returns both those edges and the vertices that they
-connect with.
+Using Gremlin, you can create a subgraph which is a subset of the vertices and edges
+in a larger graph you are working with.  Once created, to work with a sub graph, you
+create a traversal source object specific to that new graph and distinct from the one
+being used to process the main graph.  Subgraphs are created using the 'subgraph'
+traversal step. Note that 'subgraph' works with edges (not vertices) and adds both
+those edges and the vertices that they connect with to the new subgraph being
+created.
+
+TIP: You can find all of the sample data in the book's GitHub repository.
+https://github.com/krlawrence/graph/tree/master/sample-data
+
+Let's start with a simple example. One of the sample data sets shipped with this book
+is a small version of the main 'air-routes' graph called 'air-routes-small.graphml'.
+It contains routes between just the first 46 airports in the full graph. We can quite
+easily write a query to generate the subgraph representing the flights between those
+airports by extracting the edges and vertices from the full graph. Take a look at the
+query below. First we find all the vertices that have an ID between 1 and 46
+inclusive. Then we find all of their outgoing edges but filter out any that do not
+also end up at an airport within the same ID range of 1 through 46. Lastly we use a
+'subgraph' step to add those edges and vertices to a new subgraph. Note that the
+'subgraph' step has to be given a label.  In this case I just used '+++'+++a+++'+++'.
+This allows us, should we need to, to add to a new subgraph from more that one part
+of a traversal. In this case we have no more to add so a 'cap' step is used to
+complete the creating of the 'subgraph'. The variable 'subg' will now contain a
+reference to the newly created graph.
 
 [source,groovy]
 ----
-// Create a subgraph of all vertices and edges directly connected to the AUS vertex
-// Note that using bothE() means we get incoming and outgoing edges.
-subg = g.V().has('code','AUS').bothE().subgraph('subGraph').cap('subGraph').next()
-
-// As above but only keep the outgoing edges in the subgraph.
-subg = g.V().has('code','AUS').outE().subgraph('subGraph').cap('subGraph').next()
-
-// Create a subgraph starting at AUS but this time going out two levels. We achieve this
-// using a repeat() method to go out from Austin 2 times.
-subg = g.V().has('code','AUS').repeat(__.bothE().subgraph('subGraph').outV()).times(2)
-                              .cap('subGraph').next()
-
-// Get a traversal object so that we can traverse the newly created sub graph
-sgt = subg.traversal(standard())
-
-// Which airports ended up in the sub graph?
-sgt.V().hasLabel('airport').values('code')
+subg=g.V(1..46).outE().
+       filter(inV().hasId(within(1L..46L))).
+       subgraph('a').cap('a').next()
 ----
 
-In this second example we create a subgraph just of airports and routes that
-are inside Europe. Effectively we just made the Europe only version of the air
-routes main graph. At first glance, this query looks a bit overwhelming but if
-you read it slowly and look at each step you should be able to make sense of what
-it is doing. It is a bit more sophisticated that the previous examples in that as
-well as extracting the routes and airports into the subgraph it also extracts all
-of the relevant countries as well.
+Note that when we run the query, Gremlin shows is that we created a new TinkerGraph
+containing 46 vertices and 1326 edges.
+
+[source,groovy]
+----
+tinkergraph[vertices:46 edges:1326]
+----
+
+Now that the subgraph is created, we need to create a traversal source object for it
+so that we can issue queries against it. Gremlin shows us details of the new
+traversal source object once it has been created.
+
+[source,groovy]
+----
+sgt = subg.traversal()
+
+graphtraversalsource[tinkergraph[vertices:46 edges:1326], standard]
+----
+
+Now that we have a traversal source object for our newly created subgraph we can run
+some queries against it.
+
+[source,groovy]
+----
+// What airports are in the subgraph?
+sgt.V().values('code').fold()
+
+[ATL,ANC,AUS,BNA,BOS,BWI,DCA,DFW,FLL,IAD,IAH,JFK,LAX,LGA,MCO,MIA,MSP,ORD,PBI,PHX,RDU,SEA,SFO,SJC,TPA,SAN,LGB,SNA,SLC,LAS,DEN,HPN,SAT,MSY,EWR,CID,HNL,HOU,ELP,SJU,CLE,OAK,TUS,SAF,PHL,DTW]
+
+// How many of the 46 airports can you fly to from LAX?
+sgt.V().has('code','LAX').out().count()
+
+40
+----
+
+Here are some more examples of working with subgraphs. The query below will create a
+subgraph of all vertices and edges directly connected to the Austin (AUS) vertex. Note
+that using 'bothE' means we get incoming and outgoing edges. In these examples the
+more meaningful label 'subGraph' is used to label the subgraph being created.    
+
+[source,groovy]
+----
+subg = g.V().has('code','AUS').bothE().
+             subgraph('subGraph').cap('subGraph').next()
+----
+
+If we only wanted the outgoing routes from Austin we could change the query to just
+use an 'outE' step instead.
+
+[source,groovy]
+----
+subg = g.V().has('code','AUS').outE('route').
+             subgraph('subGraph').cap('subGraph').next()
+----
+
+The next example is a little more sophisticated. It will create a subgraph starting
+with the Austin vertex but this time going out two hops. We achieve this using a
+'repeat' step.
+
+[source,groovy]
+----
+subg = g.V().has('code','AUS').
+       repeat(bothE().subgraph('subGraph').outV()).times(2).
+       cap('subGraph').next()
+
+[tinkergraph[vertices:1294 edges:11336]
+----
+
+As before we can now work with the newly created subgraph.
+
+[source,groovy]
+----
+// Get a traversal source object so that we can traverse 
+// the newly created sub graph.
+sgt = subg.traversal()
+
+// What sort of vertices ended up in the subgraph?
+sgt.V().groupCount().by(label)
+
+[continent:2,country:5,airport:1287]
+----
+
+Here is a more complicated example. The query will create a subgraph just of airports
+and routes that are inside Europe. Effectively this will make the Europe only version
+of the air routes main graph. At first glance, this query looks a bit overwhelming
+but if you read it slowly and look at each step you should be able to make sense of
+what it is doing. It is quite a bit more sophisticated than the previous examples in
+that as well as extracting the routes and airports into the subgraph it also extracts
+all of the relevant countries and continents as well.Note that this query also uses
+multiple 'subgraph' steps.
 
 [source,groovy]
 ----
 // Create a sub graph only of airports in Europe and routes between those airports
-subgraph = g.V().hasLabel('continent').has('code','EU')
-                .outE('contains').subgraph('eu-air-routes').inV().as('a')
-                .inE('contains').subgraph('eu-air-routes')
-                .outV().hasLabel('country')
-                .select('a').outE().as('r').inV().hasLabel('airport').in().hasLabel('continent')
-                .has('code','EU').select('r').subgraph('eu-air-routes')
-                .cap('eu-air-routes').next()
 
-// Create a traversal object for the subgraph
-sg = subgraph.traversal()
+subg = g.V().hasLabel('continent').has('code','EU').
+             outE('contains').subgraph('eu-air-routes').inV().as('a').
+             inE('contains').subgraph('eu-air-routes').
+             outV().hasLabel('country').
+             select('a').outE().as('r').
+             inV().hasLabel('airport').in().hasLabel('continent').
+             has('code','EU').select('r').subgraph('eu-air-routes').
+             cap('eu-air-routes').next()
+
+tinkergraph[vertices:630 edges:13665]
+----
+
+As before we can now work with the newly created subgraph.
+
+[source,groovy]
+----
+// Create a traversal source object for the subgraph
+sgt = subg.traversal()
 
 // How many routes are there in the subgraph?
-sg.E().hasLabel('route').count()
+sgt.E().hasLabel('route').count()
 
-// How many airports?
-sg.V().hasLabel('airport').count()
+12499
 
-// Now I can query the subgraph to find out where I can get to from LHR within
-// the subgraph.
-sg.V().has('code','LHR').out().values('code').join(',')
+// What sort of vertices ended up in the subgraph?
+sgt.V().groupCount().by(label)
+
+[continent:1,country:46,airport:583]
 ----
+
+The following query uses the new Europe only subgraph to find out where we can
+get to from London Heathrow (LHR) within Europe.
+
+[source,groovy]
+----
+sgt.V().has('code','LHR').out().values('code').fold()
+
+[FAO,JMK,FCO,JTR,KBP,AMS,RJK,TLS,PRG,BCN,LED,MAD,OPO,VIE,ZRH,GVA,LCG,BRU,MUC,MAN,INN,CGN,INV,GOT,BLL,VCE,KRK,SNN,MJV,OSL,MPL,ARN,EDI,PUY,GLA,BDS,DME,SVO,ORY,NCE,MXP,ATH,ZAG,BUD,BIO,IBZ,WAW,MLA,SOF,BEG,IST,HAM,STR,PSA,BLQ,NTE,CPH,LUX,DUS,TXL,LIS,GIB,KEF,PMI,AGP,LBA,ABZ,NCL,BSL,SVG,BGO,TLL,ORK,VKO,SPU,BHD,HAJ,LIN,LYS,MRS,OTP,CDG,RTM,FRA,HEL,DUB]
+----
+
+The ability to create a subgraph from a larger graph is a very powerful feature that
+Gremlin provides for us. If you have a large graph but only want to work with a part
+of it it is nice to be able to create a subgraph from it and perhaps even work with
+that subgraph locally in memory while running some queries.
 
 [[graphmlandjsonintro]]
 Working with GraphML and GraphSON

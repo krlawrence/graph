@@ -9,6 +9,7 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/V2
 The examples in this release have been tested against Apache TinkerPop at the 3.3.1 and at the newly released 3.3.2 level. They have also been tested against JanusGraph 0.2 (where appropriate) which supports TinkerPop at the 3.2.6 level.
 
 Major new features in this release
+- Significantly expanded and improved the `subgraph` section.
 - Added examples to the `where` `by` section.
 - Added more examples of `select` keywords `last`, `first` and `mixed`.
 - Added to the section that discusses the `union` step.
