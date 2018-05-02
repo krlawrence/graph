@@ -902,7 +902,8 @@ subg = g.V().hasLabel('continent').has('code','EU').
 sgt = subg.traversal();[]
 
 assert sgt.E().hasLabel('route').count().next() == 12499;[]  
-
+assert sgt.E().count().next() == 13665;[]
+assert sgt.V().count().next() == 630;[]
 m = sgt.V().groupCount().by(label).next();[]
 assert m['airport'] == 583;[]
 assert m['country'] == 46;[]
