@@ -883,8 +883,9 @@ subg=g.V(1..46).outE().
 
 sgt = subg.traversal();[]
 
-c = sgt.V().has('code','LAX').out().count().next();[]
+assert sgt.E().count().next() == 1326;[]
 assert sgt.V().count().next() == 46;[]
+c = sgt.V().has('code','LAX').out().count().next();[]
 assert c == 40;[]
 
 
