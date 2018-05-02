@@ -601,8 +601,13 @@ assert a.get(2) == 3;[]
 assert a.get(4) == 0;[]
 assert a.get(5) == 1;[]
 
+a=g.V().has('region','US-TX').aggregate('c').by('code').cap('c').next();[]
+assert a.size() == 26;[]
+assert a.uniqueSize() == 26;[]
+assert a.sort()[0] == 'ABI';[]
 
 ;[] //-------------------------------------------------------------------------
+
 n=status( "Checking 'dedup(local)'",n);[]
 a=g.V().has('country','US').values('region').
       order().fold().dedup(local).next();[]
@@ -868,6 +873,39 @@ bp = new java.util.function.BiPredicate<String, String>() {
 regex = {new P(bp, it)};[]
 c= g.V().has('desc', regex(/^Dal.*/)).count().next();[]
 assert c == 5;[]
+
+;[] //-------------------------------------------------------------------------
+n=status( "Checking 'subgraph' of first 46 airports.",n);[]
+
+subg=g.V(1..46).outE().
+       filter(inV().hasId(within(1L..46L))).
+       subgraph('a').cap('a').next();[]
+
+sgt = subg.traversal();[]
+
+c = sgt.V().has('code','LAX').out().count().next();[]
+assert sgt.V().count().next() == 46;[]
+assert c == 40;[]
+
+
+n=status( "Checking 'subgraph' of European airports.",n);[]
+subg = g.V().hasLabel('continent').has('code','EU').
+             outE('contains').subgraph('eu-air-routes').inV().as('a').
+             inE('contains').subgraph('eu-air-routes').
+             outV().hasLabel('country').
+             select('a').outE().as('r').
+             inV().hasLabel('airport').in().hasLabel('continent').
+             has('code','EU').select('r').subgraph('eu-air-routes').
+             cap('eu-air-routes').next();[]
+
+sgt = subg.traversal();[]
+
+assert sgt.E().hasLabel('route').count().next() == 12499;[]  
+
+m = sgt.V().groupCount().by(label).next();[]
+assert m['airport'] == 583;[]
+assert m['country'] == 46;[]
+assert m['continent'] == 1;[]
 
 
 ;[] //-------------------------------------------------------------------------
