@@ -878,7 +878,7 @@ assert c == 5;[]
 ;[] //-------------------------------------------------------------------------
 n=status( "Checking 'tree' of routes from AUS",n);[]
 tree=g.V().has('code','AUS').
-           repeat(out().simplePath()).
+           repeat(out()).
              times(2).tree().by('code').next();[]
 
 assert tree instanceof org.apache.tinkerpop.gremlin.process.traversal.step.util.Tree;[]
@@ -887,8 +887,8 @@ assert items.size() == 1;[]
 items = tree.getObjectsAtDepth(2).toList();[]
 assert items.size() == 59;[]
 items = tree.getObjectsAtDepth(3).toList();[]
-assert items.size() == 5883;[]
-assert tree['AUS']['DFW'].size() == 220;[]
+assert items.size() == 5942;[]
+assert tree['AUS']['DFW'].size() == 221;[]
 
 ;[] //-------------------------------------------------------------------------
 n=status( "Checking 'subgraph' of first 46 airports.",n);[]

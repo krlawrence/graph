@@ -10773,7 +10773,7 @@ connected by routes to the vertices in the previous level.
 ----
 //Generate a tree the AUS vertex and it's neighbors and their neighbors
 tree = g.V().has('code','AUS').
-             repeat(out().simplePath()).
+             repeat(out()).
                times(2).
              tree().by('code').next()
 ----
