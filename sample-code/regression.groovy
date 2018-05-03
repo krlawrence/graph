@@ -874,6 +874,22 @@ regex = {new P(bp, it)};[]
 c= g.V().has('desc', regex(/^Dal.*/)).count().next();[]
 assert c == 5;[]
 
+
+;[] //-------------------------------------------------------------------------
+n=status( "Checking 'tree' of routes from AUS",n);[]
+tree=g.V().has('code','AUS').
+           repeat(out().simplePath()).
+             times(2).tree().by('code').next();[]
+
+assert tree instanceof org.apache.tinkerpop.gremlin.process.traversal.step.util.Tree;[]
+items = tree.getObjectsAtDepth(1).toList();[]
+assert items.size() == 1;[]
+items = tree.getObjectsAtDepth(2).toList();[]
+assert items.size() == 59;[]
+items = tree.getObjectsAtDepth(3).toList();[]
+assert items.size() == 5883;[]
+assert tree['AUS']['DFW'].size() == 220;[]
+
 ;[] //-------------------------------------------------------------------------
 n=status( "Checking 'subgraph' of first 46 airports.",n);[]
 
