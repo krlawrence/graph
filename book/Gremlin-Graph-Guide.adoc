@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v279-preview, Apr 30, 2018
+v279-preview, May 3, 2018
 //v278 (TP 3.3.1), Mar 28, 2018
-// Mon Apr 30, 2018 12:19:55 CDT
+// Thu May 03, 2018 09:58:31 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -23,7 +23,7 @@ v279-preview, Apr 30, 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: April 30th 2018
+:draftdate: May 3rd 2018
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
 //        has a white foreground color. The default was unreadable,
@@ -10772,7 +10772,10 @@ connected by routes to the vertices in the previous level.
 [source,groovy]
 ----
 //Generate a tree the AUS vertex and it's neighbors and their neighbors
- t=g.V().has('code','AUS').repeat(out()).times(2).tree().by('code').next()
+tree = g.V().has('code','AUS').
+             repeat(out().simplePath()).
+               times(2).
+             tree().by('code').next()
 ----
 
 The object returned to our variable 't' will be an instance of the
@@ -10782,13 +10785,13 @@ provides a set of methods that can be used when working with a Tree.
 [source,groovy]
 ----
 // Look at part of the tree directly
-t['AUS']['DFW']
+tree['AUS']['DFW']
 
 // You can also use the TinkerPop Tree API to work with the tree
-t.getLeafObjects()
-t.getObjectsAtDepth(1)
-t.getObjectsAtDepth(1)
-t.getObjectsAtDepth(2)
+tree.getLeafObjects()
+tree.getObjectsAtDepth(1)
+tree.getObjectsAtDepth(1)
+tree.getObjectsAtDepth(2)
 ----
 
 We will see the  Tree API used again in the "<<btree>>" section later on.
