@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v279-preview, May 3, 2018
+v279-preview, May 4, 2018
 //v278 (TP 3.3.1), Mar 28, 2018
-// Thu May 03, 2018 09:58:31 CDT
+// Fri May 04, 2018 10:22:34  CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -23,7 +23,7 @@ v279-preview, May 3, 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: May 3rd 2018
+:draftdate: May 4th 2018
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
 //        has a white foreground color. The default was unreadable,
@@ -12082,6 +12082,53 @@ is that three of the top five busiest single runway airports are in England.
 [apt:XIY,city:Xianyang,routes:105]
 ----
 
+[[runwaycountproject]]
+Another way of counting runways
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Let's assume we wanted to count the runways in the graph and for each number of
+runways produce a simple map result where the runway number and total count of
+airports having that number of runways  are each meaningfully labeled. One way we
+could do that is to use a 'groupCount' step to calculate the distribution of runways
+and then use a 'project' step to produce the nicely labeled result. That is what the
+query below does. Notice that an 'unfold' step is used so that the results of
+the 'groupCount' which itself produces a map, can be further processed.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').
+      groupCount().by('runways').
+      unfold().
+      project('runways','count').by(keys).by(values)
+----
+
+When run we get a nice map back showing us the number of runways and for each the
+total count. Each value has a meaningful key name of 'runways' and 'count'
+respectively.
+
+[source,groovy]
+----
+[runways:1,count:2316]
+[runways:2,count:762]
+[runways:3,count:225]
+[runways:4,count:51]
+[runways:5,count:14]
+[runways:6,count:4]
+[runways:7,count:1]
+[runways:8,count:1]
+----
+
+Notice that if the unfold step had not been used, a very different result would have
+been generated.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').
+      groupCount().by('runways').
+      project('runways','count').by(keys).by(values) 
+
+[runways:[1,2,3,4,5,6,7,8],count:[2316,762,225,51,14,4,1,1]]
+----
 [[canadamost]]
 Airports with the most routes in Canada
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
