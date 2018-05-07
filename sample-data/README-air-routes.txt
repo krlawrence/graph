@@ -1,4 +1,6 @@
-Information about the Air Routes graph.  
+Information about the Air Routes graph data set.
+
+These notes refer to the version of the data set used by the examples in the book.
 
 Timestamp: Fri, 06 Oct 2017 11:28:40 -0500
 
