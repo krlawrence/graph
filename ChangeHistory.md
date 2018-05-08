@@ -21,7 +21,8 @@ Major new features in this release
   - Added new script `regression.groovy` to check that the book examples work with the most recent Tinkerpop versions.
   - Added new sample `add-aircraft.Groovy`.
   - Added new sample data `aircraft.csv`.
-  - Added new Java sample `ListAirports.java`.
+  - Added new sample `RemoteClient.java`
+  - Added new sample `ListAirports.java`.
   - Expanded `CreateGraph.java` sample.
   - Moved `edges.csv` to `sample-data` folder.
 - Miscellaneous minor corrections.
