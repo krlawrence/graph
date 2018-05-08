@@ -25,6 +25,7 @@ Major new features in this release
   - Added new sample `ListAirports.java`.
   - Expanded `CreateGraph.java` sample.
   - Moved `edges.csv` to `sample-data` folder.
+  - Provided updated versions of the air-routes data and demo apps.
 - Miscellaneous minor corrections.
 
 ## Release 278 change history (March 28th 2018)
