@@ -3,7 +3,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v279-preview, May 9, 2018
 //v278 (TP 3.3.1), Mar 28, 2018
-// Wed May 09, 2018 08:52:32 CDT
+// Wed May 09, 2018 13:04:29 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -3195,8 +3195,13 @@ a=[3,6,8,15]
 
 g.V(a).values('code')
 ----
+
+If the graph database that you are using supports it you can set the ID of a
+vertex at the time you create it. How that can be done is explained in the
+"<<injectid>>" section.   
+
 Every property in the graph also has an ID as we shall explore in the "<<propid>>"
-section.
+section a bit later on. 
 
 
 [[lab]]
@@ -8948,6 +8953,111 @@ property to the same vertex property.
 So as mentioned above, the meta property provides a way to attach metadata to another
 property. This enables a number of important use cases including being able to attach 
 a date or ACL information to individual properties.
+
+[[deduce]]
+Deducing the schema of a graph using queries
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Sometimes, you may find yourself working with a graph while being unsure of its data
+model or schema. Using some simple Gremlin queries we can quite easily figure out the
+major elements that a graph contains.  This technique should only be used if the
+graph database you are using does not provide an explicit API for working with the
+schema of a graph. First of all, we can figure out the vertex labels that are in use
+as shown below. The 'dedup' step insures that we get a list of unique label names
+back.
+
+[source,groovy]
+----
+g.V().label().dedup()
+
+version
+airport
+country
+continent
+----
+
+Similarly, we can find out the names of the edge labels in the graph.
+
+[source,groovy]
+----
+g.E().label().dedup()
+
+route
+contains
+----
+
+Now that we know the label names it is very easy to get the names of the property
+keys for a vertex with a given label. The query below will display the names of the
+property keys found in an 'airport' vertex.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').limit(1).next().keys()
+
+country
+code
+longest
+city
+elev
+icao
+lon
+type
+region
+runways
+lat
+desc
+----
+
+You could easily put the previous query inside a simple loop if you wanted to iterate
+through each of the vertex labels that were discovered. As with vertices we can also
+query edges to discover their key names. The query below finds the property key named
+for 'route' edges.
+
+[source,groovy]
+----
+g.E().hasLabel('route').limit(1).next().keys()
+
+dist
+----
+
+Lastly now that we know the label names and we know how to find out the property key
+names, we can also figure out the types associated with each key. The code below
+creates an array called 'pkeys' containing all of the property key names for an
+'airport' vertex. Having done that, the code iterates through the list in a simple
+loop to find the type for each key. The code as shown is intended to be run inside
+the Gremlin Console.
+
+[source,groovy]
+----
+pkeys=g.V().hasLabel('airport').limit(1).next().keys()
+
+pkeys.each {
+  printf("%10s : %s\n" , it, 
+          g.V().hasLabel('airport').limit(1).
+            values(it).next().class)};[]
+----
+
+When run, we get back a nicely formatted table showing the key names and their types.
+
+[source,groovy]
+----
+   country : class java.lang.String
+      code : class java.lang.String
+   longest : class java.lang.Integer
+      city : class java.lang.String
+      elev : class java.lang.Integer
+      icao : class java.lang.String
+       lon : class java.lang.Double
+      type : class java.lang.String
+    region : class java.lang.String
+   runways : class java.lang.Integer
+       lat : class java.lang.Double
+      desc : class java.lang.String
+----
+ 
+Later, in the "<<janusmgmt>>" section, we will look at how JanusGraph allows us to
+define an explicit schema and also to query the schema using its Graph Management
+API.
 
 [[collrev]]
 Collections revisited

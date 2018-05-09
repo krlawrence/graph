@@ -17,6 +17,7 @@ Major new features in this release
 - Improved coverage of text comparison predicates.
 - Improved the `Working with IDs` section.
 - Expanded coverage of custom ID values.
+- Added a new section showing how to deduce a graph's schema.
 - Added more examples to Section 5.
 - Expanded coverage of the results from a `Gremlin Server`.
 - Sample code and data improvements
