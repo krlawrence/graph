@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v279-preview, May 4, 2018
+v279-preview, May 9, 2018
 //v278 (TP 3.3.1), Mar 28, 2018
-// Fri May 04, 2018 10:22:34  CDT
+// Wed May 09, 2018 07:50:41 CDY
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -23,7 +23,7 @@ v279-preview, May 4, 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: May 4th 2018
+:draftdate: May 9th 2018
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
 //        has a white foreground color. The default was unreadable,
@@ -9719,7 +9719,7 @@ the values are subtracted *from* the sack's initialization value.
 ----
 g.V().has('code','AUS').sack(assign).by('runways').
   V().has('code','SAF').out().
-      sack(mult).by('runways').sack().fold()
+      sack(minus).by('runways').sack().fold()
 
 [-5,-2,-1,-4]
 ----
