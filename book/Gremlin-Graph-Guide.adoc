@@ -3,7 +3,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v279-preview, May 9, 2018
 //v278 (TP 3.3.1), Mar 28, 2018
-// Wed May 09, 2018 07:50:41 CDY
+// Wed May 09, 2018 08:52:32 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -3097,21 +3097,23 @@ println s
 Working with IDs
 ~~~~~~~~~~~~~~~~
 
-Every vertex and every edge in a graph has a unique ID that can be used to reference
-them individually or as a group. Beware that the IDs you provide when loading a graph
-from a GraphML or GraphSON file may not in many cases end up being the IDs that the
-back-end graph store actually uses as it builds up your graph.  Tinkergraph for
-example will preserve user provided IDs but most systems like JanusGraph or
-IBM-Graph generate their own IDs. The same is true when you add vertices and edges
-using a graph traversal or using the TinkerPop API. This is a long winded way of
-saying that you should not depend on the IDs in your GraphML or GraphSON file that
-you just loaded remaining unchanged once the data has been loaded into the graph
-store.  When you add new a vertex or edge to your graph, the graph system will
-automatically generate a new, unique ID for it.  If you need to figure out the ID for
-a vertex or an edge you can always get it from a query of the graph itself!
+Every vertex, every edge and even every property in a graph has a unique ID that can
+be used to reference it individually or as part of a group. Beware that the IDs you
+provide when loading a graph from a GraphML or GraphSON file may not in many cases
+end up being the IDs that the back-end graph store actually uses as it builds up your
+graph.  Tinkergraph for example will preserve user provided IDs but many graph
+databases such as JanusGraph generate their own IDs. The same is true when you add
+vertices and edges using a graph traversal or using the TinkerPop API. This is a long
+winded way of saying that you should not depend on the IDs in your GraphML or
+GraphSON file that you just loaded remaining unchanged once the data has been loaded
+into the graph store.  When you add new a vertex or edge to your graph using a
+traversal, the graph system will automatically generate a new, unique ID for it.  If
+you need to figure out the ID for a vertex or an edge you can always get it from a
+query of the graph itself.
 
 TIP: Don't rely on the graph preserving the ID values you provide. Write code that
-can query the graph itself for ID values.
+can query the graph itself for ID values. How IDs are managed will be graph database
+implementation dependent.
 
 Especially when dealing with large graphs, because using IDs is typically very
 efficient, you will find that many of your queries will involve collecting one or
@@ -7866,9 +7868,9 @@ PIT
 Using 'inject' to specify new vertex ID values
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If the graph database you are using supports user provided ID values, you can use an 'inject'
-step as one way to specify what you want the ID value of a new vertex to be. For
-example consider the example below.
+If the graph database you are using supports user provided ID values, you can use an
+'inject' step as one way to specify what you want the ID value of a new vertex to be.
+For example consider the example below.
 
 [source,groovy]
 ----
@@ -7887,8 +7889,42 @@ v[99997]
 v[99998]
 ----
 
-Note that if you try to create a vertex using an ID that already exists the operation
-will fail.
+I chose to show use of 'inject' as it provides an interesting example. However, it is
+not required to create new IDs in this way. Both of the examples below are also valid
+ways to do the same thing. The first example just uses a literal value.
+
+[source,groovy]
+----
+g.addV().property(id,99999L)
+
+v[99999]
+----
+
+Alternatively we could pass in a variable.
+
+[source,groovy]
+----
+n=99999L;
+g.addV().property(id,n)
+
+v[99999]
+----
+
+NOTE: Remember that these methods of specifying an ID value will only work if the
+graph database that you are using allows you to specify your own ID values. This
+varies by graph database implementation and you should check the documentation for
+the system you are using before assuming that you can create your own custom ID
+values.
+
+Even if the graph database that you are using does support user provided ID values
+you should check to see what data types can be used for them. All of the examples
+above used LONG values. However, as one example, some graph databases that do allow
+you to specify custom IDs only support String values. So the key thing is to check
+the documentation before you start building your graph.
+
+Even if a graph database does support custom ID values, if you try to create a vertex
+using an ID that already exists the operation will fail. The example below shows what
+happens when we try to add a vertex using an ID that already exists to a TinkerGraph.
 
 [source,groovy]
 ----

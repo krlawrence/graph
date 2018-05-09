@@ -15,6 +15,8 @@ Major new features in this release
 - Added to the section that discusses the `union` step.
 - Improved the section dedicated to the `match` step.
 - Improved coverage of text comparison predicates.
+- Improved the `Working with IDs` section.
+- Expanded coverage of custom ID values.
 - Added more examples to Section 5.
 - Expanded coverage of the results from a `Gremlin Server`.
 - Sample code and data improvements
@@ -26,7 +28,7 @@ Major new features in this release
   - Expanded `CreateGraph.java` sample.
   - Moved `edges.csv` to `sample-data` folder.
   - Provided updated versions of the air-routes data and demo apps.
-- Miscellaneous minor corrections.
+- Miscellaneous issues resolved and other more minor corrections.
 
 ## Release 278 change history (March 28th 2018)
 
