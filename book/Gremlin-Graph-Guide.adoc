@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v279-preview, May 9, 2018
+v279-preview, May 10, 2018
 //v278 (TP 3.3.1), Mar 28, 2018
-// Wed May 09, 2018 13:04:29 CDT
+// Thu May 10, 2018 12:29:22 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -23,7 +23,8 @@ v279-preview, May 9, 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: May 9th 2018
+:draftdate: May 10th 2018
+:tpvercheck: 3.3.2
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
 //        has a white foreground color. The default was unreadable,
@@ -151,9 +152,7 @@ the Gremlin console running with a TinkerGraph. How to set that environment up i
 covered in the <<gremlininstall>> section below.
 
 NOTE: The examples in this book have now been updated and tested using Apache
-TinkerPop version 3.3 which introduced a few breaking changes. If you find any I
-missed please let me know! The examples have also been tested using the 3.3.1
-release.
+TinkerPop release {tpvercheck}.
 
 TinkerGraph is an 'in-memory' graph, meaning nothing gets saved to disk
 automatically. It is shipped as part of the Apache TinkerPop 3 download.  The
@@ -1995,6 +1994,37 @@ representing the number of runways the second airport has.
 [LCY,JER,1]
 [LCY,BSL,2]
 [LCY,BHD,1]
+----
+
+It is also possible to use a traversal inside of a 'by' modulator. This allows us to
+do things like combine multiple values together as part of a path result. The example
+below finds five routes that start in Austin and creates a path result containing the
+airport code and city name for both the source and destination airports.
+
+[source,groovy]
+----
+g.V(3).out().limit(5).path().by(values('code','city').fold())
+
+[[AUS,Austin],[YYZ,Toronto]]
+[[AUS,Austin],[LHR,London]]
+[[AUS,Austin],[FRA,Frankfurt]]
+[[AUS,Austin],[MEX,Mexico City]]
+[[AUS,Austin],[PIT,Pittsburgh]]
+----
+
+To demonstrate that just about any arbitrary traversal can be placed inside the 'by'
+modulator here is one more example that counts the number of outgoing routes for the
+source and destination airports as part of generating the 'path' result.
+
+[source,groovy]
+----
+g.V(3).out().limit(5).path().by(out().count().fold())
+
+[[59],[181]]
+[[59],[191]]
+[[59],[272]]
+[[59],[105]]
+[[59],[54]]
 ----
 
 In Apache TinkerPop version 3.2.5 the ability to limit what is returned by the 'path'
@@ -9010,7 +9040,7 @@ desc
 
 You could easily put the previous query inside a simple loop if you wanted to iterate
 through each of the vertex labels that were discovered. As with vertices we can also
-query edges to discover their key names. The query below finds the property key named
+query edges to discover their key names. The query below finds the property key names
 for 'route' edges.
 
 [source,groovy]
