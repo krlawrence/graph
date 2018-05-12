@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v279-preview, May 10, 2018
+v279-preview, May 12, 2018
 //v278 (TP 3.3.1), Mar 28, 2018
-// Thu May 10, 2018 12:29:22 CDT
+// Sat May 12, 2018 10:14:27 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -23,7 +23,7 @@ v279-preview, May 10, 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: May 10th 2018
+:draftdate: May 12th 2018
 :tpvercheck: 3.3.2
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -1113,11 +1113,12 @@ commands shown below, available in the '/sample-data' directory.
 https://github.com/krlawrence/graph/tree/master/sample-data
 
 These commands create an in-memory TinkerGraph which will use LONG values for the
-vertex and edge IDs. TinkerPop 3 introduced the concept of a 'traversal'  so as part
-of loading a 'graph' we also setup a graph traversal source called 'g' which we will
-then refer to in our subsequent queries of the graph.  The 'max-iteration' option
-tells the Gremlin console the maximum number of lines of output that we ever want to
-see in return from a  query. The default, if this is not specified, is 100.
+vertex, edge and vertex property IDs. TinkerPop 3 introduced the concept of a
+'traversal'  so as part of loading a 'graph' we also setup a graph traversal source
+object called 'g' which we will then refer to in our subsequent queries of the graph.
+The 'max-iteration' option tells the Gremlin console the maximum number of lines of
+output that we ever want to see in return from a  query. The default, if this is not
+specified, is 100.
 
 TIP: You can use the 'max-iteration' setting to control how much output the Gremlin
 Console displays.
@@ -1133,6 +1134,7 @@ with minor modifications.
 conf = new BaseConfiguration()
 conf.setProperty("gremlin.tinkergraph.vertexIdManager","LONG")
 conf.setProperty("gremlin.tinkergraph.edgeIdManager","LONG")
+conf.setProperty("gremlin.tinkergraph.vertexPropertyIdManager","LONG");[]
 graph = TinkerGraph.open(conf)
 graph.io(graphml()).readGraph('air-routes.graphml')
 g=graph.traversal()
