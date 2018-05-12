@@ -6,6 +6,7 @@
 conf = new BaseConfiguration()
 conf.setProperty("gremlin.tinkergraph.vertexIdManager","LONG")
 conf.setProperty("gremlin.tinkergraph.edgeIdManager","LONG")
+conf.setProperty("gremlin.tinkergraph.vertexPropertyIdManager","LONG")
 graph = TinkerGraph.open(conf)
 
 // Change the path below to point to wherever you put the graphml file
