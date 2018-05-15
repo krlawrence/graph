@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v279-preview, May 12, 2018
+v279-preview, May 15, 2018
 //v278 (TP 3.3.1), Mar 28, 2018
-// Sat May 12, 2018 10:14:27 CDT
+// Tue May 15, 2018 09:57:55 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -23,8 +23,8 @@ v279-preview, May 12, 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: May 12th 2018
-:tpvercheck: 3.3.2
+:draftdate: May 15th 2018
+:tpvercheck: 3.3.3
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
 //        has a white foreground color. The default was unreadable,
@@ -462,7 +462,7 @@ Any such TinkerPop enabled graph databases can be accessed using the Gremlin que
 language and corresponding API. We can also use the TinkerPop API to write client
 code in languages like Java that can talk to a TinkerPop enabled graph.  For most of
 this book we will be working within the Gremlin console with a local graph. However
-in Section 6 we will take a look at Gremlin Server and some other TinkerPop 3 enabled
+in Chapter 6 we will take a look at Gremlin Server and some other TinkerPop 3 enabled
 environments. Most of Apache Tinkerpop has been developed using Java 8 but there are
 also bindings available for many other programming languages such as Groovy and
 Python. Parts of TinkerPop are themselves developed in Groovy, most notably the
@@ -1213,15 +1213,15 @@ for cases where a particular item in a graph is not backed by an index. One exam
 of this is vertex and edge 'labels' which are typically not indexed but are sometimes
 very useful items to specify at the start of a query.  As most of the examples in this book
 are intended to work just fine with only a basic TinkerGraph the subject of indexes
-is not covered in detail until Section 6 "<<beyond>>" . However, as TinkerGraph does
+is not covered in detail until Chapter 6 "<<beyond>>" . However, as TinkerGraph does
 have some indexing capability I have also included some discussion of it in the
-"<<tinkerindex>>" section. In Section 6 where I start to look at additional
+"<<tinkerindex>>" section. In Chapter 6 where I start to look at additional
 technologies such as JanusGraph I have included a more in depth discussion of
 indexing as part of that coverage.  You should always refer to the specific
 documentation for the graph system you are using to decide what you need to do about
 creating an index and schema for your graph.  We will explain what TinkerGraph is in
 the next section. I won't be discussing the creation of an explicit schema again until
-Section 6. When working with TinkerGraph there is no need to define a schema ahead of
+Chapter 6. When working with TinkerGraph there is no need to define a schema ahead of
 time. The types of each property are derived at creation time. This is a really
 convenient feature and allows us to get productive and do some experimenting really
 quickly.
@@ -2944,7 +2944,7 @@ println "The AUS airport is located in " + aus['city'][0]
 The AUS airport is located in Austin
 ----
 
-NOTE: Because properties are stored as arrays of values. Even if there is only one
+NOTE: Properties are stored as arrays of values. Even if there is only one
 property value for the given key, we still have to add the '[0]' when referencing it
 otherwise the whole array will be returned if we just used 'aus[+++'city'+++]'. We
 will explore why property values are stored in this way in the "<<listprop>>"
@@ -10307,7 +10307,34 @@ closure to do what you want is easier than figuring out the pure Gremlin way to 
 but if at all possible using just Gremlin steps is still the recommended path to
 take. Lambda functions in general are discouraged.
 
-Finally, here is another example that uses a 'filter' step combined with a closure to
+Gremlin currently does not have any regular expression support built in to the
+language. However, as we will explore later in the "<<janpred>>" section, JanusGraph
+does provide some support. When working with a graph, such as TinkerGraph, that has
+no built in regular expression support you can use a 'filter' step combined with a
+Lambda as shown in the following two examples. The examples take advantage of methods
+provided by the Java String class.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').
+      filter{ it.get().value('city').startsWith('Dal')}.
+      values('city')
+----
+
+When the query is run, all the airport city names matching the pattern are found.
+
+[source,groovy]
+----
+Dallas
+Dallas
+Dalaman
+Dalian
+Dalcahue
+Dalat
+Dalanzadgad
+----
+
+The next example that uses a 'filter' step combined with a closure to
 find any airport vertex that has a description containing the letter '"F"' followed by
 a period, as in '"F."'. While this makes an interesting example, there are other ways
 to achieve this result. One such way would be to used a mixed index and special text
@@ -10324,6 +10351,9 @@ g.V()hasLabel('airport').as('a').values('desc').
 [SLU,George F. L. Charles Airport]
 [EUX,F. D. Roosevelt Airport]
 ----
+
+You will see more examples of how to use Lambda expressions with the 'filter' step in
+the "<<fuzzyregs>>" section.
 
 [[mapstep]]
 Introducing the 'Map' step
