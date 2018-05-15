@@ -19395,6 +19395,128 @@ to read.
 I have included examples of the different types of JSON result that you are likely to
 have to process in the "<<serverjson>>" section that is coming up soon.
 
+[[javagsclient]]
+Connecting to a Gremlin Server from Java using 'withRemote'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+While it is perfectly possible to work directly with the JSON returned from a Gremlin
+Server it is often more desirable to have the results placed directly into variables
+of the appropriate type. It the appropriate Grelmin language driver exists for the
+programming language that you are using, this is quite easy to setup. In this section
+we will look at connecting to a Gremlin Server from a Java application and taking
+advantage of the 'withRemote' capability that TinkerPop provides.
+
+TIP: The source code for the example shown in this section comes from the
+'RemoteClient.java' sample located at
+https://github.com/krlawrence/graph/tree/master/sample-code.
+
+Let's look at the small application in sections. First of all it is necessary to
+import the required classes that we will need to make the connection to the server
+and retrieve the query results.
+
+[source,groovy]
+----
+import org.apache.tinkerpop.gremlin.driver.Cluster;
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
+import org.apache.tinkerpop.gremlin.structure.util.empty.EmptyGraph;
+import org.apache.tinkerpop.gremlin.driver.remote.DriverRemoteConnection;
+import org.apache.tinkerpop.gremlin.driver.ser.GryoMessageSerializerV1d0;
+import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+----
+
+We can now define a small Java class that we will call 'RemoteClient' and setup the
+connection to the Gremlin Server. This is done by first of all creating a
+'Cluster.Builder' instance that will be used to describe the server we are connecting
+to and the protocol we want to use. It is important that these settings match what
+the Gremlin Server is configured to use. For this simple example we are just using
+'localhost' as the host name but the name of any Gremlin Server that you have access
+to can be used instead. The default Gremlin Server port of '8182' is specified and the
+'GyroMessageServializerV1d0' serialization format is selected. Again, this needs to
+match both the protocol and the version of the protocol that your Gremlin Server is
+supporting.
+
+[source,groovy]
+----
+public class RemoteClient
+{
+  public static void main( String[] args )
+  {
+    Cluster.Builder builder = Cluster.build();
+    builder.addContactPoint("localhost");
+    builder.port(8182);
+    builder.serializer(new GryoMessageSerializerV1d0());
+----
+
+Once the Cluster.Builder instance has been setup we can use it to create our
+'Cluster' instance.
+
+[source,groovy]
+----
+    Cluster cluster = builder.create();
+----
+
+Lastly, we need to setup a GraphTraversalSource object for the Gremlin Server hosted
+graph that we will be working with. The TinkerPop documentation recommends that an
+instance of an 'EmptyGraph' is used when creating the traversal. Having done that,
+the 'withRemote' method can be called to establish the remote connection. Note that
+the cluster instance that we just created is passed in as a parameter. While this
+looks a little complicated it is really not a lot different than when we connect to a
+local graph using the Gremlin Console. The only difference is that by setting up the
+remote connection this way, when we start to issue queries against the graph, rather
+than getting JSON objects back, the results will automatically be serialized into
+Java variables for us. This makes our code a lot easier to write and essentially is
+the same code from this point onwards that would also work with a local graph that we
+are directly connected to.
+
+[source,groovy]
+----
+    GraphTraversalSource g =
+      EmptyGraph.instance().traversal().
+        withRemote(DriverRemoteConnection.using(cluster));
+----
+
+We can now use our new graph traversal source object to issue a Gremlin query.  The
+results will be placed directly into the 'List' called 'vmaps'.  The query finds the
+first 10 airports with a region code of 'GB-ENG' which is short for Great Britain
+- England.
+
+[source,groovy]
+----
+    List <Map<String,Object>> vmaps =
+      g.V().has("airport","region","GB-ENG").limit(10).valueMap().toList();
+    
+    System.out.println("\n\nThe following airports were found\n");
+    for (Map <String,Object> m : vmaps)
+    {
+      ArrayList code = (ArrayList) m.get("code");
+      ArrayList desc = (ArrayList) m.get("desc");
+      System.out.println(code.get(0) + " , " + desc.get(0));
+    }
+
+    cluster.close();
+  }
+}                                           
+----
+
+When the Java application is compiled and run the output should look similar to that
+shown below.
+
+[source,groovy]
+----
+LEQ , Land's End Airport
+LGW , London Gatwick
+MAN , Manchester Airport
+LHR , London Heathrow
+LCY , London City Airport
+STN , London Stansted Airport
+EMA , East Midlands Airport
+LPL , Liverpool John Lennon Airport
+LBA , Leeds Bradford Airport
+NCL , Newcastle Airport         
+----
+
 [[rubyclient]]
 Connecting to a Gremlin Server from Ruby
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

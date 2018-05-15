@@ -17,6 +17,7 @@ Major new features in this release
 - Improved coverage of text comparison predicates.
 - Improved the `Working with IDs` section.
 - Added examples to the `introducing Path` section.
+- Added a new section covering use of `withRemote` with a Gremlin Server.
 - Expanded coverage of custom ID values.
 - Added a new section showing how to deduce a graph's schema.
 - Added more examples to Section 5.
