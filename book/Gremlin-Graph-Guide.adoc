@@ -3138,7 +3138,7 @@ databases such as JanusGraph generate their own IDs. The same is true when you a
 vertices and edges using a graph traversal or using the TinkerPop API. This is a long
 winded way of saying that you should not depend on the IDs in your GraphML or
 GraphSON file that you just loaded remaining unchanged once the data has been loaded
-into the graph store.  When you add new a vertex or edge to your graph using a
+into the graph store.  When you add a new vertex or edge to your graph using a
 traversal, the graph system will automatically generate a new, unique ID for it.  If
 you need to figure out the ID for a vertex or an edge you can always get it from a
 query of the graph itself.
