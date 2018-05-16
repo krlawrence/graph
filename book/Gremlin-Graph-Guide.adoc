@@ -3730,12 +3730,12 @@ of the characters following '"Dal"' in the strings being tested are ignored. Not
 that this is a case sensitive comparison. In other words '"Dal"' and '"dal"' are
 different strings in this context. 
 
-TIP: The 'between' predicate can be used to simulate a string 'startsWidth' method.
+TIP: The 'between' predicate can be used to simulate a string 'startsWith' method.
 
 As discussed more in the "<<fuzzyregs>>" section, Gremlin does not currently support
 any methods for applying regular expressions or even more basic text analysis
 operators to strings. This use of the 'between' predicate can at least be used to
-simulate a 'startsWidth' type of operator.
+simulate a 'startsWith' type of operator.
 
 [source,groovy]
 ----
@@ -3758,7 +3758,7 @@ Dalat
 Dalanzadgad
 ----
 
-You will notice from the results above that '"Dallas"' appears twice as there are tow
+You will notice from the results above that '"Dallas"' appears twice as there are two
 airports with that city name. We could add a 'dedup' step to our query to only return
 unique matches.
 
