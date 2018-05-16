@@ -3138,7 +3138,7 @@ databases such as JanusGraph generate their own IDs. The same is true when you a
 vertices and edges using a graph traversal or using the TinkerPop API. This is a long
 winded way of saying that you should not depend on the IDs in your GraphML or
 GraphSON file that you just loaded remaining unchanged once the data has been loaded
-into the graph store.  When you add new a vertex or edge to your graph using a
+into the graph store.  When you add a new vertex or edge to your graph using a
 traversal, the graph system will automatically generate a new, unique ID for it.  If
 you need to figure out the ID for a vertex or an edge you can always get it from a
 query of the graph itself.
@@ -3285,7 +3285,7 @@ g.V().where(label().is(eq('airport'))).count()
 // Or using the label key word
 g.V().has(label,'airport').count()
 
-// But you would perhaps use the  hasLabel() method in this case instead
+// But you would perhaps use the hasLabel() method in this case instead
 g.V().hasLabel('airport').count()
 
 // How many non airport vertices are there?
@@ -3350,7 +3350,7 @@ is essentially the same as dividing the count by one.
 So how do we fix this? The answer is to use the 'local' step. What we really want to
 do is to create, in essence, a collection of values, where each value is the route
 count for just one airport. Having done that, we want to divide the sum of all of
-these numbers by the number of members ,airports in this case, int the collection.
+these numbers by the number of members, airports in this case, into the collection.
 
 Take a look at the modified query below.
 
@@ -3695,7 +3695,7 @@ via Phoenix (PHX) or Los Angeles (LAX).
 
 Lastly this query uses both within and without to modify the previous query to just
 airports within the United States or Canada as Austin now has a direct flight to
-London in England we probably don't want to go that way if we are headed to Vegas!
+London in England. We probably don't want to go that way if we are headed to Vegas!
 
 [source,groovy]
 ----
@@ -3730,12 +3730,12 @@ of the characters following '"Dal"' in the strings being tested are ignored. Not
 that this is a case sensitive comparison. In other words '"Dal"' and '"dal"' are
 different strings in this context. 
 
-TIP: The 'between' predicate can be used to simulate a string 'startsWidth' method.
+TIP: The 'between' predicate can be used to simulate a string 'startsWith' method.
 
 As discussed more in the "<<fuzzyregs>>" section, Gremlin does not currently support
 any methods for applying regular expressions or even more basic text analysis
 operators to strings. This use of the 'between' predicate can at least be used to
-simulate a 'startsWidth' type of operator.
+simulate a 'startsWith' type of operator.
 
 [source,groovy]
 ----
@@ -3758,7 +3758,7 @@ Dalat
 Dalanzadgad
 ----
 
-You will notice from the results above that '"Dallas"' appears twice as there are tow
+You will notice from the results above that '"Dallas"' appears twice as there are two
 airports with that city name. We could add a 'dedup' step to our query to only return
 unique matches.
 
@@ -3854,7 +3854,7 @@ g.V().has('airport','code','AUS').
       out().has('code','SYD').path().by('code')
 ----
 
-We could also have written the prior query this way replacing 'and' with 'without'
+We could also have written the prior query this way replacing 'and' with 'without'.
 This approach feels a lot cleaner and it is easy to add more airports to the
 'without' test as needed. We will look more at steps like 'and' in the "<<bool>>"
 section that is coming up soon.
@@ -4012,7 +4012,7 @@ believe that the 'sample(1)' call is doing something similar to this
 g.V().hasLabel('airport').coin(0.01).limit(1)
 ----
 
-Look at the code below. Even if I run that simple experiment many times always gives
+Look at the code below. Even if I run that simple experiment many times it always gives
 results similar to these.
 
 [source,groovy]
@@ -4081,7 +4081,7 @@ approach appears to be a lot more evenly distributed across all of the possible 
 
 Note that this approach only works unmodified with the air-routes graph loaded into a
 TinkerGraph. This is because we know that the TinkerGraph implementation honors user
-provided IDs and that in the air routes graph, airport IDs begin at one and are
+provided IDs and that in the air-routes graph, airport IDs begin at one and are
 sequential with no gaps. However, you could easily modify this approach to work with
 other graphs without relying on knowing that the index values are sequential. For
 example you could extract all of the IDs into a list and then select one randomly
@@ -4090,12 +4090,12 @@ from that list.
 It is likely that this apparent lack of randomness is more specific to TinkerGraph
 and the fact that it will respect user provided ID values whereas other graph systems
 will probably store vertices in a more random order to begin with.  Indeed when I ran
-these queries on Janus graph the 'sample' step did indeed yield a better selection of
+these queries on Janus graph the 'sample' step did yield a better selection of
 airports from across the graph.
 
 If the airport IDs were not all known to be in a sequential order one after the
 other, we could create a list of all the airport IDs and then select one at random by
-doing do something like this if we wanted to use our 'Math.random' technique.
+doing something like this if we wanted to use our 'Math.random' technique.
 
 [source,groovy]
 ----
