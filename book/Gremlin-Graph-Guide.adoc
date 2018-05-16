@@ -4012,7 +4012,7 @@ believe that the 'sample(1)' call is doing something similar to this
 g.V().hasLabel('airport').coin(0.01).limit(1)
 ----
 
-Look at the code below. Even if I run that simple experiment many times always gives
+Look at the code below. Even if I run that simple experiment many times it always gives
 results similar to these.
 
 [source,groovy]
@@ -4081,7 +4081,7 @@ approach appears to be a lot more evenly distributed across all of the possible 
 
 Note that this approach only works unmodified with the air-routes graph loaded into a
 TinkerGraph. This is because we know that the TinkerGraph implementation honors user
-provided IDs and that in the air routes graph, airport IDs begin at one and are
+provided IDs and that in the air-routes graph, airport IDs begin at one and are
 sequential with no gaps. However, you could easily modify this approach to work with
 other graphs without relying on knowing that the index values are sequential. For
 example you could extract all of the IDs into a list and then select one randomly
@@ -4090,12 +4090,12 @@ from that list.
 It is likely that this apparent lack of randomness is more specific to TinkerGraph
 and the fact that it will respect user provided ID values whereas other graph systems
 will probably store vertices in a more random order to begin with.  Indeed when I ran
-these queries on Janus graph the 'sample' step did indeed yield a better selection of
+these queries on Janus graph the 'sample' step did yield a better selection of
 airports from across the graph.
 
 If the airport IDs were not all known to be in a sequential order one after the
 other, we could create a list of all the airport IDs and then select one at random by
-doing do something like this if we wanted to use our 'Math.random' technique.
+doing something like this if we wanted to use our 'Math.random' technique.
 
 [source,groovy]
 ----
