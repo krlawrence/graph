@@ -3285,7 +3285,7 @@ g.V().where(label().is(eq('airport'))).count()
 // Or using the label key word
 g.V().has(label,'airport').count()
 
-// But you would perhaps use the  hasLabel() method in this case instead
+// But you would perhaps use the hasLabel() method in this case instead
 g.V().hasLabel('airport').count()
 
 // How many non airport vertices are there?
