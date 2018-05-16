@@ -3695,7 +3695,7 @@ via Phoenix (PHX) or Los Angeles (LAX).
 
 Lastly this query uses both within and without to modify the previous query to just
 airports within the United States or Canada as Austin now has a direct flight to
-London in England we probably don't want to go that way if we are headed to Vegas!
+London in England. We probably don't want to go that way if we are headed to Vegas!
 
 [source,groovy]
 ----
