@@ -3350,7 +3350,7 @@ is essentially the same as dividing the count by one.
 So how do we fix this? The answer is to use the 'local' step. What we really want to
 do is to create, in essence, a collection of values, where each value is the route
 count for just one airport. Having done that, we want to divide the sum of all of
-these numbers by the number of members ,airports in this case, int the collection.
+these numbers by the number of members, airports in this case, into the collection.
 
 Take a look at the modified query below.
 
