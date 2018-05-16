@@ -3854,7 +3854,7 @@ g.V().has('airport','code','AUS').
       out().has('code','SYD').path().by('code')
 ----
 
-We could also have written the prior query this way replacing 'and' with 'without'
+We could also have written the prior query this way replacing 'and' with 'without'.
 This approach feels a lot cleaner and it is easy to add more airports to the
 'without' test as needed. We will look more at steps like 'and' in the "<<bool>>"
 section that is coming up soon.
