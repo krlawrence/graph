@@ -129,6 +129,16 @@ m=g.V().hasLabel('continent').group().by('code').by(out().count()).next();[]
 assert m instanceof  java.util.HashMap;[]
 assert m['EU']==583;[]
 
+n=status( "Checking 'group' for London airports",n);[]
+m=g.V().hasLabel('continent').group().by('code').by(out().count()).next();[]
+m = g.V().has('region','GB-ENG').has('city','London').
+          group().by('code').by(out().count()).next();[]
+assert m['LCY']==42;[]          
+assert m['LHR']==191;[]          
+assert m['LTN']==104;[]          
+assert m['STN']==186;[]          
+assert m['LGW']==200;[]          
+
 n=status( "Checking 'groupCount'",n);[]
 m=g.V().hasLabel('airport').groupCount().by('runways').next();[]
 assert m[1] == 2316;[]
@@ -250,7 +260,7 @@ c=g.V().has('airport','city','London').as('a','r').
 
 assert c==6;[]
 
-n=status( "Checking 'where('a',lt('b')'",n);[]
+n=status( "Checking 'where('a',lt('b'))'",n);[]
 a=g.V().has('region','GB-ENG').order().by('code').as('a').
         out().has('region','GB-ENG').as('b').
         where('a',lt('b')).by('code').
@@ -761,7 +771,7 @@ assert a.flatten() == [8,5,4,7];[]
 
 n=status( "Checking 'sack' with 'assign' using a property value'",n);[]
 a=g.V().has('code','AUS').
-        sack(assign).by('runways').
+        sack(assign).by('runways'). 
     V().has('code','SAF').
         out().
         sack(mult).by('runways').
