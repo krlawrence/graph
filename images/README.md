@@ -1,1 +1,1 @@
-This folder contains images used by the book.
+This folder contains images used by other parts of this project.
