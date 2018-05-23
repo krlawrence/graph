@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v279-preview, May 15, 2018
+v279-preview, May 23, 2018
 //v278 (TP 3.3.1), Mar 28, 2018
-// Tue May 15, 2018 09:57:55 CDT
+// Wed May 23, 2018 14:02:47 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -23,7 +23,7 @@ v279-preview, May 15, 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: May 15th 2018
+:draftdate: May 23rd 2018
 :tpvercheck: 3.3.3
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -16811,12 +16811,12 @@ NOTE: When working with JanusGraph you must use the version of the Gremlin Conso
 that is packaged as part of the JanusGraph download.
 
 As mentioned above, JanusGraph is not a stand alone service, it is a set of Java
-classes that a process to invoke it. The Gremlin Console can play that role. After
-you have unzipped JanusGraph you will find the gremlin.sh and gremlin.bat scripts in
-the bin directory under the JanusGraph parent directory. Once you have started the
-Gremlin Console you can, as we will explore in the next few sections, tell Janus
-Graph about the environment you will be operating in in terms of back end store and
-index.
+classes that still need to be invoked by a calling process. The Gremlin Console can
+play that role. After you have unzipped JanusGraph you will find the gremlin.sh and
+gremlin.bat scripts in the bin directory under the JanusGraph parent directory. Once
+you have started the Gremlin Console you can, as we will explore in the next few
+sections, tell Janus Graph about the environment you will be operating in in terms of
+back end store and index.
 
 [[janusinmemory]]
 Using JanusGraph with the 'inmemory' option
