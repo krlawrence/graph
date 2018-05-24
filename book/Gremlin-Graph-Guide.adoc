@@ -3,7 +3,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v279-preview, May 23, 2018
 //v278 (TP 3.3.1), Mar 28, 2018
-// Wed May 23, 2018 14:02:47 CDT
+// Wed May 23, 2018 18:59:05 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -3316,6 +3316,15 @@ vertices that have the 'airport' label for a code of "'SYD'".
 [source,groovy]
 ----
 g.V().has('airport','code','SYD')
+----
+
+It is also possible to specify more than one label in the same step as shown below.
+In general, whenever a step can be provided a label, more than one may also be
+provided.
+
+[source,groovy]
+----
+g.E().hasLabel('route','contains')
 ----
 
 [[local]]
