@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v279-preview, May 23, 2018
+v279-preview, May 24, 2018
 //v278 (TP 3.3.1), Mar 28, 2018
-// Wed May 23, 2018 18:59:05 CDT
+// Thu May 24, 2018 08:06:38 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -23,7 +23,7 @@ v279-preview, May 23, 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: May 23rd 2018
+:draftdate: May 24th 2018
 :tpvercheck: 3.3.3
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -1816,10 +1816,8 @@ connected to each other.
 |otherV  | The vertex that was not the vertex we came from.
 |==============================================================================
 
-Note that the steps labelled with an '*' can optionally take the
-name of an edge label as a parameter. If omitted, all relevant edges will be
-traversed.                
-
+Note that the steps labelled with an '*' can optionally take the name of one or more
+edge labels as a parameter. If omitted, all relevant edges will be traversed.                
 
 Some simple graph traversal examples
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
