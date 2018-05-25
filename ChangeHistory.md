@@ -19,6 +19,7 @@ Major new features in this release
 - Added examples to the `introducing Path` section.
 - Added a new section covering use of `withRemote` with a Gremlin Server.
 - Expanded coverage of custom ID values.
+- Added a new section showing an example of a `path` step used inside a `groupCount` step.
 - Added a new section showing how to deduce a graph's schema.
 - Added more examples to Section 5.
 - Expanded coverage of the results from a `Gremlin Server`.
