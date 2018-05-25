@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v279-preview, May 24, 2018
+v279-preview, May 25, 2018
 //v278 (TP 3.3.1), Mar 28, 2018
-// Thu May 24, 2018 08:06:38 CDT
+// Fri May 25, 2018 11:30:15 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -23,7 +23,7 @@ v279-preview, May 24, 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: May 24th 2018
+:draftdate: May 25th 2018
 :tpvercheck: 3.3.3
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -15380,7 +15380,44 @@ you may need to write. Doing it this way has the advantage that you can also che
 that each part of the query is working the way you intend it to before you add more
 parts to it.
 
+[[groupcountpath]]
+Using 'groupCount' with 'path' to find duplicate edges
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+The prior example found duplicate edges by working with a map created using 'select'
+and 'groupCount' steps. It is also possible to use a 'path' step inside a
+'groupCount' step to achieve a similar result.
+
+First of all let's create a duplicate edge between Austin (AUS) and Cancun (CUN).
+
+[source,groovy]
+----
+g.V().has('code','AUS').addE('route').to(V().has('code','CUN'))
+
+e[53791][3-route->180]
+----
+
+We can now use a 'groupCount' step containing a 'path' step to look for duplicate
+edges originating in Austin. I used a 'limit' step just to reduce the amount of
+output a bit.
+
+[source,groovy]
+----
+g.V().has('code','AUS').out().
+      groupCount().by(path().by('code')).limit(local,5)
+----
+
+As you can see from the results below the route between AUS and CUN has a count of 2
+associated with it.
+
+[source,groovy]
+----
+[[AUS,CUN]:2,[AUS,MDW]:1,[AUS,MIA]:1,[AUS,DFW]:1,[AUS,BWI]:1]
+----
+
+Note that this technique does not replace the full query shown in the prior section.
+It is more intended to show that you can place a 'path' step inside of a 'groupCount'
+step and achieve some useful results.
 
 
 [[flr]]
