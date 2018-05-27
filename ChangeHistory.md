@@ -21,7 +21,8 @@ Major new features in this release
 - Expanded coverage of custom ID values.
 - Added a new section showing an example of a `path` step used inside a `groupCount` step.
 - Added a new section showing how to deduce a graph's schema.
-- Added more examples to Section 5.
+- Added more examples to Chapter 5.
+- Corrected output in Section 3.3.1 to reflect correct version of air-routes. Issue #87. 
 - Expanded coverage of the results from a `Gremlin Server`.
 - Sample code and data improvements
   - Added new script `regression.groovy` to check that the book examples work with the most recent Tinkerpop versions.
