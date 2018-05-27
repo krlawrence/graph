@@ -3,7 +3,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v279-preview, May 27, 2018
 //v278 (TP 3.3.1), Mar 28, 2018
-// Sun May 27, 2018 10:36:05 CDT
+// Sun May 27, 2018 15:53:49 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -14072,7 +14072,7 @@ first and using the 'project' step instead of using the 'as' and 'select' steps.
 While in general it is not recommended to start a query with 'g.E()' as there are
 typically a lot more edges than vertices in a graph this does illustrate a useful
 pattern. Also, just to change things a bit, this time we just look for the 20 longest
-routes rather than looking for routes longer the 8,000 miles. We again filter the
+routes rather than looking for routes longer than 8,000 miles. We again filter the
 results to only show the route in one direction. Note that the limit step is passed a
 parameter of 40 rather than 20 as we know we will be filtering out the same route in
 the return direction so we will actually only get 20 routes back.
