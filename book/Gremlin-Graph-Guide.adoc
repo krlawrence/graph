@@ -13828,34 +13828,37 @@ between airport pairs.
 
 [source,groovy]
 ----
-// All outes longer than 8,000 miles
+// All routes longer than 8,000 miles
 g.V().as('src').outE('route').
       has('dist',gt(8000)).inV().as('dest').
       select('src','dest').by('code')
 ----
 
-Here is what our query produces.
+Here is what our query produces. As before I have arranged the output in columns to
+aid readability.
 
 [source,groovy]
 ----
-[src:ATL,dest:JNB]   [src:SIN,dest:SFO]
-[src:DFW,dest:SYD]   [src:DXB,dest:DFW]
-[src:DFW,dest:DXB]   [src:DXB,dest:IAH]
-[src:DFW,dest:HKG]   [src:DXB,dest:LAX]
-[src:DFW,dest:AUH]   [src:DXB,dest:SFO]
-[src:IAH,dest:DXB]   [src:DXB,dest:AKL]
-[src:IAH,dest:DOH]   [src:HKG,dest:DFW]
-[src:JFK,dest:HKG]   [src:HKG,dest:JFK]
-[src:LAX,dest:DXB]   [src:HKG,dest:EWR]
-[src:LAX,dest:DOH]   [src:AKL,dest:DXB]
-[src:LAX,dest:AUH]   [src:DOH,dest:IAH]
-[src:LAX,dest:JED]   [src:DOH,dest:LAX]
-[src:LAX,dest:RUH]   [src:JNB,dest:ATL]
-[src:SFO,dest:SIN]   [src:AUH,dest:DFW]
-[src:SFO,dest:DXB]   [src:AUH,dest:LAX]
-[src:SFO,dest:AUH]   [src:AUH,dest:SFO]
-[src:EWR,dest:HKG]   [src:JED,dest:LAX]
-[src:SYD,dest:DFW]   [src:RUH,dest:LAX]
+[src:ATL,dest:JNB]    [src:DXB,dest:IAH]  
+[src:DFW,dest:SYD]    [src:DXB,dest:LAX]  
+[src:DFW,dest:DXB]    [src:DXB,dest:SFO]  
+[src:DFW,dest:HKG]    [src:DXB,dest:AKL]  
+[src:DFW,dest:AUH]    [src:HKG,dest:DFW]  
+[src:IAH,dest:DXB]    [src:HKG,dest:JFK]  
+[src:IAH,dest:DOH]    [src:HKG,dest:EWR]  
+[src:JFK,dest:HKG]    [src:AKL,dest:DXB]  
+[src:LAX,dest:DOH]    [src:AKL,dest:DOH]  
+[src:LAX,dest:AUH]    [src:DOH,dest:IAH]  
+[src:LAX,dest:JED]    [src:DOH,dest:LAX]  
+[src:LAX,dest:RUH]    [src:DOH,dest:AKL]  
+[src:LAX,dest:DXB]    [src:JNB,dest:ATL]  
+[src:SFO,dest:SIN]    [src:MEX,dest:CAN]  
+[src:SFO,dest:DXB]    [src:AUH,dest:DFW]  
+[src:SFO,dest:AUH]    [src:AUH,dest:LAX]  
+[src:EWR,dest:HKG]    [src:AUH,dest:SFO]  
+[src:SYD,dest:DFW]    [src:JED,dest:LAX]  
+[src:SIN,dest:SFO]    [src:RUH,dest:LAX]  
+[src:DXB,dest:DFW]    [src:CAN,dest:MEX]  
 ----
 
 Now let's improve the query by including the distance of each route in the query
@@ -13863,7 +13866,8 @@ results.
 
 [source,groovy]
 ----
-// Find routes longer than 8,000 miles, include the distance in returned values.
+// Find routes longer than 8,000 miles.
+// Include the distance in returned values.
 g.V().as('src').
       outE().has('dist',gt(8000)).as('e').
       inV().as('dest').
@@ -13874,24 +13878,26 @@ Here is the modified output showing the distance between the airports.
 
 [source,groovy]
 ----
-[src:ATL,e:8434,dest:JNB]     [src:SIN,e:8433,dest:SFO]  
-[src:DFW,e:8574,dest:SYD]     [src:DXB,e:8022,dest:DFW]  
-[src:DFW,e:8022,dest:DXB]     [src:DXB,e:8150,dest:IAH]  
-[src:DFW,e:8105,dest:HKG]     [src:DXB,e:8321,dest:LAX]  
-[src:DFW,e:8053,dest:AUH]     [src:DXB,e:8085,dest:SFO]  
-[src:IAH,e:8150,dest:DXB]     [src:DXB,e:8818,dest:AKL]  
-[src:IAH,e:8030,dest:DOH]     [src:HKG,e:8105,dest:DFW]  
-[src:JFK,e:8054,dest:HKG]     [src:HKG,e:8054,dest:JFK]  
-[src:LAX,e:8321,dest:DXB]     [src:HKG,e:8047,dest:EWR]  
-[src:LAX,e:8287,dest:DOH]     [src:AKL,e:8818,dest:DXB]  
-[src:LAX,e:8372,dest:AUH]     [src:DOH,e:8030,dest:IAH]  
-[src:LAX,e:8314,dest:JED]     [src:DOH,e:8287,dest:LAX]  
-[src:LAX,e:8246,dest:RUH]     [src:JNB,e:8434,dest:ATL]  
-[src:SFO,e:8433,dest:SIN]     [src:AUH,e:8053,dest:DFW]  
-[src:SFO,e:8085,dest:DXB]     [src:AUH,e:8372,dest:LAX]  
-[src:SFO,e:8139,dest:AUH]     [src:AUH,e:8139,dest:SFO]  
-[src:EWR,e:8047,dest:HKG]     [src:JED,e:8314,dest:LAX]  
-[src:SYD,e:8574,dest:DFW]     [src:RUH,e:8246,dest:LAX]  
+[src:ATL,e:8434,dest:JNB]     [src:DXB,e:8150,dest:IAH]
+[src:DFW,e:8574,dest:SYD]     [src:DXB,e:8321,dest:LAX]
+[src:DFW,e:8022,dest:DXB]     [src:DXB,e:8085,dest:SFO]
+[src:DFW,e:8105,dest:HKG]     [src:DXB,e:8818,dest:AKL]
+[src:DFW,e:8053,dest:AUH]     [src:HKG,e:8105,dest:DFW]
+[src:IAH,e:8150,dest:DXB]     [src:HKG,e:8054,dest:JFK]
+[src:IAH,e:8030,dest:DOH]     [src:HKG,e:8047,dest:EWR]
+[src:JFK,e:8054,dest:HKG]     [src:AKL,e:8818,dest:DXB]
+[src:LAX,e:8287,dest:DOH]     [src:AKL,e:9025,dest:DOH]
+[src:LAX,e:8372,dest:AUH]     [src:DOH,e:8030,dest:IAH]
+[src:LAX,e:8314,dest:JED]     [src:DOH,e:8287,dest:LAX]
+[src:LAX,e:8246,dest:RUH]     [src:DOH,e:9025,dest:AKL]
+[src:LAX,e:8321,dest:DXB]     [src:JNB,e:8434,dest:ATL]
+[src:SFO,e:8433,dest:SIN]     [src:MEX,e:8754,dest:CAN]
+[src:SFO,e:8085,dest:DXB]     [src:AUH,e:8053,dest:DFW]
+[src:SFO,e:8139,dest:AUH]     [src:AUH,e:8372,dest:LAX]
+[src:EWR,e:8047,dest:HKG]     [src:AUH,e:8139,dest:SFO]
+[src:SYD,e:8574,dest:DFW]     [src:JED,e:8314,dest:LAX]
+[src:SIN,e:8433,dest:SFO]     [src:RUH,e:8246,dest:LAX]
+[src:DXB,e:8022,dest:DFW]     [src:CAN,e:8754,dest:MEX]
 ----
 
 Next let's simplify things a bit. While using 'as' and 'select' gets the job done,
@@ -13911,15 +13917,17 @@ The output indeed now looks more readable.
 
 [source,groovy]
 ----
-[ATL,8434,JNB]   [LAX,8287,DOH]   [SIN,8433,SFO]   [AKL,8818,DXB]
-[DFW,8574,SYD]   [LAX,8372,AUH]   [DXB,8022,DFW]   [DOH,8030,IAH]
-[DFW,8022,DXB]   [LAX,8314,JED]   [DXB,8150,IAH]   [DOH,8287,LAX]
-[DFW,8105,HKG]   [LAX,8246,RUH]   [DXB,8321,LAX]   [JNB,8434,ATL]
-[DFW,8053,AUH]   [SFO,8433,SIN]   [DXB,8085,SFO]   [AUH,8053,DFW]
-[IAH,8150,DXB]   [SFO,8085,DXB]   [DXB,8818,AKL]   [AUH,8372,LAX]
-[IAH,8030,DOH]   [SFO,8139,AUH]   [HKG,8105,DFW]   [AUH,8139,SFO]
-[JFK,8054,HKG]   [EWR,8047,HKG]   [HKG,8054,JFK]   [JED,8314,LAX]
-[LAX,8321,DXB]   [SYD,8574,DFW]   [HKG,8047,EWR]   [RUH,8246,LAX]
+[ATL,8434,JNB]   [LAX,8314,JED]   [DXB,8150,IAH]   [DOH,8287,LAX] 
+[DFW,8574,SYD]   [LAX,8246,RUH]   [DXB,8321,LAX]   [DOH,9025,AKL] 
+[DFW,8022,DXB]   [LAX,8321,DXB]   [DXB,8085,SFO]   [JNB,8434,ATL] 
+[DFW,8105,HKG]   [SFO,8433,SIN]   [DXB,8818,AKL]   [MEX,8754,CAN] 
+[DFW,8053,AUH]   [SFO,8085,DXB]   [HKG,8105,DFW]   [AUH,8053,DFW] 
+[IAH,8150,DXB]   [SFO,8139,AUH]   [HKG,8054,JFK]   [AUH,8372,LAX] 
+[IAH,8030,DOH]   [EWR,8047,HKG]   [HKG,8047,EWR]   [AUH,8139,SFO] 
+[JFK,8054,HKG]   [SYD,8574,DFW]   [AKL,8818,DXB]   [JED,8314,LAX] 
+[LAX,8287,DOH]   [SIN,8433,SFO]   [AKL,9025,DOH]   [RUH,8246,LAX] 
+[LAX,8372,AUH]   [DXB,8022,DFW]   [DOH,8030,IAH]   [CAN,8754,MEX] 
+                                  
 ----
 
 Our query is looking pretty good but it would be nice to not report the same route
@@ -13937,7 +13945,8 @@ shown below to apply this filter.
 
 [source,groovy]
 ----
-// We could avoid returning both directions of travel by refining our query as follows
+// We could avoid returning both directions of 
+// travel by refining our query as follows.
 g.V().as('a').outE().has('dist',gt(8000)).
       inV().as('b'). 
       filter(select('a','b').by('code').where('a', lt('b'))).
@@ -13950,15 +13959,16 @@ true for all the other 'return journey' routes.
 
 [source,groovy]
 ----
-[ATL,8434,JNB]     [DXB,8085,SFO]
-[DFW,8574,SYD]     [HKG,8054,JFK]
-[DFW,8022,DXB]     [AKL,8818,DXB]
+[ATL,8434,JNB]     [HKG,8054,JFK]
+[DFW,8574,SYD]     [AKL,8818,DXB]
+[DFW,8022,DXB]     [AKL,9025,DOH]
 [DFW,8105,HKG]     [DOH,8030,IAH]
 [LAX,8246,RUH]     [DOH,8287,LAX]
 [SFO,8433,SIN]     [AUH,8053,DFW]
 [EWR,8047,HKG]     [AUH,8372,LAX]
 [DXB,8150,IAH]     [AUH,8139,SFO]
 [DXB,8321,LAX]     [JED,8314,LAX]
+[DXB,8085,SFO]     [CAN,8754,MEX]
 ----
 
 Lastly, now that we have the routes we want, let's tweak the query so that the routes
@@ -13967,7 +13977,7 @@ step after finding the routes we are interested in.
 
 [source,groovy]
 ----
-// As above but sorted by route lengths
+// As above but sorted by route lengths.
 g.V().as('a').outE().has('dist',gt(8000)).
       order().by('dist',decr).
       inV().as('b').
@@ -13979,29 +13989,30 @@ Here are the results again, this time sorted by route distance in descending ord
 
 [source,groovy]
 ----
+[AKL,9025,DOH]     [LAX,8246,RUH]
 [AKL,8818,DXB]     [DXB,8150,IAH]
-[DFW,8574,SYD]     [AUH,8139,SFO]
-[ATL,8434,JNB]     [DFW,8105,HKG]
-[SFO,8433,SIN]     [DXB,8085,SFO]
-[AUH,8372,LAX]     [HKG,8054,JFK]
-[DXB,8321,LAX]     [AUH,8053,DFW]
-[JED,8314,LAX]     [EWR,8047,HKG]
-[DOH,8287,LAX]     [DOH,8030,IAH]
-[LAX,8246,RUH]     [DFW,8022,DXB]
+[CAN,8754,MEX]     [AUH,8139,SFO]
+[DFW,8574,SYD]     [DFW,8105,HKG]
+[ATL,8434,JNB]     [DXB,8085,SFO]
+[SFO,8433,SIN]     [HKG,8054,JFK]
+[AUH,8372,LAX]     [AUH,8053,DFW]
+[DXB,8321,LAX]     [EWR,8047,HKG]
+[JED,8314,LAX]     [DOH,8030,IAH]
+[DOH,8287,LAX]     [DFW,8022,DXB]
 ----
 
-TinkerPop 3.2.3 added additional capability to the 'where' step that allows it to be
-followed by a 'by' modulator. This allows us, should we so desire, to simplify our
-query a bit more as follows.
+As part of the TinkerPop 3.2.3 release an additional capability was added to the
+'where' step that allows it to be followed by a 'by' modulator. This allows us,
+should we so desire, to simplify our query a bit more as follows.
 
 [source,groovy]
 ----
 //Query changed to take advantage of the where().by() construct
 g.V().as('s').
-  outE().has('dist',gt(8000)).
-  order().by('dist',decr).inV().as('f').
-  where('f',lt('s')).by('code').
-  path().by('code').by('dist')
+      outE().has('dist',gt(8000)).
+      order().by('dist',decr).inV().as('f').
+      where('f',lt('s')).by('code').
+      path().by('code').by('dist')
 ----
 
 As you can see, we got the same results from our modified query. Well, almost the same
@@ -14011,18 +14022,19 @@ prior case. This is because we compared the values in the opposite order!
 
 [source,groovy]
 ----
+[DOH,9025,AKL]     [RUH,8246,LAX]
 [DXB,8818,AKL]     [IAH,8150,DXB]
-[SYD,8574,DFW]     [SFO,8139,AUH]
-[JNB,8434,ATL]     [HKG,8105,DFW]
-[SIN,8433,SFO]     [SFO,8085,DXB]
-[LAX,8372,AUH]     [JFK,8054,HKG]
-[LAX,8321,DXB]     [DFW,8053,AUH]
-[LAX,8314,JED]     [HKG,8047,EWR]
-[LAX,8287,DOH]     [IAH,8030,DOH]
-[RUH,8246,LAX]     [DXB,8022,DFW]
+[MEX,8754,CAN]     [SFO,8139,AUH]
+[SYD,8574,DFW]     [HKG,8105,DFW]
+[JNB,8434,ATL]     [SFO,8085,DXB]
+[SIN,8433,SFO]     [JFK,8054,HKG]
+[LAX,8372,AUH]     [DFW,8053,AUH]
+[LAX,8321,DXB]     [HKG,8047,EWR]
+[LAX,8314,JED]     [IAH,8030,DOH]
+[LAX,8287,DOH]     [DXB,8022,DFW]
 ----
 
-As an interesting sidenote, and this would be true for the queries above as well, if
+As an interesting side note, and this would be true for the queries above as well, if
 we replace the 'lt' with a 'gt' we will get the routes returned in the reverse order.
 
 
@@ -14035,20 +14047,21 @@ g.V().as('s').
       path().by('code').by('dist')
 ----
 
-Using the prior query the first result was '[DXB,8818,AKL]'. As you will
-see below, our first result is now '[AKL,8818,DXB]'.   
+Using the prior query the first result was '[DOH,9025,AKL]'. As you will
+see below, our first result is now '[AKL,9025,DOH]'.   
 
 [source,groovy]
 ----
+[AKL,9025,DOH]     [LAX,8246,RUH]
 [AKL,8818,DXB]     [DXB,8150,IAH]
-[DFW,8574,SYD]     [AUH,8139,SFO]
-[ATL,8434,JNB]     [DFW,8105,HKG]
-[SFO,8433,SIN]     [DXB,8085,SFO]
-[AUH,8372,LAX]     [HKG,8054,JFK]
-[DXB,8321,LAX]     [AUH,8053,DFW]
-[JED,8314,LAX]     [EWR,8047,HKG]
-[DOH,8287,LAX]     [DOH,8030,IAH]
-[LAX,8246,RUH]     [DFW,8022,DXB]
+[CAN,8754,MEX]     [AUH,8139,SFO]
+[DFW,8574,SYD]     [DFW,8105,HKG]
+[ATL,8434,JNB]     [DXB,8085,SFO]
+[SFO,8433,SIN]     [HKG,8054,JFK]
+[AUH,8372,LAX]     [AUH,8053,DFW]
+[DXB,8321,LAX]     [EWR,8047,HKG]
+[JED,8314,LAX]     [DOH,8030,IAH]
+[DOH,8287,LAX]     [DFW,8022,DXB]
 ----
 
 Finding the 20 longest routes in the graph
