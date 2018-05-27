@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v279-preview, May 26, 2018
+v279-preview, May 27, 2018
 //v278 (TP 3.3.1), Mar 28, 2018
-// Sat May 26, 2018 20:45:33 CDT
+// Sun May 27, 2018 10:36:05 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -23,7 +23,7 @@ v279-preview, May 26, 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: May 26th 2018
+:draftdate: May 27th 2018
 :tpvercheck: 3.3.3
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -14079,15 +14079,16 @@ Here are the results from running the query.
 
 [source,groovy]
 ----
-[a:AKL,b:8818,c:DXB]    [a:DXB,b:8150,c:IAH] 
-[a:CAN,b:8754,c:MEX]    [a:AUH,b:8139,c:SFO] 
-[a:ATL,b:8434,c:JNB]    [a:DFW,b:8105,c:HKG] 
-[a:SFO,b:8433,c:SIN]    [a:DXB,b:8085,c:SFO] 
-[a:AUH,b:8372,c:LAX]    [a:HKG,b:8054,c:JFK] 
-[a:DXB,b:8321,c:LAX]    [a:AUH,b:8053,c:DFW] 
-[a:JED,b:8314,c:LAX]    [a:EWR,b:8047,c:HKG] 
-[a:DOH,b:8287,c:LAX]    [a:DOH,b:8030,c:IAH] 
-[a:LAX,b:8246,c:RUH]    [a:DFW,b:8022,c:DXB] 
+[a:AKL,b:9025,c:DOH]    [a:LAX,b:8246,c:RUH]
+[a:AKL,b:8818,c:DXB]    [a:DXB,b:8150,c:IAH]
+[a:CAN,b:8754,c:MEX]    [a:AUH,b:8139,c:SFO]
+[a:DFW,b:8574,c:SYD]    [a:DFW,b:8105,c:HKG]
+[a:ATL,b:8434,c:JNB]    [a:DXB,b:8085,c:SFO]
+[a:SFO,b:8433,c:SIN]    [a:HKG,b:8054,c:JFK]
+[a:AUH,b:8372,c:LAX]    [a:AUH,b:8053,c:DFW]
+[a:DXB,b:8321,c:LAX]    [a:EWR,b:8047,c:HKG]
+[a:JED,b:8314,c:LAX]    [a:DOH,b:8030,c:IAH]
+[a:DOH,b:8287,c:LAX]    [a:DFW,b:8022,c:DXB]
 ----
 
 Here is the query rewritten slightly to start with airport vertices rather than with
