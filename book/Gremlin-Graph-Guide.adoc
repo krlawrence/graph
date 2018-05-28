@@ -20362,12 +20362,6 @@ g.V().has('region','US-OK').values('code').fold()
 ----
 
 
-Using Gremlin within a Python notebook
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-To be written
-
-
 [[serialize]]
 COMMON GRAPH SERIALIZATION FORMATS
 ----------------------------------
