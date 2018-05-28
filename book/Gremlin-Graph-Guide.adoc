@@ -3,7 +3,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v279-preview, May 28, 2018
 //v278 (TP 3.3.1), Mar 28, 2018
-// Mon May 28, 2018 09:38:37 CDT
+// Mon May 28, 2018 12:37:16 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -347,7 +347,7 @@ Those of you that looked at graphs as part of a computer science course are corr
 if your reaction was "haven't graphs been around for ages?" Indeed, Leonard Euler is
 credited with demonstrating the first graph problem and inventing the whole concept
 of "Graph Theory" all the way back in 1763 when he investigated the now famous
-"Seven Bridges of Konigsberg" problem.
+"Seven Bridges of K&ouml;nigsberg" problem.
 
 If you want to read a bit more about graph theory and its present-day application,
 you can find a lot of good information online. Here's a Wikipedia link to get you
