@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v279-preview, May 27, 2018
+v279-preview, May 28, 2018
 //v278 (TP 3.3.1), Mar 28, 2018
-// Sun May 27, 2018 15:53:49 CDT
+// Mon May 28, 2018 09:38:37 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -23,7 +23,7 @@ v279-preview, May 27, 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: May 27th 2018
+:draftdate: May 28th 2018
 :tpvercheck: 3.3.3
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -19762,7 +19762,7 @@ g.V().as('a').outE().has('dist',gt(8000)).
       path().by('code').by('dist').toList().toString()
 ----
 
-If we were to send this modified form of the query to our Gremlin Server, we shoulkd
+If we were to send this modified form of the query to our Gremlin Server, we should
 get back something that looks a lot more like the result we got back when working
 with the Gremlin Console. As shown below, it is certainly a bit easier to process in
 your application now. However, this is still not an ideal result as what we now have
