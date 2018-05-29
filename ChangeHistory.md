@@ -2,9 +2,9 @@
 
 Starting with the v275 release, this file will contain a record of the major changes and updates made in each release.
 
-## Future Release 279 change history (Date TBD)
+## Release 279 change history (May 29th 2018)
 
-Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/V278-3.3.1...master) between this release and the prior one.
+Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/V278-3.3.1...v279-tp.3.3.3) between this release and the prior one.
 
 The examples in this release have been tested against Apache TinkerPop at the 3.3.1, 3.3.2 and at the newly released 3.3.3 level. They have also been tested against JanusGraph 0.2 (where appropriate) which supports TinkerPop at the 3.2.6 level.
 
