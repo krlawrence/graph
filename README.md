@@ -12,7 +12,8 @@ This repository is the new home for the source materials, sample code and exampl
 To read the latest snapshot of the book right away in a browser (HTML format) click [here](http://kelvinlawrence.net/book/Gremlin-Graph-Guide.html) or for a PDF version click [here](http://kelvinlawrence.net/book/Gremlin-Graph-Guide.pdf). You will find other formats including MOBI, EPUB and XML (Docbook) in the [releases](https://github.com/krlawrence/graph/releases)  section. Formal releases will be published about once a month assuming there is enough new material. If you want to see the absolute latest updates you can always browse the Asciidoc source file (Gremlin-Graph-Guide.adoc) in the /book folder. The PDF version is currently the "official" version, simply meaning it looks the best!
 
 **LATEST NEWS:**  
-[Mar-28-2018] Revision 278 (TP 3.3.1) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
+[May-29-2018] Revision 279 (TP 3.3.3) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.    
+
 
 ## Releases and change history
 
@@ -108,6 +109,7 @@ Chapter 8 - FURTHER READING
   tools and documentation for many of the technologies covered in this document.
 
 **NEWS ARCHIVE:**
+[Mar-28-2018] Revision 278 (TP 3.3.1) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
 [Feb-11-2018] Revision 277 was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
 [Jan-12-2018] Revision 276 was just published in all formats. Many updates to book and samples.  
 [Jan-12-2018] Based on feedback I have decided to rename the book "Practical Gremlin" (see issue #29)  
