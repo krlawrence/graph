@@ -2,6 +2,15 @@
 
 Starting with the v275 release, this file will contain a record of the major changes and updates made in each release.
 
+## Release 280 change history (Date TBD)
+
+Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v279-tp.3.3.3...master) between this release and the prior one.
+
+- Miscellaneous minor wording updates and corrections.
+- Sample code and data improvements.
+  - Updated air-routes sample data (475 new routes, 2 new airports).
+  - Updated demo apps to reflect the latest data updates.
+
 ## Release 279 change history (May 29th 2018)
 
 Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/V278-3.3.1...v279-tp.3.3.3) between this release and the prior one.
@@ -22,7 +31,7 @@ Major new features in this release
 - Added a new section showing an example of a `path` step used inside a `groupCount` step.
 - Added a new section showing how to deduce a graph's schema.
 - Added more examples to Chapter 5.
-- Corrected output in Section 3.3.1 to reflect correct version of air-routes. Issue #87. 
+- Corrected output in Section 3.3.1 to reflect correct version of air-routes. Issue #87.
 - Expanded coverage of the results from a `Gremlin Server`.
 - Sample code and data improvements
   - Added new script `regression.groovy` to check that the book examples work with the most recent Tinkerpop versions.
@@ -32,7 +41,7 @@ Major new features in this release
   - Added new sample `ListAirports.java`.
   - Expanded `CreateGraph.java` sample.
   - Moved `edges.csv` to `sample-data` folder.
-  - Provided updated versions of the air-routes data and demo apps.
+  - Provided updated versions of the air-routes data and demo apps (1895 new routes, 21 new airports).
 - Miscellaneous issues resolved and other more minor corrections.
 
 ## Release 278 change history (March 28th 2018)
