@@ -1,7 +1,7 @@
 
 Information about the most recent Air Routes graph data set.
 
-Timestamp: Thu, 03 May 2018 07:49:14 -0500
+Timestamp: Thu, 31 May 2018 09:35:19 -0500
 
 This file contains the following sections
   1. Introduction
@@ -61,21 +61,21 @@ air-routes.graphml file.
 
 2. SOME STATISTICS ABOUT THE GRAPH
 
-Air Routes Graph (v0.78, 2018-May-03) contains:
-  3,395 airports
-  45,321 routes
+Air Routes Graph (v0.79, 2018-May-31) contains:
+  3,397 airports
+  45,845 routes
   237 countries (and dependent areas)
   7 continents
-  3,640 total nodes
-  52,111 total edges
+  3,642 total nodes
+  52,639 total edges
 
 Additional observations:
   Longest route is between DOH and AKL (9,025 miles)
   Shortest route is between WRY and PPW (2 miles)
-  Average route distance is 1,182.173 miles.
+  Average route distance is 1,186.279 miles.
   Longest runway is 18,045ft (BPX)
   Shortest runway is 1,300ft (SAB)
-  Average number of runways is 1.42916
+  Average number of runways is 1.4292
   Furthest North is LYR (latitude: 78.2461013793945)
   Furthest South is USH (latitude: -54.8433)
   Furthest East is SVU (longitude: 179.341003418)
@@ -84,66 +84,64 @@ Additional observations:
   Closest to the Greenwich meridian is LDE (longitude: -0.006438999902457)
   Highest elevation is DCY (14,472 feet)
   Lowest elevation is GUW (-72 feet)
-  Maximum airport node degree (routes in and out) is 586 (FRA)
+  Maximum airport node degree (routes in and out) is 590 (FRA)
   Country with the most airports: United States (579)
   Continent with the most airports: North America (980)
-  Average degree (airport nodes) is 26.699
-  Average degree (all nodes) is 26.774
+  Average degree (airport nodes) is 26.991
+  Average degree (all nodes) is 27.049
  
  
 Here are the top 50 airports with the most routes
  
     POS  ID   CODE  TOTAL     DETAILS
 
-     1	  52   FRA  (586)  out:293 in:293
-     2	  70   AMS  (551)  out:274 in:277 
-     3	 161   IST  (546)  out:273 in:273
-     4	  51   CDG  (544)  out:272 in:272
-     5	  80   MUC  (492)  out:246 in:246
-     6	  64   PEK  (485)  out:242 in:243 
-     7	  18   ORD  (482)  out:241 in:241
+     1	  52   FRA  (590)  out:295 in:295
+     2	  51   CDG  (556)  out:278 in:278
+     3	  70   AMS  (553)  out:275 in:278
+     4	 161   IST  (548)  out:274 in:274
+     5	  80   MUC  (506)  out:253 in:253
+     6	  18   ORD  (486)  out:243 in:243
+     7	  64   PEK  (485)  out:242 in:243
      8	  58   DXB  (480)  out:240 in:240
-     9	   1   ATL  (472)  out:236 in:236
-    10	   8   DFW  (442)  out:221 in:221
+     9	   1   ATL  (474)  out:237 in:237
+    10	   8   DFW  (444)  out:222 in:222
     11	 102   DME  (436)  out:218 in:218
-    12	  50   LGW  (418)  out:209 in:209
+    12	  50   LGW  (424)  out:212 in:212
     13	  67   PVG  (408)  out:204 in:204
-    14	  74   MAD  (400)  out:200 in:200
-    15	  49   LHR  (400)  out:200 in:200
-    16	  13   LAX  (400)  out:200 in:200
-    17	  73   BCN  (388)  out:194 in:194
-    18	  11   IAH  (388)  out:194 in:194
-    19	  68   FCO  (386)  out:193 in:193
-    20	  31   DEN  (382)  out:191 in:191
-    21	  12   JFK  (381)  out:191 in:190 
-    22	  94   STN  (378)  out:189 in:189
-    23	  79   BRU  (374)  out:187 in:187
-    24	  84   MAN  (373)  out:187 in:186 
-    25	  35   EWR  (372)  out:186 in:186
-    26	  47   YYZ  (366)  out:183 in:183
-    27	  16   MIA  (356)  out:178 in:178
-    28	 198   DUS  (350)  out:175 in:175
-    29	 106   DOH  (344)  out:172 in:172
+    14	  49   LHR  (406)  out:203 in:203
+    15	  13   LAX  (402)  out:201 in:201
+    16	  74   MAD  (400)  out:200 in:200
+    17	  73   BCN  (390)  out:195 in:195
+    18	  31   DEN  (390)  out:195 in:195
+    19	  94   STN  (388)  out:194 in:194
+    20	  68   FCO  (388)  out:194 in:194
+    21	  11   IAH  (388)  out:194 in:194
+    22	  12   JFK  (387)  out:194 in:193
+    23	  84   MAN  (385)  out:193 in:192
+    24	  79   BRU  (378)  out:189 in:189
+    25	  35   EWR  (374)  out:187 in:187
+    26	  47   YYZ  (370)  out:185 in:185
+    27	 198   DUS  (356)  out:178 in:178
+    28	  16   MIA  (356)  out:178 in:178
+    29	 106   DOH  (348)  out:174 in:174
     30	 178   CLT  (340)  out:170 in:170
-    31	  75   VIE  (338)  out:169 in:169
-    32	  60   DUB  (334)  out:167 in:167
-    33	 250   CAN  (331)  out:166 in:165 
-    34	  76   ZRH  (320)  out:160 in:160
-    35	 103   SVO  (318)  out:159 in:159
-    36	 177   CPH  (314)  out:157 in:157
-    37	  61   HKG  (312)  out:156 in:156
-    38	  56   SIN  (310)  out:155 in:155
-    39	  93   ARN  (308)  out:154 in:154
-    40	  17   MSP  (298)  out:149 in:149
-    41	 346   LED  (296)  out:148 in:148
+    31	  75   VIE  (340)  out:170 in:170
+    32	  60   DUB  (338)  out:169 in:169
+    33	 250   CAN  (331)  out:166 in:165
+    34	  76   ZRH  (330)  out:165 in:165
+    35	 103   SVO  (320)  out:160 in:160
+    36	 177   CPH  (318)  out:159 in:159
+    37	  93   ARN  (318)  out:159 in:159
+    38	  61   HKG  (318)  out:159 in:159
+    39	  56   SIN  (312)  out:156 in:156
+    40	 346   LED  (300)  out:150 in:150
+    41	  17   MSP  (298)  out:149 in:149
     42	 122   ICN  (296)  out:148 in:148
-    43	  30   LAS  (294)  out:147 in:147
-    44	   9   FLL  (292)  out:146 in:146
-    45	 230   PMI  (288)  out:144 in:144
-    46	  23   SFO  (286)  out:143 in:143
-    47	 101   BKK  (284)  out:142 in:142
-    48	  46   DTW  (280)  out:140 in:140
-    49	  10   IAD  (274)  out:137 in:137
-    50	  15   MCO  (266)  out:133 in:133
- 
- 
+    43	   9   FLL  (296)  out:148 in:148
+    44	  30   LAS  (294)  out:147 in:147
+    45	 230   PMI  (292)  out:146 in:146
+    46	  23   SFO  (290)  out:145 in:145
+    47	 101   BKK  (286)  out:143 in:143
+    48	 110   ATH  (281)  out:141 in:140
+    49	  46   DTW  (280)  out:140 in:140
+    50	  10   IAD  (276)  out:138 in:138

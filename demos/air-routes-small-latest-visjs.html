@@ -3,8 +3,8 @@
 <head>
 <title>World air route map (graph)</title>
 <meta name='author' content='Kelvin R. Lawrence' />
-<meta name='created' content='2018-Jan-28' />
-<meta name='version' content='0.78' />
+<meta name='created' content='2018-May-31' />
+<meta name='version' content='0.79' />
 <script type='text/javascript' src='http://visjs.org/dist/vis.js'></script>
 <link href='http://visjs.org/dist/vis.css' rel='stylesheet' type='text/css' />
 
@@ -23,12 +23,12 @@
 <input type='text' id='search' maxlength='3' style='width:100%' onkeydown='check(event)'></input><br><br>
 <button onClick='doSearch()'>Search</button><br><br>
 <textarea rows='50' cols='20' id='txt1' readOnly='true'>
-AIR ROUTES v0.78
+AIR ROUTES v0.79
 
-2018-Jan-28
+2018-May-31
 
-48 Airports
-1,336 Routes
+46 Airports
+1,350 Routes
 
 Click on an airport node to see route details here.
 
@@ -59,17 +59,17 @@ var nodes = new vis.DataSet([
 {id: 11, label: 'IAH', title:"<b>IAH - Houston (KIAH</b>)<br>George Bush Intercontinental<br>United States (US-TX)<br>Outgoing routes: 39<br>Incoming routes: 39",x:-3237.3955620659735,y:-832.6399909125423},
 {id: 12, label: 'JFK', title:"<b>JFK - New York (KJFK</b>)<br>New York John F. Kennedy International Airport<br>United States (US-NY)<br>Outgoing routes: 37<br>Incoming routes: 37",x:-2279.0622288888885,y:-1306.2133791111112},
 {id: 13, label: 'LAX', title:"<b>LAX - Los Angeles (KLAX</b>)<br>Los Angeles International Airport<br>United States (US-CA)<br>Outgoing routes: 40<br>Incoming routes: 40",x:-4262.577648888889,y:-1008.5556031111109},
-{id: 14, label: 'LGA', title:"<b>LGA - New York (KLGA</b>)<br>New York La Guardia<br>United States (US-NY)<br>Outgoing routes: 21<br>Incoming routes: 21",x:-2283.226521777778,y:-1312.3199462222221},
-{id: 15, label: 'MCO', title:"<b>MCO - Orlando (KMCO</b>)<br>Orlando International Airport<br>United States (US-FL)<br>Outgoing routes: 34<br>Incoming routes: 34",x:-2613.733249240453,y:-763.5288662380622},
+{id: 14, label: 'LGA', title:"<b>LGA - New York (KLGA</b>)<br>New York La Guardia<br>United States (US-NY)<br>Outgoing routes: 22<br>Incoming routes: 22",x:-2283.226521777778,y:-1312.3199462222221},
+{id: 15, label: 'MCO', title:"<b>MCO - Orlando (KMCO</b>)<br>Orlando International Airport<br>United States (US-FL)<br>Outgoing routes: 35<br>Incoming routes: 35",x:-2613.733249240453,y:-763.5288662380622},
 {id: 16, label: 'MIA', title:"<b>MIA - Miami (KMIA</b>)<br>Miami International Airport<br>United States (US-FL)<br>Outgoing routes: 32<br>Incoming routes: 32",x:-2568.4712727864576,y:-646.3644239637599},
 {id: 17, label: 'MSP', title:"<b>MSP - Minneapolis (KMSP</b>)<br>Minneapolis-St.Paul International Airport<br>United States (US-MN)<br>Outgoing routes: 39<br>Incoming routes: 39",x:-3143.1911892355556,y:-1494.7555542},
 {id: 18, label: 'ORD', title:"<b>ORD - Chicago (KORD</b>)<br>Chicago OHare International Airport<br>United States (US-IL)<br>Outgoing routes: 42<br>Incoming routes: 42",x:-2906.8800186666667,y:-1365.7155355555553},
 {id: 19, label: 'PBI', title:"<b>PBI - West Palm Beach (KPBI</b>)<br>Palm Beach International Airport<br>United States (US-FL)<br>Outgoing routes: 19<br>Incoming routes: 19",x:-2559.8042805989603,y:-685.9200371636266},
-{id: 20, label: 'PHX', title:"<b>PHX - Phoenix (KPHX</b>)<br>Phoenix Sky Harbor International Airport<br>United States (US-AZ)<br>Outgoing routes: 35<br>Incoming routes: 35",x:-3978.311157226577,y:-985.9688652886266},
-{id: 21, label: 'RDU', title:"<b>RDU - Raleigh (KRDU</b>)<br>Raleigh-Durham<br>United States (US-NC)<br>Outgoing routes: 30<br>Incoming routes: 30",x:-2501.666598849826,y:-1094.56007215712},
+{id: 20, label: 'PHX', title:"<b>PHX - Phoenix (KPHX</b>)<br>Phoenix Sky Harbor International Airport<br>United States (US-AZ)<br>Outgoing routes: 36<br>Incoming routes: 36",x:-3978.311157226577,y:-985.9688652886266},
+{id: 21, label: 'RDU', title:"<b>RDU - Raleigh (KRDU</b>)<br>Raleigh-Durham<br>United States (US-NC)<br>Outgoing routes: 32<br>Incoming routes: 32",x:-2501.666598849826,y:-1094.56007215712},
 {id: 22, label: 'SEA', title:"<b>SEA - Seattle (KSEA</b>)<br>Seattle-Tacoma<br>United States (US-WA)<br>Outgoing routes: 37<br>Incoming routes: 37",x:-4435.9554714626665,y:-1608.844502766929},
 {id: 23, label: 'SFO', title:"<b>SFO - San Francisco (KSFO</b>)<br>San Francisco International Airport<br>United States (US-CA)<br>Outgoing routes: 35<br>Incoming routes: 35",x:-4438.888888888889,y:-1171.955532497831},
-{id: 24, label: 'SJC', title:"<b>SJC - San Jose (KSJC</b>)<br>Norman Y. Mineta San Jose International Airport<br>United States (US-CA)<br>Outgoing routes: 21<br>Incoming routes: 21",x:-4419.0667046440885,y:-1160.5599297417557},
+{id: 24, label: 'SJC', title:"<b>SJC - San Jose (KSJC</b>)<br>Norman Y. Mineta San Jose International Airport<br>United States (US-CA)<br>Outgoing routes: 25<br>Incoming routes: 25",x:-4419.0667046440885,y:-1160.5599297417557},
 {id: 25, label: 'TPA', title:"<b>TPA - Tampa (KTPA</b>)<br>Tampa International Airport<br>United States (US-FL)<br>Outgoing routes: 33<br>Incoming routes: 33",x:-2668.142361111111,y:-743.3555603027332},
 {id: 26, label: 'SAN', title:"<b>SAN - San Diego (KSAN</b>)<br>San Diego Lindbergh<br>United States (US-CA)<br>Outgoing routes: 35<br>Incoming routes: 35",x:-4208.444552933333,y:-954.8266940666665},
 {id: 27, label: 'LGB', title:"<b>LGB - Long Beach (KLGB</b>)<br>Long Beach Airport<br>United States (US-CA)<br>Outgoing routes: 11<br>Incoming routes: 11",x:-4251.200017777778,y:-1003.0088635555553},
@@ -78,14 +78,14 @@ var nodes = new vis.DataSet([
 {id: 30, label: 'LAS', title:"<b>LAS - Las Vegas (KLAS</b>)<br>Las Vegas Mc Carran<br>United States (US-NV)<br>Outgoing routes: 40<br>Incoming routes: 40",x:-4117.866684444444,y:-1103.5600448888888},
 {id: 31, label: 'DEN', title:"<b>DEN - Denver (KDEN</b>)<br>Denver International Airport<br>United States (US-CO)<br>Outgoing routes: 42<br>Incoming routes: 42",x:-3652.133178710933,y:-1271.6310289171022},
 {id: 32, label: 'HPN', title:"<b>HPN - White Plains (KHPN</b>)<br>Westchester County<br>United States (US-NY)<br>Outgoing routes: 11<br>Incoming routes: 11",x:-2275.893486870658,y:-1325.2000596788178},
-{id: 33, label: 'SAT', title:"<b>SAT - San Antonio (KSAT</b>)<br>San Antonio<br>United States (US-TX)<br>Outgoing routes: 26<br>Incoming routes: 26",x:-3376.4356825086797,y:-812.6089307996976},
-{id: 34, label: 'MSY', title:"<b>MSY - New Orleans (KMSY</b>)<br>New Orleans L. Armstrong<br>United States (US-LA)<br>Outgoing routes: 33<br>Incoming routes: 33",x:-3011.4668104383686,y:-833.0400254991332},
+{id: 33, label: 'SAT', title:"<b>SAT - San Antonio (KSAT</b>)<br>San Antonio<br>United States (US-TX)<br>Outgoing routes: 28<br>Incoming routes: 28",x:-3376.4356825086797,y:-812.6089307996976},
+{id: 34, label: 'MSY', title:"<b>MSY - New Orleans (KMSY</b>)<br>New Orleans L. Armstrong<br>United States (US-LA)<br>Outgoing routes: 34<br>Incoming routes: 34",x:-3011.4668104383686,y:-833.0400254991332},
 {id: 35, label: 'EWR', title:"<b>EWR - Newark (KEWR</b>)<br>Newark, Liberty<br>United States (US-NY)<br>Outgoing routes: 36<br>Incoming routes: 36",x:-2296.38671875,y:-1308.5556030273422},
 {id: 36, label: 'CID', title:"<b>CID - Cedar Rapids (KCID</b>)<br>The Eastern Iowa Airport<br>United States (US-IA)<br>Outgoing routes: 9<br>Incoming routes: 9",x:-3076.0355631510397,y:-1361.5422566731777},
 {id: 37, label: 'HNL', title:"<b>HNL - Honolulu (PHNL</b>)<br>Honolulu International Airport<br>United States (US-HI)<br>Outgoing routes: 16<br>Incoming routes: 16",x:-6018.755425347199,y:-447.49781290690214},
-{id: 38, label: 'HOU', title:"<b>HOU - Houston (KHOU</b>)<br>Houston Hobby<br>United States (US-TX)<br>Outgoing routes: 28<br>Incoming routes: 28",x:-3234.6177844444446,y:-817.573292888889},
+{id: 38, label: 'HOU', title:"<b>HOU - Houston (KHOU</b>)<br>Houston Hobby<br>United States (US-TX)<br>Outgoing routes: 29<br>Incoming routes: 29",x:-3234.6177844444446,y:-817.573292888889},
 {id: 39, label: 'ELP', title:"<b>ELP - El Paso (KELP</b>)<br>El Paso International Airport<br>United States (US-TX)<br>Outgoing routes: 13<br>Incoming routes: 13",x:-3727.91104,y:-913.6533102222222},
-{id: 40, label: 'SJU', title:"<b>SJU - San Juan (TJSJ</b>)<br>Puerto Rico, Luis Munoz International Airport<br>Puerto Rico (PR-U-A)<br>Outgoing routes: 17<br>Incoming routes: 17",x:-1933.4133572044443,y:-319.5288764088889},
+{id: 40, label: 'SJU', title:"<b>SJU - San Juan (TJSJ</b>)<br>Puerto Rico, Luis Munoz International Airport<br>Puerto Rico (PR-U-A)<br>Outgoing routes: 18<br>Incoming routes: 18",x:-1933.4133572044443,y:-319.5288764088889},
 {id: 41, label: 'CLE', title:"<b>CLE - Cleveland (KCLE</b>)<br>Cleveland, Hopkins International Airport<br>United States (US-OH)<br>Outgoing routes: 30<br>Incoming routes: 30",x:-2637.7688937733333,y:-1340.52005344},
 {id: 42, label: 'OAK', title:"<b>OAK - Oakland (KOAK</b>)<br>Oakland<br>United States (US-CA)<br>Outgoing routes: 25<br>Incoming routes: 25",x:-4432.044474283866,y:-1176.5021430121512},
 {id: 43, label: 'TUS', title:"<b>TUS - Tucson (KTUS</b>)<br>Tucson International Airport<br>United States (US-AZ)<br>Outgoing routes: 16<br>Incoming routes: 16",x:-3930.7111952039995,y:-927.3822360568577},
@@ -553,6 +553,7 @@ var edges = new vis.DataSet([
 {from: 14, to: 17,title: 'LGA-MSP 1020 miles'},
 {from: 14, to: 18,title: 'LGA-ORD 731 miles'},
 {from: 14, to: 19,title: 'LGA-PBI 1040 miles'},
+{from: 14, to: 20,title: 'LGA-PHX 2143 miles'},
 {from: 14, to: 21,title: 'LGA-RDU 431 miles'},
 {from: 14, to: 25,title: 'LGA-TPA 1010 miles'},
 {from: 14, to: 31,title: 'LGA-DEN 1610 miles'},
@@ -581,6 +582,7 @@ var edges = new vis.DataSet([
 {from: 15, to: 21,title: 'MCO-RDU 534 miles'},
 {from: 15, to: 22,title: 'MCO-SEA 2549 miles'},
 {from: 15, to: 23,title: 'MCO-SFO 2440 miles'},
+{from: 15, to: 24,title: 'MCO-SJC 2415 miles'},
 {from: 15, to: 26,title: 'MCO-SAN 2143 miles'},
 {from: 15, to: 29,title: 'MCO-SLC 1930 miles'},
 {from: 15, to: 30,title: 'MCO-LAS 2030 miles'},
@@ -738,6 +740,7 @@ var edges = new vis.DataSet([
 {from: 20, to: 11,title: 'PHX-IAH 1010 miles'},
 {from: 20, to: 12,title: 'PHX-JFK 2150 miles'},
 {from: 20, to: 13,title: 'PHX-LAX 369 miles'},
+{from: 20, to: 14,title: 'PHX-LGA 2143 miles'},
 {from: 20, to: 15,title: 'PHX-MCO 1844 miles'},
 {from: 20, to: 16,title: 'PHX-MIA 1967 miles'},
 {from: 20, to: 17,title: 'PHX-MSP 1276 miles'},
@@ -786,9 +789,11 @@ var edges = new vis.DataSet([
 {from: 21, to: 29,title: 'RDU-SLC 1818 miles'},
 {from: 21, to: 30,title: 'RDU-LAS 2020 miles'},
 {from: 21, to: 31,title: 'RDU-DEN 1430 miles'},
+{from: 21, to: 33,title: 'RDU-SAT 1222 miles'},
 {from: 21, to: 35,title: 'RDU-EWR 416 miles'},
 {from: 21, to: 34,title: 'RDU-MSY 778 miles'},
 {from: 21, to: 38,title: 'RDU-HOU 1050 miles'},
+{from: 21, to: 40,title: 'RDU-SJU 1434 miles'},
 {from: 21, to: 41,title: 'RDU-CLE 416 miles'},
 {from: 21, to: 45,title: 'RDU-PHL 338 miles'},
 {from: 21, to: 46,title: 'RDU-DTW 501 miles'},
@@ -872,6 +877,7 @@ var edges = new vis.DataSet([
 {from: 24, to: 11,title: 'SJC-IAH 1600 miles'},
 {from: 24, to: 12,title: 'SJC-JFK 2560 miles'},
 {from: 24, to: 13,title: 'SJC-LAX 294 miles'},
+{from: 24, to: 15,title: 'SJC-MCO 2415 miles'},
 {from: 24, to: 17,title: 'SJC-MSP 1575 miles'},
 {from: 24, to: 18,title: 'SJC-ORD 1820 miles'},
 {from: 24, to: 20,title: 'SJC-PHX 621 miles'},
@@ -882,8 +888,11 @@ var edges = new vis.DataSet([
 {from: 24, to: 29,title: 'SJC-SLC 584 miles'},
 {from: 24, to: 30,title: 'SJC-LAS 386 miles'},
 {from: 24, to: 31,title: 'SJC-DEN 946 miles'},
+{from: 24, to: 33,title: 'SJC-SAT 1451 miles'},
+{from: 24, to: 34,title: 'SJC-MSY 1880 miles'},
 {from: 24, to: 35,title: 'SJC-EWR 2541 miles'},
 {from: 24, to: 37,title: 'SJC-HNL 2410 miles'},
+{from: 24, to: 38,title: 'SJC-HOU 1618 miles'},
 {from: 24, to: 43,title: 'SJC-TUS 720 miles'},
 {from: 25, to: 1,title: 'TPA-ATL 406 miles'},
 {from: 25, to: 3,title: 'TPA-AUS 925 miles'},
@@ -1119,8 +1128,10 @@ var edges = new vis.DataSet([
 {from: 33, to: 17,title: 'SAT-MSP 1097 miles'},
 {from: 33, to: 18,title: 'SAT-ORD 1040 miles'},
 {from: 33, to: 20,title: 'SAT-PHX 841 miles'},
+{from: 33, to: 21,title: 'SAT-RDU 1222 miles'},
 {from: 33, to: 22,title: 'SAT-SEA 1772 miles'},
 {from: 33, to: 23,title: 'SAT-SFO 1480 miles'},
+{from: 33, to: 24,title: 'SAT-SJC 1451 miles'},
 {from: 33, to: 25,title: 'SAT-TPA 970 miles'},
 {from: 33, to: 26,title: 'SAT-SAN 1129 miles'},
 {from: 33, to: 29,title: 'SAT-SLC 1086 miles'},
@@ -1153,6 +1164,7 @@ var edges = new vis.DataSet([
 {from: 34, to: 21,title: 'MSY-RDU 778 miles'},
 {from: 34, to: 22,title: 'MSY-SEA 2082 miles'},
 {from: 34, to: 23,title: 'MSY-SFO 1910 miles'},
+{from: 34, to: 24,title: 'MSY-SJC 1880 miles'},
 {from: 34, to: 25,title: 'MSY-TPA 488 miles'},
 {from: 34, to: 26,title: 'MSY-SAN 1599 miles'},
 {from: 34, to: 29,title: 'MSY-SLC 1428 miles'},
@@ -1240,6 +1252,7 @@ var edges = new vis.DataSet([
 {from: 38, to: 15,title: 'HOU-MCO 847 miles'},
 {from: 38, to: 20,title: 'HOU-PHX 1020 miles'},
 {from: 38, to: 21,title: 'HOU-RDU 1050 miles'},
+{from: 38, to: 24,title: 'HOU-SJC 1618 miles'},
 {from: 38, to: 22,title: 'HOU-SEA 1891 miles'},
 {from: 38, to: 25,title: 'HOU-TPA 779 miles'},
 {from: 38, to: 26,title: 'HOU-SAN 1310 miles'},
@@ -1280,6 +1293,7 @@ var edges = new vis.DataSet([
 {from: 40, to: 16,title: 'SJU-MIA 1044 miles'},
 {from: 40, to: 18,title: 'SJU-ORD 2072 miles'},
 {from: 40, to: 19,title: 'SJU-PBI 1062 miles'},
+{from: 40, to: 21,title: 'SJU-RDU 1434 miles'},
 {from: 40, to: 25,title: 'SJU-TPA 1236 miles'},
 {from: 40, to: 35,title: 'SJU-EWR 1611 miles'},
 {from: 40, to: 38,title: 'SJU-HOU 1994 miles'},
