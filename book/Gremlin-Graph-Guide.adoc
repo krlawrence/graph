@@ -3727,14 +3727,17 @@ g.V().hasId(within(1,2,3))
 g.V().hasId(within([1,2,3]))
 ----
 
-You will find more examples of these types of queries in the next section.
+You will find more examples of these types of queries in the next two sections.
 
+[[startswith]]
+Using 'between' to simulate 'startsWith'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 One thing that may not be obvious is that when using string values with the 'between'
 predicate the values do not have to specify exact matches. Take a look at the query
 below. This will find any airports in cities whose names start with '"Dal"' as it
-looks for strings between '"Dal"' and '"Dam"' in an inclusive/exclusive fashion. The rest
-of the characters following '"Dal"' in the strings being tested are ignored. Note
-that this is a case sensitive comparison. In other words '"Dal"' and '"dal"' are
+looks for strings between '"Dal"' and '"Dam"' in an inclusive/exclusive fashion. The
+rest of the characters following '"Dal"' in the strings being tested are ignored.
+Note that this is a case sensitive comparison. In other words '"Dal"' and '"dal"' are
 different strings in this context. 
 
 TIP: The 'between' predicate can be used to simulate a string 'startsWith' method.
