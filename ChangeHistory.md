@@ -6,6 +6,7 @@ Starting with the v275 release, this file will contain a record of the major cha
 
 Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v279-tp.3.3.3...master) between this release and the prior one.
 
+- Added more examples in the `Testing ranges` section.
 - Miscellaneous minor wording updates and corrections.
 - Sample code and data improvements.
   - Updated air-routes sample data (475 new routes, 2 new airports).
