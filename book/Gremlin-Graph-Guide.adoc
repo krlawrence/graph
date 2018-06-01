@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v280-preview, May 31, 2018
+v280-preview, June 1, 2018
 //v279 (TP 3.3.3), May 31, 2018
-// Thu May 31, 2018 11:45:49 CDT
+// Fri Jun 01, 2018 10:38:13 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -18,12 +18,12 @@ v280-preview, May 31, 2018
 //:pygments-style: vim
 :toc:
 :toclevels: 4
-:revision: 279
+:revision: 280-preview
 //:revision: 278 (TP 3.3.1)
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: May 31st 2018
+:draftdate: June 1st 2018
 :tpvercheck: 3.3.3
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -3816,6 +3816,22 @@ Daqing Shi
 Dar es Salaam
 Daru
 Darwin
+----
+
+If you wanted to find strings that begin with a single character you can achieve
+that as follows.
+
+[source,groovy]
+----
+g.V().has('airport','code',between('X','Xa')).
+      values('code').fold()
+----
+
+When run, the query returns all airports with codes that start win the letter '"X"'.
+
+[source,groovy]
+----
+[XNA,XMN,XRY,XIY,XUZ,XSB,XCH,XIL,XFN,XNN,XGR,XFW,XCR,XSC,XQP,XMH,XBJ,XAP,XMS,XKH,XIC,XTG,XKS,XBE,XTO]
 ----
 
 While Gremlin does not currently provide any advanced text searching capabilities,
