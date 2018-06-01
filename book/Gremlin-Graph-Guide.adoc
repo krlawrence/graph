@@ -3,7 +3,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v280-preview, June 1, 2018
 //v279 (TP 3.3.3), May 31, 2018
-// Fri Jun 01, 2018 10:38:13 CDT
+// Fri Jun 01, 2018 14:59:42 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -34,7 +34,7 @@ v280-preview, June 1, 2018
 // Windows.  On Mac OS X the easiest way to install asciidoc is probably via
 // Homebrew. You can also install Asciidoctor, a Ruby Gem, as an alternative to
 // Asciidoc which is written in Python.
-//
+//                                
 // NOTE3: In my tests, Asciidoctor seems a lot faster than Asciidoc and it has now become my
 //       preferred way of processing this file.
 //
@@ -6274,9 +6274,9 @@ later.
 Introducing 'cyclicPath'
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-You can use 'cyclicPath' to find paths through the graph that end up back where they
-started. The rather contrived example below finds routes that both start and end in
-Austin (AUS).
+You can use the 'cyclicPath' step to find paths through the graph that end up back
+where they started. The rather contrived example below finds routes that both start
+and end in Austin (AUS).
 
 [source,groovy]
 ----
@@ -6325,6 +6325,27 @@ generated the same results.
 [AUS,PIT,AUS]
 [AUS,PDX,AUS]
 [AUS,ONT,AUS]
+----
+
+You can also use 'cyclicPath' combined with a 'not' predicate to avoid returning
+cyclic results from a query.
+
+[source,groovy]
+----
+g.V().has('code','AUS').
+      out().
+      out().not(cyclicPath()).limit(10).
+      path().by('code')
+----
+
+Note that this has the same effect as if we had written the query as shown below.
+
+[source,groovy]
+----
+g.V().has('code','AUS').
+      out().as('a').
+      out().where(neq('a')).limit(10).
+      path().by('code')
 ----
 
 [[pathwarn]]
