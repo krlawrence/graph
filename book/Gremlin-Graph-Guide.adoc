@@ -91,8 +91,8 @@ How this book came to be
 
 I forget exactly when, but over a year ago I started compiling a list of notes, hints
 and tips, initially for my own benefit, of things I had found poorly explained
-elsewhere while using graph databases and especially using Apache TinkerPop, Janus
-Graph and Gremlin. Over time that document grew (and continues to grow) and has
+elsewhere while using graph databases and especially using Apache TinkerPop, JanusGraph
+and Gremlin. Over time that document grew (and continues to grow) and has
 effectively become a book. After some encouragement from colleagues I have decided to
 release it as a living book in an open source venue so that anyone who is interested
 can read it. It is aimed at programmers and anyone using the Gremlin query language
@@ -159,7 +159,7 @@ automatically. It is shipped as part of the Apache TinkerPop 3 download.  The
 goal of this tutorial is to allow someone with little to no prior knowledge to
 get up and going quickly using the Gremlin console and the 'air-routes' graph.
 Later in the book I will discuss using additional technologies such as
-JanusGraph, Apache Cassandra, Gremlin Server and Apache Elastic Search to build
+JanusGraph, Apache Cassandra, Gremlin Server and Elasticsearch to build
 scalable and persisted graph stores that can still be traversed using Gremlin
 queries. I will also discuss writing stand alone Java and Groovy applications
 as well as using the Gremlin Console. I even slipped a couple of Ruby examples in
@@ -1228,7 +1228,7 @@ quickly.
 
 NOTE: In production systems, especially those where the graphs are large, the task of
 creating and managing the parts of the index is often handed to an additional
-software component such as Apache Solr or Apache Elastic Search.      
+software component such as Apache Solr or Elasticsearch.      
 
 In general for any graph database, regardless of whether it is optional or not,  use of an
 index should be considered a best practice. As I mentioned, even TinkerGraph has a
@@ -3267,7 +3267,7 @@ graph's data model will dictate the way you use labels but it is good to be awar
 their value.
 
 NOTE: As useful as labels are, in larger graph deployments when indexing technology
-such as Solr or Elastic Search is often used to speed up traversing the graph, vertex
+such as Solr or Elasticsearch is often used to speed up traversing the graph, vertex
 labels typically do not get indexed. Therefore, it is currently recommended that an
 actual vertex property that can be indexed is used when walking a graph rather than
 relying on the vertex label. This is especially important when working with large
@@ -4116,7 +4116,7 @@ from that list.
 It is likely that this apparent lack of randomness is more specific to TinkerGraph
 and the fact that it will respect user provided ID values whereas other graph systems
 will probably store vertices in a more random order to begin with.  Indeed when I ran
-these queries on Janus graph the 'sample' step did yield a better selection of
+these queries on JanusGraph the 'sample' step did yield a better selection of
 airports from across the graph.
 
 If the airport IDs were not all known to be in a sequential order one after the
@@ -10816,8 +10816,8 @@ we have looked at above. However, the underlying graph store can still expose
 such capabilities.
 
 NOTE: Most TinkerPop enabled graph stores that you are likely to use for any sort of
-serious deployment will also be backed by an indexing technology like Solr or Elastic
-Search and a graph engine like Titan. In those cases some amount of more
+serious deployment will also be backed by an indexing technology like Solr or
+Elasticsearch and a graph engine like Titan. In those cases some amount of more
 sophisticated search methods will likely be made available to you. You should always
 check the documentation for the system you are using to see what is recommended.
 
@@ -11906,7 +11906,7 @@ clockWithResult(100) {g.E().has('dist',gt(1000)).count().next()}
 ----
 
 Later on we will take a look at using an index with JanusGraph and look at external
-indexing technologies such as Apache Solr and Apache Elastic Search that do support
+indexing technologies such as Apache Solr and Elasticsearch that do support
 more complex types of comparison predicates.
 
 [[olapoltp]]
@@ -15672,9 +15672,9 @@ remotely and talk to it over HTTP or WebSockets. The Gremlin console supports
 accessing graphs both locally or remotely or you can access them using your own code
 or other tools or even command line utilities such as 'curl'.
 
-For a production environment it is likely you will use a technology such as Janus
-Graph backed by something like HBase or Cassandra and an indexing technology such as
-Solr or Elastic Search.  In these cases the way you work with and manage
+For a production environment it is likely you will use a technology such as JanusGraph
+backed by something like HBase or Cassandra and an indexing technology such as
+Solr or Elasticsearch.  In these cases the way you work with and manage
 the graph and the way that query results are retuned will vary.  
 
 In some cases data returned will be in the form of a GraphSON (JSON) in others it
@@ -15828,7 +15828,7 @@ here, simple use of the 'classpath' will suffice.
 The following lines of Bash shell script will setup what you need to both build and
 run our small test program. Note that the 'GREMLIN' variable should be set to point
 to the root directory of wherever your TinkerPop JAR files are. Later when we start
-using Janus graph you will see that rather than TinkerGraph we will need to adjust
+using JanusGraph you will see that rather than TinkerGraph we will need to adjust
 these settings to point to the JanusGraph JAR files.
 
 ----
@@ -16879,10 +16879,10 @@ needs.
 
 JanusGraph can run on a laptop, which is useful for learning and experimenting, but
 it is designed to handle very large graphs stored on distributed clusters. It can
-handle graphs containing billions of vertices and edges. As we shall discuss, Janus
-Graph is designed to work with a variety of persistent storage options including
+handle graphs containing billions of vertices and edges. As we shall discuss, JanusGraph
+is designed to work with a variety of persistent storage options including
 Apache Cassandra and Apache HBase as well as indexing technology such as Apache Solr
-and Apache Elastic Search.
+and Elasticsearch.
 
 .Here are some useful JanusGraph resources
 Runtime download (JAR files and more)::
@@ -16925,8 +16925,8 @@ something like Gremlin Server.
 The install package for JanusGraph is located at http://janusgraph.org/ and is a
 single ZIP file. Once you have it downloaded and unzipped you are ready to experiment
 using the Gremlin Console. As will be discussed below, when working with JanusGraph
-you must use the version of the Gremlin Console that is packaged as part of the Janus
-Graph download.
+you must use the version of the Gremlin Console that is packaged as part of the
+JanusGraph download.
 
 [[janusconsole]]
 Using JanusGraph from the Gremlin Console
@@ -16936,18 +16936,18 @@ A version of the Gremlin Console is included as part of the JanusGraph download.
 only major difference between this version of the console and the one you get as part
 of the standard Apache TinkerPop download is that the console has been preconfigured
 to recognize and find the JanusGraph specific classes. A good example of one such
-class is 'JanusGraphFactory' that is used from the Console to create a new Janus
-Graph instance.
+class is 'JanusGraphFactory' that is used from the Console to create a new JanusGraph
+instance.
 
 NOTE: When working with JanusGraph you must use the version of the Gremlin Console
 that is packaged as part of the JanusGraph download.
 
 As mentioned above, JanusGraph is not a stand alone service, it is a set of Java
 classes that still need to be invoked by a calling process. The Gremlin Console can
-play that role. After you have unzipped JanusGraph you will find the gremlin.sh and
-gremlin.bat scripts in the bin directory under the JanusGraph parent directory. Once
+play that role. After you have unzipped JanusGraph you will find the `gremlin.sh` and
+`gremlin.bat` scripts in the bin directory under the JanusGraph parent directory. Once
 you have started the Gremlin Console you can, as we will explore in the next few
-sections, tell Janus Graph about the environment you will be operating in in terms of
+sections, tell JanusGraph about the environment you will be operating in in terms of
 back end store and index.
 
 [[janusinmemory]]
@@ -16956,7 +16956,7 @@ Using JanusGraph with the 'inmemory' option
 
 For almost all production use cases, you will be using JanusGraph along with a
 persistent back end store such as Apache Cassandra or Apache HBase. However while
-experimenting with Janus graph it is incredibly useful to be able to get up and
+experimenting with JanusGraph it is incredibly useful to be able to get up and
 running quickly without having to worry about configuring all of the back end storage
 components.  This is made possible by the 'inmemory' option that JanusGraph
 provides. This essentially allows us to use JanusGraph in the same way as we have
@@ -17176,7 +17176,7 @@ otherwise configuring a graph.
 The JanusGraph management API
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Janus graph includes a management API that is made available via the ManagementSystem
+JanusGraph includes a management API that is made available via the ManagementSystem
 class. You can use the management API to perform various important functions that
 include querying metadata about the graph, defining the edge, vertex and property
 schema types and creating and updating the index.
@@ -17253,7 +17253,7 @@ SINGLE
 
 Note that as we have not so far defined a schema for the air-routes graph. if we
 query the dataType for any of the already loaded properties we will get back
-'Object.class' and by default that is what Janus will use in the absence of a schema
+'Object.class' and by default that is what JanusGraph will use in the absence of a schema
 having been defined.
 
 [source,groovy]
@@ -17426,8 +17426,8 @@ Defining a JanusGraph schema for the air-routes graph
 
 You are not required to define the types and labels of your edges, vertices and
 properties ahead of time but it is strongly recommended that you do so. If you do not
-define anything and load the air routes data for example, it will work fine but Janus
-Graph will make assumptions about various things. One thing it will do is default the
+define anything and load the air routes data for example, it will work fine but JanusGraph
+will make assumptions about various things. One thing it will do is default the
 type of all property keys to Java's 'Object.class' which is not ideal if you want the
 graph to help you enforce stricter type checking. Also, without a schema being
 defined, JanusGraph will default the usage constraint or 'multiplicity' setting on
@@ -17742,7 +17742,7 @@ Introducing 'mixed' indexes
 As mentioned above, if the queries that you expect to be writing require more than a
 simple test for equality then you will need to create what is referred to as a 'mixed
 index'. Once you decide to create a mixed index you will also need to configure an
-indexing backend such as Apache Solr or Apache Elastic Search. We will explore the
+indexing backend such as Apache Solr or Elasticsearch. We will explore the
 use of mixed indexes in the "<<extindex>>" section.
 
 [[compositeindex]]
@@ -17785,8 +17785,8 @@ entries in the index pointing to each occurrence of that property key within the
 graph. This enables JanusGraph to directly fetch those elements without having to
 search the entire graph looking for them. With a large graph this can provide a very
 substantial performance improvement. Depending on your indexing needs you may or may
-not need to also use an external indexing technology such as Apache Solr or Apache
-Elastic Search. The subject of using an external index is discussed a bit later.
+not need to also use an external indexing technology such as Apache Solr or
+Elasticsearch. The subject of using an external index is discussed a bit later.
 First of all let's take a look at the types of index that you can create that
 JanusGraph can manage by itself without needing help from an external index.
 
@@ -17957,7 +17957,7 @@ Additional JanusGraph text search predicates
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We have already looked, in the "<<tranges>> section, at the predicates TinkerPop
-defines such as 'neq', 'gte' and 'lte'. Janus graph offers an additional set of
+defines such as 'neq', 'gte' and 'lte'. JanusGraph offers an additional set of
 predicates that can be used when looking for specific patterns within text in a
 graph.
 
@@ -19099,7 +19099,7 @@ Using an external index with JanusGraph
 
 To be written
 
-Apache Elastic Search
+Elasticsearch
 ^^^^^^^^^^^^^^^^^^^^^
 
 To be written
@@ -19207,8 +19207,8 @@ Notice also that the 'janusgraph-cassandra-es.server.properties' file is specifi
 the 'graphs' section. This is a file that is provided as part of the JanusGraph
 download.  This is the file that Gremlin Server will use to connect to our JanusGraph
 backed by Cassandra. Note that the '"-es"' in the properties file name refers to
-Elastic Search. As we did not configure an external index when we setup our
-JanusGraph the lines referring to Elastic Search inside the properties file should be
+Elasticsearch. As we did not configure an external index when we setup our
+JanusGraph the lines referring to Elasticsearch inside the properties file should be
 commented out.
 
 The 'scriptEvaluationTimeout' setting is important. It tells the Gremlin Server how
