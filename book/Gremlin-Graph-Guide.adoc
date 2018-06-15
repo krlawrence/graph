@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v280-preview, June 14, 2018
+v280-preview, June 15, 2018
 //v279 (TP 3.3.3), May 31, 2018
-// Thu Jun 14, 2018 22:07:13 CDT
+// Fri Jun 15, 2018 18:21:18 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -23,7 +23,7 @@ v280-preview, June 14, 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: June 14th 2018
+:draftdate: June 15th 2018
 :tpvercheck: 3.3.3
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -6835,7 +6835,7 @@ Including an index with results - introducing 'withIndex' and 'index'
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If for any reason you wanted an index value included as part of the results from a
-query you can use the Groovy 'withIndex' or 'index' methods as shown below. The
+query you can use the Groovy 'withIndex' or 'indexed' methods as shown below. The
 'withIndex' method adds the index value at the end of a list whereas the 'indexed'
 method adds it at the start. You can provide a starting index value as a parameter.
 If no value is provided the default value for the first index will be zero.
