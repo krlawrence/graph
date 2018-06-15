@@ -3,7 +3,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v280-preview, June 14, 2018
 //v279 (TP 3.3.3), May 31, 2018
-// Thu Jun 14, 2018 22:03:47 CDT
+// Thu Jun 14, 2018 22:07:13 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -652,7 +652,7 @@ Gremlin.version()
 ----
 
 One thing that is not at all obvious or apparent is that the Gremlin console quietly
-imports a large number of Java Classes and Enums on you behalf as it starts up. This
+imports a large number of Java Classes and Enums on your behalf as it starts up. This
 makes writing queries within the console simpler. However, as we shall explore in the
 "<<javastatics>>" section later, once you start writing stand alone programs in Java
 or other languages, you need to actually know what the console did on your behalf. As
