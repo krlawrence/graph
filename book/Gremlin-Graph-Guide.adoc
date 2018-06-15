@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v280-preview, June 10, 2018
+v280-preview, June 14, 2018
 //v279 (TP 3.3.3), May 31, 2018
-// Sun Jun 10, 2018 21:56:14 CDT
+// Thu Jun 14, 2018 22:03:47 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -23,7 +23,7 @@ v280-preview, June 10, 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: June 10th 2018
+:draftdate: June 14th 2018
 :tpvercheck: 3.3.3
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -1628,7 +1628,7 @@ g.V().hasLabel('airport').outE('route').count()
 ----
 
 You could shorten the above a little as follows but this would cause more edges to get
-looked as as we do not first filter out all vertices that are not airports.
+looked at as we do not first filter out all vertices that are not airports.
 
 [source,groovy]
 ----
