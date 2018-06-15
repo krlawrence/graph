@@ -8,6 +8,7 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
 
 - Broke out the discussion of simulating `startsWith` into its own section.
 - Added to the discussion of `cyclicPath`.
+- Expanded and improved the `Calculating vertex degree` section.
 - Miscellaneous minor wording updates and corrections.
 - Sample code and data improvements.
   - Updated air-routes sample data (475 new routes, 2 new airports).
