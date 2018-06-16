@@ -3,7 +3,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v280-preview, June 16, 2018
 //v279 (TP 3.3.3), May 31, 2018
-// Sat Jun 16, 2018 11:00:40 CDT
+// Sat Jun 16, 2018 12:06:14 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -9327,10 +9327,17 @@ Ireland.
 [source,groovy]
 ----
 g.V().has('airport','country','IE').aggregate('ireland').
-      out().where(neq('ireland')).values('country').
+      out().where(without('ireland')).
+      values('country').
       dedup().fold().order(local)
+----
 
-[AE,AT,BE,BG,CA,CH,CY,CZ,DE,DK,ES,ET,FI,FR,GR,HR,HU,IE,IM,IS,IT,JE,LT,LU,LV,MA,MD,MT,NL,NO,PL,PT,QA,RO,SE,SK,TR,UK,US]
+As you can see by looking at the results, the country code for Ireland, 'IE' is not
+present in the list.
+
+[source,groovy]
+----
+[AE,AT,BE,BG,CA,CH,CY,CZ,DE,DK,ES,ET,FI,FR,GR,HR,HU,IM,IS,IT,JE,LT,LU,LV,MA,MD,MT,NL,NO,PL,PT,QA,RO,SE,SK,TR,UK,US]
 ----
 
 While 'aggregate' and 'store' on the surface appear identical, they actually behave
