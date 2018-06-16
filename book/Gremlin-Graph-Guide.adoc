@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v280-preview, June 15, 2018
+v280-preview, June 16, 2018
 //v279 (TP 3.3.3), May 31, 2018
-// Fri Jun 15, 2018 19:07:07 CDT
+// Sat Jun 16, 2018 11:00:40 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -23,7 +23,7 @@ v280-preview, June 15, 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: June 15th 2018
+:draftdate: June 16th 2018
 :tpvercheck: 3.3.3
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -9210,7 +9210,7 @@ g.V().hasLabel('airport').limit(40).groupCount().by('region')
 [US-FL:5,PR-U-A:1,US-NV:1,US-MN:1,US-HI:1,US-IL:1,US-TX:6,US-AK:1,US-WA:1,US-VA:1,US-NY:4,US-CO:1,US-NC:1,US-LA:1,US-MD:1,US-IA:1,US-MA:1,US-CA:6,US-DC:1,US-UT:1,US-AZ:1,US-GA:1,US-TN:1]
 ----
 
-Likewise, when we use the fold step a map is generated. We can use the 'order' step
+Likewise, when we use the fold step a list is generated. We can use the 'order' step
 with a 'local' scope to order the contents of the list.
 
 [source,groovy]
