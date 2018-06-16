@@ -9332,7 +9332,7 @@ g.V().has('airport','country','IE').aggregate('ireland').
       dedup().fold().order(local)
 ----
 
-As you can see by looking at the results, the country code for Ireland, 'IE' is not
+As you can see by looking at the results, the country code for Ireland, 'IE', is not
 present in the list.
 
 [source,groovy]
