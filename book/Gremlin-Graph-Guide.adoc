@@ -3,7 +3,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v280-preview, June 15, 2018
 //v279 (TP 3.3.3), May 31, 2018
-// Fri Jun 15, 2018 18:57:02 CDT
+// Fri Jun 15, 2018 19:07:07 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -9211,7 +9211,7 @@ g.V().hasLabel('airport').limit(40).groupCount().by('region')
 ----
 
 Likewise, when we use the fold step a map is generated. We can use the 'order' step
-with a 'local' scope to order the contents of the map.
+with a 'local' scope to order the contents of the list.
 
 [source,groovy]
 ----
