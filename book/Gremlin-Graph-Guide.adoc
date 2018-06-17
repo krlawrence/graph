@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v280-preview, June 16, 2018
+v280-preview, June 17, 2018
 //v279 (TP 3.3.3), May 31, 2018
-// Sat Jun 16, 2018 12:06:14 CDT
+// Sun Jun 17, 2018 11:41:20 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -23,7 +23,7 @@ v280-preview, June 16, 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: June 16th 2018
+:draftdate: June 17th 2018
 :tpvercheck: 3.3.3
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -1910,16 +1910,18 @@ g.V().has('code','LHR').out('route').has('country','US').values('code')
 What vertices and edges did I visit? - Introducing 'path'
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-A Gremlin method (often called a step) that you will see used a lot in this
-book is 'path'. After you have done some graph walking using a query you
-can use 'path' to get a summary back of where you went. Here is a simple
-example of 'path' being used. Throughout the book you will see numerous
-examples of 'path' being used including in conjunction with 'by' to specify
-how the path should be formatted. This particular query will return the vertices
-and outgoing edges starting at the LCY airport vertex. You can read this query
-like this: "Start at the LCY vertex, find all outgoing edges and also find all
-of the vertices that are on the other ends of those edges". The 'inV' step gives us
-the vertex at the other end of the outgoing edge.
+A Gremlin method (often called a step) that you will see used a lot in this book is
+'path'. After you have done some graph walking using a query you can use 'path' to
+get a summary back of where you went. A simple example of a 'path' step being used is
+shown below. Throughout the book you will see numerous examples of 'path' being used
+including in conjunction with one or more 'by' steps to specify how the path result
+should be formatted. 
+
+This particular query will return the vertices and outgoing edges starting at the
+London City (LCY) airport vertex. You can read this query like this: "Start at the
+LCY vertex, find all outgoing edges and also find all of the vertices that are on the
+other ends of those edges". The 'inV' step gives us the vertex at the other end of
+the outgoing edge.
 
 [source,groovy]
 ----
@@ -1936,18 +1938,19 @@ edge with an ID of 13208.
 [v[88],e[13208][88-route->77],v[77]]
 ----
 
-While this is useful, we might want to return something more human readable
-such as the IATA codes for each airport and perhaps the distance property from
-the edge that tells us how far apart the airports are. We could add some 'by'
-modulators to our query to do this. Take a look at the modified query and an
-example of the results that it will now return. The 'by' modulators are
-processed in a round robin fashion. So even though there are three values we
-want to have formatted, we only need to specify two 'by' modulators as both
-the first and third values are the same. If all three were different, say for
-example that the third value was a different property like a city name then we
-would have to provide an explicit 'by' modulator for it. If this is not fully
-clear yet don't panic. Both 'path' and 'by' are used a lot throughout this
-book.
+While this result is useful, we might want to return something more human readable
+such as the IATA codes for each airport and perhaps the distance property from the
+edge that tells us how far apart the airports are. We could add some 'by' modulators
+to our query to do this. The Apache TinkerPop documentation uses the phrase
+'modulator' to describe steps that are not really independent steps but instead alter
+the behavior of the steps that they are associated with.
+
+TIP: A 'modulator' is a step that influences the behavior of the step that it is
+associated with.  Examples of such modulator steps are 'by' and 'as'.
+
+Take a look at the modified form of the query shown below and an example of the
+results that it will now return.  If this is not fully clear yet don't panic. Both
+'path' and 'by' are used a lot throughout this book.
 
 [source,groovy]
 ----
@@ -1963,10 +1966,22 @@ that look like the following line.
 [LCY,468,GVA]
 ----
 
-Note that the example above is equivalent to this longer form of the same query. The
-'by' modulator steps that follow a 'path' are applied in a 'round robin' fashion. So
-if there are not enough specified for the number of steps in the path, it just loops
-back around to the first 'by' step and so on.
+The 'by' modulator steps are processed in a round robin fashion. If if there are not
+enough modulators specified for the total number of elements in the path, Gremlin
+just loops back around to the first 'by' step and so on.  So even though there were
+three elements in the path that we wanted to have formatted, we only needed to
+specify two 'by' modulators. This is because the first and third elements in the path
+are of the same type, namely airport vertices, and we wanted to use the same property
+name, 'code',  in each of those cases. If we instead wanted to reference a different
+property name for each element of the path result, we would need to specify three
+explicit 'by' modulator steps.  This would be required if, for example, we wanted to
+reference the 'city' property of the third element in the path rather than its
+'code'. 
+
+TIP: The 'by' modulator steps are processed in a round robin fashion in cases where
+there are more results to apply them to that 'by' modulators specified. 
+
+The example above is equivalent to this longer form of the same query.  
 
 [source,groovy]
 ----
@@ -1974,19 +1989,34 @@ g.V().has('airport','code','LCY').outE().inV().
       path().by('code').by('dist').by('code')
 ----
 
-Sometimes it is necessary to use a 'by' modulator that has no parameter as shown
-below. This is because the item in the path is not an element containing multiple
-values but rather a single value, in this case, an integer.
+The example below shows a case where three different 'by' modulators are used. This
+time the third 'by' modulator step references the 'city' property rather than the
+airport 'code'. As you can see from the sample output, this time the city name
+'Geneva' appears rather than the airport code 'GVA'.
 
 [source,groovy]
 ----
-g.V().has('airport','code','LCY').out().limit(5).values('runways').
+g.V().has('airport','code','LCY').outE().inV().
+      path().by('code').by('dist').by('city')
+
+
+[LCY,468,Geneva]
+----
+
+Sometimes it is necessary to use a 'by' modulator that has no parameter as shown
+below. This is because the element in the path is not a vertex or edge containing multiple
+properties but rather a single value, in this case, an integer.
+
+[source,groovy]
+----
+g.V().has('airport','code','LCY').out().limit(5).
+      values('runways').
       path().by('code').by('code').by()
 ----
 
 The results show the codes for the airports we visited along with a number
 representing the number of runways the second airport has.
-
+      
 [source,groovy]
 ----
 [LCY,AGP,2]
@@ -1996,10 +2026,17 @@ representing the number of runways the second airport has.
 [LCY,BHD,1]
 ----
 
-It is also possible to use a traversal inside of a 'by' modulator. This allows us to
-do things like combine multiple values together as part of a path result. The example
-below finds five routes that start in Austin and creates a path result containing the
-airport code and city name for both the source and destination airports.
+It is also possible to use a traversal inside of a 'by' modulator. Such traversals
+are known as '"anonymous traversals"' as they do not include a beginning 'V' or 'E'
+step.
+
+NOTE: Traversals that do not start with a 'V' or 'E' step are referred to as
+'"anonymous traversals"'.
+
+This capability allows us to do things like combine multiple values together as part
+of a path result. The example below finds five routes that start in Austin and
+creates a path result containing the airport code and city name for both the source
+and destination airports.
 
 [source,groovy]
 ----
@@ -20988,4 +21025,4 @@ http://docs.janusgraph.org/latest/javadoc.html
 .Public mailing list for JanusGraph users
 https://groups.google.com/forum/#!forum/janusgraph-users
 
-// vim: set tw=85 cc=+1 wrap spell:
+ne/ vim: set tw=85 cc=+1 wrap spell:

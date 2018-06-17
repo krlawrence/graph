@@ -8,6 +8,8 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
 
 - Broke out the discussion of simulating `startsWith` into its own section.
 - Added to the discussion of `cyclicPath`.
+- Expanded the section that introduces the `path` step.
+- Added text to better introduce the concept of a `modulator`.
 - Expanded and improved the `Calculating vertex degree` section.
 - Miscellaneous minor wording updates and corrections.
 - Sample code and data improvements.
