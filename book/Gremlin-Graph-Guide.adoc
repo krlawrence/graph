@@ -3,7 +3,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v280-preview, June 17, 2018
 //v279 (TP 3.3.3), May 31, 2018
-// Sun Jun 17, 2018 11:41:20 CDT
+// Sun Jun 17, 2018 13:03:20 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -1935,7 +1935,7 @@ edge with an ID of 13208.
 
 [source,groovy]
 ----
-[v[88],e[13208][88-route->77],v[77]]
+[v[88],e[13698][88-route->77],v[77]]
 ----
 
 While this result is useful, we might want to return something more human readable
@@ -1963,7 +1963,7 @@ that look like the following line.
 
 [source,groovy]
 ----
-[LCY,468,GVA]
+[LCY,456,GVA]
 ----
 
 The 'by' modulator steps are processed in a round robin fashion. If if there are not
@@ -2000,7 +2000,7 @@ g.V().has('airport','code','LCY').outE().inV().
       path().by('code').by('dist').by('city')
 
 
-[LCY,468,Geneva]
+[LCY,456,Geneva]
 ----
 
 Sometimes it is necessary to use a 'by' modulator that has no parameter as shown
