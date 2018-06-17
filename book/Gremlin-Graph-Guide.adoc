@@ -2036,7 +2036,8 @@ NOTE: Traversals that do not start with a 'V' or 'E' step are referred to as
 This capability allows us to do things like combine multiple values together as part
 of a path result. The example below finds five routes that start in Austin and
 creates a path result containing the airport code and city name for both the source
-and destination airports.
+and destination airports. In this case, the anonymous traversal contained within the
+'by' modulator is applied to each element in the path.
 
 [source,groovy]
 ----
