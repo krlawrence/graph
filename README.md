@@ -1,7 +1,7 @@
 # Practical Gremlin: An Apache TinkerPop Tutorial
 
 
-![map](https://github.com/krlawrence/graph/raw/master/images/map-snip2.PNG?raw=true, "graph picture")
+![map](https://github.com/krlawrence/graph/raw/master/images/GremlinEaselNoText.png?raw=true, "graph picture")
 
 ## Welcome!
 
