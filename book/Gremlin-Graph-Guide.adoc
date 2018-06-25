@@ -145,9 +145,9 @@ What is this book about?
 This book introduces the Apache TinkerPop 3 'Gremlin' graph query and traversal
 language via real examples featuring real-world graph data. That data along with
 sample code and example applications is available for download from the GitHub
-project as well as many other items. The graph, 'air-routes.graphml', is a model of
+project as well as many other items. The graph, 'air-routes', is a model of
 the world airline route network between 3,373 airports including 43,400 routes. The
-examples presented will work unmodified with the air-routes.graphml file loaded into
+examples presented will work unmodified with the `air-routes.graphml` file loaded into
 the Gremlin console running with a TinkerGraph. How to set that environment up is
 covered in the <<gremlininstall>> section below.
 
@@ -178,13 +178,13 @@ Chapter 1 - INTRODUCTION::
   programs and other additional materials referenced by the book.
 Chapter 2 - GETTING STARTED::
 - In Chapter two I introduce several of the components of Apache TinkerPop  and 
-  also introduce the air-routes.graphml file that will be used as the graph the
+  also introduce the `air-routes.graphml` file that will be used as the graph the
   majority of examples shown in this book are based on.
 Chapter 3 - WRITING GREMLIN QUERIES::
 - In Chapter three things start to get a lot more interesting! I start discussing 
   how to use the Gremlin graph traversal and
-  query language to interrogate the air-routes graph. I begin by comparing how we
-  could have built the air-routes graph using a more traditional relational database
+  query language to interrogate the 'air-routes' graph. I begin by comparing how we
+  could have built the 'air-routes' graph using a more traditional relational database
   and then look at how SQL and Gremlin are both similar in some ways and very
   different in others. For the rest of the Chapter, I introduce several of
   the key Gremlin methods, or as they are often called, '"steps"'. I
@@ -221,7 +221,7 @@ Introducing the book sources, sample programs and data
 
 All work related to this project is being done in the open at GitHub. A list of where
 to find the key components is provided below. The examples in this book make use of a
-sample graph called 'air-routes.graphml' which contains a graph based on the world
+sample graph called 'air-routes' which contains a graph based on the world
 airline route network between over 3,370 airports.  The sample graph data, quite a
 bit of sample code and some larger demo applications can all be found at the same
 GitHub location that hosts the book manuscript.  You will also find releases of the
@@ -231,7 +231,7 @@ well as many examples that can be run from the Gremlin Console.  There are some
 differences between using Gremlin from a stand alone program and from the Gremlin
 Console. The sample programs demonstrate several of these differences.  The sample
 applications area contains a full example HTML and JavaScript application that lets
-you explore the air-routes graph visually. The home page for the GitHub project
+you explore the 'air-routes' graph visually. The home page for the GitHub project
 includes a README.md file to help you navigate the site. Below are some links to
 various resources included with this book.
 
@@ -267,7 +267,7 @@ Official book releases in multiple formats::
   have the wrong text. Other than that they should work although you may need to 
   change the font size you use on your device to make things easier to read.
 - https://github.com/krlawrence/graph/releases
-Sample data (air-routes.graphml)::
+Sample data (`air-routes.graphml`)::
 - https://github.com/krlawrence/graph/tree/master/sample-data
 Sample code::
 - https://github.com/krlawrence/graph/tree/master/sample-code
@@ -837,10 +837,10 @@ Introducing the air-routes graph
 Along with this book I have provided what is, in big data terms,a very small, but
 nonetheless real-world graph that is written in GraphML, a standard XML format for
 describing graphs that can be used to move graphs between applications. The graph,
-'air-routes.graphml' is a model I built of the world airline route network that is
+'air-routes' is a model I built of the world airline route network that is
 fairly accurate. 
 
-NOTE: The 'air-routes.graphml' file can be downloded from the 'sample-data' folder
+NOTE: The `air-routes.graphml` file can be downloded from the `sample-data` folder
 located in the GitHub repository at the following URL:
 https://github.com/krlawrence/graph/tree/master/sample-data
 
@@ -860,7 +860,7 @@ much deeper look at different ways to work with graph data stored in text format
 files including importing and exporting graph data in the "<<serialize>>" section at
 the end of this book.
 
-The air-routes graph contains several vertex types that are specified using labels.
+The 'air-routes' graph contains several vertex types that are specified using labels.
 The most common ones being 'airport' and 'country'. There are also vertices for each
 of the seven continents ('continent') and a single 'version' vertex that I provided
 as a way to test which version of the graph you are using.
@@ -929,18 +929,18 @@ this is because TinkerPop allows us to associate a list of values with any verte
 property. We will explore ways that you can take advantage of this capability in the
 "<<listprop>>" section.
 
-The full details of all the features contained in the air-routes graph can be learned
-by reading the comments at the start of the 'air-routes.graphml' file or reading the
-README.txt file.
+The full details of all the features contained in the 'air-routes' graph can be learned
+by reading the comments at the start of the `air-routes.graphml` file or reading the
+`README.txt` file.
 
 The graph currently contains a total of 3,612 vertices and 49,894 edges. Of these
 3,367 vertices are airports, and 43,160 of the edges represent routes. While in big
 data terms this is really a tiny graph, it is plenty big enough for us to build up
 and experiment with some very interesting Gremlin queries.
 
-Lastly, here is are some statistics and facts about the air-routes graph. If you want
-to see a lot more statistics check the README.txt file that is included with the
-air-routes graph.
+Lastly, here is are some statistics and facts about the 'air-routes' graph. If you want
+to see a lot more statistics check the `README.txt` file that is included with the
+'air-routes' graph.
 
 ----
 Air Routes Graph (v0.77, 2017-Oct-06) contains:
@@ -1105,11 +1105,11 @@ Loading the air-routes graph using the Gremlin console
 Here is some code you can load the air routes graph using the gremlin console by
 putting it into a file and using ':load' to load and run it or by entering each line
 into the console manually.  These commands will setup the console environment, create
-a TinkerGraph graph and load the 'air-routes.graphml' file into it. Some extra
+a TinkerGraph graph and load the `air-routes.graphml` file into it. Some extra
 console features are also enabled. 
 
-NOTE: There is a file called 'load-air-routes-graph.groovy', that contains the
-commands shown below, available in the '/sample-data' directory.
+NOTE: There is a file called `load-air-routes-graph.groovy`, that contains the
+commands shown below, available in the `/sample-data` directory.
 https://github.com/krlawrence/graph/tree/master/sample-data
 
 These commands create an in-memory TinkerGraph which will use LONG values for the
@@ -1124,7 +1124,7 @@ TIP: You can use the 'max-iteration' setting to control how much output the Grem
 Console displays.
 
 If you are using a different graph environment and GraphML import is supported, you
-can still load the 'air-routes.graphml' file by following the instructions specific
+can still load the `air-routes.graphml` file by following the instructions specific
 to that system.  Once loaded, the queries below should still work either unchanged or
 with minor modifications.
 
@@ -1145,7 +1145,7 @@ NOTE: Setting the ID manager as shown above is important. If you do not do this,
 default, when using TinkerGraph, ID values will have to be specified as strings such
 as '"3"' rather than just the numeral '3'.
 
-If you download the 'load-air-routes-graph.groovy' file, once the console is up and
+If you download the `load-air-routes-graph.groovy` file, once the console is up and
 running you can load that file by entering the command below. Doing this will save
 you a fair bit of time as each time you restart the console you can just reload your
 configuration file and the environment will be configured and the graph loaded and
@@ -1164,7 +1164,7 @@ Once you have the Gremlin Console up and running and have the graph loaded, if
 you feel like it you can cut and paste queries from this book directly into
 the console to see them run.
 
-Once the air-routes graph is loaded you can enter the following command and you will
+Once the 'air-routes' graph is loaded you can enter the following command and you will
 get back information about the graph. In the case of a TinkerGraph you will get back
 a useful message telling you how many vertices and edges the graph contains. Note that
 the contents of this message will vary from one graph system to another and should
@@ -1239,7 +1239,7 @@ way to create an index should you want to.
 WRITING GREMLIN QUERIES
 -----------------------
 
-Now that you hopefully  have the air-routes graph loaded it's time to start writing
+Now that you hopefully  have the 'air-routes' graph loaded it's time to start writing
 some queries!  
 
 In this section we will begin to look at the Gremlin query language. We will start
@@ -1295,7 +1295,7 @@ distribution of airports in each country as follows.
 select country,count(country) from airports group by country;
 ----
 
-We can do this in Gremlin using the air-routes graph with a query like the one below
+We can do this in Gremlin using the 'air-routes' graph with a query like the one below
 (we will explain what all of this means later on in the book). 
 
 
@@ -1315,7 +1315,7 @@ core reason why, for many use cases, Graph databases are a very good choice and 
 be more performant than relational databases.                           
 
 Graph databases are usually a good choice for storing and modelling networks.  The
-air-routes graph is an example of a network graph a social network is of course
+'air-routes' graph is an example of a network graph a social network is of course
 another good example. Networks can be modelled using relational databases too but as
 you explore the network and ask questions like "who are my friends' friends?" in a
 social network or "where can I fly to from here with a maximum of two stops?" things
@@ -1360,7 +1360,7 @@ select a1.code,r1.dest,r2.dest,r3.dest from airports a1
   where a1.code='AUS' and r3.dest='AGR';   
 ----
 
-Using our air-routes graph database the query can be expressed quite simply as
+Using our 'air-routes' graph database the query can be expressed quite simply as
 follows:
 
 [source,groovy]
@@ -1454,8 +1454,8 @@ different types of Gremlin query using an interesting and real-world graph.
 NOTE: The latest TinkerPop 3 documentation is always available at this URL:
 http://tinkerpop.apache.org/docs/current/reference/
 
-Below are some simple queries against the air-routes graph to get us started. It is
-assumed that the air-routes graph has been loaded already per the instructions above.
+Below are some simple queries against the 'air-routes' graph to get us started. It is
+assumed that the 'air-routes' graph has been loaded already per the instructions above.
 The query below will return any vertices (nodes) that have the 'airport' label.
 
 [source,groovy]
@@ -1602,7 +1602,7 @@ Counting things
 A common need when working with graphs is to be able to count how "many of something"
 there are in the graph. We will look in the next section at other ways to count
 groups of things but first of all let's look at some examples of using the 'count'
-step to count how many of various things there are in our air-routes graph. First of
+step to count how many of various things there are in our 'air-routes' graph. First of
 all lets find out how many vertices in the graph represent airports.
 
 [source,groovy]
@@ -3277,7 +3277,7 @@ Working with labels
 ~~~~~~~~~~~~~~~~~~~
 
 It's a good idea when designing a graph to give the vertices and edges meaningful
-labels. You can use these to help refine searches. For example in the air-routes
+labels. You can use these to help refine searches. For example in the 'air-routes'
 graph, every airport vertex is labelled 'airport' and every country vertex, not
 surprisingly, is labelled 'country'. Similarly, edges that represent a flight route
 are labelled 'route'. You can use labels in many ways. We already saw the hasLabel()
@@ -4143,9 +4143,9 @@ approach appears to be a lot more evenly distributed across all of the possible 
 3028
 ----
 
-Note that this approach only works unmodified with the air-routes graph loaded into a
+Note that this approach only works unmodified with the 'air-routes' graph loaded into a
 TinkerGraph. This is because we know that the TinkerGraph implementation honors user
-provided IDs and that in the air-routes graph, airport IDs begin at one and are
+provided IDs and that in the 'air-routes' graph, airport IDs begin at one and are
 sequential with no gaps. However, you could easily modify this approach to work with
 other graphs without relying on knowing that the index values are sequential. For
 example you could extract all of the IDs into a list and then select one randomly
@@ -4300,7 +4300,7 @@ we are interested in.
 g.V().hasLabel('airport').order().by(values('longest'),decr).limit(1).valueMap()
 ----
 
-In the case of the air-routes graph there is only one airport with the longest
+In the case of the 'air-routes' graph there is only one airport with the longest
 runway. The runway at the Chinese city of Bangda is 18,045 feet long. The reason the
 runway is so long is due to the altitude of the airport which is located 14,219 feet
 above sea level. Aircraft need a lot more runway to operate safely at that altitude!
@@ -5133,7 +5133,7 @@ g.V().hasLabel('airport').
 
 ----
 
-There are, of course a lot of places in the air-routes graph where this pattern can
+There are, of course a lot of places in the 'air-routes' graph where this pattern can
 be found. Here are just a few examples of the results you might get from running the
 query.
 
@@ -5737,10 +5737,10 @@ not any, any vertices on any incoming edges labelled 'contains' will be returned
 g.V(3).coalesce(out('fly'),__.in('contains')).valueMap()
 ----
 
-As there are not any edges labelled 'fly' in the air-routes graph, the second
+As there are not any edges labelled 'fly' in the 'air-routes' graph, the second
 traversal will be the one whose results are returned.
 
-If we were to run the above query using the air-routes graph, this is what would be
+If we were to run the above query using the 'air-routes' graph, this is what would be
 returned.
 
 [source,groovy]
@@ -7396,7 +7396,7 @@ to handle.
 
 Consider this query description. "Find all flight routes that exist between airports
 anywhere in the continent of Africa and the United States". When putting the
-air-routes graph together I decided to model continents as their own vertices. So each
+'air-routes' graph together I decided to model continents as their own vertices. So each
 of the seven continents has a vertex. Each vertex is connected to airports within that
 continent by an edge labeled "contains".
 
@@ -7434,7 +7434,7 @@ g.V().hasLabel('airport').as('a').in('contains').has('code','AF').
      .select('a').out().has('country','US').as('b').select('a','b').by('code')
 ----
 
-Now for a fairly simple graph, like air-routes, this discussion of efficiency is
+Now for a fairly simple graph, like 'air-routes', this discussion of efficiency is
 perhaps not such a big deal, but as you start to work with large graphs,
 getting the data model right can be the difference between good and bad query
 response times. If the data model is bad you won't always be able to work
@@ -7504,10 +7504,10 @@ graph traversals. This is because it is likely that any graph traversal that goe
 such a vertex will have to look at most if not all of the edges connected to that vertex
 as part of a traversal.
 
-The air-routes graph does not really have anything that could be classed as a
+The 'air-routes' graph does not really have anything that could be classed as a
 'supernode'. The vertex with the most edges is the continent vertex for North America
 that has approximately 980 edges. The busiest airports are IST and AMS and they both
-have just over 530 total edges. So in the case of the air-routes graph we do not have
+have just over 530 total edges. So in the case of the 'air-routes' graph we do not have
 to worry too much.
 
 If we were building a graph of a social network that included famous people we might
@@ -7819,7 +7819,7 @@ Adding an airport (vertex) and a route (edge)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The following code uses the 'graph' object that we created when we first loaded the
-air-routes graph to create a new airport vertex (node) and then adds a route (edge)
+'air-routes' graph to create a new airport vertex (node) and then adds a route (edge)
 from it to the existing DFW vertex. We can specify the label name ('airport') and as
 many properties as we wish to while creating the vertex.  In this case we just provide
 three. We can additionally add and delete vertex properties after a vertex has been
@@ -8268,7 +8268,7 @@ Deleting a property
 ^^^^^^^^^^^^^^^^^^^
 
 Lastly, we can use 'drop' to delete a specific property value from a specific vertex.
-Let's start by querying the properties defined by the air-routes graph for the San
+Let's start by querying the properties defined by the 'air-routes' graph for the San
 Francisco airport.
 
 [source,groovy]
@@ -8440,7 +8440,7 @@ vp[desc->Dallas/Fort Worth In]
 We have already seen how each property on a vertex or edge is represented as a key
 and value pair. If we wanted to retrieve a list of all of the property keys
 associated with a given vertex we could write a query like the one below that finds all
-of the property keys associated with the DFW vertex in the air-routes graph.
+of the property keys associated with the DFW vertex in the 'air-routes' graph.
 
 [source,groovy]
 ----
@@ -11041,7 +11041,7 @@ key/value pair that can be associated with the graph itself. Graph variables are
 considered part of the graph that you would process with Gremlin traversals but are
 in essence a way to associate metadata with a graph. You can set and retrieve graph
 variables using the 'variables' method of the graph object. Let's assume I wanted to
-add some metadata that allowed me to record who the maintainer of the air-routes
+add some metadata that allowed me to record who the maintainer of the 'air-routes'
 graph is and when it was last updated. We could do that as follows.
 
 [source,groovy]
@@ -11150,7 +11150,7 @@ TIP: You can find all of the sample data in the book's GitHub repository.
 https://github.com/krlawrence/graph/tree/master/sample-data
 
 Let's start with a simple example. One of the sample data sets shipped with this book
-is a small version of the main 'air-routes' graph called 'air-routes-small.graphml'.
+is a small version of the main ''air-routes'' graph called `air-routes-small.graphml`.
 It contains routes between just the first 46 airports in the full graph. We can quite
 easily write a query to generate the subgraph representing the flights between those
 airports by extracting the edges and vertices from the full graph. Take a look at the
@@ -11352,7 +11352,7 @@ considered lossee.
 
 Saving a graph to a GraphML file can be done using the following Gremlin expression.
 You might want to try it on one of your graphs and look at the output generated. You
-can also take a look at the air-routes.graphml file distribued with this book if
+can also take a look at the `air-routes.graphml` file distribued with this book if
 you want to look at a well laid out (for human readability) GraphMl file. Bear in
 mind that by default, TinkerPop will save your graph in a way that is not easily
 human readable without using a code beautifier first. Most modern text editors can
@@ -11437,7 +11437,7 @@ section.
 Loading a graph stored as GraphML (XML) or GraphSON (JSON)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In section 2 we saw how to load the 'air-routes.graphml' file. In case you skipped
+In section 2 we saw how to load the `air-routes.graphml` file. In case you skipped
 that part lets do a quick recap on loading GraphML files and also look at loading
 a GraphSON JSON format file.
 
@@ -11626,7 +11626,7 @@ use to time how long your queries are taking to run. A second class called
 ProfileStep provides a way to get a more fine grained analysis of where the time is
 spent during execution of a query. In this section I am going to provide a few
 examples of how to use the methods provided to analyze the execution time of a few
-queries. I ran the tests on a laptop using the Gremlin Console with the air-routes
+queries. I ran the tests on a laptop using the Gremlin Console with the 'air-routes'
 data loaded into an in-memory TinkerGraph.
 
 [[clock]]
@@ -12065,7 +12065,7 @@ ground up with distributed systems in mind, it is possible to use a stand a alon
 TinkerGraph to experiment with a few of the capabilities.
 
 The example below only assumes that you have a TinkerGraph running locally inside the
-Gremlin Console with the air-routes data loaded. You will notice a few differences
+Gremlin Console with the 'air-routes' data loaded. You will notice a few differences
 from the examples we have seen so far in this book. First of all, when we create our
 graph traversal source object, we add a call to 'withComputer' to indicate that we
 plan to be doing some things that require the Graph Computer capabilities. Having
@@ -12213,7 +12213,7 @@ reading the official TinkerPop reference documentation.
 MISCELLANEOUS QUERIES AND THEIR RESULTS
 ---------------------------------------
 
-In this section you will find more Gremlin queries that operate on the air-routes
+In this section you will find more Gremlin queries that operate on the 'air-routes'
 graph.  All of these queries build upon the topics  covered in the prior sections.
 In this section I have included lots of examples of the output returned by running
 queries. In cases where the output is rather lengthy I have either truncated it or
@@ -12590,7 +12590,7 @@ g.V().hasLabel('airport').
 [DE:32, CN:179, NL:5, US:566]
 ----
 
-Because the air-routes graph also has country specific vertices, we could chose to
+Because the 'air-routes' graph also has country specific vertices, we could chose to
 write the previous queries a different way. We could start by finding country
 vertices and then see how many airport vertices each one is connected to. In this
 instance, because a 'group' step is being used, countries with no airports will be
@@ -12930,7 +12930,7 @@ g.V().has('continent','code','EU').
 ----
 
 So we now know that there are 345 different routes. Remember though that the
-air-routes graph does not track the number of airlines that operate any of these
+'air-routes' graph does not track the number of airlines that operate any of these
 routes. The graph just stores the data that at least one airline operates each of
 these unique route pairs. Let's dig a bit deeper into the 345 and find out how many
 US airports have flights that arrive from Europe.
@@ -14655,7 +14655,7 @@ g.V().has('code','AUS').
 Using latitude, longitude and geographical region in queries
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The air-routes graph stores the geographic coordinates (latitude and longitude) of
+The 'air-routes' graph stores the geographic coordinates (latitude and longitude) of
 each airport as floating point numbers.  Some graph systems such as JanusGraph have
 some useful geographic coordinate and shape support built in but TinkerGraph does
 not. Moreover, GraphML does not offer any specific geospatial support so to keeps
@@ -15415,12 +15415,12 @@ Finding unwanted parallel edges
 In general terms there are many reasons in a graph that there could be more than one edge
 between the same two vertices in the same direction.  Most property graph systems allow this
 and many data models take advantage of this capability. We call these parallel edges.
-However, in the air-routes graph we only model the existence of a route using a single
+However, in the 'air-routes' graph we only model the existence of a route using a single
 edge from airport A to airport B. It is considered an error for there to be more than one
 edge between the same two airports in the same direction. Note this does not include an
 edge going the other way (from B to A).
 
-During development of the air-routes graph, when I was still cleaning up the data, I
+During development of the 'air-routes' graph, when I was still cleaning up the data, I
 frequently ran into problems with parallel edges getting included in the graph by mistake.
 I realized I could use Gremlin to help me detect these error cases.
 
@@ -15798,7 +15798,7 @@ As briefly discussed already, when building a commercial application, you may
 need capabilities such as ACID transactions and would not use TinkerGraph as your
 graph database in those cases. There are however, places where TinkerGraph may be
 just what you need. One example might be doing analysis on a static graph that can
-fit into memory on your laptop. The air-routes graph is a good example of such a
+fit into memory on your laptop. The 'air-routes' graph is a good example of such a
 graph. As a first step towards writing stand alone applications that use different
 graph database back ends, lets look at a few examples of how you can create a Java
 application that uses Gremlin and TinkerGraph.
@@ -17028,7 +17028,7 @@ that is packaged as part of the JanusGraph download.
 As mentioned above, JanusGraph is not a stand alone service, it is a set of Java
 classes that still need to be invoked by a calling process. The Gremlin Console can
 play that role. After you have unzipped JanusGraph you will find the `gremlin.sh` and
-`gremlin.bat` scripts in the bin directory under the JanusGraph parent directory. Once
+`gremlin.bat` scripts in the `bin` directory under the JanusGraph parent directory. Once
 you have started the Gremlin Console you can, as we will explore in the next few
 sections, tell JanusGraph about the environment you will be operating in in terms of
 back end store and index.
@@ -17273,10 +17273,10 @@ mgmt = graph.openManagement()
 ----
 
 In the following sections we will show how to use the management API to create both a
-schema and an index for the air-routes graph and then load it. Before we do that we
+schema and an index for the 'air-routes' graph and then load it. Before we do that we
 need should take a few minutes to introduce the JanusGraph Management API. For the
 time being, assume we have created an in memory JanusGraph instance and loaded the
-air-routes graph into it but have not defined an index or a schema. In this
+'air-routes' graph into it but have not defined an index or a schema. In this
 situation, JanusGraph will give us the best defaults it can as it loads the graph
 for schema types.
 
@@ -17334,7 +17334,7 @@ mgmt.getPropertyKey('code').cardinality()
 SINGLE
 ----
 
-Note that as we have not so far defined a schema for the air-routes graph. if we
+Note that as we have not so far defined a schema for the 'air-routes' graph. if we
 query the dataType for any of the already loaded properties we will get back
 'Object.class' and by default that is what JanusGraph will use in the absence of a schema
 having been defined.
@@ -17528,9 +17528,9 @@ need to add additional property types or labels you are allowed to do that.
 
 Using the management API you can define the labels that will be used by vertices and
 edges. These values must be unique across the graph. You can also define the type and
-cardinality (SINGLE, LIST or SET) of each property key and for edges you can specify
-the allowed usage of edges for any given label (MULTI, MANY2ONE, ONE2MANY, ONE2ONE or
-SIMPLE). Property key names must also be unique across the graph.
+cardinality ('SINGLE', 'LIST' or 'SET') of each property key and for edges you can specify
+the allowed usage of edges for any given label ('MULTI', 'MANY2ONE', 'ONE2MANY', 'ONE2ONE' or
+'SIMPLE'). Property key names must also be unique across the graph.
 
 Before we can define a schema for our edge labels we need to understand what each
 option allows and decide on the best fit for each of our edge types.
@@ -17539,12 +17539,12 @@ option allows and decide on the best fit for each of our edge types.
 MULTI::
 - This is the default option if no multiplicity has been defined for an edge with
 a given label. This setting permits multiple edges of the same label between any 
-pair of vertices. The air-routes graph uses a multiplicity of MULTI for the
+pair of vertices. The 'air-routes' graph uses a multiplicity of 'MULTI' for the
 'routes' edges between airports. 
   
 SIMPLE::
 - This setting permits at most one edge of a given label between any pair of
-  vertices.  In the air-routes graph this setting is used for the edges between a
+  vertices.  In the 'air-routes' graph this setting is used for the edges between a
   continent and an airport as an airport cannot be in more than one continent. The
   same is used for the edges between airports and countries.
 MANY2ONE::
@@ -17562,7 +17562,7 @@ Defining edge labels and usage
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Let's look at how we can use the JanusGraph Management API to specify the
-multiplicty for the 'route' and 'contains' edges used by the air-routes graph.
+multiplicty for the 'route' and 'contains' edges used by the 'air-routes' graph.
 
 [source,groovy]
 ----
@@ -17596,7 +17596,7 @@ Defining vertex property keys
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Next we need to define the property keys and data types that our vertices will be
-using. The air-routes graph only uses properties that have a cardinality of SINGLE.
+using. The 'air-routes' graph only uses properties that have a cardinality of 'SINGLE'.
 
 [source,groovy]
 ----
@@ -17676,7 +17676,7 @@ elev    : class java.lang.Integer SINGLE
 Loading air-routes into a JanusGraph instance
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Now that we know how to create a schema and an index for the air-routes graph 
+Now that we know how to create a schema and an index for the 'air-routes' graph 
 we can use the same basic steps to load it into a JanusGraph
 instance that we used with TinkerGraph. Note that after loading the graph from the
 XML file we then call 'commit' to finalize the transaction. 
@@ -17687,18 +17687,18 @@ graph.io(graphml()).readGraph('air-routes.graphml')
 graph.tx().commit()
 ----
 
-Note that had we not defined a schema before loading the air-routes graph that
+Note that had we not defined a schema before loading the 'air-routes' graph that
 JanusGraph would have still created the vertices, edges and properties but using
 default types and settings.  A bit later we will look at creating an index for the
-air-routes graph as well.  It is strongly recommended to create the index as well as
+'air-routes' graph as well.  It is strongly recommended to create the index as well as
 the schema before loading the data but lets examine a few more things before we
 discuss how to do that. 
 
 Unlike TinkerGraph, JanusGraph does not, by default,  guarantee to respect user
 provided vertex and edge ID values. Instead it creates its own ID values as vertices
 and edges are added to the graph. You may have noticed from earlier in the book
-or from the air-routes.graphml file if you happened to look in there, that the ID
-provided for Austin in the GraphML markup is 3. However, having loaded air-routes
+or from the `air-routes.graphml` file if you happened to look in there, that the ID
+provided for Austin in the GraphML markup is 3. However, having loaded 'air-routes'
 into JanusGraph if we query the ID for the Austin vertex we can see that it is no
 longer 3. There is a setting that can be changed to force JanusGraph to honor user
 provided ID values but it is not recommended this be used as it will disable some
@@ -17811,7 +17811,7 @@ A composite index will not help if we want to get more sophisticated and look fo
 partial matches, use predicates other than 'equal to' or use regular expressions in
 our queries. That is where the 'mixed index' comes in to play. So for example, a
 composite index would not help with the following query that looks for airports in
-the air-routes graph with more than five runways.
+the 'air-routes' graph with more than five runways.
 
 [source,groovy]
 ----
@@ -17879,7 +17879,7 @@ JanusGraph documentation strongly recommends that you always make a call to
 other transactions are currently active.
 
 The example below shows how to use the Management API to create a new composite index
-for the airport 'code' property in the air-routes graph.
+for the airport 'code' property in the 'air-routes' graph.
 
 [source,groovy]
 ----
@@ -18030,7 +18030,7 @@ the file by visiting this URL:
 https://github.com/krlawrence/graph/blob/master/sample-code/janus-inmemory.groovy
 
 The script will create an 'inmemory' JanusGraph instance, define the schema, create
-several indexes and load the 'air-routes.graphml' file so that you can try some
+several indexes and load the `air-routes.graphml` file so that you can try some
 queries using the Gremlin Console. You might find that a good way to experiment with
 the concepts that we have covered in this discussion of JanusGraph so far.
 
@@ -18464,7 +18464,7 @@ The JanusGraph GeoSpatial API
 
 Earlier, in the "<<latlonmanual>>" section, I provided a few examples of how we could
 write some queries that took advantage of the fact that the airports in the
-air-routes graph include their latitude and longitude among their properties. When
+'air-routes' graph include their latitude and longitude among their properties. When
 working with JanusGraph there are some additional built in capabilities that we can
 take advantage of.
 
@@ -18503,7 +18503,7 @@ g.V().hasLabel('airport').
 
 Below is the output that you might bet back from running the above query. The query
 can be run as-is from the Gremlin Console connected to a JanusGraph instance
-containing the air-routes graph.
+containing the 'air-routes' graph.
 
 [source,groovy]
 ----
@@ -18886,7 +18886,7 @@ both at the same time! There is a very useful containerized implementation of Ap
 Cassandra available that you can download and get running in a few seconds and use to
 test things with JanusGraph. In this section I will walk you through the steps that I
 use to get a single Cassandra node up and running and use it with JanusGraph to setup
-the air-routes graph. I am going to make the assumption that you have already
+the 'air-routes' graph. I am going to make the assumption that you have already
 downloaded and installed the necessary Docker runtime for your platform. I do most of
 my Docker testing using Linux systems but there are runtimes available for Windows
 and Mac OS as well.  Assuming you have docker installed, Cassandra can be installed
@@ -19022,14 +19022,14 @@ JanusGraph will attempt to connect to Cassandra using the specified protocols. T
 first time you connect to a brand new (empty) Cassandra instance you should first
 define the graph's schema by creating key definitions and create any indexes that you
 need before creating any vertices, edges or properties. If you would like to
-experiment with the air-routes data using Cassandra as the backing store, the script
-called 'janus-cassandra.groovy' from the sample-code folder can be used for this. If
+experiment with the 'air-routes' data using Cassandra as the backing store, the script
+called `janus-cassandra.groovy` from the `sample-code` folder can be used for this. If
 you prefer you can experiment yourself from the console using the JanusGraph
 management API to create keys and indexes and creating a traversal source object
 before adding any vertices and edges.
 
-If you choose run the 'janus-cassandra.groovy' script it will create the keys and
-indexes needed and then load the air-routes graph and also run a few tests to make
+If you choose run the `janus-cassandra.groovy` script it will create the keys and
+indexes needed and then load the 'air-routes' graph and also run a few tests to make
 sure everything is working. Note that you only need to do this setup step once as
 next time the data will have already been loaded and the schema defined.
 
@@ -19085,7 +19085,7 @@ want to start over.
 gremlin> JanusGraphFactory.drop(graph) 
 ----
 
-Having done a 'drop' operation, if you previously loaded the air-routes data using
+Having done a 'drop' operation, if you previously loaded the 'air-routes' data using
 the janus-cassandra.groovy script, you will need to run the script again to get the
 data, indexes and schema back.
 
@@ -19337,7 +19337,7 @@ Gremlin Server or JanusGraph install. We will take a look at the default script 
 moment.
 
 By default both Gremlin Server and JanusGraph include a Groovy script called
-'empty-sample.groovy'. That name is a bit misleading as the file actually does some
+`empty-sample.groovy`. That name is a bit misleading as the file actually does some
 interesting things. For our purposes the most useful thing that the script does is to
 configure and make available to us in the Gremlin Console, the graph traversal
 source, 'g' object that hopefully by now you are very familiar with. This provides
@@ -19349,7 +19349,7 @@ own script entirely. You will find additional example scripts included as part o
 Gremlin Server download. These scripts do things such as create a TinkerGraph
 instance and load some graph data as part of the server startup process. Using this
 technique, we could easily add a line to the script so that when the server starts an
-empty TinkerGraph is created and the air-routes data loaded.
+empty TinkerGraph is created and the 'air-routes' data loaded.
 
 .empty-sample.groovy
 [source,groovy]
@@ -19446,7 +19446,7 @@ gremlin> :remote connect tinkerpop.server conf/remote.yaml
 ----
 
 Now that we are connected to the Gremlin Server we can issue some Gremlin commands.
-Given that the air-routes graph is already loaded into our remote graph we can
+Given that the 'air-routes' graph is already loaded into our remote graph we can
 immediately start to issue some queries. In order to make sure the query goes to the
 remote graph, the query needs to be prefixed with '":>"'.
 
@@ -20513,7 +20513,7 @@ contain all of the vertex data and the other will contain all of the edge data.
 [[csvair]]
 Using two CSV files to represent the air-routes data
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-If we were to store the airport data from the air-routes graph in CSV format we might
+If we were to store the airport data from the 'air-routes' graph in CSV format we might
 do something like the example below. Note that to improve readability I have not
 included every property (or indeed every airport) in this example. Notice how each
 vertex has a unique ID assigned. This is important as when we define the edges we will
@@ -20608,7 +20608,7 @@ G,A,B,C,E,F
 ----
 
 While this is a simple example, it is possible to represent a more complex graph such
-as the air-routes graph in this way. We could build a more complex CSV file where the
+as the 'air-routes' graph in this way. We could build a more complex CSV file where the
 vertex and its properties are listed first, followed by all of the other vertices it
 connects to and the properties for those edges.
 
@@ -20636,7 +20636,7 @@ C,B
 ----
 
 There are many ways you could construct an edge list. By way of another simple
-example we could represent routes in the air-routes graph in a format similar to that
+example we could represent routes in the 'air-routes' graph in a format similar to that
 shown below. In this case we also include the label of the edge between each of the
 vertices. The vertices are represented by their ID value.
 
@@ -20653,7 +20653,7 @@ vertices. The vertices are represented by their ID value.
 [1,route,632]
 ----
 
-If you wanted to export a very simple version of the air-routes graph, using just the
+If you wanted to export a very simple version of the 'air-routes' graph, using just the
 airport IATA codes and the edge labels you could write a Gremlin query to do it for
 you as follows. Only the first 10 results returned are shown.
 
