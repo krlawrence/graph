@@ -1,14 +1,15 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v280-preview, June 30, 2018
+v280-preview, July 1, 2018
+// v279 (TP 3.3.3), May 31, 2018
 // Sun Jul 01, 2018 18:12:22 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
-:title-logo-image: TestEasel.png
+:title-logo-image: CoverArt.png
 //:pygments-style: lovelace
 //:source-highlighter: rouge
 //:source-highlighter: coderay
@@ -23,7 +24,7 @@ v280-preview, June 30, 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: June 30th 2018
+:draftdate: July 1st 2018
 :tpvercheck: 3.3.3
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -6309,8 +6310,8 @@ later.
 
 
 [[cyclicpath]]
-Introducing 'cyclicPath'
-^^^^^^^^^^^^^^^^^^^^^^^^
+Haven't I been here before? - Introducing 'cyclicPath'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You can use the 'cyclicPath' step to find paths through the graph that revisit a
 vertex seen earlier in the traversal. This does not necessarily mean revisiting the
@@ -6396,12 +6397,13 @@ g.V().has('code','AUS').
       path().by('code')
 ----
 
-Note that this has the same effect as if we had written the query as shown below.
+Note that for the 'air-routes' graph this has the same effect as if we had written
+the query as shown below.
 
 [source,groovy]
 ----
-g.V().has('code','AUS').
-      out().as('a').
+g.V().has('code','AUS').as('a').
+      out().
       out().where(neq('a')).limit(10).
       path().by('code')
 ----
