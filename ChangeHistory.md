@@ -11,6 +11,7 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
 - Expanded the section that introduces the `path` step #97, #98, #99.
 - Added text to better introduce the concept of a `modulator` #99 .
 - Added text to introduce the phrase `anonymous traversal` #98
+- Expanded the section covering the `cyclicPath` step.
 - Expanded and improved the `Calculating vertex degree` section.
 - Miscellaneous minor wording updates and corrections.
 - Sample code and data improvements.
