@@ -13,6 +13,7 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
 - Added text to introduce the phrase `anonymous traversal` #98
 - Expanded the section covering the `cyclicPath` step.
 - Expanded and improved the `Calculating vertex degree` section.
+- Added the `Cardinality` enum to the tables in section 6.1.5 #110.
 - Miscellaneous minor wording updates and corrections.
 - Sample code and data improvements.
   - Updated air-routes sample data (475 new routes, 2 new airports).
