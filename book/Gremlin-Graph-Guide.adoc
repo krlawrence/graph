@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v280-preview, July 6, 2018
+v280-preview, July 11, 2018
 // v279 (TP 3.3.3), May 31, 2018
-// Fri Jul 06, 2018 19:02:47 CDT
+// Wed Jul 11, 2018 19:52:21 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -24,7 +24,7 @@ v280-preview, July 6, 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: July 6th 2018
+:draftdate: July 11th 2018
 :tpvercheck: 3.3.3
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -16174,7 +16174,7 @@ examples.  In general you use this prefix when you have nothing prior in the que
 that you can "dot chain" to.
 
 If you need to specify how a property value should be treated when added to a vertex
-or edge you can use one of the keywords defined as part of the 'Cardinality' enum
+you can use one of the keywords defined as part of the 'Cardinality' enum
 which is part of the 'VertexProperty' interface.
 
 .Cardinality
