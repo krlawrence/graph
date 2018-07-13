@@ -5,7 +5,7 @@ All of the examples in the book are based on *'air-routes.graphml'*.
 
 The small script called *'load-air-routes-graph.groovy'* can be used to load the graph into a TinkerGraph from within the Gremlin Console. Edit the script before using it to adjust the location of where you put the GraphML file on your system.
 
-There is also a small Groovy script in the *'/sample-code'* folder called *'graph-stats.groovy'* that can be run from within the Gremlin console to produce some statistics about the graph similr to those found in the boook and in the *'README-air-routes.txt file'*.
+There is also a small Groovy script in the *'/sample-code'* folder called *'graph-stats.groovy'* that can be run from within the Gremlin console to produce some statistics about the graph similar to those found in the book and in the *'README-air-routes.txt file'*.
 
 The *'aircraft.csv'* file is intended to be used with the *'add-airports.groovy'* sample that is located in the *'/sample-code'* folder.
 
