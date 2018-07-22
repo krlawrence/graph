@@ -3,7 +3,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v280-preview, July 22, 2018
 // v279 (TP 3.3.3), May 31, 2018
-// Sun Jul 22, 2018 11:17:47 CDT
+// Sun Jul 22, 2018 13:58:38 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -15428,18 +15428,21 @@ LBA Leeds
 [[randwalk]]
 Randomly walking a graph
 ~~~~~~~~~~~~~~~~~~~~~~~~
+
 When doing analysis of a graph sometimes you just want to randomly traverse or 'walk'
 parts of the graph. The example below shows a query that starts at the Austin (AUS)
-vertex and then randomly goes to five connected vertices from there.  The 'random walk' is
-achieved by picking a sample of one of the possible edges connected to  vertex (node) we are
-currently at and then moving to the vertex at the other end of that edge. Notice how
-to get the effect that we want that the edge is picked inside of a 'local' step.
+vertex and then randomly goes to five connected vertices from there.  The 'random
+walk' is achieved by picking a sample of one of the possible edges connected to yhe
+vertex we are currently at by sampling using the distance property of the edge and
+then moving to the vertex at the other end of that edge. 
 
 [source,groovy]
 ----
 // Random walk with five hops
-g.V().has('code','AUS').repeat(local(bothE('route').
-      sample(1).by('dist').otherV())).times(5).
+g.V().has('code','AUS').
+      repeat(bothE('route').
+         sample(1).by('dist').otherV()).
+      times(5).
       path().by('code').by('dist')
 ----
 
@@ -15459,6 +15462,63 @@ names of the other airports and the distances between them.
 
 [AUS,722,STL,717,DCA,893,RSW,1103,HPN,563,CLT]
 ----
+
+In the previous example, every random walk began at the same place. However, if we
+wanted a more random walk that starts from a different airport each time we could
+instead use a 'sample' step to at the start of the query to pick a random airport to
+start from out of the set of all vertices with an 'airport' label.
+
+[source,groovy]
+----
+// Random walk with five hops
+g.V().hasLabel('airport').sample(1).
+      repeat(bothE('route').
+        sample(1).by('dist').otherV()).
+      times(5).
+      path().by('code').by('dist')
+----
+
+When run five times , as shown below, each walk begins at a different airport.
+
+[source,groovy]
+----
+[OMA,1144,LGA,584,CVG,750,BOS,6682,NRT,5951,VCE]
+
+[CLE,244,ROC,263,JFK,8054,HKG,7952,BOS,7288,PVG]
+
+[EMA,1126,AGP,969,PMO,708,VIE,5684,NRT,5152,DOH]
+
+[SNN,387,LGW,1349,KBP,264,KHE,434,IST,2831,DEL]
+
+[ARN,1814,LEI,1232,PRG,433,BRU,1384,SVO,3598,PEK]
+----
+
+Another way to write the query involves the introduction of a 'local' step. In this
+case the 'repeat' step is applied against the current local state of the traversal.
+In this way we can achieve multiple random walks. The 'limit(5)' at the end of the
+query limits the number of random walks returned to just five. Note that if the
+'local' step was removed only one walk would occur.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').
+      repeat(local(bothE('route').
+        sample(1).by('dist').otherV())).
+      times(5).
+      path().by('code').by('dist').limit(5) 
+----
+
+When run, five results such as those shown below are returned.
+
+[source,groovy]
+----
+[ATL,1301,ASE,845,SFO,2580,MIA,596,ATL,546,PBI]
+[ANC,2547,PHX,1999,BWI,368,BOS,3576,CGN,4745,MIA]
+[AUS,922,CUN,931,SAT,248,DAL,1378,LGA,736,MKE]
+[BNA,630,DFW,1430,SJC,2110,ATL,2180,SEA,4868,AMS]
+[BOS,3838,MUC,4024,JFK,8054,HKG,858,YNZ,901,HRB]
+----
+
 
 [[unwantededges]]
 Finding unwanted parallel edges 
