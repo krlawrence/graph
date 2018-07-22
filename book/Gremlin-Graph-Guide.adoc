@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v280-preview, July 11, 2018
+v280-preview, July 22, 2018
 // v279 (TP 3.3.3), May 31, 2018
-// Wed Jul 11, 2018 19:52:21 CDT
+// Sun Jul 22, 2018 11:17:47 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -24,7 +24,7 @@ v280-preview, July 11, 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: July 11th 2018
+:draftdate: July 22nd 2018
 :tpvercheck: 3.3.3
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -16285,6 +16285,17 @@ When working with a 'sack' the operators like 'sum' and 'assign' are defined in 
 |addAll  | Operator.addAll|sack(Operator.addAll)
 |and     | Operator.and   |sack(Operator.and)
 |or      | Operator.or    |sack(Operator.or)
+|==============================================================================
+
+The 'Direction' Enum defines constants that are used in association with edge
+direction.
+
+.Direction
+[cols="1,1,3"]
+|==============================================================================
+|IN      | Direction.IN   | myEdge.vertices(Direction.IN)
+|OUT     | Direction.OUT  | myEdge.vertices(Direction.OUT)
+|BOTH    | Direction.BOTH | myEdge.vertices(Direction.BOTH)
 |==============================================================================
 
 Another useful tip, that was shared on the Gremlin Users mailing list, is that you
