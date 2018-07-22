@@ -15501,6 +15501,7 @@ query limits the number of random walks returned to just five. Note that if the
 
 [source,groovy]
 ----
+// Five random walks each of five hops
 g.V().hasLabel('airport').
       repeat(local(bothE('route').
         sample(1).by('dist').otherV())).
