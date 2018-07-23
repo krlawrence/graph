@@ -3,7 +3,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v280-preview, July 22, 2018
 // v279 (TP 3.3.3), May 31, 2018
-// Sun Jul 22, 2018 13:58:38 CDT
+// Sun Jul 22, 2018 22:30:30 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -19774,7 +19774,7 @@ Connecting to a Gremlin Server from Java using 'withRemote'
 
 While it is perfectly possible to work directly with the JSON returned from a Gremlin
 Server it is often more desirable to have the results placed directly into variables
-of the appropriate type. It the appropriate Grelmin language driver exists for the
+of the appropriate type. If the appropriate Grelmin language driver exists for the
 programming language that you are using, this is quite easy to setup. In this section
 we will look at connecting to a Gremlin Server from a Java application and taking
 advantage of the 'withRemote' capability that TinkerPop provides.
