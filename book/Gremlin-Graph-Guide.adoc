@@ -937,8 +937,8 @@ The full details of all the features contained in the 'air-routes' graph can be 
 by reading the comments at the start of the `air-routes.graphml` file or reading the
 `README.txt` file.
 
-The graph currently contains a total of 3,612 vertices and 49,894 edges. Of these
-3,367 vertices are airports, and 43,160 of the edges represent routes. While in big
+The graph currently contains a total of 3,619 vertices and 50,148 edges. Of these
+3,374 vertices are airports, and 43,400 of the edges represent routes. While in big
 data terms this is really a tiny graph, it is plenty big enough for us to build up
 and experiment with some very interesting Gremlin queries.
 
