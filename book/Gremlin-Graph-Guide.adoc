@@ -4612,9 +4612,22 @@ Below is what we get back as a result of running the query.
 
 Sometimes you will be looking for results that match the inverse condition of a
 'where' step. One way this can be achieved is to wrap the 'where' step inside of a
-'not' step, as shown below. We start in Austin (AUS) and find all outgoing routes.
-We then look at all incoming 'contains' edges to see which country each airport we
-can fly to is in that do not have the United States country code of 'US' .
+'not' step, as shown below. 
+
+NOTE: The double underscore prefix '"+++__.+++"' before the 'in' step is required as
+'in' is a reserved word in Groovy. If you are using the Gremlin Console and do not
+include the prefix you will get an error. This is explained in more detail in the
+"<<rword>>" section a bit later. The '"+++__.+++"' notation is actually a reference
+to a special TinkerPop Java class that has the name '"+++__+++"' (double underscore)
+but don't worry about that for the time being. In fact, for now, just think of
+'"+++__+++."' as meaning '"the result of the previous step"'. This will become
+important once we start looking at writing a Java program to issue Gremlin queries
+and is discussed in the "<<tpinterfaces>>" section quite a bit later on.
+
+The query starts by finding the Austin airport (AUS) and then finds all outgoing
+routes.  We then look at all incoming 'contains' edges to see which country each
+airport we can fly to is in. The 'not' step ensures that only airports that do not
+have the United States country code of 'US' are selected.
 
 [source,groovy]
 ----
@@ -7408,17 +7421,18 @@ take a look at the following query.
 ----
 g.V().has('code','AUS').in()
 ----
+
 That query does not cause an error and correctly returns all of the vertices that are
-connected by an incoming edge, to the 'AUS' vertex. There is no conflict of names here
-because it is clear that the 'in()' reference applies to the result of the has step.
-However, now take a look at this query.
+connected by an incoming edge, to the 'AUS' vertex. There is no conflict of names
+here because it is clear that the 'in' reference applies to the result of the has
+step.  However, now take a look at this query.
 
 [source,groovy]
 ----
 g.V().has('code','AUS').union(in(),out())
 ----
 
-In this case the 'in()' is on it's own and not 'dot connected' to a previous step.
+In this case the 'in' is on it's own and not 'dot connected' to a previous step.
 The Gremlin runtime (which remember is written in Groovy) will try to interpret this
 and will throw an error because it thinks this is a reference to its own 'in' method.
 To make this query work we have to adjust the syntax slightly as follows.
@@ -7427,9 +7441,10 @@ To make this query work we have to adjust the syntax slightly as follows.
 ----
 g.V().has('code','AUS').union(__.in(),out())
 ----
-Notice that I added the '"__."' (underscore underscore period) in front of the 'in()'.
-This is shorthand for '"the thing we are currently looking at"', so in this case, the
-result of the 'has' step.
+
+Notice that I added the '"__."' (underscore underscore period) in front of the 'in'
+step.  This is shorthand for '"the thing we are currently looking at"', so in this
+case, the result of the 'has' step.
 
 There are currently not too many Groovy reserved words to worry about. The three that
 you have to watch out for are 'in', 'not' and 'as' which have special meanings in
