@@ -7,7 +7,7 @@ The small script called *'load-air-routes-graph.groovy'* can be used to load the
 
 There is also a small Groovy script in the *'/sample-code'* folder called *'graph-stats.groovy'* that can be run from within the Gremlin console to produce some statistics about the graph similar to those found in the book and in the *'README-air-routes.txt file'*.
 
-The *'aircraft.csv'* file is intended to be used with the *'add-airports.groovy'* sample that is located in the *'/sample-code'* folder.
+The *'aircraft.csv'* file is intended to be used with the *'add-aircraft.groovy'* sample that is located in the *'/sample-code'* folder.
 
 The *'edges.csv'* file is intended to be used with the *'GraphFromCSV.java'* sample that is located in the *'/sample-code'* folder.
 
