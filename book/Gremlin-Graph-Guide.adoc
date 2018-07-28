@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v280-preview, July 22, 2018
-// v279 (TP 3.3.3), May 31, 2018
-// Sun Jul 22, 2018 22:30:30 CDT
+//v280-preview, July 22, 2018
+ v280 (TP 3.3.3), July 28, 2018
+// Sat Jul 28, 2018 12:37:29 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -19,12 +19,12 @@ v280-preview, July 22, 2018
 //:pygments-style: vim
 :toc:
 :toclevels: 4
-:revision: 280-preview
-//:revision: 278 (TP 3.3.1)
+//:revision: 280-preview
+:revision: 280 (TP 3.3.3)
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: July 22nd 2018
+:draftdate: July 28th 2018
 :tpvercheck: 3.3.3
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
