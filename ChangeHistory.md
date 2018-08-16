@@ -2,6 +2,14 @@
 
 Starting with the v275 release, this file will contain a record of the major changes and updates made in each release.
 
+## Release 281 change history (RELEASE DATE TBD)
+
+Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v280-tp.3.3.3...master) between this release and the prior one.
+
+The examples in this release have been tested against Apache TinkerPop at the 3.3.2 and 3.3.3 levels. They have also been tested against JanusGraph 0.2 (where appropriate) which supports TinkerPop at the 3.2.6 level. As always I am very grateful for the feedback buy e-mail, issue and PR. This release resolves a number of open issues. Please check the commit log for finer grained details of all changes. Here is a list of the major improvements in this release.
+
+- Expanded the section that discusses using `coalesce` as a way to do `upsert` type opeartions
+
 ## Release 280 change history (July 28th 2018)
 
 Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v279-tp.3.3.3...v280-tp.3.3.3) between this release and the prior one.

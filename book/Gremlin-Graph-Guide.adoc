@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-//v280-preview, July 22, 2018
- v280 (TP 3.3.3), July 28, 2018
-// Sat Jul 28, 2018 12:37:29 CDT
+v281-preview, August 15, 2018
+//v280 (TP 3.3.3), July 28, 2018
+// Wed Aug 15, 2018 15:17:27 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -19,12 +19,12 @@ Kelvin R. Lawrence <gfxman@yahoo.com>
 //:pygments-style: vim
 :toc:
 :toclevels: 4
-//:revision: 280-preview
-:revision: 280 (TP 3.3.3)
+:revision: 281-preview
+//:revision: 280 (TP 3.3.3)
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: July 28th 2018
+:draftdate: August 15th 2018
 :tpvercheck: 3.3.3
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -60,7 +60,7 @@ Kelvin R. Lawrence <gfxman@yahoo.com>
 
 INTRODUCTION
 ------------
-
+                     
 .This book is a work in progress. Feedback is very much encouraged and welcomed!
 
 The title of this book could equally well be '"A getting started guide for users of
@@ -8294,9 +8294,76 @@ g.V().has('code','XYZ').fold().coalesce(unfold(),addV().property('code','XYZ'))
 v[53865]
 ----
 
-Using 'coalesce' in this way provides us with a nice pattern for a commonly performed
-task of checking to see if something already exists before we create it.
+[[upsert]]
+Using 'coalesce' to derive an 'upsert' pattern
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Using 'coalesce' in this way provides us with a nice pattern for a commonly performed
+task of checking to see if something already exists before we try to update it and
+otherwise create it. This is often called an '"upsert"' pattern as the operation
+potentially updates or inserts a vertex based on it's existence or not.
+
+The query below is perhaps a better example of an '"upsert"'. The query looks to
+see if the vertex with an ID of 3 already exists. If it does it updates the 'runways'
+property of that vertex be the value 3. If it does not exist it creates a new vertex and
+the property. As vertex v[3] already exists that is what the query returns, having
+first updated the 'runways' property.
+
+[source,groovy]
+----
+g.V(3).fold().
+       coalesce(unfold().property('runways','3'),
+       addV('airport').property('runways',3))
+
+v[3]
+----
+
+If we now examine the properties of the vertex v[3] we can see that the 'runways'
+value has been set to 3.
+
+[source,groovy]
+----
+g.V(3).valueMap().unfold()
+
+country=[US]
+code=[AUS]
+longest=[12250]
+city=[Austin]
+elev=[542]
+icao=[KAUS]
+lon=[-97.6698989868164]
+type=[airport]
+region=[US-TX]
+runways=[3]
+lat=[30.1944999694824]
+desc=[Austin Bergstrom International Airport]
+----
+
+In the air routes graph there is no vertex with an ID of 9999999. So if we rerun the
+previous '"upsert"' query, this time a new vertex will be created.
+
+[source,groovy]
+----
+g.V(9999999).fold().
+             coalesce(unfold().property('runways','3'),
+             addV('airport').property('runways',3))
+
+v[57343] 
+----
+
+If we look at the 'valueMap' for the new vertex we can see that it was created as we
+would have expected.
+
+
+[source,groovy]
+----
+g.V(57343).valueMap().unfold()
+
+runways=[3]
+----
+
+This technique is currently the recommended way of doing '"upsert"' operations with
+Gremlin.
 
 [[deleting]]
 Deleting vertices, edges and properties
@@ -8321,6 +8388,7 @@ edges we created connected to that vertex.
 g.V().has('code','XYZ').drop()
 ----
 
+[[deledge]]
 Deleting an edge
 ^^^^^^^^^^^^^^^^
 
@@ -8334,6 +8402,7 @@ g.V().has('code','AUS').outE().as('e').inV().has('code','LHR').select('e').drop(
 g.V().has('code','LHR').outE().as('e').inV().has('code','AUS').select('e').drop()
 ----
 
+[[delprop]]
 Deleting a property
 ^^^^^^^^^^^^^^^^^^^
 
