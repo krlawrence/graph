@@ -12375,7 +12375,7 @@ reading the official TinkerPop reference documentation.
 MISCELLANEOUS QUERIES AND THEIR RESULTS
 ---------------------------------------
 
-In this section you will find more Gremlin queries that operate on the 'air-routes'
+In this chapter you will find more Gremlin queries that operate on the 'air-routes'
 graph.  All of these queries build upon the topics  covered in the prior sections.
 In this section I have included lots of examples of the output returned by running
 queries. In cases where the output is rather lengthy I have either truncated it or
@@ -15667,6 +15667,267 @@ When run, five results such as those shown below are returned.
 [BOS,3838,MUC,4024,JFK,8054,HKG,858,YNZ,901,HRB]
 ----
 
+[[sevendegrees]]
+Seven degrees of separation!
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+No, the word seven in the heading above is not a mistake, read on! Most people I am
+sure have heard of the famous "Six degrees of separation" theory.  The theory
+essentially states that for any living person, using "friend of a friend" style
+connections, none of use is farther removed than six friendship relationships from
+anyone else.
+
+NOTE: You can read more about the Six degrees of separation theory on Wikipedia at
+this location https://en.wikipedia.org/wiki/Six_degrees_of_separation.
+
+I decided it would be fun to run an experiment using the `air-routes` data set to see
+how far any airport, that is not a known orphan vertex, is from a major hub airport.
+For this experiment I decided to use London Heathrow (LHR) airport as my target.
+
+I came up with the queries below in order to do this. The first thing I wanted to do
+was establish how many connections I would be looking for.
+
+First of all I double checked how many airports are in the graph.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').count()
+
+3374
+----
+
+Next I remembered there are some orphan airports that have no routes so we have to
+rule those out.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').not(outE('route')).count()
+
+16
+----
+
+So we know that there are 16 airports we need to ignore for this experiment. Leaving
+us with 3358 airports we care about but one of those will be LHR so we also need to
+discount that one as we are not looking for cyclic paths. So, we need a query that
+proves there is a route between all of these 3357 remaining airports and London
+Heathrow but ignores the orphan airports and Heathrow itself as starting points.
+
+The core part of the query is shown below.  I started out using just one hop for
+testing purposes. The query starts by ignoring LHR and the orphan nodes. It next uses
+a 'union' step within 'local' scope to try and find a single path in one hop between
+the starting airport and LHR. The result, for each starting airport will either be a
+path containing the codes of all the airports from the starting airport to LHR or if
+LHR was not reached the path will just contain the starting airport. Just to test
+this part of the query I used a hop count of 1 and limited the results to just 10.
+
+[source,groovy]
+----
+g.V().has('airport','code',neq('LHR')).
+       filter(out('route').count().is(neq(0))).
+       local(union(
+              identity().values('code'),
+              local(repeat(out().simplePath()).
+                      emit().times(1).
+                      has('code','LHR').
+                      limit(1)).
+              path().by('code')).
+              fold()).
+        limit(10)
+
+----
+
+As you can see, the query we have so far seems to be working. We either get back a
+starting airport and a path or just a starting airport if no route was found. This is
+why I used the 'union' step to guarantee that at a minimum the starting airport is
+returned. The 'local' scope is used as I wanted the results for each starting airport
+to be in a separate list.
+
+[source,groovy]
+----
+[ATL,[ATL,LHR]]
+[ANC]
+[AUS,[AUS,LHR]]
+[BNA]
+[BOS,[BOS,LHR]]
+[BWI,[BWI,LHR]]
+[DCA]
+[DFW,[DFW,LHR]]
+[FLL]
+[IAD,[IAD,LHR]]
+
+----
+
+The final piece missing from the query is a way to decide if we reached LHR and count
+the number of times we succeeded in doing so. This is done by checking to see that
+the length of the result returned has more than one item in it. In other words, did
+we get back more than just the starting airport code. To do this,  the 'where' step
+filters out the paths that did not reach LHR in the specified number of steps.
+Finally, rather than displaying the paths as I did in my testing, we now count how
+many of the starting airports were able to get to LHR. For my first round of tests I
+decided to see how many of the airports can reach LHR in five hops. 
+
+[source,groovy]
+----
+g.V().has('airport','code',neq('LHR')).
+      filter(out('route').count().is(neq(0))).
+      local(union(
+             identity().values('code'),
+             local(repeat(out().simplePath()).
+                     emit().times(5).
+                     has('code','LHR').
+                     limit(1)).
+             path().by('code')).
+             fold().
+             where(count(local).is(gt(1)))).
+      count()
+
+3345
+----
+
+As you can see, with five hops were were able to reach LHR from 3345 of the 3357
+airports we are testing.  Next I ran the query again but using six hops.
+
+
+[source,groovy]
+----
+g.V().has('airport','code',neq('LHR')).
+      filter(out('route').count().is(neq(0))).
+      local(union(
+             identity().values('code'),
+             local(repeat(out().simplePath()).
+                     emit().times(6).
+                     has('code','LHR').
+                     limit(1)).
+             path().by('code')).
+             fold().
+             where(count(local).is(gt(1)))).
+      count()  
+
+3354
+----
+
+So with six hops 3354 of our 3357 airports were able to get to LHR. I then tried
+seven hops and found that all but two of the airports were able to reach LHR
+
+[source,groovy]
+----
+g.V().has('airport','code',neq('LHR')).
+      filter(out('route').count().is(neq(0))).
+      local(union(
+             identity().values('code'),
+             local(repeat(out().simplePath()).
+                     emit().times(7).
+                     has('code','LHR').
+                     limit(1)).
+             path().by('code')).
+             fold().
+             where(count(local).is(gt(1)))).
+      count() 
+
+3355
+----
+
+This made me curious. I was fairly convinced that there are no airports in the graph
+that would not be able to reach LHR in seven hops unless of course they were orphans
+but we have already ruled those out as part of our query. So, I decided to go with 30
+hops just to make sure. However I still got the answer 3355.
+
+[source,groovy]
+----
+g.V().has('airport','code',neq('LHR')).
+      filter(out('route').count().is(neq(0))).
+      local(union(
+             identity().values('code'),
+             local(repeat(out().simplePath()).
+                     emit().times(30).
+                     has('code','LHR').
+                     limit(1)).
+             path().by('code')).
+             fold().
+             where(count(local).is(gt(1)))).
+      count()
+
+3355
+----
+
+This left me with an interesting conclusion. There must be two airports in the graph
+that are not orphans, in other words they have some routes, but they are isolated
+from the main network. So I needed a query to find them which is the subject of the
+next section. What the queries in this section did prove is that from any airport in
+the graph, with the exception of the two cases we need to investigate further, London
+LHR can be reached in seven hops or less. Hence the title of this section being
+"Seven degrees of separation" rather than "Six" !
+
+[[mininetworks]]
+Finding isolated sub-networks
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+As discussed above, while I was working on the queries for the previous section I
+realized that there are two airports in the graph that are not true orphans, as they
+do have routes between each other but that they are part of a small network that is
+not itself connected to the main route network. In other words, the network is an
+isolated mini network within the main graph and you can never get to London from
+either one of them.  After more analysis I realized that this was actually due to an
+error in my data set which I have fixed in subsequent updates but if you are using
+the version 0.77 level of `air-routes` then the following query will yield the
+results shown. 
+
+To solve the puzzle of the missing airports, I only had to slightly modify the seven
+degrees of separation query. Note that if you use the most recent version of the
+`air-routes` data set, this particular error is fixed, but you will find other
+isolated networks within the main graph exist. However, these are not due to errors
+but rather because there truly are a set of airports in Portugal connected to each
+other via commuter airlines but with no way to get from any one of them to the main,
+worldwide route network.
+
+So, here is the modified form of the query.
+
+[source,groovy]
+----
+g.V().has('airport','code',neq('LHR')).
+      filter(out('route').count().is(neq(0))).
+      local(union(
+             identity().values('code'),
+             local(repeat(out().simplePath()).
+                     emit().times(7).
+                     has('code','LHR').
+                     limit(1)).
+             path().by('code')).
+             fold().
+             where(count(local).is(1))).
+       unfold()   
+----
+
+The only change made to this query from the one used in the prior section is that the
+'where' step has been changed to 'where(count(local).is(1)))' so that it now looks
+for paths of length one. These represent the airports for which no route to LHR was
+found. Then rather than 'count' the paths an 'unfold' is used to return the codes for
+the airports that had no route.  
+
+When the query is run, the codes for the airports with no route to London are
+revealed. These airports are truly connected to each other but isolated from the main
+route network.
+
+[source,groovy]
+----
+HPB
+VAK
+----
+
+Just to verify my findings I ran a couple of queries to double check on the routes
+from each of these airports. As you can see they were just connected to each other.
+
+[source,groovy]
+----
+g.V().has('code','HPB').out().path().by('code')
+[HPB,VAK]
+
+g.V().has('code','VAK').out().path().by('code')
+[VAK,HPB]
+----
+
+This proved both an interesting and useful exercise and uncovered some errors in the
+graph that had slipped through my error checking!
 
 [[unwantededges]]
 Finding unwanted parallel edges 
