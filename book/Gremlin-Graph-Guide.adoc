@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v281-preview, August 15, 2018
+v281-preview, August 18, 2018
 //v280 (TP 3.3.3), July 28, 2018
-// Wed Aug 15, 2018 15:17:27 CDT
+// Sat Aug 18, 2018 19:28:04 PDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -24,7 +24,7 @@ v281-preview, August 15, 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: August 15th 2018
+:draftdate: August 18th 2018
 :tpvercheck: 3.3.3
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -6185,13 +6185,36 @@ saying "at most three hops" or in airline terms "at most two stops".
 
 [source,groovy]
 ----
-g.V(3).repeat(out()).emit().times(3).has('code','MIA').
+g.V(3).repeat(out().simplePath()).emit().times(3).has('code','MIA').
        limit(5).path().by('code')
 ----
 
 As you can see, by adding an 'emit' we got back a quite different set of results.
 This is a really useful and powerful capability. Being able to express ideas such as
 "at most three" provides us a way to write very clean queries in cases like this.
+
+[source,groovy]
+----
+[AUS,MIA]
+[AUS,YYZ,MIA]
+[AUS,LHR,MIA]
+[AUS,FRA,MIA]
+[AUS,MEX,MIA]
+----
+
+Note that using the emit step in the previous query we were able to write a more
+compact form of this query which essentially does the same thing. Note the use of the
+inline 'or' step in this example.
+
+[source,groovy]
+----
+g.V(3).repeat(out().simplePath()).
+         until(has('code','MIA').or().loops().is(3)).
+       has('code','MIA').
+       path().by('code').limit(5)
+----
+
+When run, as you can see, we get the same results back.
 
 [source,groovy]
 ----
