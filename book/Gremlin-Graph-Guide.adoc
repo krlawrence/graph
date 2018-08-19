@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v281-preview, August 18, 2018
+v281-preview, August 19, 2018
 //v280 (TP 3.3.3), July 28, 2018
-// Sat Aug 18, 2018 19:28:04 PDT
+// Sun Aug 19, 2018 06:34:01 PDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -24,7 +24,7 @@ v281-preview, August 18, 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: August 18th 2018
+:draftdate: August 19th 2018
 :tpvercheck: 3.3.3
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -12421,13 +12421,44 @@ Pitcairn
 San Marino
 ----
 
-The previous query is a slightly shorter form of the query below which would yield
-the same results.
+The previous query is a slightly shorter form of the two queries below which would
+both yield the same results. Note the use of the '"--"' prefix in front of the 'not'
+step in the second query. This is because 'not' is a reserved word in Groovy and has
+to be prefixed in this way when not directly connected to a prior step by a dot.  
 
 [source,groovy]
 // Are there any countries that have no airports?
 ----
 g.V().hasLabel('country').where(out().count().is(0)).values('desc')
+
+g.V().hasLabel('country').where(__.not(out())).values('desc') 
+
+----
+
+[[noroutes]]
+Which airports have no routes?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+There are a few airports in the graph that currently have no commercial routes. This
+is either because they used to have service and it was discontinued or they are new
+airports still awaiting service to start. We can write a query to easily find these
+"orphan" airports.  Note that this is query based on the version 0.77 release of
+`air-routes.graphml`. In more recent updates of the data set, some of these airports
+do now have commercial airline service.
+
+
+[source,groovy]
+----
+
+g.V().hasLabel('airport').not(bothE('route')).values('code').fold()
+----
+
+When we run the query, you can see we find quite a few orphan airport nodes that have
+no outgoing or incoming routes.
+
+[source,groovy]
+----
+[ILG,TWB,TUA,BVS,KGG,RIG,INT,APA,BWU,BID,NBW,SFH,CVT,AFW,PSY,HLE]
 ----
 
 [[runwaydist]]
