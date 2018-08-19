@@ -3,7 +3,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v281-preview, August 19, 2018
 //v280 (TP 3.3.3), July 28, 2018
-// Sun Aug 19, 2018 07:57:16 PDT
+// Sun Aug 19, 2018 11:17:16 PDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -15697,7 +15697,8 @@ g.V().hasLabel('airport').count()
 ----
 
 Next I remembered there are some orphan airports that have no routes so we have to
-rule those out.
+rule those out. We can do this using a technique similar to the one that was
+discussed in the "<<noroutes>> section.
 
 [source,groovy]
 ----
