@@ -3,7 +3,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v281-preview, August 19, 2018
 //v280 (TP 3.3.3), July 28, 2018
-// Sun Aug 19, 2018 11:17:16 PDT
+// Sun Aug 19, 2018 17:06:33 PDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -15674,7 +15674,7 @@ Seven degrees of separation!
 No, the word seven in the heading above is not a mistake, read on! Most people I am
 sure have heard of the famous "Six degrees of separation" theory.  The theory
 essentially states that for any living person, using "friend of a friend" style
-connections, none of use is farther removed than six friendship relationships from
+connections, none of us is farther removed than six friendship relationships from
 anyone else.
 
 NOTE: You can read more about the Six degrees of separation theory on Wikipedia at
