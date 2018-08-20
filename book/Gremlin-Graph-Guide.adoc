@@ -3,7 +3,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v281-preview, August 19, 2018
 //v280 (TP 3.3.3), July 28, 2018
-// Sun Aug 19, 2018 17:19:09 PDT
+// Sun Aug 19, 2018 17:35:17 PDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -5303,6 +5303,18 @@ g.V().has('airport','code','DFW').
 
 [v[8],221]
 ----
+
+We could modify the query slightly to have the first part of the result returned be
+the airport's IATA code rather than just a vertex.
+
+[source,groovy]
+----
+g.V().has('airport','code','DFW').
+      union(identity().values('code'),out().count()).fold()
+
+[DFW,221]
+----
+
 
 [[unionconstant]]
 Using 'constant' values as part of a 'union'

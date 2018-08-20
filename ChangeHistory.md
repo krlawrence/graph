@@ -13,6 +13,7 @@ The examples in this release have been tested against Apache TinkerPop at the 3.
 - Expanded the section that discusses using `coalesce` as a way to do `upsert` type operations
 - Added to the section that introduces the `emit` step.
 - Added a section on finding airports with no routes.
+- Added another example to the section that introduces the `identity` step.
 
 ## Release 280 change history (July 28th 2018)
 
