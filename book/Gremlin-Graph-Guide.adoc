@@ -12445,7 +12445,7 @@ airports still awaiting service to start. We can write a query to easily find th
 "orphan" airports.  Note that this is query based on the version 0.77 release of
 `air-routes.graphml`. 
 
-TIP: You can always find the version of the `air-routes.graphml' used for the
+TIP: You can always find the version of the `air-routes.graphml` used for the
 examples in the book and also the most recent data set in the `sample-data` folder
 located at https://github.com/krlawrence/graph/tree/master/sample-data . 
 
