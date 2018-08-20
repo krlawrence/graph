@@ -3,7 +3,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v281-preview, August 19, 2018
 //v280 (TP 3.3.3), July 28, 2018
-// Sun Aug 19, 2018 17:06:33 PDT
+// Sun Aug 19, 2018 17:19:09 PDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -12445,9 +12445,9 @@ airports still awaiting service to start. We can write a query to easily find th
 "orphan" airports.  Note that this is query based on the version 0.77 release of
 `air-routes.graphml`. 
 
-TIP: You can always find the version used for the book and also the most recent data
-set in the `sample-data` folder located at
-https://github.com/krlawrence/graph/tree/master/sample-data . 
+TIP: You can always find the version of the `air-routes.graphml' used for the
+examples in the book and also the most recent data set in the `sample-data` folder
+located at https://github.com/krlawrence/graph/tree/master/sample-data . 
 
 In more recent updates of the data set, some of these airports
 do now have commercial airline service.
