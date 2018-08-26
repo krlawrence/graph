@@ -16,7 +16,7 @@ from gremlin_python.process.strategies import *
 from gremlin_python.process.traversal import *
 
 # Path to our graph (this assumes a locally running Gremlin Server)
-# Note how the path is a Web Socket (ws) connection.ó
+# Note how the path is a Web Socket (ws) connection.
 endpoint = 'ws://localhost:8182'
 
 # Obtain a graph traversal source using a remote connection
