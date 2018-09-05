@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v281-preview, August 19, 2018
+v281-preview, September 4th 2018
 //v280 (TP 3.3.3), July 28, 2018
-// Sun Aug 19, 2018 17:35:17 PDT
+// Tue Sep 04, 2018 18:36:54  CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -24,7 +24,7 @@ v281-preview, August 19, 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: August 19th 2018
+:draftdate: September 4th 2018
 :tpvercheck: 3.3.3
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -5745,6 +5745,57 @@ US-TX
 30.1944999694824
 Austin Bergstrom International Airport
 ----
+
+[[injecttrick]]
+A useful trick using 'inject'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+There is also a useful trick that can be achieved using 'inject'. Take a look at the
+query below. 
+
+[source,groovy]
+----
+
+g.V().choose(V().hasLabel('XYZ').count().is(0),constant("None found"))
+----
+
+If we were to run it we would get back multiple lines like those below. One for each
+vertex in the graph in fact.
+
+[source,groovy]
+----
+None found
+None found
+None found
+None found
+None found
+...
+----
+
+In order to get just one result we might be tempted to write the query as
+shown below.
+
+[source,groovy]
+----
+g.choose(V().hasLabel('XYZ').count().is(0),constant("None found"))
+----
+
+However this will cause an error to be returned as a choose step cannot come
+immediately after a traversal source object ('g'). To get around this we can
+rewrite the query with an 'inject' step after the 'g'. We do not use the value of the
+'inject' in the query but its presence allows us to follow it with a 'choose' step.
+
+[source,groovy]
+----
+g.inject(1).choose(V().hasLabel('XYZ').count().is(0),constant("None found"))
+
+None found
+----
+
+This is a trick that can come in useful from time to time. The query used to
+demonstrate this point could indeed be rewritten to avoid any use of 'choose' but
+hopefully the usefulness of 'inject' as a way to avoid using a 'V' when not wanted is
+clear.
 
 [[coalesce]]
 Using 'coalesce' to see which traversal returns a result
