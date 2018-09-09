@@ -32,7 +32,5 @@ sample = g.V().hasLabel('airport'). \
                toList()
 
 # Print the results in a tabular form with a row index
-i = 1
-for c in sample:
+for i,c in enumerate(sample,1):
     print("%3d %4s %s" % (i,c[0],c[1]))
-    i += 1
