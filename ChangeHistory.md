@@ -15,6 +15,7 @@ The examples in this release have been tested against Apache TinkerPop at the 3.
 - Added a section on finding airports with no routes.
 - Added more examples to the section introducing the `inject` step.
 - Added another example to the section that introduces the `identity` step.
+- Added a new sample - `sample.py` - that shows how to connect to Gremlin Server using the gremlinpython GLV.
 
 ## Release 280 change history (July 28th 2018)
 
