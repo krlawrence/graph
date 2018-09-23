@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v281-preview, September 4th 2018
+v281-preview, September 23rd 2018
 //v280 (TP 3.3.3), July 28, 2018
-// Tue Sep 04, 2018 18:36:54  CDT
+// Sun Sep 23, 2018 10:20:58 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -24,7 +24,7 @@ v281-preview, September 4th 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: September 4th 2018
+:draftdate: September 23rd 2018
 :tpvercheck: 3.3.3
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -897,13 +897,14 @@ the following properties. The word in parenthesis indicates the type of the prop
 ----
 
 We can use Gremlin once the air route graph is loaded to show us what properties an
-airport vertex has. As an example here is what the airport vertex with an ID of 3 looks
-like. We will explain the steps that make up the Gremlin query shortly.
+airport vertex has. As an example here is what the Austin airport vertex looks
+like. I will explain the steps that make up the Gremlin query shortly. First we need
+to dig a little bit into how to load the data and configure a few preferences.
 
 [source,groovy]
 ----
 // Query the properties of vertex 3
-g.V(3).valueMap(true).unfold()
+g.V().has('code','AUS').valueMap(true).unfold()
 
 id=3
 label=airport
