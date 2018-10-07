@@ -3,7 +3,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v281-preview, October 7th 2018
 //v280 (TP 3.3.3), July 28, 2018
-//Sun Oct 07, 2018 14:35:41 CDT
+//Sun Oct 07, 2018 15:02:33 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -8121,7 +8121,11 @@ g.V(53768).addE(V().has('code','AUS').outE().limit(1).label()).
 e[53770][53768-route->3]
 ----
 
-Again, we can use a 'valueMap' step to make sure our new edge label looks OK.
+NOTE: Later in the book we will build upon these concepts to show how the property
+keys and values from one vertex, as well as the label, can be copied into a new
+vertex using a single query.
+
+Once again, we can use a 'valueMap' step to make sure our new edge label looks OK.
 
 [source,groovy]
 ----
@@ -8129,6 +8133,7 @@ g.E(53770).valueMap(true)
 
 [id:53770,label:route]
 ----
+
 
 [[proptraversal]]
 Using a traversal to seed a property with a list
@@ -8281,7 +8286,7 @@ g.addV('airport').property('code','AUS').as('aus').
 ----
 
 NOTE: The form of 'addV' that used to allow creation of a vertex and a property using
-something like 'g.addV(label,'airport','code','AUS')' is now deprecated and should
+something like 'g.addV(label,"airport","code","AUS")' is now deprecated and should
 not be used.
 
 [[addloop]]
@@ -8457,10 +8462,13 @@ Creating one vertex based on another
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 It is sometimes useful to be able to create a new vertex using the label and
-properties from an existing vertex.  A technique for doing this is discussed in the
-"<<dfwcopy>>" section. Feel free to skip ahead but be aware that the techniques
-used in that section have not yet been fully covered so you may want to also take a
-look at some other sections along the way.  
+properties from an existing vertex.  We have already looked, in the
+"<<addlabeldynamic>>" section, at some ways to create a new label using the value
+of other labels but we have not yet looked at how to clone the properties from one
+vertex onto another. A technique for doing that is discussed in the "<<dfwcopy>>"
+section. Feel free to skip ahead but be aware that the techniques used in that
+section have not yet been fully covered so you may want to also take a look at some
+other sections along the way.  
 
 [[deleting]]
 Deleting vertices, edges and properties
