@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v281-preview, September 23rd 2018
+v281-preview, October 7th 2018
 //v280 (TP 3.3.3), July 28, 2018
-// Sun Sep 23, 2018 10:20:58 CDT
+//Sun Oct 07, 2018 14:35:41 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -24,7 +24,7 @@ v281-preview, September 23rd 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: September 23rd 2018
+:draftdate: October 7th 2018
 :tpvercheck: 3.3.3
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -8452,6 +8452,16 @@ runways=[3]
 This technique is currently the recommended way of doing '"upsert"' operations with
 Gremlin.
 
+[[vertexcopy]]
+Creating one vertex based on another
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+It is sometimes useful to be able to create a new vertex using the label and
+properties from an existing vertex.  A technique for doing this is discussed in the
+"<<dfwcopy>>" section. Feel free to skip ahead but be aware that the techniques
+used in that section have not yet been fully covered so you may want to also take a
+look at some other sections along the way.  
+
 [[deleting]]
 Deleting vertices, edges and properties
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -12073,7 +12083,7 @@ g.V().has('region','US-TX').out().has('region','US-CA').
 After you run the query, instead of showing you the results, Gremlin will show you
 where the time was spent processing the components of the query.
 
-[source,groovy]
+[source,console]
 ----
 Step                                       Count  Traversers  Time (ms)    % Dur
 ===============================================================================
@@ -12101,7 +12111,7 @@ g.V().has('airport','code','AUS').
 Here is the 'profile' report. I truncated some of the text with '"..." so that it
 will fit on a single page.
 
-[source,groovy]
+[source,console]
 ----
 Step                              Count  Traversers       Time (ms)    % Dur
 ============================================================================
@@ -15436,6 +15446,303 @@ e[8][2-knows->3]
 As you start to work with graphs and start to do more complex querying, this pattern
 of query based around 'withSideEffect' is extremely useful to keep in mind.
 
+[[dfwcopy]]
+Making a copy of the DFW vertex
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+It is sometimes useful to be able to create a new vertex using the label and
+properties from one or more existing vertices. In this section I am going to present
+a small case study that shows how I investigated the creation of a query that could
+create a copy of the Dallas Fort Worth (DFW) airport vertex.
+
+Creating a vertex using the label from another vertex is quite straightforward. The
+two queries shown below use the label from the DFW Airport vertex as the label for a
+new vertex.
+
+My first thought was to do this as follows.
+
+[source,groovy]
+----
+g.addV().property(label,V().has('code','DFW').label())
+----
+
+The query above does work but it felt a bit cumbersome and I also realized I was
+going to need a way to refer to the DFW vertex more than once so I changed the query
+as follows and ran it.
+
+[source,groovy]
+----
+g.V().has('code','DFW').as('dfw').
+      addV().property(label, select('dfw').label())
+
+v[57525]
+----
+
+If we examine the new vertex we can see that it does indeed have the correct label.
+
+[source,groovy]
+----
+g.V(57525).valueMap(true)
+
+[label:airport,id:57525]
+----
+
+Now we need to expand the query to also copy the property key names and their values
+from the DFW vertex into our new vertex. Earlier in the book we looked at ways that a
+'select' step combined with the 'keys' and 'values' keywords can be used to select
+values from a map. We can use that same technique here. 
+
+First of all let's remind ourselves about the properties of the DFW airport.
+
+[source,groovy]
+----
+g.V().has('code','DFW').properties()
+
+vp[country->US]
+vp[code->DFW]
+vp[longest->13401]
+vp[city->Dallas]
+vp[elev->607]
+vp[icao->KDFW]
+vp[lon->-97.0380020141602]
+vp[type->airport]
+vp[region->US-TX]
+vp[runways->7]
+vp[lat->32.896800994873]
+vp[desc->Dallas/Fort Worth...]
+----
+
+Let's also count how many properties there are listed above.
+
+[source,groovy]
+----
+g.V().has('code','DFW').properties().count()
+
+12
+----
+
+So we need to add some steps to our query that will copy the twelve keys and values
+from these twelve properties belonging to the DFW vertex into our new one.
+
+Below is the first query I tried when thinking about how to do this. The goal of the
+query is to first capture the properties from the DFW airport and then to add them to
+the new vertex being created.
+
+[source,groovy]
+----
+g.V().has('code','DFW').as('dfw').
+      addV().property(label, select('dfw').label()).as('new').
+             property(select('dfw').properties().key(),
+                      select('dfw').properties().value()) 
+----
+
+When I ran it I got this result which looked encouraging as a new vertex had clearly
+been created. 
+
+
+[source,groovy]
+----
+v[53767]
+----
+
+However, when I inspected my new vertex I saw I had only managed to copy one of the
+twelve properties over. So it was time to delete that vertex and have a bit of a
+rethink.
+
+[source,groovy]
+----
+g.V(53767).valueMap(true).unfold()
+
+country=[US]
+label=airport
+id=53767
+
+g.V(53767).drop()
+----
+
+What I realized was that my first attempt at copying the properties was only ever
+going to copy one property as that was essentially what I had asked it to do. If it's
+not quite clear why this is the case, hopefully it will become clearer once you look
+at the results from the profile step that are shown later in this section. I realized
+that what I needed to do was to first get all of the DFW properties and then add them
+to the new vertex. So I changed the query as shown below.
+
+[source,groovy]
+----
+g.V().has('code','DFW').as('dfw').
+      addV().property(label, select('dfw').label()).as('new').
+      select('dfw').properties().as('dfwprops').
+      select('new').property(select('dfwprops').key(), 
+                             select('dfwprops').value())          
+----
+
+When run, this is what I saw in the Gremlin console. This is more output than I
+wanted to get from the query but it has clearly done more work this time. If you
+count the number of rows below you will find it also adds up to twelve. So this time
+I got one result per property it would appear.
+
+[source,groovy]
+----
+[53768]
+[53768]
+[53768]
+[53768]
+[53768]
+[53768]
+[53768]
+[53768]
+[53768]
+[53768]
+[53768]
+[53768]
+----
+
+In a moment I will explore a way to get rid of the unwanted output but first let's
+examine the contents of the new vertex.
+
+[source,groovy]
+----
+g.V(53768).valueMap(true).unfold()
+
+country=[US]
+code=[DFW]
+longest=[13401]
+city=[Dallas]
+lon=[-97.0380020141602]
+type=[airport]
+elev=[607]
+label=airport
+icao=[KDFW]
+id=53768
+region=[US-TX]
+runways=[7]
+lat=[32.896800994873]
+desc=[Dallas/Fort Worth International Airport]
+----
+
+So a large part of my original goal has now been achieved. A vertex has been created
+that is a copy in all but ID value of the original DFW vertex. So, what can be done
+about the unwanted list of vertices that came back as the results from the query?
+
+First of all, let's take a look at what the 'profile' step can tell us about this
+query. Note that I deleted the new vertex using a 'drop' step before running this
+query so it did not pick up both the old and new DFW vertices.
+
+[source,groovy]
+----
+g.V(53768).drop()
+
+g.V().has('code','DFW').as('dfw').
+      addV().property(label, select('dfw').label()).as('new').
+      select('dfw').properties().as('dfwprops').
+      select('new').property(select('dfwprops').key(), 
+                             select('dfwprops').value()).profile()
+
+----
+
+If you look at the results below you can see that for each property key/value pair,
+a traverser was spawned. This explains why we got twelve results back. This also
+explains why my first attempt at writing this query failed. If you were to profile
+that query you would find that it only spawns one traverser rather than the twelve
+that we need to be successful. 
+
+
+[source,console]
+----
+Traversal Metrics      Step                      Count Traver-  Time   %Dur
+                                                       sers      (ms)
+===================================================================================
+TinkerGraphStep(vertex,[code.eq(DFW)])@[dfw]        1     1    1.416    28.85
+AddVertexStep({label=[[SelectOneStep(last,dfw),...  1     1    1.840    37.47
+  SelectOneStep(last,dfw)                           1     1    0.171
+  NoOpBarrierStep(2500)                             1     1    0.092
+  LabelStep                                         1     1    0.059
+SelectOneStep(last,dfw)                             1     1    0.132     2.70
+NoOpBarrierStep(2500)                               1     1    0.032     0.66
+PropertiesStep(property)@[dfwprops]                12    12    0.094     1.92
+SelectOneStep(last,new)                            12    12    0.127     2.60
+NoOpBarrierStep(2500)                              12    12    0.065     1.34
+AddPropertyStep({value=[[SelectOneStep(last,dfw... 12    12    1.200    24.45
+  SelectOneStep(last,dfwprops)                     12    12    0.168
+  NoOpBarrierStep(2500)                            12    12    0.064
+  PropertyKeyStep                                  12    12    0.066
+  SelectOneStep(last,dfwprops)                     12    12    0.134
+  NoOpBarrierStep(2500)                            12    12    0.070
+  PropertyValueStep                                12    12    0.043
+                                            >TOTAL  -     -    4.911                               
+
+----
+
+As you will hopefully recall from our discussion of the 'addV' and 'property' steps
+earlier in Chapter 4, a 'property' step returns the vertex that the property was
+added to and not the new property itself. This allows multiple 'addV' and 'property'
+steps to be chained together.
+
+So we need a way to still create our new properties but not have the twelve
+traversers return any results to us. Hopefully your reaction to this is something
+like "This feels like a good place to introduce a 'sideEffect' step into the query".
+If that was your reaction you are right! 
+
+Before running the new query we need to clean up the work done by the prior one.
+
+[source,groovy]
+----
+g.V().has('code','DFW')
+
+[8]
+[53767]
+
+g.V(53767).drop()
+----
+
+So now let's wrap the creation of the properties into a 'sideEffect' step that should
+stop the unwanted results from being returned.The modified  version of the query is
+shown below.  
+
+[source,groovy]
+----
+g.V().has('code','DFW').as('dfw').
+      addV().property(label, select('dfw').label()).as('new').
+      sideEffect(select('dfw').properties().as('dfwprops').
+                 select('new').property(select('dfwprops').key(), 
+                                        select('dfwprops').value()))
+----
+
+When we run the modified version of the query this is what we get back.
+
+[source,groovy]
+----
+[53780]
+----
+
+This is a lot better as we now just got back the new vertex one time as the result.
+Let's double check that the query has worked as intended.
+
+
+[source,groovy]
+----
+g.V(53780).valueMap(true).unfold()
+
+country=[US]
+code=[DFW]
+longest=[13401]
+city=[Dallas]
+lon=[-97.0380020141602]
+type=[airport]
+elev=[607]
+label=airport
+icao=[KDFW]
+id=53780
+region=[US-TX]
+runways=[7]
+lat=[32.896800994873]
+desc=[Dallas/Fort Worth International Airport]
+----
+
+In this small case study I have tried to show how I was able to evolve a query in
+stages and also to adapt to unexpected outcomes along the way. You could use
+essentially the same technique shown in this section to also copy one or more edges
+if you needed to.
 
 
 [[btree]]
@@ -18613,7 +18920,12 @@ can see from the output that the query did indeed use our new index.
 [source,groovy]
 ----
 g.V().has('city','London').has('country','CA').profile()
+----
 
+Here is the output returned by the query.
+
+[source,console]
+----
 Traversal Metrics
 Step                                              Traversers  Time (ms)
 ========================================================================
