@@ -1,6 +1,9 @@
-# sample.py
+# glv-client.py
 #
 # Connect to a Gremlin Server using a remote connection and issue some basic queries.
+#
+# Unlike in the basic-client.py example, the queries sent to the server are sent using
+# Gremlin byte code and not sent as text strings.
 #
 # This example code assumes that the GremlinPython library has been installed using:
 #
@@ -32,5 +35,8 @@ sample = g.V().hasLabel('airport'). \
                toList()
 
 # Print the results in a tabular form with a row index
-for i,c in enumerate(sample,1):
+# for ctr, c in enumerate(sample,1):
+i = 1
+for c in sample:
     print("%3d %4s %s" % (i,c[0],c[1]))
+    i += 1
