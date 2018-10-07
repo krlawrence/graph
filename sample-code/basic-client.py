@@ -3,7 +3,7 @@
 # Connect to a Gremlin Server using a client connection.
 #
 # Note that in this case the Gremlin queries are sent to  the server as text strings.
-# Too see an example of using Gremlin byte code instead see the glv-client.py example.
+# To see an example of using Gremlin byte code instead see the glv-client.py example.
 #
 # This example code assumes that the GremlinPython library has been installed using:
 #
