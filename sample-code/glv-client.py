@@ -40,3 +40,4 @@ i = 1
 for c in sample:
     print("%3d %4s %s" % (i,c[0],c[1]))
     i += 1
+

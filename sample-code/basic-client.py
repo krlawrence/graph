@@ -35,3 +35,4 @@ client.close()
 # Print the results in a tabular form with a row index
 for i,c in enumerate(results,1):
     print("%3d %4s %s" % (i,c[0],c[1]))
+
