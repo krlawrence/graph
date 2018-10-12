@@ -109,7 +109,7 @@ Chapter 8 - FURTHER READING
 - We finish up by providing several links to useful web sites where you can find
   tools and documentation for many of the technologies covered in this document.
 
-**NEWS ARCHIVE:**
+**NEWS ARCHIVE:**  
 [May-29-2018] Revision 279 (TP 3.3.3) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.    
 [Mar-28-2018] Revision 278 (TP 3.3.1) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
 [Feb-11-2018] Revision 277 was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
