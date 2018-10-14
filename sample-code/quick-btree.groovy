@@ -4,7 +4,7 @@ graph=TinkerGraph.open()
 g=graph.traversal()
 
 // Create the vertices and edges. Note how this is done in a single query
-// by chaining all of the steps together. 
+// by chaining all of the steps together.
 g.addV('root').property('data',9).as('root').   
   addV('node').property('data',5).as('b').   
   addV('node').property('data',2).as('c').   
