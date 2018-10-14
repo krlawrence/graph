@@ -1,6 +1,10 @@
 // Builds a small ordered Binary (BST) Tree
+
 graph=TinkerGraph.open()
 g=graph.traversal()
+
+// Create the vertices and edges. Note how this is done in a single query
+// by chaining all of the steps together.
 g.addV('root').property('data',9).as('root').   
   addV('node').property('data',5).as('b').   
   addV('node').property('data',2).as('c').   
@@ -19,7 +23,7 @@ g.addV('root').property('data',9).as('root').
   addE('left').from('i').to('j').
   addE('left').from('d').to('f').
   addE('right').from('b').to('h').
-  addE('left').from('c').to('g')
+  addE('left').from('c').to('g').iterate()
 
 
   // Find the largest value in the graph  (using max would be cheating!)  
