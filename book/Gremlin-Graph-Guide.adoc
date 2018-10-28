@@ -8056,7 +8056,7 @@ g.V().has('code','DFW').addE('route').from(xyz)
 Another way that we could have chosen to create our edge is by naming things using
 'as' steps. Note also there is more than one way to define the direction of an edge.
 Two examples are shown below. One uses the 'addOutE' step and the other uses the
-'outE' and 'to' combination. Notice also how the 'V' step was used below to
+'addE' and 'to' combination. Notice also how the 'V' step was used below to
 essentially start a new traversal midway through the current one.
 
 [source,groovy]
