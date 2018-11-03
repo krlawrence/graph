@@ -10569,7 +10569,7 @@ lambda expressions and see other ways that we could have written the previous qu
 Using Lambda functions
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Gremlin allows you to put a code fragment (sometimes called a Lambda function or a
+Gremlin allows you to include a code fragment (sometimes called a Lambda function or a
 closure) as part of a query. This is typically done as part of a 'filter', 'map' or
 'sideEffect' step but there are other places where you will find this concept used
 such as when working with 'sacks'.  This technique provides a lot of additional
@@ -10583,10 +10583,14 @@ to want to do as for programmers it feels like the programming they are used to.
 However, there is often, if not always, a pure Gremlin traversal step that can be
 used to do what is needed.  Of course with all rules there are exceptions.   
 
+NOTE: For reasons of security not all graph databases, especially those that are
+managed as hosted services, allow lambdas to be included in queries. You should
+always check the documentation for the graph database that you are using.
+
 By way of a very simple example, the code below declares a variable '"c"' and
 initializes it to zero. The Gremlin query that follows then adds one to '"c"' each
-time it finds an airport vertex located in Oregon. We then use a 'println' to display the updated value
-for '"c"'.  
+time it finds an airport vertex located in Oregon. We then use a 'println' to display
+the updated value for '"c"'.  
 
 [source,groovy]
 ----
@@ -10686,7 +10690,8 @@ language. However, as we will explore later in the "<<janpred>>" section, JanusG
 does provide some support. When working with a graph, such as TinkerGraph, that has
 no built in regular expression support you can use a 'filter' step combined with a
 Lambda as shown in the following two examples. The examples take advantage of methods
-provided by the Java String class.
+provided by the Java String class. Support for additional text search predicates is
+likely to appear in future Apache TinkerPop releases.
 
 [source,groovy]
 ----
