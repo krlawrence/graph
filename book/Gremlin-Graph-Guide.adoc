@@ -16341,13 +16341,11 @@ Austin as AUS.
 ----
 g.V().has('airport','code',neq('AUS')).
       filter(out('route').count().is(neq(0))).
-      local(union(
-             identity().values('code'),
-             local(repeat(out().simplePath()).
-                     emit(has('code','AUS')).times(10).
-                     limit(1)).
-             path().by('code')).
-             where(count(local).is(gte(8)))) 
+      local(repeat(out().simplePath()).
+              emit(has('code','AUS')).
+              times(100).limit(1)).
+      path().by('code').
+      where(count(local).is(gte(8))) 
 ----
 
 When run the query may take a few seconds to complete but should not take more than
