@@ -3,7 +3,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v281-preview, November 3rd 2018
 //v280 (TP 3.3.3), July 28, 2018
-//Sat Nov 03, 2018 09:33:22 CDT
+//Sat Nov 03, 2018 13:58:12 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -6878,6 +6878,36 @@ g.V(3).out().count().as('a').math('a / 2')
 
 29.5
 ----
+
+[[mathconvert]]
+Converting feet to meters
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+The length of the longest runway at each airport in the graph is stored as units of
+feet. We can use a simple 'math' step to convert that value to meters.
+
+[source,groovy]
+----
+g.V().has('code','DFW').values('longest').math('_ * 0.3048')
+
+4084.6248
+----
+
+We could make the result a bit more interesting by adding a 'project' step to the
+query.
+
+[source,groovy]
+----
+g.V().has('code','DFW').
+      project('Longest runway at','feet','meters').
+        by('code').
+        by('longest').
+        by(values('longest').math('_ * 0.3048'))
+
+[Longest runway at:DFW,feet:13401,meters:4084.6248]
+----
+
 
 [[mathtrig]]
 Using the trigonometric functions
