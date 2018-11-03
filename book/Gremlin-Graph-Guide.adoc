@@ -16328,8 +16328,8 @@ long as it is big enough. A value of 100 does not adversely affect the query giv
 that the 'emit' step will return a result as soon as AUS is reached. The query will
 find a single path between each starting airport and AUS. The 'where' step on the
 last line of the query only keeps any paths that have a length of eight or more. So
-essentially that says find me only routes that take at least eight hops to get to
-Austin.
+essentially that says find me only routes that take at least seven hops to get to
+Austin as AUS. 
 
 [source,groovy]
 ----
