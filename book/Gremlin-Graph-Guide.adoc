@@ -5063,7 +5063,7 @@ of 'none' is used as the catchall. Notice how in this case, the values returned 
 
 [source,groovy]
 ----
-// You can return constant values of you need to
+// You can return constant values if you need to
 g.V().hasLabel('airport').limit(10).choose(values('runways')).
                                       option(1,constant('just one')).
                                       option(2,constant('a couple')).
@@ -6983,6 +6983,62 @@ g.inject(Math.toRadians(45)).math('tan(_)').math('ceil(_)')
 
 1.0
 ----
+
+
+[[mathsignum]]
+Using signum to make a choice
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The 'signum' operator allows us to make a decision depending upon whether a numeric
+value is positive, negative or zero as shown below.
+
+[source,groovy]
+----
+g.inject(-10).math('signum(_)')
+-1.0
+
+g.inject(10).math('signum(_)')
+1.0
+
+g.inject(0).math('signum(_)')
+0.0
+----
+
+We can use this capability to build a query that reports which side of
+the Greenwich meridian an airport is located. Note that I had to use the '"D"'
+suffix on the numbers in the 'option' steps as 'math' returns a double precision
+result.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').sample(12).
+      project('IATA','city','position').
+        by('code').
+        by('city').
+        by(choose(values('lon').math('signum(_)')).
+          option(0D,constant('on the meridian')).
+          option(1D,constant('East')).
+          option(-1D,constant('West')))
+
+----
+
+Here is an example of the output from running the query.
+[source,groovy]
+----
+[IATA:LGW,city:London,position:West]
+[IATA:STN,city:London,position:East]
+[IATA:LIM,city:Lima,position:West]
+[IATA:SYD,city:Sydney,position:East]
+[IATA:VCE,city:Venice,position:East]
+[IATA:FCO,city:Rome,position:East]
+[IATA:OAK,city:Oakland,position:West]
+[IATA:GVA,city:Geneva,position:East]
+[IATA:LAS,city:Las Vegas,position:West]
+[IATA:NRT,city:Tokyo,position:East]
+[IATA:DME,city:Moscow,position:East]
+[IATA:ALC,city:Alicante,position:West] 
+----
+
 
 [[stddev]]
 Calculating a standard deviation
