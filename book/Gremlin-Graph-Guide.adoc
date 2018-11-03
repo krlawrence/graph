@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v281-preview, October 27th 2018
+v281-preview, November 3rd 2018
 //v280 (TP 3.3.3), July 28, 2018
-//Sat Oct 27, 2018 19:33:33 CDT
+//Sat Nov 03, 2018 09:33:22 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -24,7 +24,7 @@ v281-preview, October 27th 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: October 27th 2018
+:draftdate: November 3rd 2018
 :tpvercheck: 3.3.3
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -16309,27 +16309,78 @@ g.V().has('code','VAK').out().path().by('code')
 This proved both an interesting and useful exercise and uncovered some errors in the
 graph that had slipped through my error checking!
 
+[[longestroutes]]
+Looking for the longest routes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Sometimes it is interesting to ponder questions such as, starting from a given
+airport what are the most difficult places to get to. For the sake of this example
+let's define "difficult to get to" as meaning "requires the most hops". By modifying
+the query from the previous section we can come up with a way to detect some longest
+routes.
+
+The query shown below finds every airport that has out going routes and is not Austin
+(AUS). For each airport found an attempt is made to get to Austin in ten or less
+hops. For each airport the attempt is only made once. I decided to use a value of 10
+as I was already fairly confident that there would be no airports further away in
+terms of stops than that. However, it really does not matter what value is used so
+long as it is big enough. A value of 100 does not adversely affect the query given
+that the 'emit' step will return a result as soon as AUS is reached. The query will
+find a single path between each starting airport and AUS. The 'where' step on the
+last line of the query only keeps any paths that have a length of eight or more. So
+essentially that says find me only routes that take at least eight hops to get to
+Austin.
+
+[source,groovy]
+----
+g.V().has('airport','code',neq('AUS')).
+      filter(out('route').count().is(neq(0))).
+      local(union(
+             identity().values('code'),
+             local(repeat(out().simplePath()).
+                     emit(has('code','AUS')).times(10).
+                     limit(1)).
+             path().by('code')).
+             where(count(local).is(gte(8)))) 
+----
+
+When run the query may take a few seconds to complete but should not take more than
+that on a typical laptop or desktop. Here are the results of running the query.
+
+[source,groovy]
+----
+[YPO,YAT,ZKE,YFA,YMO,YTS,YYZ,AUS]
+[YZG,YIK,AKV,YPX,YGL,YUL,ATL,AUS]
+[THU,NAQ,JUV,JAV,GOH,KEF,PIT,AUS]
+----
+
+When looking for longest routes in a graph, especially a highly connected one, you
+need to be careful. Noticed how I chose a very specific target for my search. If you
+were to try and write a query that arbitrarily looked for the longest route between
+any two airports you run the risk of writing a query that runs for an extremely long
+time. In many ways the concept of "longest route" can be viewed as an anti pattern.
+
 [[unwantededges]]
 Finding unwanted parallel edges 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In general terms there are many reasons in a graph that there could be more than one edge
-between the same two vertices in the same direction.  Most property graph systems allow this
-and many data models take advantage of this capability. We call these parallel edges.
-However, in the 'air-routes' graph we only model the existence of a route using a single
-edge from airport A to airport B. It is considered an error for there to be more than one
-edge between the same two airports in the same direction. Note this does not include an
-edge going the other way (from B to A).
+In general terms there are many reasons in a graph that there could be more than one
+edge between the same two vertices in the same direction.  Most property graph
+systems allow this and many data models take advantage of this capability. We call
+these parallel edges.  However, in the 'air-routes' graph we only model the existence
+of a route using a single edge from airport A to airport B. It is considered an error
+for there to be more than one edge between the same two airports in the same
+direction. Note this does not include an edge going the other way (from B to A).
 
-During development of the 'air-routes' graph, when I was still cleaning up the data, I
-frequently ran into problems with parallel edges getting included in the graph by mistake.
-I realized I could use Gremlin to help me detect these error cases.
+During development of the 'air-routes' graph, when I was still cleaning up the data,
+I frequently ran into problems with parallel edges getting included in the graph by
+mistake.  I realized I could use Gremlin to help me detect these error cases.
 
-Initially I tried something very basic, that still required quite a bit of manual reading
-of the output. I used the following query to tell me if for a given airport there was more
-than one outgoing edge to any other airport. This required me to have a hunch ahead of
-time which airport vertices might have an issue. Far from ideal when there are over 3,300
-airport vertices in the graph.
+Initially I tried something very basic, that still required quite a bit of manual
+reading of the output. I used the following query to tell me if for a given airport
+there was more than one outgoing edge to any other airport. This required me to have
+a hunch ahead of time which airport vertices might have an issue. Far from ideal when
+there are over 3,300 airport vertices in the graph.
 
 [source,groovy]
 ----
