@@ -3788,7 +3788,8 @@ TIP: The 'between' predicate can be used to simulate a string 'startsWith' metho
 As discussed more in the "<<fuzzyregs>>" section, Gremlin does not currently support
 any methods for applying regular expressions or even more basic text analysis
 operators to strings. This use of the 'between' predicate can at least be used to
-simulate a 'startsWith' type of operator.
+simulate a 'startsWith' type of operator. It is likely that support for additional
+text search predicates will appear in future Apache TinkerPop releases.
 
 [source,groovy]
 ----
