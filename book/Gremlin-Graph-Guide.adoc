@@ -16355,10 +16355,17 @@ that on a typical laptop or desktop. Here are the results of running the query.
 ----
 
 When looking for longest routes in a graph, especially a highly connected one, you
-need to be careful. Noticed how I chose a very specific target for my search. If you
+need to be careful. Notice how I chose a very specific target for my search. 
+
+NOTE: Looking for longest paths must be done carefully as it can result in very long
+running queries.
+
+If you
 were to try and write a query that arbitrarily looked for the longest route between
 any two airports you run the risk of writing a query that runs for an extremely long
-time. In many ways the concept of "longest route" can be viewed as an anti pattern.
+time. In many ways the concept of "longest path" can be viewed as an anti pattern.
+This is especially true in highly connected graphs of which `air-routes` is an
+example.
 
 [[unwantededges]]
 Finding unwanted parallel edges 
