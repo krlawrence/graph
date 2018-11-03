@@ -8,7 +8,8 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
 
 The examples in this release have been tested against Apache TinkerPop at the 3.3.2 and 3.3.3 levels. They have also been tested against JanusGraph 0.2 (where appropriate) which supports TinkerPop at the 3.2.6 level. As always I am very grateful for the feedback buy e-mail, issue and PR. This release resolves a number of open issues. Please check the commit log for finer grained details of all changes. Here is a list of the major improvements in this release.
 
-- Added a new section called "Seven degrees of separation"
+- Added a new section called "Seven degrees of separation".
+- Added a new section on finding the longest routes.
 - Added a section presenting a case study of copying one vertex from another.
 - Added a section on finding isolated networks within the graph.
 - Expanded the section that discusses using `coalesce` as a way to do `upsert` type operations
