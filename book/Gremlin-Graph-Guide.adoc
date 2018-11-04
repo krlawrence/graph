@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v281-preview, November 3rd 2018
+v281-preview, November 4th 2018
 //v280 (TP 3.3.3), July 28, 2018
-//Sat Nov 03, 2018 13:58:12 CDT
+//Sun Nov 04, 2018 17:32:44 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -24,7 +24,7 @@ v281-preview, November 3rd 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: November 3rd 2018
+:draftdate: November 4th 2018
 :tpvercheck: 3.3.3
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -7023,6 +7023,7 @@ g.V().hasLabel('airport').sample(12).
 ----
 
 Here is an example of the output from running the query.
+
 [source,groovy]
 ----
 [IATA:LGW,city:London,position:West]
@@ -7149,14 +7150,14 @@ hopefully this section gives you a feel for ways that the 'math' step can be use
 create interesting queries.
 
 [[withindex]]
-Including an index with results - introducing 'withIndex' and 'index'
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Including an index with results - introducing 'withIndex' and 'indexed'
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If for any reason you wanted an index value included as part of the results from a
 query you can use the Groovy 'withIndex' or 'indexed' methods as shown below. The
 'withIndex' method adds the index value at the end of a list whereas the 'indexed'
 method adds it at the start. You can provide a starting index value as a parameter.
-If no value is provided the default value for the first index will be zero.
+If no value is provided the default value for the first index will be zero. 
 
 
 [source,groovy]
@@ -7168,7 +7169,12 @@ g.V().has('region','US-OK').values('code').withIndex()
 [LAW,2]
 [SWO,3]
 ----
-Here is the same query but using 1 as the starting index.
+
+NOTE: Note that 'indexed' and 'withIndex' are Groovy methods and not Gremlin
+traversal steps. They will only work using graph databases that allow Groovy code to
+be included as part of a query.
+
+Here is the same query as before but using 1 as the starting index.
 
 [source,groovy]
 ----
