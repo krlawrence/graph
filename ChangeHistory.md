@@ -17,8 +17,10 @@ The examples in this release have been tested against Apache TinkerPop at the 3.
 - Added a section on finding airports with no routes.
 - Added a small section showing `math` being used to convert feet to meters.
 - Added examples of the `math` step's `signum` operator.
+- Added examples of using `project` to feed `math`.
 - Added more examples to the section introducing the `inject` step.
 - Added a warning that not all Graph DBs accept lambdas (in-line code).
+- Added additional notes and tips and made wording improvements.
 - Added another example to the section that introduces the `identity` step.
 - Added two new samples - `basic-client.py` and `glv-client.py`- that show how to connect to Gremlin Server using the `gremlinpython` library.
 - Uploaded updated versions of the air-routes data and corresponding demo apps.
