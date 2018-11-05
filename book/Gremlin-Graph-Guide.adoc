@@ -3,7 +3,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v281-preview, November 4th 2018
 //v280 (TP 3.3.3), July 28, 2018
-//Sun Nov 04, 2018 17:32:44 CST
+//Sun Nov 04, 2018 18:40:13 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -7143,11 +7143,47 @@ g.withSideEffect("m",mean).
 
 This time we got a much bigger number back as the result compared to when we looked
 at runways. This reflects the differing distribution of routes between major and more
-minor airports. 
+minor airports.
 
-There are a lot of other operators that I have not provided examples for but
-hopefully this section gives you a feel for ways that the 'math' step can be used to
-create interesting queries.
+
+[[mathproject]]
+Using 'project' to feed values to 'math'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The 'project' step can be used to create a map of key/value pairs that can in turn be
+passed to a 'math' step. First of all let's create a query that generates a simple
+projection containing the number of incoming and outgoing routes at the Austin
+airport.
+
+[source,groovy]
+----
+g.V().has('code','AUS').
+      project('in','out').
+        by(__.in('route').count()).
+        by(out('route').count())
+
+[in:59,out:59]
+----
+
+We can now add a 'math' step that uses the key names from the map created by the
+'project' step and adds their values together.
+
+[source,groovy]
+----
+math('in + out')
+
+g.V().has('code','AUS').
+      project('in','out').
+        by(__.in('route').count()).
+        by(out('route').count()).
+      math('in + out')
+
+118.0
+----
+
+There are obviously many other operators that I have not provided examples for but
+hopefully the ones I have provided give you a feel for ways that the 'math' step can
+be used to create interesting queries.
 
 [[withindex]]
 Including an index with results - introducing 'withIndex' and 'indexed'
