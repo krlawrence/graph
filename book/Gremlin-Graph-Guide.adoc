@@ -7170,8 +7170,6 @@ We can now add a 'math' step that uses the key names from the map created by the
 
 [source,groovy]
 ----
-math('in + out')
-
 g.V().has('code','AUS').
       project('in','out').
         by(__.in('route').count()).
