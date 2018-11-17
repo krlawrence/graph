@@ -3,7 +3,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v281-preview, November 17th 2018
 //v280 (TP 3.3.3), July 28, 2018
-//Sat Nov 17, 2018 08:45:17
+//Sat Nov 17, 2018 09:00:12 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -1984,7 +1984,7 @@ reference the 'city' property of the third element in the path rather than its
 'code'. 
 
 TIP: The 'by' modulator steps are processed in a round robin fashion in cases where
-there are more results to apply them to that 'by' modulators specified. 
+there are more results to apply them to than 'by' modulators specified. 
 
 The example above is equivalent to this longer form of the same query.  
 
