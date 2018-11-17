@@ -5,4 +5,6 @@ Note that files with a ".groovy" extension but with all lowercase names are inte
 
 Files with a ".java" extension are stand alone Java applications that need to be compiled and run using a Java JDK.
 
+Files with a ".py" extension are stand alone Python applications that require the Gremlin Python library to have been installed using PIP or an equivalent method. 
+
 Some of the samples use data from CSV files that can be found in the *'/sample-data'* folder.
