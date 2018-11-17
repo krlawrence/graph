@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v281-preview, November 4th 2018
+v281-preview, November 17th 2018
 //v280 (TP 3.3.3), July 28, 2018
-//Sun Nov 04, 2018 18:40:13 CST
+//Sat Nov 17, 2018 08:45:17
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -24,8 +24,8 @@ v281-preview, November 4th 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: November 4th 2018
-:tpvercheck: 3.3.3
+:draftdate: November 17th 2018
+:tpvercheck: 3.3.4
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
 //        has a white foreground color. The default was unreadable,
@@ -1765,7 +1765,7 @@ that we have created. Again you can see the results we get from running the quer
 // How many airports in there in France (having first counted all countries)
 g.V().hasLabel('airport').groupCount().by('country').select('FR')
 
-59
+58
 
 // How many airports are there in France, Greece and Belgium respectively?
 g.V().hasLabel('airport').groupCount().by('country').select('FR','GR','BE')
@@ -22143,4 +22143,4 @@ http://docs.janusgraph.org/latest/javadoc.html
 .Public mailing list for JanusGraph users
 https://groups.google.com/forum/#!forum/janusgraph-users
 
-ne/ vim: set tw=85 cc=+1 wrap spell:
+//vim: set tw=85 cc=+1 wrap spell redrawtime=10000:
