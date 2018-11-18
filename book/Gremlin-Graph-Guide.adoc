@@ -3,7 +3,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v281-preview, November 18th 2018
 //v280 (TP 3.3.3), July 28, 2018
-//Sun Nov 18, 2018 10:14:35 CDT
+//Sun Nov 18, 2018 12:17:30 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -20441,17 +20441,16 @@ sh>
 Using an external index with JanusGraph
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To be written
+JanusGraph allows an external index to be created using a technology such as Apache
+Elastic Search or Apache Solr. You would create such an index in cases where you need
+to do more sophisticated pattern matching as part of a graph query. This topic is
+currently a little beyond the main focus of this book which is to give a detailed
+introduction to the Gremlin Query and Traversal language and some of the ways that
+technology can be deployed. You can find a detailed explanation of how to create an
+external index in the JanusGraph documentation which is located at the following
+URLs: https://docs.janusgraph.org/latest/indexes.html and
+https://docs.janusgraph.org/latest/index-backends.html.
 
-Elasticsearch
-^^^^^^^^^^^^^^^^^^^^^
-
-To be written
-
-Apache Solr
-^^^^^^^^^^^
-
-To be written
 
 [[gremlinserver]]
 Introducing Gremlin Server
