@@ -3,7 +3,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v281-preview, November 18th 2018
 //v280 (TP 3.3.3), July 28, 2018
-//Sun Nov 18, 2018 12:17:30 CST
+//Sun Nov 18, 2018 12:43:22 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -20644,8 +20644,43 @@ sh> gremlin-server.sh conf/gremlin-server/gremlin-server.yaml
 
 If all goes well you should see output from the Gremlin Server displayed. The server
 will keep running until you kill it. In this case a simple CTRL-C is all you need to
-do to kill the server. After you press CTRL-C the server will do a bit of cleaning up
-and 
+do to kill the server. After you press CTRL-C the server will do a bit of cleaning
+up.
+
+TIP: You can use the 'start' keyword to start the Gremlin Server as a background
+task.
+
+You can also start the Gremlin Server in the background rather than have it take over
+your current terminal window by adding the 'start' keyword as part of the invocation
+command as shown below.
+
+
+[source,console]
+----
+sh> gremlin-server.sh start conf/gremlin-server/gremlin-server.yaml
+
+Server started 25897
+----
+
+If you want to check whether or not the Gremlin Server is currently running you can
+use the 'status' keyword.
+
+[source,console]
+----
+sh> gremlin-server.sh status
+
+Server running with PID 25897
+----
+
+To stop the server you can use the 'stop' keyword as follows. 
+
+[source,console]
+----
+sh> gremlin-server.sh stop
+
+Server stopped [25897]
+----
+
 
 [[serverconsole]]
 Connecting to a Gremlin Server from the Gremlin Console
