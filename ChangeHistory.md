@@ -14,7 +14,7 @@ The examples in this release have been tested against Apache TinkerPop at the 3.
 - Added a section on finding isolated networks within the graph.
 - Expanded the section that discusses using `coalesce` as a way to do `upsert` type operations
 - Added to the section that introduces the `emit` step.
-- Added a section covering the new Order.asc and Order.desc enumerations. Issue #127.
+- Added a section covering the new `Order.asc` and `Order.desc` enumerations. Issue #127.
 - Added a section on finding airports with no routes.
 - Added a small section showing `math` being used to convert feet to meters.
 - Added examples of the `math` step's `signum` operator.
