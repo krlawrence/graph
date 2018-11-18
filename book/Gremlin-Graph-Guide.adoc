@@ -3,7 +3,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 Kelvin R. Lawrence <gfxman@yahoo.com>
 v281-preview, November 18th 2018
 //v280 (TP 3.3.3), July 28, 2018
-//Sun Nov 18, 2018 12:43:22 CST
+//Sun Nov 18, 2018 13:24:57 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -20830,7 +20830,7 @@ Gremlin Server.
 
 [source,console]
 ----
-sh> curl "http://localhost:8182?gremlin=g.V().has('code','AUS').valueMap()" 
+sh> curl "http://localhost:8182/gremlin?gremlin=g.V().has('code','AUS').valueMap()" 
 ----
 
 In response to the HTTP GET request the server sends back the result packaged as JSON
