@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v281-preview, November 17th 2018
+v281-preview, November 18th 2018
 //v280 (TP 3.3.3), July 28, 2018
-//Sat Nov 17, 2018 09:00:12 CST
+//Sun Nov 18, 2018 10:14:35 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -24,7 +24,7 @@ v281-preview, November 17th 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: November 17th 2018
+:draftdate: November 18th 2018
 :tpvercheck: 3.3.4
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -4283,7 +4283,7 @@ into two columns.
 [code:[DEN],longest:[16000]]    [code:[ZIA],longest:[15092]]
 ----
 
-Lastly, let's look at another way we could have coded the query we used earlier to
+Let's look at another way we could have coded the query we used earlier to
 find the longest runway in the graph. As you may recall, we used the following
 query. While the query does indeed find the longest runway in the graph. If we wanted
 to know which airport or airports had runways of that length we would have to run a
@@ -4316,6 +4316,8 @@ above sea level. Aircraft need a lot more runway to operate safely at that altit
 [country:[CN], code:[BPX], longest:[18045], city:[Bangda], elev:[14219], icao:[ZUBD], lon:[97.1082992553711], type:[airport], region:[CN-54], runways:[1], lat:[30.5536003112793], desc:[Qamdo Bangda Airport]]
 ----
 
+
+[[sortkeyvalue]]
 Sorting by key or value
 ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -4366,6 +4368,141 @@ g.V().hasLabel('airport').limit(10).
 [7:[DFW],6:[BOS],5:[ATL],4:[BNA,IAD],3:[ANC,BWI,DCA],2:[AUS,FLL]]
 ----
 
+[[orderchanges]]
+Changes to 'order' introduced in TinkerPop release 3.3.4
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+On October 15th 2018 a change was introduced as part of the  Apache TinkerPop release
+3.3.4. This change affects the 'incr' and 'decr' keywords recognized by the 'Order'
+step. These keywords have now been declared as deprecated and new keywords 'asc' and
+'desc' have been introduced.  All of the examples in the previous two sections remain
+valid but moving forward the new keywords should be used if the database you are
+using supports a version of Apache TinkerPop at the 3.3.4 level or higher. It is
+possible that in some future TinkerPop release the 'incr' and 'decr' keywords will be
+removed from the language.
+
+NOTE: The 'Order.incr' and 'Order.decr' enumerations were deprecated in the TinkerPop
+3.3.4 release in favor of 'Order.asc' and 'Order.desc'. This was done bring the
+keywords more into line with other commonly used query languages.
+
+Let's take a look at how queries are affected by these changes.  The query below
+finds the 10 airports in England with the most outgoing routes and sorts the results
+in descending order. Prior to TinkerPop 3.3.4 the query would have been written as
+follows.
+
+[source,groovy]
+----
+g.V().has('airport','region','GB-ENG').
+      order().by(out().count(),decr).limit(10).
+      project('a','b').by('code').by(out().count())
+----
+
+Running the query produces the following results.
+
+[source,groovy]
+----
+[a:LGW,b:200]
+[a:LHR,b:191]
+[a:STN,b:186]
+[a:MAN,b:182]
+[a:BHX,b:109]
+[a:LTN,b:104]
+[a:BRS,b:84]
+[a:EMA,b:64]
+[a:LBA,b:62]
+[a:LPL,b:60]
+----
+
+Using the new keywords introduced in the 3.3.4 release, the query can be written as
+shown below.
+
+[source,groovy]
+----
+g.V().has('airport','region','GB-ENG').
+      order().by(out().count(),desc).limit(10).
+      project('a','b').by('code').by(out().count())
+----
+
+The results produced, as you would expect, are the same as before.
+
+[source,groovy]
+----
+[a:LGW,b:200]
+[a:LHR,b:191]
+[a:STN,b:186]
+[a:MAN,b:182]
+[a:BHX,b:109]
+[a:LTN,b:104]
+[a:BRS,b:84]
+[a:EMA,b:64]
+[a:LBA,b:62]
+[a:LPL,b:60]
+----
+
+For completeness let's take a look at the same query but sorted in ascending order
+using both the original 'incr' keyword and the newly introduced 'asc' keyword.  As
+with 'incr', this remains the default behavior if neither 'asc' nor 'desc' is
+specified.
+
+
+[source,groovy]
+----
+g.V().has('airport','region','GB-ENG').
+      order().by(out().count(),incr).limit(10).
+      project('a','b').by('code').by(out().count())
+----
+
+This time the query has found the airports with the least outgoing commercial
+aviation routes.
+
+[source,groovy]
+----
+[a:CVT,b:0]
+[a:GLO,b:1]
+[a:LEQ,b:1]
+[a:BZZ,b:1]
+[a:MME,b:2]
+[a:ISC,b:3]
+[a:HUY,b:6]
+[a:BLK,b:9]
+[a:NQY,b:11]
+[a:DSA,b:15]
+----
+
+The query below is modified to use the new 'asc' keyword.
+
+[source,groovy]
+----
+g.V().has('airport','region','GB-ENG').
+      order().by(out().count(),asc).limit(10).
+      project('a','b').by('code').by(out().count())
+----
+
+The results produced are the same as before.
+
+[source,groovy]
+----
+[a:CVT,b:0]
+[a:GLO,b:1]
+[a:LEQ,b:1]
+[a:BZZ,b:1]
+[a:MME,b:2]
+[a:ISC,b:3]
+[a:HUY,b:6]
+[a:BLK,b:9]
+[a:NQY,b:11]
+[a:DSA,b:15]
+----
+
+As of TinkerPop 3.3.4 these are not breaking changes. Most if not all TinkerPop
+enabled graph databases continue to support the 'incr' and 'decr' keywords. In fact
+until the majority of graph databases offer support for the new 'asc' and 'desc'
+keywords it is likely that the prior ones will keep working. However, be aware that
+at some future date it is possible that the TinkerPop language will discontinue
+support for 'incr' and 'decr' and you will need to use the new 'asc' and 'desc'
+keywords.
+
+
 [[bool]]                          
 Boolean operations
 ~~~~~~~~~~~~~~~~~~
@@ -4377,6 +4514,7 @@ by using 'without' but it is still good to know that these operators exist.  The
 'and' operator can sometimes be avoided by chaining 'has' steps together. That said
 there are always cases where having these boolean steps available is extremely
 useful.
+
 
 [source,groovy]
 ----
@@ -17225,13 +17363,19 @@ which is part of the 'VertexProperty' interface.
 When local scope needs to be specified as a parameter of sort order direction needs
 to be specified the statics defined in the  'Scope' and 'Order' Enums can be used.
 
+NOTE: The 'Order.incr' and 'Order.decr' enumerations were deprecated in the TinkerPop
+3.3.4 release in favor of 'Order.asc' and 'Order.desc' to bring the keywords more
+into line with other commonly used query languages.
+
 .Scope and ordering
 [cols="1,1,3"]
 |==============================================================================
 |local   | Scope.local    | order(Scope.local)
 |global  | Scope.global   | order(Scope.global)
-|decr    | Order.decr     | order().by(Order.decr)
-|incr    | Order.incr     | order().by(Order.incr)
+|desc    | Order.desc     | order().by(Order.desc)
+|decr    | Order.decr     | order().by(Order.decr)  [Deprecated since 3.3.4]
+|incr    | Order.asc      | order().by(Order.asc)
+|incr    | Order.incr     | order().by(Order.incr)  [Deprecated since 3.3.4]
 |shuffle | Order.shuffle  | order().by(Order.shuffle)
 |==============================================================================
 
