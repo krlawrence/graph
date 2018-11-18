@@ -20441,8 +20441,8 @@ sh>
 Using an external index with JanusGraph
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-JanusGraph allows an external index to be created using a technology such as Apache
-Elastic Search or Apache Solr. You would create such an index in cases where you need
+JanusGraph allows an external index to be created using a technology such as
+ElasticSearch or Apache Solr. You would create such an index in cases where you need
 to do more sophisticated pattern matching as part of a graph query. This topic is
 currently a little beyond the main focus of this book which is to give a detailed
 introduction to the Gremlin Query and Traversal language and some of the ways that
