@@ -20830,7 +20830,7 @@ Gremlin Server.
 
 [source,console]
 ----
-sh> curl "http://localhost:8182/gremlin?gremlin=g.V().has('code','AUS').valueMap()" 
+sh> curl "http://localhost:8182?gremlin=g.V().has('code','AUS').valueMap()" 
 ----
 
 In response to the HTTP GET request the server sends back the result packaged as JSON
