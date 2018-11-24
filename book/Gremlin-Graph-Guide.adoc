@@ -1,9 +1,10 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v281-preview, November 18th 2018
+v281-preview, November 24th 2018
+// vim: set tw=85 cc=+1 wrap spell redrawtime=10000:
 //v280 (TP 3.3.3), July 28, 2018
-//Sun Nov 18, 2018 13:24:57 CST
+//Sat Nov 24, 2018 16:18:28 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -24,7 +25,7 @@ v281-preview, November 18th 2018
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: November 18th 2018
+:draftdate: November 24th 2018
 :tpvercheck: 3.3.4
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -20652,14 +20653,37 @@ task.
 
 You can also start the Gremlin Server in the background rather than have it take over
 your current terminal window by adding the 'start' keyword as part of the invocation
-command as shown below.
+command as shown below.  The examples below assume that you are starting the server
+from the place where you installed the Gremlin Server zip file.
 
 
 [source,console]
 ----
-sh> gremlin-server.sh start conf/gremlin-server/gremlin-server.yaml
+sh> bin/gremlin-server.sh start
 
 Server started 25897
+----
+
+By default the configuration information for the server being started will be looked
+for in the file `conf/gremlin-server.yaml`. If you want to override this value you
+need to provide an environment variable called 'GREMLIN_YAML' before starting the
+server as shown below.
+
+[source,console]
+----
+sh> export GREMLIN_YAML='conf/mysettings.yaml'
+sh> bin/gremlin-server.sh start
+
+Server started 25897
+----
+
+As an alternative to defining an environment variable, you can instead create a file
+called `bin/gremlin-server.conf` and put the name of your YAML file in it. An example
+is shown below.
+
+[source,console]
+----
+GREMLIN_YAML='conf/mysettings.yaml'
 ----
 
 If you want to check whether or not the Gremlin Server is currently running you can
@@ -20667,7 +20691,7 @@ use the 'status' keyword.
 
 [source,console]
 ----
-sh> gremlin-server.sh status
+sh> bin/gremlin-server.sh status
 
 Server running with PID 25897
 ----
@@ -20676,7 +20700,7 @@ To stop the server you can use the 'stop' keyword as follows.
 
 [source,console]
 ----
-sh> gremlin-server.sh stop
+sh> bin/gremlin-server.sh stop
 
 Server stopped [25897]
 ----
@@ -20752,8 +20776,50 @@ gremlin> :> g.V().count()
 ==>3624
 ----
 
-If you are going to be issuing a lot of queries to the remote graph, I find it more
-convenient to put the console into '"remote mode"'. This can be done as follows.
+When working within the Gremlin console, one other useful thing to be aware of is
+that the results of queries sent to a server, when the console is in '"local mode"',
+as well as being displayed are stored in a variable called 'result'. Take a look at
+the query below.
+
+[source,groovy]
+----
+gremlin> :>  g.V().hasLabel('continent').group().by('desc').by(out().count())
+
+==>{South America=305, Asia=941, Europe=596, Africa=298, Antarctica=0, North America=981, Oceania=287}
+----
+
+If we were to print the contents of the 'result' variable we would find it contains
+the results from the query.
+
+[source,groovy]
+----
+gremlin> println result
+
+[result{object={South America=305, Asia=941, Europe=596, Africa=298, Antarctica=0, North America=981, Oceania=287} class=java.lang.String}]
+----
+
+As the console is still in local mode we can use some inline Groovy code to post
+process, in this case  pretty print, the contents of 'result'. This capability is
+worth keeping in mind. There are some interesting things it allows you to do such as
+easily post process results and saving them to a file locally when working with a
+remote server. 
+
+[source,groovy]
+----
+gremlin> for (x in result['object'][0][1..-2].split(', ')) println x
+
+South America=305
+Asia=941
+Europe=596
+Africa=298
+Antarctica=0
+North America=981
+Oceania=287
+----
+
+As useful as keeping the console in '"local mode"' can be, if you are going to be
+issuing a lot of queries to the remote graph, I find it more convenient to put the
+console into '"remote mode"'. This can be done as follows.
 
 [source,console]
 ----
@@ -20762,7 +20828,7 @@ gremlin> :remote console
 All scripts will now be sent to Gremlin Server - [localhost/127.0.0.1:8182] - type ':remote console' to return to local mode
 ----
 
-The console is now in remote mode. All queries that you enter will be sent to the
+The console is now in '"remote mode"'. All queries that you enter will be sent to the
 Gremlin Server and there is no need to use the '":>"' prefix.
 
 [source,groovy]
@@ -22321,4 +22387,4 @@ http://docs.janusgraph.org/latest/javadoc.html
 .Public mailing list for JanusGraph users
 https://groups.google.com/forum/#!forum/janusgraph-users
 
-//vim: set tw=85 cc=+1 wrap spell redrawtime=10000:
+// vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
