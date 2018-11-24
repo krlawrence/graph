@@ -22,6 +22,7 @@ The examples in this release have been tested against Apache TinkerPop at the 3.
 - Added more examples to the section introducing the `inject` step.
 - Added a warning that not all Graph DBs accept lambdas (in-line code).
 - Added additional notes and tips and made wording improvements.
+- Added to the section on the Gremlin Server and using a remotely connected Gremlin Console.
 - Added another example to the section that introduces the `identity` step.
 - Added coverage of the `start`, `stop` and `status` keywords that can be used to control a Gremlin Server.
 - Added two new samples - `basic-client.py` and `glv-client.py`- that show how to connect to Gremlin Server using the `gremlinpython` library.
