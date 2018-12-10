@@ -100,3 +100,11 @@ g.V().has('person','name','Mary').
            ,__.as('maryalreadyknows').out('knows').where(neq('mary')).as('c')
            ,__.not(__.as('mary').out().as('c'))).
       select('c').by('name').dedup()
+
+// Which of Mary's friends already know each other?
+ g.V().has('name','Mary').as('mary').out('knows').aggregate('maryknows').
+       local(union(identity().values('name'),
+             out('knows').where(neq('mary')).where(within('maryknows')).
+       values('name')).fold())
+
+
