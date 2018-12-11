@@ -18,9 +18,12 @@ g.addV("person").property("name","Albert").as("albert").
   addV("person").property("name","Max").as("max").
   addV("person").property("name","Lily").as("lily").
   addV("person").property("name","Peter").as("peter").
+  addV("person").property("name","Sarah").as("sarah").
   addV("person").property("name","Susan").as("susan").
   addV("place").property("name","Boston").as("bos").
+  addV("place").property("name","Chicago").as("ord").
   addV("place").property("name","Dallas").as("dal").
+  addV("place").property("name","Los Angeles").as("lax").
   addV("place").property("name","Miami").as("mia").
   addV("place").property("name","New York City").as("nyc").
   addV("place").property("name","Seattle").as("sea").
@@ -56,6 +59,7 @@ g.addV("person").property("name","Albert").as("albert").
   addE("lives_in").from("peter").to("dal").
   addE("knows").from("susan").to("peter").
   addE("knows").from("susan").to("mary").
+  addE("lives_in").from("sarah").to("ord").
   addE("lives_in").from("susan").to("sea").iterate()
  
 // What does the graph look like?
