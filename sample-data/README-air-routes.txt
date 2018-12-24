@@ -2,6 +2,9 @@ Information about the Air Routes graph data set.
 
 These notes refer to the version of the data set used by the examples in the book.
 
+If you would like instead to work with the most recent version of the data please use
+the file called 'air-routes-latest.graphml.'
+
 Timestamp: Fri, 06 Oct 2017 11:28:40 -0500
 
 This file contains the following sections
