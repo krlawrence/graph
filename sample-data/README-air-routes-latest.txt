@@ -6,6 +6,8 @@ This file contains the following sections
   1. Introduction
   2. Some statistics about the graph
 
+The latest data set adds 47 additional airports and 4,692 additional routes to 
+the original air-routes.graphml data set.
 
 1. INTRODUCTION 
 
