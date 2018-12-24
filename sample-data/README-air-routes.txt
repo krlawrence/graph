@@ -99,11 +99,11 @@ Here are the top 50 airports with the most routes
     POS  ID   CODE  TOTAL     DETAILS
 
      1	  52   FRA  (544)  out:272 in:272
-     2	  70   AMS  (541)  out:269 in:272 <-- different (3)
+     2	  70   AMS  (541)  out:269 in:272 
      3	 161   IST  (540)  out:270 in:270
      4	  51   CDG  (524)  out:262 in:262
      5	  80   MUC  (474)  out:237 in:237
-     6	  64   PEK  (469)  out:234 in:235 <-- different (1)
+     6	  64   PEK  (469)  out:234 in:235 
      7	  18   ORD  (464)  out:232 in:232
      8	   1   ATL  (464)  out:232 in:232
      9	  58   DXB  (458)  out:229 in:229
@@ -118,17 +118,17 @@ Here are the top 50 airports with the most routes
     18	  73   BCN  (380)  out:190 in:190
     19	  68   FCO  (378)  out:189 in:189
     20	  31   DEN  (376)  out:188 in:188
-    21	  12   JFK  (373)  out:187 in:186 <-- different (1)
+    21	  12   JFK  (373)  out:187 in:186 
     22	  94   STN  (372)  out:186 in:186
     23	  35   EWR  (364)  out:182 in:182
-    24	  84   MAN  (363)  out:182 in:181 <-- different (1)
+    24	  84   MAN  (363)  out:182 in:181 
     25	  47   YYZ  (362)  out:181 in:181
     26	  79   BRU  (360)  out:180 in:180
     27	  16   MIA  (342)  out:171 in:171
     28	 178   CLT  (336)  out:168 in:168
     29	 198   DUS  (332)  out:166 in:166
     30	  60   DUB  (330)  out:165 in:165
-    31	 250   CAN  (327)  out:164 in:163 <-- different (1)
+    31	 250   CAN  (327)  out:164 in:163 
     32	 106   DOH  (326)  out:163 in:163
     33	  75   VIE  (324)  out:162 in:162
     34	 103   SVO  (312)  out:156 in:156
