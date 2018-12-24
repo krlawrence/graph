@@ -12,7 +12,7 @@ This repository is the new home for the source materials, sample code and exampl
 To read the latest snapshot of the book right away in a browser (HTML format) click [here](http://kelvinlawrence.net/book/Gremlin-Graph-Guide.html) or for a PDF version click [here](http://kelvinlawrence.net/book/Gremlin-Graph-Guide.pdf). These snapshots are updated regularly. You will find other formats including MOBI, EPUB and XML (Docbook) in the [releases](https://github.com/krlawrence/graph/releases)  section. Formal releases will be published about once a month assuming there is enough new material to make it worthwhile. If you want to see the absolute latest updates you can always browse the Asciidoc source file (Gremlin-Graph-Guide.adoc) in the /book folder. The PDF version is currently the "official" version. It has a better table of contents, some better formatting and a much nicer title page!
 
 **LATEST NEWS:**  
-[Sep-29-2018] Updated versions of the sample data and corresponding demo apps have been uploaded.  
+[Dec-24-2018] Updated versions of the sample data and corresponding demo apps have been uploaded.  
 [Jul-28-2018] Revision 280 (TP 3.3.3) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.    
 
 
@@ -110,6 +110,7 @@ Chapter 8 - FURTHER READING
   tools and documentation for many of the technologies covered in this document.
 
 **NEWS ARCHIVE:**  
+[Sep-29-2018] Updated versions of the sample data and corresponding demo apps have been uploaded.  
 [May-29-2018] Revision 279 (TP 3.3.3) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.    
 [Mar-28-2018] Revision 278 (TP 3.3.1) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
 [Feb-11-2018] Revision 277 was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
