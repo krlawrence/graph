@@ -15,7 +15,7 @@ The *'edges.csv'* file is intended to be used with the *'GraphFromCSV.java'* sam
 
 ## Latest data
 
-The two files *'air-routes-latest.graphml'* and *'air-routes-small-latest.graphml'* contain additional routes and airports added since the original version was uploaded. They are provided in case anyone wants to experiment with some more recent data. The latest data set includes 35 additional airports and 3,653 additional routes.
+The two files *`air-routes-latest.graphml`* and *`air-routes-small-latest.graphml`* contain additional routes and airports added since the original version was uploaded. They are provided in case anyone wants to experiment with some more recent data. The latest data set adds 47 additional airports and 4,692 additional routes to the original *`air-routes.graphml`* data set.
 
 I have also provided two CSV files to go along withe the GraphML files. Thery are called *'air-routes-latest-nodes.csv*' and *'air-routes-latest-edges.csv'*. The CSV files were produced using the open source [GraphML2CSV tool](https://github.com/awslabs/amazon-neptune-tools/tree/master/graphml2csv). You may need to edit the first line (header) of each CSV file depending on your graph database and toolset. 
 
