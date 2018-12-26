@@ -1,10 +1,10 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v281-preview, December 11th 2018
-// vim: set tw=85 cc=+1 wrap spell redrawtime=10000:
-//v280 (TP 3.3.3), July 28, 2018
-//Sat Tue Dec 11, 2018 18:09:01 CST
+v281 (TP 3.3.4), December 26th 2018
+//v281-preview, December 11th 2018
+// vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
+//Wed Dec 26, 2018 09:43:26 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -20,12 +20,12 @@ v281-preview, December 11th 2018
 //:pygments-style: vim
 :toc:
 :toclevels: 4
-:revision: 281-preview
-//:revision: 280 (TP 3.3.3)
+//:revision: 281-preview
+:revision: 281 (TP 3.3.4)
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: December 11th 2018
+:draftdate: December 26th 2018
 :tpvercheck: 3.3.4
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
