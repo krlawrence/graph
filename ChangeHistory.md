@@ -6,7 +6,7 @@ Starting with the v275 release, this file will contain a record of the major cha
 
 Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v280-tp.3.3.3...master) between this release and the prior one.
 
-The examples in this release have been tested against Apache TinkerPop at the 3.3.2, 3.3.3 and 3.3.4 levels. They have also been tested against JanusGraph 0.2 (where appropriate) which supported TinkerPop at the 3.2.6 level at the time. As always I am very grateful for the feedback by e-mail, issue and PR. This release resolves a number of open issues. Please check the commit log for finer grained details of all changes. Here is a list of the major improvements in this release.
+The examples in this release have been tested against Apache TinkerPop at the 3.3.3 and 3.3.4 levels. As always I am very grateful for the feedback by e-mail, issue and PR. This release resolves a number of issues and adds quite a bit of new content. Please check the commit log for finer grained details of all changes. Here is a list of the major improvements in this release.
 
 - Added a new section called "Seven degrees of separation".
 - Added a new section on finding the longest routes.
