@@ -26,7 +26,7 @@ The examples in this release have been tested against Apache TinkerPop at the 3.
 - Added another example to the section that introduces the `identity` step.
 - Added coverage of the `start`, `stop` and `status` keywords that can be used to control a Gremlin Server.
 - Added two new samples - `basic-client.py` and `glv-client.py`- that show how to connect to Gremlin Server using the `gremlinpython` library.
-- Added a sample called `quick-sample2.groovy` that creates a social graph useful for testing. Intended to be run from the Gremlin console.
+- Added a sample called `quick-social2.groovy` that creates a social graph useful for testing. Intended to be run from the Gremlin console.
 - Uploaded updated versions of the air-routes data and corresponding demo apps.
 - Added CSV versions of the air-routes data set. Issue #75
 - Resolved several issues.
