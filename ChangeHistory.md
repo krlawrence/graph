@@ -2,9 +2,9 @@
 
 Starting with the v275 release, this file will contain a record of the major changes and updates made in each release.
 
-## Release 281 change history (RELEASE DATE TBD)
+## Release 281 change history (December 26th 2018)
 
-Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v280-tp.3.3.3...master) between this release and the prior one.
+Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v280-tp.3.3.3...v281-tp-3.3.4) between this release and the prior one.
 
 The examples in this release have been tested against Apache TinkerPop at the 3.3.3 and 3.3.4 levels. As always I am very grateful for the feedback by e-mail, issue and PR. This release resolves a number of issues and adds quite a bit of new content. Please check the commit log for finer grained details of all changes. Here is a list of the major improvements in this release.
 
@@ -29,6 +29,7 @@ The examples in this release have been tested against Apache TinkerPop at the 3.
 - Added a sample called `quick-sample2.groovy` that creates a social graph useful for testing. Intended to be run from the Gremlin console.
 - Uploaded updated versions of the air-routes data and corresponding demo apps.
 - Added CSV versions of the air-routes data set. Issue #75
+- Resolved several issues.
 
 ## Release 280 change history (July 28th 2018)
 
