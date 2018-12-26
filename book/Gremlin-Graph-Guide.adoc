@@ -1028,7 +1028,7 @@ airline route currently being flown, are out of date.
 TIP: You can download the very latest air-routes data set from
 https://github.com/krlawrence/graph/blob/master/sample-data/air-routes-latest.graphml
 
-If you want to get the most up to  date results there is a newer version of the data
+If you want to get the most up to date results there is a newer version of the data
 set available. That file can be found in the 'sample-data' folder. Look for a file
 called `air-routes-latest.graphml`. There is also a README file to go along with the
 updated data set called `README-air-routes-latest.txt` in the same folder.
