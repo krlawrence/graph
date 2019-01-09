@@ -10505,7 +10505,7 @@ g.withSack(1).V().has('code','SAF').out().
 Now, each time the number of runways was added to the sack using a 'sum' operator,
 the operation that was performed was '1 + runways'. As you can see from the results,
 in each case, the value returned is one higher than those from the previous query.
-This is a very dimple example but hopefully you can start to see how useful sacks can
+This is a very simple example but hopefully you can start to see how useful sacks can
 be.
 
 Before getting into some more interesting examples, it is worth pointing out that you
