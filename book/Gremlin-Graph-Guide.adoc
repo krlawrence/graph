@@ -607,7 +607,7 @@ set of query results. If you are working with a graph system that supports Tinke
 3 but not via the Gremlin console (an example of this would be talking to a Gremlin
 Server using the HTTP REST API) then what you will get back is going to be a JSON
 document that you will need to write some code to parse. We will explore that topic
-much later in this book.
+much later in the book.
 
 If you want to see lots of examples of the output from running various queries you
 will find plenty in the "<<msc>>" section of this book where we have tried to go
@@ -658,8 +658,9 @@ the following command from inside the Gremlin console.
 
 [source,groovy]
 ----
-// What version of Gremlin am I running?
-Gremlin.version()
+// What version of Gremlin console am I running?
+gremlin>  Gremlin.version()
+==>3.3.5
 ----
 
 One thing that is not at all obvious or apparent is that the Gremlin console quietly
@@ -729,13 +730,13 @@ laptop or desktop computer and be up and running very quickly. I will also expla
 get started with the Gremlin Console and TinkerGraph a bit later in this section.
 
 Tinkerpop 3 defines a number of capabilities that a graph store should support. Some
-are optional others are not. You can query any TinkerPop 3 enabled graph store to see
-which features are supported using a command such as 'graph.features()' once you have
-established the 'graph' object. We will look at how to do that soon. The following
-list shows the features supported by TinkerGraph. This is what you would get back
-should you call the 'features' method provided by TinkerGraph. I have arranged the
-list in two columns to aid readability.  Don't worry if not all of these terms make
-sense right away - we'll get there soon!
+are optional others are not. If supported, you can query any TinkerPop 3 enabled
+graph store to see which features are supported using a command such as
+'graph.features()' once you have established the 'graph' object. We will look at how
+to do that soon. The following list shows the features supported by TinkerGraph. This
+is what you would get back should you call the 'features' method provided by
+TinkerGraph. I have arranged the list in two columns to aid readability.  Don't worry
+if not all of these terms make sense right away - we'll get there soon!
 
 .Output from graph.features()
 ----
@@ -836,17 +837,17 @@ method as follows.
 g = graph.traversal()
 ----
 
-NOTE: Throughout the remainder of this book we will follow the convention that we
-will always use the variable name 'graph' for any variable that represents a graph
-instance and we will always use the variable name 'g' for any variable that
-represents an instance of a graph traversal source object.
+NOTE: Throughout the remainder of this book the following convention will be used.
+The variable name 'graph' will be used for any object that represents a graph
+instance and the variable name 'g' will be used for any object that represents an
+instance of a graph traversal source object.
 
 [[air]]
 Introducing the air-routes graph
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Along with this book I have provided what is, in big data terms,a very small, but
-nonetheless real-world graph that is written in GraphML, a standard XML format for
+Along with this book I have provided what is, in big data terms, a very small, but
+nonetheless real-world graph that is stored in GraphML, a standard XML format for
 describing graphs that can be used to move graphs between applications. The graph,
 'air-routes' is a model I built of the world airline route network that is
 fairly accurate. 
@@ -862,12 +863,12 @@ so inclined you can load the file into a text editor and examine how it is laid 
 As you work with graphs you will want to become familiar with popular graph
 serialization formats. Two common ones are GraphML and GraphSON.  The latter is a
 JSON format that is defined by Apache TinkerPop and heavily used in that environment.
-GraphML is very widely recognized by TinkerPop and many other tools as well such as
+GraphML is widely recognized by TinkerPop and many other tools as well such as
 Gephi, a popular open source tool for visualizing graph data.  A lot of graph
-ingestion algorithms also still use comma separated values (CSV) format files. 
+ingestion tools also still use comma separated values (CSV) format files. 
 
 We will briefly look at loading and saving graph data in Sections 2 and 4. I take a
-much deeper look at different ways to work with graph data stored in text format
+much look at different ways to work with graph data stored in text format
 files including importing and exporting graph data in the "<<serialize>>" section
 towards the end of the book.
 
@@ -1041,11 +1042,11 @@ TinkerPop 3 migration notes
 There are still a large number of examples on the internet that show the TinkerPop 2
 way of doing things. Quite a lot of things changed between TinkerPop 2 and TinkerPop
 3. If you were an early adopter and are coming from a TinkerPop 2 environment to a
-TinkerPop 3 environment you may find some of the tips in this section helpful. As we
-we will explain below, using the 'sugar' plugin will make the migration from
-TinkerPop 2 easier but it is recommended to learn the full TinkerPop 3 Gremlin syntax
-and get used to using that as soon as possible. Using the full syntax will make your
-queries a lot more portable to other TinkerPop 3 enabled graph systems. 
+TinkerPop 3 environment you may find some of the tips in this section helpful. As
+explained below, using the 'sugar' plugin will make the migration from TinkerPop 2
+easier but it is recommended to learn the full TinkerPop 3 Gremlin syntax and get
+used to using that as soon as possible. Using the full syntax will make your queries
+a lot more portable to other TinkerPop 3 enabled graph systems. 
 
 TinkerPop 3 requires a minimum of Java 8 v45. It will not run on earlier versions of
 Java 8 based on my testing.
@@ -1273,7 +1274,7 @@ WRITING GREMLIN QUERIES
 Now that you hopefully  have the 'air-routes' graph loaded it's time to start writing
 some queries!  
 
-In this section we will begin to look at the Gremlin query language. I will start
+In this chapter we will begin to look at the Gremlin query language. I will start
 off with a quick look at how Gremlin and SQL differ and are yet in some ways similar,
 then present some fairly basic queries and finally get into some more
 advanced concepts. Hopefully each set of examples presented, building upon things
@@ -1327,7 +1328,7 @@ select country,count(country) from airports group by country;
 ----
 
 We can do this in Gremlin using the 'air-routes' graph with a query like the one below
-(we will explain what all of this means later on in the book). 
+(I will explain what all of this means later on in the book). 
 
 
 [source,groovy]
@@ -1346,7 +1347,7 @@ core reason why, for many use cases, Graph databases are a very good choice and 
 be more performant than relational databases.                           
 
 Graph databases are usually a good choice for storing and modelling networks.  The
-'air-routes' graph is an example of a network graph a social network is of course
+'air-routes' graph is an example of a network graph. A social network is of course
 another good example. Networks can be modelled using relational databases too but as
 you explore the network and ask questions like "who are my friends' friends?" in a
 social network or "where can I fly to from here with a maximum of two stops?" things
@@ -10505,7 +10506,7 @@ g.withSack(1).V().has('code','SAF').out().
 Now, each time the number of runways was added to the sack using a 'sum' operator,
 the operation that was performed was '1 + runways'. As you can see from the results,
 in each case, the value returned is one higher than those from the previous query.
-This is a very simple example but hopefully you can start to see how useful sacks can
+This is a very dimple example but hopefully you can start to see how useful sacks can
 be.
 
 Before getting into some more interesting examples, it is worth pointing out that you
@@ -16254,7 +16255,7 @@ Randomly walking a graph
 When doing analysis of a graph sometimes you just want to randomly traverse or 'walk'
 parts of the graph. The example below shows a query that starts at the Austin (AUS)
 vertex and then randomly goes to five connected vertices from there.  The 'random
-walk' is achieved by picking a sample of one of the possible edges connected to yhe
+walk' is achieved by picking a sample of one of the possible edges connected to the
 vertex we are currently at by sampling using the distance property of the edge and
 then moving to the vertex at the other end of that edge. 
 
