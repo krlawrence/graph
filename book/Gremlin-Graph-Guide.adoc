@@ -1,10 +1,10 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-//v281 (TP 3.3.4), December 30th 2018
-v282-preview, December 30th 2018
+//v281 (TP 3.3.5), January 24th 2019
+v282-preview, February 3rd 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-//Sun Dec 30, 2018 14:40:01 CST
+//Sun Feb 03, 2019 12:20:39 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -21,12 +21,12 @@ v282-preview, December 30th 2018
 :toc:
 :toclevels: 4
 :revision: 282-preview
-//:revision: 281 (TP 3.3.4)
+//:revision: 281 (TP 3.3.5)
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: December 30th 2018
-:tpvercheck: 3.3.4
+:draftdate: February 2nd 2019
+:tpvercheck: 3.3.5
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
 //        has a white foreground color. The default was unreadable,
@@ -57,6 +57,10 @@ v282-preview, December 30th 2018
 // in the Gem but if it does not work you may,
 //
 //   3. pygments (via pip)
+//
+// <img src="GremlinEaselNoText.png">
+// <h1>PRACTICAL GREMLIN:<br>An Apache TinkerPop Tutorial</h1>
+
 
 
 INTRODUCTION
@@ -20480,8 +20484,8 @@ https://docs.janusgraph.org/latest/index-backends.html.
 
 
 [[gremlinserver]]
-Introducing Gremlin Server
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+INTRODUCING GREMLIN SERVER
+--------------------------
 
 So far in this book we have looked at a few different ways to setup a TinkerPop
 enabled graph store. Initially we focussed on running a TinkerGraph or a JanusGraph
@@ -20522,7 +20526,7 @@ Server I very much encourage you to read the official documentation.
 
 [[serverconfig]]
 Configuring Gremlin Server
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The Gremlin Server runtime is a separate download available from the Apache TinkerPop
 Web site. However, if you are going to be using Gremlin Server in conjunction with
@@ -20734,7 +20738,7 @@ Server stopped [25897]
 
 [[serverconsole]]
 Connecting to a Gremlin Server from the Gremlin Console
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 It is fairly straightforward to connect to a running Gremlin Server from a Gremlin
 Console. In this case it should not matter whether you are using the Gremlin Console
@@ -20913,7 +20917,7 @@ gremlin> :remote close
 
 [[servercli]]
 Connecting to a Gremlin Server from the command line
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Now that we have a Gremlin Server up and running that supports both HTTP and Web
 Sockets connections, we can, if we wish,  communicate with it using nothing more than
@@ -21003,7 +21007,7 @@ have to process in the "<<serverjson>>" section that is coming up soon.
 
 [[javagsclient]]
 Connecting to a Gremlin Server from Java using 'withRemote'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 While it is perfectly possible to work directly with the JSON returned from a Gremlin
 Server it is often more desirable to have the results placed directly into variables
@@ -21125,7 +21129,7 @@ NCL , Newcastle Airport
 
 [[rubyclient]]
 Connecting to a Gremlin Server from Ruby
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 As far as I know, at time of writing, there is currently no formal Gremlin language
 binding support available for Ruby programmers. This is therefore a perfect use case
@@ -21187,7 +21191,7 @@ with and also add to our Ruby program to work with the JSON.
 
 [[servertweaks]]
 Tweaking queries to make the JSON returned easier to work with
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Below is a query that we have seen used earlier in this book. It finds all
 routes longer than 8,000 miles and returns the airport pairs and the distance
@@ -21395,7 +21399,7 @@ returned.
 
 [[serverjson]]
 More examples of the JSON returned from a Gremlin Server
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The JSON returned by the Gremlin Server depends on query that is used and more
 specifically, what that query returns. Everything that is returned in the 'data' part
@@ -21414,7 +21418,7 @@ achieve the specific result. I have deliberately picked queries that show differ
 Gremlin steps to give you a feel for the type of JSON result each generates.
 
 No result
-+++++++++
+^^^^^^^^^
 
 The following query does not return any results. The JSON reflects this in the form
 of the 'data' returned being an empty list '"[]"'.
@@ -21429,7 +21433,7 @@ g.V().has('code','AUS').out('route').has('code','SYD')
 ----
 
 Integer result
-++++++++++++++
+^^^^^^^^^^^^^^
 
 A simple query that just returns a single integer result will generate JSON as shown
 below. The 'result' section of the JSON will contain a 'data' section with the single
@@ -21445,7 +21449,7 @@ g.V().count()
 ----
 
 String result
-+++++++++++++
+^^^^^^^^^^^^^
 
 As with integer results, a query that just returns a single string  result will
 generate JSON as shown below. The 'result' section of the JSON will contain a 'data'
@@ -21461,7 +21465,7 @@ g.V().has('code','DFW').values('city')
 ----
 
 List of strings
-+++++++++++++++
+^^^^^^^^^^^^^^^
 
 The query below generates a 'data' array containing a list of strings representing
 airport codes.
@@ -21476,7 +21480,7 @@ g.V().has('code','SAF').out().values('code')
 ----
 
 List of integers
-++++++++++++++++
+^^^^^^^^^^^^^^^^
 
 The query below generates a 'data' array containing a list of integers representing
 runway counts. Note that in reality you would not use a 'sack' for this, a simple
@@ -21493,7 +21497,7 @@ g.withSack(0).V().has('code','SAF').out().sack(sum).by('runways').sack()
 ----
 
 List of mixed types
-+++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^
 
 It is common for a query result to contain a variety of different data types. The
 example below generates a list containing a string, and integer and a double. Note,
@@ -21510,7 +21514,7 @@ g.V().has('code','LGW').values('city','lat','runways')
 ----
 
 Value map
-+++++++++
+^^^^^^^^^
 
 As you might expect, when a 'valueMap' is used to generate the result from a query,
 the JSON generated also contains a map. Note how each property value is encoded in a
@@ -21539,7 +21543,7 @@ g.V().has('code','CDG').valueMap()
 
 
 Single vertex
-+++++++++++++
+^^^^^^^^^^^^^
 
 When your query returns a vertex, unlike in the Gremlin Console where you would get
 back something like "'v[51]'" when talking to the Gremlin Server what you get back is
@@ -21576,7 +21580,7 @@ g.V().has('code','CDG')
 ----
 
 Selected vertex information
-+++++++++++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 One way to limit the amount of JSON we get back is shown below. Let's assume for a
 selection of airport vertices, all we are interested in is the ID, airport code and
@@ -21596,7 +21600,7 @@ g.V().hasLabel('airport').sample(3).
 ----
 
 Single edge
-+++++++++++
+^^^^^^^^^^^
 
 Just as when we queried a single vertex, when we query a single edge, we get back a
 lot of information including its label and ID and information about the vertices the
@@ -21619,7 +21623,7 @@ g.V().has('code','SAF').outE().limit(1)
 ----
 
 New vertex
-++++++++++
+^^^^^^^^^^
 
 When a new vertex and some properties are added the returned JSON will contain all of
 the information about the vertex including its ID, label and type as well as its
@@ -21639,7 +21643,7 @@ g.addV('test').property('fruit','apple')
 ----
 
 New vertex only returning the ID
-++++++++++++++++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When adding a new vertex, if you are not really interested in getting back the entire
 new vertex and its properties, you can write the query to only return the ID of the
@@ -21655,7 +21659,7 @@ g.addV('test').as('a').property('fruit','apple').select('a').id()
 ----
 
 Path by value (list of strings)
-+++++++++++++++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The query below returns a path between two airports as a list of airport codes.
 Note the new 'objects' key that is used when the returned JSON represents a path. 
@@ -21671,7 +21675,7 @@ g.V().has('code','SAF').out().path().by('code').limit(1)
 ----
 
 Path by values (list of strings and integers)
-+++++++++++++++++++++++++++++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Similar to the previous query but this time the path also includes the distance
 between the airports.
@@ -21688,7 +21692,7 @@ g.V().has('code','SAF').outE().inV().path().by('code').by('dist').limit(1)
 ----
 
 Two vertex path
-+++++++++++++++
+^^^^^^^^^^^^^^^
 
 The query below returns a path but does not include a 'by' modulator so what is
 returned is the two vertices along with their IDs, labels and properties.
@@ -21740,7 +21744,7 @@ g.V().has('code','SAF').out().path().limit(1)
 
 
 Path with two vertices and an edge
-++++++++++++++++++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The following query is similar to the previous one but also includes an edge. You can
 hopefully see here how the JSON can rapidly get large if we are not more specific in
@@ -21797,7 +21801,7 @@ g.V().has('code','SAF').outE().inV().path().limit(1)
 ----
 
 Selection map
-+++++++++++++
+^^^^^^^^^^^^^
 
 If a query ends with a 'select' step that references labels defined earlier in the
 query, what is returned is a map where the labels are the keys and the values are the
@@ -21814,7 +21818,7 @@ g.V().has('code','SAF').as('a').out().has('code','DFW').as('b').
 ----
 
 Projected map
-+++++++++++++
+^^^^^^^^^^^^^
 
 The 'project' step also generates a map just as the 'select' step did in the previous
 example.
@@ -21830,7 +21834,7 @@ g.V().has('code','LGW').project('a','b').by('code').by(out().count())
 ----
 
 Strings and a map
-+++++++++++++++++
+^^^^^^^^^^^^^^^^^
 
 The following path query returns a list containing two strings representing airport
 codes and the full JSON object representing an edge.
@@ -21855,7 +21859,7 @@ g.V().has('code','SAF').outE().inV().limit(1).path().by('code').by()
 ----
 
 Nested lists
-++++++++++++
+^^^^^^^^^^^^
 
 When using the console or issuing Gremlin commands via the TinkerPop API from an
 application program, ending a query with a 'fold' step can be a nice way to put all
