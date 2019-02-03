@@ -218,12 +218,16 @@ Chapter 6 - MOVING BEYOND THE CONSOLE AND TINKERGRAPH::
   can work with a graph. I then introduce JanusGraph and take a fairly detailed
   look at its capabilities such as support for transactions, schemas and indexes. 
   I also explore various technology choices for back end persistent stores
-  and indexes as well as introducing the Gremlin Server.
-Chapter 7 - COMMON GRAPH SERIALIZATION FORMATS::
+  and indexes.
+Chapter 7 - INTRODUCING GREMLIN SERVER::
+- In Chapter seven, Gremlin Server is introduced. We begin to explore connecting to 
+  and working with a remote graph both from the Gremlin Console and the command line
+  as well as from code.
+Chapter 8 - COMMON GRAPH SERIALIZATION FORMATS::
 - In Chapter seven a discussion is presented of some common Graph serialization file
   formats along with coverage of how to use them in the context of TinkerPop 3
   enabled graphs.
-Chapter 8 - FURTHER READING::
+Chapter 9 - FURTHER READING::
 - I finish up by providing several links to useful web sites where you can find
   tools and documentation for many of the topics and technologies covered in this book.
 
