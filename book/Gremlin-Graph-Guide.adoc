@@ -2,9 +2,9 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 24th 2019
-v282-preview, February 3rd 2019
+v282-preview, February 23rd 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-//Sun Feb 03, 2019 12:20:39 CST
+//Sat Feb 23, 2019 16:36:08 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -25,7 +25,7 @@ v282-preview, February 3rd 2019
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: February 2nd 2019
+:draftdate: February 23rd 2019
 :tpvercheck: 3.3.5
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -17776,10 +17776,10 @@ source object and then uses a traversal to create a small graph.
 TIP: The full source code for this sample can be found in the file CreateGraph.java
 located at https://github.com/krlawrence/graph/tree/master/sample-code
 
-Note the call to 'iterate()' at the end of the traversal. When running as a stand
-alone application this is necessary. This is another of those little things that the
-Gremlin Console does for you without you realizing it that we have to remember to do
-ourselves when not running inside the console.
+Note the call to 'iterate()' at the end of the traversal. When running as a
+standalone application this is necessary. This is another of those little things that
+the Gremlin Console does for you without you realizing it that we have to remember to
+do ourselves when not running inside the console.
 
 [source,java]
 ----
@@ -17888,10 +17888,10 @@ Saving a graph from a Java application
 
 Having created our new graph, we may want to save it. The code below shows how to
 save the graph as either GraphSON (TinkerPop's JSON format) or as GraphML (XML). This
-is another instance where we have to do a bit more work as we are running in a stand
-alone program and not inside the Gremlin Console. Our attempts to save our data have
-to catch any exceptions that may occur. This code is also included as part of the
-CreateGraph.java sample program.
+is another instance where we have to do a bit more work as we are running in a
+standalone program and not inside the Gremlin Console. Our attempts to save our data
+have to catch any exceptions that may occur. This code is also included as part of
+the CreateGraph.java sample program.
 
 [source,java]
 ----
@@ -19402,7 +19402,7 @@ Ernest A. Love Field
 ----
 
 In this example the word 'fort' is found no matter where it occurs in the 'city'
-name so long as it occurs as a standalone word.. 
+name so long as it occurs as a standalone word. 
 
 [source,groovy]
 ----
