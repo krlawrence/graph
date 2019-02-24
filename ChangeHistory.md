@@ -13,6 +13,7 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
 - Added a section on using a TinkerGraph containing the air-route data with Gremlin Server . #118
   - Added the required config files to the `sample-data` folder. #118
 - Added a small section with a pointer to the latest sample data.
+- Added `bootstrap-console.py` to the `sample-code` folder.
 - Cleaned up some wording.
 
 
