@@ -2,9 +2,9 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 24th 2019
-v282-preview, February 23rd 2019
+v282-preview, February 24th 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-//Sat Feb 23, 2019 16:36:08 CST
+//Sun Feb 24, 2019 10:06:38 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -25,7 +25,7 @@ v282-preview, February 23rd 2019
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: February 23rd 2019
+:draftdate: February 24th 2019
 :tpvercheck: 3.3.5
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -21189,6 +21189,183 @@ Response code from the server was 200
  "result":{"data":[62],"meta":{}}}
 ----
 
+[[servertinkergraph]]
+Configuring a Gremlin Server to use a TinkerGraph
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We have already seen how a Gremlin Server can be configured as a way to provide
+remote access to a JanusGraph and Cassandra deployment. Sometimes it can be useful to
+setup a Gremlin Server with just a basic TinkerGraph, in-memory graph, as the
+backend. This is often a handy way to work if you are developing code that will
+ultimately work with a remote TinkerPop enabled graph database but want to do some
+testing and development locally. A Gremlin Server can of course be configured as a
+genuinely remote endpoint, perhaps running on a cloud hosted machine, but it can also
+be configured to run on your local computer. I often set it up this way on my laptop
+while experimenting.  In this section I am going to walk through the steps required
+to configure a Gremlin Server running locally that hosts the air-routes dataset in a
+TinkerGraph.
+
+NOTE: You will find the configuration files discussed in this section in the
+`sample-data` folder at this location
+https://github.com/krlawrence/graph/tree/master/sample-data.
+
+[[TGConfig]]
+Creating the configuration files
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To get our remote TinkerGraph up and running, all we have to do is to configure a few
+settings files and start the Gremlin Server. The first file we need to create is the
+YAML file that will be read by the Gremlin Server as it starts. I created a file
+called `gremlin-server-air-routes.yaml` for this purpose. The file actually only
+contains minor changes from the default `gremlin-server.yaml` file that comes
+included as part of the Gremlin Server download. The key change is that the file
+includes a reference to a script in the `/scripts` folder called `air-routes.groovy`.
+The script will load the air-routes data set into a TinkerGraph instance once it has
+been created. 
+
+NOTE: All folders referenced in this section, such as `/data` and `/script` are
+relative to the location where the Gremlin Server is installed.
+
+The `gremlin-server-air-routes.yaml` file should be placed in the `/conf` folder.
+
+.gremlin-server-air-routes.yaml
+[source,groovy]
+----
+host: localhost
+port: 8182
+scriptEvaluationTimeout: 30000
+channelizer: org.apache.tinkerpop.gremlin.server.channel.WsAndHttpChannelizer
+graphs: {
+  graph: conf/tinkergraph-empty.properties}
+scriptEngines: {
+  gremlin-groovy: {
+    plugins: { org.apache.tinkerpop.gremlin.server.jsr223.GremlinServerGremlinPlugin: {},
+               org.apache.tinkerpop.gremlin.tinkergraph.jsr223.TinkerGraphGremlinPlugin: {},
+               org.apache.tinkerpop.gremlin.jsr223.ImportGremlinPlugin: {classImports: [java.lang.Math], methodImports: [java.lang.Math#*]},
+               org.apache.tinkerpop.gremlin.jsr223.ScriptFileGremlinPlugin: {files: [scripts/air-routes.groovy]}}}}
+serializers:
+  - { className: org.apache.tinkerpop.gremlin.driver.ser.GryoMessageSerializerV3d0, config: { ioRegistries: [org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerIoRegistryV3d0] }}            # application/vnd.gremlin-v3.0+gryo
+  - { className: org.apache.tinkerpop.gremlin.driver.ser.GryoMessageSerializerV3d0, config: { serializeResultToString: true }}                                                                      # application/vnd.gremlin-v3.0+gryo-stringd
+  - { className: org.apache.tinkerpop.gremlin.driver.ser.GraphSONMessageSerializerV1d0, config: { ioRegistries: [org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerIoRegistryV3d0] }}        # application/json
+metrics: {
+  slf4jReporter: {enabled: true, interval: 180000}}
+strictTransactionManagement: false
+idleConnectionTimeout: 0
+keepAliveInterval: 0
+maxInitialLineLength: 4096
+maxHeaderSize: 8192
+maxChunkSize: 8192
+maxContentLength: 65536
+maxAccumulationBufferComponents: 1024
+resultIterationBatchSize: 64
+----
+
+Note that I configured the YAML file so that when JSON is returned it is in the
+original V1 GraphSON format. This is done by specifying that the
+'GraphSONMessageSerializerV1d0' message serializer be used. The main difference
+between the V1 format and the newer V3 format is that no type information will be
+returned as part of the V1 format. I find that users find this format much easier to
+read while learning Gremlin.
+
+The properties file that is referenced in the YAML file is unchanged from the default
+one that comes with Gremlin Server. It creates an empty in-memory TinkerGraph. 
+
+The `tinkergraph-empty.properties` file should also be placed in the `/conf` folder.
+
+.tinkergraph-empty.properties
+[source,groovy]
+----
+gremlin.graph=org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph
+gremlin.tinkergraph.vertexIdManager=LONG
+----
+
+The file `air-routes.groovy` invokes the necessary method to load the
+`air-routes.graphml` file from the `/data` folder. The file should be placed in the
+`/scripts` folder.
+
+.air-routes.groovy
+[source,groovy]
+----
+def globals = [:]
+
+globals << [hook : [
+  onStartUp: { ctx ->
+    ctx.logger.info("Loading 'air-routes' graph data.")
+    graph.io(graphml()).readGraph('data/air-routes.graphml')
+  }
+] as LifeCycleHook]
+
+globals << [g : graph.traversal()]
+----
+
+[[TGStart]]
+Starting the Server
+^^^^^^^^^^^^^^^^^^^
+
+As discussed in the "<<serverconfig>>" section, you can start the Gremlin Server in the
+foreground or in the background. For our initial test let's just start the server
+running in the foregorund.
+
+[source,console]
+----
+$ bin/gremlin-server.sh conf/gremlin-server-air-routes.yaml 
+----
+
+[[TGTest]]
+Testing the Server
+^^^^^^^^^^^^^^^^^^
+
+Now that the Gremlin Server is up and running you can access it using 'localhost' as
+the host name and a port of 8182 just as we did earlier while setting up a Gremlin
+Server and JanusGraph. It's always a good idea to try a simple 'curl' command to make
+sure that things are working.
+
+[source,console]
+----
+$ curl "localhost:8182/gremlin?gremlin=g.V().has('code','SFO').valueMap()"
+----
+
+Here is the output returned. Note that it is in the GraphSON V1 format that
+we configured for earlier.
+
+[source,groovy]
+----
+{"requestId":"fbcab664-7538-402f-85b4-1b14db88c968","status":{"message":"","code":200,"attributes":{}},"result":{"data":[{"country":["US"],"code":["SFO"],"longest":[11870],"city":["San Francisco"],"elev":[13],"icao":["KSFO"],"lon":[-122.375],"type":["airport"],"region":["US-CA"],"runways":[4],"lat":[37.6189994812012],"desc":["San Francisco International Airport"]}],"meta":{}}}
+----
+
+The same Gremlin Console remote connections configuration we looked at earlier can
+also be reused.  Likewise, you can connect to your Gremlin Server using the host name
+'localhost' and port 8182. The example below assumes that you have already started
+the Gremlin Console.
+
+[source,groovy]
+----
+gremlin> :remote connect tinkerpop.server conf/remote.yaml
+==>Configured localhost/127.0.0.1:8182
+
+gremlin> :remote console
+==>All scripts will now be sent to Gremlin Server - [localhost/127.0.0.1:8182] - type ':remote console' to return to local mode
+
+gremlin> g.V().has('code','SFO').valueMap().unfold()
+==>country=[US]
+==>code=[SFO]
+==>longest=[11870]
+==>city=[San Francisco]
+==>elev=[13]
+==>icao=[KSFO]
+==>lon=[-122.375]
+==>type=[airport]
+==>region=[US-CA]
+==>runways=[4]
+==>lat=[37.6189994812012]
+==>desc=[San Francisco International Airport]
+----
+
+Hopefully having read this section you now have an understanding of how to setup a
+Gremlin Server that hosts an in-memory TinkerGraph containing the 'air-routes' data
+set.  This can be a useful environment when you want to test queries and code locally
+that will ultimately need to work with a remote TinkerPop enabled graph
+database.
 
 In the next section we will look at ways to make the JSON returned easier to work
 with and also add to our Ruby program to work with the JSON.
@@ -21400,6 +21577,8 @@ further.
 In the next section you will find more examples of the JSON that can be returned by
 Gremlin Server and also some examples of how to reduce the amount of data that is
 returned.
+
+
 
 [[serverjson]]
 More examples of the JSON returned from a Gremlin Server
