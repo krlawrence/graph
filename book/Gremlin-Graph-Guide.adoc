@@ -20861,6 +20861,9 @@ port: 8182
 serializer: { className: org.apache.tinkerpop.gremlin.driver.ser.GryoMessageSerializerV1d0, config: { serializeResultToString: true }}
 ----
 
+[[remoteconn]]
+Making the remote connection
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Now that we have our YAML file ready, all that we have to do to establish a
 connection between our Gremlin Console and the Gremlin Server is to issue the
 following command once the console is running.
@@ -20882,6 +20885,9 @@ gremlin> :> g.V().count()
 ==>3624
 ----
 
+[[resultvar]]
+The Gremlin Console's 'result' variable
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 When working within the Gremlin console, one other useful thing to be aware of is
 that the results of queries sent to a server, when the console is in '"local mode"',
 as well as being displayed are stored in a variable called 'result'. Take a look at
@@ -20926,6 +20932,10 @@ Oceania=287
 As useful as keeping the console in '"local mode"' can be, if you are going to be
 issuing a lot of queries to the remote graph, I find it more convenient to put the
 console into '"remote mode"'. This can be done as follows.
+
+[[remotemode]]
+Working in remote mode
+^^^^^^^^^^^^^^^^^^^^^^
 
 [source,console]
 ----
