@@ -4,7 +4,7 @@ Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 24th 2019
 v282-preview, February 24th 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-//Sun Feb 24, 2019 10:06:38 CST
+//Sun Feb 24, 2019 12:27:21 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -10676,6 +10676,78 @@ also possible to use non primitive types such as maps when working with a sack. 
 will find an example of 'sack' being used to generate a map in the "<<anothersack>>
 section.
 
+[[sackpathlength]]
+Computing hop counts using a 'sack'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The next query we are going to look at uses a 'sack' to keep track of how many flight
+segments (or hops) a 'path' consists of. This means that along with the 'path' result
+we can also return the path's 'hop count'.
+
+The query below looks for routes between Austin and Wellington and returns the first
+10 results found along with the number flights that would need to be  taken between
+the source and destination airports. As part of the 'repeat' step, each time an 'out'
+step is taken a 'constant' value of one is added to the sack for that individual
+path. Finally a 'union' step is used to combine the individual path with its hop
+count.
+
+[source,groovy]
+----
+g.withSack(0).V().
+  has('code','AUS').
+  repeat(out().simplePath().sack(sum).by(constant(1))).
+    until(has('code','WLG')).
+  limit(10).
+  local(union(path().by('code'),sack()).fold())
+----
+
+When run the query returns ten lists containing the airports visited and the number of
+hops in each individual list.
+
+[source,groovy]
+----
+[[AUS,DFW,SYD,WLG],3]
+[[AUS,IAH,AKL,WLG],3]
+[[AUS,LAX,SYD,WLG],3]
+[[AUS,LAX,MEL,WLG],3]
+[[AUS,LAX,AKL,WLG],3]
+[[AUS,LAX,BNE,WLG],3]
+[[AUS,SFO,SYD,WLG],3]
+[[AUS,SFO,AKL,WLG],3]
+[[AUS,YYZ,HND,SYD,WLG],4]
+[[AUS,YYZ,HND,AKL,WLG],4]
+----
+
+As a side note, if we wanted to include the path's length rather than the hop count we
+could change the query as shown below. In this case a 'sack' step is not needed as we
+can just count the length of each path.
+
+[source,groovy]
+----
+g.withSack(0).V().
+  has('code','AUS').
+   repeat(out().simplePath()).
+     until(has('code','WLG')).
+  limit(10).
+  local(union(path().by('code'),path().count(local)).fold())
+----
+
+This time the number shown is one bigger than in the previous example as the starting
+airport is included in the overall count.
+
+[source,groovy]
+----
+[[AUS,DFW,SYD,WLG],4]
+[[AUS,IAH,AKL,WLG],4]
+[[AUS,LAX,SYD,WLG],4]
+[[AUS,LAX,MEL,WLG],4]
+[[AUS,LAX,AKL,WLG],4]
+[[AUS,LAX,BNE,WLG],4]
+[[AUS,SFO,SYD,WLG],4]
+[[AUS,SFO,AKL,WLG],4]
+[[AUS,YYZ,HND,SYD,WLG],5]
+[[AUS,YYZ,HND,AKL,WLG],5]
+----
 
 [[sackbooleans]]
 Using boolean operators with a 'sack'
