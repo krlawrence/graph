@@ -8,10 +8,10 @@ Placeholder for the next release that will be some time in 2019.
 
 Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v281-tp-3.3.4...master) between this release and the prior one.
 
-- Aded an example showing how `sack` can be used to count flight segments.
+- Added an example showing how `sack` can be used to count flight segments (hops).
 - Made the coverage of Gremlin Server its own chapter. Issue #131.
-- Added a section on using a TinkerGraph containing the air-route data with Gremlin Server . #118
-  - Added the required config files to the `sample-data` folder. #118
+- Added a section on using a TinkerGraph containing the air-route data with Gremlin Server . Issue #118
+  - Added the required config files to the `sample-data` folder. Issue #118
 - Added a small section with a pointer to the latest sample data.
 - Added `bootstrap-console.py` to the `sample-code` folder.
 - Cleaned up some wording.
