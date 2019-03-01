@@ -1,10 +1,10 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-//v281 (TP 3.3.5), January 24th 2019
-v282-preview, February 24th 2019
+//v281 (TP 3.3.5), January 28th 2019
+v282-preview, February 28th 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-//Sun Feb 24, 2019 12:27:21 CST
+//Thu Feb 28, 2019 18:49:05 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -25,7 +25,7 @@ v282-preview, February 24th 2019
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: February 24th 2019
+:draftdate: February 28th 2019
 :tpvercheck: 3.3.5
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -10718,6 +10718,36 @@ hops in each individual list.
 [[AUS,YYZ,HND,AKL,WLG],4]
 ----
 
+To return the results with the longer routes coming first we could use the values in
+the sack along with an 'order' step.
+
+[source,groovy]
+----
+g.withSack(0).V().
+  has('code','AUS').
+  repeat(out().simplePath().sack(sum).by(constant(1))).
+    until(has('code','WLG')).
+  limit(10).
+  order().by(sack(),decr).
+  local(union(path().by('code'),sack()).fold())
+----
+
+This time the four hop routes appear first in the results.
+
+[source,groovy]
+----
+[[AUS,YYZ,HND,SYD,WLG],4]
+[[AUS,YYZ,HND,AKL,WLG],4]
+[[AUS,DFW,SYD,WLG],3]
+[[AUS,IAH,AKL,WLG],3]
+[[AUS,LAX,SYD,WLG],3]
+[[AUS,LAX,MEL,WLG],3]
+[[AUS,LAX,AKL,WLG],3]
+[[AUS,LAX,BNE,WLG],3]
+[[AUS,SFO,SYD,WLG],3]
+[[AUS,SFO,AKL,WLG],3]
+----
+
 As a side note, if we wanted to include the path's length rather than the hop count we
 could change the query as shown below. In this case a 'sack' step is not needed as we
 can just count the length of each path.
@@ -16687,8 +16717,8 @@ This proved both an interesting and useful exercise and uncovered some errors in
 graph that had slipped through my error checking!
 
 [[longestroutes]]
-Looking for the longest routes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Looking for the journey requiring the most stops
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Sometimes it is interesting to ponder questions such as, starting from a given
 airport what are the most difficult places to get to. For the sake of this example
@@ -20929,13 +20959,13 @@ North America=981
 Oceania=287
 ----
 
-As useful as keeping the console in '"local mode"' can be, if you are going to be
-issuing a lot of queries to the remote graph, I find it more convenient to put the
-console into '"remote mode"'. This can be done as follows.
-
 [[remotemode]]
 Working in remote mode
 ^^^^^^^^^^^^^^^^^^^^^^
+
+As useful as keeping the console in '"local mode"' can be, if you are going to be
+issuing a lot of queries to the remote graph, I find it more convenient to put the
+console into '"remote mode"'. This can be done as follows.
 
 [source,console]
 ----
