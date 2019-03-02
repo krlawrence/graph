@@ -1971,7 +1971,7 @@ g.V().has('airport','code','LCY').outE().inV().path()
 
 If you run that query as-is you will get back a series of results that look
 like this. This shows that there is a route from vertex 88 to vertex 77 via an
-edge with an ID of 13208.
+edge with an ID of 13698.
 
 [source,groovy]
 ----
@@ -2397,7 +2397,7 @@ have labels associated with them but are otherwise the same.
 [DFW,SBA]
 ----
 
-While the 'path' step is a lot more convenient, in some cases in can be very
+While the 'path' step is a lot more convenient, in some cases it can be very
 expensive in terms of memory and CPU usage so it is worth remembering these
 alternative techniques using 'as' and 'select'. That topic is discussed in more
 detail in the "<<pathwarn>> section.
@@ -4320,7 +4320,7 @@ into two columns.
 
 Let's look at another way we could have coded the query we used earlier to
 find the longest runway in the graph. As you may recall, we used the following
-query. While the query does indeed find the longest runway in the graph. If we wanted
+query. While the query does indeed find the longest runway in the graph, if we wanted
 to know which airport or airports had runways of that length we would have to run a
 second query to find them.
 
@@ -5024,7 +5024,7 @@ query that does not use any 'where' steps would have sufficed in this case.
 
 [source,groovy]
 ----
-g.V().has(airport','city','London').
+g.V().has('airport','city','London').
       valueMap('code','region','country')
 
 [country:[UK],code:[LHR],region:[GB-ENG]]
@@ -6635,7 +6635,7 @@ Here are the results from running the query. As you can see it generated the sam
 results in this instance but if we let it run for longer than just ten results it
 would ultimately find a lot more cyclic paths as it is not restricted to just going
 out one hop from its starting point. Indeed, if we did not restrict the number of
-results we wante,d the query would ultimately find every cyclic route in the graph.
+results we wanted the query would ultimately find every cyclic route in the graph.
 That query could run for quite a while so I would not recommend trying it!
 
 [source,groovy]
@@ -6851,7 +6851,7 @@ g.V().hasLabel('airport').
       order(local).by(values).unfold().tail(10).fold()
 ----
 
-Here are the results from running the query. As you can see, Amsterdam (AMS) has the
+Here are the results from running the query. As you can see, Frankfurt Airport (FRA) has the
 highest number of outgoing routes. The topic of analyzing routes is revisited in
 detail in the "<<mostroutes>>" section.
 
