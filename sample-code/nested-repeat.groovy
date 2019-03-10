@@ -2,7 +2,7 @@
 //
 // NOTE: To run you will need the Gremlin Console at the TinkerPop 3.4.0
 //       level or higher. As other vendors upgrade to TinkerPop 3.4.0
-//       you may be able to use nested repeats on those platforms also.
+//       you mayl be able to use nested repeats on those platforms also.
 
 conf = new BaseConfiguration()
 conf.setProperty("gremlin.tinkergraph.vertexIdManager","LONG")
@@ -112,6 +112,27 @@ g.V().has('name','Bill').
 //[Sam,Brighton]
 //[Amy,Canterbury] 
 
+// We could get the same result using a where step but only because
+// we have a fixed number of out steps before  the where.
+g.V().has('name','Bill').
+      out('knows').as('friend').
+      out('location').
+         where(repeat(out('part_of')).
+           emit(has('name','England'))).
+         path().from('friend').by('name')
+//[Sam,Brighton]
+//[Amy,Canterbury]  
+
+
+// This will not get us any results
+g.V().has('name','Bill').
+      out('knows').as('friend').
+      repeat(out('location').
+         where(repeat(out('part_of')).
+           emit(has('name','England')))).
+         path().from('friend').by('name') 
+
+
 // Similar but without a nested repeat.
 // Notice the difference. We get the whole path back.
 g.V().has('name','Bill').
@@ -121,4 +142,6 @@ g.V().has('name','Bill').
            emit(has('name','England')).
          path().from('friend').by('name')
 //[Amy,Canterbury,Kent,England]         
-//[Sam,Brighton,East Sussex,England]            
+//[Sam,Brighton,East Sussex,England]  
+
+
