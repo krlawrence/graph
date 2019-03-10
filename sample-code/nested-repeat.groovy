@@ -52,7 +52,7 @@ g.addV('person').property('name','Amy').as('amy').
   addE('location').from('mark').to('miami').
   addE('location').from('pam').to('nyc').
   addE('location').from('peter').to('brighton').
-  addE('location').from('sue').to('brighton').
+  addE('location').from('sam').to('brighton').
   addE('part_of').from('austin').to('travis').
   addE('part_of').from('brighton').to('esussex').
   addE('part_of').from('canterbury').to('kent').
@@ -81,7 +81,7 @@ g.V().hasLabel('person').
 ==>[Bill,knows,Eric,location,Austin,part_of,Travis,part_of,Texas,part_of,USA]
 ==>[Bill,knows,Eric,knows,Pam,location,New York City,part_of,New York,part_of,USA]
 ==>[Bill,knows,Frank,location,Miami,part_of,Dade,part_of,Florida,part_of,USA]
-==>[Sue,location,Brighton,part_of,East Sussex,part_of,England]
+==>[Sam,location,Brighton,part_of,East Sussex,part_of,England]
 ==>[Eric,location,Austin,part_of,Travis,part_of,Texas,part_of,USA]
 ==>[Eric,knows,Pam,location,New York City,part_of,New York,part_of,USA]
 ==>[Frank,location,Miami,part_of,Dade,part_of,Florida,part_of,USA]
@@ -119,6 +119,6 @@ g.V().has('name','Bill').
       out('location').
          repeat(out('part_of')).
            emit(has('name','England')).
-         path().from('friend').by('name') 
+         path().from('friend').by('name')
 //[Amy,Canterbury,Kent,England]         
-//[Sam,Brighton,East Sussex,England]     
+//[Sam,Brighton,East Sussex,England]            
