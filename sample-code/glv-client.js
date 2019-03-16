@@ -11,14 +11,13 @@
 const gremlin = require('gremlin');
 const Graph = gremlin.structure.Graph;
 const __ = gremlin.process.statics;
-const { t: { id }, order,cardinality,column,scope,P } = gremlin.process;
+const { t: { id }, order,cardinality,column,scope,pop,P } = gremlin.process;
 
 // Note that if we just wanted to import 'decr' rather than all of order we could do:
 // const { order: { decr } } = gremlin.process;
 
 const hostname = 'localhost'
 const port=8182
-
 console.log("Creating connection");
 wspath = `ws://${hostname}:${port}/gremlin`;
 
@@ -56,6 +55,26 @@ async function runTests() {
             local(__.values('code','runways').fold()).toList();
       console.log("Airports with the most runways");      
       console.log(most_runways);
+
+    const highest = await
+       g.V().hasLabel('airport').
+             order().by('elev',order.decr).
+             limit(10).
+             project('iata','city','elev').
+               by('code').
+               by('city').
+               by('elev').
+               toList()
+      console.log("Airports at the highest altitude");      
+      console.log(highest);
+
+      const pop_test = await
+        g.V().has('code','SFO').as('a').
+              out().limit(1).as('a').
+              select(pop.all,'a').
+              toList();
+      console.log("Using pop.all on a list");
+      console.log(pop_test);
   } catch(e) {
       console.error(`Something went wrong:\n ${e}`);
   } finally {
@@ -74,5 +93,8 @@ async function runTests() {
     process.exit(1);
   }
 }());
+
+
+
 
 
