@@ -11,7 +11,7 @@
 const gremlin = require('gremlin');
 const Graph = gremlin.structure.Graph;
 const __ = gremlin.process.statics;
-const { t: { id }, order,cardinality,column,scope } = gremlin.process;
+const { t: { id }, order,cardinality,column,scope,P } = gremlin.process;
 
 // Note that if we just wanted to import 'decr' rather than all of order we could do:
 // const { order: { decr } } = gremlin.process;
@@ -37,7 +37,7 @@ async function runTests() {
     const texas = await
       g.V().has('region','US-TX').
             values('city').
-            order().by(order.decr).
+            order().
             toList();
       console.log("Airports in Texas");      
       console.log(texas);
@@ -49,6 +49,13 @@ async function runTests() {
             toList();
       console.log("Route counts for airports in Texas");      
       console.log(runways);
+
+    const most_runways = await
+      g.V().has('runways',P.gt(5)).
+            order().by('runways',order.decr).
+            local(__.values('code','runways').fold()).toList();
+      console.log("Airports with the most runways");      
+      console.log(most_runways);
   } catch(e) {
       console.error(`Something went wrong:\n ${e}`);
   } finally {
@@ -67,5 +74,7 @@ async function runTests() {
     process.exit(1);
   }
 }());
+
+
 
 
