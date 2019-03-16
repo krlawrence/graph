@@ -11,7 +11,7 @@
 const gremlin = require('gremlin');
 const Graph = gremlin.structure.Graph;
 const __ = gremlin.process.statics;
-const { t: { id }, order,cardinality,column,scope,pop,P } = gremlin.process;
+const { t,order,cardinality,column,scope,pop,P } = gremlin.process;
 
 // Note that if we just wanted to import 'decr' rather than all of order we could do:
 // const { order: { decr } } = gremlin.process;
@@ -75,6 +75,13 @@ async function runTests() {
               toList();
       console.log("Using pop.all on a list");
       console.log(pop_test);
+
+      const label_test = await
+        g.V().has('code',P.within(['EU','SFO','NA','MEX'])).
+              group().by(t.label).by('desc').
+              toList();
+      console.log("Grouping by labels");
+      console.log(label_test);
   } catch(e) {
       console.error(`Something went wrong:\n ${e}`);
   } finally {
@@ -93,6 +100,7 @@ async function runTests() {
     process.exit(1);
   }
 }());
+
 
 
 
