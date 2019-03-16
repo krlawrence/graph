@@ -51,7 +51,7 @@ async function runTests() {
       console.log(runways);
 
     const most_runways = await
-      g.V().has('runways',P.gt(5)).
+      g.V().has('runways',P.gte(5)).
             order().by('runways',order.decr).
             local(__.values('code','runways').fold()).toList();
       console.log("Airports with the most runways");      
@@ -74,7 +74,5 @@ async function runTests() {
     process.exit(1);
   }
 }());
-
-
 
 
