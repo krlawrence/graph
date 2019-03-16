@@ -13,7 +13,9 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
 - Added a section on using a TinkerGraph containing the air-route data with Gremlin Server . Issue #118
   - Added the required config files to the `sample-data` folder. Issue #118
 - Added a small section with a pointer to the latest sample data.
+- Added `nested-repeat.groovy` to the `sample-code` folder.
 - Added `bootstrap-console.py` to the `sample-code` folder.
+- Added `glv-client.js` showing a simple Node.js Gremlin GLV client to the `sample-code` folder. Issues #107 #122
 - Cleaned up some wording.
 
 
