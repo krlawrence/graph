@@ -86,7 +86,7 @@ async function runTests() {
       const routes = await
         g.withSack(0).V().
               has('code','AUS').
-              repeat(__.outE().sack(operator.sum).by('dist').inV()).
+              repeat(__.outE().sack(operator.sum).by('dist').inV().simplePath()).
                 until(__.has('code','WLG')).
               limit(10).
               order().by(__.sack()).
@@ -95,6 +95,21 @@ async function runTests() {
       console.log("Sack step tests");
       for (let i=0; i<routes.length;i++) {
           console.log(routes[i][0].objects + ' Total: ' + routes[i][1])}
+
+      const max_depth = await
+        g.withSack(0).V().
+              has('code','AUS').
+              repeat(__.outE().sack(operator.sum).by('dist').inV().simplePath()).
+                emit(__.has('code','WLG')).
+                times(4).
+              has('code','WLG').
+              limit(10).
+              order().by(__.sack()).
+              local(__.union(__.path().by('code').by('dist'),__.sack()).fold()).
+              toList();
+      console.log("Sack and emit step tests");
+      for (let i=0; i<max_depth.length;i++) {
+          console.log(max_depth[i][0].objects + ' Total: ' + max_depth[i][1])}     
   } catch(e) {
       console.error(`Something went wrong:\n ${e}`);
   } finally {
@@ -104,7 +119,6 @@ async function runTests() {
 
 (async function() {
   try {
-    console.log("Application starting");
     await runTests();
     console.log("\nTests complete");
     process.exit(0);
@@ -113,8 +127,5 @@ async function runTests() {
     process.exit(1);
   }
 }());
-
-
-
 
 
