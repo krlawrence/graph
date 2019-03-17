@@ -11,7 +11,7 @@
 const gremlin = require('gremlin');
 const Graph = gremlin.structure.Graph;
 const __ = gremlin.process.statics;
-const { t,order,cardinality,column,scope,pop,P } = gremlin.process;
+const { t,order,cardinality,column,scope,pop,operator,P } = gremlin.process;
 
 // Note that if we just wanted to import 'decr' rather than all of order we could do:
 // const { order: { decr } } = gremlin.process;
@@ -82,6 +82,19 @@ async function runTests() {
               toList();
       console.log("Grouping by labels");
       console.log(label_test);
+      
+      const routes = await
+        g.withSack(0).V().
+              has('code','AUS').
+              repeat(__.outE().sack(operator.sum).by('dist').inV()).
+                until(__.has('code','WLG')).
+              limit(10).
+              order().by(__.sack()).
+              local(__.union(__.path().by('code').by('dist'),__.sack()).fold()).
+              toList();
+      console.log("Sack step tests");
+      for (let i=0; i<routes.length;i++) {
+          console.log(routes[i][0].objects + ' Total: ' + routes[i][1])}
   } catch(e) {
       console.error(`Something went wrong:\n ${e}`);
   } finally {
@@ -93,14 +106,13 @@ async function runTests() {
   try {
     console.log("Application starting");
     await runTests();
-    console.log("Tests complete");
+    console.log("\nTests complete");
     process.exit(0);
   } catch (e) {
     console.error(e);
     process.exit(1);
   }
 }());
-
 
 
 
