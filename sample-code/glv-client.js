@@ -92,7 +92,7 @@ async function runTests() {
               order().by(__.sack()).
               local(__.union(__.path().by('code').by('dist'),__.sack()).fold()).
               toList();
-      console.log("Sack step tests");
+      console.log("\nSack step tests");
       for (let i=0; i<routes.length;i++) {
           console.log(routes[i][0].objects + ' Total: ' + routes[i][1])}
 
@@ -107,13 +107,14 @@ async function runTests() {
               order().by(__.sack()).
               local(__.union(__.path().by('code').by('dist'),__.sack()).fold()).
               toList();
-      console.log("Sack and emit step tests");
+      console.log("\nSack and emit step tests");
       for (let i=0; i<max_depth.length;i++) {
           console.log(max_depth[i][0].objects + ' Total: ' + max_depth[i][1])}     
   } catch(e) {
       console.error(`Something went wrong:\n ${e}`);
   } finally {
-      connection.close();
+      console.log("Closing connection");
+      await connection.close();
   }
 }
 
