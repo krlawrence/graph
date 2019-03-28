@@ -43,7 +43,7 @@ texas = g.V().has('region','US-TX').\
               order().\
               toList()
 
-heading("Cities with airports in Texas");      
+heading("Cities with airports in Texas")      
 for t in texas:
     print(t)
 
@@ -57,7 +57,7 @@ runways = g.V().has('region','US-TX').\
                   by(Column.values,Order.decr).\
                 next()
 
-heading("Commercial route counts for airports in Texas");      
+heading("Commercial route counts for airports in Texas")      
 for k,v in runways.items():
     print(k,v)
 
@@ -85,8 +85,8 @@ pop_test = g.V().has('code','SFO').as_('a').\
                  values('code').\
                  toList()
 
-heading("Using pop.all on a list");
-print(pop_test);
+heading("Using pop.all on a list")
+print(pop_test)
 
 # Shows how to access a vertex label using the T enum.
 label_test = g.V().has('code',P.within(['EU','SFO','NA','CUN'])).\
@@ -110,6 +110,24 @@ most_runways = g.V().has('runways',P.gte(5)).\
 heading("Airports with the most runways")
 for rows in most_runways:
     print(rows[0],rows[1])
+
+# Shortest routes by distance from AUS to WLG.
+# Note the use of the Operator enum.
+routes = g.withSack(0).\
+           V().\
+           has('code','AUS').\
+           repeat(__.outE().sack(Operator.sum).by('dist').\
+                     inV().simplePath()).\
+             until(__.has('code','WLG')).\
+           limit(10).\
+           order().\
+             by(__.sack()).\
+           local(__.union(__.path().by('code').by('dist'),__.sack()).fold()).\
+           toList()
+
+heading("Sack step tests")
+for route in routes:
+    print(route)
 
 # All done so close the connetion
 connection.close()
