@@ -1,4 +1,4 @@
-# glv-client.py
+# glv-client-2.py
 #
 # Connect to a Gremlin Server using a remote connection and issue some basic queries. 
 # Note the way that certain Gremlin steps that share the same name as Python reserved words
@@ -73,6 +73,17 @@ label_test = g.V().has('code',P.within(['EU','SFO','NA','CUN'])).\
 print("\nGrouping by labels\n")
 for k,v in label_test.items():
     print(k,v)
+
+
+most_runways = g.V().has('runways',P.gte(5)).\
+                     order().\
+                       by('runways',Order.decr).\
+                     local(__.values('code','runways').fold()).\
+                     toList()
+
+print("\nAirports with the most runways\n")      
+for rows in most_runways:
+    print(rows[0],rows[1])
 
 # All done so close the connetion
 connection.close()
