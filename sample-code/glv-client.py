@@ -24,7 +24,8 @@ endpoint = 'ws://localhost:8182/gremlin'
 
 # Obtain a graph traversal source using a remote connection
 graph=Graph()
-g = graph.traversal().withRemote(DriverRemoteConnection(endpoint,'g'))
+connection = DriverRemoteConnection(endpoint,'g')
+g = graph.traversal().withRemote(connection)
 
 # Sample 30 airports and return their code and city values.
 # The returned values will be packaged as a list containing 30 small lists.
@@ -41,3 +42,5 @@ for c in sample:
     print("%3d %4s %s" % (i,c[0],c[1]))
     i += 1
 
+# All done so close the connetion
+connection.close()
