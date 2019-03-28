@@ -29,17 +29,40 @@ graph=Graph()
 connection = DriverRemoteConnection(endpoint,'g')
 g = graph.traversal().withRemote(connection)
 
+# Helper method to pretty print some headings.
+def heading(s):
+    print("\n{}".format(s))
+    for i in range(len(s)):
+        print("-",end="")
+    print("")    
 
+# Cities in Texas with one or more airports.
 texas = g.V().has('region','US-TX').\
               values('city').\
               dedup().\
               order().\
               toList()
 
-print("\nCities with airports in Texas\n");      
+heading("Cities with airports in Texas");      
 for t in texas:
     print(t)
 
+# Outgoing route counts for airports in Texas.
+# Note the use of the anonymous traversal "__." as well as
+# the Scope, Column and Order enums.
+runways = g.V().has('region','US-TX').\
+                group().by('code').\
+                  by(__.out().count()).\
+                order(Scope.local).\
+                  by(Column.values,Order.decr).\
+                next()
+
+heading("Commercial route counts for airports in Texas");      
+for k,v in runways.items():
+    print(k,v)
+
+# Find the top 10 airports at the highest elevation.
+# Note the use of the Order enum
 highest = g.V().hasLabel('airport').\
                 order().by('elev',Order.decr).\
                 limit(10).\
@@ -49,11 +72,12 @@ highest = g.V().hasLabel('airport').\
                  by('elev').\
                  toList()
 
-print("\nAirports at the highest altitude\n")
+heading("Airports at the highest altitude")
 for row in highest:
     print("{:3s} {:20s} Elevation {:6d}ft".format(row['iata'],row['city'],row['elev']))
 
-# Shows how to use the Pop enum. Note the use of "as_"
+
+# Shows how to use the Pop enum. Note the use of "as_" and "all_".
 pop_test = g.V().has('code','SFO').as_('a').\
                  out().limit(1).as_('a').\
                  select(Pop.all_,'a').\
@@ -61,27 +85,29 @@ pop_test = g.V().has('code','SFO').as_('a').\
                  values('code').\
                  toList()
 
-print("\nUsing pop.all on a list\n");
+heading("Using pop.all on a list");
 print(pop_test);
 
+# Shows how to access a vertex label using the T enum.
 label_test = g.V().has('code',P.within(['EU','SFO','NA','CUN'])).\
                    group().\
                      by(T.label).\
                      by('desc').\
                    next()\
 
-print("\nGrouping by labels\n")
+heading("Grouping by labels")
 for k,v in label_test.items():
     print(k,v)
 
-
+# Airports with the most runways. Note the use of the P enum to
+# access the "gte" predicate.
 most_runways = g.V().has('runways',P.gte(5)).\
                      order().\
                        by('runways',Order.decr).\
                      local(__.values('code','runways').fold()).\
                      toList()
 
-print("\nAirports with the most runways\n")      
+heading("Airports with the most runways")
 for rows in most_runways:
     print(rows[0],rows[1])
 
