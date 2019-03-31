@@ -16,6 +16,12 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
 - Added `nested-repeat.groovy` to the `sample-code` folder.
 - Added `bootstrap-console.py` to the `sample-code` folder.
 - Added `glv-client.js` showing a simple Node.js Gremlin GLV client to the `sample-code` folder. Issues #107 #122
+- Added `glv-client2.py` showing additional Python examples using a Gremlin GLV client to the `sample-code` folder. 
+- Added samples showing use of TinkerPop strategies from Java and Python to the `sample-code` folder. Issue #11:
+  - `RemoteSubgraphStrategy.java`
+  - `RemoteReadOnlyStrategy.java`
+  - `RemotePartitionStrategy.java`
+  - `strategies.py`
 - Cleaned up some wording.
 
 
