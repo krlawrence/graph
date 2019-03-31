@@ -10,6 +10,7 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
 
 - Added a new section comparing `sack` to `union` and `project` when adding values.
 - Added an example showing how `sack` can be used to count flight segments (hops).
+- Added a small section showing how to use a `by` modulator with the `math` step.
 - Made the coverage of Gremlin Server its own chapter. Issue #131.
 - Added more examples to the coverage of colleactions and 'local' scope.
 - Added a section on using a TinkerGraph containing the air-route data with Gremlin Server . Issue #118
