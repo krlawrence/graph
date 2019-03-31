@@ -4,7 +4,7 @@ Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
 v282-preview, March 31st 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Sun Mar 31, 2019 11:08:19 CDT
+// Sun Mar 31, 2019 11:40:10 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -299,7 +299,7 @@ Change history::
 A word about TinkerPop 3.4
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-A major update to Apache TinkerPop, release 3.4, was released in January 2019. The
+A major update to Apache TinkerPop, version 3.4, was released in January 2019. The
 examples in this book have been tested with TinkerPop 3.4 but the text does not yet
 include coverage of all the new features, changes and deprecations  introduced with
 that release. Be aware also that given the scope of the 3.4 release it may take a
@@ -10287,7 +10287,6 @@ g.V().has('airport','country','IE').
 
 [KIR,ORK]
 ----
-
 You can combine the 'limit' and 'tail' steps with 'local' scope to extract the
 beginning or ending entries from a list of values as shown below.  The following
 query creates a list containing the IATA codes for all airports in Texas.
@@ -10319,7 +10318,7 @@ g.V().has('region','US-TX').values('code').fold().tail(local,2)
 [VCT,AFW]
 ----
 
-Lastly, let's take a look at how 'local' scope can be used with a 'dedup' step. The
+It is worth noting that 'local' scope can also be used with a 'dedup' step. The
 query below finds airports in the US and produces a sorted list of the unique region
 codes by only allowing one airport from each region to proceed to the next steps of
 the traversal.
@@ -10346,6 +10345,49 @@ When either query is run, here are the results that are returned.
 [source,groovy]
 ----
 [US-AK,US-AL,US-AR,US-AZ,US-CA,US-CO,US-CT,US-DC,US-DE,US-FL,US-GA,US-HI,US-IA,US-ID,US-IL,US-IN,US-KS,US-KY,US-LA,US-MA,US-MD,US-ME,US-MI,US-MN,US-MO,US-MS,US-MT,US-NC,US-ND,US-NE,US-NH,US-NJ,US-NM,US-NV,US-NY,US-OH,US-OK,US-OR,US-PA,US-RI,US-SC,US-SD,US-TN,US-TX,US-UT,US-VA,US-VT,US-WA,US-WI,US-WV,US-WY]
+----
+
+Lastly, we can combine some of the prior examples to limit, order and deduplicate the
+contents of a group. The query below does not include a 'limit' step so it retrieves
+all possible results. The goal of the query is to build a group, with labels as the
+keys and vertex 'code' properties as the values for both incoming and outgoing edges
+connected to AUS (Austin). The results are deduplicated so that no airport code
+appears twice.
+
+[source,groovy]
+----
+g.V().has('code','AUS').
+      both().
+      group().
+        by(label).
+        by(values('code').fold().dedup(local).order(local))
+----
+
+When run it returns the following results.
+
+[source,groovy]
+----
+[continent:[NA],country:[US],airport:[ABQ,ATL,BKG,BNA,BOS,BWI,CLE,CLT,CUN,CVG,DAL,DCA,DEN,DFW,DTW,ELP,EWR,FLL,FRA,GDL,HOU,HRL,IAD,IAH,IND,JFK,LAS,LAX,LBB,LGB,LHR,MCI,MCO,MDW,MEM,MEX,MIA,MSP,MSY,OAK,ORD,PDX,PHL,PHX,PIE,PIT,PNS,RDU,SAN,SEA,SFB,SFO,SJC,SLC,SNA,STL,TPA,VPS,YYZ]]
+----
+
+However, let's assume we wanted to limit the query to a maximum of ten results for
+any of the keys in the group. We can do so by adding a 'limit' step with 'local'
+scope as shown below.
+
+[source,groovy]
+----
+g.V().has('code','AUS').
+      both().
+      group().
+        by(label).
+        by(values('code').fold().dedup(local).order(local).limit(local,10))
+----
+
+This time when run, the amount of results returned is restricted.
+
+[source,groovy]
+----
+[continent:[NA],country:[US],airport:[ABQ,ATL,BKG,BNA,BOS,BWI,CLE,CLT,CUN,CVG]]
 ----
 
 In the next section we will continue our look at Gremlin's collections and how they
