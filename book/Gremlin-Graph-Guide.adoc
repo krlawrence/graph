@@ -4,7 +4,7 @@ Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
 v282-preview, March 31st 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Sun Mar 31, 2019 13:36:52 CDT
+// Sun Mar 31, 2019 14:47:39 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -7071,6 +7071,59 @@ queries using a pattern like the one used below where the count step is labelled
 g.V(3).out().count().as('a').math('a / 2')
 
 29.5
+----
+
+[[mathby]]
+Using a 'by' modulator with a 'math' step
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+As with many Gremlin steps, a 'math' step can also be combined with one or more 'by'
+modulators. First of all let's write a simple query to inspect the number of runways
+and Santa Fe (SAF) and all of the places that you can fly to from there.
+
+[source,groovy]
+----
+g.V().has('code','SAF').as('a').
+      out().as('b').
+      select('a','b').
+        by(values('code','runways').fold())
+
+[a:[SAF,3],b:[DFW,7]]
+[a:[SAF,3],b:[LAX,4]]
+[a:[SAF,3],b:[PHX,3]]
+[a:[SAF,3],b:[DEN,6]]
+----
+
+Now let's modify the query to use a 'math' step to add the number of runways each
+pair of airports has.
+
+[source,groovy]
+----
+g.V().has('code','SAF').as('a').
+      out().as('b').
+      math('a + b').by('runways')
+
+10.0
+7.0
+6.0
+9.0      
+----
+
+Of course, this is a simple example where 'math' is not really needed but hopefully
+it shows how a 'by' modulator can be used with a 'math' step. For completeness, here
+is the query rewritten to use a 'sum' step. Notice that in this case the results are
+integers whereas the 'math' step always returns floating point values.
+
+[source,groovy]
+----
+g.V().has('code','SAF').as('a').
+      out().as('b').
+      select('a','b').by('runways').select(values).sum(local) 
+
+10
+7
+6
+9
 ----
 
 [[mathconvert]]
