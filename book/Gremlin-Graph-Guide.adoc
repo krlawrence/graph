@@ -4,7 +4,7 @@ Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
 v282-preview, March 31st 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Sun Mar 31, 2019 14:47:39 CDT
+// Sun Mar 31, 2019 18:47:59 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -7435,10 +7435,15 @@ Including an index with results - introducing 'withIndex' and 'indexed'
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If for any reason you wanted an index value included as part of the results from a
-query you can use the Groovy 'withIndex' or 'indexed' methods as shown below. The
-'withIndex' method adds the index value at the end of a list whereas the 'indexed'
-method adds it at the start. You can provide a starting index value as a parameter.
-If no value is provided the default value for the first index will be zero. 
+query you can use the Groovy 'withIndex' or 'indexed' methods as shown below.
+
+NOTE: As covered in the next section, a native Gremlin 'index' step was introduced in
+the Apache TinkerPop 3.4 release.
+
+The 'withIndex' method adds the index value at the end of a list whereas the
+'indexed' method adds it at the start. You can provide a starting index value as a
+parameter.  If no value is provided the default value for the first index will be
+zero. 
 
 
 [source,groovy]
@@ -7453,7 +7458,7 @@ g.V().has('region','US-OK').values('code').withIndex()
 
 NOTE: Note that 'indexed' and 'withIndex' are Groovy methods and not Gremlin
 traversal steps. They will only work using graph databases that allow Groovy code to
-be included as part of a query.
+be included as part of a query. 
 
 Here is the same query as before but using 1 as the starting index.
 
@@ -7467,7 +7472,6 @@ g.V().has('region','US-OK').values('code').withIndex(1)
 [SWO,4]
 ----
 
-
 Below is the query used again but this time with the 'indexed' method being used to
 generate the index value.
 
@@ -7480,8 +7484,101 @@ g.V().has('region','US-OK').values('code').indexed(1)
 [3,LAW]
 [4,SWO]
 ----
-[[sx]]
 
+[[tp34index]]
+The new 'index' step added in TinkerPop 3.4
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Apache TinkerPop version 3.4, released at the start of 2019, added a native 'index'
+step to the Gremlin language. A new 'with' modulator was also added that can be used
+to control how the index step behaves. Unlike the native 'Groovy' methods, there is
+no way to specify the starting value for the index range.
+
+TIP: The official Apache TinkerPop documentation for the 'index' step can be found at
+the following link http://tinkerpop.apache.org/docs/current/reference/#index-step.
+
+The use of 'index' only really makes sense in the context of a collection such as a
+'list' or a 'map'. As shown below, without a 'fold' step in the query, the result set
+will consist of a number of individual lists all with an index of zero.
+
+[source,groovy]
+----
+g.V().has('code','LHR').
+      out().limit(5).
+      values('code').index()
+
+[[HKG,0]]
+[[PEK,0]]
+[[PVG,0]]
+[[FCO,0]]
+[[BOM,0]]
+----
+ 
+If we had a 'fold' step before calling 'index' however, the results will be indexed
+in increments of one, starting at zero.
+
+[source,groovy]
+----
+g.V().has('code','LHR').
+      out().limit(5).
+      values('code').fold().index()
+
+[[HKG,0],[PEK,1],[PVG,2],[FCO,3],[BOM,4]]
+----
+
+Adding an 'unfold' step will yield a set of individual lists with each containing an
+airport code and its index.
+
+[source,groovy]
+----
+g.V().has('code','LHR').
+      out().limit(5).
+      values('code').fold().index().
+      unfold()
+
+[HKG,0]
+[PEK,1]
+[PVG,2]
+[FCO,3]
+[BOM,4]
+----
+
+The new 'with' modulator can be used to control the type of collection that 'index'
+produces. To have the result returned as a map where the key is the index value the
+query can be modified as follows.
+
+[source,groovy]
+----
+g.V().has('code','LHR').
+      out().limit(5).
+      values('code').fold().
+      index().with(WithOptions.indexer,WithOptions.map)
+
+[0:HKG,1:PEK,2:PVG,3:FCO,4:BOM]
+----
+
+Finally the example below shows a 'with' step being used to ask for results as a list
+which is the default. The results are then sorted in reverse order. Note that this
+query uses 'desc' rather than the now deprecated 'decr' to ask for descending order
+results.
+
+[source,groovy]
+----
+g.V().has('code','LHR').
+      out().limit(5).
+      values('code').fold().
+      index().with(WithOptions.indexer,WithOptions.list).
+      unfold().
+      order().by(tail(local,1),desc)
+
+[BOM,4]
+[FCO,3]
+[PVG,2]
+[PEK,1]
+[HKG,0]
+----
+
+[[sx]]
 More examples using concepts we have covered so far
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
