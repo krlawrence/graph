@@ -4,7 +4,7 @@ Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
 v282-preview, March 31st 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Sun Mar 31, 2019 10:36:57
+// Sun Mar 31, 2019 11:08:19 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -299,16 +299,22 @@ Change history::
 A word about TinkerPop 3.4
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-A major update to Apache TinkerPop, release 3.4.0 was released in January 2019. The
-examples in this book have been tested with TinkerPop 3.4.0 but the text does not yet
+A major update to Apache TinkerPop, release 3.4, was released in January 2019. The
+examples in this book have been tested with TinkerPop 3.4 but the text does not yet
 include coverage of all the new features, changes and deprecations  introduced with
-that release. Be aware also that given the scope of the 3.4.0 release it may take a while
-before all of the vendor and open source graph implementations that support Apache
-TinkerPop have caught up with all of these new features. I plan to add coverage of
-these features over the coming weeks to the book. I also plan to add additional
-sample code to the `sample-code` folder. By way of a start I have recently added a
-sample called `nested-repeat.groovy` that demonstrates the use of the new nested
-repeat step capability from the Gremlin console.
+that release. Be aware also that given the scope of the 3.4 release it may take a
+while before all of the vendor and open source graph implementations that support
+Apache TinkerPop have caught up with all of these new features. 
+
+NOTE: Full details of all the new features added in the TinkerPop 3.4 release can be
+found at the following link:
+https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc
+
+I plan to add
+coverage of these features over the coming weeks to the book. I also plan to add
+additional sample code to the `sample-code` folder. By way of a start I have recently
+added a sample called `nested-repeat.groovy` that demonstrates the use of the new
+nested repeat step capability from the Gremlin console.
 
 [[whygraph]]
 So what is a graph database and why should I care?
