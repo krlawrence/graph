@@ -1304,7 +1304,7 @@ Now that you hopefully  have the 'air-routes' graph loaded it's time to start wr
 some queries!
 
 NOTE: Chapter 3 is focussed on queries that simply read from an existing graph. If
-you ar emore interested in adding new vertices, edges and properties or modifying
+you are more interested in adding new vertices, edges and properties or modifying
 existing properties you may want to jump to Chapter 4 and in particular the
 "<<addnodes>>" section.
 
