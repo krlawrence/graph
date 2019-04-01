@@ -14,6 +14,7 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
 - Added a section describing the `index` step added in TinkerPop 3.4. Issues #115 and #108.
 - Made the coverage of Gremlin Server its own chapter. Issue #131.
 - Added more examples to the coverage of colleactions and 'local' scope.
+- Added a note at the start of Chapter 3 that mutation steps like `addV` are covered in Chapter 4.
 - Added a section on using a TinkerGraph containing the air-route data with Gremlin Server . Issue #118
   - Added the required config files to the `sample-data` folder. Issue #118
 - Added a small section with a pointer to the latest sample data.
