@@ -4,7 +4,7 @@ Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
 v282-preview, March 31st 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Sun Mar 31, 2019 18:47:59 CDT
+// Sun Mar 31, 2019 19:17:41 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -1301,7 +1301,12 @@ WRITING GREMLIN QUERIES
 -----------------------
 
 Now that you hopefully  have the 'air-routes' graph loaded it's time to start writing
-some queries!  
+some queries!
+
+NOTE: Chapter 3 is focussed on queries that simply read from an existing graph. If
+you ar emore interested in adding new vertices, edges and properties or modifying
+existing properties you may want to jump to Chapter 4 and in particular the
+"<<addnodes>>" section.
 
 In this chapter we will begin to look at the Gremlin query language. I will start
 off with a quick look at how Gremlin and SQL differ and are yet in some ways similar,
