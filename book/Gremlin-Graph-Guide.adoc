@@ -3902,7 +3902,7 @@ little. This query will find any cities that start with '"Dal"' through '"Dar"'.
 [source,groovy]
 ----
 g.V().hasLabel('airport').
-      has('city',between('Dal','Dat')).
+      has('city',between('Dal','Dar')).
       values('city').order().dedup()
 ----
 
