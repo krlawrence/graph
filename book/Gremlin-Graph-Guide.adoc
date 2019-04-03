@@ -3852,6 +3852,8 @@ operators to strings. This use of the 'between' predicate can at least be used t
 simulate a 'startsWith' type of operator. It is likely that support for additional
 text search predicates will appear in future Apache TinkerPop releases.
 
+TIP: The 'between' predicate will return results that are inclusive of the first argument and exclusive of the second argument.
+
 [source,groovy]
 ----
 g.V().hasLabel('airport').
@@ -3902,7 +3904,7 @@ little. This query will find any cities that start with '"Dal"' through '"Dar"'.
 [source,groovy]
 ----
 g.V().hasLabel('airport').
-      has('city',between('Dal','Dar')).
+      has('city',between('Dal','Dat')).
       values('city').order().dedup()
 ----
 
