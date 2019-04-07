@@ -2,9 +2,9 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
-v282-preview, April 5th 2019
+v282-preview, April 7th 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Fri Apr 05, 2019 19:19:07 CDT
+// Sun Apr 07, 2019 17:37:17 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -25,7 +25,7 @@ v282-preview, April 5th 2019
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: April 5th 2019
+:draftdate: April 7th 2019
 :tpvercheck: 3.4.0
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -2926,20 +2926,35 @@ the Austin airport vertex.
 [source,groovy]
 ----
 // Return all the properties and values the AUS vertex has
-g.V().has('code','AUS').valueMap()
+g.V().has('code','AUS').valueMap().unfold()
 ----
 
 If you are using the Gremlin console, the output from running the previous command
-should look something like this.
+should look something like this. The unfold step at the end of the query is used
+to make the results easier to read.
 
 [source,groovy]
 ----
-[country:[US], code:[AUS], longest:[12248], city:[Austin], elev:[542], icao:[KAUS], lon:[-97.6698989868164], type:[airport], region:[US-TX], runways:[2], lat:[30.1944999694824], desc:[Austin Bergstrom International Airport]]
+country=[US]
+code=[AUS]
+longest=[12250]
+city=[Austin]
+elev=[542]
+icao=[KAUS]
+lon=[-97.6698989868164]
+type=[airport]
+region=[US-TX]
+runways=[2]
+lat=[30.1944999694824]
+desc=[Austin Bergstrom International Airport]
 ----
 
-NOTE: Notice how each key like 'country' is followed by a value that is returned as
+NOTE: Notice how each key, like 'country', is followed by a value that is returned as
 an element of a list. This is because it is possible (for vertices but not for edges)
-to provide more than one property value for a given key by encoding them as a list.
+to provide more than one property value for a given key by encoding them as a list or
+as a set.  In the Apache TinkerPop release 3.4 some changes were introduced to make
+it easier to control how these results are returned. Those changes are discussed in
+the next section.
 
 Here are some more examples of how 'valueMap' can be used. If a parameter of 'true'
 is provided, then the results returned will include the ID and label of the element
@@ -2948,9 +2963,22 @@ being examined.
 [source,groovy]
 ----
 // If you also want the ID and label, add a parameter of true
-g.V().has('code','AUS').valueMap(true)
+g.V().has('code','AUS').valueMap(true).unfold()
 
-[country:[US],id:3,code:[AUS],longest:[12250],city:[Austin],lon:[-97.6698989868164],type:[airport],elev:[542],icao:[KAUS],region:[US-TX],runways:[2],label:airport,lat:[30.1944999694824],desc:[Austin Bergstrom International Airport]]
+id=3
+label=airport
+country=[US]
+code=[AUS]
+longest=[12250]
+city=[Austin]
+elev=[542]
+icao=[KAUS]
+lon=[-97.6698989868164]
+type=[airport]
+region=[US-TX]
+runways=[2]
+lat=[30.1944999694824]
+desc=[Austin Bergstrom International Airport]
 ----
 
 You can also mix use of 'true' along with requesting the map for specific properties.
@@ -3009,6 +3037,131 @@ g.E(5161).valueMap(true)
 
 [id:5161,dist:1357,label:route]
 ----
+
+[[tp34vm]]
+Changes to 'valueMap' introduced in TinkerPop 3.4
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Starting with the Apache TinkerPop 3.4 release, a few changes have been introduced
+that allow easier control of the results that a 'valueMap' step returns. Further, the
+use of 'true' to return the ID and label properties of a Vertex or an Edge was
+deprecated and replaced by the use of a 'with' modulator. 
+
+NOTE: The new valueMap configuration options are described in the official
+documentation at the following link
+http://tinkerpop.apache.org/docs/current/reference/#valuemap-step.
+
+The previous ways of using 'valueMap' will still work but over time as Graph DB
+providers adopt TinkerPop 3.4 the examples shown below will become the preferred way
+of controlling the results returned by 'valueMap'
+
+Instead of using 'valueMap(true)' to include the ID and label of an element (a vertex
+or an edge) in the results, the new 'with(WithOptions.tokens)' construct can
+now be used as shown below. 
+
+[source,groovy]
+----
+g.V().has('code','SFO').valueMap().with(WithOptions.tokens).unfold()
+
+id=23
+label=airport
+country=[US]
+code=[SFO]
+longest=[11870]
+city=[San Francisco]
+elev=[13]
+icao=[KSFO]
+lon=[-122.375]
+type=[airport]
+region=[US-CA]
+runways=[4]
+lat=[37.6189994812012]
+desc=[San Francisco International Airport]
+----
+
+TIP: All of the possible values that can be specified using WithOptions can be found
+in the official Apache TinkerPop JavaDoc documentation
+http://tinkerpop.apache.org/javadocs/current/full/org/apache/tinkerpop/gremlin/process/traversal/step/util/WithOptions.html[at
+this location].
+
+You can still include the ID and label in the results, along with a subset of the
+properties, by explicitly naming the property keys you are interested in. In the
+example below only the 'code' property is requested.
+
+[source,groovy]
+----
+g.V().has('code','SFO').valueMap('code').with(WithOptions.tokens).unfold()
+
+id=23
+label=airport
+code=[SFO]
+----
+
+You can use additional 'WithOptions' qualifiers to select just the labels.
+
+[source,groovy]
+----
+g.V().has('code','SFO').
+      valueMap('code').with(WithOptions.tokens,WithOptions.labels).
+      unfold()
+
+label=airport
+code=[SFO]
+----
+
+In the same way you can choose to just have the ID value returned without the label.
+[source,groovy]
+----
+g.V().has('code','SFO').
+      valueMap('code').with(WithOptions.tokens,WithOptions.ids).
+      unfold()
+
+id=23
+code=[SFO]
+----
+
+As discussed in the previous section, the property values returned by 'valueMap' are
+by default represented as lists even if there is only a single property value
+present.
+
+NOTE: Using  versions of TinkerPop prior to 3.4 it is still possible to generate the
+same unrolled results that you get using 'by(unfold())'. How to do that is discussed
+a bit later in the book we need to look at  a few other steps such as 'map' first.
+If you want to jump ahead you will find these examples in the "<<vmunroll>>" section.
+
+Starting with TinkerPop 3.4 you can very easily request that these values be returned
+as single values not wrapped in lists. This can be done using a 'by' step modulator
+as shown below.
+
+[source,groovy]
+----
+g.V().has('code','SFO').valueMap().by(unfold()).unfold()
+----
+
+Notice how all the values such as the city name, "San Francisco", are now just simple
+strings or numeric values and not a single value wrapped in a list of length one.
+
+[source,groovy]
+----
+country=US
+code=SFO
+longest=11870
+city=San Francisco
+elev=13
+icao=KSFO
+lon=-122.375
+type=airport
+region=US-CA
+runways=4
+lat=37.6189994812012
+desc=San Francisco International Airport
+----
+
+NOTE: There are additional 'WithOptions' settings we can use to change how 
+properties with meta properties are returned by 'valueMap' This is covered later as
+part of the "<<tp34vmmetaprop>>" section.
+
+
 
 [[var]]
 Assigning query results to a variable
@@ -7563,9 +7716,15 @@ g.V().has('code','LHR').
 ----
 
 Finally the example below shows a 'with' step being used to ask for results as a list
-which is the default. The results are then sorted in reverse order. Note that this
-query uses 'desc' rather than the now deprecated 'decr' to ask for descending order
-results.
+which is the default. The results are then sorted in reverse order. 
+
+TIP: All of the possible values that can be specified using WithOptions can be found
+in the official Apache TinkerPop JavaDoc documentation
+http://tinkerpop.apache.org/javadocs/current/full/org/apache/tinkerpop/gremlin/process/traversal/step/util/WithOptions.html[at
+this location].
+
+Note that this query uses 'desc' rather than the now deprecated 'decr' to ask for
+descending order results.
 
 [source,groovy]
 ----
@@ -9828,6 +9987,155 @@ property to the same vertex property.
 So as mentioned above, the meta property provides a way to attach metadata to another
 property. This enables a number of important use cases including being able to attach 
 a date or ACL information to individual properties.
+
+[[tp34vmmetaprop]]
+Using 'unfold' and 'WithOptions' with Meta Properties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+A new feature was introduced in Apache TinkerPop version 3.4 that allows us to more
+easily include both properties and their meta properties in the result from a
+'valueMap' step that follows a 'properties' step.  
+
+
+TIP: All of the possible values that can be specified using WithOptions can be found
+in the official Apache TinkerPop JavaDoc documentation
+http://tinkerpop.apache.org/javadocs/current/full/org/apache/tinkerpop/gremlin/process/traversal/step/util/WithOptions.html[at
+this location].
+
+To use this new capability
+requires that the graph database you are using has support for both meta properties
+and TinkerPop version 3.4. The examples below build upon the examples shown in the
+previous section.
+
+First of all, we know how to inspect the properties present for any vertex using the
+'properties' step.
+
+[source,groovy]
+----
+g.V().has('code','AUS').properties()
+
+vp[country->US]
+vp[code->AUS]
+vp[longest->12250]
+vp[city->Austin]
+vp[elev->542]
+vp[icao->KAUS]
+vp[lon->-97.6698989868164]
+vp[type->airport]
+vp[region->US-TX]
+vp[runways->2]
+vp[lat->30.1944999694824]
+vp[desc->Austin Bergstrom ...]
+----
+
+We also know how to look at the meta properties by following the 'properties' step
+with a 'valueMap' step or a second 'properties' step. However,  a value is returned
+only when a property has a meta property. For all other properties the result is
+simply an empty list.  
+
+[source,groovy]
+----
+g.V().has('code','AUS').properties().valueMap()
+
+[]
+[date:6/6/2017]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+----
+
+Using the new 'with' step and specifying options using 'WithOptions' we can generate
+a result from 'valueMap' that includes the property values and their respective meta
+properties. The example below generates a map containing the values for all
+properties plus the key and value for any meta properties present.
+
+[source,groovy]
+----
+g.V().has('code','AUS').
+      properties().
+      valueMap().with(WithOptions.tokens,WithOptions.values)
+----
+
+The values are shown for all properties but for the case where we have a 'date'
+meta property, that is also shown.
+
+[source,groovy]
+----
+[value:US]
+[value:AUS,date:6/6/2017]
+[value:12250]
+[value:Austin]
+[value:542]
+[value:KAUS]
+[value:-97.6698989868164]
+[value:airport]
+[value:US-TX]
+[value:2]
+[value:30.1944999694824]
+[value:Austin Bergstrom International Airport]
+----
+
+Similarly we could just decide to include the key names in the results.
+
+[source,groovy]
+----
+g.V().has('code','AUS').
+      properties().
+      valueMap().with(WithOptions.tokens,WithOptions.keys)
+----
+
+Once again the key and value are shown for the 'date' meta property.
+
+[source,groovy]
+----
+[key:country]
+[key:code,date:6/6/2017]
+[key:longest]
+[key:city]
+[key:elev]
+[key:icao]
+[key:lon]
+[key:type]
+[key:region]
+[key:runways]
+[key:lat]
+[key:desc]
+----
+
+To include both the keys and the values in the result along with the meta properties,
+'WithOptions.all' can be used.    
+
+[source,groovy]
+----
+g.V().has('code','AUS').
+      properties().
+      valueMap().with(WithOptions.tokens,WithOptions.all)
+----
+
+Note that in this case, the ID for each property is also shown.
+
+[source,groovy]
+----
+[id:28,key:country,value:US]
+[id:29,key:code,value:AUS,date:6/6/2017]
+[id:30,key:longest,value:12250]
+[id:31,key:city,value:Austin]
+[id:32,key:elev,value:542]
+[id:33,key:icao,value:KAUS]
+[id:34,key:lon,value:-97.6698989868164]
+[id:35,key:type,value:airport]
+[id:36,key:region,value:US-TX]
+[id:37,key:runways,value:2]
+[id:38,key:lat,value:30.1944999694824]
+[id:39,key:desc,value:Austin Bergstrom International Airport]
+----
 
 [[deduce]]
 Deducing the schema of a graph using queries
@@ -12104,6 +12412,124 @@ regex = {new P(bp, it)}
 // and the regex pattern as the second paramter.
 g.V().has('desc', regex(/^Dal.*/)).values('desc')
 ----
+
+[[vmunroll]]
+Unrolling the lists returned by 'valueMap'
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In the "<<tp34vm>>" section, I showed some examples that used 'by(unfold()' following
+a 'valueMap' step unroll property values. As you may recall, this means that single
+property values are not returned wrapped inside lists. This feature was introduced in
+TinkerPop 3.4. However, you can achieve the same results using earlier versions of
+TinkerPop, it just takes a bit more work.
+
+In case you jumped ahead to this section, here is an example of the new feature and
+the output it produces.
+
+[source,groovy]
+----
+g.V().has('code','SFO').valueMap().by(unfold()).unfold()
+
+country=US
+code=SFO
+longest=11870
+city=San Francisco
+elev=13
+icao=KSFO
+lon=-122.375
+type=airport
+region=US-CA
+runways=4
+lat=37.6189994812012
+desc=San Francisco International Airport
+----
+
+We could use a query like the one below to achieve the same result. A 'map' step is
+used to unpack age and then repackage the results of the 'valueMap' step with the
+values unrolled from their lists.
+
+[source,groovy]
+----
+g.V().has('code','SFO').
+      valueMap().
+      map(unfold().group().by(keys).by(select(values).unfold())).
+      unfold()
+----
+
+The output looks just like that from the prior query, which is good. However, there
+is still an issue with the query. It will not do quite what we want if any property
+has a list or set of values associated with it.
+
+[source,groovy]
+----
+country=US
+code=SFO
+longest=11870
+city=San Francisco
+elev=13
+icao=KSFO
+lon=-122.375
+type=airport
+region=US-CA
+runways=4
+lat=37.6189994812012
+desc=San Francisco International Airport
+----
+
+Let's imagine we wanted to add an additional region classification of "Bay Area" to
+the San Francisco airport vertex. We might do that as shown below.
+
+[source,groovy]
+----
+g.V().has('code','SFO').property(list,'region','Bay Area')
+----
+
+We can look at the valueMap for the 'region' property to validate we now have a list.
+
+[source,groovy]
+----
+g.V().has('code','SFO').valueMap('region')
+
+[region:[US-CA,Bay Area]]
+----
+If we were to use the 'map' step that we just created, it would try to unroll this
+property which in this case is not what we want as we want to preserve the list. We
+can modify the clearly a little to include a 'choose' step that only unrolls the
+'lst' if it has a length of one.
+
+[source,groovy]
+----
+g.V().has('code','SFO').
+      valueMap().
+      map(unfold().
+        group().
+          by(keys).
+          by(choose(select(values).count(local).is(1),
+                    select(values).unfold(),
+                    select(values)))).
+      unfold()
+----
+
+This time the results are still unrolled except for the 'region' property which
+remained a list.
+
+[source,groovy]
+----
+country=US
+code=SFO
+longest=11870
+city=San Francisco
+elev=13
+icao=KSFO
+lon=-122.375
+type=airport
+region=[US-CA, Bay Area]
+runways=4
+lat=37.6189994812012
+desc=San Francisco International Airport
+----
+
+
 
 [[graphvars]]
 Using graph variables to associate metadata with a graph
