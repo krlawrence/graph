@@ -3075,6 +3075,10 @@ lat=[37.6189994812012]
 desc=[San Francisco International Airport]
 ----
 
+TIP: All of the possible values that can be specified using WithOptions can be found
+in the official Apache TinkerPop JavaDoc at this location
+http://tinkerpop.apache.org/javadocs/current/full/org/apache/tinkerpop/gremlin/process/traversal/step/util/WithOptions.html.
+
 [source,groovy]
 ----
 g.V().has('code','SFO').valueMap('code').with(WithOptions.tokens).unfold()
@@ -3135,9 +3139,9 @@ lat=37.6189994812012
 desc=San Francisco International Airport
 ----
 
-NOTE: There are additional 'WithOptions' values we can use to change how the way
+NOTE: There are additional 'WithOptions' settings we can use to change how 
 properties with meta properties are returned by 'valueMap' This is covered later as
-part of the "<<>>" section.
+part of the "<<tp34vmmetaprop>>" section.
 
 [[vmunroll]]
 Unrolling the lists returned by 'valueMap'
@@ -7790,9 +7794,14 @@ g.V().has('code','LHR').
 ----
 
 Finally the example below shows a 'with' step being used to ask for results as a list
-which is the default. The results are then sorted in reverse order. Note that this
-query uses 'desc' rather than the now deprecated 'decr' to ask for descending order
-results.
+which is the default. The results are then sorted in reverse order. 
+
+TIP: All of the possible values that can be specified using WithOptions can be found
+in the official Apache TinkerPop JavaDoc at this location
+http://tinkerpop.apache.org/javadocs/current/full/org/apache/tinkerpop/gremlin/process/traversal/step/util/WithOptions.html.
+
+Note that this query uses 'desc' rather than the now deprecated 'decr' to ask for
+descending order results.
 
 [source,groovy]
 ----
@@ -10062,12 +10071,66 @@ Using 'unfold' and 'WithOptions' with Meta Properties
 
 A new feature was introduced in Apache TinkerPop version 3.4 that allows us to more
 easily include both properties and their meta properties in the result from a
-'valueMap' step that follows a 'properties' step.
+'valueMap' step that follows a 'properties' step.  
 
-Continuing with our example from the previous section, using the new 'with' step and
-specifying options using 'WithOptions' we can generate a result from 'valueMap' that
-includes the values and their meta properties. The example below will include the
-values for all properties in the map plus the key and value for any meta properties.
+
+TIP: All of the possible values that can be specified using WithOptions can be found
+in the official Apache TinkerPop JavaDoc at this location
+http://tinkerpop.apache.org/javadocs/current/full/org/apache/tinkerpop/gremlin/process/traversal/step/util/WithOptions.html.
+
+To use this new capability
+requires that the graph database you are using has support for both meta properties
+and TinkerPop version 3.4. The examples below build upon the examples shown in the
+previous section.
+
+First of all, we know how to inspect the properties present for any vertex using the
+'properties' step.
+
+[source,groovy]
+----
+g.V().has('code','AUS').properties()
+
+vp[country->US]
+vp[code->AUS]
+vp[longest->12250]
+vp[city->Austin]
+vp[elev->542]
+vp[icao->KAUS]
+vp[lon->-97.6698989868164]
+vp[type->airport]
+vp[region->US-TX]
+vp[runways->2]
+vp[lat->30.1944999694824]
+vp[desc->Austin Bergstrom ...]
+----
+
+We also know how to look at the meta properties by following the 'properties' step
+with a 'valueMap' step or a second 'properties' step. However,  a value is returned
+only when a property has a meta property. For all other properties the result is
+simply an empty list.  
+
+[source,groovy]
+----
+g.V().has('code','AUS').properties().valueMap()
+
+[]
+[date:6/6/2017]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+----
+
+Using the new 'with' step and specifying options using 'WithOptions' we can generate
+a result from 'valueMap' that includes the property values and their respective meta
+properties. The example below generates a map containing the values for all
+properties plus the key and value for any meta properties present.
 
 [source,groovy]
 ----
