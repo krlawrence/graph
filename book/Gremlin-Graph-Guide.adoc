@@ -4,7 +4,7 @@ Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
 v282-preview, April 7th 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Sun Apr 07, 2019 10:23:40 CDT
+// Sun Apr 07, 2019 15:52:46 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -3236,86 +3236,6 @@ lat=37.6189994812012
 desc=San Francisco International Airport
 ----
 
-[[tp34vmmetaprop]]
-Using 'unfold' and 'WithOptions' with Meta Properties
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-A new feature was introduced in Apache TinkerPop version 3.4 that allows us to more
-easily include both properties and their meta properties in the result from a
-'valueMap' step.
-
-Continuing with our example from the previous section, using the new 'with' step and
-specifying options using 'WithOptions' we can generate a result from 'valueMap' that
-includes the values and their meta properties.
-
-[source,groovy]
-----
-g.V().has('code','AUS').
-      properties().
-      valueMap().with(WithOptions.tokens,WithOptions.values)
-----
-
-[source,groovy]
-----
-[value:US]
-[value:AUS,date:6/6/2017]
-[value:12250]
-[value:Austin]
-[value:542]
-[value:KAUS]
-[value:-97.6698989868164]
-[value:airport]
-[value:US-TX]
-[value:2]
-[value:30.1944999694824]
-[value:Austin Bergstrom International Airport]
-----
-
-[source,groovy]
-----
-g.V().has('code','AUS').
-      properties().
-      valueMap().with(WithOptions.tokens,WithOptions.keys)
-----
-
-[source,groovy]
-----
-[key:country]
-[key:code,date:6/6/2017]
-[key:longest]
-[key:city]
-[key:elev]
-[key:icao]
-[key:lon]
-[key:type]
-[key:region]
-[key:runways]
-[key:lat]
-[key:desc]
-----
-
-[source,groovy]
-----
-g.V().has('code','AUS').
-      properties().
-      valueMap().with(WithOptions.tokens,WithOptions.all)
-----
-
-[source,groovy]
-----
-[id:28,key:country,value:US]
-[id:29,key:code,value:AUS,date:6/6/2017]
-[id:30,key:longest,value:12250]
-[id:31,key:city,value:Austin]
-[id:32,key:elev,value:542]
-[id:33,key:icao,value:KAUS]
-[id:34,key:lon,value:-97.6698989868164]
-[id:35,key:type,value:airport]
-[id:36,key:region,value:US-TX]
-[id:37,key:runways,value:2]
-[id:38,key:lat,value:30.1944999694824]
-[id:39,key:desc,value:Austin Bergstrom International Airport]
-----
 
 [[var]]
 Assigning query results to a variable
@@ -10135,6 +10055,100 @@ property to the same vertex property.
 So as mentioned above, the meta property provides a way to attach metadata to another
 property. This enables a number of important use cases including being able to attach 
 a date or ACL information to individual properties.
+
+[[tp34vmmetaprop]]
+Using 'unfold' and 'WithOptions' with Meta Properties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+A new feature was introduced in Apache TinkerPop version 3.4 that allows us to more
+easily include both properties and their meta properties in the result from a
+'valueMap' step that follows a 'properties' step.
+
+Continuing with our example from the previous section, using the new 'with' step and
+specifying options using 'WithOptions' we can generate a result from 'valueMap' that
+includes the values and their meta properties. The example below will include the
+values for all properties in the map plus the key and value for any meta properties.
+
+[source,groovy]
+----
+g.V().has('code','AUS').
+      properties().
+      valueMap().with(WithOptions.tokens,WithOptions.values)
+----
+
+The values are shown for all properties but for the case where we have a 'date'
+meta property, that is also shown.
+
+[source,groovy]
+----
+[value:US]
+[value:AUS,date:6/6/2017]
+[value:12250]
+[value:Austin]
+[value:542]
+[value:KAUS]
+[value:-97.6698989868164]
+[value:airport]
+[value:US-TX]
+[value:2]
+[value:30.1944999694824]
+[value:Austin Bergstrom International Airport]
+----
+
+Similarly we could just decide to include the key names in the results.
+
+[source,groovy]
+----
+g.V().has('code','AUS').
+      properties().
+      valueMap().with(WithOptions.tokens,WithOptions.keys)
+----
+
+Once again the key and value are shown for the 'date' meta property.
+
+[source,groovy]
+----
+[key:country]
+[key:code,date:6/6/2017]
+[key:longest]
+[key:city]
+[key:elev]
+[key:icao]
+[key:lon]
+[key:type]
+[key:region]
+[key:runways]
+[key:lat]
+[key:desc]
+----
+
+To include both the keys and the values in the result along with the meta properties,
+'WithOptions.all' can be used.    
+
+[source,groovy]
+----
+g.V().has('code','AUS').
+      properties().
+      valueMap().with(WithOptions.tokens,WithOptions.all)
+----
+
+Note that in this case, the ID for each property is also shown.
+
+[source,groovy]
+----
+[id:28,key:country,value:US]
+[id:29,key:code,value:AUS,date:6/6/2017]
+[id:30,key:longest,value:12250]
+[id:31,key:city,value:Austin]
+[id:32,key:elev,value:542]
+[id:33,key:icao,value:KAUS]
+[id:34,key:lon,value:-97.6698989868164]
+[id:35,key:type,value:airport]
+[id:36,key:region,value:US-TX]
+[id:37,key:runways,value:2]
+[id:38,key:lat,value:30.1944999694824]
+[id:39,key:desc,value:Austin Bergstrom International Airport]
+----
 
 [[deduce]]
 Deducing the schema of a graph using queries
