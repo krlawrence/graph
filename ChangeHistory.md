@@ -10,15 +10,18 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
 
 - Added a new section comparing `sack` to `union` and `project` when adding values.
 - Added an example showing how `sack` can be used to count flight segments (hops).
+- Began adding coverage of TinkerPop 3.4 features. Issue #115 and #108
+  - Added a mention of TinkerPop 3.4 in the Introduction.
+  - Added a section describing the new `index` step.
+  - Added `nested-repeat.groovy` to the `sample-code` folder.
+  - Expanded existing `valueMap` coverage and added new sections covering the new `unfold`-`by`,`with` and `WithOptions` features.
 - Added a small section showing how to use a `by` modulator with the `math` step.
-- Added a section describing the `index` step added in TinkerPop 3.4. Issues #115 and #108.
 - Made the coverage of Gremlin Server its own chapter. Issue #131.
 - Added more examples to the coverage of colleactions and 'local' scope.
 - Added a note at the start of Chapter 3 that mutation steps like `addV` are covered in Chapter 4.
 - Added a section on using a TinkerGraph containing the air-route data with Gremlin Server . Issue #118
   - Added the required config files to the `sample-data` folder. Issue #118
 - Added a small section with a pointer to the latest sample data.
-- Added `nested-repeat.groovy` to the `sample-code` folder.
 - Added `bootstrap-console.py` to the `sample-code` folder.
 - Added `glv-client.js` showing a simple Node.js Gremlin GLV client to the `sample-code` folder. Issues #107 #122
 - Added `glv-client2.py` showing additional Python examples using a Gremlin GLV client to the `sample-code` folder. 
@@ -27,9 +30,7 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
   - `RemoteReadOnlyStrategy.java`
   - `RemotePartitionStrategy.java`
   - `strategies.py`
-- Began coverage of TinkerPop 3.4
 - Cleaned up some wording.
-
 
 ## Release 281 change history (December 26th 2018)
 
