@@ -4,7 +4,7 @@ Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
 v282-preview, April 7th 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Mon Apr 08, 2019 18:39:35 CDT
+// Wed Apr 10, 2019 20:21:08 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -9039,7 +9039,7 @@ first updated the 'runways' property.
 [source,groovy]
 ----
 g.V(3).fold().
-       coalesce(unfold().property('runways','3'),
+       coalesce(unfold().property('runways',3),
        addV('airport').property('runways',3))
 
 v[3]
@@ -17599,6 +17599,28 @@ g.V().has('airport','code',neq('AUS')).
 
 When run the query may take a few seconds to complete but should not take more than
 that on a typical laptop or desktop. Here are the results of running the query.
+
+[source,groovy]
+----
+[YPO,YAT,ZKE,YFA,YMO,YTS,YYZ,AUS]
+[YZG,YIK,AKV,YPX,YGL,YUL,ATL,AUS]
+[THU,NAQ,JUV,JAV,GOH,KEF,PIT,AUS]
+----
+
+The query could also be written using 'repeat' and 'until' steps as shown below.
+
+[source,groovy]
+----
+g.V().has('airport','code',neq('AUS')).
+      filter(out('route').count().is(neq(0))).
+      local(repeat(out().simplePath()).
+        until(has('code','AUS').or().loops().is(8)).
+        has('code','AUS').limit(1)).
+      path().by('code').
+      where(count(local).is(gte(8)))
+----
+
+As before, the same three paths are found.
 
 [source,groovy]
 ----
