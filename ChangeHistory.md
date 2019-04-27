@@ -32,6 +32,7 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
   - `RemotePartitionStrategy.java`
   - `strategies.py`
 - Cleaned up some wording.
+- Uploaded latest data sets and demo apps to the `sample-data` and `demo` folders.
 
 ## Release 281 change history (December 26th 2018)
 
