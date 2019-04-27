@@ -3,8 +3,8 @@
 <head>
 <title>World air route map (graph)</title>
 <meta name='author' content='Kelvin R. Lawrence' />
-<meta name='created' content='2018-December-24th' />
-<meta name='version' content='0.81' />
+<meta name='created' content='2019-April-27th' />
+<meta name='version' content='0.82' />
 <script type='text/javascript' src='http://visjs.org/dist/vis.js'></script>
 <link href='http://visjs.org/dist/vis.css' rel='stylesheet' type='text/css' />
 
@@ -23,12 +23,12 @@
 <input type='text' id='search' maxlength='3' style='width:100%' onkeydown='check(event)'></input><br><br>
 <button onClick='doSearch()'>Search</button><br><br>
 <textarea rows='50' cols='20' id='txt1' readOnly='true'>
-AIR ROUTES v0.81
+AIR ROUTES v0.82
 
-2018-December-24th
+2019-April-27th
 
 46 Airports
-1,374 Routes
+1,380 Routes
 
 Click on an airport node to see route details here.
 
@@ -50,7 +50,7 @@ var nodes = new vis.DataSet([
 {id: 2, label: 'ANC', title:"<b>ANC - Anchorage (PANC</b>)<br>Anchorage Ted Stevens<br>United States (US-AK)<br>Outgoing routes: 12<br>Incoming routes: 12",x:-5666.488986545155,y:-2218.862236870658},
 {id: 3, label: 'AUS', title:"<b>AUS - Austin (KAUS</b>)<br>Austin Bergstrom International Airport<br>United States (US-TX)<br>Outgoing routes: 36<br>Incoming routes: 36",x:-3340.8843994140625,y:-841.97777642144},
 {id: 4, label: 'BNA', title:"<b>BNA - Nashville (KBNA</b>)<br>Nashville International Airport<br>United States (US-TN)<br>Outgoing routes: 33<br>Incoming routes: 33",x:-2852.3644341362847,y:-1105.5333455403645},
-{id: 5, label: 'BOS', title:"<b>BOS - Boston (KBOS</b>)<br>Boston Logan<br>United States (US-MA)<br>Outgoing routes: 37<br>Incoming routes: 37",x:-2155.7868111111106,y:-1382.8577675555555},
+{id: 5, label: 'BOS', title:"<b>BOS - Boston (KBOS</b>)<br>Boston Logan<br>United States (US-MA)<br>Outgoing routes: 38<br>Incoming routes: 38",x:-2155.7868111111106,y:-1382.8577675555555},
 {id: 6, label: 'BWI', title:"<b>BWI - Baltimore (KBWI</b>)<br>Baltimore/Washington International Airport<br>United States (US-MD)<br>Outgoing routes: 33<br>Incoming routes: 33",x:-2407.479858222222,y:-1241.128879111111},
 {id: 7, label: 'DCA', title:"<b>DCA - Washington D.C. (KDCA</b>)<br>Ronald Reagan Washington National Airport<br>United States (US-DC)<br>Outgoing routes: 30<br>Incoming routes: 30",x:-2423.8976372612847,y:-1226.7600165473111},
 {id: 8, label: 'DFW', title:"<b>DFW - Dallas (KDFW</b>)<br>Dallas/Fort Worth International Airport<br>United States (US-TX)<br>Outgoing routes: 43<br>Incoming routes: 43",x:-3312.8000895182313,y:-962.0800442165776},
@@ -61,13 +61,13 @@ var nodes = new vis.DataSet([
 {id: 13, label: 'LAX', title:"<b>LAX - Los Angeles (KLAX</b>)<br>Los Angeles International Airport<br>United States (US-CA)<br>Outgoing routes: 40<br>Incoming routes: 40",x:-4262.577648888889,y:-1008.5556031111109},
 {id: 14, label: 'LGA', title:"<b>LGA - New York (KLGA</b>)<br>New York La Guardia<br>United States (US-NY)<br>Outgoing routes: 22<br>Incoming routes: 22",x:-2283.226521777778,y:-1312.3199462222221},
 {id: 15, label: 'MCO', title:"<b>MCO - Orlando (KMCO</b>)<br>Orlando International Airport<br>United States (US-FL)<br>Outgoing routes: 35<br>Incoming routes: 35",x:-2613.733249240453,y:-763.5288662380622},
-{id: 16, label: 'MIA', title:"<b>MIA - Miami (KMIA</b>)<br>Miami International Airport<br>United States (US-FL)<br>Outgoing routes: 32<br>Incoming routes: 32",x:-2568.4712727864576,y:-646.3644239637599},
+{id: 16, label: 'MIA', title:"<b>MIA - Miami (KMIA</b>)<br>Miami International Airport<br>United States (US-FL)<br>Outgoing routes: 33<br>Incoming routes: 33",x:-2568.4712727864576,y:-646.3644239637599},
 {id: 17, label: 'MSP', title:"<b>MSP - Minneapolis (KMSP</b>)<br>Minneapolis-St.Paul International Airport<br>United States (US-MN)<br>Outgoing routes: 39<br>Incoming routes: 39",x:-3143.1911892355556,y:-1494.7555542},
 {id: 18, label: 'ORD', title:"<b>ORD - Chicago (KORD</b>)<br>Chicago OHare International Airport<br>United States (US-IL)<br>Outgoing routes: 42<br>Incoming routes: 42",x:-2906.8800186666667,y:-1365.7155355555553},
 {id: 19, label: 'PBI', title:"<b>PBI - West Palm Beach (KPBI</b>)<br>Palm Beach International Airport<br>United States (US-FL)<br>Outgoing routes: 20<br>Incoming routes: 20",x:-2559.8042805989603,y:-685.9200371636266},
 {id: 20, label: 'PHX', title:"<b>PHX - Phoenix (KPHX</b>)<br>Phoenix Sky Harbor International Airport<br>United States (US-AZ)<br>Outgoing routes: 37<br>Incoming routes: 37",x:-3978.311157226577,y:-985.9688652886266},
 {id: 21, label: 'RDU', title:"<b>RDU - Raleigh (KRDU</b>)<br>Raleigh-Durham<br>United States (US-NC)<br>Outgoing routes: 34<br>Incoming routes: 34",x:-2501.666598849826,y:-1094.56007215712},
-{id: 22, label: 'SEA', title:"<b>SEA - Seattle (KSEA</b>)<br>Seattle-Tacoma<br>United States (US-WA)<br>Outgoing routes: 37<br>Incoming routes: 37",x:-4435.9554714626665,y:-1608.844502766929},
+{id: 22, label: 'SEA', title:"<b>SEA - Seattle (KSEA</b>)<br>Seattle-Tacoma<br>United States (US-WA)<br>Outgoing routes: 38<br>Incoming routes: 38",x:-4435.9554714626665,y:-1608.844502766929},
 {id: 23, label: 'SFO', title:"<b>SFO - San Francisco (KSFO</b>)<br>San Francisco International Airport<br>United States (US-CA)<br>Outgoing routes: 35<br>Incoming routes: 35",x:-4438.888888888889,y:-1171.955532497831},
 {id: 24, label: 'SJC', title:"<b>SJC - San Jose (KSJC</b>)<br>Norman Y. Mineta San Jose International Airport<br>United States (US-CA)<br>Outgoing routes: 26<br>Incoming routes: 26",x:-4419.0667046440885,y:-1160.5599297417557},
 {id: 25, label: 'TPA', title:"<b>TPA - Tampa (KTPA</b>)<br>Tampa International Airport<br>United States (US-FL)<br>Outgoing routes: 33<br>Incoming routes: 33",x:-2668.142361111111,y:-743.3555603027332},
@@ -82,9 +82,9 @@ var nodes = new vis.DataSet([
 {id: 34, label: 'MSY', title:"<b>MSY - New Orleans (KMSY</b>)<br>New Orleans L. Armstrong<br>United States (US-LA)<br>Outgoing routes: 34<br>Incoming routes: 34",x:-3011.4668104383686,y:-833.0400254991332},
 {id: 35, label: 'EWR', title:"<b>EWR - Newark (KEWR</b>)<br>Newark, Liberty<br>United States (US-NY)<br>Outgoing routes: 36<br>Incoming routes: 36",x:-2296.38671875,y:-1308.5556030273422},
 {id: 36, label: 'CID', title:"<b>CID - Cedar Rapids (KCID</b>)<br>The Eastern Iowa Airport<br>United States (US-IA)<br>Outgoing routes: 9<br>Incoming routes: 9",x:-3076.0355631510397,y:-1361.5422566731777},
-{id: 37, label: 'HNL', title:"<b>HNL - Honolulu (PHNL</b>)<br>Honolulu International Airport<br>United States (US-HI)<br>Outgoing routes: 18<br>Incoming routes: 18",x:-6018.755425347199,y:-447.49781290690214},
-{id: 38, label: 'HOU', title:"<b>HOU - Houston (KHOU</b>)<br>Houston Hobby<br>United States (US-TX)<br>Outgoing routes: 29<br>Incoming routes: 29",x:-3234.6177844444446,y:-817.573292888889},
-{id: 39, label: 'ELP', title:"<b>ELP - El Paso (KELP</b>)<br>El Paso International Airport<br>United States (US-TX)<br>Outgoing routes: 14<br>Incoming routes: 14",x:-3727.91104,y:-913.6533102222222},
+{id: 37, label: 'HNL', title:"<b>HNL - Honolulu (PHNL</b>)<br>Honolulu International Airport<br>United States (US-HI)<br>Outgoing routes: 19<br>Incoming routes: 19",x:-6018.755425347199,y:-447.49781290690214},
+{id: 38, label: 'HOU', title:"<b>HOU - Houston (KHOU</b>)<br>Houston Hobby<br>United States (US-TX)<br>Outgoing routes: 30<br>Incoming routes: 30",x:-3234.6177844444446,y:-817.573292888889},
+{id: 39, label: 'ELP', title:"<b>ELP - El Paso (KELP</b>)<br>El Paso International Airport<br>United States (US-TX)<br>Outgoing routes: 15<br>Incoming routes: 15",x:-3727.91104,y:-913.6533102222222},
 {id: 40, label: 'SJU', title:"<b>SJU - San Juan (TJSJ</b>)<br>Puerto Rico, Luis Munoz International Airport<br>Puerto Rico (PR-U-A)<br>Outgoing routes: 18<br>Incoming routes: 18",x:-1933.4133572044443,y:-319.5288764088889},
 {id: 41, label: 'CLE', title:"<b>CLE - Cleveland (KCLE</b>)<br>Cleveland, Hopkins International Airport<br>United States (US-OH)<br>Outgoing routes: 32<br>Incoming routes: 32",x:-2637.7688937733333,y:-1340.52005344},
 {id: 42, label: 'OAK', title:"<b>OAK - Oakland (KOAK</b>)<br>Oakland<br>United States (US-CA)<br>Outgoing routes: 26<br>Incoming routes: 26",x:-4432.044474283866,y:-1176.5021430121512},
@@ -249,6 +249,7 @@ var edges = new vis.DataSet([
 {from: 5, to: 32,title: 'BOS-HPN 166 miles'},
 {from: 5, to: 34,title: 'BOS-MSY 1370 miles'},
 {from: 5, to: 35,title: 'BOS-EWR 200 miles'},
+{from: 5, to: 37,title: 'BOS-HNL 5083 miles'},
 {from: 5, to: 38,title: 'BOS-HOU 1610 miles'},
 {from: 5, to: 40,title: 'BOS-SJU 1677 miles'},
 {from: 5, to: 41,title: 'BOS-CLE 560 miles'},
@@ -627,6 +628,7 @@ var edges = new vis.DataSet([
 {from: 16, to: 33,title: 'MIA-SAT 1140 miles'},
 {from: 16, to: 34,title: 'MIA-MSY 674 miles'},
 {from: 16, to: 35,title: 'MIA-EWR 1087 miles'},
+{from: 16, to: 38,title: 'MIA-HOU 953 miles'},
 {from: 16, to: 40,title: 'MIA-SJU 1044 miles'},
 {from: 16, to: 41,title: 'MIA-CLE 1082 miles'},
 {from: 16, to: 45,title: 'MIA-PHL 1020 miles'},
@@ -836,6 +838,7 @@ var edges = new vis.DataSet([
 {from: 22, to: 35,title: 'SEA-EWR 2393 miles'},
 {from: 22, to: 37,title: 'SEA-HNL 2670 miles'},
 {from: 22, to: 38,title: 'SEA-HOU 1891 miles'},
+{from: 22, to: 39,title: 'SEA-ELP 1367 miles'},
 {from: 22, to: 42,title: 'SEA-OAK 671 miles'},
 {from: 22, to: 43,title: 'SEA-TUS 1215 miles'},
 {from: 22, to: 45,title: 'SEA-PHL 2370 miles'},
@@ -1241,6 +1244,7 @@ var edges = new vis.DataSet([
 {from: 36, to: 46,title: 'CID-DTW 429 miles'},
 {from: 37, to: 1,title: 'HNL-ATL 4502 miles'},
 {from: 37, to: 2,title: 'HNL-ANC 2778 miles'},
+{from: 37, to: 5,title: 'HNL-BOS 5083 miles'},
 {from: 37, to: 8,title: 'HNL-DFW 3770 miles'},
 {from: 37, to: 11,title: 'HNL-IAH 3890 miles'},
 {from: 37, to: 12,title: 'HNL-JFK 4970 miles'},
@@ -1269,6 +1273,7 @@ var edges = new vis.DataSet([
 {from: 38, to: 13,title: 'HOU-LAX 1390 miles'},
 {from: 38, to: 14,title: 'HOU-LGA 1430 miles'},
 {from: 38, to: 15,title: 'HOU-MCO 847 miles'},
+{from: 38, to: 16,title: 'HOU-MIA 953 miles'},
 {from: 38, to: 20,title: 'HOU-PHX 1020 miles'},
 {from: 38, to: 21,title: 'HOU-RDU 1050 miles'},
 {from: 38, to: 24,title: 'HOU-SJC 1618 miles'},
@@ -1293,6 +1298,7 @@ var edges = new vis.DataSet([
 {from: 39, to: 13,title: 'ELP-LAX 712 miles'},
 {from: 39, to: 18,title: 'ELP-ORD 1234 miles'},
 {from: 39, to: 20,title: 'ELP-PHX 346 miles'},
+{from: 39, to: 22,title: 'ELP-SEA 1367 miles'},
 {from: 39, to: 26,title: 'ELP-SAN 634 miles'},
 {from: 39, to: 29,title: 'ELP-SLC 694 miles'},
 {from: 39, to: 30,title: 'ELP-LAS 582 miles'},
