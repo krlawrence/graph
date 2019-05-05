@@ -99,6 +99,19 @@ heading("Grouping by labels")
 for k,v in label_test.items():
     print(k,v)
 
+# Shows how to explicitly access the values of a map
+group = g.V().has('region','GB-ENG').\
+              has('city', P.within('London','Manchester')).\
+              group().\
+                by('city').\
+                by('code').\
+              select(Column.values).\
+              unfold().\
+              toList()
+
+heading("Selecting values from a group")
+print(group)
+
 # Airports with the most runways. Note the use of the P enum to
 # access the "gte" predicate.
 most_runways = g.V().has('runways',P.gte(5)).\
