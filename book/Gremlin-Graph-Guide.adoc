@@ -2,9 +2,9 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
-v282-preview, April 7th 2019
+v282-preview, May 20th 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Wed Apr 10, 2019 20:21:08 CDT
+// Tue May 21, 2019 17:59:18 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -25,8 +25,8 @@ v282-preview, April 7th 2019
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: April 7th 2019
-:tpvercheck: 3.4.0
+:draftdate: May 20th 2019
+:tpvercheck: 3.4.1
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
 //        has a white foreground color. The default was unreadable,
@@ -310,11 +310,13 @@ NOTE: Full details of all the new features added in the TinkerPop 3.4 release ca
 found at the following link:
 https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc
 
-I plan to add
-coverage of these features over the coming weeks to the book. I also plan to add
-additional sample code to the `sample-code` folder. By way of a start I have recently
-added a sample called `nested-repeat.groovy` that demonstrates the use of the new
-nested repeat step capability from the Gremlin console.
+I have started and plan to continue incrementally adding coverage of these features
+to the book over the coming weeks. I also plan to add additional examples to the
+`sample-code` folder. Material has already been added for several changes and
+additions made to the Gremlin language and I have also added some new sample code to
+the `sample-code` folder. These new samples include `nested-repeat.groovy` that
+demonstrates the use of the new nested repeat step capability. It can be loaded and
+run from the Gremlin console.
 
 [[whygraph]]
 So what is a graph database and why should I care?
@@ -324,12 +326,12 @@ This book is mainly intended to be a tutorial in working with graph databases an
 related technology using the Gremlin query language. However, it is worth spending
 just a few moments to summarize why it is important to understand what a graph
 database is, what some good use cases for graphs are and why you should care in a
-world that is already full of all kinds of SQL and NoSQL databases. In this book
-we are going to be discussing 'directed property graphs'. At the conceptual level
-these types of graphs are quite simple to understand. You have three basic building
-blocks.  Vertices (often referred to as nodes), edges and properties. Vertices
-represent "things" such as people or places. Edges represent connections between
-those vertices, and properties are information added to the vertices and edges as needed.
+world that is already full of all kinds of SQL and NoSQL databases. In this book we
+are going to be discussing 'directed property graphs'. At the conceptual level these
+types of graphs are quite simple to understand. You have three basic building blocks.
+Vertices (often referred to as nodes), edges and properties. Vertices represent
+"things" such as people or places. Edges represent connections between those
+vertices, and properties are information added to the vertices and edges as needed.
 The 'directed' part of the name means that any edge has a direction. It goes 'out'
 from one vertex and 'in' to another. You will sometimes hear people use the word
 'digraph' as shorthand for 'directed graph'.  Consider the relationship "Kelvin knows
