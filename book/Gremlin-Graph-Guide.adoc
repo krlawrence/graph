@@ -2,9 +2,9 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
-v282-preview, May 20th 2019
+v282-preview, May 31st 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Tue May 21, 2019 17:59:18 CDT
+// Fri May 31, 2019 07:23:26 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -25,7 +25,7 @@ v282-preview, May 20th 2019
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: May 20th 2019
+:draftdate: May 31t 2019
 :tpvercheck: 3.4.1
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -3735,15 +3735,19 @@ We will dig a bit deeper into some of these capabilities and explain in more det
 in the "<<meanmode>>" section of the book. Some of these examples also take advantage
 of the 'local' step that was introduced in the previous section. A way of calculating
 the standard deviation within a data set is presented later in the "<<mathstep>>"
-section.
+section.  The results of running each query are also shown in the examples below.
 
 [source,groovy]
 ----
 // How many routes are there from Austin?
 g.V().has("airport","code","AUS").out().count()
 
+59
+
 // Sum of values - total runways of all airports
 g.V().hasLabel('airport').values('runways').sum()
+
+4828
 ----
 
 The 'mean' step allows us to find the mean (average) value in a data set.
@@ -3753,23 +3757,76 @@ The 'mean' step allows us to find the mean (average) value in a data set.
 // Statistical mean (average) value - average number of runways per airport
 g.V().hasLabel('airport').values('runways').mean()
 
+1.4309425014819206
+
+// Average length of the longest runway across all airports
+g.V().hasLabel('airport').values('longest').mean()
+
+7570.862477771191
+
 // Average number of routes to and from an airport
 g.V().hasLabel('airport').local(both('route').count()).mean()
+
+25.726141078838175
 ----
 
 The following queries find maximum and minimum values using the 'max' and 'min'
-steps.
+steps. 
 
 [source,groovy]
 ----
 //maximum value - longest runway
 g.V().hasLabel('airport').values('longest').max()
 
+18045
+
 // What is the biggest number of outgoing routes any airport has?
- g.V().hasLabel('airport').local(out('route').count()).max()
+g.V().hasLabel('airport').local(out('route').count()).max()
+
+272
 
 //minimum value - shortest runway
 g.V().hasLabel('airport').values('longest').min()
+
+1300
+----
+
+It is also possible in more recent versions of Apache TinkerPop to use the 'min' and
+'max' steps with more than just numeric values.
+
+NOTE: Before TinkerPop 3.4 was released 'min' and 'max' could only be used with
+numeric values. It is now possible to also test any values that are considered
+_"comparable"_.
+
+Prior to TinkerPop 3.4, it was only possible to work with purely
+numeric values when using 'min' and 'max'. It is now possible to apply these steps to
+any values that are considered _"comparable"_. So, for example, we can now compare
+strings as well as numbers. The examples below look for the minimum and maximum value
+in the descriptive names of the continents.
+
+[source,groovy]
+----
+g.V().hasLabel('continent').values('desc').min()
+
+Africa
+
+g.V().hasLabel('continent').values('desc').max()
+
+South America
+----
+
+Prior to TinkerPop 3.4, a similar result could still be achieved by ordering the
+results and simply returning the first one.
+
+[source,groovy]
+----
+g.V().hasLabel('continent').values('desc').order().limit(1)
+
+Africa
+
+g.V().hasLabel('continent').values('desc').order().by(desc).limit(1)
+
+South America
 ----
 
 [[tranges]]
