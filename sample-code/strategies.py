@@ -81,10 +81,9 @@ heading('PartitionStrateggy')
 g4 = g.withStrategies(PartitionStrategy(
          partition_key="partition",
          write_partition="a", 
-         read_partitions="a"))
+         read_partitions=["a"]))
 
-# There seems to be an issue with this strategy from Python that 
-# is being investigated so for now wrap the call in a 'try' block.          
+         
 try:
     x = g4.addV('test').property("p1",1).toList()
 except:
