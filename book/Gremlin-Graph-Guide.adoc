@@ -2,9 +2,9 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
-v282-preview, May 31st 2019
+v282-preview, July 9th 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Fri May 31, 2019 07:23:26 CDT
+// Tue Jul 09, 2019 12:18:42 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -25,7 +25,7 @@ v282-preview, May 31st 2019
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: May 31t 2019
+:draftdate: July 9th 2019
 :tpvercheck: 3.4.1
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -6823,6 +6823,77 @@ When either query is run, the following results are returned.
 You will see more examples of 'emit' being used in the "<<btree>>" section a bit
 later.
 
+[[nestedrepeat]]
+Nested and named 'repeat' steps
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Starting with Apache TinkerPop release 3.4 it is now possible to nest a 'repeat' step
+inside another 'repeat' step as well as inside 'emit' and 'until' steps.
+
+TIP: The official documentation for these new capabilities can be located here: http://tinkerpop.apache.org/docs/current/reference/#repeat-step
+
+It is also possible to label a repeat step with a name so that it can be referenced
+later in a traversal.  Nested 'repeat' steps allow for some interesting new graph
+traversal patterns. For example you might be traversing along a set of outgoing
+edges, and for each vertex along the way want to traverse a set of incoming edges.
+The `air-routes` graph does not have any relationships that demonstrate an ideal use
+case for nested 'repeat' steps but the query below shows a simple example.
+
+[source,groovy]
+----
+g.V().has('code','SAF').
+      repeat(out('route').simplePath().
+        repeat(__.in('route')).times(3)).
+      times(2).
+      path().by('code').
+      limit(3).
+      toList()
+----
+
+Running the query will generate results similar to those shown below. We start at
+Santa Fe (SAF) and take one outbound route and arrive at Dallas Fort Worth (DFW). We
+then look at three incoming routes which yields Corpus Christi (CRP), Lubbock (LBB)
+and Austin (AUS). We then take another outbound hop from DFW and find ourselves in
+Atlanta(ATL) we then look at three incoming routes from Atlanta and find Lagos (LOS),
+Addis Ababa (ADD) and one of Oslo (OSL), Bangkok (BKK) or Mumbai (BOM).
+
+[source,groovy]
+----
+[SAF,DFW,CRP,LBB,AUS,ATL,LOS,ADD,OSL]
+[SAF,DFW,CRP,LBB,AUS,ATL,LOS,ADD,BKK]
+[SAF,DFW,CRP,LBB,AUS,ATL,LOS,ADD,BOM]
+----
+
+As I mentioned, working with the air routes data set does not perhaps present an
+ideal use case for using nested repeat steps.  Most of the edges are routes and most
+of the vertices are airports.  However, if your data had a broader variety of vertex
+and edge types, this capability may come in quite handy.
+
+When using nested 'repeat' steps, in order for a 'loops' step to know which repeat
+step it is attached to it is necessary to give each 'repeat' step its own label name.
+The example below gives the 'repeat' step a label of '"r1"' and refers to that label
+in the subsequent 'loops' step. Obviously, this example does not contain any nested
+repeats but hopefully shows how this new labelling capability can be used.
+
+[source,groovy]
+----
+g.V().has('code','SAF').
+      repeat('r1',out().simplePath()).
+        until(loops('r1').is(3).or().has('code','MAN')).
+      path().by('city').
+      limit(3).
+      toList()
+----
+
+The results below show that we found Manchester once and reached our 'loops' limit the
+other two times.
+
+[source,groovy]
+----
+[Santa Fe,Los Angeles,Manchester]
+[Santa Fe,Dallas,Buenos Aires,Atlanta]
+[Santa Fe,Dallas,Buenos Aires,Houston]
+----
 
 [[cyclicpath]]
 Haven't I been here before? - Introducing 'cyclicPath'
