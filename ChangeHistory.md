@@ -13,6 +13,7 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
 - Began adding coverage of TinkerPop 3.4 features. Issue #115 and #108
   - Added a mention of TinkerPop 3.4 in the Introduction.
   - Added a section describing the new `index` step.
+  - Added coverage of nested and named `repeat` steps.
   - Added `nested-repeat.groovy` to the `sample-code` folder.
   - Added coverage of the new features for `min` and `max` steps.
   - Expanded existing `valueMap` coverage and added new sections covering the new `unfold`-`by`,`with` and `WithOptions` features.
