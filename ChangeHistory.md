@@ -12,6 +12,7 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
 - Added an example showing how `sack` can be used to count flight segments (hops).
 - Began adding coverage of TinkerPop 3.4 features. Issue #115 and #108
   - Added a mention of TinkerPop 3.4 in the Introduction.
+  - Added a section covering the new text predicates such as `contains` and `startingWith`.
   - Added a section describing the new `index` step.
   - Added coverage of nested and named `repeat` steps.
   - Added `nested-repeat.groovy` to the `sample-code` folder.
