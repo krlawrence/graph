@@ -2,9 +2,9 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
-v282-preview, May 31st 2019
+v282-preview, July 12th 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Fri May 31, 2019 07:23:26 CDT
+// Sun Jul 14, 2019 10:48:58 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -25,7 +25,7 @@ v282-preview, May 31st 2019
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: May 31t 2019
+:draftdate: July 9th 2019
 :tpvercheck: 3.4.1
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -4459,7 +4459,256 @@ v[859]
 g.V(airports[x-1]).values('code')
 
 OSR
+----
 
+[[textpredicates]]
+New text search predicates added in TinkerPop 3.4
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Probably one of, if not the, most anticipated features in Apache TinkerPop version
+3.4 was the addition of new '"predicates"' that aid in performing more focused text
+searches. 
+
+TIP: Additional information on the text predicates can be found in the official
+Apache TinkerPop documentation here:  http://tinkerpop.apache.org/docs/current/reference/#a-note-on-predicates
+
+In total, six new predicates were added to the Gremlin query language. There are
+three predicates that search for the existence of one or more characters within a
+string of text and three that search for the non existence of one or more characters.
+
+.Text searching predicates
+[cols="^1,4"]
+|==============================================================================
+|startingWith     | Match text that starts with the given character(s)
+|endingWith       | Match text that ends with the given charcter(s)
+|containing       | Match text that contains the given character(s)
+|notStartingWith  | Match text that does not start with the given character(s)  
+|notEndingWith    | Match text that does not end with the given charcter(s)     
+|notContaining    | Match text that does notcontain the given character(s)      
+|==============================================================================
+
+In the sections below you will find examples of each predicate being used. Each
+predicate is case sensitive so bear that in mind as you use them. To do a case
+insensitive search you can chain multiple steps together combined by an 'or' step.
+
+NOTE: All of these predicates are *_case sensitive_*.
+
+These predicates add to the existing Gremlin predicates that we looked at in the <<>>
+section.
+
+[[startingwith]]
+startingWith
+^^^^^^^^^^^^
+
+The text that you search for can be one or more characters. Here is a
+simple example that looks for unique city names that begin with an uppercase "X".
+
+[source,groovy]
+----
+g.V().hasLabel('airport').
+      has('city',startingWith('X')).
+      values('city')
+----
+
+As expected, when run we get back a set of names all beginning with an "X".
+
+[source,groovy]
+----
+Xiamen
+Xianyang
+Xuzhou
+Xilinhot
+Xiangfan
+Xining
+Xalapa
+Xieng Khouang
+Xiahe
+Xiaguan
+Xichang
+Xingyi
+Xinyuan
+Xigaze
+----
+
+The example below looks for any cities with names starting with "Dal". A 'dedup' step
+is used to get rid of any duplicate names in the results.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').
+      has('city',TextP.startingWith('Dal')).
+      values('city').
+      dedup().
+      fold()
+----
+
+When run, the query finds all the city names in the graph that begin with the
+characters "Dal" as expected.
+
+[source,groovy]
+----
+[Dalat, Dallas, Dalcahue, Dalaman, Dalian, Dalanzadgad]
+----
+
+As I mentioned, all of the text predicates are case sensitive. If we were
+to search for city names starting with the characters "dal" we would not find any
+matches. The query below demonstrates this.           
+
+[source,groovy]
+----
+g.V().hasLabel('airport').
+      has('city',startingWith('dal')).
+      count()
+
+0
+----
+
+Given the predicates are case sensitive, if, for example, you need to find matches
+for both 'Dal' or 'dal' you can do that as shown below using an 'or' step and two
+'has' steps.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').
+      or(has('city',startingWith('dal')),
+         has('city',startingWith('Dal'))).
+      dedup().by('city').
+      count()
+
+6
+----
+
+[[endingwith]]
+endingWith
+^^^^^^^^^^
+
+The example below looks for any city names ending with that characters "zhi".
+
+[source,groovy]
+----
+g.V().hasLabel('airport').
+      has('city',endingWith('zhi')).
+      values('city')
+
+Changzhi
+----
+
+[[containing]]
+containing
+^^^^^^^^^^
+
+We can also look for cities whose names contain a certain string of one or more
+characters. The example below looks for any cities with the string "gzh" in their
+name.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').
+      has('city',containing('gzh')).
+      values('city')
+----
+
+When run the query produces the following results.
+
+[source,groovy]
+----
+Guangzhou
+Hangzhou
+Zhengzhou
+Changzhi
+Changzhou
+Yongzhou
+Yangzho]
+----
+
+[[notStartingWith]]
+notStartingWith
+^^^^^^^^^^^^^^^
+
+Each of the text predicates has an inverse step. We can use the 'notStartingWith'
+predicate to look for city names that do not start with "Dal".
+
+[source,groovy]
+----
+g.V().hasLabel('airport').
+      has('city',notStartingWith('Dal')).
+      count()
+
+3367
+----
+
+The example above returns the same results we would get if we were to negate a
+'startingWith' predicate as shown below.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').
+      not(has('city',startingWith('Dal'))).
+      count()
+
+3367
+----
+
+
+[[notEndingWith]]
+notEndingWith
+^^^^^^^^^^^^^
+
+Using 'notEndingWith' we can easily find cities whose names do not end with "zhi".
+
+[source,groovy]
+----
+g.V().hasLabel('airport').
+      has('city',notEndingWith('zhi')).
+      count()
+
+3373
+----
+
+
+[[notContaining]]
+notContaining
+^^^^^^^^^^^^^
+
+
+The query below counts the number of cities that do not contain the string "berg" in
+their name.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').
+      has('city',notContaining('berg')).
+      count()
+
+3370
+----
+
+Let's now do something a little more interesting. The query below chains together a
+number of has steps using 'notContaining' and 'containing' predicates to find cities
+with names containing no basic, lowercase, vowels commonly used in the English
+language but containing either of the secondary vowels.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').
+      has('city',notContaining('e')).
+      has('city',notContaining('a')).
+      has('city',notContaining('i')).
+      has('city',notContaining('u')).
+      has('city',notContaining('o')).
+      or(has('city',containing('y')),
+         has('city',containing('h'))).
+      values('city').
+      dedup()
+----
+
+Only two results are found. Note that one of the results does contain a vowel but it
+is an uppercase "O" and as such is allowed by the constraints that we specified.
+
+[source,groovy]
+----
+Osh
+Kyzyl
 ----
 
 [[sort]]
@@ -6823,6 +7072,81 @@ When either query is run, the following results are returned.
 You will see more examples of 'emit' being used in the "<<btree>>" section a bit
 later.
 
+[[nestedrepeat]]
+Nested and named 'repeat' steps
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Starting with Apache TinkerPop release 3.4 it is now possible to nest a 'repeat' step
+inside another 'repeat' step as well as inside 'emit' and 'until' steps.
+
+TIP: The official documentation for these new capabilities can be located here: http://tinkerpop.apache.org/docs/current/reference/#repeat-step
+
+It is also possible to label a repeat step with a name so that it can be referenced
+later in a traversal.  Nested 'repeat' steps allow for some interesting new graph
+traversal patterns. For example you might be traversing along a set of outgoing
+edges, and for each vertex along the way want to traverse a set of incoming edges.
+The `air-routes` graph does not have any relationships that demonstrate an ideal use
+case for nested 'repeat' steps but the query below shows a simple example.
+
+[source,groovy]
+----
+g.V().has('code','SAF').
+      repeat(out('route').simplePath().
+        repeat(__.in('route')).times(3)).
+      times(2).
+      path().by('code').
+      limit(3).
+      toList()
+----
+
+Running the query will generate results similar to those shown below. We start at
+Santa Fe (SAF) and take one outbound route and arrive at Dallas Fort Worth (DFW). We
+then look at three incoming routes which yields Corpus Christi (CRP), Lubbock (LBB)
+and Austin (AUS). We then take another outbound hop from DFW and find ourselves in
+Atlanta(ATL) we then look at three incoming routes from Atlanta and find Lagos (LOS),
+Addis Ababa (ADD) and one of Oslo (OSL), Bangkok (BKK) or Mumbai (BOM).
+
+[source,groovy]
+----
+[SAF,DFW,CRP,LBB,AUS,ATL,LOS,ADD,OSL]
+[SAF,DFW,CRP,LBB,AUS,ATL,LOS,ADD,BKK]
+[SAF,DFW,CRP,LBB,AUS,ATL,LOS,ADD,BOM]
+----
+
+As I mentioned, working with the air routes data set does not perhaps present an
+ideal use case for using nested repeat steps.  Most of the edges are routes and most
+of the vertices are airports.  However, if your data had a broader variety of vertex
+and edge types, this capability may come in quite handy.
+
+NOTE: There is a stand alone example in the `sample-code` folder that creates a small
+social graph and performs various nested 'repeat' step operations. That sample is
+located here: https://github.com/krlawrence/graph/blob/master/sample-code/nested-repeat.groovy
+
+When using nested 'repeat' steps, in order for a 'loops' step to know which repeat
+step it is attached to it is necessary to give each 'repeat' step its own label name.
+The example below gives the 'repeat' step a label of '"r1"' and refers to that label
+in the subsequent 'loops' step. Obviously, this example does not contain any nested
+repeats but hopefully shows how this new labelling capability can be used.
+
+[source,groovy]
+----
+g.V().has('code','SAF').
+      repeat('r1',out().simplePath()).
+        until(loops('r1').is(3).or().has('code','MAN')).
+      path().by('city').
+      limit(3).
+      toList()
+----
+
+The results below show that we found Manchester once and reached our 'loops' limit the
+other two times.
+
+[source,groovy]
+----
+[Santa Fe,Los Angeles,Manchester]
+[Santa Fe,Dallas,Buenos Aires,Atlanta]
+[Santa Fe,Dallas,Buenos Aires,Houston]
+----
 
 [[cyclicpath]]
 Haven't I been here before? - Introducing 'cyclicPath'
@@ -12340,9 +12664,9 @@ such capabilities.
 
 NOTE: Most TinkerPop enabled graph stores that you are likely to use for any sort of
 serious deployment will also be backed by an indexing technology like Solr or
-Elasticsearch and a graph engine like Titan. In those cases some amount of more
-sophisticated search methods will likely be made available to you. You should always
-check the documentation for the system you are using to see what is recommended.
+Elasticsearch. In those cases some amount of more sophisticated search methods will
+likely be made available to you. You should always check the documentation for the
+system you are using to see what is recommended.
 
 When working with Tinkergraph and the Gremlin console if we want to do any
 sort of text search beyond very basic things like 'city == "Dallas"' then we
@@ -18498,6 +18822,20 @@ defined in the 'P' class. Not all the methods defined are shown below.
 |inside  | P.inside       | has("runways",P.inside(3,5))
 |outside | P.outside      | has("runways",P.outside(2,5))
 |between | P.between      | has("runways",P.between(2,5))
+|==============================================================================
+
+The Apache TinkerPop release 3.4 introduced some new text predicates and a new TextP
+class.
+
+.Text Predicates
+[cols="1,1,3"]
+|==============================================================================
+|startingWith    | TextP.startingWith     | has("city",TextP.startingWith("Dal"))
+|endingWith      | TextP.endingWith       | has("city",TextP.endingWith("as"))
+|containing      | TextP.containing       | has("city",TextP.containing("all"))
+|notStartingWith | TextP.notStartingWith  | has("city",TextP.notStartingWith("Dal")) 
+|notEndingWith   | TextP.notEndingWith    | has("city",TextP.notEndingWith("as"))    
+|notContaining   | TextP.notContaining    | has("city",TextP.notContaining("all"))   
 |==============================================================================
 
 If a traversal path has multiple values associated with a single label, such as '"x"'
