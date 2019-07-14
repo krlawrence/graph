@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
-v282-preview, July 12th 2019
+v282-preview, July 14th 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
 // Sun Jul 14, 2019 11:48:30 CDT
 //:Author:    Kelvin R. Lawrence
@@ -25,7 +25,7 @@ v282-preview, July 12th 2019
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: July 9th 2019
+:draftdate: July 14th 2019
 :tpvercheck: 3.4.1
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
