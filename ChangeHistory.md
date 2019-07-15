@@ -17,6 +17,7 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
   - Added coverage of nested and named `repeat` steps.
   - Added `nested-repeat.groovy` to the `sample-code` folder.
   - Added coverage of the new features for `min` and `max` steps.
+  - Added `load-air-routes-graph-34.groovy` using the new `g.io()` syntax to the `sample-data` folder.
   - Expanded existing `valueMap` coverage and added new sections covering the new `unfold`-`by`,`with` and `WithOptions` features.
 - Added a small section showing how to use a `by` modulator with the `math` step.
 - Made the coverage of Gremlin Server its own chapter. Issue #131.
