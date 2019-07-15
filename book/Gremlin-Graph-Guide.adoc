@@ -4,7 +4,7 @@ Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
 v282-preview, July 14th 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Sun Jul 14, 2019 12:50:47 CDT
+// Mon Jul 15, 2019 18:03:56  CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -23931,24 +23931,23 @@ To be written
 ----
 
 
-Other formats you may encounter
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-To be written
-
-- GML
-- GEXF
-- etc
-
 [[fr]]
 FURTHER READING
 ---------------
 
-.Apache TinkerPop Getting Started guide
-http://tinkerpop.apache.org/docs/current/tutorials/getting-started/
+Below you will find a selection of links to additional material related to the topics
+covered in this book. The links include additional web sites maintained by the Apache
+TinkerPop community as well as some mailing lists where Gremlin and related topics
+are discussed daily.
 
+[[tplinks]]
+Additional Apache TinkerPop community links
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .Official Apache TinkerPop home page and Gremlin downloads
 http://tinkerpop.apache.org/
+
+.Apache TinkerPop Getting Started guide
+http://tinkerpop.apache.org/docs/current/tutorials/getting-started/
 
 .Current Apache TinkerPop documention
 http://tinkerpop.apache.org/docs/current/reference/
@@ -23958,19 +23957,51 @@ http://tinkerpop.apache.org/javadocs/current/core/
 
 http://tinkerpop.apache.org/javadocs/current/full/
 
+.Gremlin IO serialization and file formats documentation
+http://tinkerpop.apache.org/docs/current/dev/io/
+
+.Apache TinkerPop Documentation for graph database providers
+http://tinkerpop.apache.org/docs/current/dev/provider/
+
 .Useful Gremlin "recipies"
 http://tinkerpop.apache.org/docs/current/recipes/
+
+[[tutorials]]
+Tutorials
+^^^^^^^^^
+There are a series of tutorials that can be found at the link below.
+
+.Apache TinkerPop Tutorials
+http://tinkerpop.apache.org/docs/current/tutorials/
+
+The tutorials include the following
+
+Getting started::
+* http://tinkerpop.apache.org/docs/current/tutorials/getting-started/
+Gremlin language variants::
+* http://tinkerpop.apache.org/docs/current/tutorials/gremlin-language-variants/
+Gremlin's anatomy::
+* http://tinkerpop.apache.org/docs/current/tutorials/gremlins-anatomy/
+The Gremlin console::
+* http://tinkerpop.apache.org/docs/current/tutorials/the-gremlin-console/
+
+
+[[gremlindiscussionlists]]
+Gremlin related mailing lists and discussion groups
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .Public mailing list for Gremlin users
 https://groups.google.com/forum/#!forum/gremlin-users
 
-.Places where you can experiment with graphs in a browser
-http://www.graphstory.com/
+.Apache TinkerPop developers mailing list archive
+https://lists.apache.org/list.html?dev&#64;tinkerpop.apache.org
 
-http://www.graphenedb.com/
+.Stack Overflow posts tagged with "gremlin"
+https://stackoverflow.com/questions/tagged/gremlin
 
-http://www.gremlinbin.com
-
+[[janusgraphlinks]]
+JanusGraph links
+~~~~~~~~~~~~~~~~
 .JanusGraph home page
 http://janusgraph.org/
 
@@ -23982,5 +24013,8 @@ http://docs.janusgraph.org/latest/javadoc.html
 
 .Public mailing list for JanusGraph users
 https://groups.google.com/forum/#!forum/janusgraph-users
+
+.Stack Overflow posts tagged with "janusgraph"
+https://stackoverflow.com/questions/tagged/janusgraph
 
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
