@@ -4,7 +4,7 @@ Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
 v282-preview, July 22nd 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Mon Jul 22, 2019 16:36:04  CDT
+// Mon Jul 22, 2019 17:03:48 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -5640,9 +5640,46 @@ runway longer than 12,000 feet otherwise it will return the value of the 'desc'.
 [source,groovy]
 ----
 // If an airport has a runway > 12,000 feet return its code else return its description
-g.V().has('region','US-TX').choose(values('longest').is(gt(12000)),
-                                   values('code'),
-                                   values('desc'))
+g.V().has('region','US-TX').
+      choose(values('longest').is(gt(12000)),
+             values('code'),
+             values('desc')).
+      limit(5)
+----
+
+When run the output returned should look like this.
+
+[source,groovy]
+----
+AUS
+DFW
+IAH
+San Antonio
+Houston Hobby
+----
+
+If the "else" part of the 'choose' step is not provided then it behaves as a simple
+"if". 
+
+[source,groovy]
+----
+g.V().has('region','US-TX').
+      choose(values('longest').is(gt(12000)),
+             values('code')).
+             limit(5)
+
+----
+
+The "else" in this case is implied and the incoming element that the 'choose'
+step received is passed on as shown below.
+
+[source,groovy]
+----
+AUS
+DFW
+IAH
+v[33]
+v[38]
 ----
 
 Here is another example that uses the same constructs.
@@ -5650,10 +5687,13 @@ Here is another example that uses the same constructs.
 [source,groovy]
 ----
 // If an airport has a code of AUS or DFW report its region else report its country
-g.V().hasLabel('airport').choose(values('code').is(within('AUS','DFW')),
-                                 values('city'),
-                                 values('region')).limit(15)
+g.V().hasLabel('airport').
+      choose(values('code').is(within('AUS','DFW')),
+             values('city'),
+             values('region')).
+     limit(5)
 ----
+
 
 [[chooseconstant]]
 Including a constant value - introducing 'constant'
