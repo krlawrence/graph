@@ -4,7 +4,7 @@ Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
 v282-preview, July 22nd 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Mon Jul 22, 2019 11:13:12 CDT
+// Mon Jul 22, 2019 13:05:27 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -2137,6 +2137,9 @@ g.V(3).out().limit(5).path().by(out().count().fold())
 [[59],[54]]
 ----
 
+[[pathfromto]]
+Modifying a 'path' using 'from' and 'to' modulators
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 In Apache TinkerPop version 3.2.5 the ability to limit what is returned by the 'path'
 step using 'from' and 'to' modulators was added. This enables us to not return the
 entire path of a traversal but instead to be more selective.
@@ -2578,6 +2581,49 @@ g.V().has('code','AUS').as('a').
 
 Keywords such as 'all', 'first' and 'last' are discussed further in the
 "<<javastatics>>" section later on in the book.
+
+[[pathselect]]
+Returning selected parts of a path
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Sometimes, even using the 'from' and 'to' modulating steps along with a 'path' step
+will not give you the results you are interested in. Using a 'select' step and some
+'as' steps in a similar way to the example in the previous section we can select
+specific parts of a traversal's "path".  Consider the query below that finds a route
+from Los Angeles (LAX) and returns the path.
+
+[source,groovy]
+----
+g.V().has('code','LAX').
+      out().
+      out().
+      out().
+      out().
+      out().
+      limit(1).
+      path().by('code')
+
+[LAX,YYC,BNA,BWI,YYZ,ZRH]
+----
+
+Now, imagine we want to just return every other stop as the result from our query.
+The example below shows how to do just that.
+
+[source,groovy]
+----
+g.V().has('code','LAX').
+      out().as('stop').
+      out().
+      out().as('stop').
+      out().
+      out().as('stop').
+      limit(1).
+      select(all,'stop').
+      unfold().
+      values('code').fold()
+
+[YYC,BWI,ZRH]
+----
 
 [[exedge]]
 Examining the edge between two vertices
