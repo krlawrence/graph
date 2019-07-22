@@ -9,7 +9,12 @@ Placeholder for the next release that will be some time in 2019.
 Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v281-tp-3.3.4...master) between this release and the prior one.
 
 - Added a new section comparing `sack` to `union` and `project` when adding values.
+- Added a new section "Does any route exist between two airports?"
 - Added an example showing how `sack` can be used to count flight segments (hops).
+- Made the discussion of `path` modulated using `from` and `to` it's own section.
+- Added a new section "Returning selected parts of a path"
+- Added a new section "Finding routes that go via a specific airport"
+- Expanded the section that introduces the `choose` step.
 - Began adding coverage of TinkerPop 3.4 features. Issue #115 and #108
   - Added a mention of TinkerPop 3.4 in the Introduction.
   - Added a section covering the new text predicates such as `contains` and `startingWith`.
@@ -30,7 +35,7 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
 - Added a small section with a pointer to the latest sample data.
 - Added `bootstrap-console.py` to the `sample-code` folder.
 - Added `glv-client.js` showing a simple Node.js Gremlin GLV client to the `sample-code` folder. Issues #107 #122
-- Added `glv-client2.py` showing additional Python examples using a Gremlin GLV client to the `sample-code` folder. 
+- Added `glv-client2.py` showing additional Python examples using a Gremlin GLV client to the `sample-code` folder.
 - Added samples showing use of TinkerPop strategies from Java and Python to the `sample-code` folder. Issue #11:
   - `RemoteSubgraphStrategy.java`
   - `RemoteReadOnlyStrategy.java`
