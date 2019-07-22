@@ -2,9 +2,9 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
-v282-preview, July 14th 2019
+v282-preview, July 22nd 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Mon Jul 15, 2019 18:03:56  CDT
+// Mon Jul 22, 2019 11:13:12 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -25,8 +25,8 @@ v282-preview, July 14th 2019
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: July 14th 2019
-:tpvercheck: 3.4.1
+:draftdate: July 22nd 2019
+:tpvercheck: 3.4.2
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
 //        has a white foreground color. The default was unreadable,
@@ -6849,6 +6849,10 @@ g.V(3).repeat(out()).times(2).count()
 
 5894
 ----
+
+NOTE: If you simply want to find out if any route exists between two airports, there
+is a nice optimization that can be used. This is discussed in the
+"<<doesanyrouteexist>>" section later in the book.
 
 In the next section, we will look at how 'emit' can be used to
 adjust the behavior of a 'repeat...times' loop.
@@ -15445,7 +15449,67 @@ Where can I fly to from here?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In this section you will find some more examples of queries that explore different
-questions along the lines of "Where can I fly to from here?". 
+questions along the lines of "Where can I fly to from here?".
+
+[[doesanyrouteexist]]
+Does any route exist between two arirports?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+We have already looked at different ways to discover shortest routes (by hops)
+between two airports using queries such as the one below. This query looks for a
+single route between Austin (AUS) and the Canadian city of Peawanuck in Ontario. It
+just so happens that Peawanuck is one of the hardest places to get to from Austin in
+the whole air-routes graph. In fact, to get there, requires six stops along the way!
+With that in mind, the query below can easily run out of memory or time out trying to
+find even a single route as there is so much work to do to analyze all of the
+possible routes.
+
+
+[source,groovy]
+----
+g.V().has('code','AUS').
+      repeat(out().simplePath()).
+        until(has('code','YPO')).
+      limit(1).
+      path().by('code')
+----
+
+In cases such as this we can take a slightly different approach that will let us know
+if any route exists and in fact will execute very efficiently. Note that this query
+cannot find multiple routes but is very useful when trying to answer the question
+"does any route exist?".
+
+[source,groovy]
+----
+g.V().has('code','AUS').
+      repeat(out().dedup()).
+        until(has('code','YPO')).
+      path().by('code')
+
+[AUS,YYZ,YTS,YMO,YFA,ZKE,YAT,YPO]
+----
+
+The difference between the two queries is the addition of a 'dedup' step. This
+ensures we only ever visit any airport along the route once no matter how we got
+there. This is different from the 'simplePath' step which makes sure we do not loop
+back on ourselves during a traversal but allows us to visit the same airport multiple
+times so long as we got there using a different path. Even if we were to make the
+task of finding a route harder by explicitly avoiding a specific stop the execution
+remains very efficient due to the 'dedup' step being used.
+
+[source,groovy]
+----
+g.V().has('code','AUS').
+      repeat(out().has('code',without('YYZ')).dedup()).
+        until(has('code','YPO')).
+      path().by('code')
+
+[AUS,BOS,YTZ,YTS,YMO,YFA,ZKE,YAT,YPO]
+----
+
+Keep in mind that this trick is only useful when trying to figure out if any route
+(or path) exists in a group between a pair of vertices. It cannot be used to find
+multiple routes but is still a very useful pattern to be aware of.
 
 [[uscatoindia]]
 Where in the USA or Canada can I fly to from any airport in India?
@@ -23994,7 +24058,8 @@ Gremlin related mailing lists and discussion groups
 https://groups.google.com/forum/#!forum/gremlin-users
 
 .Apache TinkerPop developers mailing list archive
-https://lists.apache.org/list.html?dev&#64;tinkerpop.apache.org
+//https://lists.apache.org/list.html?dev&#64;tinkerpop.apache.org
+https://lists.apache.org/
 
 .Stack Overflow posts tagged with "gremlin"
 https://stackoverflow.com/questions/tagged/gremlin
