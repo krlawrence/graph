@@ -4,7 +4,7 @@ Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
 v282-preview, July 22nd 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Mon Jul 22, 2019 13:05:27 CDT
+// Mon Jul 22, 2019 16:36:04  CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -16994,7 +16994,113 @@ US-CO=[DEN, COS, DRO, GJT, EGE, HDN, ASE, GUC, MTJ]
 US-IL=[ORD, PIA, BMI, CMI, MLI, SPI]
 ----
 
+[[via]]
+Finding routes that go via a specific airport
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+We have seen a number of examples that use a 'has' step to filter routes. The example
+below looks for five routes that start in Austin (AUS) and go via Dallas (DFW).
+
+[source,groovy]
+----
+g.V().has('code','AUS').
+      out().has('code','DFW').
+      out().
+      limit(5).
+      path().by('code')
+----
+
+When run the query, as expected finds us five routes that start in AUS and stop at
+DFW on the way.
+
+[source,groovy]
+----
+[AUS,DFW,ATL]
+[AUS,DFW,ANC]
+[AUS,DFW,AUS]
+[AUS,DFW,BNA]
+[AUS,DFW,BOS]
+----
+
+This technique works well if we know which stop we want to be in DFW. However, we
+might want to write a query that can only return results that include a visit to a
+specific airport anywhere in the journey. Let's build an example in two stages. First
+of all look at the query below. It looks for ten routes that start in Austin and end 
+up in Edinburgh only stopping along the way in US or the UK airports.
+
+[source,groovy]
+----
+g.V().
+  has('code','AUS').
+  repeat(out().simplePath().has('country',within('US','UK'))).
+    until(has('code','EDI')).
+  path().by('code').
+  limit(10)
+----
+
+When run we get the following results. 
+
+[source,groovy]
+----
+[AUS,LHR,EDI]
+[AUS,JFK,EDI]
+[AUS,EWR,EDI]
+[AUS,LHR,MAN,EDI]
+[AUS,LHR,BHD,EDI]
+[AUS,LHR,INV,EDI]
+[AUS,LHR,JFK,EDI]
+[AUS,LHR,EWR,EDI]
+[AUS,PIT,JFK,EDI]
+[AUS,PIT,EWR,EDI]
+----
+
+However, for the sake of making the example more interesting, let's assume that we
+only want to get back routes that go via Manchester (MAN). We can do this by
+adjusting the prior query to look for "MAN" as it traverses the graph and keep track,
+using  a sack, of paths that encounter Manchester along the way. Once we arrive at
+EDI we use a 'where' step to filter out routes where the value of the sack is
+anything but "1". A value of "1" means we encountered Manchester along the way.
+
+[source,groovy]
+----
+g.withSack(0).V().
+  has('code','AUS').
+  repeat(out().simplePath().has('country',within('US','UK')).
+         choose(has('code','MAN'),sack(sum).by(constant(1)))).
+    until(has('code','EDI')).
+  where(sack().is(1)).
+  path().by('code').
+  limit(10)
+----
+
+When the modified query is run, each result includes MAN in the path.
+
+[source,groovy]
+----
+[AUS,LHR,MAN,EDI]
+[AUS,ATL,MAN,EDI]
+[AUS,BOS,MAN,EDI]
+[AUS,IAD,MAN,EDI]
+[AUS,IAH,MAN,EDI]
+[AUS,JFK,MAN,EDI]
+[AUS,LAX,MAN,EDI]
+[AUS,MCO,MAN,EDI]
+[AUS,MIA,MAN,EDI]
+[AUS,ORD,MAN,EDI]
+----
+
+If we you increase the limit step to use a value such as 30, then you will start to
+see that MAN can appear in any position in the path.
+
+[source,groovy]
+----
+[AUS,LHR,GLA,MAN,EDI]
+[AUS,LHR,ABZ,MAN,EDI]
+[AUS,LHR,BHD,MAN,EDI]
+[AUS,LHR,INV,MAN,EDI]
+----
+
+[[storesideeffect]]
 Using 'store' and a 'sideEffect' to make a set of unique values
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
