@@ -15,6 +15,8 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
 - Added a new section "Returning selected parts of a path"
 - Added a new section "Finding routes that go via a specific airport"
 - Expanded the section that introduces the `choose` step.
+- Added a new section "Calculating the `sum` of a collection"
+- Added a new section "Using the `math` step with collections"
 - Began adding coverage of TinkerPop 3.4 features. Issue #115 and #108
   - Added a mention of TinkerPop 3.4 in the Introduction.
   - Added a section covering the new text predicates such as `contains` and `startingWith`.

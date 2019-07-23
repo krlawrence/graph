@@ -11028,6 +11028,7 @@ As we shall see in the next two sections, sometimes it is necessary to use the
 'unfold' step to access the contents of a collection and it is also sometimes
 necessary to use 'local' scope.
 
+
 [[unbundle]]
 Using 'unfold' to unbundle a collection
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -11472,6 +11473,150 @@ g.V(54931).valueMap(true)
 Hopefully you are starting to see a pattern here. It is important to understand which
 steps are 'reducing barrier' steps and be able to work with them in a way that allows
 you to write queries that do what you need.
+
+[[sumcollection]]
+Calculating the 'sum' of a collection
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The query below returns a map where the keys are airport IATA codes and the values
+are the number of runways at the airport. The results are ordered to aid readability.
+
+[source,groovy]
+----
+
+g.V().hasLabel('airport').limit(10).
+      group().by('code').by(values('runways')).
+      order(local).by(values)
+
+[FLL:2,AUS:2,DCA:3,BWI:3,ANC:3,BNA:4,IAD:4,ATL:5,BOS:6,DFW:7]
+----
+
+Given such a collection of airports and runways, we might want to calculate the total
+number of runways present. The query below achieves that. Note that in order to
+select the values from the collection an 'unfold' step is used to turn the collection
+back into a stream from which the values can be selected.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').limit(10).
+      group().by('code').by(values('runways')).
+      unfold().
+      select(values).
+      sum()
+
+39
+----
+
+We can also write the query using 'local' scope rather than an 'unfold' step as shown
+below.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').limit(10).
+      group().by('code').by(values('runways')).
+      local(select(values).sum(local))
+
+39
+----
+
+[[mathcollection]]
+Using the 'math' step with collections
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Building on the examples from the previous section, let's now take these experiments
+one step further and look at ways to apply the 'math' step to values from one or more
+collections.  Given we know that there are 10 values in our collection we can easily
+use a 'math' step to calculate the average of those values.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').limit(10).
+      group().by('code').by(values('runways')).
+      unfold().
+      select(values).
+      sum().
+      math('_ / 10') 
+
+3.9
+----
+
+We may not always know ahead of time  how many entries a collection has. The modified
+example below uses a 'project' step to feed the 'math' step with two values
+representing the total number of runways and the number of members in the collection.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').limit(10).
+      group().by('code').by(values('runways')).
+      project('total','number').
+        by(select(values).unfold().sum()).
+        by(count(local)).
+      math('total / number')
+
+3.9
+----
+
+Sometimes you may want to perform computations on the sums of multiple collections.
+The two queries shown below create maps of airport and runway key/value pairs for all
+the airports in New Mexico and Arizona respectively.
+
+[source,groovy]
+----
+g.V().has('region','US-NM').
+      group().by('code').by(values('runways'))
+
+[ABQ:4,SVC:4,CNM:4,FMN:2,SAF:3,LAM:1,HOB:3,CVN:3,ROW:3]
+----
+
+If you were to add up the runways at the New Mexico airports you would find there are
+27 and likewise there are 26 runways across the Arizona airports.
+
+[source,groovy]
+----
+g.V().has('region','US-AZ').
+      group().by('code').by(values('runways'))
+
+[YUM:4,PRC:3,FLG:1,PHX:3,IFP:1,TUS:3,GCN:1,AZA:3,SOW:2,PGA:2,IGM:3]
+----
+
+Given these two collections, we might want to divide the sum of one set of values by
+the other to calculate the ratio between the total number of runways in Arizona and
+New Mexico.  The query below does just that. While at first glance this query looks a
+bit complicated, it is in fact just the result of combining the prior few queries we
+have looked at into a single query.
+
+[source,groovy]
+----
+g.V().has('region','US-NM').
+      group().by('code').by(values('runways')).
+      select(values).
+      unfold().
+      sum().
+      store('a').
+      V().has('region','US-AZ').
+      group().by('code').by(values('runways')).
+      select(values).
+      unfold().
+      sum().
+      store('b').
+      project('first','second').
+        by(select('a').unfold()).
+        by(select('b').unfold()).
+      math('first / second')
+
+1.0384615384615385
+----
+
+Given we calculated that there were 27 runways in New Mexico and 26 in Arizona we can
+verify that we have the right result using the Gremlin Console..
+
+[source,console]
+----
+gremlin> 27/26
+
+==>1.0384615385
+----
+
 
 [[sackintro]]
 Introducing 'sack' as a way to store values
