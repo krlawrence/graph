@@ -2,9 +2,9 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
-v282-preview, July 22nd 2019
+v282-preview, July 23rd 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Mon Jul 22, 2019 17:03:48 CDT
+// Tue Jul 23, 2019 18:04:39 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -25,7 +25,7 @@ v282-preview, July 22nd 2019
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: July 22nd 2019
+:draftdate: July 23rd 2019
 :tpvercheck: 3.4.2
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -11608,7 +11608,7 @@ g.V().has('region','US-NM').
 ----
 
 Given we calculated that there were 27 runways in New Mexico and 26 in Arizona we can
-verify that we have the right result using the Gremlin Console..
+verify that we have the right result using the Gremlin Console.
 
 [source,console]
 ----
