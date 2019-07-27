@@ -2,9 +2,9 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
-v282-preview, July 26th 2019
+v282-preview, July 27th 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Tue Jul 23, 2019 18:04:39 CDT
+// Sat Jul 27, 2019 09:16:22 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -25,7 +25,7 @@ v282-preview, July 26th 2019
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: July 26th 2019
+:draftdate: July 27th 2019
 :tpvercheck: 3.4.2
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -5829,7 +5829,9 @@ Using 'match' to do pattern matching
 The 'match' step was added in TinkerPop 3 and allows a more declarative style of
 pattern based query to be expressed using Gremlin. 'Match' can be a bit hard to
 master but once you figure it out it can be a very powerful way of traversing a graph
-looking for specific patterns.
+looking for specific patterns. As we shall see however, sometimes a `where` step is
+more than adequate and can be used to express similar patterns to those supported by
+'match'.
 
 Below is an example that uses 'match' to look for airline route patterns where there
 is a flight from one airport to another but no return flight back to the original
@@ -5970,7 +5972,8 @@ a 'where' step and a 'by' modulator. This capability was introduced in the Tinke
 [source,groovy]
 ----
 g.V().has('code','AUS').as('a').out().
-       where(eq('a')).by('runways').valueMap('code','runways')
+       where(eq('a')).by('runways').
+       valueMap('code','runways')
 ----
 
 So, while there is often a simpler way to write a query that avoids using the 'match'
@@ -5980,6 +5983,78 @@ met. However, before I resort to using a 'match' step I always think carefully a
 other ways that I could write the query that might be simpler. I do this because the
 syntax of the 'match' step can be tricky to get right without a fair bit of trial and
 error in my experience.
+
+[[patternwhere]]
+Pattern matching using a 'where' step
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+As the Gremlin language has evolved, many queries that might seem a perfect candidate
+for a 'match' step can actually also be written using a 'where' step but still in a
+more declarative style. We can rewrite the query from the previous section that looks
+at routes from JFK that do not have a return flight using a 'where' step as shown
+below.
+
+The way to read this, in a similar way as with a 'match' step is as follows. Starting
+at JFK, look at all the places we can fly to but only keep those airports that do not
+have a route back to JFK. Note that the 'as' step plays two roles in this query.
+Outside of the 'where' step it is used to label steps in the query we want to refer
+back to later. Inside the 'where' step it provides a convenient shorthand way to
+refer back to the departure airport.
+
+[source,groovy]
+----
+g.V().has('code','JFK').as('s').
+      out().as('d').
+      where(__.not(out().as('s'))).
+      select('s','d').by('code')
+
+[s:JFK,d:LCY]
+----
+
+As we have seen in some prior examples, if you only want the airport codes in the
+result and not the "s" and "d" keys, adding an additional 'select' step is all that
+it takes.
+
+[source,groovy]
+----
+g.V().has('code','JFK').as('s').
+      out().as('d').
+      where(__.not(out().as('s'))).
+      select('s','d').by('code').
+      select(values)
+
+[JFK,LCY]   
+----
+
+The query can be expanded to search for this same pattern across the whole
+graph. The example below returns the first ten routes found where there is no return
+flight.  The results are sorted in ascending order using the departure airport code.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').as('s').
+      out().as('d').
+      where(__.not(out().as('s'))).
+      limit(10).
+      select('s','d').by('code').
+      order().by(select('s'))
+----
+
+When run the query returns the following results.
+
+[source,groovy]
+----
+[s:AMS,d:HRE]
+[s:AMS,d:FNA]
+[s:AMS,d:UIO]
+[s:BNE,d:BCI]
+[s:BNE,d:BKQ]
+[s:BOM,d:DIU]
+[s:HEL,d:IVL]
+[s:HPN,d:HYA]
+[s:JFK,d:LCY]
+[s:MAN,d:ANU]
+----
 
 [[union]]
 Using 'union' to combine query results
