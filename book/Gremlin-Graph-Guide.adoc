@@ -2,9 +2,9 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
-v282-preview, July 27th 2019
+v282-preview, July 28th 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Sat Jul 27, 2019 09:16:22 CDT
+// Sun Jul 28, 2019 10:32:42 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -25,7 +25,7 @@ v282-preview, July 27th 2019
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: July 27th 2019
+:draftdate: July 28th 2019
 :tpvercheck: 3.4.2
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -11897,16 +11897,16 @@ distance from SAF to ATL with a stop in DFW is 1278 miles.
 
 [source,groovy]
 ----
-==>[SAF,549,DFW,190,AUS,739]
-==>[SAF,549,DFW,225,IAH,774]
-==>[SAF,549,DFW,630,BNA,1179]
-==>[SAF,549,DFW,729,ATL,1278]
-==>[SAF,549,DFW,1120,FLL,1669]
-==>[SAF,549,DFW,1170,IAD,1719]
-==>[SAF,549,DFW,1190,DCA,1739]
-==>[SAF,549,DFW,1210,BWI,1759]
-==>[SAF,549,DFW,1560,BOS,2109]
-==>[SAF,549,DFW,3030,ANC,3579]
+[SAF,549,DFW,190,AUS,739]
+[SAF,549,DFW,225,IAH,774]
+[SAF,549,DFW,630,BNA,1179]
+[SAF,549,DFW,729,ATL,1278]
+[SAF,549,DFW,1120,FLL,1669]
+[SAF,549,DFW,1170,IAD,1719]
+[SAF,549,DFW,1190,DCA,1739]
+[SAF,549,DFW,1210,BWI,1759]
+[SAF,549,DFW,1560,BOS,2109]
+[SAF,549,DFW,3030,ANC,3579]
 ----
 
 What may not be obvious from the query above is that we are in fact using multiple
