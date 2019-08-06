@@ -1829,7 +1829,7 @@ that we have created. Again you can see the results we get from running the quer
 
 [source,groovy]
 ----
-// How many airports in there in France (having first counted all countries)
+// How many airports are there in France (having first counted all countries)
 g.V().hasLabel('airport').groupCount().by('country').select('FR')
 
 58
