@@ -1235,7 +1235,7 @@ Once the 'air-routes' graph is loaded you can enter the following command and yo
 get back information about the graph. In the case of a TinkerGraph you will get back
 a useful message telling you how many vertices and edges the graph contains. Note that
 the contents of this message will vary from one graph system to another and should
-not be relied upon as a way to keep tack of vertex and edge counts. We will look at
+not be relied upon as a way to keep track of vertex and edge counts. We will look at
 some other ways of counting things a bit later.
 
 [source,groovy]
