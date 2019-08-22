@@ -3105,7 +3105,7 @@ http://tinkerpop.apache.org/docs/current/reference/#valuemap-step.
 
 The previous ways of using 'valueMap' will still work but over time as Graph DB
 providers adopt TinkerPop 3.4 the examples shown below will become the preferred way
-of controlling the results returned by 'valueMap'
+of controlling the results returned by 'valueMap'.
 
 Instead of using 'valueMap(true)' to include the ID and label of an element (a vertex
 or an edge) in the results, the new 'with(WithOptions.tokens)' construct can
