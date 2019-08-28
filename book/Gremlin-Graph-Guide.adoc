@@ -4024,7 +4024,7 @@ example.
 
 Let's now look at a query that compares strings rather than numbers. The following
 query finds all airports located in the state of Texas in the United States but only
-returns their code if the name of the city the airport is located in is not 'Houston'
+returns their code if the name of the city the airport is located in is not 'Houston'.
 
 [source,groovy]
 ----
