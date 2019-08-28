@@ -1779,7 +1779,7 @@ As before we could rewrite the query as follows.
 // How many of each type of edge are there?
 g.E().label().groupCount()
 
-[contains:6748,route:43400
+[contains:6748,route:43400]
 ----
 
 By way of a side note, the examples above are shorthand ways of writing
