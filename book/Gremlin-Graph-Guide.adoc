@@ -5147,7 +5147,7 @@ g.V().has('region','US-TX').has('longest',gte(12000))
 ----
 
 Gremlin also provides a 'not' step which works as you would expect. This query finds
-vertices that are not airports?
+vertices that are not airports.
 
 [source,groovy]
 ----
