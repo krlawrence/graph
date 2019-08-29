@@ -1779,7 +1779,7 @@ As before we could rewrite the query as follows.
 // How many of each type of edge are there?
 g.E().label().groupCount()
 
-[contains:6748,route:43400
+[contains:6748,route:43400]
 ----
 
 By way of a side note, the examples above are shorthand ways of writing
@@ -3105,7 +3105,7 @@ http://tinkerpop.apache.org/docs/current/reference/#valuemap-step.
 
 The previous ways of using 'valueMap' will still work but over time as Graph DB
 providers adopt TinkerPop 3.4 the examples shown below will become the preferred way
-of controlling the results returned by 'valueMap'
+of controlling the results returned by 'valueMap'.
 
 Instead of using 'valueMap(true)' to include the ID and label of an element (a vertex
 or an edge) in the results, the new 'with(WithOptions.tokens)' construct can
@@ -4024,7 +4024,7 @@ example.
 
 Let's now look at a query that compares strings rather than numbers. The following
 query finds all airports located in the state of Texas in the United States but only
-returns their code if the name of the city the airport is located in is not 'Houston'
+returns their code if the name of the city the airport is located in is not 'Houston'.
 
 [source,groovy]
 ----
@@ -4668,7 +4668,7 @@ Zhengzhou
 Changzhi
 Changzhou
 Yongzhou
-Yangzho]
+Yangzho
 ----
 
 [[notStartingWith]]
@@ -5147,7 +5147,7 @@ g.V().has('region','US-TX').has('longest',gte(12000))
 ----
 
 Gremlin also provides a 'not' step which works as you would expect. This query finds
-vertices that are not airports?
+vertices that are not airports.
 
 [source,groovy]
 ----
