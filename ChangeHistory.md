@@ -44,6 +44,8 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
   - `RemoteReadOnlyStrategy.java`
   - `RemotePartitionStrategy.java`
   - `strategies.py`
+- Added a sample showing use of text predicates and bulk sets
+  - `RemoteBulkSetTest.java`
 - Cleaned up some wording.
 - Uploaded latest data sets and demo apps to the `sample-data` and `demo` folders.
 
