@@ -46,6 +46,8 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
   - `strategies.py`
 - Added a sample showing use of text predicates and bulk sets
   - `RemoteBulkSetTest.java`
+- Added a sample showing how to limit the results at each depth of a `repeat` traversal.
+  - `restricted-repeat.groovy`
 - Cleaned up some wording.
 - Uploaded latest data sets and demo apps to the `sample-data` and `demo` folders.
 
