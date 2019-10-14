@@ -50,7 +50,7 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
   - `restricted-repeat.groovy`
 - Cleaned up some wording.
 - Uploaded latest data sets and demo apps to the `sample-data` and `demo` folders.
-  - The latest data set adds 63 additional airports and 5,838 additional routes to the original `air-routes.graphml` data set.
+  - The latest data set adds 90 additional airports and 6,830 additional routes to the original `air-routes.graphml` data set.
 
 ## Release 281 change history (December 26th 2018)
 
