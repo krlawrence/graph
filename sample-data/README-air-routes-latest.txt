@@ -1,17 +1,11 @@
 Information about the Air Routes graph.  
 
-Timestamp: Sat, 27 Apr 2019 10:03:59 -0500
+Timestamp: Mon, 14 Oct 2019 11:23:21 -0500
 
 This file contains the following sections
   1. Introduction
   2. Some statistics about the graph
 
-The latest data set adds 63 additional airports and 5,838 additional routes to
-the original air-routes.graphml data set. The latest data set also incorporates
-updates such as the new Istanbul Airport opening. All distances have been
-updated of the location change. This update also corrects the number of runways
-at Chicago O'Hare (ORD) to 7 rather than the 8 previously used based on latest
-airport charts.
 
 1. INTRODUCTION 
 
@@ -66,21 +60,21 @@ air-routes.graphml file.
 
 2. SOME STATISTICS ABOUT THE GRAPH
 
-Air Routes Graph (v0.82, 2019-April-27th) contains:
-  3,437 airports
-  49,238 routes
+Air Routes Graph (v0.83, 2019-October-13th) contains:
+  3,464 airports
+  50,230 routes
   237 countries (and dependent areas)
   7 continents
-  3,682 total nodes
-  56,112 total edges
+  3,709 total nodes
+  57,158 total edges
 
 Additional observations:
   Longest route is between SIN and EWR (9,523 miles)
   Shortest route is between WRY and PPW (2 miles)
-  Average route distance is 1,204.759 miles.
+  Average route distance is 1,207.09 miles.
   Longest runway is 18,045ft (BPX)
   Shortest runway is 1,300ft (SAB)
-  Average number of runways is 1.42624
+  Average number of runways is 1.42436
   Furthest North is LYR (latitude: 78.2461013793945)
   Furthest South is USH (latitude: -54.8433)
   Furthest East is SVU (longitude: 179.341003418)
@@ -89,72 +83,72 @@ Additional observations:
   Closest to the Greenwich meridian is LDE (longitude: -0.006438999902457)
   Highest elevation is DCY (14,472 feet)
   Lowest elevation is GUW (-72 feet)
-  Maximum airport node degree (routes in and out) is 612 (FRA)
-  Country with the most airports: United States (582)
-  Continent with the most airports: North America (983)
-  Average degree (airport nodes) is 28.652
-  Average degree (all nodes) is 28.620
+  Maximum airport node degree (routes in and out) is 614 (FRA)
+  Country with the most airports: United States (583)
+  Continent with the most airports: North America (986)
+  Average degree (airport nodes) is 29.001
+  Average degree (all nodes) is 28.961
  
  
 Here are the top 50 airports with the most routes
  
     POS  ID   CODE  TOTAL     DETAILS
 
-     1	  52   FRA  (612)  out:306 in:306
-     2	 161   IST  (608)  out:304 in:304
-     3	  51   CDG  (580)  out:290 in:290
-     4	  70   AMS  (559)  out:278 in:281 
-     5	  80   MUC  (530)  out:265 in:265
-     6	  18   ORD  (507)  out:254 in:253 
-     7	  64   PEK  (493)  out:246 in:247 
-     8	  58   DXB  (490)  out:245 in:245
-     9	   8   DFW  (484)  out:242 in:242
-    10	   1   ATL  (482)  out:241 in:241
-    11	  50   LGW  (456)  out:228 in:228
-    12	 102   DME  (454)  out:227 in:227
-    13	  49   LHR  (434)  out:217 in:217
-    14	  13   LAX  (424)  out:212 in:212
-    15	  67   PVG  (418)  out:209 in:209
-    16	  31   DEN  (417)  out:209 in:208 
-    17	  94   STN  (416)  out:208 in:208
-    18	  84   MAN  (415)  out:208 in:207 
+     1	  52   FRA  (614)  out:307 in:307
+     2	 161   IST  (612)  out:306 in:306
+     3	  51   CDG  (589)  out:294 in:295 
+     4	  70   AMS  (568)  out:283 in:285 
+     5	  80   MUC  (541)  out:270 in:271 
+     6	  18   ORD  (527)  out:264 in:263 
+     7	   8   DFW  (500)  out:250 in:250
+     8	  64   PEK  (497)  out:248 in:249 
+     9	  58   DXB  (494)  out:247 in:247
+    10	   1   ATL  (484)  out:242 in:242
+    11	  50   LGW  (462)  out:231 in:231
+    12	 102   DME  (461)  out:230 in:231 
+    13	  49   LHR  (440)  out:220 in:220
+    14	  31   DEN  (430)  out:215 in:215
+    15	  84   MAN  (429)  out:215 in:214 
+    16	  67   PVG  (424)  out:212 in:212
+    17	  13   LAX  (424)  out:212 in:212
+    18	  94   STN  (419)  out:209 in:210 
     19	  74   MAD  (414)  out:207 in:207
-    20	  73   BCN  (404)  out:202 in:202
-    21	  12   JFK  (401)  out:201 in:200 
-    22	  68   FCO  (400)  out:200 in:200
-    23	  75   VIE  (398)  out:199 in:199
-    24	  11   IAH  (392)  out:196 in:196
-    25	  47   YYZ  (390)  out:195 in:195
-    26	 198   DUS  (386)  out:193 in:193
-    27	  16   MIA  (386)  out:193 in:193
-    28	  79   BRU  (384)  out:192 in:192
-    29	  35   EWR  (384)  out:192 in:192
-    30	 177   CPH  (380)  out:190 in:190
-    31	 106   DOH  (366)  out:183 in:183
-    32	 103   SVO  (362)  out:181 in:181
-    33	 178   CLT  (358)  out:179 in:179
-    34	  60   DUB  (358)  out:179 in:179
-    35	  76   ZRH  (356)  out:178 in:178
+    20	  73   BCN  (408)  out:204 in:204
+    21	  68   FCO  (404)  out:202 in:202
+    22	  75   VIE  (402)  out:201 in:201
+    23	  12   JFK  (401)  out:201 in:200 
+    24	  11   IAH  (396)  out:198 in:198
+    25	 198   DUS  (394)  out:197 in:197
+    26	  35   EWR  (392)  out:196 in:196
+    27	  47   YYZ  (390)  out:195 in:195
+    28	  16   MIA  (390)  out:195 in:195
+    29	 177   CPH  (388)  out:194 in:194
+    30	  79   BRU  (386)  out:193 in:193
+    31	 106   DOH  (372)  out:186 in:186
+    32	  60   DUB  (372)  out:186 in:186
+    33	 178   CLT  (368)  out:184 in:184
+    34	 103   SVO  (364)  out:182 in:182
+    35	  76   ZRH  (360)  out:180 in:180
     36	  61   HKG  (346)  out:173 in:173
-    37	 250   CAN  (342)  out:172 in:170 
-    38	 122   ICN  (336)  out:168 in:168
-    39	  93   ARN  (334)  out:167 in:167
-    40	  56   SIN  (332)  out:166 in:166
-    41	  15   MCO  (318)  out:159 in:159
-    42	  30   LAS  (314)  out:157 in:157
-    43	   9   FLL  (314)  out:157 in:157
-    44	 346   LED  (310)  out:155 in:155
-    45	  17   MSP  (308)  out:154 in:154
-    46	 230   PMI  (304)  out:152 in:152
-    47	 101   BKK  (304)  out:152 in:152
-    48	 110   ATH  (303)  out:152 in:151 
-    49	  23   SFO  (303)  out:151 in:152 
-    50	 200   TXL  (302)  out:152 in:150 
+    37	 250   CAN  (345)  out:174 in:171 
+    38	 122   ICN  (342)  out:171 in:171
+    39	  93   ARN  (338)  out:169 in:169
+    40	  56   SIN  (335)  out:168 in:167 
+    41	  30   LAS  (320)  out:160 in:160
+    42	  15   MCO  (320)  out:160 in:160
+    43	 346   LED  (318)  out:159 in:159
+    44	   9   FLL  (314)  out:157 in:157
+    45	  23   SFO  (310)  out:155 in:155
+    46	  17   MSP  (310)  out:155 in:155
+    47	  10   IAD  (308)  out:154 in:154
+    48	 200   TXL  (307)  out:153 in:154 
+    49	 230   PMI  (306)  out:153 in:153
+    50	 110   ATH  (306)  out:154 in:152 
  
  
 Here are the longest routes currently in the graph
  
-60 route(s)
+62 route(s)
 SIN->EWR 9,523
 EWR->SIN 9,523
 DOH->AKL 9,025
@@ -205,6 +199,8 @@ HKG->DFW 8,105
 DFW->HKG 8,105
 SFO->DXB 8,085
 DXB->SFO 8,085
+SIN->SEA 8,059
+SEA->SIN 8,059
 JFK->HKG 8,054
 HKG->JFK 8,054
 DFW->AUH 8,053
