@@ -4,7 +4,7 @@ Starting with the v275 release, this file will contain a record of the major cha
 
 ## Release 282 change history (RELEASE DATE TBD)
 
-Placeholder for the next release that will be some time in 2019.
+Placeholder for the next release that will be some time in 2019. All being well that will be sometime in November 2019 Planning to do a to close out all the fixed issues etc.
 
 Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v281-tp-3.3.4...master) between this release and the prior one.
 
