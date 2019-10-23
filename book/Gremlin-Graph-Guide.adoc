@@ -2,9 +2,9 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
-v282-preview, October 22nd 2019
+v282-preview, October 23rd 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Tue Oct 22, 2019 18:17:33 CST
+// Wed Oct 23, 2019 18:06:19 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -25,7 +25,7 @@ v282-preview, October 22nd 2019
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: October 22nd 2019
+:draftdate: October 23rd 2019
 :tpvercheck: 3.4.4
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -7324,7 +7324,7 @@ Limiting the results at each depth
 
 Sometimes, while exploring a graph using 'repeat' steps, it is desirable to
 limit the amount of results returned at any given depth of a traversal.
-Achieving this result is a little more complicated that you might expect. The
+Achieving this result is a little more complicated than you might expect. The
 'limit' step has a global scope, as shown below, and is therefore not quite what
 we need in this case.
 
