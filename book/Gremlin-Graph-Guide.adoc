@@ -4,7 +4,7 @@ Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
 v282-preview, October 24th 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Thu Oct 24, 2019 18:24:31 CDT
+// Thu Oct 24, 2019 18:30:43 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -3216,10 +3216,10 @@ part of the "<<tp34vmmetaprop>>" section.
 
 
 [[element-map]]
-An alternative to valueMap - introducing elementMap
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+An alternative to 'valueMap' - introducing 'elementMap'
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-A new step, 'elementMap' was added to the Gremlin language as part of the Apache
+A new step, 'elementMap', was added to the Gremlin language as part of the Apache
 TinkerPop 3.4.4 release in October 2019. This new step is similar in many ways
 to the 'valueMap' step but makes some things a little easier. 
 
@@ -3250,7 +3250,7 @@ lat=30.1944999694824
 desc=Austin Bergstrom International Airport     
 ----
 
-As with 'valueMap' you can request only certain property values be included in
+As with 'valueMap', you can request only certain property values be included in
 the resulting map. Note however that the property values are not returned as
 list members. This is a key difference from 'valueMap'. In fact, if the value
 for a given property is a list or set containing multiple values, 'elementMap'
@@ -3289,8 +3289,7 @@ g.E(5161).project('v','IN','OUT').
 ----
 
 To make the output look even closer to the results returned by 'elementMap'
-something along the lines of the following query would be required to achieve a
-similar result using 'valueMap'.
+we could decide to add some additional 'project' steps.
 
 [source,groovy]
 ----
@@ -3305,9 +3304,10 @@ g.E(5161).project('v','IN','OUT').
             unfold()
 ----
 
-The results of running the query are shown below. I added an unfold step to make
-the results a little easier to read.
+The results of running the query are shown below. I added an unfold step to the query
+just to make the results a little easier to read.
 
+[source,groovy]
 ----
 v={id=5161, label=route, dist=1357}
 IN={id=47, label=airport}
