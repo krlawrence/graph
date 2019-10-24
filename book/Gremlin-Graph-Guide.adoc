@@ -2,9 +2,9 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
-v282-preview, October 23rd 2019
+v282-preview, October 24th 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Wed Oct 23, 2019 18:06:19 CDT
+// Thu Oct 24, 2019 18:17:41 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -25,7 +25,7 @@ v282-preview, October 23rd 2019
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: October 23rd 2019
+:draftdate: October 24th 2019
 :tpvercheck: 3.4.4
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -3213,6 +3213,106 @@ NOTE: There are additional 'WithOptions' settings we can use to change how
 properties with meta properties are returned by 'valueMap' This is covered later as
 part of the "<<tp34vmmetaprop>>" section.
 
+
+
+[[element-map]]
+An alternative to valueMap - introducing elementMap
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A new step, 'elementMap' was added to the Gremlin language as part of the Apache
+TinkerPop 3.4.4 release in October 2019. This new step is similar in many ways
+to the 'valueMap' step but makes some things a little easier. 
+
+TIP: Make sure the graph database you are using has support for Apache TinkerPop
+at the 3.4.4 level or higher before using 'elementMap' in your queries.
+
+When using 'valueMap' you need to explicitly request that the ID and label of a
+vertex or an edge are included in query results. This is not necessary when
+using 'elementMap'.
+
+[source,groovy]
+----
+g.V().has('code','AUS').elementMap().unfold()
+
+id=3
+label=airport
+country=US
+code=AUS
+longest=12250
+city=Austin
+elev=542
+icao=KAUS
+lon=-97.6698989868164
+type=airport
+region=US-TX
+runways=2
+lat=30.1944999694824
+desc=Austin Bergstrom International Airport     
+----
+
+As with 'valueMap' you can request only certain property values be included in
+the resulting map. Note however that the property values are not returned as
+list members. This is a key difference from 'valueMap'. In fact, if the value
+for a given property is a list or set containing multiple values, 'elementMap'
+will only return the first member of that list or set. If you need to return
+'set' or 'list' cardinality values you should use 'valueMap' instead.
+
+[source,groovy]
+----
+g.V().has('code','AUS').elementMap('city')
+
+[id:3,label:airport,city:Austin]  
+----
+
+The biggest difference between 'elementMap' and 'valueMap' becomes apparent when
+looking at edges. For a given edge, as well as the ID and label and properties,
+information about the incoming and outgoing vertices is also returned.
+
+[source,groovy]
+----
+g.V(3).outE().limit(1).elementMap()
+
+[id:5161,label:route,IN:[id:47,label:airport],OUT:[id:3,label:airport],dist:1357]
+----
+
+A similar result could be generated using 'valueMap' as shown below but it is
+definitely a bit more work.
+
+[source,groovy]
+----
+g.E(5161).project('v','IN','OUT').
+            by(valueMap(true)).
+            by(inV().union(id(),label()).fold()).
+            by(outV().union(id(),label()).fold())
+
+[v:[id:5161,label:route,dist:1357],IN:[47,airport],OUT:[3,airport]]
+----
+
+To make the output look even closer to the results returned by 'elementMap'
+something along the lines of the following query would be required to achieve a
+similar result using 'valueMap'.
+
+[source,groovy]
+----
+g.E(5161).project('v','IN','OUT').
+            by(valueMap(true)).
+            by(project('id','label').
+              by(inV().id()).
+              by(inV().label())).
+            by(project('id','label').
+              by(outV().id()).
+              by(outV().label())).
+            unfold()
+----
+
+The results of running the query are shown below. I added an unfold step to make
+the results a little easier to read.
+
+----
+v={id=5161, label=route, dist=1357}
+IN={id=47, label=airport}
+OUT={id=3, label=airport}  
+----
 
 
 [[var]]
