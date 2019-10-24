@@ -4,7 +4,7 @@ Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
 v282-preview, October 24th 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Thu Oct 24, 2019 18:17:41 CDT
+// Thu Oct 24, 2019 18:24:31 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -903,7 +903,7 @@ Gephi, a popular open source tool for visualizing graph data.  A lot of graph
 ingestion tools also still use comma separated values (CSV) format files. 
 
 We will briefly look at loading and saving graph data in Sections 2 and 4. I take a
-much look at different ways to work with graph data stored in text format
+look at different ways to work with graph data stored in text format
 files including importing and exporting graph data in the "<<serialize>>" section
 towards the end of the book.
 
