@@ -13,8 +13,8 @@ To read the latest snapshot of the book right away in a browser (HTML format) cl
 
 **LATEST NEWS:**  
 
-[Oct-13-2019] Updated versions of the sample data and corresponding demo apps have been uploaded.  
-[Dec-26-2018] Revision 281 (TP 3.3.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.    
+[Oct-26-2019] Revision 282 (TP 3.4.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.   
+[Oct-13-2019] Updated versions of the sample data and corresponding demo apps have been uploaded.      
 
 ## Releases and change history
 
@@ -112,6 +112,7 @@ Chapter 8 - FURTHER READING
 **NEWS ARCHIVE:**  
 
 [Apr-27-2019] Updated versions of the sample data and corresponding demo apps have been uploaded.  
+[Dec-26-2018] Revision 281 (TP 3.3.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.
 [Dec-24-2018] Updated versions of the sample data and corresponding demo apps have been uploaded.  
 [Sep-29-2018] Updated versions of the sample data and corresponding demo apps have been uploaded.  
 [Jul-28-2018] Revision 280 (TP 3.3.3) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.     
