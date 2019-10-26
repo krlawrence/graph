@@ -2,11 +2,11 @@
 
 Starting with the v275 release, this file will contain a record of the major changes and updates made in each release.
 
-## Release 282 change history (RELEASE DATE TBD)
-
-Placeholder for the next release that will be some time in 2019. All being well that will be sometime in November 2019 Planning to do a to close out all the fixed issues etc.
+## Release 282 change history (October 26th 2019)
 
 Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v281-tp-3.3.4...master) between this release and the prior one.
+
+The examples in this release have been tested against Apache TinkerPop at the 3.4.1, 3.4.2, 3.4.3 and 3.4.4 levels. As always I am very grateful for the feedback by e-mail, issue and PR. This release resolves a few minor issues and adds a significant amount new content. Please check the commit log for finer grained details of all changes. Here is a list of the major improvements in this release.
 
 - Added a new section comparing `sack` to `union` and `project` when adding values.
 - Added a new section "Does any route exist between two airports?"
