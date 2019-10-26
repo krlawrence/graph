@@ -2,9 +2,9 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
-v282-preview, October 24th 2019
+v282-preview, October 25th 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Thu Oct 24, 2019 18:30:43 CDT
+// Fri Oct 25, 2019 19:14:43 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -25,7 +25,7 @@ v282-preview, October 24th 2019
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: October 24th 2019
+:draftdate: October 25th 2019
 :tpvercheck: 3.4.4
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -238,19 +238,19 @@ Introducing the book sources, sample programs and data
 
 All work related to this project is being done in the open at GitHub. A list of where
 to find the key components is provided below. The examples in this book make use of a
-sample graph called 'air-routes' which contains a graph based on the world
-airline route network between over 3,370 airports.  The sample graph data, quite a
-bit of sample code and some larger demo applications can all be found at the same
-GitHub location that hosts the book manuscript.  You will also find releases of the
-the book in various formats (HTML, PDF, DocBook/XML, MOBI and EPUB) at the same GitHub
-location.  The sample programs include standalone Java, Groovy and Ruby examples as
-well as many examples that can be run from the Gremlin Console.  There are some
-differences between using Gremlin from a standalone program and from the Gremlin
-Console. The sample programs demonstrate several of these differences.  The sample
-applications area contains a full example HTML and JavaScript application that lets
-you explore the 'air-routes' graph visually. The home page for the GitHub project
-includes a README.md file to help you navigate the site. Below are some links to
-various resources included with this book.
+sample graph called 'air-routes' which contains a graph based on the world airline
+route network between over 3,370 airports.  The sample graph data, quite a bit of
+sample code and some larger demo applications can all be found at the same GitHub
+location that hosts the book manuscript.  You will also find releases of the the book
+in various formats (HTML, PDF, DocBook/XML, MOBI and EPUB) at the same GitHub
+location.  The sample programs include standalone Java, Groovy, Python and Ruby
+examples as well as many examples that can be run from the Gremlin Console.  There
+are some differences between using Gremlin from a standalone program and from the
+Gremlin Console. The sample programs demonstrate several of these differences.  The
+sample applications area contains a full example HTML and JavaScript application that
+lets you explore the 'air-routes' graph visually. The home page for the GitHub
+project includes a README.md file to help you navigate the site. Below are some links
+to various resources included with this book.
 
 .Where to find the book, samples and data
 Project home::
@@ -16842,6 +16842,46 @@ When the query is run the results look like the ones from the prior query.
 [a:JED,b:8314,c:LAX]    [a:DOH,b:8030,c:IAH]
 [a:DOH,b:8287,c:LAX]    [a:DFW,b:8022,c:DXB]
 ----
+
+[[longesteach]]
+Finding the longest route from each airport
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following query can be used to find the longest route from each airport in
+the graph. I included a 'limit' step so that just a few results are returned but
+if you were to remove it then every airport in the graph would be represented in
+the query results. A local step is used so that for each airport all of its
+outgoing routes are analyzed. Those routes are ordered in descending order and
+only the first one is selected in each case.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').limit(10).
+      local(outE().
+            order().by('dist',decr).
+            inV().
+            path().
+              by('code').
+              by('dist').
+              limit(1))
+----
+
+When run the query produces the following results.
+
+[source,groovy]
+----
+[ATL,8434,JNB]
+[ANC,3260,IAH]
+[AUS,5294,FRA]
+[BNA,1972,SEA]
+[BOS,7952,HKG]
+[BWI,3622,LHR]
+[DCA,2434,SFO]
+[DFW,8574,SYD]
+[FLL,7808,DXB]
+[IAD,7487,DEL]
+----
+
 
 [[aggrunion]]
 Combining 'aggregate', 'union' and 'filter' to compute distances
