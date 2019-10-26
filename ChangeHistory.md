@@ -4,7 +4,7 @@ Starting with the v275 release, this file will contain a record of the major cha
 
 ## Release 282 change history (October 26th 2019)
 
-Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v282-tp-3.4.4...master) between this release and the prior one.
+Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v281-tp-3.3.4...v282-tp-3.4.4) between this release and the prior one.
 
 The examples in this release have been tested against Apache TinkerPop at the 3.4.1, 3.4.2, 3.4.3 and 3.4.4 levels. As always I am very grateful for the feedback by e-mail, issue and PR. This release resolves a few minor issues and adds a significant amount new content. Please check the commit log for finer grained details of all changes. Here is a list of the major improvements in this release.
 
