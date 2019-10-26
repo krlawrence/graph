@@ -19,6 +19,7 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
 - Added a new section "Calculating the `sum` of a collection"
 - Added a new section "Using the `math` step with collections"
 - Added a new section "Limiting the results at each depth" when using `repeat` steps.
+- Added a new section "Finding the longest route from each airport".
 - Began adding coverage of TinkerPop 3.4.x features. Issue #115 and #108
   - Added a mention of TinkerPop 3.4 in the Introduction.
   - Added a section covering the new text predicates such as `contains` and `startingWith`.
