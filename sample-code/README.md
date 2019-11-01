@@ -5,6 +5,8 @@ Note that files with a ".groovy" extension but with all lowercase names are inte
 
 Files with a ".java" extension are stand alone Java applications that need to be compiled and run using a Java JDK.
 
+Files that have "remote" in the name such as `RemoteStats.java` are designed to be run against a Gremlin Server rather than a local in memory TinkerGraph. It is important to understand the differences between these two environments and that is what these samples aim to help with.
+
 Files with a ".py" extension are stand alone Python applications that require the Gremlin Python library to have been installed using PIP or an equivalent method. 
 
 Some of the samples use data from CSV files that can be found in the *'/sample-data'* folder.
