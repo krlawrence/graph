@@ -21344,7 +21344,7 @@ JanusGraph can manage by itself without needing help from an external index.
 
 Using JanusGraph you can create and manipulate an index using the Management API. The
 JanusGraph documentation strongly recommends that you always make a call to
-'graph().tx().rollback()' before you start to create an index to make sure that no
+'graph.tx().rollback()' before you start to create an index to make sure that no
 other transactions are currently active.
 
 The example below shows how to use the Management API to create a new composite index
