@@ -2,9 +2,9 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
-v282-preview, October 25th 2019
+v282-preview, December 27th 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Fri Oct 25, 2019 19:14:43 CDT
+// Fri Dec 27, 2019 18:59:59 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -25,7 +25,7 @@ v282-preview, October 25th 2019
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: October 25th 2019
+:draftdate: December 27th 2019
 :tpvercheck: 3.4.4
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -7736,22 +7736,28 @@ shown below.
 ----
 
 [[pathwarn]]
-A warning that 'path' can be memory and CPU intensive
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+A warning that path finding can be memory and CPU intensive
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The 'path' step is incredibly useful and I find myself using it a lot. However, there
-are some downsides to the use of 'path', especially when searching entire graphs for
-non trivial results. Take a look at the query below. It returns the first 10 routes
-found that will get you from Papa Stour (PSV), a small airport in the Shetland
-Islands, to Austin (AUS). The 'simplePath' step is used to make sure the same exact
-path is never looked at twice. This query runs quickly and returns some useful
-results.
+Take a look at the query below. It returns the first 10 routes found that will get
+you from Papa Stour (PSV), a small airport in the Shetland Islands, to Austin (AUS).
+The 'simplePath' step is used to make sure the same exact path is never looked at
+twice. This query runs quickly and returns some useful results.
 
 [source,groovy]
 ----
-g.V().has('code','PSV').repeat(out().simplePath()).until(has('code','AUS')).
-      limit(10).path().by('code')
+g.V().has('code','PSV').
+      repeat(out().simplePath()).
+      until(has('code','AUS')).
+      limit(10).
+      path().
+        by('code')
+----
 
+Here are some of the routes returned.
+
+[source,groovy]
+----
 [PSV,LWK,FIE,KOI,EDI,JFK,AUS]
 [PSV,LWK,FIE,KOI,EDI,EWR,AUS]
 [PSV,LWK,FIE,KOI,EDI,LHR,AUS]
@@ -7764,15 +7770,19 @@ g.V().has('code','PSV').repeat(out().simplePath()).until(has('code','AUS')).
 [PSV,LWK,FIE,KOI,GLA,LHR,AUS]
 ----
 
-However, were we to reverse the query as follows we can run into trouble. In fact, if
+If we reverse the query as shown below we can run into trouble. In fact, if
 you run this query on your laptop, after a few minutes of high CPU usage and
 increased fan noise, it is likely you will get an error that the query ran out of
 available memory.
 
 [source,groovy]
 ----
-g.V().has('code','AUS').repeat(out().simplePath()).until(has('code','PSV')).
-      limit(10).path().by('code')
+g.V().has('code','AUS').
+      repeat(out().simplePath()).
+      until(has('code','PSV')).
+      limit(10).
+      path().
+        by('code')
 ----
 
 The reason this happens is as follows. There are very few routes from PSV and not
@@ -7780,15 +7790,41 @@ many more from the airports it is closely connected to. Therefore, if you start 
 query from PSV, you will fairly quickly find some paths that end up in AUS. However,
 if you start from AUS there are a lot of possible routes that Gremlin has to explore
 before it gets close to finding PSV. If it helps, think of a funnel where PSV is at
-the narrow end and AUS is at the other.
+the narrow end and AUS is at the other. This is also sometimes referred to as having
+a high or low "fan out" of possible routes depending on the query direction.
 
-NOTE: The 'path' step uses a lot of memory and in some cases can cause issues.
+[[pathstepwarn]]
+A warning that the 'path' and 'as' steps can also be memory intensive
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The reason that so much memory is consumed is that the 'path' step, even if
-'simplePath' is used to avoid travelling the same path twice, has to store up a very
-large number of routes before finding the ones we are actually interested in.  So
-while the 'path' step is incredibly useful, be aware that in cases like this one, it
-can get you into trouble if not used with care.
+The Gremlin 'path' step is incredibly useful and I find myself using it a lot.
+However, there are some downsides to the use of 'path', especially when searching
+entire graphs for non trivial results.  Even if the paths that you are looking for
+are less difficult to find than in the prior section, you should be aware that
+keeping track of all the paths that you find and retrieving them using a 'path' step
+can require a lot of memory to be used.
+
+NOTE: The 'path' and 'as' steps can use a lot of memory and in some cases cause
+issues.
+
+The reason that so much memory can be consumed is that the 'path' step, even if
+'simplePath' is used to avoid travelling the same exact path more than once, requires
+the query processor to potentially store up a very large number of results before
+finding the ones we are actually interested in. So while the 'path' step is
+incredibly useful, be aware that in cases where a lot of paths need to be tracked, it
+can get you into trouble if not used with care. A Gremlin query processor will have a
+limited amount of memory available in which to execute a given query. Storing a large
+amount of path information may exceed that limit causing query execution to fail.
+
+Something that may not be immediately obvious is that using an 'as' step can also
+require the query processor to, at least in part, store path information requiring
+significant amounts of memory. The 'as' step allows us to refer back to the previous
+state of a traversal but potentially requires a lot of memory to hold this state
+during complex queries. 
+
+If you find yourself running into memory limitation issues there are often ways to
+circumvent the problem using different approaches to writing the query. You will find
+an example of such a case in the "<<sackpredicate>>" section.
 
 [[nd]]
 Calculating vertex degree
@@ -12028,11 +12064,11 @@ g.withSack(0).V().has('code','SAF').out().
 [7,4,3,6]
 ----
 
-This time we add the runways to our sack using a sum operation, but as our starting
-value is zero we are not actually changing the end result in any way. This is because
-we essentially perform the operation '0 + runways' for each runway value. The final
-call to 'sack' with no parameters causes the current contents of the 'sack' to be
-returned. The 'fold' step, as before, puts whatever results we got from the 'sack'
+This time we add the runways to our sack using a sum operation but as our starting
+value is zero we are not actually changing the end result in any way as for each
+runway value we essentially perform the operation '0 + runways' in each case. The
+final call to 'sack' with no parameters causes the current contents of the 'sack' to
+be returned. The 'fold' step, as before, puts whatever results we got from the 'sack'
 into a list.
 
 [source,groovy]
@@ -12057,14 +12093,14 @@ g.withSack(1).V().has('code','SAF').out().
 Now, each time the number of runways was added to the sack using a 'sum' operator,
 the operation that was performed was '1 + runways'. As you can see from the results,
 in each case, the value returned is one higher than those from the previous query.
-This is a very simple example but hopefully you can start to see how useful sacks can
+This is a very dimple example but hopefully you can start to see how useful sacks can
 be.
 
 Before getting into some more interesting examples, it is worth pointing out that you
 can also initialize a sack using the 'assign' operator as shown below. It is also
 important to note that this sack initialization does not have to happen at the start
-of the query when done in this way. In the example below, a constant value of one is
-used, but we could equally well have used a traversal to initialize that sack as we
+of the query when done in this way. In the example below a constant value of one is
+used but we could equally well have used a traversal to initialize that sack as we
 shall see in the next example.
 
 [source,groovy]
@@ -12682,13 +12718,100 @@ g.withSack{[1,1,1,1]}{it.clone()}V().has('code','SAF').
 Later in the "<<lambdasack>>" section we  will revisit the topic of 'sacks' and
 lambda expressions and see other ways that we could have written the previous query.
 
+[[sackpredicate]]
+Comparing properties and constants to the value of a sack
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+During a traversal you may want to incrementally modify a sack and then compare a
+vertex or edge property against the current contents of a sack. The examples below
+show ways of doing this. To keep things simple, initially we will use a sack that is
+initialized to a value of six and does not change. This demonstrates how to compare
+each airport's runway count against the value stored in the sack.
+
+[source,groovy]
+----
+
+g.withSack(6).V().
+  hasLabel('airport').as('a').
+  where(gt('a')).
+    by('runways').
+    by(sack()).
+  values('code')
+
+DFW
+ORD
+----
+
+As I mentioned in the "<<pathstepwarn>>" section, using an 'as' step to remember a
+prior part of a traversal can be expensive in terms of memory usage. This will not be
+an issue with small graphs such as `air-routes`, but can be problematic when
+working with larger graphs. The query can be rewritten without the use of an 'as'
+step as shown below.
+
+[source,groovy]
+----
+g.withSack(6).V().hasLabel('airport').
+  filter(project('a','b').
+           by('runways').
+           by(sack()).
+         where('a', gt('b'))).
+  values('code')
+
+DFW
+ORD
+----
+
+Obviously, while these examples demonstrate the concept, in reality we have not done
+anything that truly warrants use of a 'sack' step so far. The query could easily have
+been written as shown below. However, hopefully this gives you some basic building
+blocks that enable sack and property values to be compared.
+
+[source,groovy]
+----
+g.V().has('airport','runways',gt(6)).values('code')
+
+DFW
+ORD
+----
+
+Let's change our query to make the use of a sack more interesting. The query below
+starts at Santa Fe (SAF) and traverses outgoing edges until the distance travelled
+exceeds 10,000 miles.  Only five results are returned.
+
+[source,groovy]
+----
+g.withSack(0).
+  V().
+  has('code','SAF').
+  repeat(outE().
+         sack(sum).by('dist').
+         inV()).
+  until(sack().is(gt(10000))).
+  limit(5).
+  path().
+    by('code').
+    by('dist')
+----
+
+When we run the query we get back a series of routes that stop as soon as we have
+travelled more than 10,000 miles.
+
+[source,groovy]
+----
+[SAF,549,DFW,1560,BOS,7952,HKG]
+[SAF,549,DFW,1230,LAX,8287,DOH]
+[SAF,549,DFW,1230,LAX,8372,AUH]
+[SAF,549,DFW,1230,LAX,8314,JED]
+[SAF,549,DFW,1230,LAX,8246,RUH]
+
+----
 
 [[lambdas]]
 Using Lambda functions
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Gremlin allows you to include a code fragment (sometimes called a Lambda function or a
-closure) as part of a query. This is typically done as part of a 'filter', 'map' or
+Gremlin allows you to include a code fragment (sometimes called a Lambda function or
+a closure) as part of a query. This is typically done as part of a 'filter', 'map' or
 'sideEffect' step but there are other places where you will find this concept used
 such as when working with 'sacks'.  This technique provides a lot of additional
 flexibility in how queries can be written. However, care should be used. When
@@ -21344,7 +21467,7 @@ JanusGraph can manage by itself without needing help from an external index.
 
 Using JanusGraph you can create and manipulate an index using the Management API. The
 JanusGraph documentation strongly recommends that you always make a call to
-'graph.tx().rollback()' before you start to create an index to make sure that no
+'graph().tx().rollback()' before you start to create an index to make sure that no
 other transactions are currently active.
 
 The example below shows how to use the Management API to create a new composite index
