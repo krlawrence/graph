@@ -2,9 +2,9 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
-v283-preview, December 27th 2019
+v283-preview, December 30th 2019
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Fri Dec 27, 2019 18:59:59 CST
+// Mon Dec 30, 2019 17:42:55 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -25,7 +25,7 @@ v283-preview, December 27th 2019
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: December 27th 2019
+:draftdate: December 30th 2019
 :tpvercheck: 3.4.4
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -12750,7 +12750,8 @@ step as shown below.
 
 [source,groovy]
 ----
-g.withSack(6).V().hasLabel('airport').
+g.withSack(6).V().
+  hasLabel('airport').
   filter(project('a','b').
            by('runways').
            by(sack()).
@@ -12780,8 +12781,7 @@ exceeds 10,000 miles.  Only five results are returned.
 
 [source,groovy]
 ----
-g.withSack(0).
-  V().
+g.withSack(0).V().
   has('code','SAF').
   repeat(outE().
          sack(sum).by('dist').
@@ -12803,7 +12803,51 @@ travelled more than 10,000 miles.
 [SAF,549,DFW,1230,LAX,8372,AUH]
 [SAF,549,DFW,1230,LAX,8314,JED]
 [SAF,549,DFW,1230,LAX,8246,RUH]
+----
 
+Finally, let's modify the query again to keep following routes starting at SAF, but
+this time adding an additional constraint that each route must be no more than 2,500
+miles. We keep going until we have travelled more than 8,000 miles. This again
+demonstrates how we can use a sack to store a running total over the course of a
+graph traversal. This time, the path that was followed along with the total distance
+are combined using a 'union' step. I also added a 'simplePath' step to the query to
+make sure we do not revisit airports.
+
+TIP: Splitting long queries over multiple lines makes them easier to read and
+understand.
+
+You will notice that I have split the queries in this section over multiple lines to
+aid readability. As your queries become more complex this becomes more important.
+
+[source,groovy]
+----
+g.withSack(0).
+  V().
+  has('code','SAF').
+  repeat(outE().
+         has('dist',lte(2500)).
+         sack(sum).by('dist').
+         inV().
+         simplePath()).
+  until(sack().is(gt(8000))).
+  limit(5).
+  local(union(path().
+                by('code').
+                by('dist').
+              unfold(),
+              sack()).
+        fold())   
+----
+
+The results from running the modified query are shown below.
+
+[source,groovy]
+----
+[SAF,708,LAX,2481,OGG,2401,SMF,2492,EWR,8082]
+[SAF,708,LAX,2481,OGG,2401,SMF,2459,HNL,8049]
+[SAF,708,LAX,2481,OGG,2352,SJC,2462,LIH,8003]
+[SAF,708,LAX,2500,KOA,2375,OAK,2440,BWI,8023]
+[SAF,708,LAX,2500,KOA,2375,OAK,2453,LIH,8036] 
 ----
 
 [[lambdas]]
