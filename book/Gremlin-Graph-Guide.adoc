@@ -2,9 +2,9 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
-v283-preview, December 30th 2019
+v283-preview, January 6th 2020
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Mon Dec 30, 2019 17:42:55 CST
+// Mon Jan 06, 2020 18:14:27 CST
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -25,7 +25,7 @@ v283-preview, December 30th 2019
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: December 30th 2019
+:draftdate: January 6th 2019
 :tpvercheck: 3.4.4
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -13327,7 +13327,7 @@ Introducing the 'flatMap' step
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 There are a set of fundamental steps that the other Gremlin query language steps
-build upon on. One of those is 'map'. Another, that we have not looked at so far in
+build upon. One of those is 'map'. Another, that we have not looked at so far in
 this book, is 'flatMap'. The two steps are similar but have a fundamental difference
 that may not be obvious from the examples we have looked at so far. The key
 difference is as follows. If a 'map' step receives multiple inputs it only passes on
