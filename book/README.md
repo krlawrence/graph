@@ -2,7 +2,7 @@ This folder contains the AsciiDoc source file used to produce the HTML, XML (DOC
 
 
 **LATEST NEWS:**  
-[Oct-26-2019] Revision 282 (TP 3.4.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.   
+[Jan-06-2020] Revision 283 (TP 3.4.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.   
 
 
 ## Releases and change history
@@ -29,6 +29,7 @@ Please note that the DOCBOOK, EPUB and MOBI format files currently do not have a
 
 
 **ARCHIVED NEWS:**  
+[Oct-26-2019] Revision 282 (TP 3.4.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.   
 [Dec-26-2018] Revision 281 (TP 3.3.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.    
 [Jul-28-2018] Revision 280 (TP 3.3.3) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.    
 [May-29-2018] Revision 279 (TP 3.3.3) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.    
