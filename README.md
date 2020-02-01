@@ -101,12 +101,16 @@ Chapter 6 - MOVING BEYOND THE CONSOLE AND TINKERGRAPH
   indexes. We also explore various technology choices for back end persistent store
   and index as well as introducing the Gremlin Server.
   
-Chapter 7 - COMMON GRAPH SERIALIZATION FORMATS
+Chapter 7 - INTRODUCING GREMLIN SERVER
+- A chapter dedicated to configuring and using Gremlin Server to host a remote graph
+  and connect to it.
+  
+Chapter 8 - COMMON GRAPH SERIALIZATION FORMATS
 - In Chapter 7 We have provided a discussion of some common Graph serialization file
   formats along with a discussion of how to use them in the context of TinkerPop 3
   enabled graphs.
   
-Chapter 8 - FURTHER READING
+Chapter 9 - FURTHER READING
 - We finish up by providing several links to useful web sites where you can find
   tools and documentation for many of the technologies covered in this document.
 
