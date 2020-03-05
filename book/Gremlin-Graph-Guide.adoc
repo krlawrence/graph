@@ -6599,11 +6599,11 @@ g.V().has('code','AUS').out().out().dedup().count()
 871
 ----
 
-There is however a problem with this query. The 865 places is going to include (some
+There is however a problem with this query. The 871 places is going to include (some
 or possibly all of) the places we can also get to non stop from Austin. What we
 really want to find are all the places that you can only get to from Austin with one
 stop. So what we need is a way to remember all of those places and remove them from
-the 865 some how. This is where 'aggregate' is useful. Take a look at the modified
+the 871 some how. This is where 'aggregate' is useful. Take a look at the modified
 query below
 
 [source,groovy]
