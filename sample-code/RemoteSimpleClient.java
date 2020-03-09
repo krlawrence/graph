@@ -33,6 +33,9 @@ public class RemoteSimpleClient
 {
   public static void runTests()
   {
+    // Create the Cluster object. Note the use of the Serializers object
+    // as a shortcut way to ask for Graph Binary rather than having to 
+    // create an instance of the serializer ourselves.
     Cluster.Builder builder = Cluster.build();
     builder.addContactPoint("localhost");
     builder.port(8182);
