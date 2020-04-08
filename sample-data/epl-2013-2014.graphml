@@ -1,0 +1,2327 @@
+<?xml version='1.0' ?>
+<!-- Sample file containing the teams playing in the 2013/2014 English        -->
+<!-- Premier League. Intended for learing to use property graphs with         -->
+<!-- multiple properties on both the nodes and the edges.                     -->
+<!--                                                                          -->
+<!-- Author: Kelvin R. Lawrence     2015-10-22 10:23:08 -0500                 -->
+<!--                                                                          -->
+<graphml xmlns='http://graphml.graphdrawing.org/xmlns'>
+   <key id='name'     for='node' attr.name='name'     attr.type='string'></key>
+   <key id='type'     for='node' attr.name='type'     attr.type='string'></key>
+   <key id='founded'  for='node' attr.name='founded'  attr.type='int'></key>
+   <key id='sname'    for='node' attr.name='sname'    attr.type='string'></key>
+   <key id='stadium'  for='node' attr.name='stadium'  attr.type='string'></key>
+   <key id='nickname' for='node' attr.name='nickname' attr.type='string'></key>
+   <key id='years'    for='edge' attr.name='years'    attr.type='int'></key>
+   <key id='date'     for='edge' attr.name='date'     attr.type='string'></key>
+   <key id='result'   for='edge' attr.name='result'   attr.type='string'></key>
+   <key id='labelV'   for='node' attr.name='labelV'   attr.type='string'></key>
+   <key id='labelE'   for='edge' attr.name='labelE'   attr.type='string'></key>
+
+  <graph id='EPL' edgedefault='directed'>
+  <node id='1'>
+    <data key='labelV'>EPL</data>
+    <data key='sname'>EPL</data>
+    <data key='name'>English Premier League</data>
+    <data key='type'>League</data>
+  </node>
+  <node id='2'>
+    <data key='labelV'>Team</data>
+    <data key='sname'>ARS</data>
+    <data key='name'>Arsenal</data>
+    <data key='type'>Team</data>
+    <data key='stadium'>Emirates Stadium</data>
+    <data key='founded'>1886</data>
+    <data key='nickname'>The Gunners</data>
+  </node>
+  <node id='3'>
+    <data key='labelV'>Team</data>
+    <data key='sname'>LIV</data>
+    <data key='name'>Liverpool</data>
+    <data key='type'>Team</data>
+    <data key='stadium'>Anfield</data>
+    <data key='founded'>1892</data>
+    <data key='nickname'>The Reds</data>
+  </node>
+  <node id='4'>
+    <data key='labelV'>Team</data>
+    <data key='sname'>CHE</data>
+    <data key='name'>Chelsea</data>
+    <data key='type'>Team</data>
+    <data key='stadium'>Stamford Bridge</data>
+    <data key='founded'>1905</data>
+    <data key='nickname'>The Blues</data>
+  </node>
+  <node id='5'>
+    <data key='labelV'>Team</data>
+    <data key='sname'>MUN</data>
+    <data key='name'>Manchester United</data>
+    <data key='type'>Team</data>
+    <data key='stadium'>Old Trafford</data>
+    <data key='founded'>1878</data>
+    <data key='nickname'>The Red Devils</data>
+  </node>
+  <node id='6'>
+    <data key='labelV'>Team</data>
+    <data key='sname'>EVE</data>
+    <data key='name'>Everton</data>
+    <data key='type'>Team</data>
+    <data key='stadium'>Goodison Park</data>
+    <data key='founded'>1878</data>
+    <data key='nickname'>The Toffees</data>
+  </node>
+  <node id='7'>
+    <data key='labelV'>Team</data>
+    <data key='sname'>TOT</data>
+    <data key='name'>Tottenham Hotspur</data>
+    <data key='type'>Team</data>
+    <data key='stadium'>White Hart Lane</data>
+    <data key='founded'>1882</data>
+    <data key='nickname'>Spurs</data>
+  </node>
+  <node id='8'>
+    <data key='labelV'>Team</data>
+    <data key='sname'>NEW</data>
+    <data key='name'>Newcastle United</data>
+    <data key='type'>Team</data>
+    <data key='stadium'>St. James' Park</data>
+    <data key='founded'>1892</data>
+    <data key='nickname'>The Magpies</data>
+  </node>
+  <node id='9'>
+    <data key='labelV'>Team</data>
+    <data key='sname'>SOU</data>
+    <data key='name'>Southampton</data>
+    <data key='type'>Team</data>
+    <data key='stadium'>St. Mary's</data>
+    <data key='founded'>1885</data>
+    <data key='nickname'>The Saints</data>
+  </node>
+  <node id='10'>
+    <data key='labelV'>Team</data>
+    <data key='sname'>AVL</data>
+    <data key='name'>Aston Villa</data>
+    <data key='type'>Team</data>
+    <data key='stadium'>Villa Park</data>
+    <data key='founded'>1874</data>
+    <data key='nickname'>The Villans</data>
+  </node>
+  <node id='11'>
+    <data key='labelV'>Team</data>
+    <data key='sname'>SWA</data>
+    <data key='name'>Swansea City</data>
+    <data key='type'>Team</data>
+    <data key='stadium'>Liberty Stadium</data>
+    <data key='founded'>1912</data>
+    <data key='nickname'>The Swans</data>
+  </node>
+  <node id='12'>
+    <data key='labelV'>Team</data>
+    <data key='sname'>STK</data>
+    <data key='name'>Stoke City</data>
+    <data key='type'>Team</data>
+    <data key='stadium'>The Britannia Stadium</data>
+    <data key='founded'>1863</data>
+    <data key='nickname'>The Potters</data>
+  </node>
+  <node id='13'>
+    <data key='labelV'>Team</data>
+    <data key='sname'>HUL</data>
+    <data key='name'>Hull City</data>
+    <data key='type'>Team</data>
+    <data key='stadium'>The KC Stadium</data>
+    <data key='founded'>1904</data>
+    <data key='nickname'>The Tigers</data>
+  </node>
+  <node id='14'>
+    <data key='labelV'>Team</data>
+    <data key='sname'>NOR</data>
+    <data key='name'>Norwich City</data>
+    <data key='type'>Team</data>
+    <data key='stadium'>Carrow Road</data>
+    <data key='founded'>1902</data>
+    <data key='nickname'>The Canaries</data>
+  </node>
+  <node id='15'>
+    <data key='labelV'>Team</data>
+    <data key='sname'>WBA</data>
+    <data key='name'>West Bromwich Albion</data>
+    <data key='type'>Team</data>
+    <data key='stadium'>The Hawthorns</data>
+    <data key='founded'>1878</data>
+    <data key='nickname'>The Baggies</data>
+  </node>
+  <node id='16'>
+    <data key='labelV'>Team</data>
+    <data key='sname'>CAR</data>
+    <data key='name'>Cardiff City</data>
+    <data key='type'>Team</data>
+    <data key='stadium'>Cardiff City Stadium</data>
+    <data key='founded'>1899</data>
+    <data key='nickname'>The Bluebirds</data>
+  </node>
+  <node id='17'>
+    <data key='labelV'>Team</data>
+    <data key='sname'>WHU</data>
+    <data key='name'>West Ham United</data>
+    <data key='type'>Team</data>
+    <data key='stadium'>Boleyn Ground</data>
+    <data key='founded'>1895</data>
+    <data key='nickname'>The Hammers</data>
+  </node>
+  <node id='18'>
+    <data key='labelV'>Team</data>
+    <data key='sname'>FUL</data>
+    <data key='name'>Fulham</data>
+    <data key='type'>Team</data>
+    <data key='stadium'>Craven Cottage</data>
+    <data key='founded'>1879</data>
+    <data key='nickname'>The Cottagers</data>
+  </node>
+  <node id='19'>
+    <data key='labelV'>Team</data>
+    <data key='sname'>CRY</data>
+    <data key='name'>Crystal Palace</data>
+    <data key='type'>Team</data>
+    <data key='stadium'>Selhurst Park</data>
+    <data key='founded'>1905</data>
+    <data key='nickname'>The Eagles</data>
+  </node>
+  <node id='20'>
+    <data key='labelV'>Team</data>
+    <data key='sname'>SUN</data>
+    <data key='name'>Sunderland</data>
+    <data key='type'>Team</data>
+    <data key='stadium'>Stadium of Light</data>
+    <data key='founded'>1879</data>
+    <data key='nickname'>The Black Cats</data>
+  </node>
+  <node id='21'>
+    <data key='labelV'>Team</data>
+    <data key='sname'>MCI</data>
+    <data key='name'>Manchester City</data>
+    <data key='type'>Team</data>
+    <data key='stadium'>Ethiad Stadium</data>
+    <data key='founded'>1880</data>
+    <data key='nickname'>The Citizens</data>
+  </node>
+  <node id='22'>
+    <data key='labelV'>City</data>
+    <data key='name'>London</data>
+    <data key='type'>City</data>
+  </node>
+  <node id='23'>
+    <data key='labelV'>City</data>
+    <data key='name'>Manchester</data>
+    <data key='type'>City</data>
+  </node>
+  <node id='24'>
+    <data key='labelV'>City</data>
+    <data key='name'>Liverpool</data>
+    <data key='type'>City</data>
+  </node>
+  <node id='25'>
+    <data key='labelV'>City</data>
+    <data key='name'>Newcastle</data>
+    <data key='type'>City</data>
+  </node>
+  <node id='26'>
+    <data key='labelV'>City</data>
+    <data key='name'>Southampton</data>
+    <data key='type'>City</data>
+  </node>
+  <node id='27'>
+    <data key='labelV'>City</data>
+    <data key='name'>Birmingham</data>
+    <data key='type'>City</data>
+  </node>
+  <node id='28'>
+    <data key='labelV'>City</data>
+    <data key='name'>Swansea</data>
+    <data key='type'>City</data>
+  </node>
+  <node id='29'>
+    <data key='labelV'>City</data>
+    <data key='name'>Stoke</data>
+    <data key='type'>City</data>
+  </node>
+  <node id='30'>
+    <data key='labelV'>City</data>
+    <data key='name'>Hull</data>
+    <data key='type'>City</data>
+  </node>
+  <node id='31'>
+    <data key='labelV'>City</data>
+    <data key='name'>Norwich</data>
+    <data key='type'>City</data>
+  </node>
+  <node id='32'>
+    <data key='labelV'>City</data>
+    <data key='name'>Cardiff</data>
+    <data key='type'>City</data>
+  </node>
+  <node id='33'>
+    <data key='labelV'>City</data>
+    <data key='name'>Sunderland</data>
+    <data key='type'>City</data>
+  </node>
+
+
+  <edge id='34' source='2' target='1'>
+    <data key='labelE'>member</data>
+    <data key='years'>22</data>
+  </edge>
+  <edge id='35' source='3' target='1'>
+    <data key='labelE'>member</data>
+    <data key='years'>22</data>
+  </edge>
+  <edge id='36' source='4' target='1'>
+    <data key='labelE'>member</data>
+    <data key='years'>22</data>
+  </edge>
+  <edge id='37' source='5' target='1'>
+    <data key='labelE'>member</data>
+    <data key='years'>22</data>
+  </edge>
+  <edge id='38' source='6' target='1'>
+    <data key='labelE'>member</data>
+    <data key='years'>22</data>
+  </edge>
+  <edge id='39' source='7' target='1'>
+    <data key='labelE'>member</data>
+    <data key='years'>22</data>
+  </edge>
+  <edge id='40' source='8' target='1'>
+    <data key='labelE'>member</data>
+    <data key='years'>20</data>
+  </edge>
+  <edge id='41' source='9' target='1'>
+    <data key='labelE'>member</data>
+    <data key='years'>15</data>
+  </edge>
+  <edge id='42' source='10' target='1'>
+    <data key='labelE'>member</data>
+    <data key='years'>22</data>
+  </edge>
+  <edge id='43' source='11' target='1'>
+    <data key='labelE'>member</data>
+    <data key='years'>3</data>
+  </edge>
+  <edge id='44' source='12' target='1'>
+    <data key='labelE'>member</data>
+    <data key='years'>6</data>
+  </edge>
+  <edge id='45' source='13' target='1'>
+    <data key='labelE'>member</data>
+    <data key='years'>3</data>
+  </edge>
+  <edge id='46' source='14' target='1'>
+    <data key='labelE'>member</data>
+    <data key='years'>7</data>
+  </edge>
+  <edge id='47' source='15' target='1'>
+    <data key='labelE'>member</data>
+    <data key='years'>8</data>
+  </edge>
+  <edge id='48' source='16' target='1'>
+    <data key='labelE'>member</data>
+    <data key='years'>1</data>
+  </edge>
+  <edge id='49' source='17' target='1'>
+    <data key='labelE'>member</data>
+    <data key='years'>18</data>
+  </edge>
+  <edge id='50' source='18' target='1'>
+    <data key='labelE'>member</data>
+    <data key='years'>13</data>
+  </edge>
+  <edge id='51' source='19' target='1'>
+    <data key='labelE'>member</data>
+    <data key='years'>5</data>
+  </edge>
+  <edge id='52' source='20' target='1'>
+    <data key='labelE'>member</data>
+    <data key='years'>13</data>
+  </edge>
+  <edge id='53' source='21' target='1'>
+    <data key='labelE'>member</data>
+    <data key='years'>17</data>
+  </edge>
+  <edge id='54' source='2' target='22'>
+    <data key='labelE'>based</data>
+  </edge>
+  <edge id='55' source='4' target='22'>
+    <data key='labelE'>based</data>
+  </edge>
+  <edge id='56' source='7' target='22'>
+    <data key='labelE'>based</data>
+  </edge>
+  <edge id='57' source='17' target='22'>
+    <data key='labelE'>based</data>
+  </edge>
+  <edge id='58' source='18' target='22'>
+    <data key='labelE'>based</data>
+  </edge>
+  <edge id='59' source='19' target='22'>
+    <data key='labelE'>based</data>
+  </edge>
+  <edge id='60' source='5' target='23'>
+    <data key='labelE'>based</data>
+  </edge>
+  <edge id='61' source='21' target='23'>
+    <data key='labelE'>based</data>
+  </edge>
+  <edge id='62' source='3' target='24'>
+    <data key='labelE'>based</data>
+  </edge>
+  <edge id='63' source='6' target='24'>
+    <data key='labelE'>based</data>
+  </edge>
+  <edge id='64' source='8' target='25'>
+    <data key='labelE'>based</data>
+  </edge>
+  <edge id='65' source='9' target='26'>
+    <data key='labelE'>based</data>
+  </edge>
+  <edge id='66' source='10' target='27'>
+    <data key='labelE'>based</data>
+  </edge>
+  <edge id='67' source='15' target='27'>
+    <data key='labelE'>based</data>
+  </edge>
+  <edge id='68' source='11' target='28'>
+    <data key='labelE'>based</data>
+  </edge>
+  <edge id='69' source='12' target='29'>
+    <data key='labelE'>based</data>
+  </edge>
+  <edge id='70' source='13' target='30'>
+    <data key='labelE'>based</data>
+  </edge>
+  <edge id='71' source='14' target='31'>
+    <data key='labelE'>based</data>
+  </edge>
+  <edge id='72' source='16' target='32'>
+    <data key='labelE'>based</data>
+  </edge>
+  <edge id='73' source='20' target='33'>
+    <data key='labelE'>based</data>
+  </edge>
+  <edge id='74' source='2' target='10'>
+    <data key='labelE'>played</data>
+    <data key='date'>17 Aug 2013</data>
+    <data key='result'>1-3</data>
+  </edge>
+  <edge id='75' source='11' target='5'>
+    <data key='labelE'>played</data>
+    <data key='date'>17 Aug 2013</data>
+    <data key='result'>1-4</data>
+  </edge>
+  <edge id='76' source='14' target='6'>
+    <data key='labelE'>played</data>
+    <data key='date'>17 Aug 2013</data>
+    <data key='result'>2-2</data>
+  </edge>
+  <edge id='77' source='20' target='18'>
+    <data key='labelE'>played</data>
+    <data key='date'>17 Aug 2013</data>
+    <data key='result'>0-1</data>
+  </edge>
+  <edge id='78' source='15' target='9'>
+    <data key='labelE'>played</data>
+    <data key='date'>17 Aug 2013</data>
+    <data key='result'>0-1</data>
+  </edge>
+  <edge id='79' source='17' target='16'>
+    <data key='labelE'>played</data>
+    <data key='date'>17 Aug 2013</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='80' source='3' target='12'>
+    <data key='labelE'>played</data>
+    <data key='date'>17 Aug 2013</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='81' source='19' target='7'>
+    <data key='labelE'>played</data>
+    <data key='date'>18 Aug 2013</data>
+    <data key='result'>0-1</data>
+  </edge>
+  <edge id='82' source='4' target='13'>
+    <data key='labelE'>played</data>
+    <data key='date'>18 Aug 2013</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='83' source='21' target='8'>
+    <data key='labelE'>played</data>
+    <data key='date'>19 Aug 2013</data>
+    <data key='result'>4-0</data>
+  </edge>
+  <edge id='84' source='4' target='10'>
+    <data key='labelE'>played</data>
+    <data key='date'>21 Aug 2013</data>
+    <data key='result'>2-1</data>
+  </edge>
+  <edge id='85' source='10' target='3'>
+    <data key='labelE'>played</data>
+    <data key='date'>24 Aug 2013</data>
+    <data key='result'>0-1</data>
+  </edge>
+  <edge id='86' source='18' target='2'>
+    <data key='labelE'>played</data>
+    <data key='date'>24 Aug 2013</data>
+    <data key='result'>1-3</data>
+  </edge>
+  <edge id='87' source='6' target='15'>
+    <data key='labelE'>played</data>
+    <data key='date'>24 Aug 2013</data>
+    <data key='result'>0-0</data>
+  </edge>
+  <edge id='88' source='13' target='14'>
+    <data key='labelE'>played</data>
+    <data key='date'>24 Aug 2013</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='89' source='8' target='17'>
+    <data key='labelE'>played</data>
+    <data key='date'>24 Aug 2013</data>
+    <data key='result'>0-0</data>
+  </edge>
+  <edge id='90' source='9' target='20'>
+    <data key='labelE'>played</data>
+    <data key='date'>24 Aug 2013</data>
+    <data key='result'>1-1</data>
+  </edge>
+  <edge id='91' source='12' target='19'>
+    <data key='labelE'>played</data>
+    <data key='date'>24 Aug 2013</data>
+    <data key='result'>2-1</data>
+  </edge>
+  <edge id='92' source='16' target='21'>
+    <data key='labelE'>played</data>
+    <data key='date'>25 Aug 2013</data>
+    <data key='result'>3-2</data>
+  </edge>
+  <edge id='93' source='7' target='11'>
+    <data key='labelE'>played</data>
+    <data key='date'>25 Aug 2013</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='94' source='5' target='4'>
+    <data key='labelE'>played</data>
+    <data key='date'>26 Aug 2013</data>
+    <data key='result'>0-0</data>
+  </edge>
+  <edge id='95' source='19' target='20'>
+    <data key='labelE'>played</data>
+    <data key='date'>31 Aug 2013</data>
+    <data key='result'>3-1</data>
+  </edge>
+  <edge id='96' source='16' target='6'>
+    <data key='labelE'>played</data>
+    <data key='date'>31 Aug 2013</data>
+    <data key='result'>0-0</data>
+  </edge>
+  <edge id='97' source='8' target='18'>
+    <data key='labelE'>played</data>
+    <data key='date'>31 Aug 2013</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='98' source='14' target='9'>
+    <data key='labelE'>played</data>
+    <data key='date'>31 Aug 2013</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='99' source='17' target='12'>
+    <data key='labelE'>played</data>
+    <data key='date'>31 Aug 2013</data>
+    <data key='result'>0-1</data>
+  </edge>
+  <edge id='100' source='21' target='13'>
+    <data key='labelE'>played</data>
+    <data key='date'>31 Aug 2013</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='101' source='2' target='7'>
+    <data key='labelE'>played</data>
+    <data key='date'>1 Sep 2013</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='102' source='3' target='5'>
+    <data key='labelE'>played</data>
+    <data key='date'>1 Sep 2013</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='103' source='15' target='11'>
+    <data key='labelE'>played</data>
+    <data key='date'>1 Sep 2013</data>
+    <data key='result'>0-2</data>
+  </edge>
+  <edge id='104' source='10' target='8'>
+    <data key='labelE'>played</data>
+    <data key='date'>14 Sep 2013</data>
+    <data key='result'>1-2</data>
+  </edge>
+  <edge id='105' source='20' target='2'>
+    <data key='labelE'>played</data>
+    <data key='date'>14 Sep 2013</data>
+    <data key='result'>1-3</data>
+  </edge>
+  <edge id='106' source='6' target='4'>
+    <data key='labelE'>played</data>
+    <data key='date'>14 Sep 2013</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='107' source='18' target='15'>
+    <data key='labelE'>played</data>
+    <data key='date'>14 Sep 2013</data>
+    <data key='result'>1-1</data>
+  </edge>
+  <edge id='108' source='13' target='16'>
+    <data key='labelE'>played</data>
+    <data key='date'>14 Sep 2013</data>
+    <data key='result'>1-1</data>
+  </edge>
+  <edge id='109' source='12' target='21'>
+    <data key='labelE'>played</data>
+    <data key='date'>14 Sep 2013</data>
+    <data key='result'>0-0</data>
+  </edge>
+  <edge id='110' source='7' target='14'>
+    <data key='labelE'>played</data>
+    <data key='date'>14 Sep 2013</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='111' source='5' target='19'>
+    <data key='labelE'>played</data>
+    <data key='date'>14 Sep 2013</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='112' source='9' target='17'>
+    <data key='labelE'>played</data>
+    <data key='date'>15 Sep 2013</data>
+    <data key='result'>0-0</data>
+  </edge>
+  <edge id='113' source='11' target='3'>
+    <data key='labelE'>played</data>
+    <data key='date'>16 Sep 2013</data>
+    <data key='result'>2-2</data>
+  </edge>
+  <edge id='114' source='14' target='10'>
+    <data key='labelE'>played</data>
+    <data key='date'>21 Sep 2013</data>
+    <data key='result'>0-1</data>
+  </edge>
+  <edge id='115' source='4' target='18'>
+    <data key='labelE'>played</data>
+    <data key='date'>21 Sep 2013</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='116' source='3' target='9'>
+    <data key='labelE'>played</data>
+    <data key='date'>21 Sep 2013</data>
+    <data key='result'>0-1</data>
+  </edge>
+  <edge id='117' source='8' target='13'>
+    <data key='labelE'>played</data>
+    <data key='date'>21 Sep 2013</data>
+    <data key='result'>2-3</data>
+  </edge>
+  <edge id='118' source='15' target='20'>
+    <data key='labelE'>played</data>
+    <data key='date'>21 Sep 2013</data>
+    <data key='result'>3-0</data>
+  </edge>
+  <edge id='119' source='17' target='6'>
+    <data key='labelE'>played</data>
+    <data key='date'>21 Sep 2013</data>
+    <data key='result'>2-3</data>
+  </edge>
+  <edge id='120' source='2' target='12'>
+    <data key='labelE'>played</data>
+    <data key='date'>22 Sep 2013</data>
+    <data key='result'>3-1</data>
+  </edge>
+  <edge id='121' source='16' target='7'>
+    <data key='labelE'>played</data>
+    <data key='date'>22 Sep 2013</data>
+    <data key='result'>0-1</data>
+  </edge>
+  <edge id='122' source='21' target='5'>
+    <data key='labelE'>played</data>
+    <data key='date'>22 Sep 2013</data>
+    <data key='result'>4-1</data>
+  </edge>
+  <edge id='123' source='19' target='11'>
+    <data key='labelE'>played</data>
+    <data key='date'>22 Sep 2013</data>
+    <data key='result'>0-2</data>
+  </edge>
+  <edge id='124' source='10' target='21'>
+    <data key='labelE'>played</data>
+    <data key='date'>28 Sep 2013</data>
+    <data key='result'>3-2</data>
+  </edge>
+  <edge id='125' source='11' target='2'>
+    <data key='labelE'>played</data>
+    <data key='date'>28 Sep 2013</data>
+    <data key='result'>1-2</data>
+  </edge>
+  <edge id='126' source='18' target='16'>
+    <data key='labelE'>played</data>
+    <data key='date'>28 Sep 2013</data>
+    <data key='result'>1-2</data>
+  </edge>
+  <edge id='127' source='13' target='17'>
+    <data key='labelE'>played</data>
+    <data key='date'>28 Sep 2013</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='128' source='5' target='15'>
+    <data key='labelE'>played</data>
+    <data key='date'>28 Sep 2013</data>
+    <data key='result'>1-2</data>
+  </edge>
+  <edge id='129' source='9' target='19'>
+    <data key='labelE'>played</data>
+    <data key='date'>28 Sep 2013</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='130' source='7' target='4'>
+    <data key='labelE'>played</data>
+    <data key='date'>28 Sep 2013</data>
+    <data key='result'>1-1</data>
+  </edge>
+  <edge id='131' source='12' target='14'>
+    <data key='labelE'>played</data>
+    <data key='date'>29 Sep 2013</data>
+    <data key='result'>0-1</data>
+  </edge>
+  <edge id='132' source='20' target='3'>
+    <data key='labelE'>played</data>
+    <data key='date'>29 Sep 2013</data>
+    <data key='result'>1-3</data>
+  </edge>
+  <edge id='133' source='6' target='8'>
+    <data key='labelE'>played</data>
+    <data key='date'>30 Sep 2013</data>
+    <data key='result'>3-2</data>
+  </edge>
+  <edge id='134' source='13' target='10'>
+    <data key='labelE'>played</data>
+    <data key='date'>5 Oct 2013</data>
+    <data key='result'>0-0</data>
+  </edge>
+  <edge id='135' source='20' target='5'>
+    <data key='labelE'>played</data>
+    <data key='date'>5 Oct 2013</data>
+    <data key='result'>1-2</data>
+  </edge>
+  <edge id='136' source='16' target='8'>
+    <data key='labelE'>played</data>
+    <data key='date'>5 Oct 2013</data>
+    <data key='result'>1-2</data>
+  </edge>
+  <edge id='137' source='18' target='12'>
+    <data key='labelE'>played</data>
+    <data key='date'>5 Oct 2013</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='138' source='3' target='19'>
+    <data key='labelE'>played</data>
+    <data key='date'>5 Oct 2013</data>
+    <data key='result'>3-1</data>
+  </edge>
+  <edge id='139' source='21' target='6'>
+    <data key='labelE'>played</data>
+    <data key='date'>5 Oct 2013</data>
+    <data key='result'>3-1</data>
+  </edge>
+  <edge id='140' source='15' target='2'>
+    <data key='labelE'>played</data>
+    <data key='date'>6 Oct 2013</data>
+    <data key='result'>1-1</data>
+  </edge>
+  <edge id='141' source='7' target='17'>
+    <data key='labelE'>played</data>
+    <data key='date'>6 Oct 2013</data>
+    <data key='result'>0-3</data>
+  </edge>
+  <edge id='142' source='14' target='4'>
+    <data key='labelE'>played</data>
+    <data key='date'>6 Oct 2013</data>
+    <data key='result'>1-3</data>
+  </edge>
+  <edge id='143' source='9' target='11'>
+    <data key='labelE'>played</data>
+    <data key='date'>6 Oct 2013</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='144' source='2' target='14'>
+    <data key='labelE'>played</data>
+    <data key='date'>19 Oct 2013</data>
+    <data key='result'>4-1</data>
+  </edge>
+  <edge id='145' source='17' target='21'>
+    <data key='labelE'>played</data>
+    <data key='date'>19 Oct 2013</data>
+    <data key='result'>1-3</data>
+  </edge>
+  <edge id='146' source='4' target='16'>
+    <data key='labelE'>played</data>
+    <data key='date'>19 Oct 2013</data>
+    <data key='result'>4-1</data>
+  </edge>
+  <edge id='147' source='6' target='13'>
+    <data key='labelE'>played</data>
+    <data key='date'>19 Oct 2013</data>
+    <data key='result'>2-1</data>
+  </edge>
+  <edge id='148' source='5' target='9'>
+    <data key='labelE'>played</data>
+    <data key='date'>19 Oct 2013</data>
+    <data key='result'>1-1</data>
+  </edge>
+  <edge id='149' source='12' target='15'>
+    <data key='labelE'>played</data>
+    <data key='date'>19 Oct 2013</data>
+    <data key='result'>0-0</data>
+  </edge>
+  <edge id='150' source='11' target='20'>
+    <data key='labelE'>played</data>
+    <data key='date'>19 Oct 2013</data>
+    <data key='result'>0-4</data>
+  </edge>
+  <edge id='151' source='8' target='3'>
+    <data key='labelE'>played</data>
+    <data key='date'>19 Oct 2013</data>
+    <data key='result'>2-2</data>
+  </edge>
+  <edge id='152' source='10' target='7'>
+    <data key='labelE'>played</data>
+    <data key='date'>20 Oct 2013</data>
+    <data key='result'>0-2</data>
+  </edge>
+  <edge id='153' source='19' target='18'>
+    <data key='labelE'>played</data>
+    <data key='date'>21 Oct 2013</data>
+    <data key='result'>1-4</data>
+  </edge>
+  <edge id='154' source='10' target='6'>
+    <data key='labelE'>played</data>
+    <data key='date'>26 Oct 2013</data>
+    <data key='result'>0-2</data>
+  </edge>
+  <edge id='155' source='19' target='2'>
+    <data key='labelE'>played</data>
+    <data key='date'>26 Oct 2013</data>
+    <data key='result'>0-2</data>
+  </edge>
+  <edge id='156' source='9' target='18'>
+    <data key='labelE'>played</data>
+    <data key='date'>26 Oct 2013</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='157' source='3' target='15'>
+    <data key='labelE'>played</data>
+    <data key='date'>26 Oct 2013</data>
+    <data key='result'>4-1</data>
+  </edge>
+  <edge id='158' source='5' target='12'>
+    <data key='labelE'>played</data>
+    <data key='date'>26 Oct 2013</data>
+    <data key='result'>3-2</data>
+  </edge>
+  <edge id='159' source='14' target='16'>
+    <data key='labelE'>played</data>
+    <data key='date'>26 Oct 2013</data>
+    <data key='result'>0-0</data>
+  </edge>
+  <edge id='160' source='4' target='21'>
+    <data key='labelE'>played</data>
+    <data key='date'>27 Oct 2013</data>
+    <data key='result'>2-1</data>
+  </edge>
+  <edge id='161' source='11' target='17'>
+    <data key='labelE'>played</data>
+    <data key='date'>27 Oct 2013</data>
+    <data key='result'>0-0</data>
+  </edge>
+  <edge id='162' source='7' target='13'>
+    <data key='labelE'>played</data>
+    <data key='date'>27 Oct 2013</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='163' source='20' target='8'>
+    <data key='labelE'>played</data>
+    <data key='date'>27 Oct 2013</data>
+    <data key='result'>2-1</data>
+  </edge>
+  <edge id='164' source='17' target='10'>
+    <data key='labelE'>played</data>
+    <data key='date'>2 Nov 2013</data>
+    <data key='result'>0-0</data>
+  </edge>
+  <edge id='165' source='2' target='3'>
+    <data key='labelE'>played</data>
+    <data key='date'>2 Nov 2013</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='166' source='18' target='5'>
+    <data key='labelE'>played</data>
+    <data key='date'>2 Nov 2013</data>
+    <data key='result'>1-3</data>
+  </edge>
+  <edge id='167' source='13' target='20'>
+    <data key='labelE'>played</data>
+    <data key='date'>2 Nov 2013</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='168' source='21' target='14'>
+    <data key='labelE'>played</data>
+    <data key='date'>2 Nov 2013</data>
+    <data key='result'>7-0</data>
+  </edge>
+  <edge id='169' source='12' target='9'>
+    <data key='labelE'>played</data>
+    <data key='date'>2 Nov 2013</data>
+    <data key='result'>1-1</data>
+  </edge>
+  <edge id='170' source='15' target='19'>
+    <data key='labelE'>played</data>
+    <data key='date'>2 Nov 2013</data>
+    <data key='result'>0-2</data>
+  </edge>
+  <edge id='171' source='8' target='4'>
+    <data key='labelE'>played</data>
+    <data key='date'>2 Nov 2013</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='172' source='16' target='11'>
+    <data key='labelE'>played</data>
+    <data key='date'>3 Nov 2013</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='173' source='6' target='7'>
+    <data key='labelE'>played</data>
+    <data key='date'>3 Nov 2013</data>
+    <data key='result'>0-0</data>
+  </edge>
+  <edge id='174' source='10' target='16'>
+    <data key='labelE'>played</data>
+    <data key='date'>9 Nov 2013</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='175' source='14' target='17'>
+    <data key='labelE'>played</data>
+    <data key='date'>9 Nov 2013</data>
+    <data key='result'>3-1</data>
+  </edge>
+  <edge id='176' source='4' target='15'>
+    <data key='labelE'>played</data>
+    <data key='date'>9 Nov 2013</data>
+    <data key='result'>2-2</data>
+  </edge>
+  <edge id='177' source='19' target='6'>
+    <data key='labelE'>played</data>
+    <data key='date'>9 Nov 2013</data>
+    <data key='result'>0-0</data>
+  </edge>
+  <edge id='178' source='3' target='18'>
+    <data key='labelE'>played</data>
+    <data key='date'>9 Nov 2013</data>
+    <data key='result'>4-0</data>
+  </edge>
+  <edge id='179' source='9' target='13'>
+    <data key='labelE'>played</data>
+    <data key='date'>9 Nov 2013</data>
+    <data key='result'>4-1</data>
+  </edge>
+  <edge id='180' source='5' target='2'>
+    <data key='labelE'>played</data>
+    <data key='date'>10 Nov 2013</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='181' source='11' target='12'>
+    <data key='labelE'>played</data>
+    <data key='date'>10 Nov 2013</data>
+    <data key='result'>3-3</data>
+  </edge>
+  <edge id='182' source='20' target='21'>
+    <data key='labelE'>played</data>
+    <data key='date'>10 Nov 2013</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='183' source='7' target='8'>
+    <data key='labelE'>played</data>
+    <data key='date'>10 Nov 2013</data>
+    <data key='result'>0-1</data>
+  </edge>
+  <edge id='184' source='2' target='9'>
+    <data key='labelE'>played</data>
+    <data key='date'>23 Nov 2013</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='185' source='17' target='4'>
+    <data key='labelE'>played</data>
+    <data key='date'>23 Nov 2013</data>
+    <data key='result'>0-3</data>
+  </edge>
+  <edge id='186' source='18' target='11'>
+    <data key='labelE'>played</data>
+    <data key='date'>23 Nov 2013</data>
+    <data key='result'>1-2</data>
+  </edge>
+  <edge id='187' source='13' target='19'>
+    <data key='labelE'>played</data>
+    <data key='date'>23 Nov 2013</data>
+    <data key='result'>0-1</data>
+  </edge>
+  <edge id='188' source='8' target='14'>
+    <data key='labelE'>played</data>
+    <data key='date'>23 Nov 2013</data>
+    <data key='result'>2-1</data>
+  </edge>
+  <edge id='189' source='12' target='20'>
+    <data key='labelE'>played</data>
+    <data key='date'>23 Nov 2013</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='190' source='6' target='3'>
+    <data key='labelE'>played</data>
+    <data key='date'>23 Nov 2013</data>
+    <data key='result'>3-3</data>
+  </edge>
+  <edge id='191' source='16' target='5'>
+    <data key='labelE'>played</data>
+    <data key='date'>24 Nov 2013</data>
+    <data key='result'>2-2</data>
+  </edge>
+  <edge id='192' source='21' target='7'>
+    <data key='labelE'>played</data>
+    <data key='date'>24 Nov 2013</data>
+    <data key='result'>6-0</data>
+  </edge>
+  <edge id='193' source='15' target='10'>
+    <data key='labelE'>played</data>
+    <data key='date'>25 Nov 2013</data>
+    <data key='result'>2-2</data>
+  </edge>
+  <edge id='194' source='16' target='2'>
+    <data key='labelE'>played</data>
+    <data key='date'>30 Nov 2013</data>
+    <data key='result'>0-3</data>
+  </edge>
+  <edge id='195' source='10' target='20'>
+    <data key='labelE'>played</data>
+    <data key='date'>30 Nov 2013</data>
+    <data key='result'>0-0</data>
+  </edge>
+  <edge id='196' source='8' target='15'>
+    <data key='labelE'>played</data>
+    <data key='date'>30 Nov 2013</data>
+    <data key='result'>2-1</data>
+  </edge>
+  <edge id='197' source='6' target='12'>
+    <data key='labelE'>played</data>
+    <data key='date'>30 Nov 2013</data>
+    <data key='result'>4-0</data>
+  </edge>
+  <edge id='198' source='14' target='19'>
+    <data key='labelE'>played</data>
+    <data key='date'>30 Nov 2013</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='199' source='17' target='18'>
+    <data key='labelE'>played</data>
+    <data key='date'>30 Nov 2013</data>
+    <data key='result'>3-0</data>
+  </edge>
+  <edge id='200' source='4' target='9'>
+    <data key='labelE'>played</data>
+    <data key='date'>1 Dec 2013</data>
+    <data key='result'>3-1</data>
+  </edge>
+  <edge id='201' source='21' target='11'>
+    <data key='labelE'>played</data>
+    <data key='date'>1 Dec 2013</data>
+    <data key='result'>3-0</data>
+  </edge>
+  <edge id='202' source='13' target='3'>
+    <data key='labelE'>played</data>
+    <data key='date'>1 Dec 2013</data>
+    <data key='result'>3-1</data>
+  </edge>
+  <edge id='203' source='7' target='5'>
+    <data key='labelE'>played</data>
+    <data key='date'>1 Dec 2013</data>
+    <data key='result'>2-2</data>
+  </edge>
+  <edge id='204' source='19' target='17'>
+    <data key='labelE'>played</data>
+    <data key='date'>3 Dec 2013</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='205' source='20' target='4'>
+    <data key='labelE'>played</data>
+    <data key='date'>4 Dec 2013</data>
+    <data key='result'>3-4</data>
+  </edge>
+  <edge id='206' source='9' target='10'>
+    <data key='labelE'>played</data>
+    <data key='date'>4 Dec 2013</data>
+    <data key='result'>2-3</data>
+  </edge>
+  <edge id='207' source='2' target='13'>
+    <data key='labelE'>played</data>
+    <data key='date'>4 Dec 2013</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='208' source='18' target='7'>
+    <data key='labelE'>played</data>
+    <data key='date'>4 Dec 2013</data>
+    <data key='result'>1-2</data>
+  </edge>
+  <edge id='209' source='15' target='21'>
+    <data key='labelE'>played</data>
+    <data key='date'>4 Dec 2013</data>
+    <data key='result'>2-3</data>
+  </edge>
+  <edge id='210' source='3' target='14'>
+    <data key='labelE'>played</data>
+    <data key='date'>4 Dec 2013</data>
+    <data key='result'>5-1</data>
+  </edge>
+  <edge id='211' source='5' target='6'>
+    <data key='labelE'>played</data>
+    <data key='date'>4 Dec 2013</data>
+    <data key='result'>0-1</data>
+  </edge>
+  <edge id='212' source='12' target='16'>
+    <data key='labelE'>played</data>
+    <data key='date'>4 Dec 2013</data>
+    <data key='result'>0-0</data>
+  </edge>
+  <edge id='213' source='11' target='8'>
+    <data key='labelE'>played</data>
+    <data key='date'>4 Dec 2013</data>
+    <data key='result'>3-0</data>
+  </edge>
+  <edge id='214' source='12' target='4'>
+    <data key='labelE'>played</data>
+    <data key='date'>7 Dec 2013</data>
+    <data key='result'>3-2</data>
+  </edge>
+  <edge id='215' source='20' target='7'>
+    <data key='labelE'>played</data>
+    <data key='date'>7 Dec 2013</data>
+    <data key='result'>1-2</data>
+  </edge>
+  <edge id='216' source='5' target='8'>
+    <data key='labelE'>played</data>
+    <data key='date'>7 Dec 2013</data>
+    <data key='result'>0-1</data>
+  </edge>
+  <edge id='217' source='9' target='21'>
+    <data key='labelE'>played</data>
+    <data key='date'>7 Dec 2013</data>
+    <data key='result'>1-1</data>
+  </edge>
+  <edge id='218' source='15' target='14'>
+    <data key='labelE'>played</data>
+    <data key='date'>7 Dec 2013</data>
+    <data key='result'>0-2</data>
+  </edge>
+  <edge id='219' source='19' target='16'>
+    <data key='labelE'>played</data>
+    <data key='date'>7 Dec 2013</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='220' source='3' target='17'>
+    <data key='labelE'>played</data>
+    <data key='date'>7 Dec 2013</data>
+    <data key='result'>4-1</data>
+  </edge>
+  <edge id='221' source='2' target='6'>
+    <data key='labelE'>played</data>
+    <data key='date'>8 Dec 2013</data>
+    <data key='result'>1-1</data>
+  </edge>
+  <edge id='222' source='18' target='10'>
+    <data key='labelE'>played</data>
+    <data key='date'>8 Dec 2013</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='223' source='11' target='13'>
+    <data key='labelE'>played</data>
+    <data key='date'>9 Dec 2013</data>
+    <data key='result'>1-1</data>
+  </edge>
+  <edge id='224' source='21' target='2'>
+    <data key='labelE'>played</data>
+    <data key='date'>14 Dec 2013</data>
+    <data key='result'>6-3</data>
+  </edge>
+  <edge id='225' source='16' target='15'>
+    <data key='labelE'>played</data>
+    <data key='date'>14 Dec 2013</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='226' source='4' target='19'>
+    <data key='labelE'>played</data>
+    <data key='date'>14 Dec 2013</data>
+    <data key='result'>2-1</data>
+  </edge>
+  <edge id='227' source='8' target='9'>
+    <data key='labelE'>played</data>
+    <data key='date'>14 Dec 2013</data>
+    <data key='result'>1-1</data>
+  </edge>
+  <edge id='228' source='17' target='20'>
+    <data key='labelE'>played</data>
+    <data key='date'>14 Dec 2013</data>
+    <data key='result'>0-0</data>
+  </edge>
+  <edge id='229' source='13' target='12'>
+    <data key='labelE'>played</data>
+    <data key='date'>14 Dec 2013</data>
+    <data key='result'>0-0</data>
+  </edge>
+  <edge id='230' source='6' target='18'>
+    <data key='labelE'>played</data>
+    <data key='date'>14 Dec 2013</data>
+    <data key='result'>4-1</data>
+  </edge>
+  <edge id='231' source='10' target='5'>
+    <data key='labelE'>played</data>
+    <data key='date'>15 Dec 2013</data>
+    <data key='result'>0-3</data>
+  </edge>
+  <edge id='232' source='14' target='11'>
+    <data key='labelE'>played</data>
+    <data key='date'>15 Dec 2013</data>
+    <data key='result'>1-1</data>
+  </edge>
+  <edge id='233' source='7' target='3'>
+    <data key='labelE'>played</data>
+    <data key='date'>15 Dec 2013</data>
+    <data key='result'>0-5</data>
+  </edge>
+  <edge id='234' source='3' target='16'>
+    <data key='labelE'>played</data>
+    <data key='date'>21 Dec 2013</data>
+    <data key='result'>3-1</data>
+  </edge>
+  <edge id='235' source='19' target='8'>
+    <data key='labelE'>played</data>
+    <data key='date'>21 Dec 2013</data>
+    <data key='result'>0-3</data>
+  </edge>
+  <edge id='236' source='18' target='21'>
+    <data key='labelE'>played</data>
+    <data key='date'>21 Dec 2013</data>
+    <data key='result'>2-4</data>
+  </edge>
+  <edge id='237' source='5' target='17'>
+    <data key='labelE'>played</data>
+    <data key='date'>21 Dec 2013</data>
+    <data key='result'>3-1</data>
+  </edge>
+  <edge id='238' source='12' target='10'>
+    <data key='labelE'>played</data>
+    <data key='date'>21 Dec 2013</data>
+    <data key='result'>2-1</data>
+  </edge>
+  <edge id='239' source='20' target='14'>
+    <data key='labelE'>played</data>
+    <data key='date'>21 Dec 2013</data>
+    <data key='result'>0-0</data>
+  </edge>
+  <edge id='240' source='15' target='13'>
+    <data key='labelE'>played</data>
+    <data key='date'>21 Dec 2013</data>
+    <data key='result'>1-1</data>
+  </edge>
+  <edge id='241' source='9' target='7'>
+    <data key='labelE'>played</data>
+    <data key='date'>22 Dec 2013</data>
+    <data key='result'>2-3</data>
+  </edge>
+  <edge id='242' source='11' target='6'>
+    <data key='labelE'>played</data>
+    <data key='date'>22 Dec 2013</data>
+    <data key='result'>1-2</data>
+  </edge>
+  <edge id='243' source='2' target='4'>
+    <data key='labelE'>played</data>
+    <data key='date'>23 Dec 2013</data>
+    <data key='result'>0-0</data>
+  </edge>
+  <edge id='244' source='13' target='5'>
+    <data key='labelE'>played</data>
+    <data key='date'>26 Dec 2013</data>
+    <data key='result'>2-3</data>
+  </edge>
+  <edge id='245' source='17' target='2'>
+    <data key='labelE'>played</data>
+    <data key='date'>26 Dec 2013</data>
+    <data key='result'>1-3</data>
+  </edge>
+  <edge id='246' source='10' target='19'>
+    <data key='labelE'>played</data>
+    <data key='date'>26 Dec 2013</data>
+    <data key='result'>0-1</data>
+  </edge>
+  <edge id='247' source='16' target='9'>
+    <data key='labelE'>played</data>
+    <data key='date'>26 Dec 2013</data>
+    <data key='result'>0-3</data>
+  </edge>
+  <edge id='248' source='4' target='11'>
+    <data key='labelE'>played</data>
+    <data key='date'>26 Dec 2013</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='249' source='6' target='20'>
+    <data key='labelE'>played</data>
+    <data key='date'>26 Dec 2013</data>
+    <data key='result'>0-1</data>
+  </edge>
+  <edge id='250' source='8' target='12'>
+    <data key='labelE'>played</data>
+    <data key='date'>26 Dec 2013</data>
+    <data key='result'>5-1</data>
+  </edge>
+  <edge id='251' source='14' target='18'>
+    <data key='labelE'>played</data>
+    <data key='date'>26 Dec 2013</data>
+    <data key='result'>1-2</data>
+  </edge>
+  <edge id='252' source='7' target='15'>
+    <data key='labelE'>played</data>
+    <data key='date'>26 Dec 2013</data>
+    <data key='result'>1-1</data>
+  </edge>
+  <edge id='253' source='21' target='3'>
+    <data key='labelE'>played</data>
+    <data key='date'>26 Dec 2013</data>
+    <data key='result'>2-1</data>
+  </edge>
+  <edge id='254' source='17' target='15'>
+    <data key='labelE'>played</data>
+    <data key='date'>28 Dec 2013</data>
+    <data key='result'>3-3</data>
+  </edge>
+  <edge id='255' source='21' target='19'>
+    <data key='labelE'>played</data>
+    <data key='date'>28 Dec 2013</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='256' source='10' target='11'>
+    <data key='labelE'>played</data>
+    <data key='date'>28 Dec 2013</data>
+    <data key='result'>1-1</data>
+  </edge>
+  <edge id='257' source='14' target='5'>
+    <data key='labelE'>played</data>
+    <data key='date'>28 Dec 2013</data>
+    <data key='result'>0-1</data>
+  </edge>
+  <edge id='258' source='16' target='20'>
+    <data key='labelE'>played</data>
+    <data key='date'>28 Dec 2013</data>
+    <data key='result'>2-2</data>
+  </edge>
+  <edge id='259' source='13' target='18'>
+    <data key='labelE'>played</data>
+    <data key='date'>28 Dec 2013</data>
+    <data key='result'>6-0</data>
+  </edge>
+  <edge id='260' source='8' target='2'>
+    <data key='labelE'>played</data>
+    <data key='date'>29 Dec 2013</data>
+    <data key='result'>0-1</data>
+  </edge>
+  <edge id='261' source='6' target='9'>
+    <data key='labelE'>played</data>
+    <data key='date'>29 Dec 2013</data>
+    <data key='result'>2-1</data>
+  </edge>
+  <edge id='262' source='4' target='3'>
+    <data key='labelE'>played</data>
+    <data key='date'>29 Dec 2013</data>
+    <data key='result'>2-1</data>
+  </edge>
+  <edge id='263' source='7' target='12'>
+    <data key='labelE'>played</data>
+    <data key='date'>29 Dec 2013</data>
+    <data key='result'>3-0</data>
+  </edge>
+  <edge id='264' source='2' target='16'>
+    <data key='labelE'>played</data>
+    <data key='date'>1 Jan 2014</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='265' source='19' target='14'>
+    <data key='labelE'>played</data>
+    <data key='date'>1 Jan 2014</data>
+    <data key='result'>1-1</data>
+  </edge>
+  <edge id='266' source='18' target='17'>
+    <data key='labelE'>played</data>
+    <data key='date'>1 Jan 2014</data>
+    <data key='result'>2-1</data>
+  </edge>
+  <edge id='267' source='3' target='13'>
+    <data key='labelE'>played</data>
+    <data key='date'>1 Jan 2014</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='268' source='9' target='4'>
+    <data key='labelE'>played</data>
+    <data key='date'>1 Jan 2014</data>
+    <data key='result'>0-3</data>
+  </edge>
+  <edge id='269' source='12' target='6'>
+    <data key='labelE'>played</data>
+    <data key='date'>1 Jan 2014</data>
+    <data key='result'>1-1</data>
+  </edge>
+  <edge id='270' source='20' target='10'>
+    <data key='labelE'>played</data>
+    <data key='date'>1 Jan 2014</data>
+    <data key='result'>0-1</data>
+  </edge>
+  <edge id='271' source='15' target='8'>
+    <data key='labelE'>played</data>
+    <data key='date'>1 Jan 2014</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='272' source='11' target='21'>
+    <data key='labelE'>played</data>
+    <data key='date'>1 Jan 2014</data>
+    <data key='result'>2-3</data>
+  </edge>
+  <edge id='273' source='5' target='7'>
+    <data key='labelE'>played</data>
+    <data key='date'>1 Jan 2014</data>
+    <data key='result'>1-2</data>
+  </edge>
+  <edge id='274' source='13' target='4'>
+    <data key='labelE'>played</data>
+    <data key='date'>11 Jan 2014</data>
+    <data key='result'>0-2</data>
+  </edge>
+  <edge id='275' source='16' target='17'>
+    <data key='labelE'>played</data>
+    <data key='date'>11 Jan 2014</data>
+    <data key='result'>0-2</data>
+  </edge>
+  <edge id='276' source='6' target='14'>
+    <data key='labelE'>played</data>
+    <data key='date'>11 Jan 2014</data>
+    <data key='result'>2-x</data>
+  </edge>
+  <edge id='277' source='18' target='20'>
+    <data key='labelE'>played</data>
+    <data key='date'>11 Jan 2014</data>
+    <data key='result'>1-4</data>
+  </edge>
+  <edge id='278' source='9' target='15'>
+    <data key='labelE'>played</data>
+    <data key='date'>11 Jan 2014</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='279' source='7' target='19'>
+    <data key='labelE'>played</data>
+    <data key='date'>11 Jan 2014</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='280' source='5' target='11'>
+    <data key='labelE'>played</data>
+    <data key='date'>11 Jan 2014</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='281' source='8' target='21'>
+    <data key='labelE'>played</data>
+    <data key='date'>12 Jan 2014</data>
+    <data key='result'>0-2</data>
+  </edge>
+  <edge id='282' source='12' target='3'>
+    <data key='labelE'>played</data>
+    <data key='date'>12 Jan 2014</data>
+    <data key='result'>3-5</data>
+  </edge>
+  <edge id='283' source='10' target='2'>
+    <data key='labelE'>played</data>
+    <data key='date'>13 Jan 2014</data>
+    <data key='result'>1-2</data>
+  </edge>
+  <edge id='284' source='20' target='9'>
+    <data key='labelE'>played</data>
+    <data key='date'>18 Jan 2014</data>
+    <data key='result'>2-2</data>
+  </edge>
+  <edge id='285' source='19' target='12'>
+    <data key='labelE'>played</data>
+    <data key='date'>18 Jan 2014</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='286' source='21' target='16'>
+    <data key='labelE'>played</data>
+    <data key='date'>18 Jan 2014</data>
+    <data key='result'>4-2</data>
+  </edge>
+  <edge id='287' source='2' target='18'>
+    <data key='labelE'>played</data>
+    <data key='date'>18 Jan 2014</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='288' source='14' target='13'>
+    <data key='labelE'>played</data>
+    <data key='date'>18 Jan 2014</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='289' source='17' target='8'>
+    <data key='labelE'>played</data>
+    <data key='date'>18 Jan 2014</data>
+    <data key='result'>1-2</data>
+  </edge>
+  <edge id='290' source='3' target='10'>
+    <data key='labelE'>played</data>
+    <data key='date'>18 Jan 2014</data>
+    <data key='result'>2-2</data>
+  </edge>
+  <edge id='291' source='11' target='7'>
+    <data key='labelE'>played</data>
+    <data key='date'>19 Jan 2014</data>
+    <data key='result'>1-3</data>
+  </edge>
+  <edge id='292' source='4' target='5'>
+    <data key='labelE'>played</data>
+    <data key='date'>19 Jan 2014</data>
+    <data key='result'>3-1</data>
+  </edge>
+  <edge id='293' source='15' target='6'>
+    <data key='labelE'>played</data>
+    <data key='date'>20 Jan 2014</data>
+    <data key='result'>1-1</data>
+  </edge>
+  <edge id='294' source='9' target='2'>
+    <data key='labelE'>played</data>
+    <data key='date'>28 Jan 2014</data>
+    <data key='result'>2-2</data>
+  </edge>
+  <edge id='295' source='5' target='16'>
+    <data key='labelE'>played</data>
+    <data key='date'>28 Jan 2014</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='296' source='3' target='6'>
+    <data key='labelE'>played</data>
+    <data key='date'>28 Jan 2014</data>
+    <data key='result'>4-0</data>
+  </edge>
+  <edge id='297' source='11' target='18'>
+    <data key='labelE'>played</data>
+    <data key='date'>28 Jan 2014</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='298' source='14' target='8'>
+    <data key='labelE'>played</data>
+    <data key='date'>28 Jan 2014</data>
+    <data key='result'>0-0</data>
+  </edge>
+  <edge id='299' source='19' target='13'>
+    <data key='labelE'>played</data>
+    <data key='date'>28 Jan 2014</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='300' source='7' target='21'>
+    <data key='labelE'>played</data>
+    <data key='date'>29 Jan 2014</data>
+    <data key='result'>1-5</data>
+  </edge>
+  <edge id='301' source='4' target='17'>
+    <data key='labelE'>played</data>
+    <data key='date'>29 Jan 2014</data>
+    <data key='result'>0-0</data>
+  </edge>
+  <edge id='302' source='20' target='12'>
+    <data key='labelE'>played</data>
+    <data key='date'>29 Jan 2014</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='303' source='10' target='15'>
+    <data key='labelE'>played</data>
+    <data key='date'>29 Jan 2014</data>
+    <data key='result'>4-3</data>
+  </edge>
+  <edge id='304' source='12' target='5'>
+    <data key='labelE'>played</data>
+    <data key='date'>1 Feb 2014</data>
+    <data key='result'>2-1</data>
+  </edge>
+  <edge id='305' source='13' target='7'>
+    <data key='labelE'>played</data>
+    <data key='date'>1 Feb 2014</data>
+    <data key='result'>1-1</data>
+  </edge>
+  <edge id='306' source='8' target='20'>
+    <data key='labelE'>played</data>
+    <data key='date'>1 Feb 2014</data>
+    <data key='result'>0-3</data>
+  </edge>
+  <edge id='307' source='17' target='11'>
+    <data key='labelE'>played</data>
+    <data key='date'>1 Feb 2014</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='308' source='6' target='10'>
+    <data key='labelE'>played</data>
+    <data key='date'>1 Feb 2014</data>
+    <data key='result'>2-1</data>
+  </edge>
+  <edge id='309' source='16' target='14'>
+    <data key='labelE'>played</data>
+    <data key='date'>1 Feb 2014</data>
+    <data key='result'>2-1</data>
+  </edge>
+  <edge id='310' source='18' target='9'>
+    <data key='labelE'>played</data>
+    <data key='date'>1 Feb 2014</data>
+    <data key='result'>0-3</data>
+  </edge>
+  <edge id='311' source='15' target='3'>
+    <data key='labelE'>played</data>
+    <data key='date'>2 Feb 2014</data>
+    <data key='result'>1-1</data>
+  </edge>
+  <edge id='312' source='2' target='19'>
+    <data key='labelE'>played</data>
+    <data key='date'>2 Feb 2014</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='313' source='21' target='4'>
+    <data key='labelE'>played</data>
+    <data key='date'>3 Feb 2014</data>
+    <data key='result'>0-1</data>
+  </edge>
+  <edge id='314' source='3' target='2'>
+    <data key='labelE'>played</data>
+    <data key='date'>8 Feb 2014</data>
+    <data key='result'>5-1</data>
+  </edge>
+  <edge id='315' source='10' target='17'>
+    <data key='labelE'>played</data>
+    <data key='date'>8 Feb 2014</data>
+    <data key='result'>0-2</data>
+  </edge>
+  <edge id='316' source='4' target='8'>
+    <data key='labelE'>played</data>
+    <data key='date'>8 Feb 2014</data>
+    <data key='result'>3-0</data>
+  </edge>
+  <edge id='317' source='19' target='15'>
+    <data key='labelE'>played</data>
+    <data key='date'>8 Feb 2014</data>
+    <data key='result'>3-1</data>
+  </edge>
+  <edge id='318' source='14' target='21'>
+    <data key='labelE'>played</data>
+    <data key='date'>8 Feb 2014</data>
+    <data key='result'>0-1</data>
+  </edge>
+  <edge id='319' source='9' target='12'>
+    <data key='labelE'>played</data>
+    <data key='date'>8 Feb 2014</data>
+    <data key='result'>2-2</data>
+  </edge>
+  <edge id='320' source='20' target='13'>
+    <data key='labelE'>played</data>
+    <data key='date'>8 Feb 2014</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='321' source='11' target='16'>
+    <data key='labelE'>played</data>
+    <data key='date'>8 Feb 2014</data>
+    <data key='result'>3-0</data>
+  </edge>
+  <edge id='322' source='7' target='6'>
+    <data key='labelE'>played</data>
+    <data key='date'>9 Feb 2014</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='323' source='5' target='18'>
+    <data key='labelE'>played</data>
+    <data key='date'>9 Feb 2014</data>
+    <data key='result'>2-2</data>
+  </edge>
+  <edge id='324' source='16' target='10'>
+    <data key='labelE'>played</data>
+    <data key='date'>11 Feb 2014</data>
+    <data key='result'>0-0</data>
+  </edge>
+  <edge id='325' source='13' target='9'>
+    <data key='labelE'>played</data>
+    <data key='date'>11 Feb 2014</data>
+    <data key='result'>0-1</data>
+  </edge>
+  <edge id='326' source='17' target='14'>
+    <data key='labelE'>played</data>
+    <data key='date'>11 Feb 2014</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='327' source='15' target='4'>
+    <data key='labelE'>played</data>
+    <data key='date'>11 Feb 2014</data>
+    <data key='result'>1-1</data>
+  </edge>
+  <edge id='328' source='2' target='5'>
+    <data key='labelE'>played</data>
+    <data key='date'>12 Feb 2014</data>
+    <data key='result'>0-0</data>
+  </edge>
+  <edge id='329' source='8' target='7'>
+    <data key='labelE'>played</data>
+    <data key='date'>12 Feb 2014</data>
+    <data key='result'>0-4</data>
+  </edge>
+  <edge id='330' source='12' target='11'>
+    <data key='labelE'>played</data>
+    <data key='date'>12 Feb 2014</data>
+    <data key='result'>1-1</data>
+  </edge>
+  <edge id='331' source='18' target='3'>
+    <data key='labelE'>played</data>
+    <data key='date'>12 Feb 2014</data>
+    <data key='result'>2-3</data>
+  </edge>
+  <edge id='332' source='4' target='6'>
+    <data key='labelE'>played</data>
+    <data key='date'>22 Feb 2014</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='333' source='2' target='20'>
+    <data key='labelE'>played</data>
+    <data key='date'>22 Feb 2014</data>
+    <data key='result'>4-1</data>
+  </edge>
+  <edge id='334' source='16' target='13'>
+    <data key='labelE'>played</data>
+    <data key='date'>22 Feb 2014</data>
+    <data key='result'>0-4</data>
+  </edge>
+  <edge id='335' source='21' target='12'>
+    <data key='labelE'>played</data>
+    <data key='date'>22 Feb 2014</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='336' source='15' target='18'>
+    <data key='labelE'>played</data>
+    <data key='date'>22 Feb 2014</data>
+    <data key='result'>1-1</data>
+  </edge>
+  <edge id='337' source='17' target='9'>
+    <data key='labelE'>played</data>
+    <data key='date'>22 Feb 2014</data>
+    <data key='result'>3-1</data>
+  </edge>
+  <edge id='338' source='19' target='5'>
+    <data key='labelE'>played</data>
+    <data key='date'>22 Feb 2014</data>
+    <data key='result'>0-2</data>
+  </edge>
+  <edge id='339' source='3' target='11'>
+    <data key='labelE'>played</data>
+    <data key='date'>23 Feb 2014</data>
+    <data key='result'>4-3</data>
+  </edge>
+  <edge id='340' source='8' target='10'>
+    <data key='labelE'>played</data>
+    <data key='date'>23 Feb 2014</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='341' source='14' target='7'>
+    <data key='labelE'>played</data>
+    <data key='date'>23 Feb 2014</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='342' source='6' target='17'>
+    <data key='labelE'>played</data>
+    <data key='date'>01 Mar 2014</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='343' source='18' target='4'>
+    <data key='labelE'>played</data>
+    <data key='date'>01 Mar 2014</data>
+    <data key='result'>1-3</data>
+  </edge>
+  <edge id='344' source='13' target='8'>
+    <data key='labelE'>played</data>
+    <data key='date'>01 Mar 2014</data>
+    <data key='result'>1-4</data>
+  </edge>
+  <edge id='345' source='12' target='2'>
+    <data key='labelE'>played</data>
+    <data key='date'>01 Mar 2014</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='346' source='9' target='3'>
+    <data key='labelE'>played</data>
+    <data key='date'>01 Mar 2014</data>
+    <data key='result'>0-3</data>
+  </edge>
+  <edge id='347' source='10' target='14'>
+    <data key='labelE'>played</data>
+    <data key='date'>02 Mar 2014</data>
+    <data key='result'>4-1</data>
+  </edge>
+  <edge id='348' source='11' target='19'>
+    <data key='labelE'>played</data>
+    <data key='date'>02 Mar 2014</data>
+    <data key='result'>1-1</data>
+  </edge>
+  <edge id='349' source='7' target='16'>
+    <data key='labelE'>played</data>
+    <data key='date'>02 Mar 2014</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='350' source='15' target='5'>
+    <data key='labelE'>played</data>
+    <data key='date'>08 Mar 2014</data>
+    <data key='result'>0-3</data>
+  </edge>
+  <edge id='351' source='16' target='18'>
+    <data key='labelE'>played</data>
+    <data key='date'>08 Mar 2014</data>
+    <data key='result'>3-1</data>
+  </edge>
+  <edge id='352' source='19' target='9'>
+    <data key='labelE'>played</data>
+    <data key='date'>08 Mar 2014</data>
+    <data key='result'>0-1</data>
+  </edge>
+  <edge id='353' source='14' target='12'>
+    <data key='labelE'>played</data>
+    <data key='date'>08 Mar 2014</data>
+    <data key='result'>1-1</data>
+  </edge>
+  <edge id='354' source='4' target='7'>
+    <data key='labelE'>played</data>
+    <data key='date'>08 Mar 2014</data>
+    <data key='result'>4-0</data>
+  </edge>
+  <edge id='355' source='13' target='21'>
+    <data key='labelE'>played</data>
+    <data key='date'>15 Mar 2014</data>
+    <data key='result'>0-2</data>
+  </edge>
+  <edge id='356' source='10' target='4'>
+    <data key='labelE'>played</data>
+    <data key='date'>15 Mar 2014</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='357' source='6' target='16'>
+    <data key='labelE'>played</data>
+    <data key='date'>15 Mar 2014</data>
+    <data key='result'>2-1</data>
+  </edge>
+  <edge id='358' source='18' target='8'>
+    <data key='labelE'>played</data>
+    <data key='date'>15 Mar 2014</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='359' source='9' target='14'>
+    <data key='labelE'>played</data>
+    <data key='date'>15 Mar 2014</data>
+    <data key='result'>4-2</data>
+  </edge>
+  <edge id='360' source='11' target='15'>
+    <data key='labelE'>played</data>
+    <data key='date'>15 Mar 2014</data>
+    <data key='result'>1-2</data>
+  </edge>
+  <edge id='361' source='12' target='17'>
+    <data key='labelE'>played</data>
+    <data key='date'>15 Mar 2014</data>
+    <data key='result'>3-1</data>
+  </edge>
+  <edge id='362' source='20' target='19'>
+    <data key='labelE'>played</data>
+    <data key='date'>15 Mar 2014</data>
+    <data key='result'>0-0</data>
+  </edge>
+  <edge id='363' source='5' target='3'>
+    <data key='labelE'>played</data>
+    <data key='date'>16 Mar 2014</data>
+    <data key='result'>0-3</data>
+  </edge>
+  <edge id='364' source='7' target='2'>
+    <data key='labelE'>played</data>
+    <data key='date'>16 Mar 2014</data>
+    <data key='result'>0-1</data>
+  </edge>
+  <edge id='365' source='4' target='2'>
+    <data key='labelE'>played</data>
+    <data key='date'>22 Mar 2014</data>
+    <data key='result'>6-0</data>
+  </edge>
+  <edge id='366' source='16' target='3'>
+    <data key='labelE'>played</data>
+    <data key='date'>22 Mar 2014</data>
+    <data key='result'>3-6</data>
+  </edge>
+  <edge id='367' source='6' target='11'>
+    <data key='labelE'>played</data>
+    <data key='date'>22 Mar 2014</data>
+    <data key='result'>3-2</data>
+  </edge>
+  <edge id='368' source='13' target='15'>
+    <data key='labelE'>played</data>
+    <data key='date'>22 Mar 2014</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='369' source='21' target='18'>
+    <data key='labelE'>played</data>
+    <data key='date'>22 Mar 2014</data>
+    <data key='result'>5-0</data>
+  </edge>
+  <edge id='370' source='8' target='19'>
+    <data key='labelE'>played</data>
+    <data key='date'>22 Mar 2014</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='371' source='14' target='20'>
+    <data key='labelE'>played</data>
+    <data key='date'>22 Mar 2014</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='372' source='17' target='5'>
+    <data key='labelE'>played</data>
+    <data key='date'>22 Mar 2014</data>
+    <data key='result'>0-2</data>
+  </edge>
+  <edge id='373' source='10' target='12'>
+    <data key='labelE'>played</data>
+    <data key='date'>24 Mar 2014</data>
+    <data key='result'>1-4</data>
+  </edge>
+  <edge id='374' source='7' target='9'>
+    <data key='labelE'>played</data>
+    <data key='date'>24 Mar 2014</data>
+    <data key='result'>3-2</data>
+  </edge>
+  <edge id='375' source='2' target='11'>
+    <data key='labelE'>played</data>
+    <data key='date'>25 Mar 2014</data>
+    <data key='result'>2-2</data>
+  </edge>
+  <edge id='376' source='5' target='21'>
+    <data key='labelE'>played</data>
+    <data key='date'>25 Mar 2014</data>
+    <data key='result'>0-3</data>
+  </edge>
+  <edge id='377' source='8' target='6'>
+    <data key='labelE'>played</data>
+    <data key='date'>25 Mar 2014</data>
+    <data key='result'>0-3</data>
+  </edge>
+  <edge id='378' source='17' target='13'>
+    <data key='labelE'>played</data>
+    <data key='date'>25 Mar 2014</data>
+    <data key='result'>2-1</data>
+  </edge>
+  <edge id='379' source='3' target='20'>
+    <data key='labelE'>played</data>
+    <data key='date'>26 Mar 2014</data>
+    <data key='result'>2-1</data>
+  </edge>
+  <edge id='380' source='5' target='10'>
+    <data key='labelE'>played</data>
+    <data key='date'>29 Mar 2014</data>
+    <data key='result'>4-1</data>
+  </edge>
+  <edge id='381' source='19' target='4'>
+    <data key='labelE'>played</data>
+    <data key='date'>29 Mar 2014</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='382' source='9' target='8'>
+    <data key='labelE'>played</data>
+    <data key='date'>29 Mar 2014</data>
+    <data key='result'>4-0</data>
+  </edge>
+  <edge id='383' source='12' target='13'>
+    <data key='labelE'>played</data>
+    <data key='date'>29 Mar 2014</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='384' source='11' target='14'>
+    <data key='labelE'>played</data>
+    <data key='date'>29 Mar 2014</data>
+    <data key='result'>3-0</data>
+  </edge>
+  <edge id='385' source='15' target='16'>
+    <data key='labelE'>played</data>
+    <data key='date'>29 Mar 2014</data>
+    <data key='result'>3-3</data>
+  </edge>
+  <edge id='386' source='2' target='21'>
+    <data key='labelE'>played</data>
+    <data key='date'>29 Mar 2014</data>
+    <data key='result'>1-1</data>
+  </edge>
+  <edge id='387' source='18' target='6'>
+    <data key='labelE'>played</data>
+    <data key='date'>30 Mar 2014</data>
+    <data key='result'>1-3</data>
+  </edge>
+  <edge id='388' source='3' target='7'>
+    <data key='labelE'>played</data>
+    <data key='date'>30 Mar 2014</data>
+    <data key='result'>4-0</data>
+  </edge>
+  <edge id='389' source='20' target='17'>
+    <data key='labelE'>played</data>
+    <data key='date'>31 Mar 2014</data>
+    <data key='result'>1-2</data>
+  </edge>
+  <edge id='390' source='21' target='9'>
+    <data key='labelE'>played</data>
+    <data key='date'>5 Apr 2014</data>
+    <data key='result'>4-1</data>
+  </edge>
+  <edge id='391' source='10' target='18'>
+    <data key='labelE'>played</data>
+    <data key='date'>5 Apr 2014</data>
+    <data key='result'>1-2</data>
+  </edge>
+  <edge id='392' source='16' target='19'>
+    <data key='labelE'>played</data>
+    <data key='date'>5 Apr 2014</data>
+    <data key='result'>0-3</data>
+  </edge>
+  <edge id='393' source='13' target='11'>
+    <data key='labelE'>played</data>
+    <data key='date'>5 Apr 2014</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='394' source='8' target='5'>
+    <data key='labelE'>played</data>
+    <data key='date'>5 Apr 2014</data>
+    <data key='result'>0-4</data>
+  </edge>
+  <edge id='395' source='14' target='15'>
+    <data key='labelE'>played</data>
+    <data key='date'>5 Apr 2014</data>
+    <data key='result'>0-1</data>
+  </edge>
+  <edge id='396' source='4' target='12'>
+    <data key='labelE'>played</data>
+    <data key='date'>5 Apr 2014</data>
+    <data key='result'>3-0</data>
+  </edge>
+  <edge id='397' source='6' target='2'>
+    <data key='labelE'>played</data>
+    <data key='date'>6 Apr 2014</data>
+    <data key='result'>3-0</data>
+  </edge>
+  <edge id='398' source='17' target='3'>
+    <data key='labelE'>played</data>
+    <data key='date'>6 Apr 2014</data>
+    <data key='result'>1-2</data>
+  </edge>
+  <edge id='399' source='7' target='20'>
+    <data key='labelE'>played</data>
+    <data key='date'>7 Apr 2014</data>
+    <data key='result'>5-1</data>
+  </edge>
+  <edge id='400' source='19' target='10'>
+    <data key='labelE'>played</data>
+    <data key='date'>12 Apr 2014</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='401' source='18' target='14'>
+    <data key='labelE'>played</data>
+    <data key='date'>12 Apr 2014</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='402' source='9' target='16'>
+    <data key='labelE'>played</data>
+    <data key='date'>12 Apr 2014</data>
+    <data key='result'>0-1</data>
+  </edge>
+  <edge id='403' source='12' target='8'>
+    <data key='labelE'>played</data>
+    <data key='date'>12 Apr 2014</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='404' source='20' target='6'>
+    <data key='labelE'>played</data>
+    <data key='date'>12 Apr 2014</data>
+    <data key='result'>0-1</data>
+  </edge>
+  <edge id='405' source='15' target='7'>
+    <data key='labelE'>played</data>
+    <data key='date'>12 Apr 2014</data>
+    <data key='result'>3-3</data>
+  </edge>
+  <edge id='406' source='3' target='21'>
+    <data key='labelE'>played</data>
+    <data key='date'>13 Apr 2014</data>
+    <data key='result'>3-2</data>
+  </edge>
+  <edge id='407' source='11' target='4'>
+    <data key='labelE'>played</data>
+    <data key='date'>13 Apr 2014</data>
+    <data key='result'>0-1</data>
+  </edge>
+  <edge id='408' source='2' target='17'>
+    <data key='labelE'>played</data>
+    <data key='date'>15 Apr 2014</data>
+    <data key='result'>3-1</data>
+  </edge>
+  <edge id='409' source='6' target='19'>
+    <data key='labelE'>played</data>
+    <data key='date'>16 Apr 2014</data>
+    <data key='result'>2-3</data>
+  </edge>
+  <edge id='410' source='21' target='20'>
+    <data key='labelE'>played</data>
+    <data key='date'>16 Apr 2014</data>
+    <data key='result'>2-2</data>
+  </edge>
+  <edge id='411' source='7' target='18'>
+    <data key='labelE'>played</data>
+    <data key='date'>19 Apr 2014</data>
+    <data key='result'>3-1</data>
+  </edge>
+  <edge id='412' source='10' target='9'>
+    <data key='labelE'>played</data>
+    <data key='date'>19 Apr 2014</data>
+    <data key='result'>0-0</data>
+  </edge>
+  <edge id='413' source='16' target='12'>
+    <data key='labelE'>played</data>
+    <data key='date'>19 Apr 2014</data>
+    <data key='result'>1-1</data>
+  </edge>
+  <edge id='414' source='8' target='11'>
+    <data key='labelE'>played</data>
+    <data key='date'>19 Apr 2014</data>
+    <data key='result'>1-2</data>
+  </edge>
+  <edge id='415' source='17' target='19'>
+    <data key='labelE'>played</data>
+    <data key='date'>19 Apr 2014</data>
+    <data key='result'>0-1</data>
+  </edge>
+  <edge id='416' source='4' target='20'>
+    <data key='labelE'>played</data>
+    <data key='date'>19 Apr 2014</data>
+    <data key='result'>1-2</data>
+  </edge>
+  <edge id='417' source='14' target='3'>
+    <data key='labelE'>played</data>
+    <data key='date'>20 Apr 2014</data>
+    <data key='result'>2-3</data>
+  </edge>
+  <edge id='418' source='13' target='2'>
+    <data key='labelE'>played</data>
+    <data key='date'>20 Apr 2014</data>
+    <data key='result'>0-3</data>
+  </edge>
+  <edge id='419' source='6' target='5'>
+    <data key='labelE'>played</data>
+    <data key='date'>20 Apr 2014</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='420' source='21' target='15'>
+    <data key='labelE'>played</data>
+    <data key='date'>21 Apr 2014</data>
+    <data key='result'>3-1</data>
+  </edge>
+  <edge id='421' source='9' target='6'>
+    <data key='labelE'>played</data>
+    <data key='date'>26 Apr 2014</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='422' source='18' target='13'>
+    <data key='labelE'>played</data>
+    <data key='date'>26 Apr 2014</data>
+    <data key='result'>2-2</data>
+  </edge>
+  <edge id='423' source='12' target='7'>
+    <data key='labelE'>played</data>
+    <data key='date'>26 Apr 2014</data>
+    <data key='result'>0-1</data>
+  </edge>
+  <edge id='424' source='11' target='10'>
+    <data key='labelE'>played</data>
+    <data key='date'>26 Apr 2014</data>
+    <data key='result'>4-1</data>
+  </edge>
+  <edge id='425' source='15' target='17'>
+    <data key='labelE'>played</data>
+    <data key='date'>26 Apr 2014</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='426' source='5' target='14'>
+    <data key='labelE'>played</data>
+    <data key='date'>26 Apr 2014</data>
+    <data key='result'>4-0</data>
+  </edge>
+  <edge id='427' source='20' target='16'>
+    <data key='labelE'>played</data>
+    <data key='date'>27 Apr 2014</data>
+    <data key='result'>4-0</data>
+  </edge>
+  <edge id='428' source='3' target='4'>
+    <data key='labelE'>played</data>
+    <data key='date'>27 Apr 2014</data>
+    <data key='result'>0-2</data>
+  </edge>
+  <edge id='429' source='19' target='21'>
+    <data key='labelE'>played</data>
+    <data key='date'>27 Apr 2014</data>
+    <data key='result'>0-2</data>
+  </edge>
+  <edge id='430' source='2' target='8'>
+    <data key='labelE'>played</data>
+    <data key='date'>28 Apr 2014</data>
+    <data key='result'>3-0</data>
+  </edge>
+  <edge id='431' source='17' target='7'>
+    <data key='labelE'>played</data>
+    <data key='date'>3 May 2014</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='432' source='10' target='13'>
+    <data key='labelE'>played</data>
+    <data key='date'>3 May 2014</data>
+    <data key='result'>3-1</data>
+  </edge>
+  <edge id='433' source='5' target='20'>
+    <data key='labelE'>played</data>
+    <data key='date'>3 May 2014</data>
+    <data key='result'>0-1</data>
+  </edge>
+  <edge id='434' source='8' target='16'>
+    <data key='labelE'>played</data>
+    <data key='date'>3 May 2014</data>
+    <data key='result'>3-0</data>
+  </edge>
+  <edge id='435' source='12' target='18'>
+    <data key='labelE'>played</data>
+    <data key='date'>3 May 2014</data>
+    <data key='result'>4-1</data>
+  </edge>
+  <edge id='436' source='11' target='9'>
+    <data key='labelE'>played</data>
+    <data key='date'>3 May 2014</data>
+    <data key='result'>0-1</data>
+  </edge>
+  <edge id='437' source='6' target='21'>
+    <data key='labelE'>played</data>
+    <data key='date'>3 May 2014</data>
+    <data key='result'>2-3</data>
+  </edge>
+  <edge id='438' source='2' target='15'>
+    <data key='labelE'>played</data>
+    <data key='date'>4 May 2014</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='439' source='4' target='14'>
+    <data key='labelE'>played</data>
+    <data key='date'>4 May 2014</data>
+    <data key='result'>0-0</data>
+  </edge>
+  <edge id='440' source='19' target='3'>
+    <data key='labelE'>played</data>
+    <data key='date'>5 May 2014</data>
+    <data key='result'>3-3</data>
+  </edge>
+  <edge id='441' source='5' target='13'>
+    <data key='labelE'>played</data>
+    <data key='date'>6 May 2014</data>
+    <data key='result'>3-1</data>
+  </edge>
+  <edge id='442' source='21' target='10'>
+    <data key='labelE'>played</data>
+    <data key='date'>7 May 2014</data>
+    <data key='result'>4-0</data>
+  </edge>
+  <edge id='443' source='20' target='15'>
+    <data key='labelE'>played</data>
+    <data key='date'>7 May 2014</data>
+    <data key='result'>1-0</data>
+  </edge>
+  <edge id='444' source='16' target='4'>
+    <data key='labelE'>played</data>
+    <data key='date'>11 May 2014</data>
+    <data key='result'>1-2</data>
+  </edge>
+  <edge id='445' source='18' target='19'>
+    <data key='labelE'>played</data>
+    <data key='date'>11 May 2014</data>
+    <data key='result'>2-2</data>
+  </edge>
+  <edge id='446' source='13' target='6'>
+    <data key='labelE'>played</data>
+    <data key='date'>11 May 2014</data>
+    <data key='result'>0-2</data>
+  </edge>
+  <edge id='447' source='3' target='8'>
+    <data key='labelE'>played</data>
+    <data key='date'>11 May 2014</data>
+    <data key='result'>2-1</data>
+  </edge>
+  <edge id='448' source='21' target='17'>
+    <data key='labelE'>played</data>
+    <data key='date'>11 May 2014</data>
+    <data key='result'>2-0</data>
+  </edge>
+  <edge id='449' source='14' target='2'>
+    <data key='labelE'>played</data>
+    <data key='date'>11 May 2014</data>
+    <data key='result'>0-2</data>
+  </edge>
+  <edge id='450' source='9' target='5'>
+    <data key='labelE'>played</data>
+    <data key='date'>11 May 2014</data>
+    <data key='result'>1-1</data>
+  </edge>
+  <edge id='451' source='20' target='11'>
+    <data key='labelE'>played</data>
+    <data key='date'>11 May 2014</data>
+    <data key='result'>1-3</data>
+  </edge>
+  <edge id='452' source='7' target='10'>
+    <data key='labelE'>played</data>
+    <data key='date'>11 May 2014</data>
+    <data key='result'>3-0</data>
+  </edge>
+  <edge id='453' source='15' target='12'>
+    <data key='labelE'>played</data>
+    <data key='date'>11 May 2014</data>
+    <data key='result'>1-2</data>
+  </edge>
+  <edge id='454' source='20' target='15'>
+    <data key='labelE'>postponed</data>
+    <data key='date'>01 Mar 2014</data>
+    <data key='result'>P-P</data>
+  </edge>
+  <edge id='455' source='21' target='20'>
+    <data key='labelE'>postponed</data>
+    <data key='date'>12 Feb 2014</data>
+    <data key='result'>P-P</data>
+  </edge>
+  <edge id='456' source='6' target='19'>
+    <data key='labelE'>postponed</data>
+    <data key='date'>12 Feb 2014</data>
+    <data key='result'>P-P</data>
+  </edge>
+
+</graph>
+</graphml>
