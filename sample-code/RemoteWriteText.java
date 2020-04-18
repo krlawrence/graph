@@ -5,7 +5,7 @@
 // This example does the following:
 //   1. Configures a new Cluster object using GraphBinary to connect
 //      to a Gremlin Server.
-//   2. Demonstrates different ways to turn traversals bacj to human readable
+//   2. Demonstrates different ways to turn traversals back to human readable
 //      text strings that can be used with the Gremlin Console. This is useful
 //      when doing things such as debugging machine generated graph traversals.
 
