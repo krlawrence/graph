@@ -4,7 +4,7 @@ Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
 v283-preview, May 24th 2020
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Sat May 16, 2020 18:03:17 CDT
+// Sun May 24, 2020 16:09:30 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -10465,7 +10465,7 @@ how we can create multiple values for a single property key.  Such values can be
 setup when the vertex is first created or added afterwards. These more complex type of
 property values are not supported on edges.
 
-If we wanted to store the IATA amd ICAO codes for the Austin airport in a list
+If we wanted to store the IATA and ICAO codes for the Austin airport in a list
 associated with a single property rather than as separate properties we could have
 created them when we created the Austin vertex follows. You can also add properties to
 an existing vertex that have lists of values. We will look at how to do that later in
@@ -16239,8 +16239,8 @@ In this section you will find some more examples of queries that explore differe
 questions along the lines of "Where can I fly to from here?".
 
 [[doesanyrouteexist]]
-Does any route exist between two arirports?
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Does any route exist between two airports?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 We have already looked at different ways to discover shortest routes (by hops)
 between two airports using queries such as the one below. This query looks for a
@@ -19059,7 +19059,7 @@ looked at each result to see where the duplicate edge was.
 
 [source,groovy]
 ----
-g.V().has('code','LHR').out().groupCount().by('code').order(local).by(values,decr)]
+g.V().has('code','LHR').out().groupCount().by('code').order(local).by(values,decr)
 ----
 
 As I said this was a very manual and time consuming process. I clearly needed a
@@ -19765,7 +19765,7 @@ into line with other commonly used query languages.
 |global  | Scope.global   | order(Scope.global)
 |desc    | Order.desc     | order().by(Order.desc)
 |decr    | Order.decr     | order().by(Order.decr)  [Deprecated since 3.3.4]
-|incr    | Order.asc      | order().by(Order.asc)
+|asc     | Order.asc      | order().by(Order.asc)
 |incr    | Order.incr     | order().by(Order.incr)  [Deprecated since 3.3.4]
 |shuffle | Order.shuffle  | order().by(Order.shuffle)
 |==============================================================================
@@ -22086,7 +22086,7 @@ The query below uses a fuzzy sort to find any words that are close to the word
 
 [source,groovy]
 ----
-.V().has('desc',textContainsFuzzy("pall")).values('desc')
+g.V().has('desc',textContainsFuzzy("pall")).values('desc')
 ----
 
 Here are the results from running the query. You can see that airport descriptions
@@ -24153,7 +24153,7 @@ values for each vertex.
 [source,groovy]
 ----
 g.V().hasLabel('airport').sample(3).
-      union(id(),values('code','city'))"
+      union(id(),values('code','city'))
 
 {"requestId":"4d308287-9725-4fa6-8c2b-b7e517ca5009",
  "status":{"message":"","code":200,"attributes":{}},
