@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
-v283-preview, May 16th 2020
+v283-preview, May 24th 2020
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
 // Sat May 16, 2020 18:03:17 CDT
 //:Author:    Kelvin R. Lawrence
@@ -25,7 +25,7 @@ v283-preview, May 16th 2020
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: May 6th 2020
+:draftdate: May 24th 2020
 :tpvercheck: 3.4.6
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -12089,11 +12089,11 @@ g.withSack(0).V().has('code','SAF').out().
 [7,4,3,6]
 ----
 
-This time we add the runways to our sack using a sum operation but as our starting
-value is zero we are not actually changing the end result in any way as for each
-runway value we essentially perform the operation '0 + runways' in each case. The
-final call to 'sack' with no parameters causes the current contents of the 'sack' to
-be returned. The 'fold' step, as before, puts whatever results we got from the 'sack'
+This time we add the runways to our sack using a sum operation, but as our starting
+value is zero we are not actually changing the end result in any way. This is because
+we essentially perform the operation '0 + runways' for each runway value. The final
+call to 'sack' with no parameters causes the current contents of the 'sack' to be
+returned. The 'fold' step, as before, puts whatever results we got from the 'sack'
 into a list.
 
 [source,groovy]
@@ -12118,14 +12118,14 @@ g.withSack(1).V().has('code','SAF').out().
 Now, each time the number of runways was added to the sack using a 'sum' operator,
 the operation that was performed was '1 + runways'. As you can see from the results,
 in each case, the value returned is one higher than those from the previous query.
-This is a very dimple example but hopefully you can start to see how useful sacks can
+This is a very simple example but hopefully you can start to see how useful sacks can
 be.
 
 Before getting into some more interesting examples, it is worth pointing out that you
 can also initialize a sack using the 'assign' operator as shown below. It is also
 important to note that this sack initialization does not have to happen at the start
-of the query when done in this way. In the example below a constant value of one is
-used but we could equally well have used a traversal to initialize that sack as we
+of the query when done in this way. In the example below, a constant value of one is
+used, but we could equally well have used a traversal to initialize that sack as we
 shall see in the next example.
 
 [source,groovy]
