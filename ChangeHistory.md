@@ -9,8 +9,9 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
 - Added a new section "A warning that the '`path`' and '`as`' steps can also be memory intensive".
 - Renamed and re-worked the section "A warning that path finding can be memory and CPU intensive"
 - Added a section showing how to create a standard deviation in a single query #174
+- Added additional examples to the "Looking for the journey requiring the most stops" section and promoted that section by one level.
 - Merged reader PRs #154, #160
-- Renamed HTML and PDF files to PracticalGremlin. 
+- Renamed HTML and PDF files to PracticalGremlin.
   - The prior Gremlin-Graph-Guide names will still work to avoid breaking bookmarks.
 - Improved grammar and fixed a few typos. #164, #180
 - Sample code updates

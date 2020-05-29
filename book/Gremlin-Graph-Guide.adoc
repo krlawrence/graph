@@ -2,9 +2,9 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
-v283-preview, May 24th 2020
+v283-preview, May 28th 2020
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Sun May 24, 2020 16:09:30 CDT
+// Thu May 28, 2020 19:19:35 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -25,7 +25,7 @@ v283-preview, May 24th 2020
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: May 24th 2020
+:draftdate: May 28th 2020
 :tpvercheck: 3.4.6
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -16296,7 +16296,8 @@ g.V().has('code','AUS').
 
 Keep in mind that this trick is only useful when trying to figure out if any route
 (or path) exists in a group between a pair of vertices. It cannot be used to find
-multiple routes but is still a very useful pattern to be aware of.
+multiple routes but is still a very useful pattern to be aware of.  You will see a
+variation of this technique used again in the "<<longestroutes>>" section.
 
 [[uscatoindia]]
 Where in the USA or Canada can I fly to from any airport in India?
@@ -18950,13 +18951,14 @@ graph that had slipped through my error checking!
 
 [[longestroutes]]
 Looking for the journey requiring the most stops
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Sometimes it is interesting to ponder questions such as, starting from a given
-airport what are the most difficult places to get to. For the sake of this example
+Sometimes it is interesting to ponder questions such as "Starting from a given
+airport what are the most difficult places to get to?". For the sake of this example
 let's define "difficult to get to" as meaning "requires the most hops". By modifying
 the query from the previous section we can come up with a way to detect some longest
-routes.
+routes. At the end of the section I have also included examples that show alternative
+ways to generate the same result.
 
 The query shown below finds every airport that has out going routes and is not Austin
 (AUS). For each airport found an attempt is made to get to Austin in ten or less
@@ -18981,7 +18983,7 @@ g.V().has('airport','code',neq('AUS')).
       where(count(local).is(gte(8))) 
 ----
 
-When run the query may take a few seconds to complete but should not take more than
+When run, the query may take a few seconds to complete, but should not take more than
 that on a typical laptop or desktop. Here are the results of running the query.
 
 [source,groovy]
@@ -19013,18 +19015,84 @@ As before, the same three paths are found.
 [THU,NAQ,JUV,JAV,GOH,KEF,PIT,AUS]
 ----
 
-When looking for longest routes in a graph, especially a highly connected one, you
-need to be careful. Notice how I chose a very specific target for my search. 
+[[quicklyfindhardest]]
+Quickly finding the hardest to get to airports
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+There are other ways we could write a query that looks for "hard to get to" airports.
+The technique shown below essentially relies on using a de-duplication strategy to
+make sure you only visit an airport exactly once. Note this is different from the way
+the 'sideEffect' step works. That step allows a query to fan out and visit the same
+vertex from many places, a many to one type of pattern, but will not allow a
+traversal to loop back on itself. By using a de-duplication approach we only visit a
+vertex exactly once and remove all other instances of it as the query progresses.
+This gives the query processor a lot less work to do and as a result the query
+executes more efficiently. The queries below do a bit less filtering than the ones
+above but work well if all you are looking for are destinations that, from a given
+starting point, require at least a specified number of hops to reach.
+
+This time I decided to start with Austin (AUS) and look for any airports that are
+only reachable in seven hops. The fact that we are removing duplicates along the way
+guarantees that there is not a shorter path to the destinations found.  If you are
+good at reading backwards, you will see that the results match those found above but
+in the reverse order.
+
+The first example keeps track of where it has been using a 'store' step and only
+continues on to places it has not seen before until seven hops have completed.
+
+[source,groovy]
+----
+g.V().has('code','AUS').
+      repeat(out().where(without('a')).store('a')).
+        times(7).
+      path().
+        by('code')
+----
+
+As you can see the results look familiar.
+
+[source,groovy]
+----
+[AUS,YYZ,YUL,YGL,YPX,AKV,YIK,YZG]
+[AUS,YYZ,CPH,SFJ,JAV,JUV,NAQ,THU]
+[AUS,YYZ,YTS,YMO,YFA,ZKE,YAT,YPO]
+----
+
+This alternate version of the query uses a 'dedup' step to achieve the same goal. On
+most Gremlin query engines this is an efficient way to look for targets only
+reachable in at least the given number of hops. This query is similar to the one used
+in the "<<doesanyrouteexist>>" section.
+
+[source,groovy]
+----
+g.V().has('code','AUS').
+      repeat(out().dedup()).
+        times(7).
+      path().
+        by('code')
+----
+
+Once again the same results are generated.
+
+[source,groovy]
+----
+[AUS,YYZ,YUL,YGL,YPX,AKV,YIK,YZG]
+[AUS,YYZ,CPH,SFJ,JAV,JUV,NAQ,THU]
+[AUS,YYZ,YTS,YMO,YFA,ZKE,YAT,YPO]     
+----
+
+When looking for longest routes in a graph, especially in a highly connected one, you
+need to be careful. Notice how I chose a very specific target or a specific number of
+hops for my searches. 
 
 NOTE: Looking for longest paths must be done carefully as it can result in very long
 running queries.
 
-If you
-were to try and write a query that arbitrarily looked for the longest route between
-any two airports you run the risk of writing a query that runs for an extremely long
-time. In many ways the concept of "longest path" can be viewed as an anti pattern.
-This is especially true in highly connected graphs of which `air-routes` is an
-example.
+If you were to try and write a query that arbitrarily looked for the longest route
+between any two airports you run the risk of writing a query that runs for an
+extremely long time. In many ways the concept of "longest path" can be viewed as an
+anti pattern.  This is especially true in highly connected graphs of which
+`air-routes` is an example.
 
 [[unwantededges]]
 Finding unwanted parallel edges 
