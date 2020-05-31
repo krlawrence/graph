@@ -2,9 +2,9 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
-v283-preview, May 28th 2020
+v283-preview, May 30th 2020
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Thu May 28, 2020 19:19:35 CDT
+// Sat May 30, 2020 19:54:24 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -25,7 +25,7 @@ v283-preview, May 28th 2020
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: May 28th 2020
+:draftdate: May 30th 2020
 :tpvercheck: 3.4.6
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -13444,6 +13444,55 @@ g.V().has('code','AUS').out().path().by('city').limit(3)
 [Austin,Detroit]
 ----
 
+Lastly, here is one more case where a 'flatMap' can be useful. In the example below I
+wanted to check the property on an edge as part of a 'repeat' step but not have the
+edge itself be included in the resultant paths. The query uses the route distance to
+filter out routes between airports that are shorter than 2,000 miles.
+
+[source,groovy]
+----
+g.V().has('code','AUS').
+      repeat(flatMap(outE().has('dist',gt(2000)).inV())).
+      times(2).
+      path()
+      limit(5)
+----
+
+When the query is run the results returned only include the vertices. Note that once
+again, the 'flatMap' step differs from the 'map' step in that for each path being
+explored, it allows the last result generated, in this case the result of the 'inV'
+step, to pass to the next step in the traversal.
+
+[source,groovy]
+----
+[v[3],v[49],v[61]]
+[v[3],v[49],v[64]]
+[v[3],v[49],v[67]]
+[v[3],v[49],v[69]]
+[v[3],v[49],v[71]]
+----
+
+The query below has the  'flatMap' step removed.
+
+[source,groovy]
+----
+g.V().has('code','AUS').
+      repeat(outE().has('dist',gt(2000)).inV()).
+      times(2).
+      path().
+      limit(5)
+----
+
+When run, this time the results do indeed include the edges as well as the vertices.
+
+[source,groovy]
+----
+[v[3],e[5162][3-route->49],v[49],e[8448][49-route->61],v[61]]
+[v[3],e[5162][3-route->49],v[49],e[8449][49-route->64],v[64]]
+[v[3],e[5162][3-route->49],v[49],e[8450][49-route->67],v[67]]
+[v[3],e[5162][3-route->49],v[49],e[8452][49-route->69],v[69]]
+[v[3],e[5162][3-route->49],v[49],e[8454][49-route->71],v[71]]
+----
 
 [[fuzzyregs]]
 Using regular expressions to do fuzzy searches
