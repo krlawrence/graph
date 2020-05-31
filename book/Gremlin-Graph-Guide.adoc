@@ -13454,7 +13454,7 @@ filter out routes between airports that are shorter than 2,000 miles.
 g.V().has('code','AUS').
       repeat(flatMap(outE().has('dist',gt(2000)).inV())).
       times(2).
-      path()
+      path().
       limit(5)
 ----
 
