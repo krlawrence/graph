@@ -2,9 +2,9 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
-v283-preview, June 4th 2020
+v283-preview, July 4th 2020
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Thu Jun 04, 2020 18:31:19 CDT
+// Sat Jul 04, 2020 19:15:35 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -25,7 +25,7 @@ v283-preview, June 4th 2020
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: June 4th 2020
+:draftdate: July 4th 2020
 :tpvercheck: 3.4.6
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -265,8 +265,8 @@ Latest PDF and HTML snapshots::
   version includes pagination as well as page numbering and is produced using an A4 
   page size. The HTML  version does not include these features. Otherwise they are 
   more or less identical.
-- http://kelvinlawrence.net/book/Gremlin-Graph-Guide.pdf
-- http://kelvinlawrence.net/book/Gremlin-Graph-Guide.html
+- http://kelvinlawrence.net/book/PracticalGremlin.pdf
+- http://kelvinlawrence.net/book/PracticalGremlin.html
 Official book releases in multiple formats::
 - Official releases include Asciidoc, HTML, PDF, ePub, MOBI and DocBook versions as
   well as snapshots of all the samples and other materials in a single package. My
