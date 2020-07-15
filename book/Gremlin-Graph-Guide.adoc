@@ -441,7 +441,7 @@ a graph.  Programmers also seem to find the graph style of programming quite
 intuitive as it closely models the way they think of the world.
             
 Graph database technology should not be viewed as a "rip and replace" technology, but
-as very much complimentary to other databases that you may already have deployed. One
+as very much complementary to other databases that you may already have deployed. One
 common use case is for the graph to be used as a form of smart index into other data
 stores. This is sometimes called having a polyglot data architecture.
 
