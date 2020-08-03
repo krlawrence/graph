@@ -3780,7 +3780,7 @@ g.V().hasLabel('airport').local(out('route').count()).mean()
 ----
 
 The result this time is a much more believable answer. Notice how this time we placed
-the __out().(''route'').count()__ steps inside a 'local' step. The query below,
+the __out(''route'').count()__ steps inside a 'local' step. The query below,
 with the mean step removed, shows what is happening during the traversal as this
 query runs. I truncated the output to just show a few lines.
 
