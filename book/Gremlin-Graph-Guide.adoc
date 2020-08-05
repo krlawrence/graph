@@ -4912,14 +4912,14 @@ Here are the results from running the query.
 ----
 
 By default a sort performed using 'order' is performed in ascending order. If we
-wanted to sort in descending order instead we can specify 'decr' as a parameter to
-'order'. We can also specify 'incr' if we want to be clear that we intend an
+wanted to sort in descending order instead we can specify 'desc' as a parameter to
+'order'. We can also specify 'asc' if we want to be clear that we intend an
 ascending order sort.            
 
 [source,groovy]
 ----
 // Sort the first 20 airports returned in descending order
-g.V().hasLabel('airport').limit(20).values('code').order().by(decr).fold()
+g.V().hasLabel('airport').limit(20).values('code').order().by(desc).fold()
 
 [PHX,PBI,ORD,MSP,MIA,MCO,LGA,LAX,JFK,IAH,IAD,FLL,DFW,DCA,BWI,BOS,BNA,AUS,ATL,ANC]
 ----
@@ -4935,12 +4935,12 @@ g.V().hasLabel('airport').limit(20).values('code').order().by(shuffle).fold()
 ----
 
 Below is an example where we combine the field we want to sort by 'longest'
-and the direction we want the sort to take, 'decr' into a single 'by' instruction.
+and the direction we want the sort to take, 'desc' into a single 'by' instruction.
 
 [source,groovy]
 ----
 // List the 10 airports with the longest runways in decreasing order.
-g.V().hasLabel('airport').order().by('longest',decr).valueMap().
+g.V().hasLabel('airport').order().by('longest',desc).valueMap().
       select('code','longest').limit(10)
 ----
 
@@ -4976,7 +4976,7 @@ we are interested in.
 
 [source,groovy]
 ----
-g.V().hasLabel('airport').order().by(values('longest'),decr).limit(1).valueMap()
+g.V().hasLabel('airport').order().by(values('longest'),desc).limit(1).valueMap()
 ----
 
 In the case of the 'air-routes' graph there is only one airport with the longest
