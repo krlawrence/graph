@@ -5628,7 +5628,7 @@ when run.
 It is also possible to compare two different properties by adding a second 'by'
 modulator. This is useful when vertex properties have different key names but may
 contain the same values. The query below is definitely contrived, you could achieve
-the same thing in a more simple way, but is does demonstrate two 'by' modulators
+the same thing in a more simple way, but it does demonstrate two 'by' modulators
 being used. The 'country' property of an airport vertex is compared with the 'code'
 property of a 'country' vertex. The query first finds any airport vertex with a
 'city' property containing the string 'London'. Next any connecting 'country'
