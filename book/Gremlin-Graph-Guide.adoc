@@ -5896,7 +5896,7 @@ might code a 'switch' statement as follows.
 ----
 
 We can write a Gremlin query that follows the same pattern as our Java 'switch'
-statement. As in the Java example I decided to lay out query out across multiple
+statement. As in the Java example I decided to lay our query out across multiple
 lines to aid readability and clarity.
 
 [source,groovy]
