@@ -9359,9 +9359,9 @@ a=g.V().group().by('code').next();[]
 a['JFK'][0].values('desc')  
 ----
 
-Another useful way to work with veriables is to establish the variable and then use
+Another useful way to work with variables is to establish the variable and then use
 the 'fill' step to place the results of a query into it. The example below creates an
-empty lisy called 'german'. The query then finds all the vertices for airports
+empty list called 'german'. The query then finds all the vertices for airports
 located in Germany and uses the 'fill' step to place them into the variable.
 
 [source,groovy]
