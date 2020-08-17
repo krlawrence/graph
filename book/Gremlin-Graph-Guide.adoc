@@ -10498,7 +10498,7 @@ g.V().has('code','AUS').valueMap()
 
 [code:[AUS,KAUS]]
 
-g.v().has('code','KAUS').valueMap()
+g.V().has('code','KAUS').valueMap()
 
 [code:[AUS,KAUS]]
 ----
