@@ -10746,7 +10746,7 @@ that inded our set was created.
 
 [source,groovy]
 ----
-g.V(3).property(set,'hw',"hello").property(set,'hw','world')
+g.V(3).property(set,'hw','hello').property(set,'hw','world')
 
 g.V(3).valueMap('hw')
 
@@ -10761,7 +10761,7 @@ the set only has unique values in it.
 
 [source,groovy]
 ----
-g.V(3).property(set,'hw',"hello").property(set,'hw','apple')
+g.V(3).property(set,'hw','hello').property(set,'hw','apple')
 
 g.V(3).valueMap('hw')
 
