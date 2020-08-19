@@ -9359,9 +9359,9 @@ a=g.V().group().by('code').next();[]
 a['JFK'][0].values('desc')  
 ----
 
-Another useful way to work with veriables is to establish the variable and then use
+Another useful way to work with variables is to establish the variable and then use
 the 'fill' step to place the results of a query into it. The example below creates an
-empty lisy called 'german'. The query then finds all the vertices for airports
+empty list called 'german'. The query then finds all the vertices for airports
 located in Germany and uses the 'fill' step to place them into the variable.
 
 [source,groovy]
@@ -10498,7 +10498,7 @@ g.V().has('code','AUS').valueMap()
 
 [code:[AUS,KAUS]]
 
-g.v().has('code','KAUS').valueMap()
+g.V().has('code','KAUS').valueMap()
 
 [code:[AUS,KAUS]]
 ----
@@ -10746,7 +10746,7 @@ that inded our set was created.
 
 [source,groovy]
 ----
-g.V(3).property(set,'hw',"hello").property(set,'hw','world')
+g.V(3).property(set,'hw','hello').property(set,'hw','world')
 
 g.V(3).valueMap('hw')
 
@@ -10756,12 +10756,12 @@ g.V(3).valueMap('hw')
 Let's now test that our set is really working as a set by adding a couple of
 additional values. Note that we have already added the value 'hello' in the prior
 steps so with the cardinality being 'SET' we expect that value to be ignored as there
-is aready a value of 'hello' in the set. We again display the valueMap to prove that
+is already a value of 'hello' in the set. We again display the valueMap to prove that
 the set only has unique values in it.
 
 [source,groovy]
 ----
-g.V(3).property(set,'hw',"hello").property(set,'hw','apple')
+g.V(3).property(set,'hw','hello').property(set,'hw','apple')
 
 g.V(3).valueMap('hw')
 
