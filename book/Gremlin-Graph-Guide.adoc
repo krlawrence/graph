@@ -12563,9 +12563,9 @@ Using boolean operators with a 'sack'
 
 You can also use the boolean operators 'or' and 'and' when working with a 'sack'. The
 examples below just test the basic functionality using constants of 'true' and
-'false' In the first example the result returned in the 'sack' is 'false' as we used
+'false'. In the first example the result returned in the 'sack' is 'false' as we used
 an 'and' operator to 'and' together the sack's initial value of 'true' and a constant
-value of 'false'
+value of 'false'.
 
 [source,groovy]
 ----
