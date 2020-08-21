@@ -11438,7 +11438,7 @@ v[8]
 ----
 
 Having extracted the vertex we can retrieve values from it. A bit later we will look
-at ways, we could continue our traversal from this point if we needed to, perhaps
+at ways we could continue our traversal from this point if we needed to, perhaps
 looking at outgoing routes from DFW or adding a new route. You will find that
 discussion in the "<<rbarriers>>" section.
 
