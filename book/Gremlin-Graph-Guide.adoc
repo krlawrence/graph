@@ -13194,7 +13194,7 @@ g.V().hasLabel('airport').limit(10).map{a=1;b=2;c=a+b;it.get().id() + c}.fold()
 ----
 
 Note that only the value from the last expression in the closure is returned from the
-'map'. So in the example above the result of 'c=a+b', 4, is added to each ID.
+'map'. So in the example above the result of 'c=a+b', 3, is added to each ID.
 
 As we have already seen, there are often multiple ways to achieve the same result
 when working with Gremlin. It is also true that some ways are almost always better
