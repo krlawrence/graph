@@ -12942,7 +12942,7 @@ do this.
 [source,groovy]
 ----
 oregon = []
-oregon = g.V().has('region','US-OR').values('code').fill(oregon);[]
+g.V().has('region','US-OR').values('code').fill(oregon);[]
 println oregon
 println "I found ${oregon.size} airports in Oregon"
 ----
