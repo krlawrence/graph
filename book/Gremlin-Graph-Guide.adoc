@@ -7277,7 +7277,7 @@ whether or not they end up in Austin.
 
 [source,groovy]
 ----
-g.V()has('code','LSI').
+g.V().has('code','LSI').
      repeat(out().simplePath()).
         emit(has('region','US-NY')).
         until(has('code','AUS')).
@@ -13032,7 +13032,7 @@ searching predicates. That, however, is a topic for quite a bit later on.
 
 [source,groovy]
 ----
-g.V()hasLabel('airport').as('a').values('desc').
+g.V().hasLabel('airport').as('a').values('desc').
      filter{it.toString().contains('F.')}.select('a').
      local(values('code','desc').fold())
 
