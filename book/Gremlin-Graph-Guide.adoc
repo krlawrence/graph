@@ -12930,7 +12930,7 @@ course.
 
 [source,groovy]
 ----
-num = oregon = g.V().has('region','US-OR').values('code').count().next()
+num = g.V().has('region','US-OR').values('code').count().next()
 println "I found ${num} airports in Oregon"
 
 I found 7 airports in Oregon
