@@ -13024,7 +13024,7 @@ Dalat
 Dalanzadgad
 ----
 
-The next example that uses a 'filter' step combined with a closure to
+The next example uses a 'filter' step combined with a closure to
 find any airport vertex that has a description containing the letter '"F"' followed by
 a period, as in '"F."'. While this makes an interesting example, there are other ways
 to achieve this result. One such way would be to used a mixed index and special text
