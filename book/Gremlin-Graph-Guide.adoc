@@ -13422,7 +13422,7 @@ g.V().has('code','AUS').flatMap(outE().inV()).
 [Austin,Detroit]
 ----
 
-We cannot use a 'map' step to achive the same result as it will only return the first
+We cannot use a 'map' step to achieve the same result as it will only return the first
 path as shown below.
 
 [source,groovy]
