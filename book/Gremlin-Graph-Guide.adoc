@@ -13645,7 +13645,7 @@ g.V().has('desc', regex(/^Dal.*/)).values('desc')
 Unrolling the lists returned by 'valueMap'
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In the "<<tp34vm>>" section, I showed some examples that used 'by(unfold()' following
+In the "<<tp34vm>>" section, I showed some examples that used 'by(unfold())' following
 a 'valueMap' step unroll property values. As you may recall, this means that single
 property values are not returned wrapped inside lists. This feature was introduced in
 TinkerPop 3.4. However, you can achieve the same results using earlier versions of
@@ -13673,7 +13673,7 @@ desc=San Francisco International Airport
 ----
 
 We could use a query like the one below to achieve the same result. A 'map' step is
-used to unpack age and then repackage the results of the 'valueMap' step with the
+used to unpackage and then repackage the results of the 'valueMap' step with the
 values unrolled from their lists.
 
 [source,groovy]
