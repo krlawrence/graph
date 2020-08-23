@@ -13343,7 +13343,7 @@ to add a 'fold' step between the 'sack' steps.
 [DFW:7,LAX:4,PHX:3,DEN:6]
 ----
 
-There are other ways that you might chose to write a query like these, that avoid the
+There are other ways that you might choose to write queries like these, that avoid the
 use of closures altogether, but hopefully these examples show some interesting ways
 that closures can be combined with 'sack' steps.
 
