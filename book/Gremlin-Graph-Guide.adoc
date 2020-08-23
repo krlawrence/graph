@@ -13722,8 +13722,8 @@ g.V().has('code','SFO').valueMap('region')
 ----
 If we were to use the 'map' step that we just created, it would try to unroll this
 property which in this case is not what we want as we want to preserve the list. We
-can modify the clearly a little to include a 'choose' step that only unrolls the
-'lst' if it has a length of one.
+can modify this a little to include a 'choose' step that only unrolls the
+list if it has a length of one.
 
 [source,groovy]
 ----
