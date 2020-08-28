@@ -2,9 +2,9 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
-v283-preview, July 4th 2020
+v283-preview, August 28th 2020
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Sat Jul 04, 2020 19:15:35 CDT
+// Fri Aug 28, 2020 09:43:19 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -25,8 +25,8 @@ v283-preview, July 4th 2020
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: July 4th 2020
-:tpvercheck: 3.4.6
+:draftdate: August 28th 2020
+:tpvercheck: 3.4.8
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
 //        has a white foreground color. The default was unreadable,
@@ -9591,18 +9591,20 @@ using the 'from' step in a similar way as we used the 'to' step above.
 g.V().has('code','DFW').addE('route').from(xyz)
 ----
 
-Another way that we could have chosen to create our edge is by naming things using
-'as' steps. Note also there is more than one way to define the direction of an edge.
-Two examples are shown below. One uses the 'addOutE' step and the other uses the
-'addE' and 'to' combination. Notice also how the 'V' step was used below to
-essentially start a new traversal midway through the current one.
+Another way that we could have chosen to create our edge involves labelling the "XYZ"
+vertex using an `as` step. The example below demonstrates this. Notice also how a 'V'
+step is used to start a new traversal midway through the current one.  The label
+created using the `as` step is used to instruct the `to` step about the target vertex
+for the new edge.
 
 [source,groovy]
 ----
-g.V().has('code','XYZ').as('a').V().has('code','DFW').addOutE('route','a')
-
 g.V().has('code','XYZ').as('a').V().has('code','DFW').addE('route').to('a')
 ----
+
+NOTE: In earlier versions of Apache TinkerPop there was an `addOutE` step. That step
+has since been deprecated and removed from the language in favor of always using
+`addE`.
 
 You will see a bigger example that uses 'as' to name steps in the "<<testgraph>>"
 section that is coming up soon.
