@@ -9606,8 +9606,8 @@ NOTE: In earlier versions of Apache TinkerPop there was an `addOutE` step. That 
 has since been deprecated and removed from the language in favor of always using
 `addE`.
 
-You will see a bigger example that uses 'as' to name steps in the "<<testgraph>>"
-section that is coming up soon.
+You will see a bigger example that uses 'as' steps while creating vertices and edges
+in the "<<testgraph>>" section that is coming up soon.
 
 [[addlabeldynamic]]
 Using a traversal to determine a new label name
