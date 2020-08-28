@@ -7277,7 +7277,7 @@ whether or not they end up in Austin.
 
 [source,groovy]
 ----
-g.V()has('code','LSI').
+g.V().has('code','LSI').
      repeat(out().simplePath()).
         emit(has('region','US-NY')).
         until(has('code','AUS')).
@@ -11438,7 +11438,7 @@ v[8]
 ----
 
 Having extracted the vertex we can retrieve values from it. A bit later we will look
-at ways, we could continue our traversal from this point if we needed to, perhaps
+at ways we could continue our traversal from this point if we needed to, perhaps
 looking at outgoing routes from DFW or adding a new route. You will find that
 discussion in the "<<rbarriers>>" section.
 
@@ -12563,9 +12563,9 @@ Using boolean operators with a 'sack'
 
 You can also use the boolean operators 'or' and 'and' when working with a 'sack'. The
 examples below just test the basic functionality using constants of 'true' and
-'false' In the first example the result returned in the 'sack' is 'false' as we used
+'false'. In the first example the result returned in the 'sack' is 'false' as we used
 an 'and' operator to 'and' together the sack's initial value of 'true' and a constant
-value of 'false'
+value of 'false'.
 
 [source,groovy]
 ----
@@ -12930,7 +12930,7 @@ course.
 
 [source,groovy]
 ----
-num = oregon = g.V().has('region','US-OR').values('code').count().next()
+num = g.V().has('region','US-OR').values('code').count().next()
 println "I found ${num} airports in Oregon"
 
 I found 7 airports in Oregon
@@ -12942,7 +12942,7 @@ do this.
 [source,groovy]
 ----
 oregon = []
-oregon = g.V().has('region','US-OR').values('code').fill(oregon);[]
+g.V().has('region','US-OR').values('code').fill(oregon);[]
 println oregon
 println "I found ${oregon.size} airports in Oregon"
 ----
@@ -13024,7 +13024,7 @@ Dalat
 Dalanzadgad
 ----
 
-The next example that uses a 'filter' step combined with a closure to
+The next example uses a 'filter' step combined with a closure to
 find any airport vertex that has a description containing the letter '"F"' followed by
 a period, as in '"F."'. While this makes an interesting example, there are other ways
 to achieve this result. One such way would be to used a mixed index and special text
@@ -13032,7 +13032,7 @@ searching predicates. That, however, is a topic for quite a bit later on.
 
 [source,groovy]
 ----
-g.V()hasLabel('airport').as('a').values('desc').
+g.V().hasLabel('airport').as('a').values('desc').
      filter{it.toString().contains('F.')}.select('a').
      local(values('code','desc').fold())
 
@@ -13194,7 +13194,7 @@ g.V().hasLabel('airport').limit(10).map{a=1;b=2;c=a+b;it.get().id() + c}.fold()
 ----
 
 Note that only the value from the last expression in the closure is returned from the
-'map'. So in the example above the result of 'c=a+b', 4, is added to each ID.
+'map'. So in the example above the result of 'c=a+b', 3, is added to each ID.
 
 As we have already seen, there are often multiple ways to achieve the same result
 when working with Gremlin. It is also true that some ways are almost always better
@@ -13343,7 +13343,7 @@ to add a 'fold' step between the 'sack' steps.
 [DFW:7,LAX:4,PHX:3,DEN:6]
 ----
 
-There are other ways that you might chose to write a query like these, that avoid the
+There are other ways that you might choose to write queries like these, that avoid the
 use of closures altogether, but hopefully these examples show some interesting ways
 that closures can be combined with 'sack' steps.
 
@@ -13422,7 +13422,7 @@ g.V().has('code','AUS').flatMap(outE().inV()).
 [Austin,Detroit]
 ----
 
-We cannot use a 'map' step to achive the same result as it will only return the first
+We cannot use a 'map' step to achieve the same result as it will only return the first
 path as shown below.
 
 [source,groovy]
@@ -13645,7 +13645,7 @@ g.V().has('desc', regex(/^Dal.*/)).values('desc')
 Unrolling the lists returned by 'valueMap'
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In the "<<tp34vm>>" section, I showed some examples that used 'by(unfold()' following
+In the "<<tp34vm>>" section, I showed some examples that used 'by(unfold())' following
 a 'valueMap' step unroll property values. As you may recall, this means that single
 property values are not returned wrapped inside lists. This feature was introduced in
 TinkerPop 3.4. However, you can achieve the same results using earlier versions of
@@ -13673,7 +13673,7 @@ desc=San Francisco International Airport
 ----
 
 We could use a query like the one below to achieve the same result. A 'map' step is
-used to unpack age and then repackage the results of the 'valueMap' step with the
+used to unpackage and then repackage the results of the 'valueMap' step with the
 values unrolled from their lists.
 
 [source,groovy]
@@ -13722,8 +13722,8 @@ g.V().has('code','SFO').valueMap('region')
 ----
 If we were to use the 'map' step that we just created, it would try to unroll this
 property which in this case is not what we want as we want to preserve the list. We
-can modify the clearly a little to include a 'choose' step that only unrolls the
-'lst' if it has a length of one.
+can modify this a little to include a 'choose' step that only unrolls the
+list if it has a length of one.
 
 [source,groovy]
 ----
