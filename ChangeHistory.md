@@ -12,11 +12,11 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
 - Added additional examples to the "Looking for the journey requiring the most stops" section and promoted that section by one level. #182
 - Added a new section "Quickly finding the hardest to get to airports". Issue #182.
 - Added additional examples to the coverage of `flatMap` Issue #183
-- Merged reader PRs #154, #160
+- Merged reader PRs #154, #160, #197, #198, #200
 - Updated warning about label indexing to reflect the current state of graph DBs better. Issue #186
 - Renamed HTML and PDF files to PracticalGremlin.
   - The prior Gremlin-Graph-Guide names will still work to avoid breaking bookmarks.
-- Improved grammar and fixed a few typos. Issues #164, #180
+- Improved grammar and fixed a few typos. Issues #164, #180, #199
 - Sample code updates
   - Added `quick-btree2.groovy` which adds a few more nodes to the treee than in `quick-btree.groovy`.
   - Added `RemoteWriteText.java` which shows how to turn traversals and GraphSON back into text queries.
