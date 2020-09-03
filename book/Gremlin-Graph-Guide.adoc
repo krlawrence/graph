@@ -2,9 +2,9 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
-v283-preview, August 28th 2020
+v283-preview, September 2nd 2020
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Fri Aug 28, 2020 09:43:19 CDT
+// Wed Sep 02, 2020 19:37:12 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -25,7 +25,7 @@ v283-preview, August 28th 2020
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: August 28th 2020
+:draftdate: September 2nd 2020
 :tpvercheck: 3.4.8
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -17520,22 +17520,23 @@ g.V().has('code','AUS').
 
 [[latlonmanual]]
 Using latitude, longitude and geographical region in queries
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The 'air-routes' graph stores the geographic coordinates (latitude and longitude) of
 each airport as floating point numbers.  Some graph systems such as JanusGraph have
-some useful geographic coordinate and shape support built in but TinkerGraph does
-not. Moreover, GraphML does not offer any specific geospatial support so to keeps
+geographic coordinate and shape (geospatial) functions built in, but TinkerGraph does
+not. Moreover, GraphML does not offer any specific geospatial support. To keep
 things simple and flexible, the air routes data set does not assume any specific back
-end capabilities. This said, even having coordinates provided as basic floating point
-numbers offers us a chance to do some interesting geospatial queries. So far in this
-book we have not made us of the latitude and longitude coordinates that are
-stored for each airport so in this section we will experiment a bit with some
-queries that do. 
+end capabilities. Having coordinates provided as basic floating point
+numbers still allows us to write some interesting geospatial queries. 
 
-To start us off, here is a simple query that finds any airports located North of 77
-degrees latitude. Note that we could have used 'where' instead of 'filter' as they
-are synonymous in this case.
+So far, we have not taken advantage of these latitude and longitude coordinates in
+queries. In this section I have included some queries that perform interesting
+geospatial calculations using just the standard Gremlin steps. 
+
+Here is a simple query that finds any airports located North of 77 degrees latitude.
+Note that a 'where' step could be used instead of 'filter' as they are synonymous in
+this case.
 
 [source,groovy]
 ----
@@ -17793,18 +17794,13 @@ avoid LAX and PHX it seems.
 [AUS,OAK,LAS]
 ----
 
-We will revisit the topic of performing geospatial queries in the "<<janusgeo>>" 
-section where we look at some additional capabilities that JanusGraph offers to us
-in this area.
+Let's look at one last query that uses the 'region' property, present on all
+airport vertices in the graph.
 
-To finish up examples of how the geospatial and region information stored in the
-graph can be used to generate interesting results, let's look at one last query that
-uses the 'region' property that is present on all of the airport vertices in the graph.
-
-The query below finds the DFW airport then looks at all routes from there to airports
-within the United States. Next we group those airports by their region code and
-airport code. Finally we select just a few states and unfold the results to make them
-a bit more readable.
+The query below starts at the DFW airport then looks for all routes to airports also
+within the United States. Next those airports are grouped by their region code and
+airport code. Finally a few states are selected. The query ends with an 'unfold' step
+to make the results a bit more readable.
 
 [source,groovy]
 ----
@@ -17814,9 +17810,8 @@ g.V().has('airport','code','DFW').out().has('country','US').
 
 ----
 
-Below you can see the results from running the query. Each of the states we selected
-is listed along with an array of airport codes in those states that you can fly to
-fro DFW.
+Below you can see the query results. Each of the selected states is listed along with
+a list of airports reachable from DFW.
 
 [source,groovy]
 ----
@@ -17827,6 +17822,100 @@ US-FL=[FLL, MCO, MIA, PBI, TPA, RSW, TLH, JAX, PNS, VPS]
 US-CO=[DEN, COS, DRO, GJT, EGE, HDN, ASE, GUC, MTJ]
 US-IL=[ORD, PIA, BMI, CMI, MLI, SPI]
 ----
+
+In the next section we will look at a more complicated query that builds upon the
+examples above and performs distance calculations using the latitude and longitude
+coordinates present on the airport vertices.
+
+[[GreatCircle]]
+Using the 'math' step to calculate Great Circle distances
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If the latitude and longitude of two places on the Earth are known, the approximate
+distance between them can be calculated using the
+(https://en.wikipedia.org/wiki/Haversine_formula)[Haversine Great Circle Distance
+formula]. The formula includes some trigonometrical calculations that can be done in
+Gremlin using the 'math' step.
+
+In this section I have included two queries. The first calculates the distance
+between Austin and Dallas Fort Worth using a somewhat inflexible approach. This
+reflects my first attempt to create a query that computes Great Circle distances, all
+in Gremlin. The airport codes are embedded in the query. Having got that working I
+realized a more generic query would be better. The second example allows an arbitrary
+source and destination to be specified.
+
+Let's take a look at the first query. At first, the number of steps used may look a
+bit daunting, but if you work your way through it section by section it's actually
+fairly straightforward. 
+
+TODO: Write more !!
+
+[source,groovy]
+----
+g.withSideEffect("rdeg", 0.017453293).
+  withSideEffect("gcmiles",3956).
+  V().
+  has('code',within('AUS','DFW')).
+  group().
+    by('code').
+    by(project('lat','lon').
+      by('lat').
+      by('lon')).
+  as('grp').
+  project('ladiff','lgdiff','lat1','lon1','lat2','lon2').
+    by(project('la1','la2').
+         by(select('AUS').select('lat')).
+         by(select('DFW').select('lat')).
+       math('(la2 - la1) * rdeg')).
+    by(project('lg1','lg2').
+         by(select('AUS').select('lon')).
+         by(select('DFW').select('lon')).
+       math('(lg2 - lg1) * rdeg')).
+    by(select('grp').select('AUS').select('lat')).
+    by(select('grp').select('AUS').select('lon')).
+    by(select('grp').select('DFW').select('lat')).
+    by(select('grp').select('DFW').select('lon')).
+    math('(sin(ladiff/2))^2 + cos(lat1*rdeg) * cos(lat2*rdeg) * (sin(lgdiff/2))^2').
+    math('gcmiles * (2 * asin(sqrt(_)))')       
+----
+
+[source,groovy]
+----
+190.2483140396514   
+----
+
+
+[source,groovy]
+----
+g.withSideEffect("rdeg", 0.017453293).
+  withSideEffect("gcmiles",3956).        
+  V().has('code','AUS').as('src').
+  V().has('code','DFW').as('dst').
+  select('src','dst').
+    by(project('lat','lon').
+         by('lat').
+         by('lon')).as('grp').
+    project('ladiff','lgdiff','lat1','lon1','lat2','lon2').
+       by(project('la1','la2').
+            by(select('grp').select('src').select('lat')).
+            by(select('grp').select('dst').select('lat')).
+          math('(la2 - la1) * rdeg')).
+       by(project('lg1','lg2').
+            by(select('grp').select('src').select('lon')).
+            by(select('grp').select('dst').select('lon')).
+          math('(lg2 - lg1) * rdeg')).
+       by(select('grp').select('src').select('lat')).
+       by(select('grp').select('src').select('lon')).
+       by(select('grp').select('dst').select('lat')).
+       by(select('grp').select('dst').select('lon')).
+    math('(sin(ladiff/2))^2 + cos(lat1*rdeg) * cos(lat2*rdeg) * (sin(lgdiff/2))^2').
+    math('gcmiles * (2 * asin(sqrt(_)))')              
+----
+
+
+We will revisit the topic of performing geospatial queries in the "<<janusgeo>>" 
+section where some additional capabilities that JanusGraph offers are discussed.
+
 
 [[via]]
 Finding routes that go via a specific airport
