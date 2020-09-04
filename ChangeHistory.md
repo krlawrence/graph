@@ -13,6 +13,10 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
 - Added a new section "Quickly finding the hardest to get to airports". Issue #182.
 - Added additional examples to the coverage of `flatMap` Issue #183
 - Removed an example that used `addOutE` as the step has since been deprectated and removed from TinkerPop completely. #199
+- Promoted the section "Using latitude, longitude and geographical region in queries" one level.
+  - Improved the wording that introduces the section
+  - Improved the wording at the end of the section.
+  - Added a sub-section that calculates Great Circle distances using the `math` step and the Haversine formula. #169
 - Merged reader PRs #154, #160, #197, #198, #200
 - Updated warning about label indexing to reflect the current state of graph DBs better. Issue #186
 - Renamed HTML and PDF files to PracticalGremlin.

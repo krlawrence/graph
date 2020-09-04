@@ -2,9 +2,9 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
-v283-preview, September 2nd 2020
+v283-preview, September 3rd 2020
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Wed Sep 02, 2020 19:37:12 CDT
+// Thu Sep 03, 2020 18:52:55 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -25,7 +25,7 @@ v283-preview, September 2nd 2020
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: September 2nd 2020
+:draftdate: September 3rd 2020
 :tpvercheck: 3.4.8
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -17832,23 +17832,101 @@ Using the 'math' step to calculate Great Circle distances
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If the latitude and longitude of two places on the Earth are known, the approximate
-distance between them can be calculated using the
-(https://en.wikipedia.org/wiki/Haversine_formula)[Haversine Great Circle Distance
-formula]. The formula includes some trigonometrical calculations that can be done in
+distance between them can be calculated using the Haversine Great Circle Distance
+formula. The formula includes some trigonometrical calculations that can be done in
 Gremlin using the 'math' step.
+
+NOTE: If you are interested in better understanding the mathematics used by the
+Haversine formula, details can be found  
+https://en.wikipedia.org/wiki/Haversine_formula[here].
 
 In this section I have included two queries. The first calculates the distance
 between Austin and Dallas Fort Worth using a somewhat inflexible approach. This
-reflects my first attempt to create a query that computes Great Circle distances, all
+reflects my first attempt to create a query that computes Great Circle distances all
 in Gremlin. The airport codes are embedded in the query. Having got that working I
 realized a more generic query would be better. The second example allows an arbitrary
 source and destination to be specified.
 
-Let's take a look at the first query. At first, the number of steps used may look a
-bit daunting, but if you work your way through it section by section it's actually
-fairly straightforward. 
+Let's take a look at the queries. At first, the number of steps used may look a bit
+daunting, but if you work your way through it section by section it's actually fairly
+straightforward. The Haversine formula needs a couple of constant values.  These are
+injected into the query using 'withSideEffect' steps. The first constant, 'rdeg'
+represents one degree in radians. This is the result from dividing PI by 180. The
+second constant 'gcmiles' represents the average radius of the Earth in miles. This
+allows for the imperfect spherical shape of the Earth where the radius varies closer
+to the poles. 
 
-TODO: Write more !!
+In my first attempt at producing a query, I used a 'has' step to find the AUS and DFW
+airports and then produced a group with the airport codes being the keys and a
+projection of their latitude and longitude being the values. If we take just that
+part of the query and run it this is what we get back.
+
+[source,groovy]
+----
+g.withSideEffect("rdeg", 0.017453293).
+  withSideEffect("gcmiles",3956).
+  V().
+  has('code',within('AUS','DFW')).
+  group().
+    by('code').
+    by(project('lat','lon').
+      by('lat').
+      by('lon'))
+
+[DFW:[lat:32.896800994873,lon:-97.0380020141602],
+ AUS:[lat:30.1944999694824,lon:-97.6698989868164]] 
+----
+
+The Haversine formula requires us to calculate the differences between the latitude
+and longitude of the two coordinates. The next part of the query does that. A project
+step 'project('ladiff','lgdiff','lat1','lon1','lat2','lon2')' is used to collect all
+the values we need. 
+
+[source,groovy]
+----
+g.withSideEffect("rdeg", 0.017453293).
+  withSideEffect("gcmiles",3956).
+  V().
+  has('code',within('AUS','DFW')).
+  group().
+    by('code').
+    by(project('lat','lon').
+      by('lat').
+      by('lon')).
+  as('grp').
+  project('ladiff','lgdiff','lat1','lon1','lat2','lon2').
+    by(project('la1','la2').
+         by(select('AUS').select('lat')).
+         by(select('DFW').select('lat')).
+       math('(la2 - la1) * rdeg')).
+    by(project('lg1','lg2').
+         by(select('AUS').select('lon')).
+         by(select('DFW').select('lon')).
+       math('(lg2 - lg1) * rdeg')).
+    by(select('grp').select('AUS').select('lat')).
+    by(select('grp').select('AUS').select('lon')).
+    by(select('grp').select('DFW').select('lat')).
+    by(select('grp').select('DFW').select('lon'))
+----
+
+Here are the results. A map has been generated containing the differences as well as
+the original coordinates.
+
+[source,groovy]
+----
+[ladiff:0.04716405157034253,
+ lgdiff:0.011028683009581777,
+ lat1:30.1944999694824,
+ lon1:-97.6698989868164,
+ lat2:32.896800994873,
+ lon2:-97.0380020141602]  
+----
+
+The purpose of collecting the values like this is so they can be fed into the 'math'
+step to complete the calculation. One key takeaway from this example is the way that
+a 'math' step can be fed values from a prior 'project' step. The final calculations
+perform the necessary trigonometry as required by the Haversine formula. Here is the
+complete version of my first attempt at solving this problem in Gremlin.
 
 [source,groovy]
 ----
@@ -17875,15 +17953,24 @@ g.withSideEffect("rdeg", 0.017453293).
     by(select('grp').select('AUS').select('lon')).
     by(select('grp').select('DFW').select('lat')).
     by(select('grp').select('DFW').select('lon')).
-    math('(sin(ladiff/2))^2 + cos(lat1*rdeg) * cos(lat2*rdeg) * (sin(lgdiff/2))^2').
-    math('gcmiles * (2 * asin(sqrt(_)))')       
+  math('(sin(ladiff/2))^2 + cos(lat1*rdeg) * cos(lat2*rdeg) * (sin(lgdiff/2))^2').
+  math('gcmiles * (2 * asin(sqrt(_)))')       
 ----
+
+We can see that the distance from Austin to Dallas Fort Worth is approximately 190
+miles.
 
 [source,groovy]
 ----
 190.2483140396514   
 ----
 
+A few adjustments are needed to make the query more flexible. I wanted to have a
+query where you just provide any two airport codes at the start. This makes it easy
+to parameterize the query when working with code. The main difference from my first
+attempt is that the source and target airports are located at the start and
+individually labelled. The `group` step is replaced by a `select` step and given a
+label of "grp". The remainder of the query refers to "grp" as needed.
 
 [source,groovy]
 ----
@@ -17894,24 +17981,71 @@ g.withSideEffect("rdeg", 0.017453293).
   select('src','dst').
     by(project('lat','lon').
          by('lat').
-         by('lon')).as('grp').
-    project('ladiff','lgdiff','lat1','lon1','lat2','lon2').
-       by(project('la1','la2').
-            by(select('grp').select('src').select('lat')).
-            by(select('grp').select('dst').select('lat')).
-          math('(la2 - la1) * rdeg')).
-       by(project('lg1','lg2').
-            by(select('grp').select('src').select('lon')).
-            by(select('grp').select('dst').select('lon')).
-          math('(lg2 - lg1) * rdeg')).
-       by(select('grp').select('src').select('lat')).
-       by(select('grp').select('src').select('lon')).
-       by(select('grp').select('dst').select('lat')).
-       by(select('grp').select('dst').select('lon')).
-    math('(sin(ladiff/2))^2 + cos(lat1*rdeg) * cos(lat2*rdeg) * (sin(lgdiff/2))^2').
-    math('gcmiles * (2 * asin(sqrt(_)))')              
+         by('lon')).
+  as('grp').
+  project('ladiff','lgdiff','lat1','lon1','lat2','lon2').
+    by(project('la1','la2').
+         by(select('grp').select('src').select('lat')).
+         by(select('grp').select('dst').select('lat')).
+       math('(la2 - la1) * rdeg')).
+    by(project('lg1','lg2').
+         by(select('grp').select('src').select('lon')).
+         by(select('grp').select('dst').select('lon')).
+       math('(lg2 - lg1) * rdeg')).
+    by(select('grp').select('src').select('lat')).
+    by(select('grp').select('src').select('lon')).
+    by(select('grp').select('dst').select('lat')).
+    by(select('grp').select('dst').select('lon')).
+  math('(sin(ladiff/2))^2 + cos(lat1*rdeg) * cos(lat2*rdeg) * (sin(lgdiff/2))^2').
+  math('gcmiles * (2 * asin(sqrt(_)))')              
 ----
 
+The result from the more general purpose version of the query is the same as before.
+
+[source,groovy]
+----
+190.2483140396514  
+----
+
+NOTE: The code for this query is available in the sample-code folder at https://github.com/krlawrence/graph/blob/master/sample-code/great-circle.groovy    
+
+We can go one step further and parameterize the query. Everything shown below can be
+done using the Gremlin Console but it also represents the way you might use this
+query within an application. This time San Francisco and Tokyo Narita are used as the
+origin and destination.
+
+[source,groovy]
+----
+start = 'SFO'
+stop = 'NRT'
+
+g.withSideEffect("rdeg", 0.017453293).
+  withSideEffect("gcmiles",3956).        
+  V().has('code',start).as('src').
+  V().has('code',stop).as('dst').
+  select('src','dst').
+    by(project('lat','lon').
+         by('lat').
+         by('lon')).
+  as('grp').
+  project('ladiff','lgdiff','lat1','lon1','lat2','lon2').
+    by(project('la1','la2').
+         by(select('grp').select('src').select('lat')).
+         by(select('grp').select('dst').select('lat')).
+       math('(la2 - la1) * rdeg')).
+    by(project('lg1','lg2').
+         by(select('grp').select('src').select('lon')).
+         by(select('grp').select('dst').select('lon')).
+       math('(lg2 - lg1) * rdeg')).
+    by(select('grp').select('src').select('lat')).
+    by(select('grp').select('src').select('lon')).
+    by(select('grp').select('dst').select('lat')).
+    by(select('grp').select('dst').select('lon')).
+  math('(sin(ladiff/2))^2 + cos(lat1*rdeg) * cos(lat2*rdeg) * (sin(lgdiff/2))^2').
+  math('gcmiles * (2 * asin(sqrt(_)))')       
+
+5108.80166113392 
+----
 
 We will revisit the topic of performing geospatial queries in the "<<janusgeo>>" 
 section where some additional capabilities that JanusGraph offers are discussed.
