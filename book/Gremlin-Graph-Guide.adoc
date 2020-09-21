@@ -14555,7 +14555,7 @@ clockWithResult(1) {
 203359
 ----
 
-Notice that for the 'clock' and 'clockWithReslts' methods to work correctly you need
+Notice that for the 'clock' and 'clockWithResult' methods to work correctly you need
 to end the query with a termination step such as 'next' or 'toList'. Alternatively
 you can end the query with 'iterate'. In my testing I found things did not always
 work correctly when using 'iterate' so I tend to avoid it.
@@ -20368,7 +20368,7 @@ public void findByRegion(String iata)
 }                                
 ----
 
-If we were to call the 'findByRegion' nethod, passing in a parameter of 'DEN',
+If we were to call the 'findByRegion' method, passing in a parameter of 'DEN',
 representing the airport in Denver Colorado, the following output should be returned.
 
 [source,console]
