@@ -6736,7 +6736,7 @@ result to be the one that is returned to your query.
 
 Look at the example below. Starting from the vertex with an ID of 3 it uses
 'coalesce' to first see if there are any outgoing edges with a label of 'fly'. If
-there are any the vertices connected to those edges will be returned. If there are
+there are any, the vertices connected to those edges will be returned. If there are
 not any, any vertices on any incoming edges labelled 'contains' will be returned.
 
 [source,groovy]
