@@ -7088,7 +7088,7 @@ g.V().has('code','AUS').repeat(out()).times(2).has('code','SYD').path().by('code
 
 The previous query is equivalent to this next one but doing it this way is less
 flexible in that we can not as easily vary the number of 'out' steps, should, for
-example we want to next try five hops instead of the current two..
+example we want to next try five hops instead of the current two.
 
 [source,groovy]
 ----
