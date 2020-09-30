@@ -12466,7 +12466,7 @@ segments (or hops) a 'path' consists of. This means that along with the 'path' r
 we can also return the path's 'hop count'.
 
 The query below looks for routes between Austin and Wellington and returns the first
-10 results found along with the number flights that would need to be  taken between
+10 results found along with the number of flights that would need to be  taken between
 the source and destination airports. As part of the 'repeat' step, each time an 'out'
 step is taken a 'constant' value of one is added to the sack for that individual
 path. Finally a 'union' step is used to combine the individual path with its hop
