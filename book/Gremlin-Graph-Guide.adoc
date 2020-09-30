@@ -12053,7 +12053,7 @@ Introducing 'sack' as a way to store values
 As is hopefully now becoming apparent, to efficiently write certain types of queries
 you need a way to build up a collection of items as the traversal takes place. We
 have already looked at steps like 'aggregate' and 'store' that can create collections
-of items during a traversal.  However, the 'sack' step offers additional capability
+of items during a traversal.  However, the 'sack' step offers an additional capability
 in that we can specify how items are added to the collection. For example they can be
 added using addition, multiplication, subtraction or division. Alternatively we can
 store the minimum or maximum value of a pair of values. These and other sack
