@@ -12158,7 +12158,7 @@ This time, as the Austin (AUS) airport has two runways our calculation in effect
 became '2 + runways'.
 
 Before looking at some slightly more complex queries that use multiple 'sack' steps,
-we should take a look at some of the other operators. So far we have just used 'sum'
+we should take a look at some of the other operators. So far we have just used 'sum'.
 The query below uses 'mult' which as its name implies will multiply the values
 together rather than add them.
 
