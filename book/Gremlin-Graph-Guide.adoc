@@ -179,7 +179,7 @@ as well as using the Gremlin Console. I even slipped a couple of Ruby examples i
 too!
 
 NOTE: In the first few sections of this book I have mainly focussed on
-showing the different types of query that you can issue using Gremlin. I have not
+showing the different types of queries that you can issue using Gremlin. I have not
 tried to show all of the output that you will get back from entering these queries
 but have selectively shown examples of output. I go a lot deeper into things in
 chapters 4, 5 and 6.
@@ -12050,7 +12050,7 @@ gremlin> 27/26
 Introducing 'sack' as a way to store values
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-As is hopefully now becoming apparent, to efficiently write certain types of query
+As is hopefully now becoming apparent, to efficiently write certain types of queries
 you need a way to build up a collection of items as the traversal takes place. We
 have already looked at steps like 'aggregate' and 'store' that can create collections
 of items during a traversal.  However, the 'sack' step offers additional capability
