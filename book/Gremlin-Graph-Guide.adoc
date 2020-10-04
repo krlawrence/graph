@@ -13845,7 +13845,7 @@ tree = g.V().has('code','AUS').
              tree().by('code').next()
 ----
 
-The object returned to our variable 't' will be an instance of the
+The object returned to our variable 'tree' will be an instance of the
 'org.apache.tinkerpop.gremlin.process.traversal.step.util.Tree' class. That class
 provides a set of methods that can be used when working with a Tree.
 
