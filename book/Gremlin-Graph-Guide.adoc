@@ -14047,7 +14047,7 @@ Working with GraphML and GraphSON
 Apache TinkerPop supports the loading and saving of entire graphs using GraphML and
 GraphSON. GraphML is a broadly supported XML standard that can be used to represent
 entire graphs. GraphSON is a JSON format defined as part of the Apache TinkerPop
-project that also allows whole graphs to represented. It is also possible to use
+project that also allows whole graphs to be represented. It is also possible to use
 GraphSON to represent the results of a Gremlin graph query in JSON format. In this
 section we will take a look at all of these topics. The whole subject of using
 GraphML and GraphSON will be revisited a few more times later in the book. Knowledge
