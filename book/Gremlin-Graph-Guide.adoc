@@ -14989,7 +14989,7 @@ San Marino
 ----
 
 The previous query is a slightly shorter form of the two queries below which would
-both yield the same results. Note the use of the '"--"' prefix in front of the 'not'
+both yield the same results. Note the use of the '"__"' prefix in front of the 'not'
 step in the second query. This is because 'not' is a reserved word in Groovy and has
 to be prefixed in this way when not directly connected to a prior step by a dot.  
 
