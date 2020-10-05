@@ -14082,7 +14082,7 @@ considered lossee.
 Saving a graph to a GraphML file can be done using the following Gremlin expression.
 You might want to try it on one of your graphs and look at the output generated. You
 can also take a look at the `air-routes.graphml` file distribued with this book if
-you want to look at a well laid out (for human readability) GraphMl file. Bear in
+you want to look at a well laid out (for human readability) GraphML file. Bear in
 mind that by default, TinkerPop will save your graph in a way that is not easily
 human readable without using a code beautifier first. Most modern text editors can
 also beautify XML files well.
