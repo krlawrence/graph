@@ -14044,7 +14044,7 @@ that subgraph locally in memory while running some queries.
 Working with GraphML and GraphSON
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Apache TinkerPop supports loading and saving of entire graphs using GraphML and
+Apache TinkerPop supports the loading and saving of entire graphs using GraphML and
 GraphSON. GraphML is a broadly supported XML standard that can be used to represent
 entire graphs. GraphSON is a JSON format defined as part of the Apache TinkerPop
 project that also allows whole graphs to represented. It is also possible to use
