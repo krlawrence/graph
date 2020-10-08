@@ -15678,7 +15678,7 @@ the results for the keys of 'IAH' and 'LAX' only.
 Analysis of routes between Europe and the USA
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The next few queries show how you can use a graph like 'air-routes' do perform
+The next few queries show how you can use a graph like 'air-routes' to perform
 analysis on a particular industry segment. The following queries analyze the
 distribution and availability of routes between airports across Europe and airports
 in the United States. First of all let's just find out how many total routes there are
