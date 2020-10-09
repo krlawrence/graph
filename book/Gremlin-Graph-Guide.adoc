@@ -15873,7 +15873,7 @@ between airport vertices?". We can also use this same query to find the statisti
 Take a look at the next query that shows how we can do analysis on the distribution
 of routes throughout the graph. We are only interested in vertices that are airports and
 for those vertices we want to count how many outgoing routes each airport has.  We want
-to return the results as a set of odered 'key:value' pairs where the key is the
+to return the results as a set of ordered 'key:value' pairs where the key is the
 number of outgoing routes and the value is the number of airports that have that
 number of outgoing routes.
 
