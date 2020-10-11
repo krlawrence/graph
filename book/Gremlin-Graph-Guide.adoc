@@ -4,7 +4,7 @@ Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
 v283-preview, October 11th 2020
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Sun Oct 11, 2020 16:36:03
+// Sun Oct 11, 2020 16:48:04
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -14555,7 +14555,7 @@ clockWithResult(1) {
 203359
 ----
 
-Notice that for the 'clock' and 'clockWithReslts' methods to work correctly you need
+Notice that for the 'clock' and 'clockWithResult' methods to work correctly you need
 to end the query with a termination step such as 'next' or 'toList'. Alternatively
 you can end the query with 'iterate'. In my testing I found things did not always
 work correctly when using 'iterate' so I tend to avoid it.
