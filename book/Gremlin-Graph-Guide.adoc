@@ -179,7 +179,7 @@ as well as using the Gremlin Console. I even slipped a couple of Ruby examples i
 too!
 
 NOTE: In the first few sections of this book I have mainly focussed on
-showing the different types of query that you can issue using Gremlin. I have not
+showing the different types of queries that you can issue using Gremlin. I have not
 tried to show all of the output that you will get back from entering these queries
 but have selectively shown examples of output. I go a lot deeper into things in
 chapters 4, 5 and 6.
@@ -6736,7 +6736,7 @@ result to be the one that is returned to your query.
 
 Look at the example below. Starting from the vertex with an ID of 3 it uses
 'coalesce' to first see if there are any outgoing edges with a label of 'fly'. If
-there are any the vertices connected to those edges will be returned. If there are
+there are any, the vertices connected to those edges will be returned. If there are
 not any, any vertices on any incoming edges labelled 'contains' will be returned.
 
 [source,groovy]
@@ -7088,7 +7088,7 @@ g.V().has('code','AUS').repeat(out()).times(2).has('code','SYD').path().by('code
 
 The previous query is equivalent to this next one but doing it this way is less
 flexible in that we can not as easily vary the number of 'out' steps, should, for
-example we want to next try five hops instead of the current two..
+example we want to next try five hops instead of the current two.
 
 [source,groovy]
 ----
@@ -12050,10 +12050,10 @@ gremlin> 27/26
 Introducing 'sack' as a way to store values
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-As is hopefully now becoming apparent, to efficiently write certain types of query
+As is hopefully now becoming apparent, to efficiently write certain types of queries
 you need a way to build up a collection of items as the traversal takes place. We
 have already looked at steps like 'aggregate' and 'store' that can create collections
-of items during a traversal.  However, the 'sack' step offers additional capability
+of items during a traversal.  However, the 'sack' step offers an additional capability
 in that we can specify how items are added to the collection. For example they can be
 added using addition, multiplication, subtraction or division. Alternatively we can
 store the minimum or maximum value of a pair of values. These and other sack
@@ -12158,7 +12158,7 @@ This time, as the Austin (AUS) airport has two runways our calculation in effect
 became '2 + runways'.
 
 Before looking at some slightly more complex queries that use multiple 'sack' steps,
-we should take a look at some of the other operators. So far we have just used 'sum'
+we should take a look at some of the other operators. So far we have just used 'sum'.
 The query below uses 'mult' which as its name implies will multiply the values
 together rather than add them.
 
@@ -12466,7 +12466,7 @@ segments (or hops) a 'path' consists of. This means that along with the 'path' r
 we can also return the path's 'hop count'.
 
 The query below looks for routes between Austin and Wellington and returns the first
-10 results found along with the number flights that would need to be  taken between
+10 results found along with the number of flights that would need to be taken between
 the source and destination airports. As part of the 'repeat' step, each time an 'out'
 step is taken a 'constant' value of one is added to the sack for that individual
 path. Finally a 'union' step is used to combine the individual path with its hop
@@ -13845,7 +13845,7 @@ tree = g.V().has('code','AUS').
              tree().by('code').next()
 ----
 
-The object returned to our variable 't' will be an instance of the
+The object returned to our variable 'tree' will be an instance of the
 'org.apache.tinkerpop.gremlin.process.traversal.step.util.Tree' class. That class
 provides a set of methods that can be used when working with a Tree.
 
@@ -14044,10 +14044,10 @@ that subgraph locally in memory while running some queries.
 Working with GraphML and GraphSON
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Apache TinkerPop supports loading and saving of entire graphs using GraphML and
+Apache TinkerPop supports the loading and saving of entire graphs using GraphML and
 GraphSON. GraphML is a broadly supported XML standard that can be used to represent
 entire graphs. GraphSON is a JSON format defined as part of the Apache TinkerPop
-project that also allows whole graphs to represented. It is also possible to use
+project that also allows whole graphs to be represented. It is also possible to use
 GraphSON to represent the results of a Gremlin graph query in JSON format. In this
 section we will take a look at all of these topics. The whole subject of using
 GraphML and GraphSON will be revisited a few more times later in the book. Knowledge
@@ -14082,7 +14082,7 @@ considered lossee.
 Saving a graph to a GraphML file can be done using the following Gremlin expression.
 You might want to try it on one of your graphs and look at the output generated. You
 can also take a look at the `air-routes.graphml` file distribued with this book if
-you want to look at a well laid out (for human readability) GraphMl file. Bear in
+you want to look at a well laid out (for human readability) GraphML file. Bear in
 mind that by default, TinkerPop will save your graph in a way that is not easily
 human readable without using a code beautifier first. Most modern text editors can
 also beautify XML files well.
@@ -14989,7 +14989,7 @@ San Marino
 ----
 
 The previous query is a slightly shorter form of the two queries below which would
-both yield the same results. Note the use of the '"--"' prefix in front of the 'not'
+both yield the same results. Note the use of the '"__"' prefix in front of the 'not'
 step in the second query. This is because 'not' is a reserved word in Groovy and has
 to be prefixed in this way when not directly connected to a prior step by a dot.  
 
@@ -15678,7 +15678,7 @@ the results for the keys of 'IAH' and 'LAX' only.
 Analysis of routes between Europe and the USA
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The next few queries show how you can use a graph like 'air-routes' do perform
+The next few queries show how you can use a graph like 'air-routes' to perform
 analysis on a particular industry segment. The following queries analyze the
 distribution and availability of routes between airports across Europe and airports
 in the United States. First of all let's just find out how many total routes there are
@@ -15873,7 +15873,7 @@ between airport vertices?". We can also use this same query to find the statisti
 Take a look at the next query that shows how we can do analysis on the distribution
 of routes throughout the graph. We are only interested in vertices that are airports and
 for those vertices we want to count how many outgoing routes each airport has.  We want
-to return the results as a set of odered 'key:value' pairs where the key is the
+to return the results as a set of ordered 'key:value' pairs where the key is the
 number of outgoing routes and the value is the number of airports that have that
 number of outgoing routes.
 
@@ -16728,16 +16728,16 @@ produced by this query.
 
 [source,groovy]
 ----
-[e:4736, c:LHR]     [e:6410, c:NRT]
-[e:4884, c:SCL]     [e:6822, c:ICN]
-[e:4905, c:AMS]     [e:6951, c:PEK]
-[e:4933, c:CDG]     [e:7332, c:PVG]
-[e:4950, c:MAD]     [e:7914, c:DOH]
-[e:5015, c:DUS]     [e:8022, c:DXB]
-[e:5119, c:GRU]     [e:8053, c:AUH]
-[e:5127, c:FRA]     [e:8105, c:HKG]
-[e:5228, c:GIG]     [e:8574, c:SYD]
-[e:5299, c:EZE]     [e:5597, c:FCO]
+[e:4736, c:LHR]     [e:5597, c:FCO]
+[e:4884, c:SCL]     [e:6410, c:NRT]
+[e:4905, c:AMS]     [e:6822, c:ICN]
+[e:4933, c:CDG]     [e:6951, c:PEK]
+[e:4950, c:MAD]     [e:7332, c:PVG]
+[e:5015, c:DUS]     [e:7914, c:DOH]
+[e:5119, c:GRU]     [e:8022, c:DXB]
+[e:5127, c:FRA]     [e:8053, c:AUH]
+[e:5228, c:GIG]     [e:8105, c:HKG]
+[e:5299, c:EZE]     [e:8574, c:SYD]
 ----
 
 For the sake of completeness, here is the query re-written to use an 'order' step
