@@ -2,9 +2,9 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
-v283-preview, September 3rd 2020
+v283-preview, October 11th 2020
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Thu Sep 03, 2020 18:52:55 CDT
+// Sun Oct 11, 2020 16:36:03
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -25,7 +25,7 @@ v283-preview, September 3rd 2020
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: September 3rd 2020
+:draftdate: October 11th 2020
 :tpvercheck: 3.4.8
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -16703,13 +16703,16 @@ worthy of note. First of all it uses the preferred 'has' technique again to test
 distance whereas in the previous query we used 'where'.  Also this time we just list
 the distance and the destination airport's code and we sort the end result using a
 'sort'. We also use 'select' and 'as' rather than the perhaps more succinct 'path'
-and 'by' to show a different way of achieving effectively the same results. The 'path'
-and 'by' combination were introduced more recently into TinkerPop and I find that to
-be a more convenient syntax to use most of the time but both ways work and both have
-their benefits. We should also note that I show 'sort' being used here just to show a
-different way of ordering results, but in most cases we can re-write our query to use
-'order'. You will find several examples of 'order' being used throughout this
-book. Order is introduced in the "<<sort>>" section.
+and 'by' to show a different way of achieving effectively the same results. The
+'path' and 'by' combination were introduced more recently into TinkerPop and I find
+that to be a more convenient syntax to use most of the time but both ways work and
+both have their benefits. We should also note that I show 'sort' being used here just
+to show a different way of ordering results, but in most cases we can re-write our
+query to use 'order'. This use of 'sort' requires a Groovy closure to be provided.
+This may not work when working with commercial graph databases that disallow
+closures.  You will find several examples of 'order' being used throughout this book.
+The 'order' step is introduced in the "<<sort>>" section. As much as possible staying
+with the pure Gremlin syntax and avoiding closures is recommended.
 
 [source,groovy]
 ----
@@ -16747,9 +16750,11 @@ general this is the recommended way of achieving sorted results.
 [source,groovy]
 ----
 g.V().hasLabel('airport').has('code','DFW').outE().has('dist',gt(4500)).
-      order().by('dist').as('e').inV().as('c').select('e','c').by('dist').by('code')
+      order().by('dist').as('e').inV().as('c').
+      select('e','c').by('dist').by('code')
 ----
 
+Note that the results are ordered before being collected using the 'select' step.
 Here is the output from running the modified query
 
 [source,groovy]
@@ -16764,6 +16769,15 @@ Here is the output from running the modified query
 [e:5127,c:FRA]     [e:8053,c:AUH]
 [e:5228,c:GIG]     [e:8105,c:HKG]
 [e:5299,c:EZE]     [e:8574,c:SYD]
+----
+
+The query can also be written with the 'order' step coming after the 'select' step.
+As follows:
+
+[source,groovy]
+----
+g.V().hasLabel('airport').has('code','DFW').outE().has('dist',gt(4500)).as('e').
+inV().as('c').select('e','c').by('dist').by('code').order().by(select('e') 
 ----
 
 [[gt8k]]
