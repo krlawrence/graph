@@ -16728,16 +16728,16 @@ produced by this query.
 
 [source,groovy]
 ----
-[e:4736, c:LHR]     [e:6410, c:NRT]
-[e:4884, c:SCL]     [e:6822, c:ICN]
-[e:4905, c:AMS]     [e:6951, c:PEK]
-[e:4933, c:CDG]     [e:7332, c:PVG]
-[e:4950, c:MAD]     [e:7914, c:DOH]
-[e:5015, c:DUS]     [e:8022, c:DXB]
-[e:5119, c:GRU]     [e:8053, c:AUH]
-[e:5127, c:FRA]     [e:8105, c:HKG]
-[e:5228, c:GIG]     [e:8574, c:SYD]
-[e:5299, c:EZE]     [e:5597, c:FCO]
+[e:4736, c:LHR]     [e:5597, c:FCO]
+[e:4884, c:SCL]     [e:6410, c:NRT]
+[e:4905, c:AMS]     [e:6822, c:ICN]
+[e:4933, c:CDG]     [e:6951, c:PEK]
+[e:4950, c:MAD]     [e:7332, c:PVG]
+[e:5015, c:DUS]     [e:7914, c:DOH]
+[e:5119, c:GRU]     [e:8022, c:DXB]
+[e:5127, c:FRA]     [e:8053, c:AUH]
+[e:5228, c:GIG]     [e:8105, c:HKG]
+[e:5299, c:EZE]     [e:8574, c:SYD]
 ----
 
 For the sake of completeness, here is the query re-written to use an 'order' step
