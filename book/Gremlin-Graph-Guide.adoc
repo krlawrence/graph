@@ -2,9 +2,9 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
-v283-preview, October 11th 2020
+v283-preview, October 12th 2020
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Sun Oct 11, 2020 16:48:04
+// Mon Oct 12, 2020 18:57:11
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -25,7 +25,7 @@ v283-preview, October 11th 2020
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: October 11th 2020
+:draftdate: October 12th 2020
 :tpvercheck: 3.4.8
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -60,6 +60,8 @@ v283-preview, October 11th 2020
 //
 // <img src="GremlinEaselNoText.png">
 // <h1>PRACTICAL GREMLIN:<br>An Apache TinkerPop Tutorial</h1>
+//<img src="PRACTICAL-GREMLIN-Revised-v2.png">
+//<h1>PRACTICAL GREMLIN:<br>An Apache TinkerPop Tutorial</h1>
 
 
 
@@ -6615,7 +6617,7 @@ g.V().has('code','AUS').out().aggregate('nonstop').
 812
 ----
 
-After the first 'out' step. all of the vertices that were found are stored in a
+After the first 'out' step all of the vertices that were found are stored in a
 collection I chose to  call 'nonstop'. Then, after the second 'out' we can add a
 'where' step that essentially says "only keep the vertices that are not part of the
 nonstop collection". We still do the 'dedup' step as otherwise we will still end up
