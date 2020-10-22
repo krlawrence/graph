@@ -35,7 +35,7 @@ The examples in this release have been tested against Apache TinkerPop at the 3.
 - Added a new section comparing `sack` to `union` and `project` when adding values.
 - Added a new section "Does any route exist between two airports?"
 - Added an example showing how `sack` can be used to count flight segments (hops).
-- Made the discussion of `path` modulated using `from` and `to` it's own section.
+- Made the discussion of `path` modulated using `from` and `to` its own section.
 - Added a new section "Returning selected parts of a path"
 - Added a new section "Finding routes that go via a specific airport"
 - Expanded the section that introduces the `choose` step.

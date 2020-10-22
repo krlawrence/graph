@@ -13,10 +13,10 @@ To read the latest snapshot of the book right away in a browser (HTML format) cl
 
 **LATEST NEWS:**  
 
-- [Aug-28-2020] The latest preview draft of revision 283 (TP 3.4.8) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.   
-- [Jun-28-2020] I have started creating a series of [issues](https://github.com/krlawrence/graph/issues) to capture changes and updates I hope to make soon. The issues contain some interesting examples of both new Gremlin features and some additional queries, some of which are quite advanced, that I intend to add to the manuscript as time allows.  
-- [Feb-01-2020] Updated versions of the sample data and corresponding demo apps have been uploaded.      
-- [Oct-26-2019] Revision 282 (TP 3.4.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
+- [Aug-28-2020] The latest preview draft of revision 283 (TP 3.4.8) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.
+- [Jun-28-2020] I have started creating a series of [issues](https://github.com/krlawrence/graph/issues) to capture changes and updates I hope to make soon. The issues contain some interesting examples of both new Gremlin features and some additional queries, some of which are quite advanced, that I intend to add to the manuscript as time allows.
+- [Feb-01-2020] Updated versions of the sample data and corresponding demo apps have been uploaded.
+- [Oct-26-2019] Revision 282 (TP 3.4.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.
 
 
 ## Releases and change history
@@ -34,7 +34,7 @@ Details of how to build the various output formats from the Asciidoc source are 
 
 ## How this book came to be
 
-I forget exactly when, but over a year ago I started compiling a list of notes, hints and tips, initially  for my own benefit, of things I had found poorly explained elsewhere while using graph databases and especially using Apache TinkerPop, Janus Graph and Gremlin. Over time that document grew (and continues to grow) and has effectively become a book.  After some encouragement from colleagues I have decided to release it as a living book in an open source venue so that anyone who is interested can read it. It is aimed at programmers and  anyone using the Gremlin query language to work with graphs. Lots of code examples, sample queries,  discussion of best practices, lessons I learned the hard way etc. are included.
+I forget exactly when, but over a year ago I started compiling a list of notes, hints and tips, initially  for my own benefit, of things I had found poorly explained elsewhere while using graph databases and especially using Apache TinkerPop, Janus Graph and Gremlin. Over time that document grew (and continues to grow) and has effectively become a book. After some encouragement from colleagues I have decided to release it as a living book in an open source venue so that anyone who is interested can read it. It is aimed at programmers and  anyone using the Gremlin query language to work with graphs. Lots of code examples, sample queries,  discussion of best practices, lessons I learned the hard way etc. are included.
 
 While this book remains a work in progress, indeed some sections are still to be filled in, I think there is enough here that people may find it a useful aid to learning the Gremlin graph traversal and query language.
 
@@ -53,7 +53,7 @@ The book introduces the Apache TinkerPop 3 Gremlin graph query and traversal lan
 
 ## How this site is organized
 
-The book is being written using a text editor in AsciiDoc format. The source manuscript "Gremlin-Graph-Guide.adoc" can be found in the /book folder. This file will always reflect the most recent updates and will often be ahead of the other formats that will only be updated as part of a formal release. You will find formatted HTML and PDF versions of the book in the releases area.  I have also provided DOCBOOK, EPUB and MOBI versions as part of each release. These can be viewed using many tools and e-book readers. Note that currently, only the HTML and PDF versions have all the nice colors for source code listings etc.
+The book is being written using a text editor in AsciiDoc format. The source manuscript "Gremlin-Graph-Guide.adoc" can be found in the /book folder. This file will always reflect the most recent updates and will often be ahead of the other formats that will only be updated as part of a formal release. You will find formatted HTML and PDF versions of the book in the releases area. I have also provided DOCBOOK, EPUB and MOBI versions as part of each release. These can be viewed using many tools and e-book readers. Note that currently, only the HTML and PDF versions have all the nice colors for source code listings etc.
 
 Included with the book are sample graph data (GraphML) and program files. You will find these, as well as some screen shots and images, and demos in the following folders.
 
@@ -118,26 +118,26 @@ Chapter 9 - FURTHER READING
 
 **NEWS ARCHIVE:**  
 
-[Jan-06-2020] The latest draft of revision 283 (TP 3.4.4 preview) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.   
-[Oct-13-2019] Updated versions of the sample data and corresponding demo apps have been uploaded.   
-[Oct-26-2019] Revision 282 (TP 3.4.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
-[Apr-27-2019] Updated versions of the sample data and corresponding demo apps have been uploaded.  
+[Jan-06-2020] The latest draft of revision 283 (TP 3.4.4 preview) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.
+[Oct-13-2019] Updated versions of the sample data and corresponding demo apps have been uploaded.
+[Oct-26-2019] Revision 282 (TP 3.4.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.
+[Apr-27-2019] Updated versions of the sample data and corresponding demo apps have been uploaded.
 [Dec-26-2018] Revision 281 (TP 3.3.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.
-[Dec-24-2018] Updated versions of the sample data and corresponding demo apps have been uploaded.  
-[Sep-29-2018] Updated versions of the sample data and corresponding demo apps have been uploaded.  
-[Jul-28-2018] Revision 280 (TP 3.3.3) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.     
-[May-29-2018] Revision 279 (TP 3.3.3) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.    
-[Mar-28-2018] Revision 278 (TP 3.3.1) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
-[Feb-11-2018] Revision 277 was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
-[Jan-12-2018] Revision 276 was just published in all formats. Many updates to book and samples.  
-[Jan-12-2018] Based on feedback I have decided to rename the book "Practical Gremlin" (see issue #29)  
-[Jan-06-2018] Several new Java samples have been added to the sample-code directory and others improved.  
-[Jan-03-2018] Revision 275 was just published in all formats. Lots of updates to book and sample code.  
-[Dec-24-2017] Revision 274 was just published in all formats. Now using releases to store output files.  
-[Dec-12-2017] Revision 273 was just published in all formats. Fixes issue #12. Also added additonal clarifications.  
-[Nov-23-2017] Revision 272 was just published in all formats. Many updates to sections 3 and 4.  
-[Nov-03-2017] Revision 271 was just published in all formats. Several improvements and additions.  
-[Oct-27-2017] Revision 270 was just published in all formats. Fixes issue #6 and adds more to Janus section.  
-[Oct-23-2017] Quite a lot has been added to the Janus Graph section - more to come soon  
-[Oct-15-2017] Experimental - The /book folder now includes DOCBOOK, EPUB and MOBI format versions of the book.  
+[Dec-24-2018] Updated versions of the sample data and corresponding demo apps have been uploaded.
+[Sep-29-2018] Updated versions of the sample data and corresponding demo apps have been uploaded.
+[Jul-28-2018] Revision 280 (TP 3.3.3) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.
+[May-29-2018] Revision 279 (TP 3.3.3) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.
+[Mar-28-2018] Revision 278 (TP 3.3.1) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.
+[Feb-11-2018] Revision 277 was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.
+[Jan-12-2018] Revision 276 was just published in all formats. Many updates to book and samples.
+[Jan-12-2018] Based on feedback I have decided to rename the book "Practical Gremlin" (see issue #29)
+[Jan-06-2018] Several new Java samples have been added to the sample-code directory and others improved.
+[Jan-03-2018] Revision 275 was just published in all formats. Lots of updates to book and sample code.
+[Dec-24-2017] Revision 274 was just published in all formats. Now using releases to store output files.
+[Dec-12-2017] Revision 273 was just published in all formats. Fixes issue #12. Also added additonal clarifications.
+[Nov-23-2017] Revision 272 was just published in all formats. Many updates to sections 3 and 4.
+[Nov-03-2017] Revision 271 was just published in all formats. Several improvements and additions.
+[Oct-27-2017] Revision 270 was just published in all formats. Fixes issue #6 and adds more to Janus section.
+[Oct-23-2017] Quite a lot has been added to the Janus Graph section - more to come soon
+[Oct-15-2017] Experimental - The /book folder now includes DOCBOOK, EPUB and MOBI format versions of the book.
 [Oct-10-2017] Several sections have been improved, I also made updates to reflect changes made in Tinkerpop 3.3
