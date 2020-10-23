@@ -1,4 +1,4 @@
-PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
+PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
@@ -36,28 +36,28 @@ v283-preview, October 12th 2020
 // Windows. On Mac OS X the easiest way to install asciidoc is probably via
 // Homebrew. You can also install Asciidoctor, a Ruby Gem, as an alternative to
 // Asciidoc which is written in Python.
-//
+// 
 // NOTE3: In my tests, Asciidoctor seems a lot faster than Asciidoc and it has now become my
 //       preferred way of processing this file.
-//
+// 
 // As well as 'asciidoc' or Asciidoctor, the 'source-highlight' utility will also need to
 // be installed if you want to process this file using Asciidoc and get source code
 // highlighting. To get the table of contents to render correctly, the 'toclevels'
 // setting needs to be set to 3 in asciidoc.conf. There are alternatives to
 // 'source-highlight' such as Pygments that can also be used. Pygments, like
 // source-highlight, will need to be installed before it can be used.
-//
+// 
 // Currently I find that Asciidoctor + pygments produces the most pleasing output.
-//
+// 
 // To use the Asciidoctor/Pygments combo you will need to install:
 //   1. Asciidoctor (via gem)
 //   2. pygments.rb (via gem)
-//
+// 
 // You probably should not need to manually install the pip piece as it is bundled
 // in the Gem but if it does not work you may,
-//
+// 
 //   3. pygments (via pip)
-//
+// 
 // <img src="GremlinEaselNoText.png">
 // <h1>PRACTICAL GREMLIN:<br>An Apache TinkerPop Tutorial</h1>
 //<img src="PRACTICAL-GREMLIN-Revised-v2.png">
@@ -1140,7 +1140,7 @@ In the current revision of this book I have tried to remove any dependence on th
 'TinkerPop.sugar' plugin from the examples presented. By not using Sugar, queries
 shown in this book should port very easily to other TinkerPop 3 enabled graph
 platforms. A few of the queries may not work on versions of TinkerPop prior to 3.2 as
-TinkerPop continues to evolve and new features are being added fairly regularly.
+TinkerPop continues to evolve and new features are being added fairly regularly.  
 
 The 'Tinkerpop.sugar' plugin allows some queries to be expressed in a more shorthand
 or lazy form, often leaving out references to 'values()' and leaving out parenthesis.
@@ -1297,7 +1297,7 @@ really quickly.
 
 NOTE: In production systems, especially those where the graphs are large, the task of
 creating and managing the parts of the index is often handed to an additional
-software component such as Apache Solr or Elasticsearch.
+software component such as Apache Solr or Elasticsearch.  
 
 In general for any graph database, regardless of whether it is optional or not, use of an
 index should be considered a best practice. As I mentioned, even TinkerGraph has a
@@ -1386,7 +1386,7 @@ One thing you will not find when working with a graph using Gremlin is the conce
 a SQL 'join'. Graph databases by their very nature avoid the need to join things
 together (as things that need to be connected already are connected) and this is a
 core reason why, for many use cases, Graph databases are a very good choice and can
-be more performant than relational databases.
+be more performant than relational databases.  
 
 Graph databases are usually a good choice for storing and modelling networks. The
 'air-routes' graph is an example of a network graph. A social network is of course
@@ -1487,7 +1487,7 @@ Some fairly basic Gremlin queries
 A graph 'query' is often referred to as a 'traversal' as that is what we are in fact
 doing. We are traversing the graph from a starting point to an ending point.
 Traversals consist of one or more 'steps' (essentially methods) that are chained
-together.
+together.  
 
 As we start to look at some simple traversals here are a few 'steps' that you will
 see used a lot. Firstly, you will notice that almost all traversals start with either
@@ -1845,7 +1845,7 @@ g.V().hasLabel('airport').groupCount().by('country').select('FR','GR','BE')
 The 'group' and 'groupCount' steps are very useful when you want to count
 groups of things or collect things into a group using a selection criteria. You
 will find a lot more examples of grouping and counting things in the section called
-"<<countmore>>".
+"<<countmore>>".  
 
 [[walk]]
 Starting to walk the graph
@@ -1869,7 +1869,7 @@ The table below gives a brief summary of all the steps that can be used to 'walk
 'traverse' a graph using Gremlin. You will find all of these steps used in various
 ways throughout the book. Think of a graph traversal as moving through the graph from
 one place to one or more other places. These steps tell Gremlin which places to move
-to next as it traverses a graph for you.
+to next as it traverses a graph for you.  
 
 In order to better understand these steps it is worth defining some terminology. One
 vertex is considered to be 'adjacent' to another vertex if there is an edge
@@ -1891,7 +1891,7 @@ connected to each other.
 |==============================================================================
 
 Note that the steps labelled with an '*' can optionally take the name of one or more
-edge labels as a parameter. If omitted, all relevant edges will be traversed.
+edge labels as a parameter. If omitted, all relevant edges will be traversed.  
 
 Some simple graph traversal examples
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2055,7 +2055,7 @@ reference the 'city' property of the third element in the path rather than its
 TIP: The 'by' modulator steps are processed in a round robin fashion in cases where
 there are more results to apply them to than 'by' modulators specified. 
 
-The example above is equivalent to this longer form of the same query.
+The example above is equivalent to this longer form of the same query.  
 
 [source,groovy]
 ----
@@ -2702,7 +2702,7 @@ sample of the data to be returned.
 [source,groovy]
 ----
 // Only return the FIRST 20 results
-g.V().hasLabel('airport').values('code').limit(20)
+g.V().hasLabel('airport').values('code').limit(20)  
 
 // Only return the LAST 20 results
 g.V().hasLabel('airport').values('code').tail(20)
@@ -3000,7 +3000,7 @@ type=[airport]
 region=[US-TX]
 runways=[2]
 lat=[30.1944999694824]
-desc=[Austin Bergstrom International Airport]
+desc=[Austin Bergstrom International Airport]  
 ----
 
 NOTE: Notice how each key, like 'country', is followed by a value that is returned as
@@ -3263,7 +3263,7 @@ will only return the first member of that list or set. If you need to return
 ----
 g.V().has('code','AUS').elementMap('city')
 
-[id:3,label:airport,city:Austin]
+[id:3,label:airport,city:Austin]  
 ----
 
 The biggest difference between 'elementMap' and 'valueMap' becomes apparent when
@@ -3312,7 +3312,7 @@ just to make the results a little easier to read.
 [source,groovy]
 ----
 v={id=5161, label=route, dist=1357}
-IN={id=47, label=airport}
+IN={id=47, label=airport}  
 OUT={id=3, label=airport}
 ----
 
@@ -3375,7 +3375,7 @@ v[3]
 ----
 
 We can call the Java 'getClass' method to verify the type of the values
-returned.
+returned.  
 
 [source,groovy]
 ----
@@ -3628,7 +3628,7 @@ MCO
 ----
 
 You can also pass a list of ID values into the 'V' step. We take a closer look at
-using variables in this way in the "<<varaus>>" section.
+using variables in this way in the "<<varaus>>" section.  
 
 [source,groovy]
 ----
@@ -3639,7 +3639,7 @@ g.V(a).values('code')
 
 If the graph database that you are using supports it you can set the ID of a
 vertex at the time you create it. How that can be done is explained in the
-"<<injectid>>" section.
+"<<injectid>>" section.  
 
 Every property in the graph also has an ID as we shall explore in the "<<propid>>"
 section a bit later on. 
@@ -3713,7 +3713,7 @@ The same concepts apply equally well when looking at edge labels as shown below.
 // The same basic concepts apply equally to edges
 g.E().has(label,'route').count()
 
-g.E().where(label().is(eq('route'))).count()
+g.E().where(label().is(eq('route'))).count()  
 
 g.E().hasLabel('route').count()
 ----
@@ -3775,8 +3775,8 @@ Take a look at the modified query below.
 
 [source,groovy]
 ----
-// Average number of outgoing routes from an airport.
-g.V().hasLabel('airport').local(out('route').count()).mean()
+// Average number of outgoing routes from an airport.  
+g.V().hasLabel('airport').local(out('route').count()).mean()  
 
 12.863070539419088
 ----
@@ -4046,7 +4046,7 @@ instead.
 
 [source,groovy]
 ----
-g.V().has('runways',3).count()
+g.V().has('runways',3).count()  
 ----
 
 You could also write this query using an 'is' step. You will find the 'is' step used
@@ -4235,7 +4235,7 @@ Dalaman
 Dalian
 Dalcahue
 Dalat
-Dalanzadgad
+Dalanzadgad  
 ----
 
 You will notice from the results above that '"Dallas"' appears twice as there are two
@@ -4332,7 +4332,7 @@ g.V().has('airport','code','AUS').
       out().has('code','SYD').path().by('code')
 ----
 
-We could also have written the query using 'not'
+We could also have written the query using 'not'  
 
 [source,groovy]
 ----
@@ -4705,7 +4705,7 @@ characters "Dal" as expected.
 
 As I mentioned, all of the text predicates are case sensitive. If we were
 to search for city names starting with the characters "dal" we would not find any
-matches. The query below demonstrates this.
+matches. The query below demonstrates this.  
 
 [source,groovy]
 ----
@@ -4916,7 +4916,7 @@ Here are the results from running the query.
 By default a sort performed using 'order' is performed in ascending order. If we
 wanted to sort in descending order instead we can specify 'decr' as a parameter to
 'order'. We can also specify 'incr' if we want to be clear that we intend an
-ascending order sort.
+ascending order sort.  
 
 [source,groovy]
 ----
@@ -5178,7 +5178,7 @@ support for 'incr' and 'decr' and you will need to use the new 'asc' and 'desc'
 keywords.
 
 
-[[bool]]
+[[bool]]  
 Boolean operations
 ~~~~~~~~~~~~~~~~~~
 
@@ -5267,7 +5267,7 @@ g.V().has(label,neq('airport')).count()
 TIP: Depending on the model of your graph and the query itself it may or may not make
 sense to use the boolean steps. Sometimes, as described above chaining 'has' steps
 together may be more efficient or using a step like 'within' or 'without' may make
-more sense.
+more sense.  
 
 Boolean steps such as 'and' can also be dot combined as the example below shows. This
 query finds all the airports that have fewer than 100 outbound routes but more than 94
@@ -5282,7 +5282,7 @@ g.V().hasLabel('airport').
       where(out().count().is(lt(100).and(gt(94)))).
       group().by('code').by(out().count())
 
-[BUD:98,STR:95,NCE:97,AUH:97,WAW:98,CRL:95]
+[BUD:98,STR:95,NCE:97,AUH:97,WAW:98,CRL:95]  
 ----
 
 The query we just looked at could also be written as follows but in this case using
@@ -6454,7 +6454,7 @@ three sets of traversals to get the desired results.
 
 g.V().has('city','London').has('region','GB-ENG').
       union(outE().inV().has('city','Berlin').
-                   outE('route').inV().has('city','Lisbon').
+                   outE('route').inV().has('city','Lisbon').  
                    path().by('code').by('dist').by('code').by('dist'),
             outE().inV().has('city','Paris').
                    outE('route').inV().has('city','Barcelona').
@@ -6475,7 +6475,7 @@ Here is what we get back when we run our query
 [LCY,227,ORY,513,BCN]
 [STN,563,SXF,1432,LIS]
 [LTN,589,SXF,1432,LIS]
-[LTN,236,CDG,533,BCN]
+[LTN,236,CDG,533,BCN]  
 ----
 
 The next query finds the total distance of all routes from any airport in Madrid to
@@ -7051,7 +7051,7 @@ You can also place the 'until' before the 'repeat' as shown below.
 
 [source,groovy]
 ----
-// Another shortest path example using until...repeat instead
+// Another shortest path example using until...repeat instead  
 g.V().has('code','AUS').
       until(has('code','SYD')).
         repeat(out().simplePath()).limit(10).
@@ -7338,7 +7338,7 @@ When either query is run, the following results are returned.
 ----
 [JNB,SYD]
 [JNB,BKK,SYD]
-[JNB,DOH,SYD]
+[JNB,DOH,SYD]  
 ----
 
 You will see more examples of 'emit' being used in the "<<btree>>" section a bit
@@ -7450,7 +7450,7 @@ for in this case.
 [SFO,ANC,DFW,AUS]
 [SFO,ANC,DFW,BNA]
 [SFO,ANC,DFW,BOS]
-[SFO,ANC,DFW,BWI]
+[SFO,ANC,DFW,BWI]  
 ----
 
 At first glance, it may appear that simply moving the 'limit' step inside the
@@ -7510,7 +7510,7 @@ given all the duplicate visits.
 
 [source,groovy]
 ----
-[0:141,1:11587,2:836707]
+[0:141,1:11587,2:836707]  
 ----
 
 Now that we have a query that can count how many vertices we are visiting at
@@ -7533,7 +7533,7 @@ g.V().has('code','SFO').
        emit().
        times(3).
        path().
-         by('code')
+         by('code')  
 ----
 
 When we run our modified query, the output is quite different. This time at each
@@ -7555,7 +7555,7 @@ depth, five routes are returned. This is the result we are looking for!
 [SFO,ANC,DFW,AUS]
 [SFO,ANC,DFW,BNA]
 [SFO,ANC,DFW,BOS]
-[SFO,ANC,DFW,BWI]
+[SFO,ANC,DFW,BWI]  
 ----
 
 At first glance, the 'where' step used above can be confusing. I have included
@@ -7972,7 +7972,7 @@ allows us to perform scientific calculator style mathematical operations as part
 Gremlin graph traversal. As these operators build upon the Java Math class it is
 worth becoming familiar with that class if you are not already. Be aware that this
 functionality will only be available to you if the graph implementation that you are
-using supports Apache TInkerPop 3.3.1 or higher.
+using supports Apache TInkerPop 3.3.1 or higher.  
 
 The table below provides a summary of the available operators sorted alphabetically.
 
@@ -8144,7 +8144,7 @@ g.V().has('code','SAF').as('a').
 10.0
 7.0
 6.0
-9.0
+9.0  
 ----
 
 Of course, this is a simple example where 'math' is not really needed but hopefully
@@ -8819,7 +8819,7 @@ the airport codes.
 
 [source,groovy]
 ----
-g.V().outE().has('dist',eq(100)).limit(10).inV().path().by('code').by('dist')
+g.V().outE().has('dist',eq(100)).limit(10).inV().path().by('code').by('dist')  
 
 [IAD,100,RIC]
 [HNL,100,OGG]
@@ -8976,7 +8976,7 @@ an indentation standard, I believe this should be left to personal preference ho
 there are a few things I want to mention in passing. When working with the Gremlin
 console, if you want to spread a query over multiple lines then you will need to end
 each line with a backslash character or with a character such as a period or a comma
-that tells the Gremlin parser that there is more to come.
+that tells the Gremlin parser that there is more to come.  
 
 The following example shows the query we already looked at in the Boolean operations
 section of this book but this time edited so that it could be copy and pasted
@@ -9165,7 +9165,7 @@ system with an index in place finding the 'Portugal' vertex should be very fast.
 
 Conversely, if we were already looking at an airport vertex for some other
 reason and just wanted to see what country it is in, it is more convenient to
-just look at the 'country' property of that vertex.
+just look at the 'country' property of that vertex.  
 
 So there is no golden rule here but it is something to think about while
 designing your data model.
@@ -9228,7 +9228,7 @@ their own vertex.
 A detailed discussion of 'supernode' mitigation is beyond the scope of this book
 but I encourage you to always be thinking about their possibility as you design your
 graph and also be thinking about how you can prevent them becoming a big issue for
-you.
+you.  
 
 [[grv]]
 Making Gremlin even Groovier
@@ -9279,7 +9279,7 @@ def degree(g,s) {
   println "Edges in  : " + i;
   println "Edges out : " + o;
   println "Total     : " +(i+o);
-}
+}  
 
 // Can be called like this
 degree(g,'LHR')
@@ -9321,7 +9321,7 @@ hash.
 [source,groovy]
 ----
 a=g.V().group().by(label).by('code').next()
-println(a["country"].size())
+println(a["country"].size())  
 println(a["country"][5])  
 println(a["airport"][2]) 
 ----
@@ -9334,7 +9334,7 @@ It then uses a simple 'for' loop to print the results in a table. Note the use o
 that we are looking for. If we did not include the calls to 'next' we would actually
 get back the iterator object itself and not the actual values.
 
-[source,groovy]
+[source,groovy]  
 ----
 // Given a traversal and an airport code print a list of all the places you can 
 // fly to from there including the IATA code and airport description.
@@ -10010,7 +10010,7 @@ of other labels but we have not yet looked at how to clone the properties from o
 vertex onto another. A technique for doing that is discussed in the "<<dfwcopy>>"
 section. Feel free to skip ahead but be aware that the techniques used in that
 section have not yet been fully covered so you may want to also take a look at some
-other sections along the way.
+other sections along the way.  
 
 [[deleting]]
 Deleting vertices, edges and properties
@@ -10143,7 +10143,7 @@ extends the 'Property' interface. These interfaces are documented as part of the
 Apache TinkerPop 3 JavaDoc. The interface defines the methods that you can use when
 working with a vertex property object in your code. One important thing to note about
 vertex properties is that they are immutable. You can create them but once created
-they cannot be updated.
+they cannot be updated.  
 
 We will look more closely at the Java interfaces that TinkerPop 3 defines in the
 "<<javatinker>>" section a bit later in this book.
@@ -10901,7 +10901,7 @@ Using 'unfold' and 'WithOptions' with Meta Properties
 
 A new feature was introduced in Apache TinkerPop version 3.4 that allows us to more
 easily include both properties and their meta properties in the result from a
-'valueMap' step that follows a 'properties' step.
+'valueMap' step that follows a 'properties' step.  
 
 
 TIP: All of the possible values that can be specified using WithOptions can be found
@@ -10938,7 +10938,7 @@ vp[desc->Austin Bergstrom ...]
 We also know how to look at the meta properties by following the 'properties' step
 with a 'valueMap' step or a second 'properties' step. However, a value is returned
 only when a property has a meta property. For all other properties the result is
-simply an empty list.
+simply an empty list.  
 
 [source,groovy]
 ----
@@ -11017,7 +11017,7 @@ Once again the key and value are shown for the 'date' meta property.
 ----
 
 To include both the keys and the values in the result along with the meta properties,
-'WithOptions.all' can be used.
+'WithOptions.all' can be used.  
 
 [source,groovy]
 ----
@@ -12896,7 +12896,7 @@ pass the closure on to the underlying runtime. With people just getting started 
 Gremlin there is a great temptation to over use in-line code. This is a natural thing
 to want to do as for programmers it feels like the programming they are used to.
 However, there is often, if not always, a pure Gremlin traversal step that can be
-used to do what is needed. Of course with all rules there are exceptions.
+used to do what is needed. Of course with all rules there are exceptions.  
 
 NOTE: For reasons of security not all graph databases, especially those that are
 managed as hosted services, allow lambdas to be included in queries. You should
@@ -12905,7 +12905,7 @@ always check the documentation for the graph database that you are using.
 By way of a very simple example, the code below declares a variable '"c"' and
 initializes it to zero. The Gremlin query that follows then adds one to '"c"' each
 time it finds an airport vertex located in Oregon. We then use a 'println' to display
-the updated value for '"c"'.
+the updated value for '"c"'.  
 
 [source,groovy]
 ----
@@ -13940,7 +13940,7 @@ sgt.V().has('code','LAX').out().count()
 Here are some more examples of working with subgraphs. The query below will create a
 subgraph of all vertices and edges directly connected to the Austin (AUS) vertex. Note
 that using 'bothE' means we get incoming and outgoing edges. In these examples the
-more meaningful label 'subGraph' is used to label the subgraph being created.
+more meaningful label 'subGraph' is used to label the subgraph being created.  
 
 [source,groovy]
 ----
@@ -14993,7 +14993,7 @@ San Marino
 The previous query is a slightly shorter form of the two queries below which would
 both yield the same results. Note the use of the '"__"' prefix in front of the 'not'
 step in the second query. This is because 'not' is a reserved word in Groovy and has
-to be prefixed in this way when not directly connected to a prior step by a dot.
+to be prefixed in this way when not directly connected to a prior step by a dot.  
 
 [source,groovy]
 // Are there any countries that have no airports?
@@ -17014,7 +17014,7 @@ g.V().as('s').
 ----
 
 Using the prior query the first result was '[DOH,9025,AKL]'. As you will
-see below, our first result is now '[AKL,9025,DOH]'.
+see below, our first result is now '[AKL,9025,DOH]'.  
 
 [source,groovy]
 ----
@@ -17880,7 +17880,7 @@ part of the query and run it this is what we get back.
 [source,groovy]
 ----
 g.withSideEffect("rdeg", 0.017453293).
-  withSideEffect("gcmiles",3956).
+  withSideEffect("gcmiles",3956).  
   V().
   has('code',within('AUS','DFW')).
   group().
@@ -17901,7 +17901,7 @@ the values we need.
 [source,groovy]
 ----
 g.withSideEffect("rdeg", 0.017453293).
-  withSideEffect("gcmiles",3956).
+  withSideEffect("gcmiles",3956).  
   V().
   has('code',within('AUS','DFW')).
   group().
@@ -18254,7 +18254,7 @@ This is clearly a simpler query in this case but you will find cases where the e
 that uses 'withSideEffect' and 'store' will come in very handy, especially in cases where
 you want to store things into a Set or List from multiple parts of a traversal such as the
 one below that finds and counts all the unique city names across multiple hops from a
-starting airport.
+starting airport.  
 
 [source,groovy]
 ----
@@ -18636,7 +18636,7 @@ g.V(53767).drop()
 
 So now let's wrap the creation of the properties into a 'sideEffect' step that should
 stop the unwanted results from being returned.The modified  version of the query is
-shown below.
+shown below.  
 
 [source,groovy]
 ----
@@ -18700,16 +18700,16 @@ graph as there are clearly many ways to revisit vertices.
 // Builds a small ordered Binary (BST) Tree
 graph=TinkerGraph.open()
 g=graph.traversal()
-g.addV('root').property('data',9).as('root').
-  addV('node').property('data',5).as('b').
-  addV('node').property('data',2).as('c').
-  addV('node').property('data',11).as('d').
-  addV('node').property('data',15).as('e').
-  addV('node').property('data',10).as('f').
-  addV('node').property('data',1).as('g').
-  addV('node').property('data',8).as('h').
-  addV('node').property('data',22).as('i').
-  addV('node').property('data',16).as('j').
+g.addV('root').property('data',9).as('root').  
+  addV('node').property('data',5).as('b').  
+  addV('node').property('data',2).as('c').  
+  addV('node').property('data',11).as('d').  
+  addV('node').property('data',15).as('e').  
+  addV('node').property('data',10).as('f').  
+  addV('node').property('data',1).as('g').  
+  addV('node').property('data',8).as('h').  
+  addV('node').property('data',22).as('i').  
+  addV('node').property('data',16).as('j').  
   addE('left').from('root').to('b').
   addE('left').from('b').to('c').
   addE('right').from('root').to('d').
@@ -19213,7 +19213,7 @@ The only change made to this query from the one used in the prior section is tha
 'where' step has been changed to 'where(count(local).is(1)))' so that it now looks
 for paths of length one. These represent the airports for which no route to LHR was
 found. Then rather than 'count' the paths an 'unfold' is used to return the codes for
-the airports that had no route. 
+the airports that had no route.  
 
 When the query is run, the codes for the airports with no route to London are
 revealed. These airports are truly connected to each other but isolated from the main
@@ -19735,7 +19735,7 @@ or other tools or even command line utilities such as 'curl'.
 For a production environment it is likely you will use a technology such as JanusGraph
 backed by something like HBase or Cassandra and an indexing technology such as
 Solr or Elasticsearch. In these cases the way you work with and manage
-the graph and the way that query results are retuned will vary. 
+the graph and the way that query results are returned will vary.  
 
 In some cases data returned will be in the form of a GraphSON (JSON) in others it
 might be as variables within a program. There are also ways to work with graphs using
@@ -20086,7 +20086,7 @@ at http://tinkerpop.apache.org/javadocs/current/full/
 
 TIP: There is a sample program called TestImports.java in the 'sample-code' folder
 located at https://github.com/krlawrence/graph/tree/master/sample-code that
-demonstrates these constructs being used. 
+demonstrates these constructs being used.  
 
 The tables below show some commonly used Gremlin keywords in the left column. The
 second column shows how you would reference those same keywords explicitly from a
@@ -24375,7 +24375,7 @@ String result
 
 As with integer results, a query that just returns a single string  result will
 generate JSON as shown below. The 'result' section of the JSON will contain a 'data'
-section with the single string value encoded as a list with one member. 
+section with the single string value encoded as a list with one member.  
 
 [source,groovy]
 ----
@@ -24874,7 +24874,7 @@ I often find myself writing Ruby or Groovy scripts that can generate CSV or Grap
 files so that a graph system can ingest them. In some cases I have used scripts to
 take CSV or GraphML data and generate the Gremlin statements that would create the
 graph. This is very similar to another common practice, namely, using a  script to
-generate 'INSERT' statements when working with SQL databases. 
+generate 'INSERT' statements when working with SQL databases.  
 
 I have also written Java and Groovy programs that will read the CSV file and use the
 TinkerPop API or the Gremlin Server REST API to insert vertices and edges into a graph.

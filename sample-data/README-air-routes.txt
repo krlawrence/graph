@@ -26,7 +26,7 @@ least one commercial airline currently operates scheduled service between them.
 Given the dynamic nature of the airline industry where routes are added and
 removed on a weekly basis any graph such as this one is, invariably, out of
 date the day it is published. That said I have tried to keep the graph as up to
-date as I can.
+date as I can.  
 
 This graph only models airports and routes it does not attempt to model airlines
 or route frequency. For example, the graph can tell you that there is a route
