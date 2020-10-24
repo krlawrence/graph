@@ -21278,7 +21278,7 @@ mgmt = graph.openManagement()
 
 In the following sections we will show how to use the management API to create both a
 schema and an index for the 'air-routes' graph and then load it. Before we do that we
-need should take a few minutes to introduce the JanusGraph Management API. For the
+should take a few minutes to introduce the JanusGraph Management API. For the
 time being, assume we have created an in memory JanusGraph instance and loaded the
 'air-routes' graph into it but have not defined an index or a schema. In this
 situation, JanusGraph will give us the best defaults it can as it loads the graph
