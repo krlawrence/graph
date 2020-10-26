@@ -20384,7 +20384,7 @@ public void findByRegion(String iata)
 }                                
 ----
 
-If we were to call the 'findByRegion' nethod, passing in a parameter of 'DEN',
+If we were to call the 'findByRegion' method, passing in a parameter of 'DEN',
 representing the airport in Denver Colorado, the following output should be returned.
 
 [source,console]
