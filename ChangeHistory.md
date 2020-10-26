@@ -17,7 +17,7 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
   - Improved the wording that introduces the section
   - Improved the wording at the end of the section.
   - Added a sub-section that calculates Great Circle distances using the `math` step and the Haversine formula. #169
-- Merged reader PRs #154, #160, #197, #198, #200, #205, #209
+- Merged reader PRs #154, #160, #197, #198, #200, #205, #209, #210
 - Updated warning about label indexing to reflect the current state of graph DBs better. Issue #186
 - Renamed HTML and PDF files to PracticalGremlin.
   - The prior Gremlin-Graph-Guide names will still work to avoid breaking bookmarks.
