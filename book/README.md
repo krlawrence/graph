@@ -3,7 +3,7 @@ This folder contains the AsciiDoc source file used to produce the HTML, XML (DOC
 
 
 **LATEST NEWS:**  
-- [Aug-28-2020] The latest preview draft of revision 283 (TP 3.4.8) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.
+- [Aug-28-2020] The latest preview draft of revision 283 (TP 3.4.8) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
 - [Oct-26-2019] Revision 282 (TP 3.4.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.   
 
 
@@ -32,16 +32,16 @@ Please note that the DOCBOOK, EPUB and MOBI format files currently do not have a
 
 **ARCHIVED NEWS:**  
 [Jan-06-2020] Revision 283 (TP 3.4.4 preview) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.   
-[Oct-26-2019] Revision 282 (TP 3.4.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.   
-[Dec-26-2018] Revision 281 (TP 3.3.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.    
-[Jul-28-2018] Revision 280 (TP 3.3.3) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.    
-[May-29-2018] Revision 279 (TP 3.3.3) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.    
+[Oct-26-2019] Revision 282 (TP 3.4.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
+[Dec-26-2018] Revision 281 (TP 3.3.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
+[Jul-28-2018] Revision 280 (TP 3.3.3) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
+[May-29-2018] Revision 279 (TP 3.3.3) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
 [Mar-28-2018] Revision 278 (TP 3.3.1) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
-[Feb-11-2018] Revision 277 was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details. 
+[Feb-11-2018] Revision 277 was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
 [Jan-12-2018] Revision 276 was just plublished in all formats. Many updates to book and samples.  
 [Jan-12-2018] Based on feedback I have decided to rename the book "Practical Gremlin" (see issue #29)  
 [Jan-03-2018] Revision 275 was just published in all formats. Lots of updates to book and sample code.  
-[Dec-24-2017] Revision 274 was just published in all formats. Now using releases to store output files.   
+[Dec-24-2017] Revision 274 was just published in all formats. Now using releases to store output files.  
 [Dec-12-2017] Revision 273 was just published in all formats. Fixes issue #12. Also added additonal clarifications.  
 [Nov-23-2017] Revision 272 was just published in all formats. Many updates to sections 3 and 4.  
 [Nov-03-2017] Revision 271 was just published in all formats. Several improvements and additions.  

@@ -107,7 +107,7 @@ public class RemoteWriteText
     
 
     // The steps that follow turn  a traversal into JSON bytecode and then turn
-    // that into text.  Given GroovyTranslator can do this all in one step this
+    // that into text. Given GroovyTranslator can do this all in one step this
     // is provided simply as an example of how you can get the JSON form of a
     // traversal and then optionally convert that to text.
     

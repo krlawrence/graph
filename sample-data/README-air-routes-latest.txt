@@ -28,7 +28,7 @@ or route frequency. For example, the graph can tell you that there is a route
 between LHR and JFK that at least one airline operates but not which airlines
 fly that route nor how many times a day the route is operated. That is an
 exercise for another day and for a bigger graph! The graph also does not
-currently contain any aircraft information.  For the most part I have only
+currently contain any aircraft information. For the most part I have only
 included scheduled flights flown by commercial airlines. I have included a few
 unusual routes such as the flights from RAF Brize Norton to RAF Ascension Island
 continuing on to Mount Pleasant in the Falkland Islands as I believe this
@@ -54,7 +54,7 @@ point. The one exception is about ten regional airports in China that I
 still need to add 
    
 If you require more detailed information about the schema of the graph  and
-it's overall demographic please see the comments at the top of the
+its overall demographic please see the comments at the top of the
 air-routes.graphml file.
  
 
