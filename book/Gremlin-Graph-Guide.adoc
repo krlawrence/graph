@@ -21912,7 +21912,7 @@ mgmt.awaitGraphIndexStatus(graph, 'airportIndex').
      status(SchemaStatus.REGISTERED).call()
 ----
 
-If we already have data in the graph we also now to tell JanusGraph to perform a
+If we already have data in the graph we now also need to tell JanusGraph to perform a
 re-index. Once again we use the Management API to do this but this time using the
 'updateIndex' method.
 
