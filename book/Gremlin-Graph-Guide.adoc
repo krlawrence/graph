@@ -21919,7 +21919,6 @@ re-index. Once again we use the Management API to do this but this time using th
 [source,groovy]
 ----
 mgmt = graph.openManagement()
-mgmt.awaitGraphIndexStatus(graph, 'airportIndex').call()
 mgmt.updateIndex(mgmt.getGraphIndex("airportIndex"), SchemaAction.REINDEX).get()
 mgmt.commit()
 ----
