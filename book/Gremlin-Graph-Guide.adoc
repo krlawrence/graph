@@ -23173,7 +23173,7 @@ Rack                   : rack1
 Exceptions             : 0
 ----
 
-Once we are done with the container typing 'exit' will return is to the Linux
+Once we are done with the container typing 'exit' will return us to the Linux
 terminal session we entered the container from.
 
 [source,console]
