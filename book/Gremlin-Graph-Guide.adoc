@@ -22979,7 +22979,7 @@ encouraged to study it.
 
 A number of properties files are included with the JanusGraph download. They are
 located in the '/conf' folder below the root of the JanusGraph folder. The properties
-files can be used to hep connect JanusGraph to a number of different back end
+files can be used to help connect JanusGraph to a number of different back end
 technologies. These properties files can be edited as needed but so long as you are
 using the default Cassandra ports with Cassandra running on your local machine
 (localhost) you should not have to edit anything for the purpose of this discussion. 
