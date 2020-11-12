@@ -23262,7 +23262,7 @@ Cassandra instance that we configured earlier.
 If you look at the files that were installed on your machine when you unzipped the
 JanusGraph download, you will find a path of 'conf/gremlin-server'. Inside this
 directory you will find a set of YAML and properties files that can be used to start
-a Gremlin Server working with JanusGraph and a variety of differnt back end stores. 
+a Gremlin Server working with JanusGraph and a variety of different back end stores. 
 
 For the rest of this discussion I am going to use the 'gremlin-server.yaml' file as
 my starting point and make minor modifications to it.
