@@ -1,4 +1,4 @@
-// VerticesFromMap.java
+// RemoteVerticesFromMap.java
 //                 
 // Simple examples of seeding a traversal with a map of new vertex values.
 //
@@ -47,7 +47,7 @@ import java.io.ByteArrayOutputStream;
  * 
  * @author Kelvin R. Lawrence
  */
-public class VerticesFromMap
+public class RemoteVerticesFromMap
 {
   private Cluster cluster;
   private GraphTraversalSource gts;
@@ -144,7 +144,7 @@ public class VerticesFromMap
    */
   public static void main(String[] args)
   {
-    VerticesFromMap vfm = new VerticesFromMap();
+    RemoteVerticesFromMap vfm = new RemoteVerticesFromMap();
     vfm.runTests();
   }
 }
