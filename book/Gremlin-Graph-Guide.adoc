@@ -20975,7 +20975,7 @@ began in 2016 as an open source fork of the popular Titan graph database, is hos
 the Linux Foundation and provides these advanced capabilities.
 
 In this book I have attempted to provide a reasonable amount of JanusGraph 
-coverage of but it is still recommended to become familiar with the official
+coverage but it is still recommended to become familiar with the official
 JanusGraph documentation where you will find more in depth discussions of advanced
 topics and explanations of the many settings that you can manipulate to suit your
 needs.
@@ -21294,7 +21294,7 @@ mgmt = graph.openManagement()
 
 In the following sections we will show how to use the management API to create both a
 schema and an index for the 'air-routes' graph and then load it. Before we do that we
-need should take a few minutes to introduce the JanusGraph Management API. For the
+should take a few minutes to introduce the JanusGraph Management API. For the
 time being, assume we have created an in memory JanusGraph instance and loaded the
 'air-routes' graph into it but have not defined an index or a schema. In this
 situation, JanusGraph will give us the best defaults it can as it loads the graph
@@ -21907,10 +21907,10 @@ for the airport 'code' property in the 'air-routes' graph.
 graph.tx().rollback()
 
 // Open a new management transaction
-mgmt=graph.openManagement()
+mgmt = graph.openManagement()
 
 // Create a composite index for the code key for use with vertices
-idx=mgmt.buildIndex('airportIndex',Vertex.class)
+idx = mgmt.buildIndex('airportIndex',Vertex.class)
 iata = mgmt.getPropertyKey('code')
 idx.addKey(iata).buildCompositeIndex()
 
@@ -21928,14 +21928,13 @@ mgmt.awaitGraphIndexStatus(graph, 'airportIndex').
      status(SchemaStatus.REGISTERED).call()
 ----
 
-If we already have data in the graph we also now to tell JanusGraph to perform a
+If we already have data in the graph we now also need to tell JanusGraph to perform a
 re-index. Once again we use the Management API to do this but this time using the
 'updateIndex' method.
 
 [source,groovy]
 ----
 mgmt = graph.openManagement()
-mgmt.awaitGraphIndexStatus(graph, 'airportIndex').call()
 mgmt.updateIndex(mgmt.getGraphIndex("airportIndex"), SchemaAction.REINDEX).get()
 mgmt.commit()
 ----
@@ -22996,7 +22995,7 @@ encouraged to study it.
 
 A number of properties files are included with the JanusGraph download. They are
 located in the '/conf' folder below the root of the JanusGraph folder. The properties
-files can be used to hep connect JanusGraph to a number of different back end
+files can be used to help connect JanusGraph to a number of different back end
 technologies. These properties files can be edited as needed but so long as you are
 using the default Cassandra ports with Cassandra running on your local machine
 (localhost) you should not have to edit anything for the purpose of this discussion. 
@@ -23190,7 +23189,7 @@ Rack                   : rack1
 Exceptions             : 0
 ----
 
-Once we are done with the container typing 'exit' will return is to the Linux
+Once we are done with the container typing 'exit' will return us to the Linux
 terminal session we entered the container from.
 
 [source,console]
@@ -23279,7 +23278,7 @@ Cassandra instance that we configured earlier.
 If you look at the files that were installed on your machine when you unzipped the
 JanusGraph download, you will find a path of 'conf/gremlin-server'. Inside this
 directory you will find a set of YAML and properties files that can be used to start
-a Gremlin Server working with JanusGraph and a variety of differnt back end stores. 
+a Gremlin Server working with JanusGraph and a variety of different back end stores. 
 
 For the rest of this discussion I am going to use the 'gremlin-server.yaml' file as
 my starting point and make minor modifications to it.
