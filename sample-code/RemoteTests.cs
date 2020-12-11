@@ -8,7 +8,7 @@
 //      Gremlin .Net client.
 // 
 // The Gremlin.Net client can be installed several ways. One way, using the "dotnet"
-// command line tool:
+// command line tool: 
 //
 //        dotnet add package Gremlin.Net
 //
