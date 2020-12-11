@@ -11,10 +11,14 @@
 //
 //        dotnet add package Gremlin.Net
 //
-//  NOTE: To keep things uncluttered, this sample application shows one example of
+//  NOTE (1): To keep things uncluttered, this sample application shows one example of
 //  catching an Exception. There are other places where an exception could be thrown,
 //  such as when adding a vertex and the ID is already in use. In production code any
 //  places where an exception could be thrown should be handled appropriately.
+//
+//  NOTE (2): This sample creates a vertex using a string value for the ID. If the
+//  graph database you are using does not support user provided, string IDs, you will
+//  need to change it to something appropriate for your environment.
 
 // Commonly needed Gremlin imports
 using Gremlin.Net;
@@ -160,7 +164,7 @@ namespace gremlinTests
           Next();
 
       
-      // Instantiate a subgraph strategy and try counting vertice
+      // Instantiate a subgraph strategy and try counting vertices
       Console.WriteLine("\nWithStrategies tests");
       Console.WriteLine("--------------------");
       
@@ -179,6 +183,7 @@ namespace gremlinTests
       
       Console.WriteLine($" The count was {ct3}");
 
+
       // Create a vertex and some properties
       Console.WriteLine("\nAddV and Property tests");
       Console.WriteLine("-----------------------");
@@ -196,8 +201,10 @@ namespace gremlinTests
       Console.WriteLine($" New vertex created with ID '{vertex}'");
 
       var max = g.V("dog-1").ValueMap<string,object[]>().Next();
+     
       Console.WriteLine($" The dog with ID {vertex} is called {max["name"][0]}");
       Console.WriteLine(" Max likes:");
+      
       foreach (string like in max["likes"])
       {
         Console.WriteLine($"   {like}");
