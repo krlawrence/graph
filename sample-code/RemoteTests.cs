@@ -2,12 +2,13 @@
 //
 // Simple examples of using C# and Gremlin .Net to connect to a remote endpoint.
 //
-// This example does the following: 1. Configures a remote connection to a Gremlin
-// Server endpoint.  2. Run some sample Gremlin queries that demonstrate usage of the
-// Gremlin .Net client.
+// This example does the following: 
+//   1. Configures a remote connection to a Gremlin Server endpoint.  
+//   2. Run some sample Gremlin queries that demonstrate usage of the
+//      Gremlin .Net client.
 // 
 // The Gremlin.Net client can be installed several ways. One way, using the "dotnet"
-// command line tool, is the command:
+// command line tool:
 //
 //        dotnet add package Gremlin.Net
 //
