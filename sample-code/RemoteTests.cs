@@ -44,13 +44,26 @@ using static Gremlin.Net.Process.Traversal.T;
 using static Gremlin.Net.Structure.Graph;
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace gremlinTests
 {
   class RemoteTests
   {
+    // Simple method to help print results returned as lists.
+    static void PrintList<T>(IList<T> items)
+    {
+      foreach(T item in items)
+      {
+        Console.WriteLine($" {item}");
+      }
+    }
+
+    // Run some tests
     static void Main(string[] args)
     {
+      RemoteTests rt = new RemoteTests();
       Console.WriteLine("\nStarting tests\n");
       
       GraphTraversalSource g = null;
@@ -93,10 +106,7 @@ namespace gremlinTests
           Values<string>("city").
           ToList();
 
-      foreach (string s in cities)
-      {
-        Console.WriteLine($" {s}");
-      }
+      PrintList<string>(cities);
 
 
       // Experiment with Path results
@@ -111,10 +121,7 @@ namespace gremlinTests
               Limit<Path>(5).
               ToList();
       
-      foreach (Path p in paths)
-      {
-        Console.WriteLine($" {p}");
-      }
+      PrintList<Path>(paths);
 
       Console.WriteLine();
 
@@ -129,10 +136,7 @@ namespace gremlinTests
           Limit<Path>(5).
           ToList();
       
-      foreach (Path p in paths)
-      {
-        Console.WriteLine($" {p}");
-      }
+      PrintList<Path>(paths);
 
       // Experiment with Repeat..Until
       Console.WriteLine("\nRepeat..Until tests");
@@ -148,11 +152,7 @@ namespace gremlinTests
           Limit<Path>(5).
           ToList();          
        
-       foreach (Path p in paths)
-       {
-         Console.WriteLine($" {p}");
-       }       
-
+       PrintList<Path>(paths);
 
       // Experiment with a value map result
       Console.WriteLine("\nValueMap test");
@@ -163,6 +163,11 @@ namespace gremlinTests
           ValueMap<string,object>().
             By(Unfold<object[]>()).
           Next();
+
+      foreach (string key in vmap.Keys)
+      {
+        Console.WriteLine($"{key} = {vmap[key]}");
+      }
 
       
       // Instantiate a subgraph strategy and try counting vertices
