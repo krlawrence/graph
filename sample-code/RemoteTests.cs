@@ -63,7 +63,6 @@ namespace gremlinTests
     // Run some tests
     static void Main(string[] args)
     {
-      RemoteTests rt = new RemoteTests();
       Console.WriteLine("\nStarting tests\n");
       
       GraphTraversalSource g = null;
