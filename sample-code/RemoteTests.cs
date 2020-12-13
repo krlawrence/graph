@@ -192,6 +192,18 @@ namespace gremlinTests
       Console.WriteLine($" Here are {found} of them");
       PrintList<Path>(paths.Take(found).ToList());
 
+      // As the prior query but using a match step
+      Console.WriteLine("\nPerforming the previous count using a Match step");
+      Console.WriteLine("------------------------------------------------");
+      var count = 
+        g.V().
+          HasLabel("airport").
+          Match<Vertex>(__.As("a").Out("route").As("b"),
+                        __.Not(__.As("b").Out("route").As("a"))).
+          Count().
+          Next();
+
+      Console.WriteLine($"The count using a match step is {count}");
 
       // Instantiate a subgraph strategy and try counting vertices
       Console.WriteLine("\nWithStrategies tests");
