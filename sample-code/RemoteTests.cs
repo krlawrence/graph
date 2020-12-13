@@ -46,6 +46,7 @@ using static Gremlin.Net.Structure.Graph;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace gremlinTests
 {
@@ -168,7 +169,30 @@ namespace gremlinTests
         Console.WriteLine($"{key} = {vmap[key]}");
       }
 
+      //Find routes with no corresponding return flight.
+      Console.WriteLine("\nWhere, Not and As tests (finding flights with no corresponding return)");
+      Console.WriteLine("----------------------------------------------------------------------");
+     
+      paths = 
+        g.V().
+          HasLabel("airport").As("a").
+          Out("route").
+          Where(Not(Out("route").As("a"))).
+          Path().
+            By("code").
+          ToList();
       
+      var found = paths.Count;
+      Console.WriteLine($" Found {found} one-way only routes");
+
+      if (found >= 10)
+      {
+        found = 10; 
+      }
+      Console.WriteLine($" Here are {found} of them");
+      PrintList<Path>(paths.Take(found).ToList());
+
+
       // Instantiate a subgraph strategy and try counting vertices
       Console.WriteLine("\nWithStrategies tests");
       Console.WriteLine("--------------------");
