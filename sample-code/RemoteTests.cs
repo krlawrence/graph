@@ -68,12 +68,34 @@ namespace gremlinTests
       
       GraphTraversalSource g = null;
       GremlinClient gremlinClient = null;
+
+      // For testing, the default connection pool settings are fine.  To specify
+      // custom values it is necessary to create a ConnectionPoolSettings object and
+      // pass it to the GremlinClient upon creation.  The values used below are in
+      // fact the default values but can be changed as needed.
+
+      ConnectionPoolSettings cpSettings = 
+        new ConnectionPoolSettings();
+      cpSettings.PoolSize = 4;
+      cpSettings.MaxInProcessPerConnection = 32;
+      cpSettings.ReconnectionAttempts = 4;
+      cpSettings.ReconnectionBaseDelay = new TimeSpan((long)(1E9/100)) ;
       
-      // Establish a connection to the server using default values
+      // Establish a connection to the server
       try
       {
-        var gremlinServer = new GremlinServer("localhost", 8182);
-        gremlinClient = new GremlinClient(gremlinServer);
+        Console.WriteLine("Creating connection");
+        var gremlinServer = new GremlinServer("localhost", 8182, enableSsl: false);
+
+        // It is only required to pass a value for connectionPoolSettings if you want
+        // to override any of the default values. Other options, such as which
+        // serializer and deserializer to use, can also be specified as parameters to
+        // the GremlinClient. The parameter names are graphSONReader and
+        // graphSONWriter. At time of writing the defaults specify GraphSON3Reader
+        // and GraphSON3Writer and this code does not override those settings.
+        
+        gremlinClient = new GremlinClient(gremlinServer, connectionPoolSettings:cpSettings);
+
         var remoteConnection = new DriverRemoteConnection(gremlinClient, "g");
         g = Traversal().WithRemote(remoteConnection);
       }
@@ -83,6 +105,7 @@ namespace gremlinTests
         System.Environment.Exit(1);
       }
 
+
       //
       // If we were able to open a connection, start running some tests.
       //
@@ -90,7 +113,7 @@ namespace gremlinTests
       // Count some vertices as a simple test
       Console.WriteLine("\nVertex Count tests");
       Console.WriteLine("------------------");
-      
+
       var ct = g.V().Limit<Vertex>(5000).Count().Next();
      
       Console.WriteLine($"The count was {ct}");
