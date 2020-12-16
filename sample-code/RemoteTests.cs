@@ -61,6 +61,14 @@ namespace gremlinTests
       }
     }
 
+    static void PrintDict<K,V>(IDictionary<K,V> dict)
+    {
+      foreach (K key in dict.Keys)
+      {
+        Console.WriteLine($" {key} ==> {dict[key]}");
+      }
+    }
+
     // Run some tests
     static void Main(string[] args)
     {
@@ -74,8 +82,7 @@ namespace gremlinTests
       // pass it to the GremlinClient upon creation.  The values used below are in
       // fact the default values but can be changed as needed.
 
-      ConnectionPoolSettings cpSettings = 
-        new ConnectionPoolSettings();
+      ConnectionPoolSettings cpSettings = new ConnectionPoolSettings();
       cpSettings.PoolSize = 4;
       cpSettings.MaxInProcessPerConnection = 32;
       cpSettings.ReconnectionAttempts = 4;
@@ -84,7 +91,6 @@ namespace gremlinTests
       // Establish a connection to the server
       try
       {
-        Console.WriteLine("Creating connection");
         var gremlinServer = new GremlinServer("localhost", 8182, enableSsl: false);
 
         // It is only required to pass a value for connectionPoolSettings if you want
@@ -105,7 +111,6 @@ namespace gremlinTests
         System.Environment.Exit(1);
       }
 
-
       //
       // If we were able to open a connection, start running some tests.
       //
@@ -113,7 +118,7 @@ namespace gremlinTests
       // Count some vertices as a simple test
       Console.WriteLine("\nVertex Count tests");
       Console.WriteLine("------------------");
-
+      
       var ct = g.V().Limit<Vertex>(5000).Count().Next();
      
       Console.WriteLine($"The count was {ct}");
@@ -177,9 +182,11 @@ namespace gremlinTests
        
        PrintList<Path>(paths);
 
-      // Experiment with a value map result
+      // Experiment with a ValueMap step. This will generate a map result
+      // represented as a .Net Dictionary.   
       Console.WriteLine("\nValueMap test");
       Console.WriteLine("-------------");
+      
       var vmap =  
         g.V().
           Has("code","AUS").
@@ -187,10 +194,22 @@ namespace gremlinTests
             By(Unfold<object[]>()).
           Next();
 
-      foreach (string key in vmap.Keys)
-      {
-        Console.WriteLine($"{key} = {vmap[key]}");
-      }
+      PrintDict<string,object>(vmap);
+
+      //
+      // Experiment with a GroupCount step. This will also generate a map result
+      // represented as a .Net Dictionary..
+      //
+      Console.WriteLine("\nUsing GroupCount to find label distribution");
+      Console.WriteLine("-------------------------------------------");
+      
+      var labelMap = g.V().GroupCount<string>().By(T.Label).Next();
+      
+      PrintDict<string,long>(labelMap);
+      //foreach (string key in labelMap.Keys)
+      //{
+      //  Console.WriteLine($" {key} ==> {labelMap[key]}");
+      //}
 
       //Find routes with no corresponding return flight.
       Console.WriteLine("\nWhere, Not and As tests (finding flights with no corresponding return)");
