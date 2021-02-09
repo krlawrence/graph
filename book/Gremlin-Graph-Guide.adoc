@@ -424,7 +424,7 @@ displaying graphs as part of the user interface layer. In particular, it is so-c
 property graph, both vertices and edges can have properties (effectively, key-value
 pairs) associated with them. There are many styles of graph that you may end up
 building and there have been whole books written on these various design patterns,
-but the property graph technology we will be focused on in this book can support
+but the property graph technology we will focus on in this book can support
 all of the most common usage patterns. If you hear phrases such as 'directed graph'
 and 'undirected graph', or 'cyclic' and 'acyclic' graph, and many more as you work
 with graph databases, a quick online search will get you to a place where you can get
