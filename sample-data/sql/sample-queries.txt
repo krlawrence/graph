@@ -18,6 +18,49 @@ select a.iata, a.city, a.descr from airports a limit 10;
 | IAD  | Washington D.C. | Washington Dulles International Airport            |
 +------+-----------------+----------------------------------------------------+
 
+select * from routes limit 5;
++-----+------+------+
+| SRC | DEST | DIST |
++-----+------+------+
+| 1   | 3    | 811  |
+| 1   | 4    | 214  |
+| 1   | 5    | 945  |
+| 1   | 6    | 576  |
+| 1   | 7    | 546  |
++-----+------+------+
+
+select * from iroutes limit 5;
++-----+------+------+
+| SRC | DEST | DIST |
++-----+------+------+
+| ATL | AUS  | 811  |
+| ATL | BNA  | 214  |
+| ATL | BOS  | 945  |
+| ATL | BWI  | 576  |
+| ATL | DCA  | 546  |
++-----+------+------+
+
+select * from continents limit 5;
++------+------------+
+| CODE |   DESCR    |
++------+------------+
+| EU   | Europe     |
+| OC   | Oceania    |
+| AS   | Asia       |
+| AN   | Antarctica |
+| AF   | Africa     |
++------+------------+
+
+select * from countries limit 5;
++------+----------------+
+| CODE |     DESCR      |
++------+----------------+
+| AF   | Afghanistan    |
+| AL   | Albania        |
+| DZ   | Algeria        |
+| AS   | American Samoa |
+| AD   | Andorra        |
++------+----------------+
 
 select iata,city from airports where city like 'Dal%' limit 10;
 +------+-------------+
