@@ -1,7 +1,7 @@
 
 # Air routes SQL data
 
-Chapter 3 of the book includes a brief discussion of the differences and similarities between SQL and Gremlin. The SQL files in this folder and the examples below were created to help build the examples in that chapter. Each file has been tested using Sqlite version 3 but should work with minor or no modifications in other SQL databases. Versions of this data have also been tested using MySQL. The following files are included.
+Chapter 3 of the book includes a brief discussion of the differences and similarities between SQL and Gremlin. The SQL files in this folder and the examples below were created to help build the examples in that chapter. Each file has been tested using Sqlite version 3 but should work with minor or no modifications in other SQL databases. Versions of this data have also been tested using MySQL. The data model is deliberately quite simple. No attempt was made to remove duplication and not all tables have primary keys (for example the edge ID values used in the Gremlin data are not used in the route tables). You will find examples showing the contents of each table in the `sample-queries.txt` file. The following files are included in this folder.
 
 |File|Purpose|
 |--|--|
@@ -52,7 +52,7 @@ select iata,city from airports where city like 'Dal%' limit 10;
 +------+-------------+
 ```
 
-### At least six RUNWAYS
+### Between six and eight runways
 
 ```
 select iata,runways from airports where runways between 6 and 8 order by runways;
