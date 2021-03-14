@@ -17,8 +17,11 @@ A few example queries that were run using Sqlite version 3 are shown below.
 
 ### Selected airports
 
-```
+```sql
 select a.iata, a.city, a.descr from airports a limit 10;
+```
+
+```
 +------+-----------------+----------------------------------------------------+
 | IATA |      CITY       |                       DESCR                        |
 +------+-----------------+----------------------------------------------------+
@@ -37,8 +40,11 @@ select a.iata, a.city, a.descr from airports a limit 10;
 
 ### Cities starting with "Dal"
 
-```
+```sql
 select iata,city from airports where city like 'Dal%' limit 10;
+```
+
+```
 +------+-------------+
 | IATA |    CITY     |
 +------+-------------+
@@ -54,8 +60,11 @@ select iata,city from airports where city like 'Dal%' limit 10;
 
 ### Between six and eight runways
 
-```
+```sql
 select iata,runways from airports where runways between 6 and 8 order by runways;
+```
+
+```
 +------+---------+
 | IATA | RUNWAYS |
 +------+---------+
@@ -70,9 +79,12 @@ select iata,runways from airports where runways between 6 and 8 order by runways
 
 ### Airports close to the Greenwich Meridien
 
-```
+```sql
 select IATA,CITY,REGION,LON from airports
 where LON between -0.2 and 0.2 order by LON;
+```
+
+```
 +------+-------------------------+--------+--------------------+
 | IATA |          CITY           | REGION |        LON         |
 +------+-------------------------+--------+--------------------+
@@ -89,10 +101,13 @@ where LON between -0.2 and 0.2 order by LON;
 ```
 ### Airports with the continent description added
 
-```
+```sql
 select airports.iata,airports.descr,continents.descr as Continent from airports
 join continents on airports.continent=continents.code
 limit 5 ;
+```
+
+```
 +------+----------------------------------------------------+----------------+
 | IATA |                       DESCR                        |   Continent    |
 +------+----------------------------------------------------+----------------+
@@ -105,9 +120,12 @@ limit 5 ;
 ```
 ### A simple view based on the prior example
 
-```
+```sql
 create view test as select airports.iata,airports.descr,continents.descr as continent from airports join continents on airports.continent=continents.code;
 select * from test where continent != "North America" limit 10;
+```
+
+```
 +------+-----------------------------------------+-----------+
 | IATA |                  DESCR                  | continent |
 +------+-----------------------------------------+-----------+
@@ -125,13 +143,16 @@ select * from test where continent != "North America" limit 10;
 ```
 ### The longest routes from Austin by joining tables
 
-```
+```sql
 select a.iata,r.dist,a2.iata from airports a
 join routes r on a.id = r.src
 join airports a2 on a2.id = r.dest
 where a.IATA = 'AUS'
 order by r.dist desc
 limit 10;
+```
+
+```
 +------+------+------+
 | IATA | DIST | IATA |
 +------+------+------+
@@ -149,8 +170,11 @@ limit 10;
 ```
 ### The longest routes in the `iroutes` table
 
-```
+```sql
 select * from iroutes order by iroutes.dist desc limit 10;
+```
+
+```
 +-----+------+------+
 | SRC | DEST | DIST |
 +-----+------+------+
@@ -168,7 +192,7 @@ select * from iroutes order by iroutes.dist desc limit 10;
 ```
 ### 3-hop routes from Austin to Agra
 
-```
+```sql
 select a.IATA ,r.DIST, a2.IATA, r2.DIST,a3.IATA,r3.DIST,a4.IATA,
        r3.DIST+r2.DIST+r.DIST as TOTAL from airports a
 join routes r on a.id = r.SRC
@@ -180,6 +204,9 @@ join airports a4 on a4.id = r3.DEST
 where a.IATA = 'AUS' and a4.IATA = 'AGR'
 order by TOTAL asc
 limit 10;
+```
+
+```
 +------+------+------+------+------+------+------+-------+
 | IATA | DIST | IATA | DIST | IATA | DIST | IATA | TOTAL |
 +------+------+------+------+------+------+------+-------+
