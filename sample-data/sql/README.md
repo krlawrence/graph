@@ -1,7 +1,7 @@
 
 # Air routes SQL data
 
-Chapter 3 of the book includes a brief discussion of the differences and similarities between SQL and Gremlin. The SQL files in this folder and the examples below were created to help build the examples in that chapter. Each file has been tested using Sqlite version 3 but should work with minor or no modifications in other SQL databases. Versions of this data have been tested using MySQL. The following files are included.
+Chapter 3 of the book includes a brief discussion of the differences and similarities between SQL and Gremlin. The SQL files in this folder and the examples below were created to help build the examples in that chapter. Each file has been tested using Sqlite version 3 but should work with minor or no modifications in other SQL databases. Versions of this data have also been tested using MySQL. The following files are included.
 
 |File|Purpose|
 |--|--|
