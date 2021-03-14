@@ -2,6 +2,22 @@
 The SQL files in this folder and the examples below were all tested using Sqlite3 but should work with minor or
 no modifications in other SQL databases. Versions of this data have been tested using MySQL.
 
+select * from airports limit 10;
++----+------+------+-----------------+----------------------------------------------------+--------+---------+---------+---------+----------+-----------+------------------+-------------------+
+| ID | IATA | ICAO |      CITY       |                       DESCR                        | REGION | COUNTRY | RUNWAYS | LONGEST | ALTITUDE | CONTINENT |       LAT        |        LON        |
++----+------+------+-----------------+----------------------------------------------------+--------+---------+---------+---------+----------+-----------+------------------+-------------------+
+| 1  | ATL  | KATL | Atlanta         | Hartsfield - Jackson Atlanta International Airport | US-GA  | US      | 5       | 12390   | 1026     | NA        | 33.6366996765137 | -84.4281005859375 |
+| 2  | ANC  | PANC | Anchorage       | Anchorage Ted Stevens                              | US-AK  | US      | 3       | 12400   | 151      | NA        | 61.1744003295898 | -149.996002197266 |
+| 3  | AUS  | KAUS | Austin          | Austin Bergstrom International Airport             | US-TX  | US      | 2       | 12250   | 542      | NA        | 30.1944999694824 | -97.6698989868164 |
+| 4  | BNA  | KBNA | Nashville       | Nashville International Airport                    | US-TN  | US      | 4       | 11030   | 599      | NA        | 36.1245002746582 | -86.6781997680664 |
+| 5  | BOS  | KBOS | Boston          | Boston Logan                                       | US-MA  | US      | 6       | 10083   | 19       | NA        | 42.36429977      | -71.00520325      |
+| 6  | BWI  | KBWI | Baltimore       | Baltimore/Washington International Airport         | US-MD  | US      | 3       | 10502   | 143      | NA        | 39.17539978      | -76.66829681      |
+| 7  | DCA  | KDCA | Washington D.C. | Ronald Reagan Washington National Airport          | US-DC  | US      | 3       | 7169    | 14       | NA        | 38.8521003723145 | -77.0376968383789 |
+| 8  | DFW  | KDFW | Dallas          | Dallas/Fort Worth International Airport            | US-TX  | US      | 7       | 13401   | 607      | NA        | 32.896800994873  | -97.0380020141602 |
+| 9  | FLL  | KFLL | Fort Lauderdale | Fort Lauderdale/Hollywood International Airport    | US-FL  | US      | 2       | 9000    | 64       | NA        | 26.0725994110107 | -80.152702331543  |
+| 10 | IAD  | KIAD | Washington D.C. | Washington Dulles International Airport            | US-VA  | US      | 4       | 11500   | 313      | NA        | 38.94449997      | -77.45580292      |
++----+------+------+-----------------+----------------------------------------------------+--------+---------+---------+---------+----------+-----------+------------------+-------------------+
+
 select a.iata, a.city, a.descr from airports a limit 10;
 +------+-----------------+----------------------------------------------------+
 | IATA |      CITY       |                       DESCR                        |
