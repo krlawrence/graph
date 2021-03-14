@@ -5,13 +5,13 @@ Chapter 3 of the book includes a brief discussion of the differences and similar
 
 |File|Purpose|
 |--|--|
-|airports.sql|SQL inserts for the airport data.|
-|continents.sql|SQL inserts for continent data.|
-|countries.sql|SQL inserts for the country data.|
-|create-tables.sql|Creates all of the tables.|
-|routes-iata.sql|SQL inserts for the routes between airport using IATA codes.|
-|routes.sql|SQL inserts for routes between airports using ID values.|
-|sample-queries.txt|A text file containing queries like the ones shown below.|
+|[airports.sql](airports.sql)|SQL inserts for the airport data.|
+|[continents.sql](continents.sql)|SQL inserts for continent data.|
+|[countries.sql](countries.sql)|SQL inserts for the country data.|
+|[create-tables.sql](create-tables.sql)|Creates all of the tables.|
+|[routes-iata.sql](routes-iata.sql)|SQL inserts for the routes between airport using IATA codes.|
+|[routes.sql](routes.sql)|SQL inserts for routes between airports using ID values.|
+|[sample-queries.txt](sample-queries.txt)|A text file containing queries like the ones shown below.|
 
 A few example queries that were run using Sqlite version 3 are shown below.
 
