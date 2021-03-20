@@ -4,7 +4,7 @@ Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
 v283-preview, March 20th 2021
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Sat Mar 20, 2021 10:22:20 CDT
+// Sat Mar 20, 2021 10:40:14 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -590,7 +590,7 @@ Groovy commands.
 gremlin> :help
 
 For information about Groovy, visit:
-    http://groovy-lang.org 
+    http://groovy-lang.org
 
 Available commands:
   :help       (:h  ) Display this help message
@@ -610,6 +610,7 @@ Available commands:
   :record     (:r  ) Record the current session to a file
   :history    (:H  ) Display, manage and recall edit-line history
   :alias      (:a  ) Create an alias
+  :grab       (:g  ) Add a dependency to the shell environment
   :register   (:rc ) Register a new command with the shell
   :doc        (:D  ) Open a browser window displaying the doc for the argument
   :set        (:=  ) Set (or list) preferences
@@ -618,9 +619,12 @@ Available commands:
   :plugin     (:pin) Manage plugins for the Console
   :remote     (:rem) Define a remote connection
   :submit     (:>  ) Send a Gremlin script to Gremlin Server
+  :bytecode   (:bc ) Gremlin bytecode helper commands
+  :cls        (:C  ) Clear the screen.
 
 For help on a specific command type:
-    :help command 
+    :help command
+
 ----
 
 TIP: Of all the commands listed above :clear (:c for short) is an important one to
@@ -665,7 +669,7 @@ Gremlin will execute the file and exit. For example if you had a file called
 terminal window as follows:
 
 ----
-$ gremlin -e mycode.groovy
+$ ./gremlin.sh -e mycode.groovy
 ----
 
 If you wanted to have the console run your script and not exit afterwards, you can
@@ -675,27 +679,25 @@ You can get help on all of the command line options for the Gremlin console by t
 'gremlin --help'. You should get back some help text that looks like this
 
 ----
-$ gremlin --help
+$ ./gremlin.sh --help
 
-usage: gremlin.sh [options] [...]
-  -C, --color                               Disable use of ANSI colors
-  -D, --debug                               Enabled debug Console output
-  -Q, --quiet                               Suppress superfluous Console
-                                            output
-  -V, --verbose                             Enable verbose Console output
-  -e, --execute=SCRIPT ARG1 ARG2 ...        Execute the specified script
-                                            (SCRIPT ARG1 ARG2 ...) and
-                                            close the console on
-                                            completion
-  -h, --help                                Display this help message
-  -i, --interactive=SCRIPT ARG1 ARG2 ...    Execute the specified script
-                                            and leave the console open on
-                                            completion
-  -l                                        Set the logging level of
-                                            components that use standard
-                                            logging output independent of
-                                            the Console
-  -v, --version                             Display the version
+Usage: gremlin.sh [-CDhlQvV] [-e=<SCRIPT ARG1 ARG2 ...>]... [-i=<SCRIPT ARG1
+                  ARG2 ...>...]...
+  -C, --color     Disable use of ANSI colors
+  -D, --debug     Enabled debug Console output
+  -e, --execute=<SCRIPT ARG1 ARG2 ...>
+                  Execute the specified script (SCRIPT ARG1 ARG2 ...) and close
+                    the console on completion
+  -h, --help      Display this help message
+  -i, --interactive=<SCRIPT ARG1 ARG2 ...>...
+                  Execute the specified script and leave the console open on
+                    completion
+  -l              Set the logging level of components that use standard logging
+                    output independent of the Console
+  -Q, --quiet     Suppress superfluous Console output
+  -v, --version   Display the version
+  -V, --verbose   Enable verbose Console output
+
 ----
 
 If you ever want to check which version of TinkerPop you have installed you can enter
