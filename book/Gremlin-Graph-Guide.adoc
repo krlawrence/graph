@@ -4,7 +4,7 @@ Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
 v283-preview, March 20th 2021
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Sat Mar 20, 2021 16:07:55 CDT
+// Sat Mar 20, 2021 18:40:59 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -707,7 +707,7 @@ the following command from inside the Gremlin console.
 ----
 // What version of Gremlin console am I running?
 gremlin>  Gremlin.version()
-==>3.3.5
+==>3.4.10
 ----
 
 One thing that is not at all obvious or apparent is that the Gremlin console quietly
@@ -20252,6 +20252,18 @@ direction.
 |OUT     | Direction.OUT  | myEdge.vertices(Direction.OUT)
 |BOTH    | Direction.BOTH | myEdge.vertices(Direction.BOTH)
 |==============================================================================
+
+
+The 'Pick' Enum defines constants that are used in association with the 'branch',
+`choose` and `option` steps.
+
+.Pick
+[cols="1,1,3"]
+|==============================================================================
+|none    | Pick.none      | option(none,constant('no match'))
+|any     | Pick.any       | option(any,constant('any picked'))  
+|==============================================================================
+
 
 Another useful tip, that was shared on the Gremlin Users mailing list, is that you
 can ask the Gremlin Console to show you a list of everything that has been imported
