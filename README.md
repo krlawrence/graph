@@ -66,55 +66,64 @@ Included with the book are sample graph data (GraphML) and program files. You wi
 ## How the book is organized
 
 Chapter 1 - INTRODUCTION
-- We start off by briefly doing a recap on why Graph databases are of interest to us
-  and discuss some good use cases for graphs.
+- I start off by briefly doing a recap on why Graph databases are of interest to us
+  and discuss some good use cases for graphs. I also provide pointers to the sample
+  programs and other additional materials referenced by the book.  
   
 Chapter 2 - GETTING STARTED
-- In Chapter 2 we introduce several of the components of Apache TinkerPop 3 and we
-  also introduce the air-routes.graphml file that will be used as the graph we base
-  most of our examples on.
+- In Chapter two I introduce several of the components of Apache TinkerPop and
+  also introduce the `air-routes.graphml` file that will be used as the graph the
+  majority of examples shown in this book are based on.  
   
 Chapter 3 - WRITING GREMLIN QUERIES
-- In Chapter 3 we start discussing how to use the Gremlin graph traversal and
-  query language to interrogate the air-routes graph. We begin by comparing how we
-  could have built the air-routes graph using a more traditional relational database
+- In Chapter three things start to get a lot more interesting! I start discussing
+  how to use the Gremlin graph traversal and
+  query language to interrogate the 'air-routes' graph. I begin by comparing how we
+  could have built the 'air-routes' graph using a more traditional relational database
   and then look at how SQL and Gremlin are both similar in some ways and very
-  different in others. For the rest of the Chapter, we introduce several of
-  the key Gremlin methods, or as they are often called, "steps". We
-  mostly focus on reading the graph (not adding or deleting things) in this Chapter.
+  different in others. For the rest of the Chapter, I introduce several of
+  the key Gremlin methods, or as they are often called, '"steps"'. I
+  mostly focus on reading the graph (not adding or deleting things) in this Chapter.  
   
 Chapter 4 - BEYOND BASIC QUERIES
-- In Chapter 4 we move beyond just reading the graph and describe how to add nodes,
-  edges and properties as well as how to delete and update them. We also present a
-  discussion of various best practices.We also start to explore some slightly more
-  advanced topics in this chapter.
+- In Chapter four the focus moves beyond just reading the graph and I describe how to add
+  vertices (nodes), edges and properties as well as how to delete and update them.
+  I also present a discussion of various best practices. I also start to explore
+  some slightly more advanced topics in this chapter.  
   
-Chapter 5 - MISCELLANEOUS QUERIES AND THE RESULTS THEY GENERATE
-- In Chapter 5 we focus on using what we have covered in the prior Chapters to write
-  queries that have a more real world feel. We present a lot more examples of the
-  output from running queries in this Chapter. We also start to discuss topics such
-  as analyzing distances, route distribution and writing geospatial queries.
+Chapter 5 - MISCELLANEOUS QUERIES AND THE RESULTS THEY GENERATE  
+- In Chapter five I focus on using what has been covered in the prior Chapters to write
+  queries that have a more real-world feel. I present a lot more examples of the
+  output from running queries in this Chapter. I also start to discuss topics such
+  as analyzing distances, route distribution and writing geospatial queries.  
   
-Chapter 6 - MOVING BEYOND THE CONSOLE AND TINKERGRAPH
-- In Chapter 6 we move beyond our focus on the Gremlin Console and TinkerGraph. We
-  start by looking at how you can write stand alone Java and Groovy applications that
-  can work with a graph. We then introduce Janus Graph and take a fairly detailed
-  look at its capabilities such as support for transactions, schemas and external
-  indexes. We also explore various technology choices for back end persistent store
-  and index as well as introducing the Gremlin Server.
+Chapter 6 - MOVING BEYOND THE CONSOLE AND TINKERGRAPH  
+- In Chapter six I start to expand the focus to concepts beyond using the Gremlin
+  Console and a TinkerGraph. I
+  start by looking at how you can write standalone Java and Groovy applications that
+  can work with a graph. I then introduce JanusGraph and take a fairly detailed
+  look at its capabilities such as support for transactions, schemas and indexes.
+  Various technology choices for back end persistent stores
+  and indexes are explored along the way.  
   
-Chapter 7 - INTRODUCING GREMLIN SERVER
-- A chapter dedicated to configuring and using Gremlin Server to host a remote graph
-  and connect to it.
+Chapter 7 - INTRODUCING GREMLIN SERVER  
+- In Chapter seven, Gremlin Server is introduced. I begin to explore connecting to
+  and working with a remote graph both from the Gremlin Console and the command line
+  as well as from code. When this book was first released, the majority of "real
+  world" use cases
+  focussed on directly attached or even in memory graphs. As Apache TinkerPop has
+  evolved, it has become a lot more common to connect to a graph remotely via a
+  Gremlin Server.  
   
-Chapter 8 - COMMON GRAPH SERIALIZATION FORMATS
-- In Chapter 7 We have provided a discussion of some common Graph serialization file
-  formats along with a discussion of how to use them in the context of TinkerPop 3
-  enabled graphs.
+Chapter 8 - COMMON GRAPH SERIALIZATION FORMATS  
+- In Chapter eight a discussion is presented of some common Graph serialization file
+  formats along with coverage of how to use them in the context of TinkerPop 3
+  enabled graphs.  
   
-Chapter 9 - FURTHER READING
-- We finish up by providing several links to useful web sites where you can find
-  tools and documentation for many of the technologies covered in this document.
+Chapter 9 - FURTHER READING  
+- I finish up by providing several links to useful web sites where you can find
+  tools and documentation for many of the topics and technologies covered in this book.
+                                                           
 
 **NEWS ARCHIVE:**  
 
