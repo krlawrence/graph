@@ -22,6 +22,7 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
 - Renamed HTML and PDF files to PracticalGremlin.
   - The prior Gremlin-Graph-Guide names will still work to avoid breaking bookmarks.
 - Added some text to emphasize the evolution of Apache TinkerPop usage from graphs being largely local or directly connected to being remotely connected via Gremlin Server.
+- Added to the Terminology section to include edges.
 - Improved grammar and fixed a few typos. Issues #164, #180, #204
 - Sample code updates
   - Added `quick-btree2.groovy` which adds a few more nodes to the treee than in `quick-btree.groovy`.
