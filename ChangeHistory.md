@@ -17,13 +17,14 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
   - Improved the wording that introduces the section
   - Improved the wording at the end of the section.
   - Added a sub-section that calculates Great Circle distances using the `math` step and the Haversine formula. #169
-- Merged reader PRs #154, #160, #197, #198, #200, #205, #209, #210, #213
-- Updated warning about label indexing to reflect the current state of graph DBs better. Issue #186
-- Renamed HTML and PDF files to PracticalGremlin.
-  - The prior Gremlin-Graph-Guide names will still work to avoid breaking bookmarks.
+- Updated the various Gremlin console help text graphics to the 3.4.10 level. Issue #215
 - Added some text to emphasize the evolution of Apache TinkerPop usage from graphs being largely local or directly connected to being remotely connected via Gremlin Server.
 - Added to the Terminology section to include edges.
+- Merged reader PRs #154, #160, #197, #198, #200, #205, #209, #210, #213
+- Updated warning about label indexing to reflect the current state of graph DBs better. Issue #186
 - Improved grammar and fixed a few typos. Issues #164, #180, #204
+- Renamed HTML and PDF files to PracticalGremlin.
+  - The prior Gremlin-Graph-Guide names will still work to avoid breaking bookmarks.
 - Sample code updates
   - Added `quick-btree2.groovy` which adds a few more nodes to the treee than in `quick-btree.groovy`.
   - Added `RemoteWriteText.java` which shows how to turn traversals and GraphSON back into text queries.
