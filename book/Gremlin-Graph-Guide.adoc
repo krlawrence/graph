@@ -4,7 +4,7 @@ Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
 v283-preview, March 20th 2021
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Sat Mar 20, 2021 10:40:14 CDT
+// Sat Mar 20, 2021 16:07:55 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -20234,7 +20234,7 @@ When working with a 'sack' the operators like 'sum' and 'assign' are defined in 
 |minus   | Operator.minus |sack(Operator.minus)
 |mult    | Operator.mult  |sack(Operator.mult)
 |div     | Operator.div   |sack(Operator.div)
-|assign  | Operator.assign|sack(Operator.assign).by(__.constant(0))
+|assign  | Operator.assign|sack(Operator.assign).by(constant(0))
 |min     | Operator.min   |sack(Operator.min)
 |max     | Operator.max   |sack(Operator.max)
 |addAll  | Operator.addAll|sack(Operator.addAll)
@@ -20262,7 +20262,7 @@ case this changes in the future you can see which version of Gremlin I queried.
 [source,groovy]
 ----
 gremlin> Gremlin.version
-==>3.3.1
+==>3.4.10
 ----
 
 Here is the list of imports that the Gremlin Console has setup for us quietly behind
@@ -20275,8 +20275,10 @@ gremlin> :show imports
 Custom imports:
   org.apache.tinkerpop.gremlin.structure.*
   org.apache.tinkerpop.gremlin.structure.util.*
+  org.apache.tinkerpop.gremlin.structure.util.reference.*
   org.apache.tinkerpop.gremlin.process.traversal.*
   org.apache.tinkerpop.gremlin.process.traversal.step.*
+  org.apache.tinkerpop.gremlin.process.traversal.step.util.*
   org.apache.tinkerpop.gremlin.process.remote.*
   org.apache.tinkerpop.gremlin.structure.util.empty.*
   org.apache.tinkerpop.gremlin.structure.io.*
@@ -20291,18 +20293,26 @@ Custom imports:
   org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.*
   org.apache.tinkerpop.gremlin.process.traversal.util.*
   org.apache.tinkerpop.gremlin.process.computer.*
+  org.apache.tinkerpop.gremlin.process.computer.traversal.step.map.*
+  org.apache.tinkerpop.gremlin.process.computer.clustering.connected.*
+  org.apache.tinkerpop.gremlin.process.computer.clone.*
   org.apache.tinkerpop.gremlin.process.computer.bulkdumping.*
   org.apache.tinkerpop.gremlin.process.computer.bulkloading.*
   org.apache.tinkerpop.gremlin.process.computer.clustering.peerpressure.*
   org.apache.tinkerpop.gremlin.process.computer.traversal.*
   org.apache.tinkerpop.gremlin.process.computer.ranking.pagerank.*
+  org.apache.tinkerpop.gremlin.process.computer.search.path.*
   org.apache.tinkerpop.gremlin.process.computer.traversal.strategy.optimization.*
   org.apache.tinkerpop.gremlin.process.computer.traversal.strategy.decoration.*
   org.apache.tinkerpop.gremlin.util.*
   org.apache.tinkerpop.gremlin.util.iterator.*
   org.apache.tinkerpop.gremlin.util.function.*
+  java.util.*
+  java.sql.*
   static org.apache.tinkerpop.gremlin.structure.io.IoCore.*
   static org.apache.tinkerpop.gremlin.process.traversal.P.*
+  static org.apache.tinkerpop.gremlin.process.traversal.AnonymousTraversalSource.*
+  static org.apache.tinkerpop.gremlin.process.traversal.TextP.*
   static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.*
   static org.apache.tinkerpop.gremlin.process.computer.Computer.*
   static org.apache.tinkerpop.gremlin.util.TimeUtil.*
@@ -20322,18 +20332,15 @@ Custom imports:
   org.apache.tinkerpop.gremlin.driver.message.*
   org.apache.tinkerpop.gremlin.driver.ser.*
   org.apache.tinkerpop.gremlin.driver.remote.*
-  groovyx.gbench.*
-  groovyx.gprof.*
-  static groovyx.gprof.ProfileStaticExtension.*
   org.apache.tinkerpop.gremlin.tinkergraph.structure.*
   org.apache.tinkerpop.gremlin.tinkergraph.process.computer.*
 ----
 
-As discussed earlier, you can always use the 'getClass' method while using the
-Gremlin Console to, in many cases, find out where something is defined. As we saw in
-the examples earlier in this section, lot of the keywords such as  'values', 'id'
-and 'local' are defined as Enums so you can use 'getClass' on them directly. A few
-examples are shown below. 
+As discussed earlier, you can always use the 'getClass' method or simply '.class'
+while using the Gremlin Console to, in many cases, find out where something is
+defined. As we saw in the examples earlier in this section, lot of the keywords such
+as  'values', 'id' and 'local' are defined as Enums so you can use 'getClass' on them
+directly. A few examples are shown below. 
 
 [source,groovy]
 ----
@@ -20347,6 +20354,10 @@ gremlin> values.getClass()
 ==>class org.apache.tinkerpop.gremlin.structure.Column$2
 gremlin> local.getClass()
 ==>class org.apache.tinkerpop.gremlin.process.traversal.Scope
+gremlin> Order.class
+==>class org.apache.tinkerpop.gremlin.process.traversal.Order
+gremlin> Column.class
+==>class org.apache.tinkerpop.gremlin.structure.Column
 ----
 
 If you compare this output to the tables above you can see that we have been able to
