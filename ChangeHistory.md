@@ -20,6 +20,7 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
 - Updated the various Gremlin console help text graphics to the 3.4.10 level. Issue #215
 - Added some text to emphasize the evolution of Apache TinkerPop usage from graphs being largely local or directly connected to being remotely connected via Gremlin Server.
 - Added to the Terminology section to include edges.
+- Added the `Pick` Enum to the enum and class tables. Issue #173
 - Merged reader PRs #154, #160, #197, #198, #200, #205, #209, #210, #213
 - Updated warning about label indexing to reflect the current state of graph DBs better. Issue #186
 - Improved grammar and fixed a few typos. Issues #164, #180, #204
