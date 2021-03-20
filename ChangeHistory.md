@@ -26,6 +26,7 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
 - Renamed HTML and PDF files to PracticalGremlin.
   - The prior Gremlin-Graph-Guide names will still work to avoid breaking bookmarks.
 - Sample code updates
+  - Added `RemoteTests.cs` containing a set of .Net examples.
   - Added `quick-btree2.groovy` which adds a few more nodes to the treee than in `quick-btree.groovy`.
   - Added `RemoteWriteText.java` which shows how to turn traversals and GraphSON back into text queries.
 - Sample data updates
