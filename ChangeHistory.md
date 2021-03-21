@@ -32,6 +32,7 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
   - Added `quick-btree2.groovy` which adds a few more nodes to the treee than in `quick-btree.groovy`.
   - Added `RemoteWriteText.java` which shows how to turn traversals and GraphSON back into text queries.
   - Fixed a compile error in TinkerGraphTest.java caused by a change to the `valueMap` return type. Issue #181
+  - Fixed two compile errors in RemoteClient.java caused by a change to the `valueMap` return type. Issue #181
 - Sample data updates
   - Added the SQL version of the air routes data to a new `sql` sub folder under `sample-data`. Issue #214
 
