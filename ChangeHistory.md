@@ -6,6 +6,7 @@ Starting with the v275 release, this file will contain a record of the major cha
 
 Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v282-tp-3.4.4...master) between this release and the prior one.
 - Added a new section "Comparing properties to the value of a sack". Issue #163
+- Expanded the section introducing `choose` with `option` to explain that `option` can now take a predicate. Issue #173
 - Added a new section "A warning that the '`path`' and '`as`' steps can also be memory intensive".
 - Renamed and re-worked the section "A warning that path finding can be memory and CPU intensive"
 - Added a section showing how to create a standard deviation in a single query. Issue #174
