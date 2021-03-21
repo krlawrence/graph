@@ -49,7 +49,7 @@ public class TinkerGraphTest
     // Run a few simple tests
 
     // Get a value map for the properties associated with the AUS airport
-    Map<String,?> aus = g.V().has("code","AUS").valueMap().next();
+    Map<Object,Object> aus = g.V().has("code","AUS").valueMap().next();
     System.out.println(aus);
 
     // Which city is the AUS airport located in?
