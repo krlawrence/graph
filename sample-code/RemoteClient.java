@@ -31,11 +31,11 @@ public class RemoteClient
       EmptyGraph.instance().traversal().
         withRemote(DriverRemoteConnection.using(cluster));
 
-    List <Map<String,Object>> vmaps =
+    List <Map<Object,Object>> vmaps =
       g.V().has("airport","region","GB-ENG").limit(10).valueMap().toList();
     
     System.out.println("\n\nThe following airports were found\n");
-    for (Map <String,Object> m : vmaps)
+    for (Map <Object,Object> m : vmaps)
     {
       ArrayList code = (ArrayList) m.get("code");
       ArrayList desc = (ArrayList) m.get("desc");
