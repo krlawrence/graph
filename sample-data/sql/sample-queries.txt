@@ -148,6 +148,44 @@ limit 5 ;
 | BOS  | Boston Logan                                       | North America  |
 +------+----------------------------------------------------+----------------+
 
+select count(city) as c,region from airports 
+group by region 
+order by c desc
+limit 10;
++-----+--------+
+|  c  | REGION |
++-----+--------+
+| 150 | US-AK  |
+| 50  | AU-QLD |
+| 46  | CA-ON  |
+| 44  | CA-QC  |
+| 39  | PF-U-A |
+| 31  | US-CA  |
+| 29  | CA-BC  |
+| 27  | US-TX  |
+| 27  | GB-ENG |
+| 27  | AU-NSW |
++-----+--------+     
+
+select count(city) as count, region from airports
+group by region 
+having count(region) > 25 
+order by count;
++-------+--------+
+| count | REGION |
++-------+--------+
+| 27    | AU-NSW |
+| 27    | GB-ENG |
+| 27    | US-TX  |
+| 29    | CA-BC  |
+| 31    | US-CA  |
+| 39    | PF-U-A |
+| 44    | CA-QC  |
+| 46    | CA-ON  |
+| 50    | AU-QLD |
+| 150   | US-AK  |
++-------+--------+   
+
 with tx as (select * from airports where region = 'US-TX')
 select city,descr from tx;
 +----------------------+---------------------------------------------------------+
@@ -181,7 +219,23 @@ select city,descr from tx;
 | Fort Worth           | Fort Worth Alliance Airport                             |
 | Del Rio              | Del Rio International Airport                           |
 +----------------------+---------------------------------------------------------+
-       
+ 
+select city,altitude from airports where altitude > (select avg(altitude) from airports) limit 10;
++-----------+----------+
+|   CITY    | ALTITUDE |
++-----------+----------+
+| Phoenix   | 1135     |
+| Las Vegas | 2181     |
+| Denver    | 5433     |
+| El Paso   | 3961     |
+| Tucson    | 2643     |
+| Santa Fe  | 6348     |
+| Prague    | 1247     |
+| Madrid    | 1998     |
+| Zurich    | 1416     |
+| Geneva    | 1411     |
++-----------+----------+   
+
 with alt(average) as (select avg(altitude) from airports)
 select city,altitude,average,(altitude - average) as diff from airports a, alt
 where a.altitude > alt.average
