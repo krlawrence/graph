@@ -92,17 +92,19 @@ select iata,city from airports where city like 'Dal%' limit 10;
 +------+-------------+
 
 
-select city from airports where length(city) > 30;
-+---------------------------------------+
-|                 CITY                  |
-+---------------------------------------+
-| Sta Cruz de la Palma, La Palma Island |
-| Staunton/Waynesboro/Harrisonburg      |
-| Tours/Val de Loire (Loire Valley)     |
-| Kolaka/Pomala Tambea-Celebes Island   |
-| Chapelco/San Martin de los Andes      |
-| Pangkal Pinang-Palaubangka Island     |
-+---------------------------------------+
+select city,length(city) as Length from airports 
+where length(city) > 30 
+order by length(city);
++---------------------------------------+--------+
+|                 CITY                  | Length |
++---------------------------------------+--------+
+| Staunton/Waynesboro/Harrisonburg      | 32     |
+| Chapelco/San Martin de los Andes      | 32     |
+| Tours/Val de Loire (Loire Valley)     | 33     |
+| Pangkal Pinang-Palaubangka Island     | 33     |
+| Kolaka/Pomala Tambea-Celebes Island   | 35     |
+| Sta Cruz de la Palma, La Palma Island | 37     |
++---------------------------------------+--------+
 
 
 select iata,runways from airports where runways between 6 and 8 order by runways;
