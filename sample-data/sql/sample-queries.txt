@@ -92,6 +92,19 @@ select iata,city from airports where city like 'Dal%' limit 10;
 +------+-------------+
 
 
+select city from airports where length(city) > 30;
++---------------------------------------+
+|                 CITY                  |
++---------------------------------------+
+| Sta Cruz de la Palma, La Palma Island |
+| Staunton/Waynesboro/Harrisonburg      |
+| Tours/Val de Loire (Loire Valley)     |
+| Kolaka/Pomala Tambea-Celebes Island   |
+| Chapelco/San Martin de los Andes      |
+| Pangkal Pinang-Palaubangka Island     |
++---------------------------------------+
+
+
 select iata,runways from airports where runways between 6 and 8 order by runways;
 +------+---------+
 | IATA | RUNWAYS |
@@ -112,8 +125,8 @@ where LON between -0.2 and 0.2 order by LON;
 | LGW  | London                  | GB-ENG | -0.190277993679047 |
 | AZR  | Adrar                   | DZ-01  | -0.186414003372192 |
 | ACC  | Accra                   | GH-AA  | -0.166786000132561 |
-| LDE  | Tarbes/Lourdes/Pyrénées | FR-N   | -0.006438999902457 |
-| CDT  | Castellón de La Plana   | ES-V   | 0.0261109992862    |
+| LDE  | Tarbes/Lourdes/PyrÃ©nÃ©es | FR-N   | -0.006438999902457 |
+| CDT  | CastellÃ³n de La Plana   | ES-V   | 0.0261109992862    |
 | LCY  | London                  | GB-ENG | 0.055278           |
 | LEH  | Le Havre/Octeville      | FR-Q   | 0.0880559980869293 |
 | MUW  | Mascara                 | DZ-29  | 0.147141993045807  |
