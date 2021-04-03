@@ -14,7 +14,7 @@ CREATE TABLE airports
     (ID        INTEGER     NOT NULL,
      IATA      CHAR(3)     NOT NULL,
      ICAO      CHAR(4)     NOT NULL,
-     CITY      VARCHAR(20),
+     CITY      VARCHAR(50),
      DESCR     VARCHAR(80),
      REGION    VARCHAR(6),
      COUNTRY   CHAR(2)     NOT NULL,
