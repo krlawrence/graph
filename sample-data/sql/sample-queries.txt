@@ -135,7 +135,6 @@ where LON between -0.2 and 0.2 order by LON;
 | DOL  | Deauville               | FR-P   | 0.154305994511     |
 +------+-------------------------+--------+--------------------+
 
-
 select airports.iata,airports.descr,continents.descr as Continent from airports 
 join continents on airports.continent=continents.code 
 limit 5 ;
@@ -148,6 +147,59 @@ limit 5 ;
 | BNA  | Nashville International Airport                    | North America  |
 | BOS  | Boston Logan                                       | North America  |
 +------+----------------------------------------------------+----------------+
+
+with tx as (select * from airports where region = 'US-TX')
+select city,descr from tx;
++----------------------+---------------------------------------------------------+
+|         CITY         |                          DESCR                          |
++----------------------+---------------------------------------------------------+
+| Austin               | Austin Bergstrom International Airport                  |
+| Dallas               | Dallas/Fort Worth International Airport                 |
+| Houston              | George Bush Intercontinental                            |
+| San Antonio          | San Antonio                                             |
+| Houston              | Houston Hobby                                           |
+| El Paso              | El Paso International Airport                           |
+| Dallas               | Dallas Love Field                                       |
+| Lubbock              | Lubbock Preston Smith International Airport             |
+| Harlingen            | Harlingen, Valley International Airport                 |
+| Midland              | Midland International Airport                           |
+| Corpus Christi       | Corpus Christi International Airport                    |
+| Abilene              | Abilene Regional Airport                                |
+| Waco                 | Waco Regional Airport                                   |
+| College Station      | Easterwood Field                                        |
+| Beaumont/Port Arthur | Southeast Texas Regional Airport                        |
+| Amarillo             | Rick Husband Amarillo International Airport             |
+| Brownsville          | Brownsville South Padre Island International Airport    |
+| Longview             | East Texas Regional Airport                             |
+| Fort Hood/Killeen    | Robert Gray  Army Air Field Airport                     |
+| Laredo               | Laredo International Airport                            |
+| Mc Allen             | Mc Allen Miller International Airport                   |
+| San Angelo           | San Angelo Regional Mathis Field                        |
+| Wichita Falls        | Sheppard Air Force Base-Wichita Falls Municipal Airport |
+| Tyler                | Tyler Pounds Regional Airport                           |
+| Victoria             | Victoria Regional Airport                               |
+| Fort Worth           | Fort Worth Alliance Airport                             |
+| Del Rio              | Del Rio International Airport                           |
++----------------------+---------------------------------------------------------+
+       
+with alt(average) as (select avg(altitude) from airports)
+select city,altitude,average,(altitude - average) as diff from airports a, alt
+where a.altitude > alt.average
+limit 10;
++-----------+----------+------------------+------------------+
+|   CITY    | ALTITUDE |     average      |       diff       |
++-----------+----------+------------------+------------------+
+| Phoenix   | 1135     | 1042.69817247287 | 92.3018275271274 |
+| Las Vegas | 2181     | 1042.69817247287 | 1138.30182752713 |
+| Denver    | 5433     | 1042.69817247287 | 4390.30182752713 |
+| El Paso   | 3961     | 1042.69817247287 | 2918.30182752713 |
+| Tucson    | 2643     | 1042.69817247287 | 1600.30182752713 |
+| Santa Fe  | 6348     | 1042.69817247287 | 5305.30182752713 |
+| Prague    | 1247     | 1042.69817247287 | 204.301827527127 |
+| Madrid    | 1998     | 1042.69817247287 | 955.301827527127 |
+| Zurich    | 1416     | 1042.69817247287 | 373.301827527127 |
+| Geneva    | 1411     | 1042.69817247287 | 368.301827527127 |
++-----------+----------+------------------+------------------+
 
 create view test as select airports.iata,airports.descr,continents.descr as continent from airports join continents on airports.continent=continents.code;
 select * from test where continent != "North America" limit 10;
@@ -224,3 +276,24 @@ limit 10;
 | AUS  | 5294 | FRA  | 4080 | BOM  | 644  | AGR  | 10018 |
 | AUS  | 4901 | LHR  | 4479 | BOM  | 644  | AGR  | 10024 |
 +------+------+------+------+------+------+------+-------+  
+
+with recursive airport(x) as (
+   select 44
+   union
+   select src from routes join airport on dest=x
+   union
+   select dest from routes join airport on src=x
+)
+select x,a.iata from airport
+join airports a on id=x
+limit 5; 
++----+------+
+| x  | IATA |
++----+------+
+| 44 | SAF  |
+| 8  | DFW  |
+| 13 | LAX  |
+| 20 | PHX  |
+| 31 | DEN  |
++----+------+    
+
