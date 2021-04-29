@@ -2528,7 +2528,7 @@ returned.
 ----
 g.V(1).as('a').V(2).as('a').select('a')
 
-[2]
+v[2]
 ----
 
 There are some special keywords that can be used in conjunction with the 'select'
