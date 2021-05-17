@@ -2140,13 +2140,13 @@ source and destination airports as part of generating the 'path' result.
 
 [source,groovy]
 ----
-g.V(3).out().limit(5).path().by(out().count().fold())
+g.V(3).out().limit(5).path().by(out().count())
 
-[[59],[181]]
-[[59],[191]]
-[[59],[272]]
-[[59],[105]]
-[[59],[54]]
+[59,181]
+[59,191]
+[59,272]
+[59,105]
+[59,54]
 ----
 
 [[pathfromto]]
@@ -2528,7 +2528,7 @@ returned.
 ----
 g.V(1).as('a').V(2).as('a').select('a')
 
-[2]
+v[2]
 ----
 
 There are some special keywords that can be used in conjunction with the 'select'
