@@ -14,7 +14,7 @@ To read the latest snapshot of the book right away in a browser (HTML format) cl
 **LATEST NEWS:**  
 
 - [Mar-21-2021] The latest preview draft of revision 283 (TP 3.4.10) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
-- [Jun-28-2020] I have started creating a series of [issues](https://github.com/krlawrence/graph/issues) to capture changes and updates I hope to make soon. The issues contain some interesting examples of both new Gremlin features and some additional queries, some of which are quite advanced, that I intend to add to the manuscript as time allows.  
+- [Jun-28-2020] I have started creating a series of [issues](https://github.com/krlawrence/graph/issues) to capture changes and updates I hope to make soon. The issues contain some interesting examples of both new Gremlin features and some additional queries, some of which are quite advanced, that I intend to add to the manuscript as time allows. The issues have been sorted into a Kanban board which can be found in the Projects area.
 - [Feb-01-2020] Updated versions of the sample data and corresponding demo apps have been uploaded.  
 - [Oct-26-2019] Revision 282 (TP 3.4.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
 
