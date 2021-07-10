@@ -2,7 +2,7 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
-v283-preview, March 21st 2021
+v283-preview, July 10th March 2021
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
 // Sun Mar 21, 2021 18:19:44 CDT  
 //:Author:    Kelvin R. Lawrence
@@ -25,7 +25,7 @@ v283-preview, March 21st 2021
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: March 21st 2021
+:draftdate: July 10th 2021
 :tpvercheck: 3.4.10
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -8700,6 +8700,81 @@ g.V().has('code','LHR').
 [PVG,2]
 [PEK,1]
 [HKG,0]
+----
+
+
+[[index-reverse]]
+Using 'index' to reverse a list
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The Gremlin query language does not have a built in step or function that can be used
+to reverse the contents of a list or other collection. However, this can be achieved
+using the 'index' step. The example below takes advantage of the index step to give
+each element of a list an index number.
+
+[source,groovy]
+----
+g.inject(['A','B','C','D']).index()
+
+
+[[A,0],[B,1],[C,2],[D,3]]   
+----
+
+Given that building block, we can use those index values to order the list.
+
+[source,groovy]
+----
+g.inject(['A','B','C','D']).index().
+  unfold().
+  order().
+    by(tail(local,1),desc)
+
+[D,3]
+[C,2]
+[B,1]
+[A,0]   
+----
+
+The query can be further refined so that the index values are not part of the result.
+
+[source,groovy]
+----
+g.inject(['A','B','C','D']).index().
+  unfold().
+  order().
+    by(tail(local,1),desc).
+  limit(local,1).
+  fold()  
+
+[D,C,B,A]     
+----
+
+The same technique can be used with any collection generated as part of a query.
+
+[source,groovy]
+----
+g.V().has('code','SAF').out().values('code').fold().index()
+
+[[DFW,0],[LAX,1],[PHX,2],[DEN,3]] 
+----
+
+Once again we can order the results using the index values.
+
+[source,groovy]
+----
+g.V().
+  has('code','SAF').
+  out().
+  values('code').
+  fold().
+  index().
+  unfold().
+  order().
+    by(tail(local,1),desc).
+  limit(local,1).
+  fold()
+
+  [DEN,PHX,LAX,DFW]
 ----
 
 [[sx]]
