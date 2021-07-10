@@ -8716,7 +8716,6 @@ each element of a list an index number.
 ----
 g.inject(['A','B','C','D']).index()
 
-
 [[A,0],[B,1],[C,2],[D,3]]   
 ----
 
