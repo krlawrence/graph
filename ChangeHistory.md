@@ -36,6 +36,7 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
   - Fixed two compile errors in RemoteClient.java caused by a change to the `valueMap` return type. Issue #181
 - Sample data updates
   - Added the SQL version of the air routes data to a new `sql` sub folder under `sample-data`. Issue #214
+  - Updated the air-route data sets with new airports and routes. Issue #229
 
 ## Release 282 change history (October 26th 2019)
 
