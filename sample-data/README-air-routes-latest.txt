@@ -1,6 +1,6 @@
 Information about the Air Routes graph.  
 
-Timestamp: Wed, 29 Jan 2020 20:17:57 -0600
+Timestamp: Sat, 31 Jul 2021 13:41:40 -0500
 
 This file contains the following sections
   1. Introduction
@@ -28,7 +28,7 @@ or route frequency. For example, the graph can tell you that there is a route
 between LHR and JFK that at least one airline operates but not which airlines
 fly that route nor how many times a day the route is operated. That is an
 exercise for another day and for a bigger graph! The graph also does not
-currently contain any aircraft information. For the most part I have only
+currently contain any aircraft information.  For the most part I have only
 included scheduled flights flown by commercial airlines. I have included a few
 unusual routes such as the flights from RAF Brize Norton to RAF Ascension Island
 continuing on to Mount Pleasant in the Falkland Islands as I believe this
@@ -54,27 +54,27 @@ point. The one exception is about ten regional airports in China that I
 still need to add 
    
 If you require more detailed information about the schema of the graph  and
-its overall demographic please see the comments at the top of the
+it's overall demographic please see the comments at the top of the
 air-routes.graphml file.
  
 
 2. SOME STATISTICS ABOUT THE GRAPH
 
-Air Routes Graph (v0.84, 2020-January-29th) contains:
-  3,497 airports
-  50,580 routes
+Air Routes Graph (v0.86, 2021-Jul 31st) contains:
+  3,502 airports
+  50,656 routes
   237 countries (and dependent areas)
   7 continents
-  3,742 total nodes
-  57,574 total edges
+  3,747 total nodes
+  57,660 total edges
 
 Additional observations:
   Longest route is between SIN and EWR (9,523 miles)
   Shortest route is between WRY and PPW (2 miles)
-  Average route distance is 1,208.224 miles.
+  Average route distance is 1,207.836 miles.
   Longest runway is 18,045ft (BPX)
   Shortest runway is 1,300ft (SAB)
-  Average number of runways is 1.4215
+  Average number of runways is 1.4209
   Furthest North is LYR (latitude: 78.2461013793945)
   Furthest South is USH (latitude: -54.8433)
   Furthest East is SVU (longitude: 179.341003418)
@@ -86,8 +86,8 @@ Additional observations:
   Maximum airport node degree (routes in and out) is 614 (FRA,IST)
   Country with the most airports: United States (586)
   Continent with the most airports: North America (989)
-  Average degree (airport nodes) is 28.928
-  Average degree (all nodes) is 28.910
+  Average degree (airport nodes) is 28.930
+  Average degree (all nodes) is 28.915
  
  
 Here are the top 50 airports with the most routes
@@ -96,27 +96,27 @@ Here are the top 50 airports with the most routes
 
      1	 161   IST  (614)  out:307 in:307
      2	  52   FRA  (614)  out:307 in:307
-     3	  51   CDG  (589)  out:294 in:295 
-     4	  70   AMS  (568)  out:283 in:285 
-     5	  80   MUC  (541)  out:270 in:271 
-     6	  18   ORD  (527)  out:264 in:263 
+     3	  51   CDG  (589)  out:294 in:295
+     4	  70   AMS  (568)  out:283 in:285
+     5	  80   MUC  (543)  out:271 in:272
+     6	  18   ORD  (527)  out:264 in:263
      7	   8   DFW  (502)  out:251 in:251
-     8	  64   PEK  (497)  out:248 in:249 
+     8	  64   PEK  (497)  out:248 in:249
      9	  58   DXB  (494)  out:247 in:247
     10	   1   ATL  (484)  out:242 in:242
     11	  50   LGW  (466)  out:233 in:233
-    12	 102   DME  (465)  out:232 in:233 
+    12	 102   DME  (465)  out:232 in:233
     13	  49   LHR  (442)  out:221 in:221
     14	  31   DEN  (432)  out:216 in:216
-    15	  84   MAN  (431)  out:216 in:215 
+    15	  84   MAN  (431)  out:216 in:215
     16	  13   LAX  (426)  out:213 in:213
-    17	  94   STN  (425)  out:212 in:213 
+    17	  94   STN  (425)  out:212 in:213
     18	  67   PVG  (424)  out:212 in:212
     19	  74   MAD  (414)  out:207 in:207
     20	  75   VIE  (412)  out:206 in:206
     21	  73   BCN  (408)  out:204 in:204
     22	  68   FCO  (404)  out:202 in:202
-    23	  12   JFK  (401)  out:201 in:200 
+    23	  12   JFK  (401)  out:201 in:200
     24	 198   DUS  (398)  out:199 in:199
     25	  11   IAH  (398)  out:199 in:199
     26	  35   EWR  (394)  out:197 in:197
@@ -130,25 +130,24 @@ Here are the top 50 airports with the most routes
     34	 103   SVO  (364)  out:182 in:182
     35	  76   ZRH  (360)  out:180 in:180
     36	  61   HKG  (348)  out:174 in:174
-    37	 250   CAN  (347)  out:175 in:172 
+    37	 250   CAN  (347)  out:175 in:172
     38	 122   ICN  (346)  out:173 in:173
     39	  93   ARN  (338)  out:169 in:169
-    40	  56   SIN  (335)  out:168 in:167 
+    40	  56   SIN  (335)  out:168 in:167
     41	  30   LAS  (322)  out:161 in:161
     42	 346   LED  (320)  out:160 in:160
     43	  15   MCO  (320)  out:160 in:160
     44	   9   FLL  (314)  out:157 in:157
-    45	  17   MSP  (312)  out:156 in:156
-    46	  23   SFO  (310)  out:155 in:155
+    45	  23   SFO  (312)  out:156 in:156
+    46	  17   MSP  (312)  out:156 in:156
     47	  10   IAD  (310)  out:155 in:155
-    48	 200   TXL  (309)  out:154 in:155 
+    48	 200   TXL  (309)  out:154 in:155
     49	 230   PMI  (306)  out:153 in:153
-    50	 110   ATH  (306)  out:154 in:152 
+    50	 110   ATH  (306)  out:154 in:152
  
  
 Here are the longest routes currently in the graph
  
-62 route(s)
 SIN->EWR 9,523
 EWR->SIN 9,523
 DOH->AKL 9,025
