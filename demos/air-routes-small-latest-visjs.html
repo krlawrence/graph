@@ -3,8 +3,8 @@
 <head>
 <title>World air route map (graph)</title>
 <meta name='author' content='Kelvin R. Lawrence' />
-<meta name='created' content='2020-January-29th' />
-<meta name='version' content='0.84' />
+<meta name='created' content='2021-Jul 31st' />
+<meta name='version' content='0.86' />
 <script type='text/javascript' src='http://kelvinlawrence.net/book/vis.js'></script>
 <link href='http://kelvinlawrence.net/book/vis.css' rel='stylesheet' type='text/css' />
 
@@ -23,12 +23,12 @@
 <input type='text' id='search' maxlength='3' style='width:100%' onkeydown='check(event)'></input><br><br>
 <button onClick='doSearch()'>Search</button><br><br>
 <textarea rows='50' cols='20' id='txt1' readOnly='true'>
-AIR ROUTES v0.84
+AIR ROUTES v0.86
 
-2020-January-29th
+2021-Jul 31st
 
 46 Airports
-1,386 Routes
+1,390 Routes
 
 Click on an airport node to see route details here.
 
@@ -48,7 +48,7 @@ You can search for an airport by entering a three character IATA code, like DFW 
 var nodes = new vis.DataSet([
 {id: 1, label: 'ATL', title:"<b>ATL - Atlanta (KATL</b>)<br>Hartsfield - Jackson Atlanta International Airport<br>United States (US-GA)<br>Outgoing routes: 43<br>Incoming routes: 43",x:-2752.3600260416665,y:-994.9644300672755},
 {id: 2, label: 'ANC', title:"<b>ANC - Anchorage (PANC</b>)<br>Anchorage Ted Stevens<br>United States (US-AK)<br>Outgoing routes: 12<br>Incoming routes: 12",x:-5666.488986545155,y:-2218.862236870658},
-{id: 3, label: 'AUS', title:"<b>AUS - Austin (KAUS</b>)<br>Austin Bergstrom International Airport<br>United States (US-TX)<br>Outgoing routes: 36<br>Incoming routes: 36",x:-3340.8843994140625,y:-841.97777642144},
+{id: 3, label: 'AUS', title:"<b>AUS - Austin (KAUS</b>)<br>Austin Bergstrom International Airport<br>United States (US-TX)<br>Outgoing routes: 38<br>Incoming routes: 38",x:-3340.8843994140625,y:-841.97777642144},
 {id: 4, label: 'BNA', title:"<b>BNA - Nashville (KBNA</b>)<br>Nashville International Airport<br>United States (US-TN)<br>Outgoing routes: 34<br>Incoming routes: 34",x:-2852.3644341362847,y:-1105.5333455403645},
 {id: 5, label: 'BOS', title:"<b>BOS - Boston (KBOS</b>)<br>Boston Logan<br>United States (US-MA)<br>Outgoing routes: 38<br>Incoming routes: 38",x:-2155.7868111111106,y:-1382.8577675555555},
 {id: 6, label: 'BWI', title:"<b>BWI - Baltimore (KBWI</b>)<br>Baltimore/Washington International Airport<br>United States (US-MD)<br>Outgoing routes: 33<br>Incoming routes: 33",x:-2407.479858222222,y:-1241.128879111111},
@@ -78,11 +78,11 @@ var nodes = new vis.DataSet([
 {id: 30, label: 'LAS', title:"<b>LAS - Las Vegas (KLAS</b>)<br>Las Vegas Mc Carran<br>United States (US-NV)<br>Outgoing routes: 40<br>Incoming routes: 40",x:-4117.866684444444,y:-1103.5600448888888},
 {id: 31, label: 'DEN', title:"<b>DEN - Denver (KDEN</b>)<br>Denver International Airport<br>United States (US-CO)<br>Outgoing routes: 42<br>Incoming routes: 42",x:-3652.133178710933,y:-1271.6310289171022},
 {id: 32, label: 'HPN', title:"<b>HPN - White Plains (KHPN</b>)<br>Westchester County<br>United States (US-NY)<br>Outgoing routes: 11<br>Incoming routes: 11",x:-2275.893486870658,y:-1325.2000596788178},
-{id: 33, label: 'SAT', title:"<b>SAT - San Antonio (KSAT</b>)<br>San Antonio<br>United States (US-TX)<br>Outgoing routes: 32<br>Incoming routes: 32",x:-3376.4356825086797,y:-812.6089307996976},
+{id: 33, label: 'SAT', title:"<b>SAT - San Antonio (KSAT</b>)<br>San Antonio<br>United States (US-TX)<br>Outgoing routes: 33<br>Incoming routes: 33",x:-3376.4356825086797,y:-812.6089307996976},
 {id: 34, label: 'MSY', title:"<b>MSY - New Orleans (KMSY</b>)<br>New Orleans L. Armstrong<br>United States (US-LA)<br>Outgoing routes: 34<br>Incoming routes: 34",x:-3011.4668104383686,y:-833.0400254991332},
 {id: 35, label: 'EWR', title:"<b>EWR - Newark (KEWR</b>)<br>Newark, Liberty<br>United States (US-NY)<br>Outgoing routes: 36<br>Incoming routes: 36",x:-2296.38671875,y:-1308.5556030273422},
 {id: 36, label: 'CID', title:"<b>CID - Cedar Rapids (KCID</b>)<br>The Eastern Iowa Airport<br>United States (US-IA)<br>Outgoing routes: 10<br>Incoming routes: 10",x:-3076.0355631510397,y:-1361.5422566731777},
-{id: 37, label: 'HNL', title:"<b>HNL - Honolulu (PHNL</b>)<br>Honolulu International Airport<br>United States (US-HI)<br>Outgoing routes: 20<br>Incoming routes: 20",x:-6018.755425347199,y:-447.49781290690214},
+{id: 37, label: 'HNL', title:"<b>HNL - Honolulu (PHNL</b>)<br>Honolulu International Airport<br>United States (US-HI)<br>Outgoing routes: 21<br>Incoming routes: 21",x:-6018.755425347199,y:-447.49781290690214},
 {id: 38, label: 'HOU', title:"<b>HOU - Houston (KHOU</b>)<br>Houston Hobby<br>United States (US-TX)<br>Outgoing routes: 30<br>Incoming routes: 30",x:-3234.6177844444446,y:-817.573292888889},
 {id: 39, label: 'ELP', title:"<b>ELP - El Paso (KELP</b>)<br>El Paso International Airport<br>United States (US-TX)<br>Outgoing routes: 15<br>Incoming routes: 15",x:-3727.91104,y:-913.6533102222222},
 {id: 40, label: 'SJU', title:"<b>SJU - San Juan (TJSJ</b>)<br>Puerto Rico, Luis Munoz International Airport<br>Puerto Rico (PR-U-A)<br>Outgoing routes: 18<br>Incoming routes: 18",x:-1933.4133572044443,y:-319.5288764088889},
@@ -176,6 +176,8 @@ var edges = new vis.DataSet([
 {from: 3, to: 29,title: 'AUS-SLC 1080 miles'},
 {from: 3, to: 30,title: 'AUS-LAS 1080 miles'},
 {from: 3, to: 31,title: 'AUS-DEN 768 miles'},
+{from: 3, to: 33,title: 'AUS-SAT 66 miles'},
+{from: 3, to: 37,title: 'AUS-HNL 3755 miles'},
 {from: 3, to: 34,title: 'AUS-MSY 444 miles'},
 {from: 3, to: 35,title: 'AUS-EWR 1500 miles'},
 {from: 3, to: 38,title: 'AUS-HOU 152 miles'},
@@ -1136,6 +1138,7 @@ var edges = new vis.DataSet([
 {from: 32, to: 45,title: 'HPN-PHL 114 miles'},
 {from: 32, to: 46,title: 'HPN-DTW 503 miles'},
 {from: 33, to: 1,title: 'SAT-ATL 872 miles'},
+{from: 33, to: 3,title: 'SAT-AUS 66 miles'},
 {from: 33, to: 4,title: 'SAT-BNA 820 miles'},
 {from: 33, to: 6,title: 'SAT-BWI 1410 miles'},
 {from: 33, to: 8,title: 'SAT-DFW 248 miles'},
@@ -1249,6 +1252,7 @@ var edges = new vis.DataSet([
 {from: 36, to: 46,title: 'CID-DTW 429 miles'},
 {from: 37, to: 1,title: 'HNL-ATL 4502 miles'},
 {from: 37, to: 2,title: 'HNL-ANC 2778 miles'},
+{from: 37, to: 3,title: 'HNL-AUS 3755 miles'},
 {from: 37, to: 5,title: 'HNL-BOS 5083 miles'},
 {from: 37, to: 8,title: 'HNL-DFW 3770 miles'},
 {from: 37, to: 10,title: 'HNL-IAD 4806 miles'},
