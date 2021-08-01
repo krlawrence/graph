@@ -5083,7 +5083,7 @@ Changes to 'order' introduced in TinkerPop release 3.3.4
 On October 15th 2018 a change was introduced as part of the Apache TinkerPop release
 3.3.4. This change deprecated the 'incr' and 'decr' keywords recognized by the
 'order' step in favor of the, new at the time, 'asc' and 'desc' keywords. This book
-and its accompanying code samples have been updated to only use `asc` and `desc`. If
+and its accompanying code samples have been updated to only use 'asc' and 'desc'. If
 the database you are using supports a version of Apache TinkerPop at the 3.3.4 level
 or higher you should be using the new keywords.
 
