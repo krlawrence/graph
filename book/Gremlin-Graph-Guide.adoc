@@ -4,7 +4,7 @@ Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
 v283-preview, August 1st 2021
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Sun Aug 01, 2021 13:33:57 CDT
+// Sun Aug 01, 2021 14:04:29 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -5080,8 +5080,8 @@ g.V().hasLabel('airport').limit(10).
 Changes to 'order' introduced in TinkerPop release 3.3.4
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-On October 15th 2018 a change was introduced as part of the Apache TinkerPop release
-3.3.4. This change deprecated the 'incr' and 'decr' keywords recognized by the
+On October 15th 2018 a change was introduced as part of the Apache TinkerPop 3.3.4
+release This change deprecated the 'incr' and 'decr' keywords recognized by the
 'order' step in favor of the, new at the time, 'asc' and 'desc' keywords. This book
 and its accompanying code samples have been updated to only use 'asc' and 'desc'. If
 the database you are using supports a version of Apache TinkerPop at the 3.3.4 level
