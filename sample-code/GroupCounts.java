@@ -87,7 +87,7 @@ public class GroupCounts
     Map<Object, Long> usmap = new HashMap<>();
     usmap = g.V().has("code","US").out().
       groupCount().by("region").order(Scope.local).
-      by(Column.values, Order.decr).next();  
+      by(Column.values, Order.desc).next();  
 
     usmap.forEach((k,v)->System.out.format("%10s :%3d\n",k,v));
 

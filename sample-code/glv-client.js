@@ -44,21 +44,21 @@ async function runTests() {
     const runways = await
       g.V().has('region','US-TX').
             group().by('code').by(__.out().count()).
-            order(scope.local).by(column.values,order.decr).
+            order(scope.local).by(column.values,order.desc).
             toList();
       console.log("Route counts for airports in Texas");      
       console.log(runways);
 
     const most_runways = await
       g.V().has('runways',P.gte(5)).
-            order().by('runways',order.decr).
+            order().by('runways',order.desc).
             local(__.values('code','runways').fold()).toList();
       console.log("Airports with the most runways");      
       console.log(most_runways);
 
     const highest = await
        g.V().hasLabel('airport').
-             order().by('elev',order.decr).
+             order().by('elev',order.desc).
              limit(10).
              project('iata','city','elev').
                by('code').

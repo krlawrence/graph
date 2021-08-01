@@ -63,7 +63,7 @@ public class GraphStats
     // Note that we have to use the "__." prefix for some steps and that "decr"
     // has to be prefixed by "Order".
     Map <String,?> most = g.V().hasLabel("airport").
-                            order().by(__.bothE("route").count(),Order.decr).limit(1).
+                            order().by(__.bothE("route").count(),Order.desc).limit(1).
                             project("ap","num","city").by("code").by(__.bothE("route").count()).
                             by("city").next();
     
@@ -80,7 +80,7 @@ public class GraphStats
     
     List<Map<String,Object>> top = 
       g.V().hasLabel("airport").
-            order().by(__.both("route").count(),Order.decr).limit(20).
+            order().by(__.both("route").count(),Order.desc).limit(20).
             project("ap","num","city").by("code").by(__.both("route").count()).by("city").
             toList();
    
@@ -97,7 +97,7 @@ public class GraphStats
     
     List<Map<String,Object>> topout = 
       g.V().hasLabel("airport").
-            order().by(__.out("route").count(),Order.decr).limit(20).
+            order().by(__.out("route").count(),Order.desc).limit(20).
             project("ap","num","city").by("code").by(__.out("route").count()).by("city").
             toList();
    
@@ -110,7 +110,7 @@ public class GraphStats
     
     List<Map<String,Object>> topin = 
       g.V().hasLabel("airport").
-            order().by(__.in("route").count(),Order.decr).limit(20).
+            order().by(__.in("route").count(),Order.desc).limit(20).
             project("ap","num","city").by("code").by(__.in("route").count()).by("city").
             toList();
    
@@ -121,7 +121,7 @@ public class GraphStats
 
     Map <String,?> longroute = 
       g.E().hasLabel("route").
-            order().by("dist",Order.decr).limit(1).
+            order().by("dist",Order.desc).limit(1).
             project("from","to","num").
             by(__.inV().values("city")).by(__.outV().values("city")).by("dist").next();
 
@@ -131,7 +131,7 @@ public class GraphStats
     // Find the longest runway in the graph
 
     Map <String,?> longest = 
-      g.V().hasLabel("airport").order().by("longest",Order.decr).limit(1).
+      g.V().hasLabel("airport").order().by("longest",Order.desc).limit(1).
             project("ap","num","city").by("code").by("longest").by("city").next();  
 
     System.out.println("The longest runway in the graph is " + longest.get("num") + " feet at " +
@@ -143,7 +143,7 @@ public class GraphStats
     Map <String,?> cmost; 
     
     cmost = g.V().hasLabel("continent").
-                  order().by(__.out("contains").count(),Order.decr).limit(1).
+                  order().by(__.out("contains").count(),Order.desc).limit(1).
                   project("num","cont").
                     by(__.out("contains").count()).
                     by("desc").next();
@@ -156,7 +156,7 @@ public class GraphStats
     // Find the country with the most airports
 
     cmost = g.V().hasLabel("country").
-                  order().by(__.out("contains").count(),Order.decr).limit(1).
+                  order().by(__.out("contains").count(),Order.desc).limit(1).
                   project("num","country").
                     by(__.out("contains").count()).
                     by("desc").next();

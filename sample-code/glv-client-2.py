@@ -54,7 +54,7 @@ runways = g.V().has('region','US-TX').\
                 group().by('code').\
                   by(__.out().count()).\
                 order(Scope.local).\
-                  by(Column.values,Order.decr).\
+                  by(Column.values,Order.desc).\
                 next()
 
 heading("Commercial route counts for airports in Texas")      
@@ -64,7 +64,7 @@ for k,v in runways.items():
 # Find the top 10 airports at the highest elevation.
 # Note the use of the Order enum
 highest = g.V().hasLabel('airport').\
-                order().by('elev',Order.decr).\
+                order().by('elev',Order.desc).\
                 limit(10).\
                 project('iata','city','elev').\
                  by('code').\
@@ -116,7 +116,7 @@ print(group)
 # access the "gte" predicate.
 most_runways = g.V().has('runways',P.gte(5)).\
                      order().\
-                       by('runways',Order.decr).\
+                       by('runways',Order.desc).\
                      local(__.values('code','runways').fold()).\
                      toList()
 

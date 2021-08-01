@@ -59,7 +59,7 @@ public class RemoteStats
 
     // Find the airport with the most overall routes.
     Map <String,?> most = g.V().hasLabel("airport").
-                            order().by(bothE("route").count(),Order.decr).limit(1).
+                            order().by(bothE("route").count(),Order.desc).limit(1).
                             project("ap","num","city").by("code").by(bothE("route").count()).
                             by("city").next();
     
@@ -75,7 +75,7 @@ public class RemoteStats
     
     List<Map<String,Object>> top = 
       g.V().hasLabel("airport").
-            order().by(both("route").count(),Order.decr).limit(20).
+            order().by(both("route").count(),Order.desc).limit(20).
             project("ap","num","city").by("code").by(both("route").count()).by("city").
             toList();
    
@@ -92,7 +92,7 @@ public class RemoteStats
     
     List<Map<String,Object>> topout = 
       g.V().hasLabel("airport").
-            order().by(out("route").count(),Order.decr).limit(20).
+            order().by(out("route").count(),Order.desc).limit(20).
             project("ap","num","city").by("code").by(out("route").count()).by("city").
             toList();
    
@@ -105,7 +105,7 @@ public class RemoteStats
     
     List<Map<String,Object>> topin = 
       g.V().hasLabel("airport").
-            order().by(in("route").count(),Order.decr).limit(20).
+            order().by(in("route").count(),Order.desc).limit(20).
             project("ap","num","city").by("code").by(in("route").count()).by("city").
             toList();
    
@@ -116,7 +116,7 @@ public class RemoteStats
 
     Map <String,?> longroute = 
       g.E().hasLabel("route").
-            order().by("dist",Order.decr).limit(1).
+            order().by("dist",Order.desc).limit(1).
             project("from","to","num").
             by(inV().values("city")).by(outV().values("city")).by("dist").next();
 
@@ -126,7 +126,7 @@ public class RemoteStats
     // Find the longest runway in the graph
 
     Map <String,?> longest = 
-      g.V().hasLabel("airport").order().by("longest",Order.decr).limit(1).
+      g.V().hasLabel("airport").order().by("longest",Order.desc).limit(1).
             project("ap","num","city").by("code").by("longest").by("city").next();  
 
     System.out.println("The longest runway in the graph is " + longest.get("num") + " feet at " +
@@ -138,7 +138,7 @@ public class RemoteStats
     Map <String,?> cmost; 
     
     cmost = g.V().hasLabel("continent").
-                  order().by(out("contains").count(),Order.decr).limit(1).
+                  order().by(out("contains").count(),Order.desc).limit(1).
                   project("num","cont").
                     by(out("contains").count()).
                     by("desc").next();
@@ -151,7 +151,7 @@ public class RemoteStats
     // Find the country with the most airports
 
     cmost = g.V().hasLabel("country").
-                  order().by(out("contains").count(),Order.decr).limit(1).
+                  order().by(out("contains").count(),Order.desc).limit(1).
                   project("num","country").
                     by(out("contains").count()).
                     by("desc").next();

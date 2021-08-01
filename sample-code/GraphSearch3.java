@@ -73,7 +73,7 @@ public class GraphSearch3
     // when using the Gremlin console with "__." and "Order."
     Map result = 
       g.V().hasLabel("airport").outE("route").
-            order().by("dist",Order.decr).limit(1).
+            order().by("dist",Order.desc).limit(1).
             project("from","distance","to").
             by(__.inV().values("code")).by("dist").by(__.outV().values("code")).next();
 
