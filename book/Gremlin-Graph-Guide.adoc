@@ -4,7 +4,7 @@ Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
 v283-preview, August 1st 2021
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Sun Aug 01, 2021 12:47:41 CDT
+// Sun Aug 01, 2021 13:33:57 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -305,28 +305,51 @@ Change history::
 A word about TinkerPop 3.4
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-A major update to Apache TinkerPop, version 3.4, was released in January 2019. The
-examples in this book have been tested with TinkerPop 3.4 and I have made significant
-progress towards adding coverage of everything that was added. However, the book does
-not yet include coverage of every new feature, change and deprecation introduced with
-TinkerPop 3.4 release.
+A major update to Apache TinkerPop, version 3.4.0, was released in January 2019 and a
+number of point releases followed. The examples in this book have been tested with
+all releases of the 3.4.x line. New examples have also been added as necessitated by
+those updates.
 
-NOTE: The change history contains details of everything that has been added so far
+NOTE: The change history contains details of everything that has been added over time
 and can be found at this location:
 https://github.com/krlawrence/graph/blob/master/ChangeHistory.md
 
-Be aware also that given the scope of the 3.4 release it may take a
-while before all of the vendor and open source graph implementations that support
-Apache TinkerPop have caught up with all of these new features.
+Graph database engines that support Apache TinkerPop often take a while to move up to
+new releases and it's always a good idea to verify the exact level the database you are
+using supports.
 
-NOTE: Full details of all the new features added in the TinkerPop 3.4 release can be
+NOTE: Full details of all the new features added in the TinkerPop 3.4.x releases can be
 found at the following link:
 https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc
 
-As well as updating the book, I have started and plan to continue incrementally
-adding coverage of these features to the `sample-code` folder. Samples currently
-added include `nested-repeat.groovy` that demonstrates the use of the new nested
-repeat step capability. It can be loaded and run from the Gremlin console.
+As well as updating the book, I continue incrementally adding coverage of these
+features to the `sample-code` folder. Samples currently added include
+`nested-repeat.groovy` that demonstrates the use of the new nested repeat step
+capability. It can be loaded and run from the Gremlin console.
+
+[[tp35intro]]
+Introducing TinkerPop 3.5
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Apache TinkerPop 3.5.0 was released in May 2021. This update introduced a number of
+improvements in areas such as Gremlin client drivers, the Gremlin Server and overall
+bug fixes. The release also improved the Gremlin query language in some key areas.
+Some features that had been declared deprecated in earlier releases were finally
+removed as part of the 3.5.0 update. If you have queries and code that still use
+these deprecated features, as part of an upgrade to the 3.5.x level, you will need to
+make the appropriate changes.
+
+The main breaking change to be aware of is that 'Order.incr' and 'Order.decr' were
+removed from the Gremlin language. The newer 'Order.asc' and 'Order.desc' must be
+used instead. The examples in this book and those in the `sample-code` folder have
+been updated to reflect these changes.
+
+As always, check the level of ApacheTinkerPop the graph database you are using
+supports to make sure the features you want to use are supported.
+
+NOTE: Full details of all the new features added in the TinkerPop 3.5.x releases can be
+found at the following link:
+https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc  
 
 [[whygraph]]
 So what is a graph database and why should I care?
