@@ -2,9 +2,9 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
-v283-preview, July 10th 2021
+v283-preview, August 2nd 2021
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Sat Jul 10, 2021 14:44:01 CDT
+// Mon Aug 02, 2021 14:22:17 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -25,8 +25,8 @@ v283-preview, July 10th 2021
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: July 10th 2021
-:tpvercheck: 3.4.10
+:draftdate: August 2nd 2021
+:tpvercheck: 3.5.1
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
 //        has a white foreground color. The default was unreadable,
@@ -305,28 +305,51 @@ Change history::
 A word about TinkerPop 3.4
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-A major update to Apache TinkerPop, version 3.4, was released in January 2019. The
-examples in this book have been tested with TinkerPop 3.4 and I have made significant
-progress towards adding coverage of everything that was added. However, the book does
-not yet include coverage of every new feature, change and deprecation introduced with
-TinkerPop 3.4 release.
+A major update to Apache TinkerPop, version 3.4.0, was released in January 2019 and a
+number of point releases followed. The examples in this book have been tested with
+all releases of the 3.4.x line. New examples have also been added as necessitated by
+those updates.
 
-NOTE: The change history contains details of everything that has been added so far
+NOTE: The change history contains details of everything that has been added over time
 and can be found at this location:
 https://github.com/krlawrence/graph/blob/master/ChangeHistory.md
 
-Be aware also that given the scope of the 3.4 release it may take a
-while before all of the vendor and open source graph implementations that support
-Apache TinkerPop have caught up with all of these new features.
+Graph database engines that support Apache TinkerPop often take a while to move up to
+new releases and it's always a good idea to verify the exact level the database you are
+using supports.
 
-NOTE: Full details of all the new features added in the TinkerPop 3.4 release can be
+NOTE: Full details of all the new features added in the TinkerPop 3.4.x releases can be
 found at the following link:
 https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc
 
-As well as updating the book, I have started and plan to continue incrementally
-adding coverage of these features to the `sample-code` folder. Samples currently
-added include `nested-repeat.groovy` that demonstrates the use of the new nested
-repeat step capability. It can be loaded and run from the Gremlin console.
+As well as updating the book, I continue incrementally adding coverage of these
+features to the `sample-code` folder. Samples currently added include
+`nested-repeat.groovy` that demonstrates the use of the new nested repeat step
+capability. It can be loaded and run from the Gremlin console.
+
+[[tp35intro]]
+Introducing TinkerPop 3.5
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Apache TinkerPop 3.5.0 was released in May 2021. This update introduced a number of
+improvements in areas such as Gremlin client drivers, the Gremlin Server and overall
+bug fixes. The release also improved the Gremlin query language in some key areas.
+Some features that had been declared deprecated in earlier releases were finally
+removed as part of the 3.5.0 update. If you have queries and code that still use
+these deprecated features, as part of an upgrade to the 3.5.x level, you will need to
+make the appropriate changes.
+
+The main breaking change to be aware of is that 'Order.incr' and 'Order.decr' were
+removed from the Gremlin language. The newer 'Order.asc' and 'Order.desc' must be
+used instead. The examples in this book and those in the `sample-code` folder have
+been updated to reflect these changes.
+
+As always, check the level of ApacheTinkerPop the graph database you are using
+supports to make sure the features you want to use are supported.
+
+NOTE: Full details of all the new features added in the TinkerPop 3.5.x releases can be
+found at the following link:
+https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc  
 
 [[whygraph]]
 So what is a graph database and why should I care?
@@ -4882,11 +4905,11 @@ You can use 'order' to sort things in either ascending (the default) or descendi
 order. Note that the sort does not have to be the last step of a query. It is
 perfectly OK to sort things in the middle of a query before moving on to a further
 step. We can see examples of that in the first two queries below. Note that the first
-query will return different results than the second one due to where the 'limit' step
-is placed. I used 'fold' at the end of the query to collect all of the results into a
-nice list. The 'fold' step can also do more than this. It provides a way of doing the
-'reduce' part of map-reduce operations. We will see some other examples of its use
-elsewhere in this book such as in the "<<mapreduce>>" section.
+query will return different results than the second one due to the placement of the
+'limit' step. I used 'fold' at the end of the query to collect all of the results
+into a list. The 'fold' step can also do more than this. It provides a way of doing
+the 'reduce' part of map-reduce operations. We will see some other examples of its
+use elsewhere in this book, such as in the "<<mapreduce>>" section.
 
 [source,groovy]
 ----
@@ -4907,7 +4930,7 @@ g.V().hasLabel('airport').order().by('code').limit(20).values('code').fold()
 ----
 
 Here is a similar example to the previous two. We find all of the places you can fly
-to from Austin (AUS) and sort the results, as before using the airport's IATA code,
+to from Austin (AUS) and sort the results as before, using the airport's IATA code,
 but this time we also include the ICAO code for each airport in the result set.
 
 [source,groovy]
@@ -4923,15 +4946,15 @@ Here are the results from running the query.
 [ABQ,KABQ,ATL,KATL,BKG,KBBG,BNA,KBNA,BOS,KBOS,BWI,KBWI,CLE,KCLE,CLT,KCLT,CUN,MMUN,CVG,KCVG,DAL,KDAL,DCA,KDCA,DEN,KDEN,DFW,KDFW,DTW,KDTW,ELP,KELP,EWR,KEWR,FLL,KFLL,FRA,EDDF,GDL,MMGL,HOU,KHOU,HRL,KHRL,IAD,KIAD,IAH,KIAH,IND,KIND,JFK,KJFK,LAS,KLAS,LAX,KLAX,LBB,KLBB,LGB,KLGB,LHR,EGLL,MCI,KMCI,MCO,KMCO,MDW,KMDW,MEM,KMEM,MEX,MMMX,MIA,KMIA,MSP,KMSP,MSY,KMSY,OAK,KOAK,ORD,KORD,PDX,KPDX,PHL,KPHL,PHX,KPHX,PIE,KPIE,PIT,KPIT,PNS,KPNS,RDU,KRDU,SAN,KSAN,SEA,KSEA,SFB,KSFB,SFO,KSFO,SJC,KSJC,SLC,KSLC,SNA,KSNA,STL,KSTL,TPA,KTPA,VPS,KVPS,YYZ,CYYZ]
 ----
 
-By default a sort performed using 'order' is performed in ascending order. If we
-wanted to sort in descending order instead we can specify 'decr' as a parameter to
-'order'. We can also specify 'incr' if we want to be clear that we intend an
-ascending order sort.  
+By default a sort performed using 'order' returns results in ascending order. To
+obtain results in descending order instead, 'desc' can be specified using a `by`
+modulator. Likewise, 'asc' can be used to make it clear that sorting in ascending
+order is required.
 
 [source,groovy]
 ----
 // Sort the first 20 airports returned in descending order
-g.V().hasLabel('airport').limit(20).values('code').order().by(decr).fold()
+g.V().hasLabel('airport').limit(20).values('code').order().by(desc).fold()
 
 [PHX,PBI,ORD,MSP,MIA,MCO,LGA,LAX,JFK,IAH,IAD,FLL,DFW,DCA,BWI,BOS,BNA,AUS,ATL,ANC]
 ----
@@ -4947,12 +4970,12 @@ g.V().hasLabel('airport').limit(20).values('code').order().by(shuffle).fold()
 ----
 
 Below is an example where we combine the field we want to sort by 'longest'
-and the direction we want the sort to take, 'decr' into a single 'by' instruction.
+and the direction we want the sort to take, 'desc' into a single 'by' instruction.
 
 [source,groovy]
 ----
 // List the 10 airports with the longest runways in decreasing order.
-g.V().hasLabel('airport').order().by('longest',decr).valueMap().
+g.V().hasLabel('airport').order().by('longest',desc).valueMap().
       select('code','longest').limit(10)
 ----
 
@@ -4988,7 +5011,7 @@ we are interested in.
 
 [source,groovy]
 ----
-g.V().hasLabel('airport').order().by(values('longest'),decr).limit(1).valueMap()
+g.V().hasLabel('airport').order().by(values('longest'),desc).limit(1).valueMap()
 ----
 
 In the case of the 'air-routes' graph there is only one airport with the longest
@@ -5013,7 +5036,7 @@ this works are shown below.
 
 NOTE: In Tinkerpop 3.3 changes to the syntax were made. The previous keywords
 'valueDecr', 'valueIncr', 'keyDecr' and 'keyIncr' are now specified using the form
-'by(keys,incr)' or 'by(values,decr)' etc. 
+'by(keys,asc)' or 'by(values,desc)' etc. 
 
 The following example shows the difference between running a query with and without
 the use of 'order' to sort using the keys of the map created by the 'group' step. 
@@ -5036,7 +5059,7 @@ the entire result which is treated as a single entity at that point.
 // Query and order by airport code (the key)
 g.V().hasLabel('airport').limit(5).
       group().by('code').by('runways').
-      order(local).by(keys,incr)
+      order(local).by(keys,asc)
 
 [ANC:[3],ATL:[5],AUS:[2],BNA:[4],BOS:[6]]
 ----
@@ -5048,7 +5071,7 @@ descending order.
 ----
 g.V().hasLabel('airport').limit(10).
       group().by('runways').by('code').
-      order(local).by(keys,decr)
+      order(local).by(keys,desc)
 
 [7:[DFW],6:[BOS],5:[ATL],4:[BNA,IAD],3:[ANC,BWI,DCA],2:[AUS,FLL]]
 ----
@@ -5057,18 +5080,18 @@ g.V().hasLabel('airport').limit(10).
 Changes to 'order' introduced in TinkerPop release 3.3.4
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-On October 15th 2018 a change was introduced as part of the Apache TinkerPop release
-3.3.4. This change affects the 'incr' and 'decr' keywords recognized by the 'Order'
-step. These keywords have now been declared as deprecated and new keywords 'asc' and
-'desc' have been introduced. All of the examples in the previous two sections remain
-valid but moving forward the new keywords should be used if the database you are
-using supports a version of Apache TinkerPop at the 3.3.4 level or higher. It is
-possible that in some future TinkerPop release the 'incr' and 'decr' keywords will be
-removed from the language.
+On October 15th 2018 a change was introduced as part of the Apache TinkerPop 3.3.4
+release This change deprecated the 'incr' and 'decr' keywords recognized by the
+'order' step in favor of the, new at the time, 'asc' and 'desc' keywords. This book
+and its accompanying code samples have been updated to only use 'asc' and 'desc'. If
+the database you are using supports a version of Apache TinkerPop at the 3.3.4 level
+or higher you should be using the new keywords.
 
 NOTE: The 'Order.incr' and 'Order.decr' enumerations were deprecated in the TinkerPop
 3.3.4 release in favor of 'Order.asc' and 'Order.desc'. This was done bring the
-keywords more into line with other commonly used query languages.
+keywords more into line with other commonly used query languages. As of TinkerPop
+release 3.5.0, those enumerations were completely removed from the Gremlin reference
+implementation and documentation and should no longer be used.
 
 Let's take a look at how queries are affected by these changes. The query below
 finds the 10 airports in England with the most outgoing routes and sorts the results
@@ -5179,13 +5202,11 @@ The results produced are the same as before.
 [a:DSA,b:15]
 ----
 
-As of TinkerPop 3.3.4 these are not breaking changes. Most if not all TinkerPop
-enabled graph databases continue to support the 'incr' and 'decr' keywords. In fact
-until the majority of graph databases offer support for the new 'asc' and 'desc'
-keywords it is likely that the prior ones will keep working. However, be aware that
-at some future date it is possible that the TinkerPop language will discontinue
-support for 'incr' and 'decr' and you will need to use the new 'asc' and 'desc'
-keywords.
+When TinkerPop 3.3.4 was released, these were not breaking changes. As more graph
+database engines move up to the TinkerPop 3.5.0 level these now become breaking
+changes and 'asc' and 'desc' must be used. In order for your code and other queries
+to be future proof, even if your database is not yet at the TinkerPop 3.5.0 level, I
+recommend making these changes to your code as soon as possible.
 
 
 [[bool]]  
@@ -5228,7 +5249,7 @@ g.V().hasLabel('airport').or(has('region','US-TX'),
                              has('region','US-LA'),
                              has('region','US-AZ'),
                              has('region','US-OK')).
-                           order().by('region',incr).
+                           order().by('region',asc).
                            valueMap().select('code','region')
 ----
 
@@ -5239,7 +5260,7 @@ will look more closely at the 'within' and 'without' steps in the following sect
 [source,groovy]
 ----
 g.V().hasLabel('airport').has('region',within('US-TX','US-LA','US-AZ','US-OK')).
-                          order().by('region',incr).
+                          order().by('region',asc).
                           valueMap().select('code','region')
 ----
 
@@ -8970,10 +8991,10 @@ and the second uses a 'project' step instead.
 ----
 // Airports above 10,000ft sorted by ascending elevation
 g.V().has('airport','elev', gt(10000)).
-      order().by('elev',incr).valueMap('city','elev')
+      order().by('elev',asc).valueMap('city','elev')
 
 
-g.V().has('airport','elev', gt(10000)).order().by('elev',incr).
+g.V().has('airport','elev', gt(10000)).order().by('elev',asc).
       project('city','elevation').by('city').by('elev')
 ----
 
@@ -9063,7 +9084,7 @@ that use variations of this collection of steps.
 [source,groovy]
 ----
 g.V().has('code','AUS').out().project('ap','rw').by('code').by('runways').
-      order().by(select('rw'),decr).limit(10)
+      order().by(select('rw'),desc).limit(10)
 ----
 
 Here are the results we get from running the query.
@@ -9115,7 +9136,7 @@ directly into the Gremlin console.
 ----
 g.V().hasLabel('airport') \
      .has('region',within('US-TX','US-LA','US-AZ','US-OK'))   \
-     .order().by('region',incr)   \
+     .order().by('region',asc)   \
      .valueMap().select('code','region')
 
 ----
@@ -9127,7 +9148,7 @@ line ends with a period which tells the parser that there are more steps coming.
 ----
 g.V().hasLabel('airport').
       has('region',within('US-TX','US-LA','US-AZ','US-OK')).
-      order().by('region',incr).
+      order().by('region',asc).
       valueMap().select('code','region')
 
 ----
@@ -9145,7 +9166,7 @@ it will still work just fine.
 g.V().hasLabel('airport').
       has('region',within('US-TX','US-LA','US-AZ','US-OK')).
       order().
-        by('region',incr).
+        by('region',asc).
       valueMap().
       select('code','region')
 
@@ -12640,7 +12661,7 @@ g.withSack(0).V().
   repeat(out().simplePath().sack(sum).by(constant(1))).
     until(has('code','WLG')).
   limit(10).
-  order().by(sack(),decr).
+  order().by(sack(),desc).
   local(union(path().by('code'),sack()).fold())
 ----
 
@@ -13245,7 +13266,7 @@ Obviously there are simpler ways we could write this query but this demonstrates
 ----
 g.V().hasLabel('airport').limit(10).
       map(properties('city').group().by(key()).by(value())).
-      unfold().order().by(values,incr)
+      unfold().order().by(values,asc)
 ----
 
 Here is the output from running the query showing the sorted city names.
@@ -14942,7 +14963,7 @@ results. In this case we want to look at outgoing 'route' edges and label all re
 g3 = graph.traversal().withComputer()
 
 g3.V().hasLabel('airport').pageRank().by(outE('route')).by('r').
-      order().by('r',decr).valueMap('code','r').limit(10)
+      order().by('r',desc).valueMap('code','r').limit(10)
 ----
 
 Here is the output from running the page rank algorithm. The results show the airport
@@ -14969,7 +14990,7 @@ incoming routes.
 [source,groovy]
 ----
 g.V().hasLabel('airport').
-      order().by(inE('route').count(),decr).limit(10).
+      order().by(inE('route').count(),desc).limit(10).
       project('a','b').by('code').by(inE('route').count())
 ----
 
@@ -15050,7 +15071,7 @@ the same as the ones returned by the in-line 'pageRank' step.
 
 [source,groovy]
 ----
-g2.V().order().by('gremlin.pageRankVertexProgram.pageRank',decr).limit(10).
+g2.V().order().by('gremlin.pageRankVertexProgram.pageRank',desc).limit(10).
        valueMap('code','gremlin.pageRankVertexProgram.pageRank')
 
 [code:[IST],gremlin.pageRankVertexProgram.pageRank:[0.004594389373424941]]
@@ -15233,7 +15254,7 @@ the number or routes in descending order. Note the use of 'local' to make sure t
 g.V().hasLabel('airport').
       where(out('route').count().is(gt(180))).
       group().by('code').by(out().count()).
-      order(local).by(values,decr)
+      order(local).by(values,desc)
 ----
 
 I have again laid the results out in a grid.
@@ -15295,7 +15316,7 @@ runway airport. This also makes the query a bit more interesting!
 [source,groovy]
 ----
 g.V().or(has('airport','runways',1),has('code','LGW')).
-      order().by(out().count(),decr).limit(10).
+      order().by(out().count(),desc).limit(10).
       project('apt','city','routes').
       by('code').by('city').by(out().count())
 ----
@@ -15375,7 +15396,7 @@ one based index as part of the results.
 [source,groovy]
 ----
 g.V().has('country','code','CA').out().
-      order().by(out().count(),decr).limit(10).
+      order().by(out().count(),desc).limit(10).
       project('apt','city','routes').
       by('code').by('city').by(out().count()).indexed(1)
 ----
@@ -15444,7 +15465,7 @@ ordering is applied.
 ----
 g.V().hasLabel('airport').
       groupCount().by('country').
-      order(local).by(values,decr)
+      order(local).by(values,desc)
 ----
 
 This time it is much easier to see which countries have the most airports.
@@ -15455,15 +15476,15 @@ This time it is much easier to see which countries have the most airports.
 ----
 
 If we wanted to sort by the country code, the 'key' in other words, we could change
-the query accordingly. In this case we will use 'by(keys,incr)' to get a sort in
+the query accordingly. In this case we will use 'by(keys,asc)' to get a sort in
 ascending order. If we wanted to sort in descending order by key we could use
-'by(keys,decr)' instead.
+'by(keys,desc)' instead.
 
 [source,groovy]
 ----
 g.V().hasLabel('airport').
       groupCount().by('country').
-      order(local).by(keys,incr)
+      order(local).by(keys,asc)
 ----
 
 This time the results are now sorted using the country codes in ascending
@@ -15500,7 +15521,7 @@ included.
 
 g.V().hasLabel('country').
       group().by('code').by(outE().count()).
-      order(local).by(values,decr)
+      order(local).by(values,desc)
 ----
 
 This time the countries with no airports *are* included in the results.
@@ -15517,7 +15538,7 @@ step with 'local' scope to the query.
 ----
 g.V().hasLabel('country').
       group().by('code').by(outE().count()).
-      order(local).by(values,decr).
+      order(local).by(values,desc).
       tail(local,20)
 
 [LV:1,MD:1,MF:1,MK:1,ML:1,MO:1,MQ:1,MS:1,MT:1,NC:1,NE:1,NF:1,NI:1,NR:1,PM:1,AD:0,SM:0,LI:0,MC:0,PN:0]
@@ -15854,7 +15875,7 @@ of these routes across the 38 airports.
 g.V().has('continent','code','EU').
       out().out().has('country','US').
       groupCount().by('code').
-      order(local).by(values,incr)
+      order(local).by(values,asc)
 ----
 
 John F. Kennedy airport (JFK) in New York appears to have the most routes from Europe
@@ -15892,7 +15913,7 @@ g.V().has('continent','code','EU').
       out().as('a').
       out().has('country','US').
       select('a').groupCount().by('code').
-      order(local).by(values,incr)
+      order(local).by(values,asc)
 ----
 
 It appears that London Heathrow (LHR) offers the
@@ -16012,7 +16033,7 @@ number of outgoing routes.
 ----
 g.V().hasLabel('airport').
       groupCount().by(out('route').count()).
-      order(local).by(values,decr)
+      order(local).by(values,desc)
 ----
 
 When we run the query we get back the results below. As the results are sorted in
@@ -16038,7 +16059,7 @@ field for each key:value pair and this time sort in ascending order.
 ----
 g.V().hasLabel('airport').
       groupCount().by(out('route').count()).
-      order(local).by(keys,incr)
+      order(local).by(keys,asc)
 ----
 
 When we run our query again we get the results below. Looking at the data sorted
@@ -16240,7 +16261,7 @@ sorted in descending order.
 ----
 // Find the top ten overall in terms of incoming routes
 g.V().hasLabel('airport').
-      order().by(__.in('route').count(),decr).limit(10).
+      order().by(__.in('route').count(),desc).limit(10).
       project('ap','routes').by('code').by(__.in('route').count())
 ----
 
@@ -16270,7 +16291,7 @@ Now let's do the same thing but for outgoing routes.
 ----
 // Find the top ten overall in terms of outgoing routes
 g.V().hasLabel('airport').
-      order().by(out('route').count(),decr).limit(10).
+      order().by(out('route').count(),desc).limit(10).
       project('ap','routes').by('code').by(out('route').count())
 ----
 
@@ -16302,7 +16323,7 @@ outgoing routes that they have.
 ----
 // Find the top ten overall in terms of total routes
 g.V().hasLabel('airport').
-      order().by(both('route').count(),decr).limit(10).
+      order().by(both('route').count(),desc).limit(10).
       project('ap','routes').by('code').by(both('route').count())
 ----
 
@@ -16715,7 +16736,7 @@ along with their distances. The results are sorted in ascending order by distanc
 [source,groovy]
 ----
 // Distances of all routes from AUS along with destination IATA CODE
-g.V().has('code','AUS').outE().order().by('dist',incr).
+g.V().has('code','AUS').outE().order().by('dist',asc).
       inV().path().by('code').by('dist')
 ----
 
@@ -16774,7 +16795,7 @@ an 'order' step so that the results are sorted in descending order by distance.
 [source,groovy]
 ----
 g.V().has('code','DFW').outE('route').has('dist',gt(4000)).
-      order().by('dist',decr).inV().
+      order().by('dist',desc).inV().
       path().by('code').by('dist')
 ----
 
@@ -17074,7 +17095,7 @@ step after finding the routes we are interested in.
 ----
 // As above but sorted by route lengths.
 g.V().as('a').outE().has('dist',gt(8000)).
-      order().by('dist',decr).
+      order().by('dist',desc).
       inV().as('b').
       filter(select('a','b').by('code').where('a', lt('b'))).
       path().by('code').by('dist')
@@ -17105,7 +17126,7 @@ should we so desire, to simplify our query a bit more as follows.
 //Query changed to take advantage of the where().by() construct
 g.V().as('s').
       outE().has('dist',gt(8000)).
-      order().by('dist',decr).inV().as('f').
+      order().by('dist',desc).inV().as('f').
       where('f',lt('s')).by('code').
       path().by('code').by('dist')
 ----
@@ -17137,7 +17158,7 @@ we replace the 'lt' with a 'gt' we will get the routes returned in the reverse o
 ----
 g.V().as('s').
       outE().has('dist',gt(8000)).
-      order().by('dist',decr).inV().as('f').
+      order().by('dist',desc).inV().as('f').
       where('f',gt('s')).by('code').
       path().by('code').by('dist')
 ----
@@ -17175,7 +17196,7 @@ the return direction so we will actually only get 20 routes back.
 [source,groovy]
 ----
 g.E().hasLabel('route').
-      order().by('dist',decr).limit(40).
+      order().by('dist',desc).limit(40).
       project('a','b','c').
         by(inV().values('code')).
         by('dist').
@@ -17211,7 +17232,7 @@ working with.
 ----
 g.V().hasLabel('airport').as('a').
       outE().as('b').
-      order().by('dist',decr).limit(40).
+      order().by('dist',desc).limit(40).
       inV().as('c').
       where('a',lt('c')).by('code').
       select('a','b','c').by('code').by('dist')
@@ -17248,7 +17269,7 @@ only the first one is selected in each case.
 ----
 g.V().hasLabel('airport').limit(10).
       local(outE().
-            order().by('dist',decr).
+            order().by('dist',desc).
             inV().
             path().
               by('code').
@@ -17471,7 +17492,7 @@ g.withSack(0).
       sack(sum).by('dist').
       inV().has('code','LHR').
       sack().
-      order().by(incr).limit(10).
+      order().by(asc).limit(10).
       path().
         by('code').
         by('dist').
@@ -17524,7 +17545,7 @@ g.withSack(0).V().
   sack(sum).by('dist').
   inV().has('code','LHR').
   sack().
-  order().by(incr).limit(10).
+  order().by(asc).limit(10).
   path().
     by('code').
     by('dist').
@@ -17711,7 +17732,7 @@ with a single query. Here is a simple example of such a query.
 
 [source,groovy]
 ----
-g.V().has('lat',outside(-50,77)).order().by('lat',incr).valueMap('city','lat')
+g.V().has('lat',outside(-50,77)).order().by('lat',asc).valueMap('city','lat')
 ----
 
 Here are the airports found by running the query.
@@ -19539,7 +19560,7 @@ there are over 3,300 airport vertices in the graph.
 [source,groovy]
 ----
 g.V().has('code','LHR').out().groupCount().by('code').
-  order(local).by(values,decr).next().values().max()  
+  order(local).by(values,desc).next().values().max()  
 ----
 
 If the answer came back greater than one I then ran the following query and manually
@@ -19547,7 +19568,7 @@ looked at each result to see where the duplicate edge was.
 
 [source,groovy]
 ----
-g.V().has('code','LHR').out().groupCount().by('code').order(local).by(values,decr)
+g.V().has('code','LHR').out().groupCount().by('code').order(local).by(values,desc)
 ----
 
 As I said this was a very manual and time consuming process. I clearly needed a
@@ -19745,7 +19766,7 @@ once, but this approach would miss the case where more than one route was of the
 
 [source,groovy]
 ----
-r=g.E().hasLabel('route').as('e').order().by('dist', decr).limit(1).select('e').id().next()
+r=g.E().hasLabel('route').as('e').order().by('dist', desc).limit(1).select('e').id().next()
 g.E(r).dist
 g.E(r).bothV().values('code')
 ----
@@ -19756,7 +19777,7 @@ our experiments to build up this query from there is a non trivial journey!
 
 [source,groovy]
 ----
-g.E().hasLabel("route").order().by("dist", decr).store("d").by("dist").
+g.E().hasLabel("route").order().by("dist", desc).store("d").by("dist").
   filter(values("dist").as("cd").select("d").by(limit(local, 1)).as("md").where("cd",eq("md"))).
   project("from","to","dist").by(outV()).by(inV()).by("dist")        
 ----
@@ -19766,7 +19787,7 @@ one more time as follows.
 
 [source,groovy]
 ----
-g.E().hasLabel("route").order().by("dist",decr).store("d").by("dist").\
+g.E().hasLabel("route").order().by("dist",desc).store("d").by("dist").\
   filter(values("dist").as("cd").select("d").by(limit(local, 1)).as("md").where("cd",eq("md"))).\
   project("from","to","dist").by(outV().values('code')).by(inV().values('code')).by("dist") 
 ----
@@ -20244,7 +20265,8 @@ to be specified the statics defined in the  'Scope' and 'Order' Enums can be use
 
 NOTE: The 'Order.incr' and 'Order.decr' enumerations were deprecated in the TinkerPop
 3.3.4 release in favor of 'Order.asc' and 'Order.desc' to bring the keywords more
-into line with other commonly used query languages.
+into line with other commonly used query languages. As of TinkerPop 3.5.0, 'incr' and
+'decr' were removed from the Gremlin query language altogether.
 
 .Scope and ordering
 [cols="1,1,3"]
@@ -20252,9 +20274,11 @@ into line with other commonly used query languages.
 |local   | Scope.local    | order(Scope.local)
 |global  | Scope.global   | order(Scope.global)
 |desc    | Order.desc     | order().by(Order.desc)
-|decr    | Order.decr     | order().by(Order.decr)  [Deprecated since 3.3.4]
+|decr    | Order.decr     | order().by(Order.decr)  [Deprecated since 3.3.4, removed
+in 3.5.0]
 |asc     | Order.asc      | order().by(Order.asc)
-|incr    | Order.incr     | order().by(Order.incr)  [Deprecated since 3.3.4]
+|incr    | Order.incr     | order().by(Order.incr)  [Deprecated since 3.3.4, removed
+in 3.5.0]
 |shuffle | Order.shuffle  | order().by(Order.shuffle)
 |==============================================================================
 
@@ -24276,7 +24300,7 @@ between them.
 [source,groovy]
 ----
 g.V().as('a').outE().has('dist',gt(8000)).
-      order().by('dist',decr).inV().as('b'). 
+      order().by('dist',desc).inV().as('b'). 
       filter(select('a','b').by('code').where('a', lt('b'))).
       path().by('code').by('dist')
 ----
@@ -24351,7 +24375,7 @@ end of the query. Take a look at the modified form of the query below.
 [source,groovy]
 ----
 g.V().as('a').outE().has('dist',gt(8000)).
-      order().by('dist',decr).inV().as('b'). 
+      order().by('dist',desc).inV().as('b'). 
       filter(select('a','b').by('code').where('a', lt('b'))). 
       path().by('code').by('dist').toList().toString()
 ----
@@ -24380,7 +24404,7 @@ every occurence of '],' in the string with ']x' and then did the split using
 [source,groovy]
 ----
 g.V().as('a').outE().has('dist',gt(8000)).
-      order().by('dist',decr).inV().as('b').
+      order().by('dist',desc).inV().as('b').
       filter(select('a','b').by('code').where('a', lt('b'))).
       path().by('code').by('dist').toList().toString()[1..-2].
       replaceAll('],',']x').split('x')

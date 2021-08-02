@@ -79,7 +79,7 @@ public class TestImports
 
     showHeader("Scope.local Order.decr");
     results = g.V().has("region","US-TX").values("code").fold().
-                    order(Scope.local).by(Order.decr).toList();
+                    order(Scope.local).by(Order.desc).toList();
 
     System.out.println(results + "\n");
 
@@ -101,14 +101,14 @@ public class TestImports
     showHeader("Order.decr");
 
     results = g.V().has("region","US-TX").values("code").
-                    order().by(Order.decr).toList();
+                    order().by(Order.desc).toList();
 
     System.out.println(results + "\n");
 
     showHeader("Order.incr runways at Texas airports");
 
     results = g.V().has("region","US-TX").values("runways").
-                    order().by(Order.incr).toList();
+                    order().by(Order.asc).toList();
 
     System.out.println(results+"\n");
 

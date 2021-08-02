@@ -5,6 +5,8 @@ Starting with the v275 release, this file will contain a record of the major cha
 ## Release 283 change history (Release date TBD)
 
 Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v282-tp-3.4.4...master) between this release and the prior one.
+- Moved the supported TinkerPop version up to 3.5.1. Issue #228
+- Upated all sections to reove any use of `Order.decr` and `Order.incr` except where explicitly discussing their removal from Gremlin as of 3.5.0 in favor of `Order.asc` and `Order.desc`. Issue #228
 - Added a new section "Comparing properties to the value of a sack". Issue #163
 - Added a new section "Using `index` to reverse a list" Issue #220
 - Expanded the section introducing `choose` with `option` to explain that `option` can now take a predicate. Issue #173
@@ -29,6 +31,7 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
 - Renamed HTML and PDF files to PracticalGremlin.
   - The prior Gremlin-Graph-Guide names will still work to avoid breaking bookmarks.
 - Sample code updates
+  - Updated all samples to use `Order.asc` and `Order.desc` Issue #228
   - Added `RemoteTests.cs` containing a set of .Net examples.
   - Added `quick-btree2.groovy` which adds a few more nodes to the treee than in `quick-btree.groovy`.
   - Added `RemoteWriteText.java` which shows how to turn traversals and GraphSON back into text queries.

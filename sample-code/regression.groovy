@@ -22,7 +22,9 @@ n=status("Checking Gremlin version",n);[]
 ver=Gremlin.version();[]
 println "Reported version is $ver";[]
 
-assert ver[0]=='3' && ((ver[2]=='3' && ver[4].toInteger() >= 1) || (ver[2]=='4' && ver[4].toInteger() >= 0));[]
+assert ver[0]=='3' && ((ver[2]=='3' && ver[4].toInteger() >= 1) 
+       || (ver[2]=='4' && ver[4].toInteger() >= 0)
+       || (ver[2]=='5' && ver[4].toInteger() >= 0));[]
 
 n=status( "Checking air-routes version",n);[]
 ver=g.V().hasLabel('version').values('code').next();[]
@@ -148,10 +150,10 @@ m=g.V().hasLabel('airport').
         groupCount().by('country').select('FR','GR','BE').next();[]
 assert m['GR']==39;[]
 
-n=status( "Checking 'group' and 'order' using 'by(keys,incr)'",n);[]
+n=status( "Checking 'group' and 'order' using 'by(keys,asc)'",n);[]
 m=g.V().has('airport','country','US').
         group().by('code').by('runways').
-        order(local).by(keys,incr).next();[]
+        order(local).by(keys,asc).next();[]
 
 assert m.size()==579;[]
 assert m['ABE'][0]==2;[]
@@ -187,7 +189,7 @@ assert a ['LAX'] == 195;[]
 
 n=status( "Checking 'order' with 'valueMap' and 'select'",n);[]
 a=g.V().hasLabel('airport').
-        order().by('longest',decr).valueMap().
+        order().by('longest',desc).valueMap().
         select('code','longest').limit(10).toList();[]
 
 assert a[0]['code'][0] == 'BPX';[]      
@@ -200,9 +202,9 @@ a=g.V().has('code','DFW').project('dfw','route_count').
 assert a[0] == g.V().has('code','DFW').next();[]
 assert a[1] == 221;[]
 
-n=status( "Checking 'order by('lobgest',decr)' with 'valueMap' and 'select''",n);[]
+n=status( "Checking 'order by('lobgest',desc)' with 'valueMap' and 'select''",n);[]
 a=g.V().hasLabel('airport').
-        order().by('longest',decr).valueMap().
+        order().by('longest',desc).valueMap().
         select('code','longest').limit(10).toList();[]
 
 assert a.size() == 10;[]
@@ -213,7 +215,7 @@ n=status( "Checking 'project'",n);[]
 a=g.V().has('airport','region','GB-ENG').
         project('IATA','Routes').
           by('code').by(out().count()).
-        order().by(select('Routes'),decr).toList();[]
+        order().by(select('Routes'),desc).toList();[]
 
 assert a[0]['IATA'] == 'LGW';[]
 assert a[0]['Routes'] == 200;[]
@@ -457,7 +459,7 @@ c=g.V().has('runways',inside(3,6)).values('code','runways').count().next();[]
 assert c == 130;[]
 
 n=status( "Checking 'outside(-50,77)'",n);[]
-c=g.V().has('lat',outside(-50,77)).order().by('lat',incr).count().next();[]
+c=g.V().has('lat',outside(-50,77)).order().by('lat',asc).count().next();[]
 assert c == 10;[]
 
 ;[] //-------------------------------------------------------------------------
@@ -514,7 +516,7 @@ c=g.V().hasLabel('airport').
            has('region','US-LA'),                                 
            has('region','US-AZ'),                                 
            has('region','US-OK')).                                
-        order().by('region',incr).                               
+        order().by('region',asc).                               
         valueMap().select('code','region').count().next();[]    
 assert c == 48;[]
 
@@ -795,7 +797,7 @@ a=g.withSack(0).
         sack(sum).by('dist').
         inV().has('code','LHR').
         sack().
-        order().by(incr).limit(10).
+        order().by(asc).limit(10).
         path().
           by('code').
           by('dist').

@@ -10,7 +10,7 @@ routes =  g.withSack(0).V().
           outE().sack(sum).by('dist').
           inV().outE().sack(sum).by('dist').
           inV().has('code','LHR').sack().
-          order().by(incr).limit(20).
+          order().by(asc).limit(20).
           path().by('code').by('dist').by('code').by('dist').by('code').by().toList();[]
           
 routes.each(){println "${it[0]} --> ${it[2]} --> ${it[4]} ${it[5]} miles"}[];

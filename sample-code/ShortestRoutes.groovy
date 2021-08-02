@@ -56,7 +56,7 @@ class Routes
                   outE().sack(Operator.sum).by('dist').
                   inV().outE().sack(Operator.sum).by('dist').
                   inV().has('code',to).sack().
-                  order().by(Order.incr).limit(10).
+                  order().by(Order.asc).limit(10).
                   path().by('code').by('dist').by('code').by('dist').by('code').by().
                   toList()
 

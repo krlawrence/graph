@@ -82,7 +82,7 @@ public class ListAirports
     // Note the use of the "__." and "Order" prefixes.
     List<Vertex> vlist = 
       g.V().hasLabel("airport").
-            order().by(__.id(),Order.incr).
+            order().by(__.id(),Order.asc).
             limit(max).
             toList();
 
