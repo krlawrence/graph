@@ -6,7 +6,7 @@ Starting with the v275 release, this file will contain a record of the major cha
 
 Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v282-tp-3.4.4...master) between this release and the prior one.
 - Moved the supported TinkerPop version up to 3.5.1. Issue #228
-- Upated all sections to reove any use of `Order.decr` and `Order.incr` except where explicitly discussing their removal from Gremlin as of 3.5.0 in favor of `Order.asc` and `Order.desc`. Issue #228
+- Upated all sections to remove any use of `Order.decr` and `Order.incr` except where explicitly discussing their removal from Gremlin as of 3.5.0 in favor of `Order.asc` and `Order.desc`. Issue #228
 - Added a new section "Comparing properties to the value of a sack". Issue #163
 - Added a new section "Using `index` to reverse a list" Issue #220
 - Expanded the section introducing `choose` with `option` to explain that `option` can now take a predicate. Issue #173
