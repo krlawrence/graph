@@ -17,6 +17,13 @@ The `edges.csv` file is intended to be used with the `GraphFromCSV.java` sample 
 
 The two files `air-routes-latest.graphml` and `air-routes-small-latest.graphml` contain additional routes and airports added since the original version was uploaded. They are provided in case anyone wants to experiment with some more recent data. The latest data set adds 128 additional airports and 7,256 additional routes to the original `air-routes.graphml` data set.
 
-I have also provided two CSV files to go along withe the GraphML files. Thery are called `air-routes-latest-nodes.csv` and `air-routes-latest-edges.csv`. The CSV files were produced using the open source [GraphML2CSV tool](https://github.com/awslabs/amazon-neptune-tools/tree/master/graphml2csv). You may need to edit the first line (header) of each CSV file depending on your graph database and toolset. 
+## Additional formats
+
+I have also provided two CSV files to go along withe the GraphML files. They are called `air-routes-latest-nodes.csv` and `air-routes-latest-edges.csv`. The CSV files were produced using the open source [GraphML2CSV tool](https://github.com/awslabs/amazon-neptune-tools/tree/master/graphml2csv). You may need to edit the first line (header) of each CSV file depending on your graph database and toolset. 
+
+It is also possible to turn the CSV files into batches of Gremlin `addV` and `addE` commands using the [csv-gremlin tool](https://github.com/awslabs/amazon-neptune-tools/blob/master/csv-gremlin/README.md). This provides yet another way that the `air-routes` data set can be loaded into a TinkerPop compatible graph store.
+
+To allow for some interesting comparisons in diferent ways of modeling this data, I have also provided some simple RDF and SQL versions of the data.
+The RDF data was created using the Ruby script that can be found in the `sample-data/RDF` folder. You may also be interested in the [AWS CSV2RDF](https://github.com/aws/amazon-neptune-csv-to-rdf-converter) tool which can turn CSV files into NQuad format RDF files.
 
 Please check back periodically to find any additional updates.

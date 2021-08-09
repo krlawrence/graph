@@ -1,0 +1,353 @@
+
+The SQL files in this folder and the examples below were all tested using Sqlite3 but should work with minor or
+no modifications in other SQL databases. Versions of this data have been tested using MySQL.
+
+select * from airports limit 10;
++----+------+------+-----------------+----------------------------------------------------+--------+---------+---------+---------+----------+-----------+------------------+-------------------+
+| ID | IATA | ICAO |      CITY       |                       DESCR                        | REGION | COUNTRY | RUNWAYS | LONGEST | ALTITUDE | CONTINENT |       LAT        |        LON        |
++----+------+------+-----------------+----------------------------------------------------+--------+---------+---------+---------+----------+-----------+------------------+-------------------+
+| 1  | ATL  | KATL | Atlanta         | Hartsfield - Jackson Atlanta International Airport | US-GA  | US      | 5       | 12390   | 1026     | NA        | 33.6366996765137 | -84.4281005859375 |
+| 2  | ANC  | PANC | Anchorage       | Anchorage Ted Stevens                              | US-AK  | US      | 3       | 12400   | 151      | NA        | 61.1744003295898 | -149.996002197266 |
+| 3  | AUS  | KAUS | Austin          | Austin Bergstrom International Airport             | US-TX  | US      | 2       | 12250   | 542      | NA        | 30.1944999694824 | -97.6698989868164 |
+| 4  | BNA  | KBNA | Nashville       | Nashville International Airport                    | US-TN  | US      | 4       | 11030   | 599      | NA        | 36.1245002746582 | -86.6781997680664 |
+| 5  | BOS  | KBOS | Boston          | Boston Logan                                       | US-MA  | US      | 6       | 10083   | 19       | NA        | 42.36429977      | -71.00520325      |
+| 6  | BWI  | KBWI | Baltimore       | Baltimore/Washington International Airport         | US-MD  | US      | 3       | 10502   | 143      | NA        | 39.17539978      | -76.66829681      |
+| 7  | DCA  | KDCA | Washington D.C. | Ronald Reagan Washington National Airport          | US-DC  | US      | 3       | 7169    | 14       | NA        | 38.8521003723145 | -77.0376968383789 |
+| 8  | DFW  | KDFW | Dallas          | Dallas/Fort Worth International Airport            | US-TX  | US      | 7       | 13401   | 607      | NA        | 32.896800994873  | -97.0380020141602 |
+| 9  | FLL  | KFLL | Fort Lauderdale | Fort Lauderdale/Hollywood International Airport    | US-FL  | US      | 2       | 9000    | 64       | NA        | 26.0725994110107 | -80.152702331543  |
+| 10 | IAD  | KIAD | Washington D.C. | Washington Dulles International Airport            | US-VA  | US      | 4       | 11500   | 313      | NA        | 38.94449997      | -77.45580292      |
++----+------+------+-----------------+----------------------------------------------------+--------+---------+---------+---------+----------+-----------+------------------+-------------------+
+
+select a.iata, a.city, a.descr from airports a limit 10;
++------+-----------------+----------------------------------------------------+
+| IATA |      CITY       |                       DESCR                        |
++------+-----------------+----------------------------------------------------+
+| ATL  | Atlanta         | Hartsfield - Jackson Atlanta International Airport |
+| ANC  | Anchorage       | Anchorage Ted Stevens                              |
+| AUS  | Austin          | Austin Bergstrom International Airport             |
+| BNA  | Nashville       | Nashville International Airport                    |
+| BOS  | Boston          | Boston Logan                                       |
+| BWI  | Baltimore       | Baltimore/Washington International Airport         |
+| DCA  | Washington D.C. | Ronald Reagan Washington National Airport          |
+| DFW  | Dallas          | Dallas/Fort Worth International Airport            |
+| FLL  | Fort Lauderdale | Fort Lauderdale/Hollywood International Airport    |
+| IAD  | Washington D.C. | Washington Dulles International Airport            |
++------+-----------------+----------------------------------------------------+
+
+select * from routes limit 5;
++-----+------+------+
+| SRC | DEST | DIST |
++-----+------+------+
+| 1   | 3    | 811  |
+| 1   | 4    | 214  |
+| 1   | 5    | 945  |
+| 1   | 6    | 576  |
+| 1   | 7    | 546  |
++-----+------+------+
+
+select * from iroutes limit 5;
++-----+------+------+
+| SRC | DEST | DIST |
++-----+------+------+
+| ATL | AUS  | 811  |
+| ATL | BNA  | 214  |
+| ATL | BOS  | 945  |
+| ATL | BWI  | 576  |
+| ATL | DCA  | 546  |
++-----+------+------+
+
+select * from continents limit 5;
++------+------------+
+| CODE |   DESCR    |
++------+------------+
+| EU   | Europe     |
+| OC   | Oceania    |
+| AS   | Asia       |
+| AN   | Antarctica |
+| AF   | Africa     |
++------+------------+
+
+select * from countries limit 5;
++------+----------------+
+| CODE |     DESCR      |
++------+----------------+
+| AF   | Afghanistan    |
+| AL   | Albania        |
+| DZ   | Algeria        |
+| AS   | American Samoa |
+| AD   | Andorra        |
++------+----------------+
+
+select iata,city from airports where city like 'Dal%' limit 10;
++------+-------------+
+| IATA |    CITY     |
++------+-------------+
+| DFW  | Dallas      |
+| DAL  | Dallas      |
+| DLM  | Dalaman     |
+| DLC  | Dalian      |
+| MHC  | Dalcahue    |
+| DLI  | Dalat       |
+| DLZ  | Dalanzadgad |
++------+-------------+
+
+
+select city,length(city) as Length from airports 
+where length(city) > 30 
+order by length(city);
++---------------------------------------+--------+
+|                 CITY                  | Length |
++---------------------------------------+--------+
+| Staunton/Waynesboro/Harrisonburg      | 32     |
+| Chapelco/San Martin de los Andes      | 32     |
+| Tours/Val de Loire (Loire Valley)     | 33     |
+| Pangkal Pinang-Palaubangka Island     | 33     |
+| Kolaka/Pomala Tambea-Celebes Island   | 35     |
+| Sta Cruz de la Palma, La Palma Island | 37     |
++---------------------------------------+--------+
+
+
+select iata,runways from airports where runways between 6 and 8 order by runways;
++------+---------+
+| IATA | RUNWAYS |
++------+---------+
+| BOS  | 6       |
+| DEN  | 6       |
+| DTW  | 6       |
+| AMS  | 6       |
+| DFW  | 7       |
+| ORD  | 7       |
++------+---------+
+
+select IATA,CITY,REGION,LON from airports 
+where LON between -0.2 and 0.2 order by LON;
++------+-------------------------+--------+--------------------+
+| IATA |          CITY           | REGION |        LON         |
++------+-------------------------+--------+--------------------+
+| LGW  | London                  | GB-ENG | -0.190277993679047 |
+| AZR  | Adrar                   | DZ-01  | -0.186414003372192 |
+| ACC  | Accra                   | GH-AA  | -0.166786000132561 |
+| LDE  | Tarbes/Lourdes/Pyrénées | FR-N   | -0.006438999902457 |
+| CDT  | Castellón de La Plana   | ES-V   | 0.0261109992862    |
+| LCY  | London                  | GB-ENG | 0.055278           |
+| LEH  | Le Havre/Octeville      | FR-Q   | 0.0880559980869293 |
+| MUW  | Mascara                 | DZ-29  | 0.147141993045807  |
+| DOL  | Deauville               | FR-P   | 0.154305994511     |
++------+-------------------------+--------+--------------------+
+
+select airports.iata,airports.descr,continents.descr as Continent from airports 
+join continents on airports.continent=continents.code 
+limit 5 ;
++------+----------------------------------------------------+----------------+
+| IATA |                       DESCR                        |   Continent    |
++------+----------------------------------------------------+----------------+
+| ATL  | Hartsfield - Jackson Atlanta International Airport | North America  |
+| ANC  | Anchorage Ted Stevens                              | North America  |
+| AUS  | Austin Bergstrom International Airport             | North America  |
+| BNA  | Nashville International Airport                    | North America  |
+| BOS  | Boston Logan                                       | North America  |
++------+----------------------------------------------------+----------------+
+
+select count(city) as c,region from airports 
+group by region 
+order by c desc
+limit 10;
++-----+--------+
+|  c  | REGION |
++-----+--------+
+| 150 | US-AK  |
+| 50  | AU-QLD |
+| 46  | CA-ON  |
+| 44  | CA-QC  |
+| 39  | PF-U-A |
+| 31  | US-CA  |
+| 29  | CA-BC  |
+| 27  | US-TX  |
+| 27  | GB-ENG |
+| 27  | AU-NSW |
++-----+--------+     
+
+select count(city) as count, region from airports
+group by region 
+having count(region) > 25 
+order by count;
++-------+--------+
+| count | REGION |
++-------+--------+
+| 27    | AU-NSW |
+| 27    | GB-ENG |
+| 27    | US-TX  |
+| 29    | CA-BC  |
+| 31    | US-CA  |
+| 39    | PF-U-A |
+| 44    | CA-QC  |
+| 46    | CA-ON  |
+| 50    | AU-QLD |
+| 150   | US-AK  |
++-------+--------+   
+
+with tx as (select * from airports where region = 'US-TX')
+select city,descr from tx;
++----------------------+---------------------------------------------------------+
+|         CITY         |                          DESCR                          |
++----------------------+---------------------------------------------------------+
+| Austin               | Austin Bergstrom International Airport                  |
+| Dallas               | Dallas/Fort Worth International Airport                 |
+| Houston              | George Bush Intercontinental                            |
+| San Antonio          | San Antonio                                             |
+| Houston              | Houston Hobby                                           |
+| El Paso              | El Paso International Airport                           |
+| Dallas               | Dallas Love Field                                       |
+| Lubbock              | Lubbock Preston Smith International Airport             |
+| Harlingen            | Harlingen, Valley International Airport                 |
+| Midland              | Midland International Airport                           |
+| Corpus Christi       | Corpus Christi International Airport                    |
+| Abilene              | Abilene Regional Airport                                |
+| Waco                 | Waco Regional Airport                                   |
+| College Station      | Easterwood Field                                        |
+| Beaumont/Port Arthur | Southeast Texas Regional Airport                        |
+| Amarillo             | Rick Husband Amarillo International Airport             |
+| Brownsville          | Brownsville South Padre Island International Airport    |
+| Longview             | East Texas Regional Airport                             |
+| Fort Hood/Killeen    | Robert Gray  Army Air Field Airport                     |
+| Laredo               | Laredo International Airport                            |
+| Mc Allen             | Mc Allen Miller International Airport                   |
+| San Angelo           | San Angelo Regional Mathis Field                        |
+| Wichita Falls        | Sheppard Air Force Base-Wichita Falls Municipal Airport |
+| Tyler                | Tyler Pounds Regional Airport                           |
+| Victoria             | Victoria Regional Airport                               |
+| Fort Worth           | Fort Worth Alliance Airport                             |
+| Del Rio              | Del Rio International Airport                           |
++----------------------+---------------------------------------------------------+
+ 
+select city,altitude from airports where altitude > (select avg(altitude) from airports) limit 10;
++-----------+----------+
+|   CITY    | ALTITUDE |
++-----------+----------+
+| Phoenix   | 1135     |
+| Las Vegas | 2181     |
+| Denver    | 5433     |
+| El Paso   | 3961     |
+| Tucson    | 2643     |
+| Santa Fe  | 6348     |
+| Prague    | 1247     |
+| Madrid    | 1998     |
+| Zurich    | 1416     |
+| Geneva    | 1411     |
++-----------+----------+   
+
+with alt(average) as (select avg(altitude) from airports)
+select city,altitude,average,(altitude - average) as diff from airports a, alt
+where a.altitude > alt.average
+limit 10;
++-----------+----------+------------------+------------------+
+|   CITY    | ALTITUDE |     average      |       diff       |
++-----------+----------+------------------+------------------+
+| Phoenix   | 1135     | 1042.69817247287 | 92.3018275271274 |
+| Las Vegas | 2181     | 1042.69817247287 | 1138.30182752713 |
+| Denver    | 5433     | 1042.69817247287 | 4390.30182752713 |
+| El Paso   | 3961     | 1042.69817247287 | 2918.30182752713 |
+| Tucson    | 2643     | 1042.69817247287 | 1600.30182752713 |
+| Santa Fe  | 6348     | 1042.69817247287 | 5305.30182752713 |
+| Prague    | 1247     | 1042.69817247287 | 204.301827527127 |
+| Madrid    | 1998     | 1042.69817247287 | 955.301827527127 |
+| Zurich    | 1416     | 1042.69817247287 | 373.301827527127 |
+| Geneva    | 1411     | 1042.69817247287 | 368.301827527127 |
++-----------+----------+------------------+------------------+
+
+create view test as select airports.iata,airports.descr,continents.descr as continent from airports join continents on airports.continent=continents.code;
+select * from test where continent != "North America" limit 10;
++------+-----------------------------------------+-----------+
+| IATA |                  DESCR                  | continent |
++------+-----------------------------------------+-----------+
+| LHR  | London Heathrow                         | Europe    |
+| LGW  | London Gatwick                          | Europe    |
+| CDG  | Paris Charles de Gaulle                 | Europe    |
+| FRA  | Frankfurt am Main                       | Europe    |
+| HEL  | Helsinki Ventaa                         | Europe    |
+| NRT  | Tokyo Narita                            | Asia      |
+| SYD  | Sydney Kingsford Smith                  | Oceania   |
+| SIN  | Singapore, Changi International Airport | Asia      |
+| MEL  | Melbourne International Airport         | Oceania   |
+| DXB  | Dubai International Airport             | Asia      |
++------+-----------------------------------------+-----------+
+
+select a.iata,r.dist,a2.iata from airports a
+join routes r on a.id = r.src
+join airports a2 on a2.id = r.dest
+where a.IATA = 'AUS'
+order by r.dist desc
+limit 10;
++------+------+------+
+| IATA | DIST | IATA |
++------+------+------+
+| AUS  | 5294 | FRA  |
+| AUS  | 4921 | LGW  |
+| AUS  | 4901 | LHR  |
+| AUS  | 1768 | SEA  |
+| AUS  | 1712 | PDX  |
+| AUS  | 1695 | BOS  |
+| AUS  | 1671 | YYC  |
+| AUS  | 1660 | PVD  |
+| AUS  | 1518 | JFK  |
+| AUS  | 1501 | EWR  |
++------+------+------+
+
+select * from iroutes order by iroutes.dist desc limit 10;
++-----+------+------+
+| SRC | DEST | DIST |
++-----+------+------+
+| EWR | SIN  | 9523 |
+| SIN | EWR  | 9523 |
+| AKL | DOH  | 9025 |
+| DOH | AKL  | 9025 |
+| LHR | PER  | 9009 |
+| PER | LHR  | 9009 |
+| PEK | PTY  | 8884 |
+| PTY | PEK  | 8884 |
+| DXB | AKL  | 8818 |
+| AKL | DXB  | 8818 |
++-----+------+------+
+
+
+select a.IATA ,r.DIST, a2.IATA, r2.DIST,a3.IATA,r3.DIST,a4.IATA,
+       r3.DIST+r2.DIST+r.DIST as TOTAL from airports a
+join routes r on a.id = r.SRC
+join airports a2 on a2.id = r.DEST
+join routes r2 on a2.id = r2.SRC
+join airports a3 on a3.id = r2.DEST
+join routes r3   on a3.id = r3.SRC
+join airports a4 on a4.id = r3.DEST
+where a.IATA = 'AUS' and a4.IATA = 'AGR'
+order by TOTAL asc
+limit 10;
++------+------+------+------+------+------+------+-------+
+| IATA | DIST | IATA | DIST | IATA | DIST | IATA | TOTAL |
++------+------+------+------+------+------+------+-------+
+| AUS  | 1357 | YYZ  | 7758 | BOM  | 644  | AGR  | 9759  |
+| AUS  | 1501 | EWR  | 7790 | BOM  | 644  | AGR  | 9935  |
+| AUS  | 1518 | JFK  | 7782 | BOM  | 644  | AGR  | 9944  |
+| AUS  | 5294 | FRA  | 4080 | BOM  | 644  | AGR  | 10018 |
+| AUS  | 4901 | LHR  | 4479 | BOM  | 644  | AGR  | 10024 |
++------+------+------+------+------+------+------+-------+  
+
+with recursive airport(x) as (
+   select 44
+   union
+   select src from routes join airport on dest=x
+   union
+   select dest from routes join airport on src=x
+)
+select x,a.iata from airport
+join airports a on id=x
+limit 5; 
++----+------+
+| x  | IATA |
++----+------+
+| 44 | SAF  |
+| 8  | DFW  |
+| 13 | LAX  |
+| 20 | PHX  |
+| 31 | DEN  |
++----+------+    
+
