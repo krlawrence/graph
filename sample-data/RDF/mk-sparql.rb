@@ -7,6 +7,7 @@ require 'csv'
 INTEGERS = ['BYTE','SHORT','INT','LONG']
 FLOATS = ['FLOAT','DOUBLE']
 BOOLS = ['BOOL','BOOLEAN']
+DATES = ['DATE']
 SPACES = " " * 4
 
 def printHeader()
@@ -16,7 +17,7 @@ def printHeader()
   puts 'PREFIX dtp: <http://kelvinlawrence.net/air-routes/datatypeProperty/>'
   puts 'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>'
   puts 'PREFIX c: <http://kelvinlawrence.net/air-routes/class/>'
-  puts 'PREFIX xmls: <http://www.w3.org/2001/XMLSchema#>'
+  puts 'PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>'
   puts 'PREFIX op: <http://kelvinlawrence.net/air-routes/objectProperty/>'
   puts ''
   puts 'INSERT DATA {'
@@ -31,7 +32,7 @@ def printVertexFooter()
   puts "}"
 end
 
-def printEdgesFooter()
+def printEdgesFooter()       
   puts "}"
 end
 
@@ -49,9 +50,13 @@ def processProperties(row,prefix,suffix)
           u = tmp[1].upcase
           case 
             when INTEGERS.include?(u)
-              line += "^^xmls:integer"
+              line += "^^xsd:integer"
             when FLOATS.include?(u)
-              line += "^^xmls:double"
+              line += "^^xsd:double"
+            when BOOLS.include?(u)
+              line += "^^xsd:boolean"
+            when DATES.include?(u)
+              line += "^^xsd:date"
           end
         end
       end
