@@ -20,11 +20,11 @@ The two files `air-routes-latest.graphml` and `air-routes-small-latest.graphml` 
 
 ## Additional formats
 
-I have also provided two CSV files to go along withe the GraphML files. They are called `air-routes-latest-nodes.csv` and `air-routes-latest-edges.csv`. The CSV files were produced using the open source [GraphML2CSV tool](https://github.com/awslabs/amazon-neptune-tools/tree/master/graphml2csv). You may need to edit the first line (header) of each CSV file depending on your graph database and toolset. 
+This folder also contains two CSV files to go along withe the GraphML files. They are called `air-routes-latest-nodes.csv` and `air-routes-latest-edges.csv`. The CSV files were produced using the open source [GraphML2CSV tool](https://github.com/awslabs/amazon-neptune-tools/tree/master/graphml2csv). You may need to edit the first line (header) of each CSV file depending on your graph database and toolset. 
 
 It is also possible to turn the CSV files into batches of Gremlin `addV` and `addE` commands using the [csv-gremlin tool](https://github.com/awslabs/amazon-neptune-tools/blob/master/csv-gremlin/README.md). This provides yet another way that the `air-routes` data set can be loaded into a TinkerPop compatible graph store.
 
-To allow for some interesting comparisons in diferent ways of modeling this data, I have also provided some simple RDF and SQL versions of the data.
+To allow for some interesting comparisons in diferent ways of modeling the data, this folder also contains sub-folders containing RDF and SQL versions of the `air-routes` dataset.
 The RDF data was created using the Ruby script that can be found in the `sample-data/RDF` folder. You may also be interested in the [AWS CSV2RDF](https://github.com/aws/amazon-neptune-csv-to-rdf-converter) tool which can turn CSV files into NQuad format RDF files.
 
 Please check back periodically to find any additional updates.
