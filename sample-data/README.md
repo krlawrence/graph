@@ -1,4 +1,5 @@
-This folder contains the GraphML file for the air-routes graph and other sample data. The `air-routes` graph is referenced throughout the book.
+# Air Route data - and more!
+This folder contains several files of sample data in various formats including the GraphML file for the `air-routes` graph. The `air-routes` graph is referenced throughout the book.
 
 ## About the data referenced in the book
 
