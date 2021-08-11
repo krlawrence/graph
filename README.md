@@ -5,7 +5,7 @@
 
 ## Welcome!
 
-This repository is the new home for the source materials, sample code and examples for the book "Practical Gremlin - An Apache TinkerPop Tutorial"
+This repository is the home for the source materials, sample code and examples for the book "Practical Gremlin - An Apache TinkerPop Tutorial"
 
 **Quick Start - the latest version**  
 
