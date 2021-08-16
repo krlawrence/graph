@@ -5,7 +5,7 @@
 
 ## Welcome!
 
-This repository is the home for the source materials, sample code and examples for the book "Practical Gremlin - An Apache TinkerPop Tutorial"
+This repository is the home for the source materials, sample code and examples for the book "Practical Gremlin - An Apache TinkerPop Tutorial". This is also the home for the `air-routes` dataset referenced throughout the book and samples.
 
 **Quick Start - the latest version**  
 
