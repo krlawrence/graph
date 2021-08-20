@@ -1,0 +1,82 @@
+#----------------------------------------------------------------------------------------
+# mrg-html.rb
+#
+# Code to produce an HTML table for each airport and their respective properties.
+#
+# Author: Kelvin R Lawrence  27th November-2013 - Present
+#----------------------------------------------------------------------------------------
+module MRGHtml
+  def createAirportHtmlTable()
+    puts"<HTML>"
+    puts""
+    puts"<HEAD>"
+    puts "<title>World airports</title>"
+    puts "<meta name='author' content='#{AUTHOR}' />"
+    puts "<meta name='created' content='#{VERSION_DATE}' />"
+    puts "<meta name='version' content='#{VERSION}' />"
+    puts"  <STYLE>"
+    puts"    body {"
+    puts"      background: white;"
+    puts"      color: black;"
+    puts"    }"
+    puts"    "
+    puts"    th {"
+    puts"      background: #c1ced0;"
+    puts"      color: black;"
+    puts"    }"
+    puts"    tr:nth-child(even) {background: #CCC}"
+    puts"    tr:nth-child(odd) {background: #FFF}"
+    puts"    table,tr,td {border:none;border-collapse: collapse;padding:5px;}"
+    puts"    .ctr {text-align:center}"
+    #puts"    td:nth-child(5) { color:blue;}"
+    #puts"    td:nth-child(4) { color:blue;}"
+    puts""
+    puts"  </STYLE>"
+    puts"</HEAD>"
+    puts""
+    puts"<BODY>"
+    puts"  <TABLE>"
+    puts"    <TH colspan='13'>"
+    puts"      <H1>Airport Data</H1>"
+    puts"    </TH>"
+    puts"    <TR style='font-weight:bold'>"
+    puts"      <TD>ID</TD>"
+    puts"      <TD>IATA</TD>"
+    puts"      <TD>ICAO</TD>"
+    puts"      <TD>City</TD>"
+    puts"      <TD>Description</TD>"
+    puts"      <TD>Region</TD>"
+    puts"      <TD>RWYS</TD>"
+    puts"      <TD>LONG</TD>"
+    puts"      <TD>ALT</TD>"
+    puts"      <TD>CTY</TD>"
+    puts"      <TD>CON</TD>"
+    puts"      <TD>LATITUDE</TD>"
+    puts"      <TD>LONGITUDE</TD>"
+    puts"    </TR>"
+
+    AIRPORT_DATA.each do |a|
+      puts""
+      puts"    <TR>"
+      puts"      <TD>#{a[0]}</TD>"
+      puts"      <TD>#{a[1]}</TD>"
+      puts"      <TD>#{a[2]}</TD>"
+      puts"      <TD>#{a[3]}</TD>"
+      puts"      <TD>#{a[4]}</TD>"
+      puts"      <TD>#{a[5]}</TD>"
+      puts"      <TD class='ctr'>#{a[6]}</TD>"
+      puts"      <TD>#{a[7]}</TD>"
+      puts"      <TD>#{a[8]}</TD>"
+      puts"      <TD class='ctr'>#{a[9]}</TD>"
+      puts"      <TD class='ctr'>#{a[10]}</TD>"
+      puts"      <TD>#{a[11]}</TD>"
+      puts"      <TD>#{a[12]}</TD>"
+      puts"    </TR>"
+    end
+
+    puts""
+    puts"  </TABLE>"
+    puts"</BODY>"
+    puts"</HTML>"
+  end
+end
