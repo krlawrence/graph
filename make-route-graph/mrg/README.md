@@ -1,7 +1,7 @@
 
 # MakeRouteGraph - Core Ruby Classes and Modules
 
-This folder contains the Ruby classes and modules that provide the foundation for the `air-routes` dataset. The `mrg.rb` file provides a stand alone application that can be used to build the `air-routes` graph and query the `air-routes` data. The `MakeRouteGraph` class, located in the `mrg-core.rb` file can be used to build custom Ruby applications that work with this data. The `air-routes` GraphML and CSV files, located in the `sample-data` folder are built using this code base.
+This folder contains the Ruby classes and modules that provide the foundation for the `air-routes` dataset. The `mrg.rb` file provides a stand alone application that can be used to build the `air-routes` graph and query the `air-routes` data. The `MakeRouteGraph` class, located in the `mrg-core.rb` file can be used to build custom Ruby applications that work with this data. The `air-routes` GraphML and CSV files, located in the `sample-data` folder are built using this code base. The `MakeRouteGraph` class includes methods to not only build the `air-routes` graph but also to query it, analyze it and validate it for correctness.
 
 The application can be run using:
 
