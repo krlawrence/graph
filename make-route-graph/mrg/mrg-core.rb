@@ -234,8 +234,8 @@ class MakeRouteGraph
   def getDistance(a,b)
     d = 0
     ROUTE_DATA.each do |v|
-      if v[0] == a and v[1] == b
-        d = v[2]
+      if v[RTE_FROM] == a and v[RTE_TO] == b
+        d = v[RTE_DIST]
         break
       end
     end  
@@ -288,8 +288,8 @@ class MakeRouteGraph
           i += 1
         end
       elsif mode == DIST_LTE
-        if r[2] <= dist
-          printf "%3s->%3s %5s\n", AIRPORT_DATA[r[0]-1][APT_IATA],AIRPORT_DATA[r[1]-1][APT_IATA],fmtsep(r[2])
+        if r[RTE_DIST] <= dist
+          printf "%3s->%3s %5s\n", AIRPORT_DATA[r[RTE_FROM]-1][APT_IATA],AIRPORT_DATA[r[RTE_TO]-1][APT_IATA],fmtsep(r[2])
           i += 1
         end
       end
