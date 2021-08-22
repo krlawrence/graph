@@ -119,16 +119,19 @@ class MakeRouteGraph
     ct = 0
     n = getAirportId(code)
     if n != 0
+      puts "\nRoutes from #{AIRPORT_DATA[n-1][APT_DESC]} (#{code})\n\n"
       ROUTE_DATA.each do |r|
         if r[0] == n
           ct += 1
-          s = AIRPORT_DATA[r[0]-1][1]
-          d = AIRPORT_DATA[r[1]-1][1]
+          s = AIRPORT_DATA[r[0]-1][APT_IATA]
+          d = AIRPORT_DATA[r[1]-1][APT_IATA]
           puts "#{s},#{d} [#{n},#{r[1]},#{r[2]}]"
         end
       end  
+      printf "\n%3d route(s)\n",ct
+    else
+      puts "No airport found for IATA code: #{code}"
     end
-    printf "\n%3d route(s)\n",ct
   end  
 
   # ---------------------------------------------------------------------------------------
@@ -136,7 +139,7 @@ class MakeRouteGraph
   # ---------------------------------------------------------------------------------------
   def displayCodeAndId()
     AIRPORT_DATA.each do |a|
-      puts "#{a[1]},#{a[0]}"
+      puts "#{a[APT_IATA]},#{a[APT_ID]}"
     end
   end
 
@@ -281,12 +284,12 @@ class MakeRouteGraph
     ROUTE_DATA.each do |r|
       if mode == DIST_GTE
         if r[2] >= dist
-          printf "%3s->%3s %5s\n", AIRPORT_DATA[r[0]-1][1],AIRPORT_DATA[r[1]-1][1],fmtsep(r[2])
+          printf "%3s->%3s %5s\n", AIRPORT_DATA[r[0]-1][APT_IATA],AIRPORT_DATA[r[1]-1][APT_IATA],fmtsep(r[2])
           i += 1
         end
       elsif mode == DIST_LTE
         if r[2] <= dist
-          printf "%3s->%3s %5s\n", AIRPORT_DATA[r[0]-1][1],AIRPORT_DATA[r[1]-1][1],fmtsep(r[2])
+          printf "%3s->%3s %5s\n", AIRPORT_DATA[r[0]-1][APT_IATA],AIRPORT_DATA[r[1]-1][APT_IATA],fmtsep(r[2])
           i += 1
         end
       end
@@ -304,13 +307,13 @@ class MakeRouteGraph
     ROUTE_DATA.each do |r|
       src = r[0]-1
       dest = r[1]-1
-      lat1 = AIRPORT_DATA[src][11].to_f
-      lon1 = AIRPORT_DATA[src][12].to_f
-      lat2 = AIRPORT_DATA[dest][11].to_f
-      lon2 = AIRPORT_DATA[dest][12].to_f
+      lat1 = AIRPORT_DATA[src][APT_LAT].to_f
+      lon1 = AIRPORT_DATA[src][APT_LON].to_f
+      lat2 = AIRPORT_DATA[dest][APT_LAT].to_f
+      lon2 = AIRPORT_DATA[dest][APT_LON].to_f
       dist = haversineDistance(lat1,lon1,lat2,lon2)
       if hcode      
-        puts "#{AIRPORT_DATA[src][1]},#{AIRPORT_DATA[dest][1]},#{dist.round}"
+        puts "#{AIRPORT_DATA[src][APT_IATA]},#{AIRPORT_DATA[dest][APT_IATA]},#{dist.round}"
       elsif hid
         puts "#{r[0]},#{r[1]},#{dist.round}"
       elsif @verbose
@@ -339,7 +342,7 @@ class MakeRouteGraph
     id = getAirportId(code)
     if id != 0
       outdeg,indeg = calcAirportDegree(code)
-      puts "Route conts for #{code} (#{AIRPORT_DATA[id-1][4]})"
+      puts "Route conts for #{code} (#{AIRPORT_DATA[id-1][APT_DESC]})"
       puts "routes out: #{outdeg} , routes in: #{indeg}"
     else
       puts "Sorry no airport found with a code of #{code}"
@@ -384,12 +387,12 @@ class MakeRouteGraph
     if @all
       puts "\nAdditional observations:"
       f,t,mi = longestRoute()
-      frm = AIRPORT_DATA[f-1][1]
-      to  = AIRPORT_DATA[t-1][1]
+      frm = AIRPORT_DATA[f-1][APT_IATA]
+      to  = AIRPORT_DATA[t-1][APT_IATA]
       puts "  Longest route is between #{frm} and #{to} (#{fmtsep(mi)} miles)" 
       f,t,mi = shortestRoute()
-      frm = AIRPORT_DATA[f-1][1]
-      to  = AIRPORT_DATA[t-1][1]
+      frm = AIRPORT_DATA[f-1][APT_IATA]
+      to  = AIRPORT_DATA[t-1][APT_IATA]
       puts "  Shortest route is between #{frm} and #{to} (#{mi} miles)" 
       avg = avgRoute()
       a = avg.to_i

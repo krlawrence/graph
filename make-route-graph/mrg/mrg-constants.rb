@@ -7,7 +7,7 @@
 #----------------------------------------------------------------------------------------
 module MRGConstants
   VERSION = "0.87" 
-  VERSION_DATE = "2021-Aug-20" 
+  VERSION_DATE = "2021-Aug-22" 
   VERSION_TIME = Time.new.utc 
   AUTHOR = "Kelvin R. Lawrence" 
 
@@ -28,6 +28,26 @@ module MRGConstants
   # Mode flags for some distance methods
   DIST_GTE = 1
   DIST_LTE = 2
-    
+
+  # Columns (fields) in the AIRPORT_DATA table
+  APT_ID   = 0  #  ID                                                                        
+  APT_IATA = 1  #  IATA code                                                           
+  APT_ICAO = 2  #  ICAO code                                                           
+  APT_CITY = 3  #  City name
+  APT_DESC = 4  #  Airport description,                                         
+  APT_REG  = 5  #  Geographical region code (within a country such as US-TX)    
+  APT_RWYS = 6  #  Number of runways                                            
+  APT_LONG = 7  #  Longest paved runway in feet                                 
+  APT_ELEV = 8  #  Elevation (AMSL) in feet                                     
+  APT_CTRY = 9  #  ISO 3166 2 character country code                            
+  APT_CONT = 10 #  Continent code                                               
+  APT_LAT  = 11 #  Latitude                                                            
+  APT_LON  = 12 #  Longitude                                                           
+  
+  # Columns (fields) in the ROUTE_DATA table
+  RTE_FROM = 0  # ID of 'from' airport
+  RTE_TO   = 1  # ID of 'to' airport
+  RTE_DIST = 2  # Distance in miles
+
   XML_COMMENT_WIDTH = 90 # Width of comment lines in generated XML files
 end

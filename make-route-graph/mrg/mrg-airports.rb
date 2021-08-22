@@ -30,8 +30,9 @@ REG="Regional Airport"
 #      8. Longest paved runway in feet
 #      9. Elevation (AMSL) in feet
 #     10. ISO 3166 2 character country code
-#     11. Latitude
-#     12. Longitude
+#     11. Continent code
+#     12. Latitude
+#     13. Longitude
 #
 # TODO: LATER: Replace UK with the correct ISO 3166 code of GB.
 #
