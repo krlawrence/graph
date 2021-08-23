@@ -60,14 +60,15 @@ class MakeRouteGraph
     # airports have been added) and these IDs are needed by methods that create edges
     # between airports and continents or countries. Similarly, edge IDs will be generated
     # starting one after the last continent ID.
+    
     id = AIRPORT_DATA[AIRPORT_DATA.size - 1][0] + 1
     COUNTRIES.each do |k,v|
-      COUNTRIES[k][1] = id
+      COUNTRIES[k][COT_ID] = id
       id += 1
     end
 
     CONTINENTS.each do |k,v|
-      CONTINENTS[k][1] = id
+      CONTINENTS[k][COT_ID] = id
       id += 1
     end
   end
@@ -90,9 +91,26 @@ class MakeRouteGraph
   # ---------------------------------------------------------------------------------------
   # Display the name and ISO code for each country in the graph.
   # ---------------------------------------------------------------------------------------
-  def displayCountries()
+  def displayCountries(includeId=@all)
     COUNTRIES.each do |k,v|
-      printf "%2s,%s\n",k,v[0]
+      s = sprintf "%2s,%s",k,v[COT_NAME]
+      if includeId
+        s = sprintf("%4d,",v[COT_ID]) + s
+      end
+      puts s
+    end
+  end
+
+  # ---------------------------------------------------------------------------------------
+  # Display the name and ISO code for each continent in the graph.
+  # ---------------------------------------------------------------------------------------
+  def displayContinents(includeId=@all)
+    CONTINENTS.each do |k,v|
+      s = sprintf "%2s,%s",k,v[COT_NAME]
+      if includeId
+        s = sprintf("%4d,",v[COT_ID]) + s
+      end
+      puts s
     end
   end
 

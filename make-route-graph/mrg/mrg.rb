@@ -12,40 +12,40 @@ require_relative 'mrg-core'
 require_relative 'mrg-constants'
 include MRGConstants
 
-gephi     = false  # If set build Gephi compatible labels when generating GraphML
-graphml   = false  # If set generate GraphML output
-tp3       = true   # If set build GraphML for Tinkerpop 3 (the default).
-tp2       = false  # If set build GraphML for Tinkerpop 2. (legacy mode not that useful anymore) 
-big       = false  # If set generate the full graph with more routes and airports
-apcode    = false  # If set do not build graph just produce a mapping table of airports and IDs
-vis       = false  # If set generate Visjs output instead of GraphML
-html      = false  # If set generate an HTML format table of the airports
-help      = false  # If set display just help info
-usage     = false  # If set display basic usage info
-haversine = false  # If set use the Haversine formula to emit Great Circles distances (miles)
-hid       = false  # If set works like hv but output is more suitable for a CSV parser.
-hcode     = false  # If set works like hx but output uses IATA codes and not ID numbers.
-verbose   = false  # If set Enable verbose output. Useful for debugging. Only affects -hv currently
-check     = false  # If set check the airport definitions for possible errors.                
-all       = false  # If set do additional processing for -check and -stats
-from      = false  # If set display all routes to the airport specified in param (forces bc to be on)
-list      = false  # If set display a list of airport codes and descriptions
-stats     = false  # If set display details about the number of airports and routes etc.
-degree    = false  # If set display the in and out degree for a specific airport
-degrees   = false  # If set display the in and out degree of each airport
-country   = false  # If set display airports contained within the specified country
-countries = false  # If set display airports contained within the specified country
-iata      = false  # If set display details of the airport with the given IATA code
-icao      = false  # If set display details of the airport with the given ICAO code
-findid    = false  # If set display details of the airport with the given ID
-region    = false  # If set display airports in the specified region
-city      = false  # If set display airports with the given city name
-distance  = false  # If set return distance for specified route.
-gte       = false  # If set return routes greater or equal to specified value
-lte       = false  # If set return routes greater or equal to specified value
-param     = ""     # Country or code to be used when -country, -region, -to or -from is set
-gremlin   = false  # If set generate a Gremlin script that builds the graph.
-
+gephi      = false  # If set build Gephi compatible labels when generating GraphML
+graphml    = false  # If set generate GraphML output
+tp3        = true   # If set build GraphML for Tinkerpop 3 (the default).
+tp2        = false  # If set build GraphML for Tinkerpop 2. (legacy mode not that useful anymore) 
+big        = false  # If set generate the full graph with more routes and airports
+apcode     = false  # If set do not build graph just produce a mapping table of airports and IDs
+vis        = false  # If set generate Visjs output instead of GraphML
+html       = false  # If set generate an HTML format table of the airports
+help       = false  # If set display just help info
+usage      = false  # If set display basic usage info
+haversine  = false  # If set use the Haversine formula to emit Great Circles distances (miles)
+hid        = false  # If set works like hv but output is more suitable for a CSV parser.
+hcode      = false  # If set works like hx but output uses IATA codes and not ID numbers.
+verbose    = false  # If set Enable verbose output. Useful for debugging. Only affects -hv currently
+check      = false  # If set check the airport definitions for possible errors.                
+all        = false  # If set do additional processing for -check and -stats
+from       = false  # If set display all routes to the airport specified in param (forces bc to be on)
+list       = false  # If set display a list of airport codes and descriptions
+stats      = false  # If set display details about the number of airports and routes etc.
+degree     = false  # If set display the in and out degree for a specific airport
+degrees    = false  # If set display the in and out degree of each airport
+country    = false  # If set display airports contained within the specified country
+countries  = false  # If set display the list of countries
+continents = false  # If set display the list of continents
+iata       = false  # If set display details of the airport with the given IATA code
+icao       = false  # If set display details of the airport with the given ICAO code
+findid     = false  # If set display details of the airport with the given ID
+region     = false  # If set display airports in the specified region
+city       = false  # If set display airports with the given city name
+distance   = false  # If set return distance for specified route.
+gte        = false  # If set return routes greater or equal to specified value
+lte        = false  # If set return routes greater or equal to specified value
+param      = ""     # Country or code to be used when -country, -region, -to or -from is set
+gremlin    = false  # If set generate a Gremlin script that builds the graph.
 
 # ---------------------------------------------------------------------------------------
 # Display some basic usage information for case where no options are specified
@@ -93,8 +93,11 @@ def displayHelp()
   puts "                 The in and out values may not always match as not all routes have return flights."
   puts
   puts "  countries      Display a list of countries currently available in the graph."
+  puts "                 If -all is specified also include the generated country ID."
   puts "  country [cry]  Display all airports in country 'cry' (must be the only option, -big will be assumed)"
   puts "                 example: country US. The country code is an ISO 3166-1 two letter code."
+  puts "  continents     Display a list of the continent codes and names."
+  puts "                 If -all is specified also include the generated continent ID."
   puts
   puts "  region [reg]   Display all airports in region 'reg' (-big will be assumed)"
   puts "                 Example: region US-TX. Region uses the ISO 3166-2 code."
@@ -112,7 +115,8 @@ def displayHelp()
   puts
   puts "Scope Modifiers"
   puts "----------------"
-  puts "  -all           Do additional processing (only applies to check, stats, list and hruby)"
+  puts "  -all           Do additional processing."
+  puts "                 Currently affects: check,stats,list,hruby,countries and continents."
   puts "  -v             Enable verbose mode. Only affects hruby currently."
   puts
   puts "Graph Data Validation"
@@ -218,6 +222,7 @@ else
       when "degrees" then degrees = true
       when "stats" then stats = true
       when "countries" then countries = true
+      when "continents" then continents = true
       when "check" then check = true
       when "-all" then all = true
       when "gremlin" then gremlin = true
@@ -242,7 +247,9 @@ case
   when country
     mrg.displayAirportsInCountry(param) 
   when countries
-    mrg.displayCountries() 
+    mrg.displayCountries(all) 
+  when continents
+    mrg.displayContinents() 
   when city
     mrg.displayAirportsInCity(param)
   when from

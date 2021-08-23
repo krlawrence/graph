@@ -49,5 +49,10 @@ module MRGConstants
   RTE_TO   = 1  # ID of 'to' airport
   RTE_DIST = 2  # Distance in miles
 
+  # Columns (fields) in the values fields for the COUNTRIES and 
+  # CONTINENTS hash tables.
+  COT_NAME = 0  # Country/Continent name
+  COT_ID   = 1  # Generated ID
+
   XML_COMMENT_WIDTH = 90 # Width of comment lines in generated XML files
 end
