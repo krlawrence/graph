@@ -18,7 +18,8 @@ The list of available commands and options can be obtained using :
 ```
 $ ruby mrg -?
 
-MakeRouteGraph version: 0.87 , 2021-Aug-14
+
+MakeRouteGraph version: 0.87 , 2021-Aug-23
 
 Usage: mrg.rb command [options|value]
 Use -? to get additional help.
@@ -55,8 +56,11 @@ Graph Information
                  The in and out values may not always match as not all routes have return flights.
 
   countries      Display a list of countries currently available in the graph.
+                 If -all is specified also include the generated country ID.
   country [cry]  Display all airports in country 'cry' (must be the only option, -big will be assumed)
                  example: country US. The country code is an ISO 3166-1 two letter code.
+  continents     Display a list of the continent codes and names.
+                 If -all is specified also include the generated continent ID.
 
   region [reg]   Display all airports in region 'reg' (-big will be assumed)
                  Example: region US-TX. Region uses the ISO 3166-2 code.
@@ -74,7 +78,8 @@ Graph Information
 
 Scope Modifiers
 ----------------
-  -all           Do additional processing (only applies to check, stats, list and hruby)
+  -all           Do additional processing.
+                 Currently affects: check,stats,list,hruby,countries and continents.
   -v             Enable verbose mode. Only affects hruby currently.
 
 Graph Data Validation
