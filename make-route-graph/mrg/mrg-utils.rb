@@ -29,7 +29,7 @@ module MRGUtils
   def getAirportId(code)
     n = 0
     AIRPORT_DATA.each do |ap|
-      if ap[1] == code
+      if ap[APT_IATA] == code
         n = ap[0]
         break
       end
@@ -76,10 +76,10 @@ module MRGUtils
     a = getAirportId(from)
     b = getAirportId(to)
     if a!=0 and b!=0
-      lat1 = AIRPORT_DATA[a-1][11].to_f
-      lon1 = AIRPORT_DATA[a-1][12].to_f
-      lat2 = AIRPORT_DATA[b-1][11].to_f
-      lon2 = AIRPORT_DATA[b-1][12].to_f
+      lat1 = AIRPORT_DATA[a-1][APT_LAT].to_f
+      lon1 = AIRPORT_DATA[a-1][APT_LON].to_f
+      lat2 = AIRPORT_DATA[b-1][APT_LAT].to_f
+      lon2 = AIRPORT_DATA[b-1][APT_LON].to_f
       return haversineDistance(lat1,lon1,lat2,lon2)
     else
       return -1
@@ -94,18 +94,18 @@ module MRGUtils
   def printFormatted(a,more)
     if more
       puts "ID        : #{a[0]}"
-      puts "IATA      : #{a[1]}"
+      puts "IATA      : #{a[APT_IATA]}"
       puts "ICAO      : #{a[2]}"
       puts "City      : #{a[3]}"
       puts "Desc      : #{a[4]}"
       puts "Region    : #{a[5]}"
-      puts "Runways   : #{a[6]}"
-      puts "Longest   : #{fmtsep(a[7])} (ft)"
-      puts "Elevation : #{fmtsep(a[8])} (ft)"
+      puts "Runways   : #{a[APT_RWYS]}"
+      puts "Longest   : #{fmtsep(a[APT_LONG])} (ft)"
+      puts "Elevation : #{fmtsep(a[APT_ELEV])} (ft)"
       puts "Country   : #{a[9]}"
       puts "Continent : #{a[10]}"
-      puts "Latitude  : #{a[11]}"
-      puts "Longitude : #{a[12]}"
+      puts "Latitude  : #{a[APT_LAT]}"
+      puts "Longitude : #{a[APT_LON]}"
     else
       printf "%4s, %s, %s, %s, %s, %s, %s\n",a[0],a[1],a[2],a[4],a[3],a[5],a[9]
     end
@@ -128,7 +128,7 @@ module MRGUtils
   def avgRunways()
     tot = 0.0
     AIRPORT_DATA.each do |r|
-      tot += r[6]
+      tot += r[APT_RWYS]
     end
 
     return tot/AIRPORT_DATA.size
@@ -175,9 +175,9 @@ module MRGUtils
     rw = 0
     cod = ""
     AIRPORT_DATA.each do |a|
-      if a[7] > rw
-        rw = a[7]
-        cod = a[1]
+      if a[APT_LONG] > rw
+        rw = a[APT_LONG]
+        cod = a[APT_IATA]
       end
     end
     return cod,rw
@@ -190,9 +190,9 @@ module MRGUtils
     rw = 99999
     cod = ""
     AIRPORT_DATA.each do |a|
-      if a[7] < rw
-        rw = a[7]
-        cod = a[1]
+      if a[APT_LONG] < rw
+        rw = a[APT_LONG]
+        cod = a[APT_IATA]
       end
     end
     return cod,rw
@@ -205,9 +205,9 @@ module MRGUtils
     lw = 99999
     cod = ""
     AIRPORT_DATA.each do |a|
-      if a[8] < lw
-        lw = a[8]
-        cod = a[1]
+      if a[APT_ELEV] < lw
+        lw = a[APT_ELEV]
+        cod = a[APT_IATA]
       end
     end
     return cod,lw
@@ -220,9 +220,9 @@ module MRGUtils
     hi = 0
     cod = ""
     AIRPORT_DATA.each do |a|
-      if a[8] > hi
-        hi = a[8]
-        cod = a[1]
+      if a[APT_ELEV] > hi
+        hi = a[APT_ELEV]
+        cod = a[APT_IATA]
       end
     end
     return cod,hi
@@ -235,9 +235,9 @@ module MRGUtils
     lat = 0.0
     cod = ""
     AIRPORT_DATA.each do |a|
-      if a[11].to_f > lat
-        lat = a[11].to_f
-        cod = a[1]
+      if a[APT_LAT].to_f > lat
+        lat = a[APT_LAT].to_f
+        cod = a[APT_IATA]
       end
     end
     return cod,lat
@@ -250,9 +250,9 @@ module MRGUtils
     lat = 90.0
     cod = ""
     AIRPORT_DATA.each do |a|
-      if a[11].to_f < lat
-        lat = a[11].to_f
-        cod = a[1]
+      if a[APT_LAT].to_f < lat
+        lat = a[APT_LAT].to_f
+        cod = a[APT_IATA]
       end
     end
     return cod,lat
@@ -265,9 +265,9 @@ module MRGUtils
     lon = -180.0
     cod = ""
     AIRPORT_DATA.each do |a|
-      if a[12].to_f > lon
-        lon = a[12].to_f
-        cod = a[1]
+      if a[APT_LON].to_f > lon
+        lon = a[APT_LON].to_f
+        cod = a[APT_IATA]
       end
     end
     return cod,lon
@@ -280,9 +280,9 @@ module MRGUtils
     lon = 0.0
     cod = ""
     AIRPORT_DATA.each do |a|
-      if a[12].to_f < lon
-        lon = a[12].to_f
-        cod = a[1]
+      if a[APT_LON].to_f < lon
+        lon = a[APT_LON].to_f
+        cod = a[APT_IATA]
       end
     end
     return cod,lon
@@ -295,9 +295,9 @@ module MRGUtils
     lat = 90.0
     cod = ""
     AIRPORT_DATA.each do |a|
-      if a[11].to_f.abs < lat.abs
-        lat = a[11].to_f
-        cod = a[1]
+      if a[APT_LAT].to_f.abs < lat.abs
+        lat = a[APT_LAT].to_f
+        cod = a[APT_IATA]
       end
     end
     return cod,lat
@@ -310,9 +310,9 @@ module MRGUtils
     lon = 90.0
     cod = ""
     AIRPORT_DATA.each do |a|
-      if a[12].to_f.abs < lon.abs
-        lon = a[12].to_f
-        cod = a[1]
+      if a[APT_LON].to_f.abs < lon.abs
+        lon = a[APT_LON].to_f
+        cod = a[APT_IATA]
       end
     end
     return cod,lon
@@ -326,17 +326,38 @@ module MRGUtils
     maxv = 0
     maxc = ""
     AIRPORT_DATA.each do |a|
-      if cont.has_key?(a[10])
-        cont[a[10]] += 1
-        if cont[a[10]] > maxv
-          maxv = cont[a[10]]
-          maxc = a[10]
+      if cont.has_key?(a[APT_CONT])
+        cont[a[APT_CONT]] += 1
+        if cont[a[APT_CONT]] > maxv
+          maxv = cont[a[APT_CONT]]
+          maxc = a[APT_CONT]
         end
       else
-        cont[a[10]] = 1
+        cont[a[APT_CONT]] = 1
       end
     end
     return maxv, CONTINENTS[maxc][0]
+  end
+
+  # ---------------------------------------------------------------------------------------
+  #  Return the region with the most airports and the count
+  # ---------------------------------------------------------------------------------------
+  def calcRegionDegree()
+    regn = Hash[]
+    maxv = 0
+    id = 1
+    AIRPORT_DATA.each do |a|
+      if regn.has_key?(a[APT_REG])
+        regn[a[APT_REG]] += 1
+        if regn[a[APT_REG]] > maxv
+          maxv = regn[a[APT_REG]]
+          id = a[0]
+        end
+      else
+        regn[a[APT_REG]] = 1
+      end
+    end
+    return maxv, AIRPORT_DATA[id-1][APT_REG]
   end
 
   # ---------------------------------------------------------------------------------------
@@ -402,7 +423,7 @@ module MRGUtils
 
     AIRPORT_DATA.each do |ap|
       id = ap[0]
-      code = ap[1]
+      code = ap[APT_IATA]
       outdeg,indeg = calcAirportDegree(code)
 
       if table

@@ -444,6 +444,8 @@ class MakeRouteGraph
         smd +="#{tmp},"
       end
       puts "  Maximum airport node degree (routes in and out) is #{deg} (#{smd[0..-2]})"
+      reg,nc = calcRegionDegree()
+      puts "  Region with the most airports: #{nc} (#{reg})"
       deg,nc = calcCountryDegree()
       puts "  Country with the most airports: #{nc} (#{deg})"
       deg,nc = calcContinentDegree()
