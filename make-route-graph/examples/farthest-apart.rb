@@ -24,8 +24,6 @@ ARGV.each do |arg|
   end
 end
 
-CHECKPOINT = ARGV[3].to_i
-
 mrg = MakeRouteGraph.new(allAirports:big)
 
 max = 0      # Maximum distance found
