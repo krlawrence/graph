@@ -34,7 +34,7 @@ col = 0      # Used to track column wrapping in verbose mode
 
 t1 = Time.now()
 
-# For each airport calculate the distance the every other airport and
+# For each airport calculate the distance to every other airport and
 # record the information if the distance is a new maxximum. By having
 # 'c' track the first airport we need to compare the current airport
 # to we avoid comparing any two airports twice.
