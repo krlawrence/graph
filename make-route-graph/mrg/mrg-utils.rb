@@ -67,10 +67,33 @@ module MRGUtils
     dMi = RMILES * c  # delta between the two points in miles  
 
     return dMi
-  end  
+  end
 
   # ---------------------------------------------------------------------------------------
-  # Calculate the haversine distance between two airports using IATA codes
+  # Calculate the haversine distance between two airports for the given IDs.
+  #
+  # This is the most efficient way to start the calculation as the IDs do not have to be
+  # looked up first from an IATA code. If doing a lot of these calculations (e.g. in a
+  # loop) this is the best method to use as the starting point.
+  # ---------------------------------------------------------------------------------------
+  def haversineDistanceById(from,to)
+    if (1..AIRPORT_DATA.size).include? from and (1..AIRPORT_DATA.size).include? to
+      lat1 = AIRPORT_DATA[from-1][APT_LAT].to_f
+      lon1 = AIRPORT_DATA[from-1][APT_LON].to_f
+      lat2 = AIRPORT_DATA[to-1][APT_LAT].to_f
+      lon2 = AIRPORT_DATA[to-1][APT_LON].to_f
+      return haversineDistance(lat1,lon1,lat2,lon2)
+    else
+      return -1
+    end
+  end
+
+  # ---------------------------------------------------------------------------------------
+  # Calculate the haversine distance between two airports using IATA codes.
+  #
+  # This entry point is more convenient in many cases where only the airport IATA code is
+  # known, but is more expensive as it has to first scan the AIRPORT_DATA table looking
+  # for the IDs which is, worst case, an additional O(n) lookup for each.
   # ---------------------------------------------------------------------------------------
   def haversineDistanceByCode(from,to)
     a = getAirportId(from)
@@ -91,19 +114,19 @@ module MRGUtils
   # to be a row from the AIRPORT_DATA table. If 'more' is true a nice tabular list is
   # printed. If 'more' is false, a single line, abbreviated form, is printed.
   # ---------------------------------------------------------------------------------------
-  def printFormatted(a,more)
+  def printFormatted(a,more=true)
     if more
-      puts "ID        : #{a[0]}"
+      puts "ID        : #{a[APT_ID]}"
       puts "IATA      : #{a[APT_IATA]}"
-      puts "ICAO      : #{a[2]}"
-      puts "City      : #{a[3]}"
-      puts "Desc      : #{a[4]}"
-      puts "Region    : #{a[5]}"
+      puts "ICAO      : #{a[APT_ICAO]}"
+      puts "City      : #{a[APT_CITY]}"
+      puts "Desc      : #{a[APT_DESC]}"
+      puts "Region    : #{a[APT_REG]}"
       puts "Runways   : #{a[APT_RWYS]}"
       puts "Longest   : #{fmtsep(a[APT_LONG])} (ft)"
       puts "Elevation : #{fmtsep(a[APT_ELEV])} (ft)"
-      puts "Country   : #{a[9]}"
-      puts "Continent : #{a[10]}"
+      puts "Country   : #{a[APT_CTRY]}"
+      puts "Continent : #{a[APT_CONT]}"
       puts "Latitude  : #{a[APT_LAT]}"
       puts "Longitude : #{a[APT_LON]}"
     else
@@ -142,10 +165,10 @@ module MRGUtils
     frm = 0
     to = 0
     ROUTE_DATA.each do |r|
-      if r[2] < sh
-        sh = r[2]
-        frm = r[0]
-        to = r[1] 
+      if r[RTE_DIST] < sh
+        sh = r[RTE_DIST]
+        frm = r[RTE_FROM]
+        to = r[RTE_TO] 
       end
     end
     return to,frm,sh
@@ -159,10 +182,10 @@ module MRGUtils
     frm = 0
     to = 0
     ROUTE_DATA.each do |r|
-      if r[2] > lg
-        lg = r[2]
-        frm = r[0]
-        to = r[1] 
+      if r[RTE_DIST] > lg
+        lg = r[RTE_DIST]
+        frm = r[RTE_FROM]
+        to = r[RTE_TO] 
       end
     end
     return to,frm,lg
