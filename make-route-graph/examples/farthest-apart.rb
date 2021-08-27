@@ -77,13 +77,13 @@ AIRPORT_DATA.each do |a|
 end
 
 # Print a summary if required
+from = AIRPORT_DATA[maxf-1][APT_IATA]
+to = AIRPORT_DATA[maxt-1][APT_IATA]
 if summary
   puts
   mrg.printFormatted(AIRPORT_DATA[maxf-1])
   puts("** ----- **")
   mrg.printFormatted(AIRPORT_DATA[maxt-1])
-  from = AIRPORT_DATA[maxf-1][APT_IATA]
-  to = AIRPORT_DATA[maxt-1][APT_IATA]
   puts("** ----- **")
-  puts "#{from}-#{to} ==> #{max.ceil(2)} miles"
 end
+puts "\n#{from}-#{to} ==> #{max.ceil(2)} miles"
