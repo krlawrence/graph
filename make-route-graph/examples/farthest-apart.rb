@@ -37,7 +37,9 @@ t1 = Time.now()
 # For each airport calculate the distance to every other airport and
 # record the information if the distance is a new maxximum. By having
 # 'c' track the first airport we need to compare the current airport
-# to we avoid comparing any two airports twice.
+# to we avoid comparing any two airports twice. This search is more or
+# less O((n^2)/2). The exact number of comparissons done can be 
+# calculated using "(1..n-2).reduce(:+)"
 AIRPORT_DATA.each do |a|
   c.upto AIRPORT_DATA.size()-1 do |x|
     from = a[APT_ID]
