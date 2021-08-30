@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------------------------
 # route-distances.rb
 #
-# Usage: route-check-file.rb <filename>
+# Usage: route-distances.rb <filename> [-array]
 #
 # Use this script to calculate the distance between one or more airport pairs. Each
 # route's distance is calculated and no attempt is made to look for an existing route in
