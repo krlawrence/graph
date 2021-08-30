@@ -466,15 +466,15 @@ class MakeRouteGraph
   # avoids having to maintain IDs in the ROUTE_DATA, COUNTRY and CONTINENT tables and
   # adjust them whenevr the airport count changes.
   # ---------------------------------------------------------------------------------------
-  def generateGraphML()
+  def generateGraphML(full=@big)
     printGraphMLHeader()
     generateGraphMLAirportNodes()
-    if @big
+    if full
       generateGraphMLCountryNodes()
       generateGraphMLContinentNodes()
     end
     nextId = generateGraphMLRouteEdges()
-    if @big
+    if full
       nextId = generateGraphMLCountryEdges(nextId)
       nextId = generateGraphMLContinentEdges(nextId)
     end

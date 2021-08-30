@@ -134,6 +134,10 @@
 #                       ** This version of the data was not put into GitHub. 
 #   31-Jul-2021  -KRL-  Added 20 route pairs (40 total routes)                                 v0.86
 #                       ** This version of the data was put into GitHub on Jul 31st 2021.
-#   25-Aug-2021  -KRL-  Refactored the original Ruby scripts into better organized             v0.87
+#   30-Aug-2021  -KRL-  Refactored the original Ruby scripts into better organized             v0.87
 #                       classes and modules.
+#                       Added BER/EDDB, changed the ICAO for SXF to 'none' to avoid conflict
+#                       with BER but left in the dataset. Marked SXF and TXL as closed. Left 
+#                       the region for SXF as DE-BR but used the new DE-BB for BER. Moved
+#                       all TXL and SXF routes to BER and recomputed distances.
 #                       Added 2 route pairs (4 total routes) 
