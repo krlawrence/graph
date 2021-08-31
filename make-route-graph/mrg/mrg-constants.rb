@@ -6,7 +6,7 @@
 # Author: Kelvin R Lawrence  27th November-2013 - Present
 #----------------------------------------------------------------------------------------
 module MRGConstants
-  VERSION = "0.87" 
+  VERSION = "0.88" 
   VERSION_DATE = "2021-Aug-31" 
   VERSION_TIME = Time.new.utc 
   AUTHOR = "Kelvin R. Lawrence" 

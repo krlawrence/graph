@@ -153,6 +153,21 @@ class MakeRouteGraph
   end  
 
   # ---------------------------------------------------------------------------------------
+  # Display details about the airport farthest from the given IATA code.
+  # ---------------------------------------------------------------------------------------
+  def displayFarthestFrom(code)
+    fromId,toId,dist = farthestAwayByCode(code)
+    dist = dist.ceil(3)
+
+    if fromId == 0
+      puts "No airport found for IATA code: #{code}"
+    else
+      to = AIRPORT_DATA[toId-1][APT_IATA]
+      puts "#{code}-#{to} is #{dist} miles"
+    end
+  end
+
+  # ---------------------------------------------------------------------------------------
   # Display each airport code with its corresponding ID.
   # ---------------------------------------------------------------------------------------
   def displayCodeAndId()

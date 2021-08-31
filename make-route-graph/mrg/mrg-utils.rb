@@ -110,6 +110,34 @@ module MRGUtils
   end
 
   # ---------------------------------------------------------------------------------------
+  # Find the farthest away airport from the given IATA code. This is computed using the
+  # Haversine distance, regardless of whether an actual route exists or not.
+  #
+  # If the provided IATA code is not in the AIRPORT_DATA table an ID of 0 is returned
+  # for both the from and to airports and the distance will be -1.
+  # ---------------------------------------------------------------------------------------
+  def farthestAwayByCode(from)
+    maxd = -1  # Maximum distance found
+    maxId = 0  # Farthest away airport
+
+    fromId = getAirportId(from)
+
+    AIRPORT_DATA.each do |a|
+      if a[APT_ID] == fromId
+        next
+      else
+        toId = a[APT_ID]
+        dist = haversineDistanceById(fromId,toId)
+        if dist > maxd
+          maxd = dist
+          maxId = toId
+        end
+      end
+    end
+    return fromId,maxId,maxd
+  end
+
+  # ---------------------------------------------------------------------------------------
   # Pretty print some information about the given airport. The value for 'a' is expected
   # to be a row from the AIRPORT_DATA table. If 'more' is true a nice tabular list is
   # printed. If 'more' is false, a single line, abbreviated form, is printed.

@@ -44,8 +44,9 @@ city       = false  # If set display airports with the given city name
 distance   = false  # If set return distance for specified route.
 gte        = false  # If set return routes greater or equal to specified value
 lte        = false  # If set return routes greater or equal to specified value
-param      = ""     # Country or code to be used when -country, -region, -to or -from is set
 gremlin    = false  # If set generate a Gremlin script that builds the graph.
+farthest   = false  # If display the farthest away airport from the given IATA code
+param      = ""     # Country or code to be used when -country, -region, -to or -from is set
 
 # ---------------------------------------------------------------------------------------
 # Display some basic usage information for case where no options are specified
@@ -113,6 +114,10 @@ def displayHelp()
   puts "                 Example: id 50"
   puts "  apcode         Display a table of airport codes and IDs"
   puts
+  puts "  far [iata]     Display information about the airport farthest away from the given IATA code."
+  puts "                 The calculation is based on actual distance and not existing routes."
+  puts "                 (-big will be assumed)."
+  puts
   puts "Scope Modifiers"
   puts "----------------"
   puts "  -all           Do additional processing."
@@ -176,7 +181,7 @@ end
 command = ARGV[0]
 if command == nil
   usage = true
-elsif command =~ /^from$|^to$|^degree$|^country$|^iata$|^icao$|^region$|^dist$|^gte$|^lte$|^id$|^city$/
+elsif command =~ /^from$|^to$|^degree$|^country$|^iata$|^icao$|^region$|^dist$|^gte$|^lte$|^id$|^city$|^far$/
   if ARGV[1] == nil
     puts "A value must be specified: #{$PROGRAM_NAME} #{ARGV[0]} <value>"                                           
     exit
@@ -194,6 +199,7 @@ elsif command =~ /^from$|^to$|^degree$|^country$|^iata$|^icao$|^region$|^dist$|^
       when "gte" then gte = true
       when "lte" then lte = true
       when "id" then findid = true
+      when "far" then farthest = true
       else icao = true
     end
   end
@@ -256,6 +262,8 @@ case
     mrg.displayRoutesFrom(param)
   when to
     mrg.displayRoutesTo(param)
+  when farthest
+    mrg.displayFarthestFrom(param)
   when findid
     mrg.displayAirportWithId(param)
   when region
