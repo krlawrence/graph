@@ -244,7 +244,7 @@ EXTRA_AIRPORTS =
             [197,'MCY','YBSU',"Maroochydore",'Sunshine Coast Airport','AU-QLD',2,5896,15,'AU','OC','-26.6033000946','153.091003418'],
             [198,'DUS','EDDL',"Dusseldorf","Dusseldorf #{APT}",'DE-NW',2,9842,147,'DE','EU','51.2895011901855','6.76677989959717'],
             [199,'GUM','PGUM',"Hagta","Antonio B. Won Pat #{APT}",'GU-U-A',2,10015,298,'GU','OC','13.4834003448','144.796005249'],
-            [200,'TXL','EDDT',"Berlin","Berlin, Tegel #{APT}",'DE-BE',2,9918,122,'DE',"EU",'52.5597000122','13.2876996994'],
+            [200,'TXL','EDDT',"Berlin","Berlin, Tegel #{APT} *Closed*",'DE-BE',2,9918,122,'DE',"EU",'52.5597000122','13.2876996994'],
             [201,'CMB','VCBI',"Colombo","Colombo, Bandaranaike #{APT}",'LK-1',1,10991,30,'LK','AS','7.1807599067688','79.8841018676758'],
             [202,'LIS','LPPT',"Lisbon",'Lisbon Portela Airport','PT-11',1,12484,374,'PT','EU','38.7812995911','-9.13591957092'],
             [203,'GIB','LXGB',"Gibraltar",'Gibraltar Airport','GI-U-A',1,6000,15,'GI','EU','36.1511993408','-5.34965991974'],
@@ -517,7 +517,7 @@ EXTRA_AIRPORTS =
             [470,'CFE','LFLC','Clermont-Ferrand/Auvergne','Clermont-Ferrand Auvergne Airport','FR-C',2,9892,1090,'FR','EU','45.7867012023926','3.16916990280151'],
             [471,'PRN','BKPR','Prishtina',"Priština #{APT}",'KS-U-A',1,8165,1789,'KS','EU','42.5727996826172','21.0358009338379'],
             [472,'HME','DAUH','Hassi Messaoud','Oued Irara Airport','DZ-30',2,9843,463,'DZ','AF','31.6730003357','6.14043998718'],
-            [473,'SXF','EDDB','Berlin',"Berlin-Schönefeld #{APT}",'DE-BR',2,9843,157,'DE','EU','52.3800010681152','13.522500038147'],
+            [473,'SXF','none','Berlin',"Berlin-Schönefeld #{APT} *Closed*",'DE-BR',2,9843,157,'DE','EU','52.3800010681152','13.522500038147'],
             [474,'ERF','EDDE','Erfurt','Erfurt Airport','DE-TH',1,8530,1036,'DE','EU','50.9798011779785','10.9581003189087'],
             [475,'BFS','EGAA','Belfast',"Belfast #{APT}",'GB-NIR',2,9121,268,'UK','EU','54.6575012207','-6.21582984924'],
             [476,'NQY','EGHQ','Newquay','Newquay Cornwall Airport','GB-ENG',1,9006,390,'UK','EU','50.440601348877','-4.99540996551514'],
@@ -3574,5 +3574,7 @@ EXTRA_AIRPORTS =
            [3499,'RRR','NTKO','Raroia','Raroia Airport','PF-U-A',1,3871,12,'PF','OC','-16.044999','-142.476944'],
            [3500,'PKP','NTGP','Puka Puka','Puka Puka Airport','PF-U-A',1,3051,5,'PF','OC','-14.8094997406006','-138.813003540039'],
            [3501,'NAU','NTGN','Napuka Island','Napuka Island Airport','PF-U-A',1,4101,7,'PF','OC','-14.1767997741699','-141.266998291016'],
-           [3502,'FGU','NTGB','Fangatau','Fangatau Airport','PF-U-A',1,3936,9,'PF','OC','-15.819899559021','-140.886993408203']]
+           [3502,'FGU','NTGB','Fangatau','Fangatau Airport','PF-U-A',1,3936,9,'PF','OC','-15.819899559021','-140.886993408203'],
+           #30-Aug-2021 V0.87
+           [3503,'BER','EDDB','Berlin',"Berlin Brandenburg #{APT}",'DE-BB',2,13123,157,'DE','EU','52.378333','13.520556']]
 end

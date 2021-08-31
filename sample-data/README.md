@@ -16,7 +16,7 @@ The `edges.csv` file is intended to be used with the `GraphFromCSV.java` sample 
 
 ## Latest data
 
-The two files `air-routes-latest.graphml` and `air-routes-small-latest.graphml` contain additional routes and airports added since the original version was uploaded. They are provided in case anyone wants to experiment with some more recent data. The latest data set adds 128 additional airports and 7,256 additional routes to the original `air-routes.graphml` data set.
+The two files `air-routes-latest.graphml` and `air-routes-small-latest.graphml` contain additional routes and airports added since the original version was uploaded. They are provided in case anyone wants to experiment with some more recent data. The latest data set adds 129 additional airports and 7,132 additional routes to the original `air-routes.graphml` data set.
 
 ## Additional formats
 
