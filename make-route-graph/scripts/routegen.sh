@@ -23,10 +23,10 @@ $mrg graphml -tp3 > air-routes-small-latest.graphml
 echo "      air-routes-latest.graphml"
 $mrg  graphml -tp3 -big > air-routes-latest.graphml
 echo "*** Generating VisJs files"
-echo "      air-routes-small-visjs-latest.html"
-$mrg vis > air-routes-small-visjs-latest.html
-echo "      air-routes-visjs-latest.html"
-$mrg vis -big > air-routes-visjs-latest.html
+echo "      air-routes-small-latest-visjs.html"
+$mrg vis > air-routes-small-latest-visjs.html
+echo "      air-routes-latest-visjs.html"
+$mrg vis -big > air-routes-latest-visjs.html
 echo "*** Generating airport degree list"
 if [ "x$1" == "xmac" ]; then
   ./make-degree-list.sh mac

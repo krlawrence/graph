@@ -3575,6 +3575,6 @@ EXTRA_AIRPORTS =
            [3500,'PKP','NTGP','Puka Puka','Puka Puka Airport','PF-U-A',1,3051,5,'PF','OC','-14.8094997406006','-138.813003540039'],
            [3501,'NAU','NTGN','Napuka Island','Napuka Island Airport','PF-U-A',1,4101,7,'PF','OC','-14.1767997741699','-141.266998291016'],
            [3502,'FGU','NTGB','Fangatau','Fangatau Airport','PF-U-A',1,3936,9,'PF','OC','-15.819899559021','-140.886993408203'],
-           #30-Aug-2021 V0.856
-           [3503,'BER','EDDB','Berlin',"Berlin Brandenburg #{APT}",'DE-BB',1,11811,157,'DE','EU','52.378333','13.520556']]
+           #30-Aug-2021 V0.87
+           [3503,'BER','EDDB','Berlin',"Berlin Brandenburg #{APT}",'DE-BB',2,13123,157,'DE','EU','52.378333','13.520556']]
 end
