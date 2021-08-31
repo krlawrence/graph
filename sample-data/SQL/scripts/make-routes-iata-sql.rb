@@ -2,7 +2,7 @@
 # make-routes-iata.rb
 #
 # This script will build a set of SQL INSERT commands from a list of routes in a CSV style
-# file. The CSV file should be from running mrg.rb with the 'hid' and optionally '-big' options
+# file. The CSV file should be from running mrg.rb with the 'hcode' and optionally '-big' options
 # specified.
 #
 # Author: Kelvin R Lawrence  27th November-2013 - Present
