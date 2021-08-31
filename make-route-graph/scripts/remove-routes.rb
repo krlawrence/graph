@@ -17,8 +17,6 @@
 # Author: Kelvin R Lawrence  27th November-2013 - Present
 # ---------------------------------------------------------------------------------------
 
-require_relative '../mrg/mrg-core'
-
 if ARGV[0] != nil
   fn = ARGV[0]
   if File.exist? fn
@@ -37,8 +35,6 @@ if ARGV[1] == nil
 else
   id = ARGV[1]
 end
-
-mrg = MakeRouteGraph.new(allAirports:true)
 
 routes.each do |r|
   x = r.strip()
