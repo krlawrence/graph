@@ -10,12 +10,12 @@ PREFIX op: <http://kelvinlawrence.net/air-routes/objectProperty/>
 INSERT DATA {
   GRAPH v:DefaultNamedGraph {
     r:0 rdfsyn:type c:Version .
-    r:0 rdfs:label "0.86" .
+    r:0 rdfs:label "0.87" .
     r:0 dtp:type "version" .
-    r:0 dtp:code "0.86" .
-    r:0 dtp:desc "Air Routes Data - Version: 0.86 Generated: 2021-07-31 18:41:21 UTC; Graph created by Kelvin R. Lawrence; Please let me know of any errors you find in the graph or routes that should be added." .
+    r:0 dtp:code "0.87" .
+    r:0 dtp:desc "Air Routes Data - Version: 0.87 Generated: 2021-08-31 15:28:31 UTC; Graph created by Kelvin R. Lawrence; Please let me know of any errors you find in the graph or routes that should be added." .
     r:0 dtp:author "Kelvin R. Lawrence" .
-    r:0 dtp:date "2021-07-31 18:41:21 UTC" .
+    r:0 dtp:date "2021-08-31 15:28:31 UTC" .
     r:1 rdfsyn:type c:Airport .
     r:1 rdfs:label "ATL" .
     r:1 dtp:type "airport" .
@@ -2807,7 +2807,7 @@ INSERT DATA {
     r:200 dtp:type "airport" .
     r:200 dtp:code "TXL" .
     r:200 dtp:icao "EDDT" .
-    r:200 dtp:desc "Berlin, Tegel International Airport" .
+    r:200 dtp:desc "Berlin, Tegel International Airport *Closed*" .
     r:200 dtp:region "DE-BE" .
     r:200 dtp:runways "2"^^xsd:integer .
     r:200 dtp:longest "9918"^^xsd:integer .
@@ -6628,8 +6628,8 @@ INSERT DATA {
     r:473 rdfs:label "SXF" .
     r:473 dtp:type "airport" .
     r:473 dtp:code "SXF" .
-    r:473 dtp:icao "EDDB" .
-    r:473 dtp:desc "Berlin-Schönefeld International Airport" .
+    r:473 dtp:icao "none" .
+    r:473 dtp:desc "Berlin-Schönefeld International Airport *Closed*" .
     r:473 dtp:region "DE-BR" .
     r:473 dtp:runways "2"^^xsd:integer .
     r:473 dtp:longest "9843"^^xsd:integer .
@@ -49044,1225 +49044,1239 @@ INSERT DATA {
     r:3502 dtp:city "Fangatau" .
     r:3502 dtp:lat "-15.819899559021"^^xsd:double .
     r:3502 dtp:lon "-140.886993408203"^^xsd:double .
-    r:3503 rdfsyn:type c:Country .
-    r:3503 rdfs:label "AF" .
-    r:3503 dtp:type "country" .
-    r:3503 dtp:code "AF" .
-    r:3503 dtp:desc "Afghanistan" .
+    r:3503 rdfsyn:type c:Airport .
+    r:3503 rdfs:label "BER" .
+    r:3503 dtp:type "airport" .
+    r:3503 dtp:code "BER" .
+    r:3503 dtp:icao "EDDB" .
+    r:3503 dtp:desc "Berlin Brandenburg International Airport" .
+    r:3503 dtp:region "DE-BB" .
+    r:3503 dtp:runways "2"^^xsd:integer .
+    r:3503 dtp:longest "13123"^^xsd:integer .
+    r:3503 dtp:elev "157"^^xsd:integer .
+    r:3503 dtp:country "DE" .
+    r:3503 dtp:city "Berlin" .
+    r:3503 dtp:lat "52.378333"^^xsd:double .
+    r:3503 dtp:lon "13.520556"^^xsd:double .
     r:3504 rdfsyn:type c:Country .
-    r:3504 rdfs:label "AL" .
+    r:3504 rdfs:label "AF" .
     r:3504 dtp:type "country" .
-    r:3504 dtp:code "AL" .
-    r:3504 dtp:desc "Albania" .
+    r:3504 dtp:code "AF" .
+    r:3504 dtp:desc "Afghanistan" .
     r:3505 rdfsyn:type c:Country .
-    r:3505 rdfs:label "DZ" .
+    r:3505 rdfs:label "AL" .
     r:3505 dtp:type "country" .
-    r:3505 dtp:code "DZ" .
-    r:3505 dtp:desc "Algeria" .
+    r:3505 dtp:code "AL" .
+    r:3505 dtp:desc "Albania" .
     r:3506 rdfsyn:type c:Country .
-    r:3506 rdfs:label "AS" .
+    r:3506 rdfs:label "DZ" .
     r:3506 dtp:type "country" .
-    r:3506 dtp:code "AS" .
-    r:3506 dtp:desc "American Samoa" .
+    r:3506 dtp:code "DZ" .
+    r:3506 dtp:desc "Algeria" .
     r:3507 rdfsyn:type c:Country .
-    r:3507 rdfs:label "AD" .
+    r:3507 rdfs:label "AS" .
     r:3507 dtp:type "country" .
-    r:3507 dtp:code "AD" .
-    r:3507 dtp:desc "Andorra" .
+    r:3507 dtp:code "AS" .
+    r:3507 dtp:desc "American Samoa" .
     r:3508 rdfsyn:type c:Country .
-    r:3508 rdfs:label "AO" .
+    r:3508 rdfs:label "AD" .
     r:3508 dtp:type "country" .
-    r:3508 dtp:code "AO" .
-    r:3508 dtp:desc "Angola" .
+    r:3508 dtp:code "AD" .
+    r:3508 dtp:desc "Andorra" .
     r:3509 rdfsyn:type c:Country .
-    r:3509 rdfs:label "AI" .
+    r:3509 rdfs:label "AO" .
     r:3509 dtp:type "country" .
-    r:3509 dtp:code "AI" .
-    r:3509 dtp:desc "Anguilla" .
+    r:3509 dtp:code "AO" .
+    r:3509 dtp:desc "Angola" .
     r:3510 rdfsyn:type c:Country .
-    r:3510 rdfs:label "AG" .
+    r:3510 rdfs:label "AI" .
     r:3510 dtp:type "country" .
-    r:3510 dtp:code "AG" .
-    r:3510 dtp:desc "Antigua and Barbuda" .
+    r:3510 dtp:code "AI" .
+    r:3510 dtp:desc "Anguilla" .
     r:3511 rdfsyn:type c:Country .
-    r:3511 rdfs:label "AR" .
+    r:3511 rdfs:label "AG" .
     r:3511 dtp:type "country" .
-    r:3511 dtp:code "AR" .
-    r:3511 dtp:desc "Argentina" .
+    r:3511 dtp:code "AG" .
+    r:3511 dtp:desc "Antigua and Barbuda" .
     r:3512 rdfsyn:type c:Country .
-    r:3512 rdfs:label "AM" .
+    r:3512 rdfs:label "AR" .
     r:3512 dtp:type "country" .
-    r:3512 dtp:code "AM" .
-    r:3512 dtp:desc "Armenia" .
+    r:3512 dtp:code "AR" .
+    r:3512 dtp:desc "Argentina" .
     r:3513 rdfsyn:type c:Country .
-    r:3513 rdfs:label "AW" .
+    r:3513 rdfs:label "AM" .
     r:3513 dtp:type "country" .
-    r:3513 dtp:code "AW" .
-    r:3513 dtp:desc "Aruba" .
+    r:3513 dtp:code "AM" .
+    r:3513 dtp:desc "Armenia" .
     r:3514 rdfsyn:type c:Country .
-    r:3514 rdfs:label "AT" .
+    r:3514 rdfs:label "AW" .
     r:3514 dtp:type "country" .
-    r:3514 dtp:code "AT" .
-    r:3514 dtp:desc "Austria" .
+    r:3514 dtp:code "AW" .
+    r:3514 dtp:desc "Aruba" .
     r:3515 rdfsyn:type c:Country .
-    r:3515 rdfs:label "AU" .
+    r:3515 rdfs:label "AT" .
     r:3515 dtp:type "country" .
-    r:3515 dtp:code "AU" .
-    r:3515 dtp:desc "Australia" .
+    r:3515 dtp:code "AT" .
+    r:3515 dtp:desc "Austria" .
     r:3516 rdfsyn:type c:Country .
-    r:3516 rdfs:label "AZ" .
+    r:3516 rdfs:label "AU" .
     r:3516 dtp:type "country" .
-    r:3516 dtp:code "AZ" .
-    r:3516 dtp:desc "Azerbajan" .
+    r:3516 dtp:code "AU" .
+    r:3516 dtp:desc "Australia" .
     r:3517 rdfsyn:type c:Country .
-    r:3517 rdfs:label "BS" .
+    r:3517 rdfs:label "AZ" .
     r:3517 dtp:type "country" .
-    r:3517 dtp:code "BS" .
-    r:3517 dtp:desc "Bahamas" .
+    r:3517 dtp:code "AZ" .
+    r:3517 dtp:desc "Azerbajan" .
     r:3518 rdfsyn:type c:Country .
-    r:3518 rdfs:label "BH" .
+    r:3518 rdfs:label "BS" .
     r:3518 dtp:type "country" .
-    r:3518 dtp:code "BH" .
-    r:3518 dtp:desc "Bahrain" .
+    r:3518 dtp:code "BS" .
+    r:3518 dtp:desc "Bahamas" .
     r:3519 rdfsyn:type c:Country .
-    r:3519 rdfs:label "BD" .
+    r:3519 rdfs:label "BH" .
     r:3519 dtp:type "country" .
-    r:3519 dtp:code "BD" .
-    r:3519 dtp:desc "Bangladesh" .
+    r:3519 dtp:code "BH" .
+    r:3519 dtp:desc "Bahrain" .
     r:3520 rdfsyn:type c:Country .
-    r:3520 rdfs:label "BB" .
+    r:3520 rdfs:label "BD" .
     r:3520 dtp:type "country" .
-    r:3520 dtp:code "BB" .
-    r:3520 dtp:desc "Barbados" .
+    r:3520 dtp:code "BD" .
+    r:3520 dtp:desc "Bangladesh" .
     r:3521 rdfsyn:type c:Country .
-    r:3521 rdfs:label "BY" .
+    r:3521 rdfs:label "BB" .
     r:3521 dtp:type "country" .
-    r:3521 dtp:code "BY" .
-    r:3521 dtp:desc "Belarus" .
+    r:3521 dtp:code "BB" .
+    r:3521 dtp:desc "Barbados" .
     r:3522 rdfsyn:type c:Country .
-    r:3522 rdfs:label "BE" .
+    r:3522 rdfs:label "BY" .
     r:3522 dtp:type "country" .
-    r:3522 dtp:code "BE" .
-    r:3522 dtp:desc "Belgium" .
+    r:3522 dtp:code "BY" .
+    r:3522 dtp:desc "Belarus" .
     r:3523 rdfsyn:type c:Country .
-    r:3523 rdfs:label "BZ" .
+    r:3523 rdfs:label "BE" .
     r:3523 dtp:type "country" .
-    r:3523 dtp:code "BZ" .
-    r:3523 dtp:desc "Belize" .
+    r:3523 dtp:code "BE" .
+    r:3523 dtp:desc "Belgium" .
     r:3524 rdfsyn:type c:Country .
-    r:3524 rdfs:label "BJ" .
+    r:3524 rdfs:label "BZ" .
     r:3524 dtp:type "country" .
-    r:3524 dtp:code "BJ" .
-    r:3524 dtp:desc "Benin" .
+    r:3524 dtp:code "BZ" .
+    r:3524 dtp:desc "Belize" .
     r:3525 rdfsyn:type c:Country .
-    r:3525 rdfs:label "BM" .
+    r:3525 rdfs:label "BJ" .
     r:3525 dtp:type "country" .
-    r:3525 dtp:code "BM" .
-    r:3525 dtp:desc "Bermuda" .
+    r:3525 dtp:code "BJ" .
+    r:3525 dtp:desc "Benin" .
     r:3526 rdfsyn:type c:Country .
-    r:3526 rdfs:label "BT" .
+    r:3526 rdfs:label "BM" .
     r:3526 dtp:type "country" .
-    r:3526 dtp:code "BT" .
-    r:3526 dtp:desc "Bhutan" .
+    r:3526 dtp:code "BM" .
+    r:3526 dtp:desc "Bermuda" .
     r:3527 rdfsyn:type c:Country .
-    r:3527 rdfs:label "BO" .
+    r:3527 rdfs:label "BT" .
     r:3527 dtp:type "country" .
-    r:3527 dtp:code "BO" .
-    r:3527 dtp:desc "Bolivia" .
+    r:3527 dtp:code "BT" .
+    r:3527 dtp:desc "Bhutan" .
     r:3528 rdfsyn:type c:Country .
-    r:3528 rdfs:label "BQ" .
+    r:3528 rdfs:label "BO" .
     r:3528 dtp:type "country" .
-    r:3528 dtp:code "BQ" .
-    r:3528 dtp:desc "Bonaire - Sint Eustatius and Saba" .
+    r:3528 dtp:code "BO" .
+    r:3528 dtp:desc "Bolivia" .
     r:3529 rdfsyn:type c:Country .
-    r:3529 rdfs:label "BA" .
+    r:3529 rdfs:label "BQ" .
     r:3529 dtp:type "country" .
-    r:3529 dtp:code "BA" .
-    r:3529 dtp:desc "Bosnia and Herzegovina" .
+    r:3529 dtp:code "BQ" .
+    r:3529 dtp:desc "Bonaire - Sint Eustatius and Saba" .
     r:3530 rdfsyn:type c:Country .
-    r:3530 rdfs:label "BW" .
+    r:3530 rdfs:label "BA" .
     r:3530 dtp:type "country" .
-    r:3530 dtp:code "BW" .
-    r:3530 dtp:desc "Botswana" .
+    r:3530 dtp:code "BA" .
+    r:3530 dtp:desc "Bosnia and Herzegovina" .
     r:3531 rdfsyn:type c:Country .
-    r:3531 rdfs:label "BR" .
+    r:3531 rdfs:label "BW" .
     r:3531 dtp:type "country" .
-    r:3531 dtp:code "BR" .
-    r:3531 dtp:desc "Brazil" .
+    r:3531 dtp:code "BW" .
+    r:3531 dtp:desc "Botswana" .
     r:3532 rdfsyn:type c:Country .
-    r:3532 rdfs:label "VG" .
+    r:3532 rdfs:label "BR" .
     r:3532 dtp:type "country" .
-    r:3532 dtp:code "VG" .
-    r:3532 dtp:desc "British Virgin Islands" .
+    r:3532 dtp:code "BR" .
+    r:3532 dtp:desc "Brazil" .
     r:3533 rdfsyn:type c:Country .
-    r:3533 rdfs:label "BN" .
+    r:3533 rdfs:label "VG" .
     r:3533 dtp:type "country" .
-    r:3533 dtp:code "BN" .
-    r:3533 dtp:desc "Brunei" .
+    r:3533 dtp:code "VG" .
+    r:3533 dtp:desc "British Virgin Islands" .
     r:3534 rdfsyn:type c:Country .
-    r:3534 rdfs:label "BG" .
+    r:3534 rdfs:label "BN" .
     r:3534 dtp:type "country" .
-    r:3534 dtp:code "BG" .
-    r:3534 dtp:desc "Bulgaria" .
+    r:3534 dtp:code "BN" .
+    r:3534 dtp:desc "Brunei" .
     r:3535 rdfsyn:type c:Country .
-    r:3535 rdfs:label "BF" .
+    r:3535 rdfs:label "BG" .
     r:3535 dtp:type "country" .
-    r:3535 dtp:code "BF" .
-    r:3535 dtp:desc "Burkina Faso" .
+    r:3535 dtp:code "BG" .
+    r:3535 dtp:desc "Bulgaria" .
     r:3536 rdfsyn:type c:Country .
-    r:3536 rdfs:label "BI" .
+    r:3536 rdfs:label "BF" .
     r:3536 dtp:type "country" .
-    r:3536 dtp:code "BI" .
-    r:3536 dtp:desc "Burundi" .
+    r:3536 dtp:code "BF" .
+    r:3536 dtp:desc "Burkina Faso" .
     r:3537 rdfsyn:type c:Country .
-    r:3537 rdfs:label "KH" .
+    r:3537 rdfs:label "BI" .
     r:3537 dtp:type "country" .
-    r:3537 dtp:code "KH" .
-    r:3537 dtp:desc "Cambodia" .
+    r:3537 dtp:code "BI" .
+    r:3537 dtp:desc "Burundi" .
     r:3538 rdfsyn:type c:Country .
-    r:3538 rdfs:label "CM" .
+    r:3538 rdfs:label "KH" .
     r:3538 dtp:type "country" .
-    r:3538 dtp:code "CM" .
-    r:3538 dtp:desc "Cameroon" .
+    r:3538 dtp:code "KH" .
+    r:3538 dtp:desc "Cambodia" .
     r:3539 rdfsyn:type c:Country .
-    r:3539 rdfs:label "CV" .
+    r:3539 rdfs:label "CM" .
     r:3539 dtp:type "country" .
-    r:3539 dtp:code "CV" .
-    r:3539 dtp:desc "Cabo Verde" .
+    r:3539 dtp:code "CM" .
+    r:3539 dtp:desc "Cameroon" .
     r:3540 rdfsyn:type c:Country .
-    r:3540 rdfs:label "CA" .
+    r:3540 rdfs:label "CV" .
     r:3540 dtp:type "country" .
-    r:3540 dtp:code "CA" .
-    r:3540 dtp:desc "Canada" .
+    r:3540 dtp:code "CV" .
+    r:3540 dtp:desc "Cabo Verde" .
     r:3541 rdfsyn:type c:Country .
-    r:3541 rdfs:label "KY" .
+    r:3541 rdfs:label "CA" .
     r:3541 dtp:type "country" .
-    r:3541 dtp:code "KY" .
-    r:3541 dtp:desc "Cayman Islands" .
+    r:3541 dtp:code "CA" .
+    r:3541 dtp:desc "Canada" .
     r:3542 rdfsyn:type c:Country .
-    r:3542 rdfs:label "CF" .
+    r:3542 rdfs:label "KY" .
     r:3542 dtp:type "country" .
-    r:3542 dtp:code "CF" .
-    r:3542 dtp:desc "Central African Republic" .
+    r:3542 dtp:code "KY" .
+    r:3542 dtp:desc "Cayman Islands" .
     r:3543 rdfsyn:type c:Country .
-    r:3543 rdfs:label "TD" .
+    r:3543 rdfs:label "CF" .
     r:3543 dtp:type "country" .
-    r:3543 dtp:code "TD" .
-    r:3543 dtp:desc "Chad" .
+    r:3543 dtp:code "CF" .
+    r:3543 dtp:desc "Central African Republic" .
     r:3544 rdfsyn:type c:Country .
-    r:3544 rdfs:label "CL" .
+    r:3544 rdfs:label "TD" .
     r:3544 dtp:type "country" .
-    r:3544 dtp:code "CL" .
-    r:3544 dtp:desc "Chile" .
+    r:3544 dtp:code "TD" .
+    r:3544 dtp:desc "Chad" .
     r:3545 rdfsyn:type c:Country .
-    r:3545 rdfs:label "CN" .
+    r:3545 rdfs:label "CL" .
     r:3545 dtp:type "country" .
-    r:3545 dtp:code "CN" .
-    r:3545 dtp:desc "China" .
+    r:3545 dtp:code "CL" .
+    r:3545 dtp:desc "Chile" .
     r:3546 rdfsyn:type c:Country .
-    r:3546 rdfs:label "CX" .
+    r:3546 rdfs:label "CN" .
     r:3546 dtp:type "country" .
-    r:3546 dtp:code "CX" .
-    r:3546 dtp:desc "Christmas Island" .
+    r:3546 dtp:code "CN" .
+    r:3546 dtp:desc "China" .
     r:3547 rdfsyn:type c:Country .
-    r:3547 rdfs:label "CO" .
+    r:3547 rdfs:label "CX" .
     r:3547 dtp:type "country" .
-    r:3547 dtp:code "CO" .
-    r:3547 dtp:desc "Colombia" .
+    r:3547 dtp:code "CX" .
+    r:3547 dtp:desc "Christmas Island" .
     r:3548 rdfsyn:type c:Country .
-    r:3548 rdfs:label "CG" .
+    r:3548 rdfs:label "CO" .
     r:3548 dtp:type "country" .
-    r:3548 dtp:code "CG" .
-    r:3548 dtp:desc "Congo" .
+    r:3548 dtp:code "CO" .
+    r:3548 dtp:desc "Colombia" .
     r:3549 rdfsyn:type c:Country .
-    r:3549 rdfs:label "CK" .
+    r:3549 rdfs:label "CG" .
     r:3549 dtp:type "country" .
-    r:3549 dtp:code "CK" .
-    r:3549 dtp:desc "Cook Islands" .
+    r:3549 dtp:code "CG" .
+    r:3549 dtp:desc "Congo" .
     r:3550 rdfsyn:type c:Country .
-    r:3550 rdfs:label "CR" .
+    r:3550 rdfs:label "CK" .
     r:3550 dtp:type "country" .
-    r:3550 dtp:code "CR" .
-    r:3550 dtp:desc "Costa Rica" .
+    r:3550 dtp:code "CK" .
+    r:3550 dtp:desc "Cook Islands" .
     r:3551 rdfsyn:type c:Country .
-    r:3551 rdfs:label "CI" .
+    r:3551 rdfs:label "CR" .
     r:3551 dtp:type "country" .
-    r:3551 dtp:code "CI" .
-    r:3551 dtp:desc "Côte d'Ivoire" .
+    r:3551 dtp:code "CR" .
+    r:3551 dtp:desc "Costa Rica" .
     r:3552 rdfsyn:type c:Country .
-    r:3552 rdfs:label "CC" .
+    r:3552 rdfs:label "CI" .
     r:3552 dtp:type "country" .
-    r:3552 dtp:code "CC" .
-    r:3552 dtp:desc "Cocos (Keeling) Islands" .
+    r:3552 dtp:code "CI" .
+    r:3552 dtp:desc "Côte d'Ivoire" .
     r:3553 rdfsyn:type c:Country .
-    r:3553 rdfs:label "KM" .
+    r:3553 rdfs:label "CC" .
     r:3553 dtp:type "country" .
-    r:3553 dtp:code "KM" .
-    r:3553 dtp:desc "Comoros" .
+    r:3553 dtp:code "CC" .
+    r:3553 dtp:desc "Cocos (Keeling) Islands" .
     r:3554 rdfsyn:type c:Country .
-    r:3554 rdfs:label "HR" .
+    r:3554 rdfs:label "KM" .
     r:3554 dtp:type "country" .
-    r:3554 dtp:code "HR" .
-    r:3554 dtp:desc "Croatia" .
+    r:3554 dtp:code "KM" .
+    r:3554 dtp:desc "Comoros" .
     r:3555 rdfsyn:type c:Country .
-    r:3555 rdfs:label "CU" .
+    r:3555 rdfs:label "HR" .
     r:3555 dtp:type "country" .
-    r:3555 dtp:code "CU" .
-    r:3555 dtp:desc "Cuba" .
+    r:3555 dtp:code "HR" .
+    r:3555 dtp:desc "Croatia" .
     r:3556 rdfsyn:type c:Country .
-    r:3556 rdfs:label "CW" .
+    r:3556 rdfs:label "CU" .
     r:3556 dtp:type "country" .
-    r:3556 dtp:code "CW" .
-    r:3556 dtp:desc "Curacao" .
+    r:3556 dtp:code "CU" .
+    r:3556 dtp:desc "Cuba" .
     r:3557 rdfsyn:type c:Country .
-    r:3557 rdfs:label "CY" .
+    r:3557 rdfs:label "CW" .
     r:3557 dtp:type "country" .
-    r:3557 dtp:code "CY" .
-    r:3557 dtp:desc "Cyprus" .
+    r:3557 dtp:code "CW" .
+    r:3557 dtp:desc "Curacao" .
     r:3558 rdfsyn:type c:Country .
-    r:3558 rdfs:label "CZ" .
+    r:3558 rdfs:label "CY" .
     r:3558 dtp:type "country" .
-    r:3558 dtp:code "CZ" .
-    r:3558 dtp:desc "Czech Republic" .
+    r:3558 dtp:code "CY" .
+    r:3558 dtp:desc "Cyprus" .
     r:3559 rdfsyn:type c:Country .
-    r:3559 rdfs:label "KP" .
+    r:3559 rdfs:label "CZ" .
     r:3559 dtp:type "country" .
-    r:3559 dtp:code "KP" .
-    r:3559 dtp:desc "Democratic People's Republic of Korea" .
+    r:3559 dtp:code "CZ" .
+    r:3559 dtp:desc "Czech Republic" .
     r:3560 rdfsyn:type c:Country .
-    r:3560 rdfs:label "CD" .
+    r:3560 rdfs:label "KP" .
     r:3560 dtp:type "country" .
-    r:3560 dtp:code "CD" .
-    r:3560 dtp:desc "Democratic Republic of the Congo" .
+    r:3560 dtp:code "KP" .
+    r:3560 dtp:desc "Democratic People's Republic of Korea" .
     r:3561 rdfsyn:type c:Country .
-    r:3561 rdfs:label "DK" .
+    r:3561 rdfs:label "CD" .
     r:3561 dtp:type "country" .
-    r:3561 dtp:code "DK" .
-    r:3561 dtp:desc "Denmark" .
+    r:3561 dtp:code "CD" .
+    r:3561 dtp:desc "Democratic Republic of the Congo" .
     r:3562 rdfsyn:type c:Country .
-    r:3562 rdfs:label "DJ" .
+    r:3562 rdfs:label "DK" .
     r:3562 dtp:type "country" .
-    r:3562 dtp:code "DJ" .
-    r:3562 dtp:desc "Djibouti" .
+    r:3562 dtp:code "DK" .
+    r:3562 dtp:desc "Denmark" .
     r:3563 rdfsyn:type c:Country .
-    r:3563 rdfs:label "DM" .
+    r:3563 rdfs:label "DJ" .
     r:3563 dtp:type "country" .
-    r:3563 dtp:code "DM" .
-    r:3563 dtp:desc "Dominica" .
+    r:3563 dtp:code "DJ" .
+    r:3563 dtp:desc "Djibouti" .
     r:3564 rdfsyn:type c:Country .
-    r:3564 rdfs:label "DO" .
+    r:3564 rdfs:label "DM" .
     r:3564 dtp:type "country" .
-    r:3564 dtp:code "DO" .
-    r:3564 dtp:desc "Dominican Republic" .
+    r:3564 dtp:code "DM" .
+    r:3564 dtp:desc "Dominica" .
     r:3565 rdfsyn:type c:Country .
-    r:3565 rdfs:label "DE" .
+    r:3565 rdfs:label "DO" .
     r:3565 dtp:type "country" .
-    r:3565 dtp:code "DE" .
-    r:3565 dtp:desc "Germany" .
+    r:3565 dtp:code "DO" .
+    r:3565 dtp:desc "Dominican Republic" .
     r:3566 rdfsyn:type c:Country .
-    r:3566 rdfs:label "GL" .
+    r:3566 rdfs:label "DE" .
     r:3566 dtp:type "country" .
-    r:3566 dtp:code "GL" .
-    r:3566 dtp:desc "Greenland" .
+    r:3566 dtp:code "DE" .
+    r:3566 dtp:desc "Germany" .
     r:3567 rdfsyn:type c:Country .
-    r:3567 rdfs:label "EC" .
+    r:3567 rdfs:label "GL" .
     r:3567 dtp:type "country" .
-    r:3567 dtp:code "EC" .
-    r:3567 dtp:desc "Ecuador" .
+    r:3567 dtp:code "GL" .
+    r:3567 dtp:desc "Greenland" .
     r:3568 rdfsyn:type c:Country .
-    r:3568 rdfs:label "EG" .
+    r:3568 rdfs:label "EC" .
     r:3568 dtp:type "country" .
-    r:3568 dtp:code "EG" .
-    r:3568 dtp:desc "Egypt" .
+    r:3568 dtp:code "EC" .
+    r:3568 dtp:desc "Ecuador" .
     r:3569 rdfsyn:type c:Country .
-    r:3569 rdfs:label "SV" .
+    r:3569 rdfs:label "EG" .
     r:3569 dtp:type "country" .
-    r:3569 dtp:code "SV" .
-    r:3569 dtp:desc "El Salvador" .
+    r:3569 dtp:code "EG" .
+    r:3569 dtp:desc "Egypt" .
     r:3570 rdfsyn:type c:Country .
-    r:3570 rdfs:label "ER" .
+    r:3570 rdfs:label "SV" .
     r:3570 dtp:type "country" .
-    r:3570 dtp:code "ER" .
-    r:3570 dtp:desc "Eritrea" .
+    r:3570 dtp:code "SV" .
+    r:3570 dtp:desc "El Salvador" .
     r:3571 rdfsyn:type c:Country .
-    r:3571 rdfs:label "EE" .
+    r:3571 rdfs:label "ER" .
     r:3571 dtp:type "country" .
-    r:3571 dtp:code "EE" .
-    r:3571 dtp:desc "Estonia" .
+    r:3571 dtp:code "ER" .
+    r:3571 dtp:desc "Eritrea" .
     r:3572 rdfsyn:type c:Country .
-    r:3572 rdfs:label "ET" .
+    r:3572 rdfs:label "EE" .
     r:3572 dtp:type "country" .
-    r:3572 dtp:code "ET" .
-    r:3572 dtp:desc "Ethiopia" .
+    r:3572 dtp:code "EE" .
+    r:3572 dtp:desc "Estonia" .
     r:3573 rdfsyn:type c:Country .
-    r:3573 rdfs:label "GQ" .
+    r:3573 rdfs:label "ET" .
     r:3573 dtp:type "country" .
-    r:3573 dtp:code "GQ" .
-    r:3573 dtp:desc "Equatorial Guinea" .
+    r:3573 dtp:code "ET" .
+    r:3573 dtp:desc "Ethiopia" .
     r:3574 rdfsyn:type c:Country .
-    r:3574 rdfs:label "FK" .
+    r:3574 rdfs:label "GQ" .
     r:3574 dtp:type "country" .
-    r:3574 dtp:code "FK" .
-    r:3574 dtp:desc "Falkland Islands" .
+    r:3574 dtp:code "GQ" .
+    r:3574 dtp:desc "Equatorial Guinea" .
     r:3575 rdfsyn:type c:Country .
-    r:3575 rdfs:label "FO" .
+    r:3575 rdfs:label "FK" .
     r:3575 dtp:type "country" .
-    r:3575 dtp:code "FO" .
-    r:3575 dtp:desc "Faroe Islands" .
+    r:3575 dtp:code "FK" .
+    r:3575 dtp:desc "Falkland Islands" .
     r:3576 rdfsyn:type c:Country .
-    r:3576 rdfs:label "FM" .
+    r:3576 rdfs:label "FO" .
     r:3576 dtp:type "country" .
-    r:3576 dtp:code "FM" .
-    r:3576 dtp:desc "Federated States of Micronesia" .
+    r:3576 dtp:code "FO" .
+    r:3576 dtp:desc "Faroe Islands" .
     r:3577 rdfsyn:type c:Country .
-    r:3577 rdfs:label "FJ" .
+    r:3577 rdfs:label "FM" .
     r:3577 dtp:type "country" .
-    r:3577 dtp:code "FJ" .
-    r:3577 dtp:desc "Fiji" .
+    r:3577 dtp:code "FM" .
+    r:3577 dtp:desc "Federated States of Micronesia" .
     r:3578 rdfsyn:type c:Country .
-    r:3578 rdfs:label "FI" .
+    r:3578 rdfs:label "FJ" .
     r:3578 dtp:type "country" .
-    r:3578 dtp:code "FI" .
-    r:3578 dtp:desc "Finland" .
+    r:3578 dtp:code "FJ" .
+    r:3578 dtp:desc "Fiji" .
     r:3579 rdfsyn:type c:Country .
-    r:3579 rdfs:label "FR" .
+    r:3579 rdfs:label "FI" .
     r:3579 dtp:type "country" .
-    r:3579 dtp:code "FR" .
-    r:3579 dtp:desc "France" .
+    r:3579 dtp:code "FI" .
+    r:3579 dtp:desc "Finland" .
     r:3580 rdfsyn:type c:Country .
-    r:3580 rdfs:label "GF" .
+    r:3580 rdfs:label "FR" .
     r:3580 dtp:type "country" .
-    r:3580 dtp:code "GF" .
-    r:3580 dtp:desc "French Guiana" .
+    r:3580 dtp:code "FR" .
+    r:3580 dtp:desc "France" .
     r:3581 rdfsyn:type c:Country .
-    r:3581 rdfs:label "PF" .
+    r:3581 rdfs:label "GF" .
     r:3581 dtp:type "country" .
-    r:3581 dtp:code "PF" .
-    r:3581 dtp:desc "French Polynesia" .
+    r:3581 dtp:code "GF" .
+    r:3581 dtp:desc "French Guiana" .
     r:3582 rdfsyn:type c:Country .
-    r:3582 rdfs:label "GA" .
+    r:3582 rdfs:label "PF" .
     r:3582 dtp:type "country" .
-    r:3582 dtp:code "GA" .
-    r:3582 dtp:desc "Gabon" .
+    r:3582 dtp:code "PF" .
+    r:3582 dtp:desc "French Polynesia" .
     r:3583 rdfsyn:type c:Country .
-    r:3583 rdfs:label "GM" .
+    r:3583 rdfs:label "GA" .
     r:3583 dtp:type "country" .
-    r:3583 dtp:code "GM" .
-    r:3583 dtp:desc "Gambia" .
+    r:3583 dtp:code "GA" .
+    r:3583 dtp:desc "Gabon" .
     r:3584 rdfsyn:type c:Country .
-    r:3584 rdfs:label "GE" .
+    r:3584 rdfs:label "GM" .
     r:3584 dtp:type "country" .
-    r:3584 dtp:code "GE" .
-    r:3584 dtp:desc "Georgia" .
+    r:3584 dtp:code "GM" .
+    r:3584 dtp:desc "Gambia" .
     r:3585 rdfsyn:type c:Country .
-    r:3585 rdfs:label "GH" .
+    r:3585 rdfs:label "GE" .
     r:3585 dtp:type "country" .
-    r:3585 dtp:code "GH" .
-    r:3585 dtp:desc "Ghana" .
+    r:3585 dtp:code "GE" .
+    r:3585 dtp:desc "Georgia" .
     r:3586 rdfsyn:type c:Country .
-    r:3586 rdfs:label "GI" .
+    r:3586 rdfs:label "GH" .
     r:3586 dtp:type "country" .
-    r:3586 dtp:code "GI" .
-    r:3586 dtp:desc "Gibraltar" .
+    r:3586 dtp:code "GH" .
+    r:3586 dtp:desc "Ghana" .
     r:3587 rdfsyn:type c:Country .
-    r:3587 rdfs:label "GR" .
+    r:3587 rdfs:label "GI" .
     r:3587 dtp:type "country" .
-    r:3587 dtp:code "GR" .
-    r:3587 dtp:desc "Greece" .
+    r:3587 dtp:code "GI" .
+    r:3587 dtp:desc "Gibraltar" .
     r:3588 rdfsyn:type c:Country .
-    r:3588 rdfs:label "GD" .
+    r:3588 rdfs:label "GR" .
     r:3588 dtp:type "country" .
-    r:3588 dtp:code "GD" .
-    r:3588 dtp:desc "Grenada" .
+    r:3588 dtp:code "GR" .
+    r:3588 dtp:desc "Greece" .
     r:3589 rdfsyn:type c:Country .
-    r:3589 rdfs:label "GU" .
+    r:3589 rdfs:label "GD" .
     r:3589 dtp:type "country" .
-    r:3589 dtp:code "GU" .
-    r:3589 dtp:desc "Guam" .
+    r:3589 dtp:code "GD" .
+    r:3589 dtp:desc "Grenada" .
     r:3590 rdfsyn:type c:Country .
-    r:3590 rdfs:label "GP" .
+    r:3590 rdfs:label "GU" .
     r:3590 dtp:type "country" .
-    r:3590 dtp:code "GP" .
-    r:3590 dtp:desc "Guadeloupe" .
+    r:3590 dtp:code "GU" .
+    r:3590 dtp:desc "Guam" .
     r:3591 rdfsyn:type c:Country .
-    r:3591 rdfs:label "GT" .
+    r:3591 rdfs:label "GP" .
     r:3591 dtp:type "country" .
-    r:3591 dtp:code "GT" .
-    r:3591 dtp:desc "Guatemala" .
+    r:3591 dtp:code "GP" .
+    r:3591 dtp:desc "Guadeloupe" .
     r:3592 rdfsyn:type c:Country .
-    r:3592 rdfs:label "GG" .
+    r:3592 rdfs:label "GT" .
     r:3592 dtp:type "country" .
-    r:3592 dtp:code "GG" .
-    r:3592 dtp:desc "Guernsey" .
+    r:3592 dtp:code "GT" .
+    r:3592 dtp:desc "Guatemala" .
     r:3593 rdfsyn:type c:Country .
-    r:3593 rdfs:label "GN" .
+    r:3593 rdfs:label "GG" .
     r:3593 dtp:type "country" .
-    r:3593 dtp:code "GN" .
-    r:3593 dtp:desc "Guinea" .
+    r:3593 dtp:code "GG" .
+    r:3593 dtp:desc "Guernsey" .
     r:3594 rdfsyn:type c:Country .
-    r:3594 rdfs:label "GW" .
+    r:3594 rdfs:label "GN" .
     r:3594 dtp:type "country" .
-    r:3594 dtp:code "GW" .
-    r:3594 dtp:desc "Guinea-Bissau" .
+    r:3594 dtp:code "GN" .
+    r:3594 dtp:desc "Guinea" .
     r:3595 rdfsyn:type c:Country .
-    r:3595 rdfs:label "GY" .
+    r:3595 rdfs:label "GW" .
     r:3595 dtp:type "country" .
-    r:3595 dtp:code "GY" .
-    r:3595 dtp:desc "Guyana" .
+    r:3595 dtp:code "GW" .
+    r:3595 dtp:desc "Guinea-Bissau" .
     r:3596 rdfsyn:type c:Country .
-    r:3596 rdfs:label "HT" .
+    r:3596 rdfs:label "GY" .
     r:3596 dtp:type "country" .
-    r:3596 dtp:code "HT" .
-    r:3596 dtp:desc "Haiti" .
+    r:3596 dtp:code "GY" .
+    r:3596 dtp:desc "Guyana" .
     r:3597 rdfsyn:type c:Country .
-    r:3597 rdfs:label "HN" .
+    r:3597 rdfs:label "HT" .
     r:3597 dtp:type "country" .
-    r:3597 dtp:code "HN" .
-    r:3597 dtp:desc "Honduras" .
+    r:3597 dtp:code "HT" .
+    r:3597 dtp:desc "Haiti" .
     r:3598 rdfsyn:type c:Country .
-    r:3598 rdfs:label "HK" .
+    r:3598 rdfs:label "HN" .
     r:3598 dtp:type "country" .
-    r:3598 dtp:code "HK" .
-    r:3598 dtp:desc "Hong Kong" .
+    r:3598 dtp:code "HN" .
+    r:3598 dtp:desc "Honduras" .
     r:3599 rdfsyn:type c:Country .
-    r:3599 rdfs:label "HU" .
+    r:3599 rdfs:label "HK" .
     r:3599 dtp:type "country" .
-    r:3599 dtp:code "HU" .
-    r:3599 dtp:desc "Hungary" .
+    r:3599 dtp:code "HK" .
+    r:3599 dtp:desc "Hong Kong" .
     r:3600 rdfsyn:type c:Country .
-    r:3600 rdfs:label "IS" .
+    r:3600 rdfs:label "HU" .
     r:3600 dtp:type "country" .
-    r:3600 dtp:code "IS" .
-    r:3600 dtp:desc "Iceland" .
+    r:3600 dtp:code "HU" .
+    r:3600 dtp:desc "Hungary" .
     r:3601 rdfsyn:type c:Country .
-    r:3601 rdfs:label "IN" .
+    r:3601 rdfs:label "IS" .
     r:3601 dtp:type "country" .
-    r:3601 dtp:code "IN" .
-    r:3601 dtp:desc "India" .
+    r:3601 dtp:code "IS" .
+    r:3601 dtp:desc "Iceland" .
     r:3602 rdfsyn:type c:Country .
-    r:3602 rdfs:label "ID" .
+    r:3602 rdfs:label "IN" .
     r:3602 dtp:type "country" .
-    r:3602 dtp:code "ID" .
-    r:3602 dtp:desc "Indonesia" .
+    r:3602 dtp:code "IN" .
+    r:3602 dtp:desc "India" .
     r:3603 rdfsyn:type c:Country .
-    r:3603 rdfs:label "IQ" .
+    r:3603 rdfs:label "ID" .
     r:3603 dtp:type "country" .
-    r:3603 dtp:code "IQ" .
-    r:3603 dtp:desc "Iraq" .
+    r:3603 dtp:code "ID" .
+    r:3603 dtp:desc "Indonesia" .
     r:3604 rdfsyn:type c:Country .
-    r:3604 rdfs:label "IR" .
+    r:3604 rdfs:label "IQ" .
     r:3604 dtp:type "country" .
-    r:3604 dtp:code "IR" .
-    r:3604 dtp:desc "Iran" .
+    r:3604 dtp:code "IQ" .
+    r:3604 dtp:desc "Iraq" .
     r:3605 rdfsyn:type c:Country .
-    r:3605 rdfs:label "IE" .
+    r:3605 rdfs:label "IR" .
     r:3605 dtp:type "country" .
-    r:3605 dtp:code "IE" .
-    r:3605 dtp:desc "Ireland" .
+    r:3605 dtp:code "IR" .
+    r:3605 dtp:desc "Iran" .
     r:3606 rdfsyn:type c:Country .
-    r:3606 rdfs:label "IM" .
+    r:3606 rdfs:label "IE" .
     r:3606 dtp:type "country" .
-    r:3606 dtp:code "IM" .
-    r:3606 dtp:desc "Isle of Man" .
+    r:3606 dtp:code "IE" .
+    r:3606 dtp:desc "Ireland" .
     r:3607 rdfsyn:type c:Country .
-    r:3607 rdfs:label "IL" .
+    r:3607 rdfs:label "IM" .
     r:3607 dtp:type "country" .
-    r:3607 dtp:code "IL" .
-    r:3607 dtp:desc "Israel" .
+    r:3607 dtp:code "IM" .
+    r:3607 dtp:desc "Isle of Man" .
     r:3608 rdfsyn:type c:Country .
-    r:3608 rdfs:label "IT" .
+    r:3608 rdfs:label "IL" .
     r:3608 dtp:type "country" .
-    r:3608 dtp:code "IT" .
-    r:3608 dtp:desc "Italy" .
+    r:3608 dtp:code "IL" .
+    r:3608 dtp:desc "Israel" .
     r:3609 rdfsyn:type c:Country .
-    r:3609 rdfs:label "JM" .
+    r:3609 rdfs:label "IT" .
     r:3609 dtp:type "country" .
-    r:3609 dtp:code "JM" .
-    r:3609 dtp:desc "Jamaica" .
+    r:3609 dtp:code "IT" .
+    r:3609 dtp:desc "Italy" .
     r:3610 rdfsyn:type c:Country .
-    r:3610 rdfs:label "JP" .
+    r:3610 rdfs:label "JM" .
     r:3610 dtp:type "country" .
-    r:3610 dtp:code "JP" .
-    r:3610 dtp:desc "Japan" .
+    r:3610 dtp:code "JM" .
+    r:3610 dtp:desc "Jamaica" .
     r:3611 rdfsyn:type c:Country .
-    r:3611 rdfs:label "JE" .
+    r:3611 rdfs:label "JP" .
     r:3611 dtp:type "country" .
-    r:3611 dtp:code "JE" .
-    r:3611 dtp:desc "Jersey" .
+    r:3611 dtp:code "JP" .
+    r:3611 dtp:desc "Japan" .
     r:3612 rdfsyn:type c:Country .
-    r:3612 rdfs:label "JO" .
+    r:3612 rdfs:label "JE" .
     r:3612 dtp:type "country" .
-    r:3612 dtp:code "JO" .
-    r:3612 dtp:desc "Jordan" .
+    r:3612 dtp:code "JE" .
+    r:3612 dtp:desc "Jersey" .
     r:3613 rdfsyn:type c:Country .
-    r:3613 rdfs:label "KZ" .
+    r:3613 rdfs:label "JO" .
     r:3613 dtp:type "country" .
-    r:3613 dtp:code "KZ" .
-    r:3613 dtp:desc "Kazakhstan" .
+    r:3613 dtp:code "JO" .
+    r:3613 dtp:desc "Jordan" .
     r:3614 rdfsyn:type c:Country .
-    r:3614 rdfs:label "KE" .
+    r:3614 rdfs:label "KZ" .
     r:3614 dtp:type "country" .
-    r:3614 dtp:code "KE" .
-    r:3614 dtp:desc "Kenya" .
+    r:3614 dtp:code "KZ" .
+    r:3614 dtp:desc "Kazakhstan" .
     r:3615 rdfsyn:type c:Country .
-    r:3615 rdfs:label "KI" .
+    r:3615 rdfs:label "KE" .
     r:3615 dtp:type "country" .
-    r:3615 dtp:code "KI" .
-    r:3615 dtp:desc "Kiribati" .
+    r:3615 dtp:code "KE" .
+    r:3615 dtp:desc "Kenya" .
     r:3616 rdfsyn:type c:Country .
-    r:3616 rdfs:label "KS" .
+    r:3616 rdfs:label "KI" .
     r:3616 dtp:type "country" .
-    r:3616 dtp:code "KS" .
-    r:3616 dtp:desc "Kosovo" .
+    r:3616 dtp:code "KI" .
+    r:3616 dtp:desc "Kiribati" .
     r:3617 rdfsyn:type c:Country .
-    r:3617 rdfs:label "KW" .
+    r:3617 rdfs:label "KS" .
     r:3617 dtp:type "country" .
-    r:3617 dtp:code "KW" .
-    r:3617 dtp:desc "Kuwait" .
+    r:3617 dtp:code "KS" .
+    r:3617 dtp:desc "Kosovo" .
     r:3618 rdfsyn:type c:Country .
-    r:3618 rdfs:label "KG" .
+    r:3618 rdfs:label "KW" .
     r:3618 dtp:type "country" .
-    r:3618 dtp:code "KG" .
-    r:3618 dtp:desc "Kyrgyzstan" .
+    r:3618 dtp:code "KW" .
+    r:3618 dtp:desc "Kuwait" .
     r:3619 rdfsyn:type c:Country .
-    r:3619 rdfs:label "LA" .
+    r:3619 rdfs:label "KG" .
     r:3619 dtp:type "country" .
-    r:3619 dtp:code "LA" .
-    r:3619 dtp:desc "Lao PDR" .
+    r:3619 dtp:code "KG" .
+    r:3619 dtp:desc "Kyrgyzstan" .
     r:3620 rdfsyn:type c:Country .
-    r:3620 rdfs:label "LV" .
+    r:3620 rdfs:label "LA" .
     r:3620 dtp:type "country" .
-    r:3620 dtp:code "LV" .
-    r:3620 dtp:desc "Latvia" .
+    r:3620 dtp:code "LA" .
+    r:3620 dtp:desc "Lao PDR" .
     r:3621 rdfsyn:type c:Country .
-    r:3621 rdfs:label "LB" .
+    r:3621 rdfs:label "LV" .
     r:3621 dtp:type "country" .
-    r:3621 dtp:code "LB" .
-    r:3621 dtp:desc "Lebanon" .
+    r:3621 dtp:code "LV" .
+    r:3621 dtp:desc "Latvia" .
     r:3622 rdfsyn:type c:Country .
-    r:3622 rdfs:label "LS" .
+    r:3622 rdfs:label "LB" .
     r:3622 dtp:type "country" .
-    r:3622 dtp:code "LS" .
-    r:3622 dtp:desc "Lesotho" .
+    r:3622 dtp:code "LB" .
+    r:3622 dtp:desc "Lebanon" .
     r:3623 rdfsyn:type c:Country .
-    r:3623 rdfs:label "LR" .
+    r:3623 rdfs:label "LS" .
     r:3623 dtp:type "country" .
-    r:3623 dtp:code "LR" .
-    r:3623 dtp:desc "Liberia" .
+    r:3623 dtp:code "LS" .
+    r:3623 dtp:desc "Lesotho" .
     r:3624 rdfsyn:type c:Country .
-    r:3624 rdfs:label "LY" .
+    r:3624 rdfs:label "LR" .
     r:3624 dtp:type "country" .
-    r:3624 dtp:code "LY" .
-    r:3624 dtp:desc "Libya" .
+    r:3624 dtp:code "LR" .
+    r:3624 dtp:desc "Liberia" .
     r:3625 rdfsyn:type c:Country .
-    r:3625 rdfs:label "LI" .
+    r:3625 rdfs:label "LY" .
     r:3625 dtp:type "country" .
-    r:3625 dtp:code "LI" .
-    r:3625 dtp:desc "Liechtenstein" .
+    r:3625 dtp:code "LY" .
+    r:3625 dtp:desc "Libya" .
     r:3626 rdfsyn:type c:Country .
-    r:3626 rdfs:label "LT" .
+    r:3626 rdfs:label "LI" .
     r:3626 dtp:type "country" .
-    r:3626 dtp:code "LT" .
-    r:3626 dtp:desc "Lithuania" .
+    r:3626 dtp:code "LI" .
+    r:3626 dtp:desc "Liechtenstein" .
     r:3627 rdfsyn:type c:Country .
-    r:3627 rdfs:label "LU" .
+    r:3627 rdfs:label "LT" .
     r:3627 dtp:type "country" .
-    r:3627 dtp:code "LU" .
-    r:3627 dtp:desc "Luxembourg" .
+    r:3627 dtp:code "LT" .
+    r:3627 dtp:desc "Lithuania" .
     r:3628 rdfsyn:type c:Country .
-    r:3628 rdfs:label "MO" .
+    r:3628 rdfs:label "LU" .
     r:3628 dtp:type "country" .
-    r:3628 dtp:code "MO" .
-    r:3628 dtp:desc "Macau" .
+    r:3628 dtp:code "LU" .
+    r:3628 dtp:desc "Luxembourg" .
     r:3629 rdfsyn:type c:Country .
-    r:3629 rdfs:label "MK" .
+    r:3629 rdfs:label "MO" .
     r:3629 dtp:type "country" .
-    r:3629 dtp:code "MK" .
-    r:3629 dtp:desc "Macedonia" .
+    r:3629 dtp:code "MO" .
+    r:3629 dtp:desc "Macau" .
     r:3630 rdfsyn:type c:Country .
-    r:3630 rdfs:label "MG" .
+    r:3630 rdfs:label "MK" .
     r:3630 dtp:type "country" .
-    r:3630 dtp:code "MG" .
-    r:3630 dtp:desc "Madagascar" .
+    r:3630 dtp:code "MK" .
+    r:3630 dtp:desc "Macedonia" .
     r:3631 rdfsyn:type c:Country .
-    r:3631 rdfs:label "MW" .
+    r:3631 rdfs:label "MG" .
     r:3631 dtp:type "country" .
-    r:3631 dtp:code "MW" .
-    r:3631 dtp:desc "Malawi" .
+    r:3631 dtp:code "MG" .
+    r:3631 dtp:desc "Madagascar" .
     r:3632 rdfsyn:type c:Country .
-    r:3632 rdfs:label "MY" .
+    r:3632 rdfs:label "MW" .
     r:3632 dtp:type "country" .
-    r:3632 dtp:code "MY" .
-    r:3632 dtp:desc "Malaysia" .
+    r:3632 dtp:code "MW" .
+    r:3632 dtp:desc "Malawi" .
     r:3633 rdfsyn:type c:Country .
-    r:3633 rdfs:label "ML" .
+    r:3633 rdfs:label "MY" .
     r:3633 dtp:type "country" .
-    r:3633 dtp:code "ML" .
-    r:3633 dtp:desc "Mali" .
+    r:3633 dtp:code "MY" .
+    r:3633 dtp:desc "Malaysia" .
     r:3634 rdfsyn:type c:Country .
-    r:3634 rdfs:label "MT" .
+    r:3634 rdfs:label "ML" .
     r:3634 dtp:type "country" .
-    r:3634 dtp:code "MT" .
-    r:3634 dtp:desc "Malta" .
+    r:3634 dtp:code "ML" .
+    r:3634 dtp:desc "Mali" .
     r:3635 rdfsyn:type c:Country .
-    r:3635 rdfs:label "MV" .
+    r:3635 rdfs:label "MT" .
     r:3635 dtp:type "country" .
-    r:3635 dtp:code "MV" .
-    r:3635 dtp:desc "Maldives" .
+    r:3635 dtp:code "MT" .
+    r:3635 dtp:desc "Malta" .
     r:3636 rdfsyn:type c:Country .
-    r:3636 rdfs:label "MH" .
+    r:3636 rdfs:label "MV" .
     r:3636 dtp:type "country" .
-    r:3636 dtp:code "MH" .
-    r:3636 dtp:desc "Marshall Islands" .
+    r:3636 dtp:code "MV" .
+    r:3636 dtp:desc "Maldives" .
     r:3637 rdfsyn:type c:Country .
-    r:3637 rdfs:label "MQ" .
+    r:3637 rdfs:label "MH" .
     r:3637 dtp:type "country" .
-    r:3637 dtp:code "MQ" .
-    r:3637 dtp:desc "Martinique" .
+    r:3637 dtp:code "MH" .
+    r:3637 dtp:desc "Marshall Islands" .
     r:3638 rdfsyn:type c:Country .
-    r:3638 rdfs:label "MR" .
+    r:3638 rdfs:label "MQ" .
     r:3638 dtp:type "country" .
-    r:3638 dtp:code "MR" .
-    r:3638 dtp:desc "Mauritania" .
+    r:3638 dtp:code "MQ" .
+    r:3638 dtp:desc "Martinique" .
     r:3639 rdfsyn:type c:Country .
-    r:3639 rdfs:label "MU" .
+    r:3639 rdfs:label "MR" .
     r:3639 dtp:type "country" .
-    r:3639 dtp:code "MU" .
-    r:3639 dtp:desc "Mauritius" .
+    r:3639 dtp:code "MR" .
+    r:3639 dtp:desc "Mauritania" .
     r:3640 rdfsyn:type c:Country .
-    r:3640 rdfs:label "YT" .
+    r:3640 rdfs:label "MU" .
     r:3640 dtp:type "country" .
-    r:3640 dtp:code "YT" .
-    r:3640 dtp:desc "Mayotte" .
+    r:3640 dtp:code "MU" .
+    r:3640 dtp:desc "Mauritius" .
     r:3641 rdfsyn:type c:Country .
-    r:3641 rdfs:label "MM" .
+    r:3641 rdfs:label "YT" .
     r:3641 dtp:type "country" .
-    r:3641 dtp:code "MM" .
-    r:3641 dtp:desc "Myanmar" .
+    r:3641 dtp:code "YT" .
+    r:3641 dtp:desc "Mayotte" .
     r:3642 rdfsyn:type c:Country .
-    r:3642 rdfs:label "MX" .
+    r:3642 rdfs:label "MM" .
     r:3642 dtp:type "country" .
-    r:3642 dtp:code "MX" .
-    r:3642 dtp:desc "Mexico" .
+    r:3642 dtp:code "MM" .
+    r:3642 dtp:desc "Myanmar" .
     r:3643 rdfsyn:type c:Country .
-    r:3643 rdfs:label "MC" .
+    r:3643 rdfs:label "MX" .
     r:3643 dtp:type "country" .
-    r:3643 dtp:code "MC" .
-    r:3643 dtp:desc "Monaco" .
+    r:3643 dtp:code "MX" .
+    r:3643 dtp:desc "Mexico" .
     r:3644 rdfsyn:type c:Country .
-    r:3644 rdfs:label "ME" .
+    r:3644 rdfs:label "MC" .
     r:3644 dtp:type "country" .
-    r:3644 dtp:code "ME" .
-    r:3644 dtp:desc "Montenegro" .
+    r:3644 dtp:code "MC" .
+    r:3644 dtp:desc "Monaco" .
     r:3645 rdfsyn:type c:Country .
-    r:3645 rdfs:label "MN" .
+    r:3645 rdfs:label "ME" .
     r:3645 dtp:type "country" .
-    r:3645 dtp:code "MN" .
-    r:3645 dtp:desc "Mongolia" .
+    r:3645 dtp:code "ME" .
+    r:3645 dtp:desc "Montenegro" .
     r:3646 rdfsyn:type c:Country .
-    r:3646 rdfs:label "MS" .
+    r:3646 rdfs:label "MN" .
     r:3646 dtp:type "country" .
-    r:3646 dtp:code "MS" .
-    r:3646 dtp:desc "Montserrat" .
+    r:3646 dtp:code "MN" .
+    r:3646 dtp:desc "Mongolia" .
     r:3647 rdfsyn:type c:Country .
-    r:3647 rdfs:label "MA" .
+    r:3647 rdfs:label "MS" .
     r:3647 dtp:type "country" .
-    r:3647 dtp:code "MA" .
-    r:3647 dtp:desc "Morocco" .
+    r:3647 dtp:code "MS" .
+    r:3647 dtp:desc "Montserrat" .
     r:3648 rdfsyn:type c:Country .
-    r:3648 rdfs:label "MD" .
+    r:3648 rdfs:label "MA" .
     r:3648 dtp:type "country" .
-    r:3648 dtp:code "MD" .
-    r:3648 dtp:desc "Moldova" .
+    r:3648 dtp:code "MA" .
+    r:3648 dtp:desc "Morocco" .
     r:3649 rdfsyn:type c:Country .
-    r:3649 rdfs:label "MZ" .
+    r:3649 rdfs:label "MD" .
     r:3649 dtp:type "country" .
-    r:3649 dtp:code "MZ" .
-    r:3649 dtp:desc "Mozambique" .
+    r:3649 dtp:code "MD" .
+    r:3649 dtp:desc "Moldova" .
     r:3650 rdfsyn:type c:Country .
-    r:3650 rdfs:label "NA" .
+    r:3650 rdfs:label "MZ" .
     r:3650 dtp:type "country" .
-    r:3650 dtp:code "NA" .
-    r:3650 dtp:desc "Namibia" .
+    r:3650 dtp:code "MZ" .
+    r:3650 dtp:desc "Mozambique" .
     r:3651 rdfsyn:type c:Country .
-    r:3651 rdfs:label "NR" .
+    r:3651 rdfs:label "NA" .
     r:3651 dtp:type "country" .
-    r:3651 dtp:code "NR" .
-    r:3651 dtp:desc "Nauru" .
+    r:3651 dtp:code "NA" .
+    r:3651 dtp:desc "Namibia" .
     r:3652 rdfsyn:type c:Country .
-    r:3652 rdfs:label "NP" .
+    r:3652 rdfs:label "NR" .
     r:3652 dtp:type "country" .
-    r:3652 dtp:code "NP" .
-    r:3652 dtp:desc "Nepal" .
+    r:3652 dtp:code "NR" .
+    r:3652 dtp:desc "Nauru" .
     r:3653 rdfsyn:type c:Country .
-    r:3653 rdfs:label "NL" .
+    r:3653 rdfs:label "NP" .
     r:3653 dtp:type "country" .
-    r:3653 dtp:code "NL" .
-    r:3653 dtp:desc "Netherlands" .
+    r:3653 dtp:code "NP" .
+    r:3653 dtp:desc "Nepal" .
     r:3654 rdfsyn:type c:Country .
-    r:3654 rdfs:label "NC" .
+    r:3654 rdfs:label "NL" .
     r:3654 dtp:type "country" .
-    r:3654 dtp:code "NC" .
-    r:3654 dtp:desc "New Caledonia" .
+    r:3654 dtp:code "NL" .
+    r:3654 dtp:desc "Netherlands" .
     r:3655 rdfsyn:type c:Country .
-    r:3655 rdfs:label "NI" .
+    r:3655 rdfs:label "NC" .
     r:3655 dtp:type "country" .
-    r:3655 dtp:code "NI" .
-    r:3655 dtp:desc "Nicaragua" .
+    r:3655 dtp:code "NC" .
+    r:3655 dtp:desc "New Caledonia" .
     r:3656 rdfsyn:type c:Country .
-    r:3656 rdfs:label "NE" .
+    r:3656 rdfs:label "NI" .
     r:3656 dtp:type "country" .
-    r:3656 dtp:code "NE" .
-    r:3656 dtp:desc "Niger" .
+    r:3656 dtp:code "NI" .
+    r:3656 dtp:desc "Nicaragua" .
     r:3657 rdfsyn:type c:Country .
-    r:3657 rdfs:label "NG" .
+    r:3657 rdfs:label "NE" .
     r:3657 dtp:type "country" .
-    r:3657 dtp:code "NG" .
-    r:3657 dtp:desc "Nigeria" .
+    r:3657 dtp:code "NE" .
+    r:3657 dtp:desc "Niger" .
     r:3658 rdfsyn:type c:Country .
-    r:3658 rdfs:label "NF" .
+    r:3658 rdfs:label "NG" .
     r:3658 dtp:type "country" .
-    r:3658 dtp:code "NF" .
-    r:3658 dtp:desc "Norfolk Island" .
+    r:3658 dtp:code "NG" .
+    r:3658 dtp:desc "Nigeria" .
     r:3659 rdfsyn:type c:Country .
-    r:3659 rdfs:label "MP" .
+    r:3659 rdfs:label "NF" .
     r:3659 dtp:type "country" .
-    r:3659 dtp:code "MP" .
-    r:3659 dtp:desc "Northern Mariana Islands" .
+    r:3659 dtp:code "NF" .
+    r:3659 dtp:desc "Norfolk Island" .
     r:3660 rdfsyn:type c:Country .
-    r:3660 rdfs:label "NO" .
+    r:3660 rdfs:label "MP" .
     r:3660 dtp:type "country" .
-    r:3660 dtp:code "NO" .
-    r:3660 dtp:desc "Norway" .
+    r:3660 dtp:code "MP" .
+    r:3660 dtp:desc "Northern Mariana Islands" .
     r:3661 rdfsyn:type c:Country .
-    r:3661 rdfs:label "NZ" .
+    r:3661 rdfs:label "NO" .
     r:3661 dtp:type "country" .
-    r:3661 dtp:code "NZ" .
-    r:3661 dtp:desc "New Zealand" .
+    r:3661 dtp:code "NO" .
+    r:3661 dtp:desc "Norway" .
     r:3662 rdfsyn:type c:Country .
-    r:3662 rdfs:label "OM" .
+    r:3662 rdfs:label "NZ" .
     r:3662 dtp:type "country" .
-    r:3662 dtp:code "OM" .
-    r:3662 dtp:desc "Oman" .
+    r:3662 dtp:code "NZ" .
+    r:3662 dtp:desc "New Zealand" .
     r:3663 rdfsyn:type c:Country .
-    r:3663 rdfs:label "PA" .
+    r:3663 rdfs:label "OM" .
     r:3663 dtp:type "country" .
-    r:3663 dtp:code "PA" .
-    r:3663 dtp:desc "Panama" .
+    r:3663 dtp:code "OM" .
+    r:3663 dtp:desc "Oman" .
     r:3664 rdfsyn:type c:Country .
-    r:3664 rdfs:label "PK" .
+    r:3664 rdfs:label "PA" .
     r:3664 dtp:type "country" .
-    r:3664 dtp:code "PK" .
-    r:3664 dtp:desc "Pakistan" .
+    r:3664 dtp:code "PA" .
+    r:3664 dtp:desc "Panama" .
     r:3665 rdfsyn:type c:Country .
-    r:3665 rdfs:label "PG" .
+    r:3665 rdfs:label "PK" .
     r:3665 dtp:type "country" .
-    r:3665 dtp:code "PG" .
-    r:3665 dtp:desc "Papua New Guinea" .
+    r:3665 dtp:code "PK" .
+    r:3665 dtp:desc "Pakistan" .
     r:3666 rdfsyn:type c:Country .
-    r:3666 rdfs:label "PY" .
+    r:3666 rdfs:label "PG" .
     r:3666 dtp:type "country" .
-    r:3666 dtp:code "PY" .
-    r:3666 dtp:desc "Paraguay" .
+    r:3666 dtp:code "PG" .
+    r:3666 dtp:desc "Papua New Guinea" .
     r:3667 rdfsyn:type c:Country .
-    r:3667 rdfs:label "PW" .
+    r:3667 rdfs:label "PY" .
     r:3667 dtp:type "country" .
-    r:3667 dtp:code "PW" .
-    r:3667 dtp:desc "Palau" .
+    r:3667 dtp:code "PY" .
+    r:3667 dtp:desc "Paraguay" .
     r:3668 rdfsyn:type c:Country .
-    r:3668 rdfs:label "PE" .
+    r:3668 rdfs:label "PW" .
     r:3668 dtp:type "country" .
-    r:3668 dtp:code "PE" .
-    r:3668 dtp:desc "Peru" .
+    r:3668 dtp:code "PW" .
+    r:3668 dtp:desc "Palau" .
     r:3669 rdfsyn:type c:Country .
-    r:3669 rdfs:label "PH" .
+    r:3669 rdfs:label "PE" .
     r:3669 dtp:type "country" .
-    r:3669 dtp:code "PH" .
-    r:3669 dtp:desc "Philippines" .
+    r:3669 dtp:code "PE" .
+    r:3669 dtp:desc "Peru" .
     r:3670 rdfsyn:type c:Country .
-    r:3670 rdfs:label "PN" .
+    r:3670 rdfs:label "PH" .
     r:3670 dtp:type "country" .
-    r:3670 dtp:code "PN" .
-    r:3670 dtp:desc "Pitcairn" .
+    r:3670 dtp:code "PH" .
+    r:3670 dtp:desc "Philippines" .
     r:3671 rdfsyn:type c:Country .
-    r:3671 rdfs:label "PL" .
+    r:3671 rdfs:label "PN" .
     r:3671 dtp:type "country" .
-    r:3671 dtp:code "PL" .
-    r:3671 dtp:desc "Poland" .
+    r:3671 dtp:code "PN" .
+    r:3671 dtp:desc "Pitcairn" .
     r:3672 rdfsyn:type c:Country .
-    r:3672 rdfs:label "PT" .
+    r:3672 rdfs:label "PL" .
     r:3672 dtp:type "country" .
-    r:3672 dtp:code "PT" .
-    r:3672 dtp:desc "Portugal" .
+    r:3672 dtp:code "PL" .
+    r:3672 dtp:desc "Poland" .
     r:3673 rdfsyn:type c:Country .
-    r:3673 rdfs:label "PR" .
+    r:3673 rdfs:label "PT" .
     r:3673 dtp:type "country" .
-    r:3673 dtp:code "PR" .
-    r:3673 dtp:desc "Puerto Rico" .
+    r:3673 dtp:code "PT" .
+    r:3673 dtp:desc "Portugal" .
     r:3674 rdfsyn:type c:Country .
-    r:3674 rdfs:label "QA" .
+    r:3674 rdfs:label "PR" .
     r:3674 dtp:type "country" .
-    r:3674 dtp:code "QA" .
-    r:3674 dtp:desc "Qatar" .
+    r:3674 dtp:code "PR" .
+    r:3674 dtp:desc "Puerto Rico" .
     r:3675 rdfsyn:type c:Country .
-    r:3675 rdfs:label "KR" .
+    r:3675 rdfs:label "QA" .
     r:3675 dtp:type "country" .
-    r:3675 dtp:code "KR" .
-    r:3675 dtp:desc "Republic of Korea" .
+    r:3675 dtp:code "QA" .
+    r:3675 dtp:desc "Qatar" .
     r:3676 rdfsyn:type c:Country .
-    r:3676 rdfs:label "RE" .
+    r:3676 rdfs:label "KR" .
     r:3676 dtp:type "country" .
-    r:3676 dtp:code "RE" .
-    r:3676 dtp:desc "Reunion" .
+    r:3676 dtp:code "KR" .
+    r:3676 dtp:desc "Republic of Korea" .
     r:3677 rdfsyn:type c:Country .
-    r:3677 rdfs:label "RO" .
+    r:3677 rdfs:label "RE" .
     r:3677 dtp:type "country" .
-    r:3677 dtp:code "RO" .
-    r:3677 dtp:desc "Romania" .
+    r:3677 dtp:code "RE" .
+    r:3677 dtp:desc "Reunion" .
     r:3678 rdfsyn:type c:Country .
-    r:3678 rdfs:label "RU" .
+    r:3678 rdfs:label "RO" .
     r:3678 dtp:type "country" .
-    r:3678 dtp:code "RU" .
-    r:3678 dtp:desc "Russian Federation" .
+    r:3678 dtp:code "RO" .
+    r:3678 dtp:desc "Romania" .
     r:3679 rdfsyn:type c:Country .
-    r:3679 rdfs:label "RW" .
+    r:3679 rdfs:label "RU" .
     r:3679 dtp:type "country" .
-    r:3679 dtp:code "RW" .
-    r:3679 dtp:desc "Rwanda" .
+    r:3679 dtp:code "RU" .
+    r:3679 dtp:desc "Russian Federation" .
     r:3680 rdfsyn:type c:Country .
-    r:3680 rdfs:label "BL" .
+    r:3680 rdfs:label "RW" .
     r:3680 dtp:type "country" .
-    r:3680 dtp:code "BL" .
-    r:3680 dtp:desc "Saint-Barthelemy" .
+    r:3680 dtp:code "RW" .
+    r:3680 dtp:desc "Rwanda" .
     r:3681 rdfsyn:type c:Country .
-    r:3681 rdfs:label "SH" .
+    r:3681 rdfs:label "BL" .
     r:3681 dtp:type "country" .
-    r:3681 dtp:code "SH" .
-    r:3681 dtp:desc "Saint Helena" .
+    r:3681 dtp:code "BL" .
+    r:3681 dtp:desc "Saint-Barthelemy" .
     r:3682 rdfsyn:type c:Country .
-    r:3682 rdfs:label "KN" .
+    r:3682 rdfs:label "SH" .
     r:3682 dtp:type "country" .
-    r:3682 dtp:code "KN" .
-    r:3682 dtp:desc "Saint Kitts and Nevis" .
+    r:3682 dtp:code "SH" .
+    r:3682 dtp:desc "Saint Helena" .
     r:3683 rdfsyn:type c:Country .
-    r:3683 rdfs:label "LC" .
+    r:3683 rdfs:label "KN" .
     r:3683 dtp:type "country" .
-    r:3683 dtp:code "LC" .
-    r:3683 dtp:desc "Saint Lucia" .
+    r:3683 dtp:code "KN" .
+    r:3683 dtp:desc "Saint Kitts and Nevis" .
     r:3684 rdfsyn:type c:Country .
-    r:3684 rdfs:label "MF" .
+    r:3684 rdfs:label "LC" .
     r:3684 dtp:type "country" .
-    r:3684 dtp:code "MF" .
-    r:3684 dtp:desc "Saint-Martin (France)" .
+    r:3684 dtp:code "LC" .
+    r:3684 dtp:desc "Saint Lucia" .
     r:3685 rdfsyn:type c:Country .
-    r:3685 rdfs:label "PM" .
+    r:3685 rdfs:label "MF" .
     r:3685 dtp:type "country" .
-    r:3685 dtp:code "PM" .
-    r:3685 dtp:desc "Saint Pierre and Miquelon" .
+    r:3685 dtp:code "MF" .
+    r:3685 dtp:desc "Saint-Martin (France)" .
     r:3686 rdfsyn:type c:Country .
-    r:3686 rdfs:label "VC" .
+    r:3686 rdfs:label "PM" .
     r:3686 dtp:type "country" .
-    r:3686 dtp:code "VC" .
-    r:3686 dtp:desc "Saint Vincent and Grenadines" .
+    r:3686 dtp:code "PM" .
+    r:3686 dtp:desc "Saint Pierre and Miquelon" .
     r:3687 rdfsyn:type c:Country .
-    r:3687 rdfs:label "WS" .
+    r:3687 rdfs:label "VC" .
     r:3687 dtp:type "country" .
-    r:3687 dtp:code "WS" .
-    r:3687 dtp:desc "Samoa" .
+    r:3687 dtp:code "VC" .
+    r:3687 dtp:desc "Saint Vincent and Grenadines" .
     r:3688 rdfsyn:type c:Country .
-    r:3688 rdfs:label "SM" .
+    r:3688 rdfs:label "WS" .
     r:3688 dtp:type "country" .
-    r:3688 dtp:code "SM" .
-    r:3688 dtp:desc "San Marino" .
+    r:3688 dtp:code "WS" .
+    r:3688 dtp:desc "Samoa" .
     r:3689 rdfsyn:type c:Country .
-    r:3689 rdfs:label "ST" .
+    r:3689 rdfs:label "SM" .
     r:3689 dtp:type "country" .
-    r:3689 dtp:code "ST" .
-    r:3689 dtp:desc "Sao Tome and Principe" .
+    r:3689 dtp:code "SM" .
+    r:3689 dtp:desc "San Marino" .
     r:3690 rdfsyn:type c:Country .
-    r:3690 rdfs:label "SA" .
+    r:3690 rdfs:label "ST" .
     r:3690 dtp:type "country" .
-    r:3690 dtp:code "SA" .
-    r:3690 dtp:desc "Saudi Arabia" .
+    r:3690 dtp:code "ST" .
+    r:3690 dtp:desc "Sao Tome and Principe" .
     r:3691 rdfsyn:type c:Country .
-    r:3691 rdfs:label "SR" .
+    r:3691 rdfs:label "SA" .
     r:3691 dtp:type "country" .
-    r:3691 dtp:code "SR" .
-    r:3691 dtp:desc "Suriname" .
+    r:3691 dtp:code "SA" .
+    r:3691 dtp:desc "Saudi Arabia" .
     r:3692 rdfsyn:type c:Country .
-    r:3692 rdfs:label "SC" .
+    r:3692 rdfs:label "SR" .
     r:3692 dtp:type "country" .
-    r:3692 dtp:code "SC" .
-    r:3692 dtp:desc "Seychelles" .
+    r:3692 dtp:code "SR" .
+    r:3692 dtp:desc "Suriname" .
     r:3693 rdfsyn:type c:Country .
-    r:3693 rdfs:label "SL" .
+    r:3693 rdfs:label "SC" .
     r:3693 dtp:type "country" .
-    r:3693 dtp:code "SL" .
-    r:3693 dtp:desc "Sierra Leone" .
+    r:3693 dtp:code "SC" .
+    r:3693 dtp:desc "Seychelles" .
     r:3694 rdfsyn:type c:Country .
-    r:3694 rdfs:label "SN" .
+    r:3694 rdfs:label "SL" .
     r:3694 dtp:type "country" .
-    r:3694 dtp:code "SN" .
-    r:3694 dtp:desc "Senegal" .
+    r:3694 dtp:code "SL" .
+    r:3694 dtp:desc "Sierra Leone" .
     r:3695 rdfsyn:type c:Country .
-    r:3695 rdfs:label "RS" .
+    r:3695 rdfs:label "SN" .
     r:3695 dtp:type "country" .
-    r:3695 dtp:code "RS" .
-    r:3695 dtp:desc "Serbia" .
+    r:3695 dtp:code "SN" .
+    r:3695 dtp:desc "Senegal" .
     r:3696 rdfsyn:type c:Country .
-    r:3696 rdfs:label "SG" .
+    r:3696 rdfs:label "RS" .
     r:3696 dtp:type "country" .
-    r:3696 dtp:code "SG" .
-    r:3696 dtp:desc "Singapore" .
+    r:3696 dtp:code "RS" .
+    r:3696 dtp:desc "Serbia" .
     r:3697 rdfsyn:type c:Country .
-    r:3697 rdfs:label "SX" .
+    r:3697 rdfs:label "SG" .
     r:3697 dtp:type "country" .
-    r:3697 dtp:code "SX" .
-    r:3697 dtp:desc "Sint Martin" .
+    r:3697 dtp:code "SG" .
+    r:3697 dtp:desc "Singapore" .
     r:3698 rdfsyn:type c:Country .
-    r:3698 rdfs:label "SK" .
+    r:3698 rdfs:label "SX" .
     r:3698 dtp:type "country" .
-    r:3698 dtp:code "SK" .
-    r:3698 dtp:desc "Slovakia" .
+    r:3698 dtp:code "SX" .
+    r:3698 dtp:desc "Sint Martin" .
     r:3699 rdfsyn:type c:Country .
-    r:3699 rdfs:label "SI" .
+    r:3699 rdfs:label "SK" .
     r:3699 dtp:type "country" .
-    r:3699 dtp:code "SI" .
-    r:3699 dtp:desc "Slovenia" .
+    r:3699 dtp:code "SK" .
+    r:3699 dtp:desc "Slovakia" .
     r:3700 rdfsyn:type c:Country .
-    r:3700 rdfs:label "ES" .
+    r:3700 rdfs:label "SI" .
     r:3700 dtp:type "country" .
-    r:3700 dtp:code "ES" .
-    r:3700 dtp:desc "Spain" .
+    r:3700 dtp:code "SI" .
+    r:3700 dtp:desc "Slovenia" .
     r:3701 rdfsyn:type c:Country .
-    r:3701 rdfs:label "SO" .
+    r:3701 rdfs:label "ES" .
     r:3701 dtp:type "country" .
-    r:3701 dtp:code "SO" .
-    r:3701 dtp:desc "Somalia" .
+    r:3701 dtp:code "ES" .
+    r:3701 dtp:desc "Spain" .
     r:3702 rdfsyn:type c:Country .
-    r:3702 rdfs:label "SB" .
+    r:3702 rdfs:label "SO" .
     r:3702 dtp:type "country" .
-    r:3702 dtp:code "SB" .
-    r:3702 dtp:desc "Solomon Islands" .
+    r:3702 dtp:code "SO" .
+    r:3702 dtp:desc "Somalia" .
     r:3703 rdfsyn:type c:Country .
-    r:3703 rdfs:label "ZA" .
+    r:3703 rdfs:label "SB" .
     r:3703 dtp:type "country" .
-    r:3703 dtp:code "ZA" .
-    r:3703 dtp:desc "South Africa" .
+    r:3703 dtp:code "SB" .
+    r:3703 dtp:desc "Solomon Islands" .
     r:3704 rdfsyn:type c:Country .
-    r:3704 rdfs:label "SS" .
+    r:3704 rdfs:label "ZA" .
     r:3704 dtp:type "country" .
-    r:3704 dtp:code "SS" .
-    r:3704 dtp:desc "South Sudan" .
+    r:3704 dtp:code "ZA" .
+    r:3704 dtp:desc "South Africa" .
     r:3705 rdfsyn:type c:Country .
-    r:3705 rdfs:label "LK" .
+    r:3705 rdfs:label "SS" .
     r:3705 dtp:type "country" .
-    r:3705 dtp:code "LK" .
-    r:3705 dtp:desc "Sri Lanka" .
+    r:3705 dtp:code "SS" .
+    r:3705 dtp:desc "South Sudan" .
     r:3706 rdfsyn:type c:Country .
-    r:3706 rdfs:label "SD" .
+    r:3706 rdfs:label "LK" .
     r:3706 dtp:type "country" .
-    r:3706 dtp:code "SD" .
-    r:3706 dtp:desc "Sudan" .
+    r:3706 dtp:code "LK" .
+    r:3706 dtp:desc "Sri Lanka" .
     r:3707 rdfsyn:type c:Country .
-    r:3707 rdfs:label "SE" .
+    r:3707 rdfs:label "SD" .
     r:3707 dtp:type "country" .
-    r:3707 dtp:code "SE" .
-    r:3707 dtp:desc "Sweden" .
+    r:3707 dtp:code "SD" .
+    r:3707 dtp:desc "Sudan" .
     r:3708 rdfsyn:type c:Country .
-    r:3708 rdfs:label "SZ" .
+    r:3708 rdfs:label "SE" .
     r:3708 dtp:type "country" .
-    r:3708 dtp:code "SZ" .
-    r:3708 dtp:desc "Swaziland" .
+    r:3708 dtp:code "SE" .
+    r:3708 dtp:desc "Sweden" .
     r:3709 rdfsyn:type c:Country .
-    r:3709 rdfs:label "CH" .
+    r:3709 rdfs:label "SZ" .
     r:3709 dtp:type "country" .
-    r:3709 dtp:code "CH" .
-    r:3709 dtp:desc "Switzerland" .
+    r:3709 dtp:code "SZ" .
+    r:3709 dtp:desc "Swaziland" .
     r:3710 rdfsyn:type c:Country .
-    r:3710 rdfs:label "SY" .
+    r:3710 rdfs:label "CH" .
     r:3710 dtp:type "country" .
-    r:3710 dtp:code "SY" .
-    r:3710 dtp:desc "Syrian Arab Republic" .
+    r:3710 dtp:code "CH" .
+    r:3710 dtp:desc "Switzerland" .
     r:3711 rdfsyn:type c:Country .
-    r:3711 rdfs:label "TW" .
+    r:3711 rdfs:label "SY" .
     r:3711 dtp:type "country" .
-    r:3711 dtp:code "TW" .
-    r:3711 dtp:desc "Taiwan" .
+    r:3711 dtp:code "SY" .
+    r:3711 dtp:desc "Syrian Arab Republic" .
     r:3712 rdfsyn:type c:Country .
-    r:3712 rdfs:label "TJ" .
+    r:3712 rdfs:label "TW" .
     r:3712 dtp:type "country" .
-    r:3712 dtp:code "TJ" .
-    r:3712 dtp:desc "Tajikistan" .
+    r:3712 dtp:code "TW" .
+    r:3712 dtp:desc "Taiwan" .
     r:3713 rdfsyn:type c:Country .
-    r:3713 rdfs:label "TZ" .
+    r:3713 rdfs:label "TJ" .
     r:3713 dtp:type "country" .
-    r:3713 dtp:code "TZ" .
-    r:3713 dtp:desc "Tanzania" .
+    r:3713 dtp:code "TJ" .
+    r:3713 dtp:desc "Tajikistan" .
     r:3714 rdfsyn:type c:Country .
-    r:3714 rdfs:label "TG" .
+    r:3714 rdfs:label "TZ" .
     r:3714 dtp:type "country" .
-    r:3714 dtp:code "TG" .
-    r:3714 dtp:desc "Togo" .
+    r:3714 dtp:code "TZ" .
+    r:3714 dtp:desc "Tanzania" .
     r:3715 rdfsyn:type c:Country .
-    r:3715 rdfs:label "TO" .
+    r:3715 rdfs:label "TG" .
     r:3715 dtp:type "country" .
-    r:3715 dtp:code "TO" .
-    r:3715 dtp:desc "Tonga" .
+    r:3715 dtp:code "TG" .
+    r:3715 dtp:desc "Togo" .
     r:3716 rdfsyn:type c:Country .
-    r:3716 rdfs:label "TH" .
+    r:3716 rdfs:label "TO" .
     r:3716 dtp:type "country" .
-    r:3716 dtp:code "TH" .
-    r:3716 dtp:desc "Thailand" .
+    r:3716 dtp:code "TO" .
+    r:3716 dtp:desc "Tonga" .
     r:3717 rdfsyn:type c:Country .
-    r:3717 rdfs:label "TL" .
+    r:3717 rdfs:label "TH" .
     r:3717 dtp:type "country" .
-    r:3717 dtp:code "TL" .
-    r:3717 dtp:desc "Timor-Leste" .
+    r:3717 dtp:code "TH" .
+    r:3717 dtp:desc "Thailand" .
     r:3718 rdfsyn:type c:Country .
-    r:3718 rdfs:label "TT" .
+    r:3718 rdfs:label "TL" .
     r:3718 dtp:type "country" .
-    r:3718 dtp:code "TT" .
-    r:3718 dtp:desc "Trinidad and Tobago" .
+    r:3718 dtp:code "TL" .
+    r:3718 dtp:desc "Timor-Leste" .
     r:3719 rdfsyn:type c:Country .
-    r:3719 rdfs:label "TN" .
+    r:3719 rdfs:label "TT" .
     r:3719 dtp:type "country" .
-    r:3719 dtp:code "TN" .
-    r:3719 dtp:desc "Tunisia" .
+    r:3719 dtp:code "TT" .
+    r:3719 dtp:desc "Trinidad and Tobago" .
     r:3720 rdfsyn:type c:Country .
-    r:3720 rdfs:label "TR" .
+    r:3720 rdfs:label "TN" .
     r:3720 dtp:type "country" .
-    r:3720 dtp:code "TR" .
-    r:3720 dtp:desc "Turkey" .
+    r:3720 dtp:code "TN" .
+    r:3720 dtp:desc "Tunisia" .
     r:3721 rdfsyn:type c:Country .
-    r:3721 rdfs:label "TM" .
+    r:3721 rdfs:label "TR" .
     r:3721 dtp:type "country" .
-    r:3721 dtp:code "TM" .
-    r:3721 dtp:desc "Turkmenistan" .
+    r:3721 dtp:code "TR" .
+    r:3721 dtp:desc "Turkey" .
     r:3722 rdfsyn:type c:Country .
-    r:3722 rdfs:label "TC" .
+    r:3722 rdfs:label "TM" .
     r:3722 dtp:type "country" .
-    r:3722 dtp:code "TC" .
-    r:3722 dtp:desc "Turks and Caicos Islands" .
+    r:3722 dtp:code "TM" .
+    r:3722 dtp:desc "Turkmenistan" .
     r:3723 rdfsyn:type c:Country .
-    r:3723 rdfs:label "TV" .
+    r:3723 rdfs:label "TC" .
     r:3723 dtp:type "country" .
-    r:3723 dtp:code "TV" .
-    r:3723 dtp:desc "Tuvalu" .
+    r:3723 dtp:code "TC" .
+    r:3723 dtp:desc "Turks and Caicos Islands" .
     r:3724 rdfsyn:type c:Country .
-    r:3724 rdfs:label "UG" .
+    r:3724 rdfs:label "TV" .
     r:3724 dtp:type "country" .
-    r:3724 dtp:code "UG" .
-    r:3724 dtp:desc "Uganda" .
+    r:3724 dtp:code "TV" .
+    r:3724 dtp:desc "Tuvalu" .
     r:3725 rdfsyn:type c:Country .
-    r:3725 rdfs:label "UA" .
+    r:3725 rdfs:label "UG" .
     r:3725 dtp:type "country" .
-    r:3725 dtp:code "UA" .
-    r:3725 dtp:desc "Ukraine" .
+    r:3725 dtp:code "UG" .
+    r:3725 dtp:desc "Uganda" .
     r:3726 rdfsyn:type c:Country .
-    r:3726 rdfs:label "UK" .
+    r:3726 rdfs:label "UA" .
     r:3726 dtp:type "country" .
-    r:3726 dtp:code "UK" .
-    r:3726 dtp:desc "United Kingdom" .
+    r:3726 dtp:code "UA" .
+    r:3726 dtp:desc "Ukraine" .
     r:3727 rdfsyn:type c:Country .
-    r:3727 rdfs:label "AE" .
+    r:3727 rdfs:label "UK" .
     r:3727 dtp:type "country" .
-    r:3727 dtp:code "AE" .
-    r:3727 dtp:desc "United Arab Emirates" .
+    r:3727 dtp:code "UK" .
+    r:3727 dtp:desc "United Kingdom" .
     r:3728 rdfsyn:type c:Country .
-    r:3728 rdfs:label "US" .
+    r:3728 rdfs:label "AE" .
     r:3728 dtp:type "country" .
-    r:3728 dtp:code "US" .
-    r:3728 dtp:desc "United States" .
+    r:3728 dtp:code "AE" .
+    r:3728 dtp:desc "United Arab Emirates" .
     r:3729 rdfsyn:type c:Country .
-    r:3729 rdfs:label "UY" .
+    r:3729 rdfs:label "US" .
     r:3729 dtp:type "country" .
-    r:3729 dtp:code "UY" .
-    r:3729 dtp:desc "Uruguay" .
+    r:3729 dtp:code "US" .
+    r:3729 dtp:desc "United States" .
     r:3730 rdfsyn:type c:Country .
-    r:3730 rdfs:label "UZ" .
+    r:3730 rdfs:label "UY" .
     r:3730 dtp:type "country" .
-    r:3730 dtp:code "UZ" .
-    r:3730 dtp:desc "Uzbekistan" .
+    r:3730 dtp:code "UY" .
+    r:3730 dtp:desc "Uruguay" .
     r:3731 rdfsyn:type c:Country .
-    r:3731 rdfs:label "VU" .
+    r:3731 rdfs:label "UZ" .
     r:3731 dtp:type "country" .
-    r:3731 dtp:code "VU" .
-    r:3731 dtp:desc "Vanuatu" .
+    r:3731 dtp:code "UZ" .
+    r:3731 dtp:desc "Uzbekistan" .
     r:3732 rdfsyn:type c:Country .
-    r:3732 rdfs:label "VE" .
+    r:3732 rdfs:label "VU" .
     r:3732 dtp:type "country" .
-    r:3732 dtp:code "VE" .
-    r:3732 dtp:desc "Venezuela" .
+    r:3732 dtp:code "VU" .
+    r:3732 dtp:desc "Vanuatu" .
     r:3733 rdfsyn:type c:Country .
-    r:3733 rdfs:label "VI" .
+    r:3733 rdfs:label "VE" .
     r:3733 dtp:type "country" .
-    r:3733 dtp:code "VI" .
-    r:3733 dtp:desc "Virgin Islands (US)" .
+    r:3733 dtp:code "VE" .
+    r:3733 dtp:desc "Venezuela" .
     r:3734 rdfsyn:type c:Country .
-    r:3734 rdfs:label "VN" .
+    r:3734 rdfs:label "VI" .
     r:3734 dtp:type "country" .
-    r:3734 dtp:code "VN" .
-    r:3734 dtp:desc "Viet Nam" .
+    r:3734 dtp:code "VI" .
+    r:3734 dtp:desc "Virgin Islands (US)" .
     r:3735 rdfsyn:type c:Country .
-    r:3735 rdfs:label "WF" .
+    r:3735 rdfs:label "VN" .
     r:3735 dtp:type "country" .
-    r:3735 dtp:code "WF" .
-    r:3735 dtp:desc "Wallis and Futuna Islands" .
+    r:3735 dtp:code "VN" .
+    r:3735 dtp:desc "Viet Nam" .
     r:3736 rdfsyn:type c:Country .
-    r:3736 rdfs:label "EH" .
+    r:3736 rdfs:label "WF" .
     r:3736 dtp:type "country" .
-    r:3736 dtp:code "EH" .
-    r:3736 dtp:desc "Western Sahara" .
+    r:3736 dtp:code "WF" .
+    r:3736 dtp:desc "Wallis and Futuna Islands" .
     r:3737 rdfsyn:type c:Country .
-    r:3737 rdfs:label "YE" .
+    r:3737 rdfs:label "EH" .
     r:3737 dtp:type "country" .
-    r:3737 dtp:code "YE" .
-    r:3737 dtp:desc "Yemen" .
+    r:3737 dtp:code "EH" .
+    r:3737 dtp:desc "Western Sahara" .
     r:3738 rdfsyn:type c:Country .
-    r:3738 rdfs:label "ZM" .
+    r:3738 rdfs:label "YE" .
     r:3738 dtp:type "country" .
-    r:3738 dtp:code "ZM" .
-    r:3738 dtp:desc "Zambia" .
+    r:3738 dtp:code "YE" .
+    r:3738 dtp:desc "Yemen" .
     r:3739 rdfsyn:type c:Country .
-    r:3739 rdfs:label "ZW" .
+    r:3739 rdfs:label "ZM" .
     r:3739 dtp:type "country" .
-    r:3739 dtp:code "ZW" .
-    r:3739 dtp:desc "Zimbabwe" .
-    r:3740 rdfsyn:type c:Continent .
-    r:3740 rdfs:label "EU" .
-    r:3740 dtp:type "continent" .
-    r:3740 dtp:code "EU" .
-    r:3740 dtp:desc "Europe" .
+    r:3739 dtp:code "ZM" .
+    r:3739 dtp:desc "Zambia" .
+    r:3740 rdfsyn:type c:Country .
+    r:3740 rdfs:label "ZW" .
+    r:3740 dtp:type "country" .
+    r:3740 dtp:code "ZW" .
+    r:3740 dtp:desc "Zimbabwe" .
     r:3741 rdfsyn:type c:Continent .
-    r:3741 rdfs:label "AF" .
+    r:3741 rdfs:label "EU" .
     r:3741 dtp:type "continent" .
-    r:3741 dtp:code "AF" .
-    r:3741 dtp:desc "Africa" .
+    r:3741 dtp:code "EU" .
+    r:3741 dtp:desc "Europe" .
     r:3742 rdfsyn:type c:Continent .
-    r:3742 rdfs:label "NA" .
+    r:3742 rdfs:label "AF" .
     r:3742 dtp:type "continent" .
-    r:3742 dtp:code "NA" .
-    r:3742 dtp:desc "North America" .
+    r:3742 dtp:code "AF" .
+    r:3742 dtp:desc "Africa" .
     r:3743 rdfsyn:type c:Continent .
-    r:3743 rdfs:label "SA" .
+    r:3743 rdfs:label "NA" .
     r:3743 dtp:type "continent" .
-    r:3743 dtp:code "SA" .
-    r:3743 dtp:desc "South America" .
+    r:3743 dtp:code "NA" .
+    r:3743 dtp:desc "North America" .
     r:3744 rdfsyn:type c:Continent .
-    r:3744 rdfs:label "AS" .
+    r:3744 rdfs:label "SA" .
     r:3744 dtp:type "continent" .
-    r:3744 dtp:code "AS" .
-    r:3744 dtp:desc "Asia" .
+    r:3744 dtp:code "SA" .
+    r:3744 dtp:desc "South America" .
     r:3745 rdfsyn:type c:Continent .
-    r:3745 rdfs:label "OC" .
+    r:3745 rdfs:label "AS" .
     r:3745 dtp:type "continent" .
-    r:3745 dtp:code "OC" .
-    r:3745 dtp:desc "Oceania" .
+    r:3745 dtp:code "AS" .
+    r:3745 dtp:desc "Asia" .
     r:3746 rdfsyn:type c:Continent .
-    r:3746 rdfs:label "AN" .
+    r:3746 rdfs:label "OC" .
     r:3746 dtp:type "continent" .
-    r:3746 dtp:code "AN" .
-    r:3746 dtp:desc "Antarctica" .
+    r:3746 dtp:code "OC" .
+    r:3746 dtp:desc "Oceania" .
+    r:3747 rdfsyn:type c:Continent .
+    r:3747 rdfs:label "AN" .
+    r:3747 dtp:type "continent" .
+    r:3747 dtp:code "AN" .
+    r:3747 dtp:desc "Antarctica" .
     }
 }
