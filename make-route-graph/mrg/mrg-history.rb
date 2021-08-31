@@ -142,3 +142,4 @@
 #                       all TXL and SXF routes to BER and recomputed distances. This
 #                       reduced the total routes in the graph from 50,660 to 50,532
 #                       Added 2 route pairs (4 total routes) 
+#                       ** This version of the data was put into GitHub on Aug 31st 2021.
