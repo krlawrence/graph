@@ -19,7 +19,7 @@ The list of available commands and options can be obtained using :
 $ ruby mrg -?
 
 
-MakeRouteGraph version: 0.87 , 2021-Aug-31
+MakeRouteGraph version: 0.88 , 2021-Sep-1
 
 Usage: mrg.rb command [options|value]
 Use -? to get additional help.
