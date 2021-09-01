@@ -19,7 +19,7 @@ The list of available commands and options can be obtained using :
 $ ruby mrg -?
 
 
-MakeRouteGraph version: 0.87 , 2021-Aug-23
+MakeRouteGraph version: 0.87 , 2021-Aug-31
 
 Usage: mrg.rb command [options|value]
 Use -? to get additional help.
@@ -41,7 +41,7 @@ Graph Selection
 ---------------
   -big           Build (or search) the bigger (full) worldwide route graph.
                  The default (tiny) graph just has 46 airports and 1390 routes, all in the USA.
-                 The full graph contains 3502 airports and 50660 routes.
+                 The full graph contains 3503 airports and 50532 routes.
 
 Graph Information
 -----------------
@@ -75,6 +75,10 @@ Graph Information
   id [id]        Display details about the aiport for the given ID (-big will be assumed)
                  Example: id 50
   apcode         Display a table of airport codes and IDs
+
+  far [iata]     Display information about the airport farthest away from the given IATA code.
+                 The calculation is based on actual distance and not existing routes.
+                 (-big will be assumed).
 
 Scope Modifiers
 ----------------
@@ -120,5 +124,4 @@ Visual Formats - viewable in a browser
 Getting Help
 ------------
   -? or -help    Display this help.
-
 ```
