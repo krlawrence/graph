@@ -52,8 +52,9 @@ echo "*** Generating SQL Files"
 $mrg hid -big > tmp-routes.csv
 $mrg hcode -big > tmp-routes-iata.csv
 $mrg list -big -all > tmp-airports.csv
+apcount=$($mrg apcount -big) 
 echo "      airports.sql"
-ruby ../../sample-data/SQL/scripts/make-sql.rb tmp-airports.csv 1 3503 > airports.sql
+ruby ../../sample-data/SQL/scripts/make-sql.rb tmp-airports.csv 1 $apcount > airports.sql
 echo "      routes.sql"
 ruby ../../sample-data/SQL/scripts/make-route-sql.rb tmp-routes.csv > routes.sql
 echo "      routes-iata.sql"

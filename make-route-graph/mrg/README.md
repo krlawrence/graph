@@ -48,6 +48,9 @@ Graph Information
   stats          Display stats about the number of airports, routes etc.
                  If -all is also specified additional graph analysis will be performed.
 
+  apcount        Return the count of available airports. Use -big to count all airports.
+  rtcount        Return the count of available routes. Use -big to count all routes.
+
   degree [iata]  Display the in and out degree (route count) for the given airport IATA code.
                  The in and out values may not always match as not all routes have return flights.
                  (-big will be assumed)

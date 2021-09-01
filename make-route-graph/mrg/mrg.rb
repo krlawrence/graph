@@ -45,7 +45,9 @@ distance   = false  # If set return distance for specified route.
 gte        = false  # If set return routes greater or equal to specified value
 lte        = false  # If set return routes greater or equal to specified value
 gremlin    = false  # If set generate a Gremlin script that builds the graph.
-farthest   = false  # If display the farthest away airport from the given IATA code
+farthest   = false  # If set display the farthest away airport from the given IATA code
+apcount    = false  # If set return the current airport count.
+rtcount    = false  # If set return the current route count.
 param      = ""     # Country or code to be used when -country, -region, -to or -from is set
 
 # ---------------------------------------------------------------------------------------
@@ -85,6 +87,9 @@ def displayHelp()
   puts "-----------------"
   puts "  stats          Display stats about the number of airports, routes etc."
   puts "                 If -all is also specified additional graph analysis will be performed."
+  puts
+  puts "  apcount        Return the count of available airports. Use -big to count all airports."
+  puts "  rtcount        Return the count of available routes. Use -big to count all routes."
   puts
   puts "  degree [iata]  Display the in and out degree (route count) for the given airport IATA code."
   puts "                 The in and out values may not always match as not all routes have return flights."
@@ -232,6 +237,8 @@ else
       when "check" then check = true
       when "-all" then all = true
       when "gremlin" then gremlin = true
+      when "apcount" then apcount = true
+      when "rtcount" then rtcount = true
       when "-?","-help" then help = true
     end
   end
@@ -250,6 +257,10 @@ mrg = MakeRouteGraph.new(allAirports:big,verbose:verbose,all:all,tp3:tp3,tp2:tp2
 case
   when stats
     mrg.displayGraphStatistics()
+  when apcount
+    puts(mrg.getAirportCount())
+  when rtcount
+    puts(mrg.getRouteCount())
   when country
     mrg.displayAirportsInCountry(param) 
   when countries
