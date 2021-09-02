@@ -48,6 +48,7 @@ gremlin    = false  # If set generate a Gremlin script that builds the graph.
 farthest   = false  # If set display the farthest away airport from the given IATA code
 apcount    = false  # If set return the current airport count.
 rtcount    = false  # If set return the current route count.
+version    = false  # If set display the version information.
 param      = ""     # Country or code to be used when -country, -region, -to or -from is set
 
 # ---------------------------------------------------------------------------------------
@@ -60,9 +61,13 @@ def displayUsage()
   puts
 end
 
+def displayVersion()
+  puts "MakeRouteGraph version: #{VERSION} , #{VERSION_DATE}"
+end
+
 def displayHelp()
   puts
-  puts "MakeRouteGraph version: #{VERSION} , #{VERSION_DATE}"
+  displayVersion()
   displayUsage()
   puts "Available commands and options:"
   puts
@@ -167,6 +172,7 @@ def displayHelp()
   puts "Getting Help"
   puts "------------"
   puts "  -? or -help    Display this help."
+  puts "  -version       Display version information."
   puts
   exit
 end
@@ -239,6 +245,7 @@ else
       when "gremlin" then gremlin = true
       when "apcount" then apcount = true
       when "rtcount" then rtcount = true
+      when "-version" then version = true
       when "-?","-help" then help = true
     end
   end
@@ -246,6 +253,9 @@ end
 
 if usage
   displayUsage()
+  exit
+elsif version
+  displayVersion()
   exit
 elsif help
   displayHelp()
