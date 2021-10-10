@@ -260,7 +260,6 @@ module MRGGraphMLBuilder
   # ---------------------------------------------------------------------------------------
   def generateGraphMLCountryEdges(id)
     tmp = ""
-    lines = 0
     begin
       AIRPORT_DATA.each do |ap|
         tmp = ap[9]
