@@ -10,7 +10,6 @@
 
 require_relative 'mrg-core'
 require_relative 'mrg-constants'
-include MRGConstants
 
 gephi      = false  # If set build Gephi compatible labels when generating GraphML
 graphml    = false  # If set generate GraphML output
