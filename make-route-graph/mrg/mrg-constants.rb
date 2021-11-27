@@ -7,7 +7,7 @@
 #----------------------------------------------------------------------------------------
 module MRGConstants
   VERSION = "0.88" 
-  VERSION_DATE = "2021-Sep-1" 
+  VERSION_DATE = "2021-Nov-27" 
   VERSION_TIME = Time.new.utc 
   AUTHOR = "Kelvin R. Lawrence" 
 
