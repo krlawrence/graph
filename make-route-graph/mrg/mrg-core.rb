@@ -375,7 +375,7 @@ class MakeRouteGraph
     id = getAirportId(code)
     if id != 0
       outdeg,indeg = calcAirportDegree(code)
-      puts "Route conts for #{code} (#{AIRPORT_DATA[id-1][APT_DESC]})"
+      puts "Route counts for #{code} (#{AIRPORT_DATA[id-1][APT_DESC]})"
       puts "routes out: #{outdeg} , routes in: #{indeg}"
     else
       puts "Sorry no airport found with a code of #{code}"
