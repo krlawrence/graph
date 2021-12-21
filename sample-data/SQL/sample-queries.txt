@@ -351,3 +351,20 @@ limit 5;
 | 31 | DEN  |
 +----+------+    
 
+# If using a SQL variant such as MySQL, replace the `||` below with a call to concat_ws.
+WITH RECURSIVE graphtraversal AS (
+  SELECT e.src, e.dest, 1 as depth, '->' || n1.iata || n2.iata as path
+  FROM airports n1
+   INNER JOIN routes e on n1.id = e.src  
+   INNER JOIN airports n2 ON n2.id = e.dest    
+  WHERE n1.iata = 'AUS'  
+ UNION    
+  SELECT r.src, p.dest, r.depth + 1 as depth, '->' || r.path || n.iata   
+  FROM graphtraversal r 
+   INNER JOIN routes p on p.src = r.dest  
+   INNER JOIN airports n ON p.dest = n.id    
+  WHERE r.depth < 4
+)
+SELECT r.depth as total_hops, r.dest as destination, r.path
+FROM graphtraversal r INNER JOIN airports n ON r.dest = n.id
+WHERE n.iata = 'AKL';  
