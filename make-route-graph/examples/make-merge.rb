@@ -2,7 +2,7 @@
 # make-merge.rb
 #
 # Example of using the MakeRouteGraph class to create a list of maps that are
-# compatible with the Gremlin mergeV() step added as par of the Apache TinkerPop 3.6.0
+# compatible with the Gremlin mergeV() step added as part of the Apache TinkerPop 3.6.0
 # release. For more details see the TINKERPOP-2681 Jira ticket.
 #
 # If the data this script creates is used as the source to a Groovy list of maps, then
