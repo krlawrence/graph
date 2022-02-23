@@ -1,6 +1,6 @@
 // tree-with-500-nodes.groovy
 //
-// Creates a 500 node ordered binary tree that has amaximum depth of 18.
+// Creates a 500 node ordered binary tree that has a maximum depth of 18.
 // This data set is useful for experiments that look for leaf nodes or
 // nodes at various depths. This graph has no cycles.
 //
