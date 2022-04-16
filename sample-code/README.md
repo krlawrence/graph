@@ -13,4 +13,6 @@ Files with a ".cs" extension are C# files that require a Microsoft .Net runtime 
 
 Files with a ".js" extension are JavaScript files designed to be run using Node.js and the Gremlin JavaScript driver available from NPM.
 
+Files with a ".go" extension are Go files designed to be compiled and run using the Apache TInkerPop Go client, launched in April 2022
+
 Some of the samples use data from CSV files that can be found in the *'/sample-data'* folder.
