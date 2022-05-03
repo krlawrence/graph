@@ -247,7 +247,7 @@ class RemoteQueryPool
     
     long stop = System.currentTimeMillis();
    
-    // All done, shit down the pool, close the server connection and calculate how long the 
+    // All done, shut down the pool, close the server connection and calculate how long the 
     // workload took to run.
     rqp.closeConnection();
     rqp.shutdown();
