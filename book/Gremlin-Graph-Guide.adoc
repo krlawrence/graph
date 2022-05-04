@@ -344,10 +344,53 @@ removed from the Gremlin language. The newer 'Order.asc' and 'Order.desc' must b
 used instead. The examples in this book and those in the `sample-code` folder have
 been updated to reflect these changes.
 
-As always, check the level of ApacheTinkerPop the graph database you are using
-supports to make sure the features you want to use are supported.
+In January 2022, the TinkerPop 3.5.2 release added a native `datetime` operator to
+the Gremlin language such that dates can be added without needing programming
+language specific constructs. This is useful when sending Gremlin queries as text
+strings.
 
 NOTE: Full details of all the new features added in the TinkerPop 3.5.x releases can be
+found at the following link:
+https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc  
+
+[[tp36intro]]
+Introducing TinkerPop 3.6
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Apache TinkerPop 3.6.0 was released in April 2022. Coming almost exactly a year after
+the initial 3.5.0 release, this is one of the most significant TinkerPop releases
+since TinkerPop 3.4.0 appeared in January 2019. The release contains many
+improvements, including several new Gremlin steps, designed to make commonly
+performed tasks much easier. Notable improvements include:
+
+- New 'mergeV' and 'mergeE' steps that make "create if not exist"
+  type queries, sometimes referred to as "upserts", much easier to write. Over time,
+  these steps will replace use of the 'fold...coalesce' pattern, and will also
+  replace the various "map injection" patterns that can be used to create multiple
+  vertices and edges in a single query.
+- A new 'TextP.regex' predicate that allows regular expressions to be
+  used when comparing strings.
+- The 'property' step can now be given a map of key/value pairs so that several
+  properties can be created at once.
+- A new 'element' step that can be used to find the parent element (vertex or edge)
+  of a property.
+- A new `call` step that lays the foundation enabling Gremlin queries to call other
+  endpoints. This opens up many types of interesting use cases such as query
+  federation, and looking up values from other services.
+- A lot of effort has been put into removing unnecessary exceptions by filtering out
+  parts of traversals instead of failing with an error. This is especially so in the
+  case of `by` modulators that now filter when a value does not exist rather than
+  throw an exception. This work began as part of the TinkerPop 3.5.2 update and is
+  completed as of TinkerPop 3.6.0.
+- A new 'fail' step that can be used to abort a query in a controlled way.  
+
+Over time, new sections will be added to this book that cover each of these features
+in detail.
+
+As always, check the level of ApacheTinkerPop the graph database you are using
+supports before trying to use these new features.
+
+NOTE: Full details of all the new features added in the TinkerPop 3.6.x releases can be
 found at the following link:
 https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc  
 
