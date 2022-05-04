@@ -2,9 +2,9 @@ PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
 //v281 (TP 3.3.5), January 28th 2019
-v283-preview, May 3rd 2022
+v283-preview, May 4th 2022
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Tue May 03, 2022 21:08:26 CDT 
+// Wed May 04, 2022 08:20:08 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -25,7 +25,7 @@ v283-preview, May 3rd 2022
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: May 3rd 2022
+:draftdate: May 4th 2022
 :tpvercheck: 3.5.2
 
 // NOTE1: I updated the paraiso-dark style so that source code with a style of text
@@ -374,12 +374,12 @@ performed tasks much easier. Notable improvements include:
   properties can be created at once.
 - A new 'element' step that can be used to find the parent element (vertex or edge)
   of a property.
-- A new `call` step that lays the foundation enabling Gremlin queries to call other
+- A new 'call' step that lays the foundation enabling Gremlin queries to call other
   endpoints. This opens up many types of interesting use cases such as query
   federation, and looking up values from other services.
 - A lot of effort has been put into removing unnecessary exceptions by filtering out
   parts of traversals instead of failing with an error. This is especially so in the
-  case of `by` modulators that now filter when a value does not exist rather than
+  case of 'by' modulators that now filter when a value does not exist rather than
   throw an exception. This work began as part of the TinkerPop 3.5.2 update and is
   completed as of TinkerPop 3.6.0.
 - A new 'fail' step that can be used to abort a query in a controlled way.  
