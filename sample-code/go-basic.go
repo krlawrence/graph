@@ -19,7 +19,7 @@ import (
 )
 
 // Server and port we want to connect to
-const Host = "krl-6-i1-cluster.cluster-cm9t6tfwbtsr.us-east-1.neptune.amazonaws.com"
+const Host = "<put your host name here>"
 const Port = 8182
 
 // Define a few shortcuts to commonly used Gremlin constructs
