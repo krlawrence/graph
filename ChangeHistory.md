@@ -5,7 +5,8 @@ Starting with the v275 release, this file will contain a record of the major cha
 ## Release 283 change history (Release date TBD)
 
 Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v282-tp-3.4.4...master) between this release and the prior one.
-- Moved the supported TinkerPop version up to 3.5.1. Issue #228
+- Moved the supported TinkerPop version up to 3.5.2. Issue #228
+- Added a section describing the changes added as part of the TinkerPop 3.6.0 release.
 - Upated all sections to remove any use of `Order.decr` and `Order.incr` except where explicitly discussing their removal from Gremlin as of 3.5.0 in favor of `Order.asc` and `Order.desc`. Issue #228
 - Added a new section "Comparing properties to the value of a sack". Issue #163
 - Added a new section "Using `index` to reverse a list" Issue #220
@@ -37,6 +38,7 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
   - Added `RemoteWriteText.java` which shows how to turn traversals and GraphSON back into text queries.
   - Fixed a compile error in TinkerGraphTest.java caused by a change to the `valueMap` return type. Issue #181
   - Fixed two compile errors in RemoteClient.java caused by a change to the `valueMap` return type. Issue #181
+  - Added a new sample `go-basic.go` that provides examples of using the new Gremlin Go client
 - Sample data updates
   - Added a SQL version of the air routes data to a new `SQL` sub folder under `sample-data`. Issue #214
   - Added an RDF version of the air routes data to a new `RDF` sub folder under `sample-data`. Issue #232
