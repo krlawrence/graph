@@ -24,7 +24,8 @@ println "Reported version is $ver";[]
 
 assert ver[0]=='3' && ((ver[2]=='3' && ver[4].toInteger() >= 1) 
        || (ver[2]=='4' && ver[4].toInteger() >= 0)
-       || (ver[2]=='5' && ver[4].toInteger() >= 0));[]
+       || (ver[2]=='5' && ver[4].toInteger() >= 0))
+       || (ver[2]=='6' && ver[4].toInteger() >= 0));[]
 
 n=status( "Checking air-routes version",n);[]
 ver=g.V().hasLabel('version').values('code').next();[]
