@@ -20,7 +20,7 @@
 # an airline would give you in a frequent flyer program for flying that route!
 #
 #
-# Author: Kelvin R. Lawrence     27th November-2013 - 26th August-2021
+# Author: Kelvin R. Lawrence     27th November-2013 - 9th July-2022
 #
 # History:
 #   25-Nov-2013  -KRL-  Created it.                                                            v0.01
@@ -143,3 +143,5 @@
 #                       reduced the total routes in the graph from 50,660 to 50,532
 #                       Added 2 route pairs (4 total routes) 
 #                       ** This version of the data was put into GitHub on Aug 31st 2021.
+#    9-Jul-2022  -KRL-  Added TCA                                                              v0.88
+#                       Added 6 route pairs plus 3 single routes (15 total routes added)
