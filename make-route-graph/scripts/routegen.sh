@@ -26,6 +26,9 @@ echo "      air-routes-small-latest-visjs.html"
 $mrg vis > air-routes-small-latest-visjs.html
 echo "      air-routes-latest-visjs.html"
 $mrg vis -big > air-routes-latest-visjs.html
+echo "*** Generating airport HTML table"
+echo "      airports-latest.html"
+$mrg html -big > airports-latest.html
 echo "*** Generating airport degree list"
 if [ "x$1" == "xmac" ]; then
   ./make-degree-list.sh mac
