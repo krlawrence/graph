@@ -1,11 +1,11 @@
 <!-- This is a machine generated file                                                  -->
-<!-- Generated at 2021-08-31 15:25:05 UTC using '../mrg/mrg.rb'                        -->
+<!-- Generated at 2022-07-10 16:49:17 UTC using '../mrg/mrg.rb'                        -->
 <html>
 <head>
 <title>World air route map (graph)</title>
 <meta name='author' content='Kelvin R. Lawrence' />
-<meta name='created' content='2021-Aug-31' />
-<meta name='version' content='0.87' />
+<meta name='created' content='2022-Jul-09' />
+<meta name='version' content='0.88' />
 <script type='text/javascript' src='http://kelvinlawrence.net/book/vis.js'></script>
 <link href='http://kelvinlawrence.net/book/vis.css' rel='stylesheet' type='text/css' />
 
@@ -24,12 +24,12 @@
 <input type='text' id='search' maxlength='3' style='width:100%' onkeydown='check(event)'></input><br><br>
 <button onClick='doSearch()'>Search</button><br><br>
 <textarea rows='50' cols='20' id='txt1' readOnly='true'>
-AIR ROUTES v0.87
+AIR ROUTES v0.88
 
-2021-Aug-31
+2022-Jul-09
 
-3,503 Airports
-50,532 Routes
+3,504 Airports
+50,547 Routes
 
 Click on an airport node to see route details here.
 
@@ -49,7 +49,7 @@ You can search for an airport by entering a three character IATA code, like DFW 
 var nodes = new vis.DataSet([
 {id: 1, label: 'ATL', title:"<b>ATL - Atlanta (KATL</b>)<br>Hartsfield - Jackson Atlanta International Airport<br>United States (US-GA)<br>Outgoing routes: 242<br>Incoming routes: 242",x:-2752.3600260416665,y:-994.9644300672755},
 {id: 2, label: 'ANC', title:"<b>ANC - Anchorage (PANC</b>)<br>Anchorage Ted Stevens<br>United States (US-AK)<br>Outgoing routes: 41<br>Incoming routes: 41",x:-5666.488986545155,y:-2218.862236870658},
-{id: 3, label: 'AUS', title:"<b>AUS - Austin (KAUS</b>)<br>Austin Bergstrom International Airport<br>United States (US-TX)<br>Outgoing routes: 93<br>Incoming routes: 93",x:-3340.8843994140625,y:-841.97777642144},
+{id: 3, label: 'AUS', title:"<b>AUS - Austin (KAUS</b>)<br>Austin Bergstrom International Airport<br>United States (US-TX)<br>Outgoing routes: 95<br>Incoming routes: 95",x:-3340.8843994140625,y:-841.97777642144},
 {id: 4, label: 'BNA', title:"<b>BNA - Nashville (KBNA</b>)<br>Nashville International Airport<br>United States (US-TN)<br>Outgoing routes: 74<br>Incoming routes: 74",x:-2852.3644341362847,y:-1105.5333455403645},
 {id: 5, label: 'BOS', title:"<b>BOS - Boston (KBOS</b>)<br>Boston Logan<br>United States (US-MA)<br>Outgoing routes: 141<br>Incoming routes: 141",x:-2155.7868111111106,y:-1382.8577675555555},
 {id: 6, label: 'BWI', title:"<b>BWI - Baltimore (KBWI</b>)<br>Baltimore/Washington International Airport<br>United States (US-MD)<br>Outgoing routes: 91<br>Incoming routes: 91",x:-2407.479858222222,y:-1241.128879111111},
@@ -108,7 +108,7 @@ var nodes = new vis.DataSet([
 {id: 59, label: 'DEL', title:"<b>DEL - New Delhi (VIDP</b>)<br>Indira Gandhi International Airport<br>India (IN-DL)<br>Outgoing routes: 118<br>Incoming routes: 118",x:4426.804606119791,y:-769.6222093370222},
 {id: 60, label: 'DUB', title:"<b>DUB - Dublin (EIDW</b>)<br>Dublin International Airport<br>Ireland (IE-D)<br>Outgoing routes: 185<br>Incoming routes: 185",x:721.3302188449436,y:-1874.279954698351},
 {id: 61, label: 'HKG', title:"<b>HKG - Hong Kong (VHHH</b>)<br>Hong Kong - Chek Lap Kok International Airport<br>Hong Kong (HK)<br>Outgoing routes: 174<br>Incoming routes: 174",x:6062.8889296,y:-491.5067036933333},
-{id: 62, label: 'PER', title:"<b>PER - Perth (YPPH</b>)<br>Perth International Airport<br>Australia (AU-WA)<br>Outgoing routes: 45<br>Incoming routes: 44",x:6154.089016384533,y:1919.5688883463556},
+{id: 62, label: 'PER', title:"<b>PER - Perth (YPPH</b>)<br>Perth International Airport<br>Australia (AU-WA)<br>Outgoing routes: 45<br>Incoming routes: 45",x:6154.089016384533,y:1919.5688883463556},
 {id: 63, label: 'AKL', title:"<b>AKL - Auckland (NZAA</b>)<br>Auckland International Airport<br>New Zealand (NZ-AUK)<br>Outgoing routes: 67<br>Incoming routes: 67",x:8768.533664266666,y:2144.8043823244443},
 {id: 64, label: 'PEK', title:"<b>PEK - Beijing (ZBAA</b>)<br>Beijing Capital International Airport<br>China (CN-11)<br>Outgoing routes: 248<br>Incoming routes: 249",x:6181.555514865467,y:-1281.33782280816},
 {id: 65, label: 'WLG', title:"<b>WLG - Wellington (NZWN</b>)<br>Wellington International Airport<br>New Zealand (NZ-WGN)<br>Outgoing routes: 22<br>Incoming routes: 22",x:8769.1107856,y:2336.764526368889},
@@ -203,7 +203,7 @@ var nodes = new vis.DataSet([
 {id: 154, label: 'KWI', title:"<b>KWI - Kuwait (OKBK</b>)<br>Kuwait International Airport<br>Kuwait (KW-FA)<br>Outgoing routes: 74<br>Incoming routes: 74",x:3131.9510565863734,y:-798.9600287543421},
 {id: 155, label: 'PNH', title:"<b>PNH - Phnom Penh (VDPP</b>)<br>Phnom Penh International Airport<br>Cambodia (KH-8)<br>Outgoing routes: 32<br>Incoming routes: 32",x:5659.733412000889,y:-13.18223741319548},
 {id: 156, label: 'AYQ', title:"<b>AYQ - Ayers Rock (YAYE</b>)<br>Ayers Rock Connellan Airport<br>Australia (AU-NT)<br>Outgoing routes: 8<br>Incoming routes: 7",x:6821.155463324666,y:1619.3822224934888},
-{id: 157, label: 'ASP', title:"<b>ASP - Alice Springs (YBAS</b>)<br>Alice Springs Airport<br>Australia (AU-NT)<br>Outgoing routes: 8<br>Incoming routes: 8",x:6951.199679904533,y:1558.0755445692266},
+{id: 157, label: 'ASP', title:"<b>ASP - Alice Springs (YBAS</b>)<br>Alice Springs Airport<br>Australia (AU-NT)<br>Outgoing routes: 9<br>Incoming routes: 9",x:6951.199679904533,y:1558.0755445692266},
 {id: 158, label: 'OOL', title:"<b>OOL - Gold Coast (YBCG</b>)<br>Gold Coast Airport<br>Australia (AU-NSW)<br>Outgoing routes: 18<br>Incoming routes: 18",x:7822.444661466667,y:1751.7511155866666},
 {id: 159, label: 'FAI', title:"<b>FAI - Fairbanks (PAFA</b>)<br>Fairbanks International Airport<br>United States (US-AK)<br>Outgoing routes: 20<br>Incoming routes: 20",x:-5571.377902222222,y:-2380.6711831111106},
 {id: 160, label: 'CNS', title:"<b>CNS - Cairns (YBCS</b>)<br>Cairns International Airport<br>Australia (AU-QLD)<br>Outgoing routes: 35<br>Incoming routes: 35",x:7478.0002170222215,y:1250.479973688889},
@@ -241,7 +241,7 @@ var nodes = new vis.DataSet([
 {id: 192, label: 'SLN', title:"<b>SLN - Salina (KSLN</b>)<br>Salina Municipal Airport<br>United States (US-KS)<br>Outgoing routes: 3<br>Incoming routes: 3",x:-3340.09772406684,y:-1224.0444607204845},
 {id: 193, label: 'OMA', title:"<b>OMA - Omaha (KOMA</b>)<br>Eppley Airfield<br>United States (US-NE)<br>Outgoing routes: 36<br>Incoming routes: 36",x:-3261.9598388671866,y:-1335.6977674696177},
 {id: 194, label: 'TUL', title:"<b>TUL - Tulsa (KTUL</b>)<br>Tulsa International Airport<br>United States (US-OK)<br>Outgoing routes: 26<br>Incoming routes: 26",x:-3261.6933186848973,y:-1108.8177151150176},
-{id: 195, label: 'PVR', title:"<b>PVR - Puerto Vallarta (MMPR</b>)<br>Puerto Vallarta, Licenciado Gustavo Diaz Ordaz International Airport<br>Mexico (MX-JAL)<br>Outgoing routes: 31<br>Incoming routes: 31",x:-3677.9554578992893,y:-419.11553276909785},
+{id: 195, label: 'PVR', title:"<b>PVR - Puerto Vallarta (MMPR</b>)<br>Puerto Vallarta, Licenciado Gustavo Diaz Ordaz International Airport<br>Mexico (MX-JAL)<br>Outgoing routes: 32<br>Incoming routes: 32",x:-3677.9554578992893,y:-419.11553276909785},
 {id: 196, label: 'OGG', title:"<b>OGG - Kahului (PHOG</b>)<br>Maui, Kahului Airport<br>United States (US-HI)<br>Outgoing routes: 23<br>Incoming routes: 23",x:-5952.4441189235995,y:-428.82664998372445},
 {id: 197, label: 'MCY', title:"<b>MCY - Maroochydore (YBSU</b>)<br>Sunshine Coast Airport<br>Australia (AU-QLD)<br>Outgoing routes: 3<br>Incoming routes: 3",x:7804.044596355556,y:1682.3688930933333},
 {id: 198, label: 'DUS', title:"<b>DUS - Dusseldorf (EDDL</b>)<br>Dusseldorf International Airport<br>Germany (DE-NW)<br>Outgoing routes: 199<br>Incoming routes: 199",x:1300.7457733154297,y:-1779.5333862304665},
@@ -278,7 +278,7 @@ var nodes = new vis.DataSet([
 {id: 229, label: 'SOU', title:"<b>SOU - Southampton (EGHI</b>)<br>Southampton Airport<br>United Kingdom (GB-ENG)<br>Outgoing routes: 33<br>Incoming routes: 33",x:939.6977795494929,y:-1764.4577026367201},
 {id: 230, label: 'PMI', title:"<b>PMI - Palma De Mallorca (LEPA</b>)<br>Palma De Mallorca Airport<br>Spain (ES-PM)<br>Outgoing routes: 152<br>Incoming routes: 152",x:1121.7248916626666,y:-1257.8533596444445},
 {id: 231, label: 'ADL', title:"<b>ADL - Adelaide (YPAD</b>)<br>Adelaide International Airport<br>Australia (AU-SA)<br>Outgoing routes: 35<br>Incoming routes: 35",x:7156.93359375,y:2053.1110975477422},
-{id: 232, label: 'DRW', title:"<b>DRW - Darwin (YPDN</b>)<br>Darwin International Airport<br>Australia (AU-NT)<br>Outgoing routes: 22<br>Incoming routes: 22",x:6816.755506727422,y:1051.7644246419288},
+{id: 232, label: 'DRW', title:"<b>DRW - Darwin (YPDN</b>)<br>Darwin International Airport<br>Australia (AU-NT)<br>Outgoing routes: 23<br>Incoming routes: 23",x:6816.755506727422,y:1051.7644246419288},
 {id: 233, label: 'CUR', title:"<b>CUR - Curacao (TNCC</b>)<br>Curacao, Hato International Airport<br>Curacao (CW-U-A)<br>Outgoing routes: 26<br>Incoming routes: 26",x:-2064.8800320088885,y:-41.728888617777784},
 {id: 234, label: 'DPS', title:"<b>DPS - Denpasar (WADD</b>)<br>Bali - Ngurah Rai International Airport<br>Indonesia (ID-BA)<br>Outgoing routes: 57<br>Incoming routes: 57",x:6118.533325195333,y:888.8075510660808},
 {id: 235, label: 'CGK', title:"<b>CGK - Jakarta (WIII</b>)<br>Soekarno-Hatta International Airport<br>Indonesia (ID-BT)<br>Outgoing routes: 77<br>Incoming routes: 77",x:5740.2665879999995,y:772.2475475733333},
@@ -449,7 +449,7 @@ var nodes = new vis.DataSet([
 {id: 400, label: 'LAW', title:"<b>LAW - Lawton (KLAW</b>)<br>Lawton Fort Sill Regional Airport<br>United States (US-OK)<br>Outgoing routes: 1<br>Incoming routes: 1",x:-3374.071248373333,y:-1036.3421969955555},
 {id: 401, label: 'LCH', title:"<b>LCH - Lake Charles (KLCH</b>)<br>Lake Charles Regional Airport<br>United States (US-LA)<br>Outgoing routes: 2<br>Incoming routes: 2",x:-3143.257649739582,y:-838.9378017849378},
 {id: 402, label: 'LFT', title:"<b>LFT - Lafayette (KLFT</b>)<br>Lafayette Regional Airport<br>United States (US-LA)<br>Outgoing routes: 5<br>Incoming routes: 5",x:-3088.3378768888883,y:-842.4577502222221},
-{id: 403, label: 'LIR', title:"<b>LIR - Liberia (MRLB</b>)<br>Daniel Oduber Quiros International Airport<br>Costa Rica (CR-G)<br>Outgoing routes: 18<br>Incoming routes: 18",x:-2801.9734700520844,y:29.186672634546653},
+{id: 403, label: 'LIR', title:"<b>LIR - Liberia (MRLB</b>)<br>Daniel Oduber Quiros International Airport<br>Costa Rica (CR-G)<br>Outgoing routes: 19<br>Incoming routes: 19",x:-2801.9734700520844,y:29.186672634546653},
 {id: 404, label: 'LRD', title:"<b>LRD - Laredo (KLRD</b>)<br>Laredo International Airport<br>United States (US-TX)<br>Outgoing routes: 3<br>Incoming routes: 3",x:-3420.515611436631,y:-724.1689046223955},
 {id: 405, label: 'MFE', title:"<b>MFE - Mc Allen (KMFE</b>)<br>Mc Allen Miller International Airport<br>United States (US-TX)<br>Outgoing routes: 6<br>Incoming routes: 6",x:-3366.1600746666663,y:-663.3689031111112},
 {id: 406, label: 'MGM', title:"<b>MGM - Montgomery (KMGM</b>)<br>Montgomery Regional (Dannelly Field) Airport<br>United States (US-AL)<br>Outgoing routes: 5<br>Incoming routes: 5",x:-2839.733208444444,y:-935.5821395555554},
@@ -868,7 +868,7 @@ var nodes = new vis.DataSet([
 {id: 819, label: 'PZU', title:"<b>PZU - Port Sudan (HSPN</b>)<br>Port Sudan New International Airport<br>Sudan (SD-26)<br>Outgoing routes: 3<br>Incoming routes: 3",x:2654.848904079862,y:-363.71553209092883},
 {id: 820, label: 'JUB', title:"<b>JUB - Juba (HSSJ</b>)<br>Juba International Airport<br>South Sudan (SS-17)<br>Outgoing routes: 8<br>Incoming routes: 8",x:2404.4933742933335,y:283.4662119546667},
 {id: 821, label: 'KRT', title:"<b>KRT - Khartoum (HSSS</b>)<br>Khartoum International Airport<br>Sudan (SD-03)<br>Outgoing routes: 27<br>Incoming routes: 27",x:2446.8088785807286,y:-192.86668565538218},
-{id: 822, label: 'DAR', title:"<b>DAR - Dar es Salaam (HTDA</b>)<br>Julius Nyerere International Airport<br>Tanzania (TZ-02)<br>Outgoing routes: 22<br>Incoming routes: 21",x:2742.3377143022226,y:805.6937747533334},
+{id: 822, label: 'DAR', title:"<b>DAR - Dar es Salaam (HTDA</b>)<br>Julius Nyerere International Airport<br>Tanzania (TZ-02)<br>Outgoing routes: 23<br>Incoming routes: 22",x:2742.3377143022226,y:805.6937747533334},
 {id: 823, label: 'GSM', title:"<b>GSM - Gheshm (OIKQ</b>)<br>Gheshm Airport<br>Iran (IR-23)<br>Outgoing routes: 5<br>Incoming routes: 5",x:3500.835503472222,y:-697.7199978298622},
 {id: 824, label: 'SKP', title:"<b>SKP - Skopje (LWSK</b>)<br>Skopje Alexander the Great Airport<br>Macedonia (MK-73)<br>Outgoing routes: 32<br>Incoming routes: 32",x:1960.9511481391066,y:-1364.9600558810753},
 {id: 825, label: 'KBL', title:"<b>KBL - Kabul (OAKB</b>)<br>Kabul International Airport<br>Afghanistan (AF-KAB)<br>Outgoing routes: 17<br>Incoming routes: 16",x:4076.1023627387153,y:-1036.262173122831},
@@ -1029,7 +1029,7 @@ var nodes = new vis.DataSet([
 {id: 980, label: 'PPP', title:"<b>PPP - Proserpine (YBPN</b>)<br>Proserpine Whitsunday Coast Airport<br>Australia (AU-QLD)<br>Outgoing routes: 3<br>Incoming routes: 3",x:7602.311197911111,y:1410.8889261866666},
 {id: 981, label: 'BME', title:"<b>BME - Broome (YBRM</b>)<br>Broome International Airport<br>Australia (AU-WA)<br>Outgoing routes: 8<br>Incoming routes: 7",x:6432.533433702266,y:1297.5422329372843},
 {id: 982, label: 'BHS', title:"<b>BHS - Bathurst (YBTH</b>)<br>Bathurst Airport<br>Australia (AU-NSW)<br>Outgoing routes: 2<br>Incoming routes: 2",x:7651.199679911111,y:1984.8622639955556},
-{id: 983, label: 'TSV', title:"<b>TSV - Townsville (YBTL</b>)<br>Townsville Airport<br>Australia (AU-QLD)<br>Outgoing routes: 16<br>Incoming routes: 15",x:7522.888861762133,y:1355.66669040256},
+{id: 983, label: 'TSV', title:"<b>TSV - Townsville (YBTL</b>)<br>Townsville Airport<br>Australia (AU-QLD)<br>Outgoing routes: 16<br>Incoming routes: 16",x:7522.888861762133,y:1355.66669040256},
 {id: 984, label: 'GLT', title:"<b>GLT - Gladstone (YGLA</b>)<br>Gladstone Airport<br>Australia (AU-QLD)<br>Outgoing routes: 3<br>Incoming routes: 3",x:7721.022542311111,y:1560.8755323599999},
 {id: 985, label: 'GFF', title:"<b>GFF - Griffith (YGTH</b>)<br>Griffith Airport<br>Australia (AU-NSW)<br>Outgoing routes: 2<br>Incoming routes: 2",x:7491.866726355554,y:2022.2578260622222},
 {id: 986, label: 'HVB', title:"<b>HVB - Hervey Bay (YHBA</b>)<br>Hervey Bay Airport<br>Australia (AU-QLD)<br>Outgoing routes: 2<br>Incoming routes: 2",x:7794.666883688888,y:1625.2844068755555},
@@ -1772,7 +1772,7 @@ var nodes = new vis.DataSet([
 {id: 1723, label: 'MSU', title:"<b>MSU - Maseru (FXMM</b>)<br>Moshoeshoe I International Airport<br>Lesotho (LS-A)<br>Outgoing routes: 1<br>Incoming routes: 1",x:2224.555545383031,y:1809.4355265299466},
 {id: 1724, label: 'WVB', title:"<b>WVB - Walvis Bay (FYWB</b>)<br>Walvis Bay Airport<br>Namibia (NA-ER)<br>Outgoing routes: 4<br>Incoming routes: 4",x:1650.9022182888443,y:1521.3289048936622},
 {id: 1725, label: 'FBM', title:"<b>FBM - Lubumbashi (FZQA</b>)<br>Lubumbashi International Airport<br>Democratic Republic of the Congo (CD-KA)<br>Outgoing routes: 6<br>Incoming routes: 6",x:2223.59551324,y:1015.1688893644445},
-{id: 1726, label: 'ZNZ', title:"<b>ZNZ - Zanzibar (HTZA</b>)<br>Abeid Amani Karume International Airport<br>Tanzania (TZ-07)<br>Outgoing routes: 12<br>Incoming routes: 12",x:2743.3288574222224,y:776.5342288546667},
+{id: 1726, label: 'ZNZ', title:"<b>ZNZ - Zanzibar (HTZA</b>)<br>Abeid Amani Karume International Airport<br>Tanzania (TZ-07)<br>Outgoing routes: 13<br>Incoming routes: 13",x:2743.3288574222224,y:776.5342288546667},
 {id: 1727, label: 'GAF', title:"<b>GAF - Gafsa (DTTF</b>)<br>Gafsa Ksar International Airport<br>Tunisia (TN-71)<br>Outgoing routes: 2<br>Incoming routes: 1",x:1392.1111212836372,y:-1029.8667060004354},
 {id: 1728, label: 'GAE', title:"<b>GAE - Gabès (DTTG</b>)<br>Gabès Matmata International Airport<br>Tunisia (TN-81)<br>Outgoing routes: 2<br>Incoming routes: 3",x:1449.0355597602,y:-1005.6399875217023},
 {id: 1729, label: 'LGG', title:"<b>LGG - Liège (EBLG</b>)<br>Liège Airport<br>Belgium (BE-WLG)<br>Outgoing routes: 10<br>Incoming routes: 11",x:1241.9208950466577,y:-1750.5511813693552},
@@ -3496,15 +3496,15 @@ var nodes = new vis.DataSet([
 {id: 3447, label: 'DBC', title:"<b>DBC - Baicheng (ZYBA</b>)<br>Changan<br>China (CN-22)<br>Outgoing routes: 1<br>Incoming routes: 1",x:6467.5432,y:-1522.4567999999997},
 {id: 3448, label: 'ETM', title:"<b>ETM - Eilat (LLER</b>)<br>Ramon International Airport<br>Israel (IL-C)<br>Outgoing routes: 3<br>Incoming routes: 3",x:2587.7197333333334,y:-821.0530666666666},
 {id: 3449, label: 'KET', title:"<b>KET - Kengtung (VYKG</b>)<br>Kengtung Airport<br>Myanmar (MM-17)<br>Outgoing routes: 1<br>Incoming routes: 1",x:5428.266533333333,y:-446.73826666666673},
-{id: 3450, label: 'KFE', title:"<b>KFE - Cloudbreak Village (YFDF</b>)<br>Fortescue - Dave Forrest Aerodrome<br>Australia (AU-WA)<br>Outgoing routes: 0<br>Incoming routes: 1",x:6307.962716044444,y:1490.46469136},
+{id: 3450, label: 'KFE', title:"<b>KFE - Cloudbreak Village (YFDF</b>)<br>Fortescue - Dave Forrest Aerodrome<br>Australia (AU-WA)<br>Outgoing routes: 1<br>Incoming routes: 1",x:6307.962716044444,y:1490.46469136},
 {id: 3451, label: 'KHM', title:"<b>KHM - Khamti (VYKI</b>)<br>Kanti Airport<br>Myanmar (MM-01)<br>Outgoing routes: 1<br>Incoming routes: 1",x:5252.195570203991,y:-655.0355699327245},
-{id: 3452, label: 'KTR', title:"<b>KTR - Katherine (YPTN</b>)<br>Tindal Airport<br>Australia (AU-NT)<br>Outgoing routes: 0<br>Incoming routes: 1",x:6883.466932508666,y:1145.382224188911},
+{id: 3452, label: 'KTR', title:"<b>KTR - Katherine (YPTN</b>)<br>Tindal Airport<br>Australia (AU-NT)<br>Outgoing routes: 2<br>Incoming routes: 2",x:6883.466932508666,y:1145.382224188911},
 {id: 3453, label: 'MNC', title:"<b>MNC - Nacala (FQNC</b>)<br>Nacala Airport<br>Mozambique (MZ-N)<br>Outgoing routes: 1<br>Incoming routes: 1",x:2809.431118435329,y:1143.9200083414712},
 {id: 3454, label: 'SQD', title:"<b>SQD - Shangrao (ZSSR</b>)<br>Shangrao Sanqingshan Airport<br>China (CN-36)<br>Outgoing routes: 1<br>Incoming routes: 1",x:6242.851866666667,y:-761.3086222222221},
 {id: 3455, label: 'BPG', title:"<b>BPG - Barra Do Garças (SBBW</b>)<br>Barra do Garças Airport<br>Brazil (BR-MT)<br>Outgoing routes: 1<br>Incoming routes: 1",x:-1328.395589191111,y:1204.9466874844443},
 {id: 3456, label: 'CQA', title:"<b>CQA - Canarana (SWEK</b>)<br>Canarana Airport<br>Brazil (BR-MT)<br>Outgoing routes: 1<br>Incoming routes: 1",x:-1323.1358846028666,y:1103.3086140950534},
-{id: 3457, label: 'DOD', title:"<b>DOD - Dodoma (HTDO</b>)<br>Dodoma Airport<br>Tanzania (TZ-03)<br>Outgoing routes: 1<br>Incoming routes: 0",x:2589.0045166015643,y:774.241786532932},
-{id: 3458, label: 'SEU', title:"<b>SEU - Seronera (HTSN</b>)<br>Seronera Airport<br>Tanzania (TZ-13)<br>Outgoing routes: 0<br>Incoming routes: 1",x:2547.6665920681426,y:609.2471122741698},
+{id: 3457, label: 'DOD', title:"<b>DOD - Dodoma (HTDO</b>)<br>Dodoma Airport<br>Tanzania (TZ-03)<br>Outgoing routes: 2<br>Incoming routes: 2",x:2589.0045166015643,y:774.241786532932},
+{id: 3458, label: 'SEU', title:"<b>SEU - Seronera (HTSN</b>)<br>Seronera Airport<br>Tanzania (TZ-13)<br>Outgoing routes: 2<br>Incoming routes: 2",x:2547.6665920681426,y:609.2471122741698},
 {id: 3459, label: 'NRR', title:"<b>NRR - Ceiba (TJRV</b>)<br>Jose Aponte de la Torre Airport<br>Puerto Rico (PR-U-A)<br>Outgoing routes: 1<br>Incoming routes: 1",x:-1917.4845377599995,y:-310.90223524444446},
 {id: 3460, label: 'LNL', title:"<b>LNL - Longnan (ZLLN</b>)<br>Cheng Xian Airport<br>China (CN-62)<br>Outgoing routes: 1<br>Incoming routes: 1",x:5701.716044444444,y:-1001.765422222222},
 {id: 3461, label: 'XAI', title:"<b>XAI - Xinyang (ZHXY</b>)<br>Xinyang Minggang Airport<br>China (CN-41)<br>Outgoing routes: 1<br>Incoming routes: 1",x:6070.172844444444,y:-946.2469333333333},
@@ -3549,7 +3549,8 @@ var nodes = new vis.DataSet([
 {id: 3500, label: 'PKP', title:"<b>PKP - Puka Puka (NTGP</b>)<br>Puka Puka Airport<br>French Polynesia (PF-U-A)<br>Outgoing routes: 3<br>Incoming routes: 4",x:-5169.466824001734,y:1158.1999884711377},
 {id: 3501, label: 'NAU', title:"<b>NAU - Napuka Island (NTGN</b>)<br>Napuka Island Airport<br>French Polynesia (PF-U-A)<br>Outgoing routes: 8<br>Incoming routes: 2",x:-5278.533257378488,y:1130.0799899631065},
 {id: 3502, label: 'FGU', title:"<b>FGU - Fangatau (NTGB</b>)<br>Fangatau Airport<br>French Polynesia (PF-U-A)<br>Outgoing routes: 5<br>Incoming routes: 5",x:-5261.644151475689,y:1203.1066470676},
-{id: 3503, label: 'BER', title:"<b>BER - Berlin (EDDB</b>)<br>Berlin Brandenburg International Airport<br>Germany (DE-BB)<br>Outgoing routes: 202<br>Incoming routes: 202",x:1600.9135999999999,y:-1827.925911111111}
+{id: 3503, label: 'BER', title:"<b>BER - Berlin (EDDB</b>)<br>Berlin Brandenburg International Airport<br>Germany (DE-BB)<br>Outgoing routes: 202<br>Incoming routes: 202",x:1600.9135999999999,y:-1827.925911111111},
+{id: 3504, label: 'TCA', title:"<b>TCA - Tennant Creek (YTNK</b>)<br>Tennant Creek Airport<br>Australia (AU-NT)<br>Outgoing routes: 1<br>Incoming routes: 1",x:6963.688829210088,y:1372.6399739583333}
 ])
 var edges = new vis.DataSet([
 {from: 1, to: 3,title: 'ATL-AUS 809 miles'},
@@ -5193,6 +5194,7 @@ var edges = new vis.DataSet([
 {from: 3, to: 190,title: 'AUS-MDW 972 miles'},
 {from: 3, to: 193,title: 'AUS-OMA 773 miles'},
 {from: 3, to: 194,title: 'AUS-TUL 427 miles'},
+{from: 3, to: 195,title: 'AUS-PVR 809 miles'},
 {from: 3, to: 208,title: 'AUS-NAS 1284 miles'},
 {from: 3, to: 227,title: 'AUS-LIT 446 miles'},
 {from: 3, to: 239,title: 'AUS-JAX 952 miles'},
@@ -5213,6 +5215,7 @@ var edges = new vis.DataSet([
 {from: 3, to: 375,title: 'AUS-CHS 1053 miles'},
 {from: 3, to: 389,title: 'AUS-GDL 755 miles'},
 {from: 3, to: 395,title: 'AUS-GRR 1103 miles'},
+{from: 3, to: 403,title: 'AUS-LIR 1562 miles'},
 {from: 3, to: 416,title: 'AUS-PNS 625 miles'},
 {from: 3, to: 422,title: 'AUS-SJD 887 miles'},
 {from: 3, to: 429,title: 'AUS-TYS 881 miles'},
@@ -20325,6 +20328,7 @@ var edges = new vis.DataSet([
 {from: 157, to: 160,title: 'ASP-CNS 903 miles'},
 {from: 157, to: 231,title: 'ASP-ADL 818 miles'},
 {from: 157, to: 232,title: 'ASP-DRW 811 miles'},
+{from: 157, to: 3504,title: 'ASP-TCA 289 miles'},
 {from: 158, to: 54,title: 'OOL-NRT 4496 miles'},
 {from: 158, to: 55,title: 'OOL-SYD 422 miles'},
 {from: 158, to: 56,title: 'OOL-SIN 3857 miles'},
@@ -22987,6 +22991,7 @@ var edges = new vis.DataSet([
 {from: 194, to: 190,title: 'TUL-MDW 582 miles'},
 {from: 194, to: 549,title: 'TUL-SFB 994 miles'},
 {from: 195, to: 1,title: 'PVR-ATL 1556 miles'},
+{from: 195, to: 3,title: 'PVR-AUS 809 miles'},
 {from: 195, to: 8,title: 'PVR-DFW 983 miles'},
 {from: 195, to: 11,title: 'PVR-IAH 891 miles'},
 {from: 195, to: 13,title: 'PVR-LAX 1218 miles'},
@@ -24912,6 +24917,7 @@ var edges = new vis.DataSet([
 {from: 232, to: 2922,title: 'DRW-MNG 228 miles'},
 {from: 232, to: 2923,title: 'DRW-MCV 446 miles'},
 {from: 232, to: 2928,title: 'DRW-GOV 401 miles'},
+{from: 232, to: 3452,title: 'DRW-KTR 177 miles'},
 {from: 233, to: 12,title: 'CUR-JFK 1986 miles'},
 {from: 233, to: 16,title: 'CUR-MIA 1194 miles'},
 {from: 233, to: 47,title: 'CUR-YYZ 2265 miles'},
@@ -30964,6 +30970,7 @@ var edges = new vis.DataSet([
 {from: 402, to: 15,title: 'LFT-MCO 654 miles'},
 {from: 402, to: 31,title: 'LFT-DEN 977 miles'},
 {from: 403, to: 1,title: 'LIR-ATL 1593 miles'},
+{from: 403, to: 3,title: 'LIR-AUS 1562 miles'},
 {from: 403, to: 8,title: 'LIR-DFW 1704 miles'},
 {from: 403, to: 11,title: 'LIR-IAH 1480 miles'},
 {from: 403, to: 12,title: 'LIR-JFK 2195 miles'},
@@ -40927,6 +40934,7 @@ var edges = new vis.DataSet([
 {from: 822, to: 2063,title: 'DAR-MBI 417 miles'},
 {from: 822, to: 2064,title: 'DAR-MYW 248 miles'},
 {from: 822, to: 2065,title: 'DAR-MWZ 529 miles'},
+{from: 822, to: 3457,title: 'DAR-DOD 242 miles'},
 {from: 823, to: 58,title: 'GSM-DXB 130 miles'},
 {from: 823, to: 1174,title: 'GSM-KIH 144 miles'},
 {from: 823, to: 1178,title: 'GSM-MHD 671 miles'},
@@ -48444,6 +48452,7 @@ var edges = new vis.DataSet([
 {from: 1726, to: 822,title: 'ZNZ-DAR 45 miles'},
 {from: 1726, to: 1722,title: 'ZNZ-LLW 640 miles'},
 {from: 1726, to: 2062,title: 'ZNZ-ARK 266 miles'},
+{from: 1726, to: 3458,title: 'ZNZ-SEU 400 miles'},
 {from: 1727, to: 1669,title: 'GAF-TOE 53 miles'},
 {from: 1727, to: 1728,title: 'GAF-GAE 82 miles'},
 {from: 1728, to: 204,title: 'GAE-TUN 205 miles'},
@@ -53807,12 +53816,18 @@ var edges = new vis.DataSet([
 {from: 3448, to: 140,title: 'ETM-WAW 1722 miles'},
 {from: 3448, to: 318,title: 'ETM-VKO 1788 miles'},
 {from: 3449, to: 2837,title: 'KET-HEH 187 miles'},
+{from: 3450, to: 62,title: 'KFE-PER 700 miles'},
 {from: 3451, to: 2839,title: 'KHM-MDL 297 miles'},
+{from: 3452, to: 232,title: 'KTR-DRW 177 miles'},
+{from: 3452, to: 983,title: 'KTR-TSV 1005 miles'},
 {from: 3453, to: 1715,title: 'MNC-APL 105 miles'},
 {from: 3454, to: 3445,title: 'SQD-PKX 774 miles'},
 {from: 3455, to: 3456,title: 'BPG-CQA 158 miles'},
 {from: 3456, to: 3455,title: 'CQA-BPG 158 miles'},
+{from: 3457, to: 822,title: 'DOD-DAR 242 miles'},
 {from: 3457, to: 3458,title: 'DOD-SEU 264 miles'},
+{from: 3458, to: 1726,title: 'SEU-ZNZ 400 miles'},
+{from: 3458, to: 3457,title: 'SEU-DOD 265 miles'},
 {from: 3459, to: 1286,title: 'NRR-CPX 23 miles'},
 {from: 3460, to: 3445,title: 'LNL-PKX 708 miles'},
 {from: 3461, to: 3445,title: 'XAI-PKX 498 miles'},
@@ -54083,7 +54098,8 @@ var edges = new vis.DataSet([
 {from: 3503, to: 3237,title: 'BER-INI 733 miles'},
 {from: 3503, to: 3277,title: 'BER-VDA 1893 miles'},
 {from: 3503, to: 3308,title: 'BER-SZF 1324 miles'},
-{from: 3503, to: 3312,title: 'BER-OGU 1394 miles'}
+{from: 3503, to: 3312,title: 'BER-OGU 1394 miles'},
+{from: 3504, to: 157,title: 'TCA-ASP 289 miles'}
 ]);
     // Setup the VisJs environment by creating a graph of nodes and edges
     var container = document.getElementById('mynetwork');
