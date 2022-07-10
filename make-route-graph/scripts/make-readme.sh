@@ -12,6 +12,18 @@
 mrg='ruby ../mrg/mrg.rb'
 fn='README-temp.txt'
 
+# Airport and route counts from the original book version so we can calculte the deltas.
+orga=3374 
+orgr=43400
+
+# Current counts
+cura=$($mrg apcount -big)
+curr=$($mrg rtcount -big)
+
+# Deltas
+deltaa=$((cura-orga))
+deltar=$((curr-orgr))
+
 # Use this date command on Linux
 if [ "x$1" == "x" ]; then
   dt=$(date -R)
@@ -85,10 +97,13 @@ you find or about airports and/or routes that are currently missing.
 Kelvin R. Lawrence
 (Graph and Aviation enthusiast)" > $fn
 
+
 echo " 
 
 2. SOME STATISTICS ABOUT THE GRAPH" >> $fn
-$mrg stats -big -all >> $fn             
+$mrg stats -big -all >> $fn 
+echo "
+This version has $deltaa more airports, and $deltar more routes than the original." >> $fn
 echo " " >> $fn
 echo " " >> $fn
 echo "Here are the top 50 airports with the most routes" >> $fn
