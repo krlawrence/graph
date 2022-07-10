@@ -3576,5 +3576,7 @@ EXTRA_AIRPORTS =
            [3501,'NAU','NTGN','Napuka Island','Napuka Island Airport','PF-U-A',1,4101,7,'PF','OC','-14.1767997741699','-141.266998291016'],
            [3502,'FGU','NTGB','Fangatau','Fangatau Airport','PF-U-A',1,3936,9,'PF','OC','-15.819899559021','-140.886993408203'],
            #30-Aug-2021 V0.87
-           [3503,'BER','EDDB','Berlin',"Berlin Brandenburg #{APT}",'DE-BB',2,13123,157,'DE','EU','52.378333','13.520556']]
+           [3503,'BER','EDDB','Berlin',"Berlin Brandenburg #{APT}",'DE-BB',2,13123,157,'DE','EU','52.378333','13.520556'],
+           #09-Jul-2022 V0.88
+           [3504,'TCA','YTNK','Tennant Creek','Tennant Creek Airport','AU-NT',2,6427,1236,'AU','OC','-19.6343994140625','134.182998657227']]
 end
