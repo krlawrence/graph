@@ -10082,8 +10082,8 @@ We can check to see if the airport exists, using a basic 'has' step.
 g.V().has('code','XYZ')
 ----
 
-If it does not exist yet, which in this case it does not, noting will be returned. We
-could go one step further and change the query to return an empty list '[]' if the
+If it does not exist yet, which in this case it does not, nothing will be returned.
+We could go one step further and change the query to return an empty list '[]' if the
 airport does not exist by adding a 'fold' step to the query.
 
 [source,groovy]
