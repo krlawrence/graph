@@ -2386,7 +2386,7 @@ what happens.
 
 [source,groovy]
 ----
-g.V().has('airport','code','AUS').as('a').out().out().as('b').out().
+g.V().has('airport','code','AUS').out().out().as('b').out().
       path().by('code').to('b').limit(10).dedup()
 
 [AUS,EWR,YYZ]
