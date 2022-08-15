@@ -42,7 +42,7 @@ Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v2
 - Sample data updates
   - Added a SQL version of the air routes data to a new `SQL` sub folder under `sample-data`. Issue #214
   - Added an RDF version of the air routes data to a new `RDF` sub folder under `sample-data`. Issue #232
-  - Updated the air-route data sets with new airports and routes. Issue #229
+  - Updated the air-route data sets with new airports and routes. Issues #229, #242
 
 ## Release 282 change history (October 26th 2019)
 
