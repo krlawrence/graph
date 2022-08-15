@@ -7,12 +7,12 @@
 #----------------------------------------------------------------------------------------
 module MRGConstants
   VERSION = "0.89" 
-  VERSION_DATE = "2022-Aug-03" 
+  VERSION_DATE = "2022-Aug-15" 
   VERSION_TIME = Time.new.utc 
   AUTHOR = "Kelvin R. Lawrence" 
 
   AIRPORTS = 3504       # Number of airports in the full graph 
-  ROUTES =  50553       # Number of routes in the full graph 
+  ROUTES =  50637       # Number of routes in the full graph 
   AIRPORTS_SMALL =  46  # Number of airports in the small graph
   ROUTES_SMALL  = 1390  # Number of routes in the small graph 
   CANVAS_WIDTH  = 2000  # Used by VisJS layout (a 2:1 ratio between width and height works best) 
