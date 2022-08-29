@@ -9,9 +9,9 @@ Many of the files in the `sample-data` folder, as well as files in the `demos` f
 
 
 The script builds the air-routes graph in various formats including GraphML, Gremlin (Groovy) steps, CSV, RDF and SQL.  This script is most commonly used when a new update of the data is going to be published. The `README-air-routes-latest.txt` file is also generated as part of this
-process. Some additional files are generated containing information about the graph. Not all of the generated files are currently pushed back into this repo (they are flagged with an asterisk (*) below. 
+process. Some additional files are generated containing information about the graph. Not all of the generated files are currently pushed back into this repo - they are flagged with an asterisk (*) below. 
 
-If running on a Mac use `routegen.sh mac`.
+If running on a Mac use `routegen.sh mac`, on Linux just use `routegen.sh`.
 
 The script assumes that the "graphml2csv.py" file has been downloaded from
 https://github.com/awslabs/amazon-neptune-tools/tree/master/graphml2csv and is available in the same directory as the script.
