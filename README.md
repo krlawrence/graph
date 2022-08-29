@@ -12,8 +12,8 @@ This repository is the home for the source materials, sample code and examples f
 To read the latest snapshot of the book right away in a browser (HTML format) click [here](http://kelvinlawrence.net/book/PracticalGremlin.html) or for a PDF version click [here](http://kelvinlawrence.net/book/PracticalGremlin.pdf). These snapshots are updated regularly. You will find other formats including MOBI, EPUB and XML (Docbook) in the [releases](https://github.com/krlawrence/graph/releases)  section. Formal releases will be published periodically assuming there is enough new material to make it worthwhile. If you want to see the absolute latest updates you can always browse the Asciidoc source file (Gremlin-Graph-Guide.adoc) in the /book folder. The PDF version is currently the "official" version. It has a better table of contents, some better formatting and a much nicer title page!
 
 **LATEST NEWS:**  
+- [Aug-29-2022] Updated versions of the sample data and corresponding demo apps have been uploaded. 
 - [May-04-2022] The latest preview draft of revision 283 (TP 3.5.1) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
-- [Aug-31-2021] Updated versions of the sample data and corresponding demo apps have been uploaded. 
 - [Jun-28-2020] I have started creating a series of [issues](https://github.com/krlawrence/graph/issues) to capture changes and updates I hope to make soon. The issues contain some interesting examples of both new Gremlin features and some additional queries, some of which are quite advanced, that I intend to add to the manuscript as time allows. The issues have been sorted into a Kanban board which can be found in the Projects area. 
 - [Oct-26-2019] Revision 282 (TP 3.4.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
 
@@ -125,6 +125,7 @@ Chapter 9 - FURTHER READING
                                                            
 
 **NEWS ARCHIVE:**  
+[Aug-31-2021] Updated versions of the sample data and corresponding demo apps have been uploaded.  
 [Aug-02-2021] The latest preview draft of revision 283 (TP 3.5.1) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.    
 [Jul-31-2021] Updated versions of the sample data and corresponding demo apps have been uploaded.  
 [Jul-10-2021] The latest preview draft of revision 283 (TP 3.4.10) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
