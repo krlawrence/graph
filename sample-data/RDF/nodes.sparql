@@ -10,12 +10,12 @@ PREFIX op: <http://kelvinlawrence.net/air-routes/objectProperty/>
 INSERT DATA {
   GRAPH v:DefaultNamedGraph {
     r:0 rdfsyn:type c:Version .
-    r:0 rdfs:label "0.88" .
+    r:0 rdfs:label "0.89" .
     r:0 dtp:type "version" .
-    r:0 dtp:code "0.88" .
-    r:0 dtp:desc "Air Routes Data - Version: 0.88 Generated: 2022-07-10 16:49:16 UTC; Graph created by Kelvin R. Lawrence; Please let me know of any errors you find in the graph or routes that should be added." .
+    r:0 dtp:code "0.89" .
+    r:0 dtp:desc "Air Routes Data - Version: 0.89 Generated: 2022-08-29 14:10:18 UTC; Graph created by Kelvin R. Lawrence; Please let me know of any errors you find in the graph or routes that should be added." .
     r:0 dtp:author "Kelvin R. Lawrence" .
-    r:0 dtp:date "2022-07-10 16:49:16 UTC" .
+    r:0 dtp:date "2022-08-29 14:10:18 UTC" .
     r:1 rdfsyn:type c:Airport .
     r:1 rdfs:label "ATL" .
     r:1 dtp:type "airport" .

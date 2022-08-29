@@ -1,6 +1,6 @@
 Information about the Air Routes graph.  
 
-Timestamp: Sun, 10 Jul 2022 11:49:44 -0500
+Timestamp: Mon Aug 29 14:10:48 UTC 2022
 
 This file contains the following sections
   1. Introduction
@@ -62,18 +62,18 @@ Kelvin R. Lawrence
 
 2. SOME STATISTICS ABOUT THE GRAPH
 
-Air Routes Graph (v0.88, 2022-Jul-09) contains:
+Air Routes Graph (v0.89, 2022-Aug-29) contains:
   3,504 airports
-  50,547 routes
+  50,637 routes
   237 countries (and dependent areas)
   7 continents
   3,749 total nodes
-  57,555 total edges
+  57,645 total edges
 
 Additional observations:
-  Longest route is between SIN and EWR (9,523 miles)
+  Longest route is between SIN and JFK (9,526 miles)
   Shortest route is between WRY and PPW (2 miles)
-  Average route distance is 1,208.297 miles.
+  Average route distance is 1,212.918 miles.
   Longest runway is 18,045ft (BPX)
   Shortest runway is 1,300ft (SAB)
   Average number of runways is 1.42123
@@ -85,75 +85,77 @@ Additional observations:
   Closest to the Greenwich meridian is LDE (longitude: -0.006438999902457)
   Highest elevation is DCY (14,472 feet)
   Lowest elevation is GUW (-72 feet)
-  Maximum airport node degree (routes in and out) is 614 (FRA,IST)
+  Maximum airport node degree (routes in and out) is 620 (FRA)
   Region with the most airports: US-AK (150)
   Country with the most airports: United States (586)
   Continent with the most airports: North America (989)
-  Average degree (airport nodes) is 28.851
-  Average degree (all nodes) is 28.843
+  Average degree (airport nodes) is 28.902
+  Average degree (all nodes) is 28.891
 
-This version has 130 more airports, and 7147 more routes than the original.
+This version has 130 more airports, and 7237 more routes than the original.
  
  
 Here are the top 50 airports with the most routes
  
     POS  ID   CODE  TOTAL     DETAILS
 
-     1	 161   IST  (614)  out:307 in:307
-     2	  52   FRA  (614)  out:307 in:307
+     1	  52   FRA  (620)  out:310 in:310
+     2	 161   IST  (618)  out:309 in:309
      3	  51   CDG  (587)  out:293 in:294 <-- different (1)
-     4	  70   AMS  (566)  out:282 in:284 <-- different (2)
+     4	  70   AMS  (568)  out:283 in:285 <-- different (2)
      5	  80   MUC  (541)  out:270 in:271 <-- different (1)
-     6	  18   ORD  (527)  out:264 in:263 <-- different (1)
-     7	   8   DFW  (502)  out:251 in:251
+     6	  18   ORD  (529)  out:265 in:264 <-- different (1)
+     7	   8   DFW  (506)  out:253 in:253
      8	  64   PEK  (497)  out:248 in:249 <-- different (1)
-     9	  58   DXB  (494)  out:247 in:247
+     9	  58   DXB  (496)  out:248 in:248
     10	   1   ATL  (484)  out:242 in:242
     11	 102   DME  (465)  out:232 in:233 <-- different (1)
     12	  50   LGW  (464)  out:232 in:232
     13	  49   LHR  (442)  out:221 in:221
-    14	  31   DEN  (432)  out:216 in:216
+    14	  31   DEN  (434)  out:217 in:217
     15	  84   MAN  (431)  out:216 in:215 <-- different (1)
-    16	  13   LAX  (426)  out:213 in:213
-    17	  67   PVG  (424)  out:212 in:212
+    16	  13   LAX  (428)  out:214 in:214
+    17	  67   PVG  (426)  out:213 in:213
     18	  94   STN  (423)  out:211 in:212 <-- different (1)
     19	  75   VIE  (412)  out:206 in:206
     20	  74   MAD  (412)  out:206 in:206
-    21	  73   BCN  (406)  out:203 in:203
-    22	3503   BER  (404)  out:202 in:202
-    23	  68   FCO  (402)  out:201 in:201
-    24	  12   JFK  (401)  out:201 in:200 <-- different (1)
-    25	 198   DUS  (398)  out:199 in:199
-    26	  11   IAH  (398)  out:199 in:199
-    27	  35   EWR  (394)  out:197 in:197
-    28	  47   YYZ  (390)  out:195 in:195
-    29	  16   MIA  (390)  out:195 in:195
+    21	  12   JFK  (407)  out:204 in:203 <-- different (1)
+    22	  73   BCN  (406)  out:203 in:203
+    23	  35   EWR  (406)  out:203 in:203
+    24	3503   BER  (404)  out:202 in:202
+    25	  68   FCO  (402)  out:201 in:201
+    26	 198   DUS  (398)  out:199 in:199
+    27	  11   IAH  (398)  out:199 in:199
+    28	  16   MIA  (392)  out:196 in:196
+    29	  47   YYZ  (390)  out:195 in:195
     30	 177   CPH  (388)  out:194 in:194
     31	  79   BRU  (388)  out:194 in:194
-    32	 106   DOH  (372)  out:186 in:186
+    32	 106   DOH  (374)  out:187 in:187
     33	  60   DUB  (370)  out:185 in:185
     34	 178   CLT  (368)  out:184 in:184
     35	 103   SVO  (362)  out:181 in:181
-    36	  76   ZRH  (359)  out:179 in:180 <-- different (1)
+    36	  76   ZRH  (361)  out:180 in:181 <-- different (1)
     37	  61   HKG  (348)  out:174 in:174
     38	 250   CAN  (347)  out:175 in:172 <-- different (3)
     39	 122   ICN  (346)  out:173 in:173
-    40	  93   ARN  (336)  out:168 in:168
-    41	  56   SIN  (335)  out:168 in:167 <-- different (1)
-    42	  30   LAS  (322)  out:161 in:161
-    43	  15   MCO  (320)  out:160 in:160
+    40	  56   SIN  (337)  out:169 in:168 <-- different (1)
+    41	  93   ARN  (336)  out:168 in:168
+    42	  15   MCO  (330)  out:165 in:165
+    43	  30   LAS  (322)  out:161 in:161
     44	 346   LED  (318)  out:159 in:159
-    45	   9   FLL  (314)  out:157 in:157
-    46	  23   SFO  (312)  out:156 in:156
-    47	  17   MSP  (312)  out:156 in:156
-    48	  10   IAD  (310)  out:155 in:155
-    49	 101   BKK  (306)  out:153 in:153
-    50	 230   PMI  (304)  out:152 in:152
+    45	   9   FLL  (316)  out:158 in:158
+    46	  10   IAD  (315)  out:158 in:157 <-- different (1)
+    47	  23   SFO  (314)  out:157 in:157
+    48	  17   MSP  (312)  out:156 in:156
+    49	 110   ATH  (308)  out:155 in:153 <-- different (2)
+    50	 230   PMI  (306)  out:153 in:153
  
  
 Here are the longest routes currently in the graph
  
-62 route(s)
+64 route(s)
+SIN->JFK 9,526
+JFK->SIN 9,526
 SIN->EWR 9,523
 EWR->SIN 9,523
 DOH->AKL 9,025
@@ -5352,9 +5354,11 @@ The graph contains the following routes
             [2,1114,125], #ANC-VDZ
             [2,2658,1950], #ANC-PKC
             [3,47,1357], #AUS-YYZ
+            [3,48,1869], #AUS-YVR
             [3,49,4901], #AUS-LHR
             [3,50,4921], #AUS-LGW
             [3,52,5294], #AUS-FRA
+            [3,70,5074], #AUS-AMS
             [3,99,1671], #AUS-YYC
             [3,136,748], #AUS-MEX
             [3,147,1209], #AUS-PIT
@@ -5390,6 +5394,7 @@ The graph contains the following routes
             [3,280,1402], #AUS-RNO
             [3,281,1072], #AUS-CMH
             [3,362,814], #AUS-DSM
+            [3,365,945], #AUS-CZM
             [3,368,419], #AUS-AMA
             [3,371,389], #AUS-BTR
             [3,375,1053], #AUS-CHS
@@ -5411,6 +5416,7 @@ The graph contains the following routes
             [4,47,641], #BNA-YYZ
             [4,49,4168], #BNA-LHR
             [4,83,723], #BNA-RSW
+            [4,86,1756], #BNA-YEG
             [4,99,1698], #BNA-YYC
             [4,147,461], #BNA-PIT
             [4,149,1967], #BNA-PDX
@@ -5476,7 +5482,9 @@ The graph contains the following routes
             [5,92,3492], #BOS-OSL
             [5,94,3273], #BOS-STN
             [5,96,3058], #BOS-EDI
+            [5,99,2090], #BOS-YYC
             [5,106,6501], #BOS-DOH
+            [5,110,4740], #BOS-ATH
             [5,122,6808], #BOS-ICN
             [5,132,4805], #BOS-GRU
             [5,136,2276], #BOS-MEX
@@ -5680,6 +5688,7 @@ The graph contains the following routes
             [8,49,4736], #DFW-LHR
             [8,51,4933], #DFW-CDG
             [8,52,5127], #DFW-FRA
+            [8,53,5208], #DFW-HEL
             [8,54,6410], #DFW-NRT
             [8,55,8574], #DFW-SYD
             [8,58,8022], #DFW-DXB
@@ -5708,6 +5717,7 @@ The graph contains the following routes
             [8,149,1613], #DFW-PDX
             [8,150,175], #DFW-OKC
             [8,151,1185], #DFW-ONT
+            [8,161,6257], #DFW-IST
             [8,164,8053], #DFW-AUH
             [8,178,933], #DFW-CLT
             [8,180,1029], #DFW-CUN
@@ -6003,6 +6013,7 @@ The graph contains the following routes
             [9,2097,1311], #FLL-OGS
             [9,2102,1286], #FLL-PSM
             [9,2190,669], #FLL-CAP
+            [9,2540,1386], #FLL-BGA
             [9,3265,271], #FLL-CFG
             [9,3273,644], #FLL-USA
             [9,3322,444], #FLL-MZO
@@ -6032,6 +6043,7 @@ The graph contains the following routes
             [10,96,3465], #IAD-EDI
             [10,103,4851], #IAD-SVO
             [10,106,6909], #IAD-DOH
+            [10,110,5152], #IAD-ATH
             [10,122,6938], #IAD-ICN
             [10,132,4750], #IAD-GRU
             [10,134,3519], #IAD-LIM
@@ -6061,6 +6073,7 @@ The graph contains the following routes
             [10,215,6577], #IAD-JED
             [10,217,2791], #IAD-KEF
             [10,220,1608], #IAD-STT
+            [10,224,5434], #IAD-LOS
             [10,225,1412], #IAD-MBJ
             [10,237,1882], #IAD-AUA
             [10,238,157], #IAD-ORF
@@ -6077,6 +6090,7 @@ The graph contains the following routes
             [10,269,284], #IAD-BUF
             [10,281,299], #IAD-CMH
             [10,283,325], #IAD-ALB
+            [10,286,5948], #IAD-AMM
             [10,291,325], #IAD-BDL
             [10,293,1681], #IAD-SXM
             [10,296,100], #IAD-RIC
@@ -6297,6 +6311,7 @@ The graph contains the following routes
             [12,52,3842], #JFK-FRA
             [12,53,4103], #JFK-HEL
             [12,54,6725], #JFK-NRT
+            [12,56,9526], #JFK-SIN
             [12,58,6831], #JFK-DXB
             [12,59,7299], #JFK-DEL
             [12,60,3169], #JFK-DUB
@@ -6363,6 +6378,7 @@ The graph contains the following routes
             [12,184,663], #JFK-IND
             [12,187,890], #JFK-STL
             [12,188,1820], #JFK-ABQ
+            [12,195,2302], #JFK-PVR
             [12,198,3736], #JFK-DUS
             [12,202,3356], #JFK-LIS
             [12,205,7789], #JFK-TPE
@@ -6434,6 +6450,7 @@ The graph contains the following routes
             [12,578,1526], #JFK-PAP
             [12,580,1540], #JFK-GCM
             [12,592,2088], #JFK-CTG
+            [12,593,2566], #JFK-CLO
             [12,594,2383], #JFK-MDE
             [12,598,2545], #JFK-GEO
             [12,599,1956], #JFK-FDF
@@ -6487,6 +6504,7 @@ The graph contains the following routes
             [13,103,6059], #LAX-SVO
             [13,105,5472], #LAX-HND
             [13,106,8287], #LAX-DOH
+            [13,107,5660], #LAX-ORY
             [13,109,6020], #LAX-MXP
             [13,122,5977], #LAX-ICN
             [13,132,6159], #LAX-GRU
@@ -6700,6 +6718,7 @@ The graph contains the following routes
             [15,87,4654], #MCO-CGN
             [15,92,4609], #MCO-OSL
             [15,93,4843], #MCO-ARN
+            [15,96,4155], #MCO-EDI
             [15,97,4115], #MCO-GLA
             [15,99,2304], #MCO-YYC
             [15,123,2021], #MCO-YYT
@@ -6766,6 +6785,7 @@ The graph contains the following routes
             [15,362,1141], #MCO-DSM
             [15,363,389], #MCO-MYR
             [15,367,1169], #MCO-MTY
+            [15,372,873], #MCO-BZE
             [15,379,809], #MCO-DAY
             [15,389,1483], #MCO-GDL
             [15,395,1025], #MCO-GRR
@@ -6773,6 +6793,7 @@ The graph contains the following routes
             [15,397,450], #MCO-GSP
             [15,398,587], #MCO-JAN
             [15,402,654], #MCO-LFT
+            [15,403,1262], #MCO-LIR
             [15,416,380], #MCO-PNS
             [15,417,1342], #MCO-PTY
             [15,420,1148], #MCO-SAL
@@ -6793,6 +6814,7 @@ The graph contains the following routes
             [15,585,4149], #MCO-CNF
             [15,588,3989], #MCO-REC
             [15,592,1297], #MCO-CTG
+            [15,593,1749], #MCO-CLO
             [15,594,1585], #MCO-MDE
             [15,607,1178], #MCO-PSE
             [15,608,853], #MCO-ACY
@@ -6809,12 +6831,14 @@ The graph contains the following routes
             [15,1581,4217], #MCO-VCP
             [15,2090,791], #MCO-LCK
             [15,2102,1167], #MCO-PSM
+            [15,2552,1578], #MCO-EOH
             [16,47,1235], #MIA-YYZ
             [16,49,4414], #MIA-LHR
             [16,50,4429], #MIA-LGW
             [16,51,4577], #MIA-CDG
             [16,52,4820], #MIA-FRA
             [16,53,5171], #MIA-HEL
+            [16,58,7828], #MIA-DXB
             [16,60,4156], #MIA-DUB
             [16,68,5172], #MIA-FCO
             [16,70,4622], #MIA-AMS
@@ -7128,6 +7152,7 @@ The graph contains the following routes
             [18,136,1688], #ORD-MEX
             [18,140,4669], #ORD-WAW
             [18,145,7563], #ORD-ADD
+            [18,146,6162], #ORD-TLV
             [18,147,411], #ORD-PIT
             [18,148,897], #ORD-PWM
             [18,149,1733], #ORD-PDX
@@ -7422,6 +7447,7 @@ The graph contains the following routes
             [21,187,666], #RDU-STL
             [21,189,688], #RDU-MKE
             [21,190,631], #RDU-MDW
+            [21,217,3009], #RDU-KEF
             [21,225,1201], #RDU-MBJ
             [21,239,408], #RDU-JAX
             [21,240,566], #RDU-PVD
@@ -7443,6 +7469,7 @@ The graph contains the following routes
             [22,50,4807], #SEA-LGW
             [22,51,4998], #SEA-CDG
             [22,52,5090], #SEA-FRA
+            [22,53,4764], #SEA-HEL
             [22,54,4754], #SEA-NRT
             [22,56,8059], #SEA-SIN
             [22,58,7406], #SEA-DXB
@@ -7453,10 +7480,12 @@ The graph contains the following routes
             [22,70,4868], #SEA-AMS
             [22,80,5264], #SEA-MUC
             [22,84,4633], #SEA-MAN
+            [22,85,2276], #SEA-YUL
             [22,86,557], #SEA-YEG
             [22,87,5008], #SEA-CGN
             [22,99,451], #SEA-YYC
             [22,105,4788], #SEA-HND
+            [22,106,7393], #SEA-DOH
             [22,122,5199], #SEA-ICN
             [22,136,2333], #SEA-MEX
             [22,147,2118], #SEA-PIT
@@ -7464,6 +7493,7 @@ The graph contains the following routes
             [22,150,1516], #SEA-OKC
             [22,151,956], #SEA-ONT
             [22,159,1528], #SEA-FAI
+            [22,161,6051], #SEA-IST
             [22,178,2273], #SEA-CLT
             [22,180,2683], #SEA-CUN
             [22,181,988], #SEA-PSP
@@ -7598,6 +7628,7 @@ The graph contains the following routes
             [23,369,1695], #SFO-BJX
             [23,384,157], #SFO-FAT
             [23,389,1642], #SFO-GDL
+            [23,403,2945], #SFO-LIR
             [23,409,1774], #SFO-MLM
             [23,412,1767], #SFO-MSN
             [23,417,3318], #SFO-PTY
@@ -7736,6 +7767,7 @@ The graph contains the following routes
             [26,52,5823], #SAN-FRA
             [26,54,5542], #SAN-NRT
             [26,76,5952], #SAN-ZRH
+            [26,85,2454], #SAN-YUL
             [26,99,1279], #SAN-YYC
             [26,136,1447], #SAN-MEX
             [26,147,2101], #SAN-PIT
@@ -7798,6 +7830,7 @@ The graph contains the following routes
             [29,48,796], #SLC-YVR
             [29,49,4850], #SLC-LHR
             [29,51,5063], #SLC-CDG
+            [29,52,5200], #SLC-FRA
             [29,70,4973], #SLC-AMS
             [29,83,1982], #SLC-RSW
             [29,99,720], #SLC-YYC
@@ -8029,6 +8062,7 @@ The graph contains the following routes
             [31,242,1470], #DEN-MDT
             [31,243,2414], #DEN-SJO
             [31,244,906], #DEN-SMF
+            [31,245,1957], #DEN-RTB
             [31,263,73], #DEN-COS
             [31,264,1045], #DEN-HSV
             [31,265,1080], #DEN-BHM
@@ -8261,6 +8295,7 @@ The graph contains the following routes
             [35,110,4940], #EWR-ATH
             [35,123,1159], #EWR-YYT
             [35,125,7819], #EWR-CPT
+            [35,126,7988], #EWR-JNB
             [35,132,4771], #EWR-GRU
             [35,133,5308], #EWR-EZE
             [35,134,3645], #EWR-LIM
@@ -8302,6 +8337,7 @@ The graph contains the following routes
             [35,221,779], #EWR-BDA
             [35,223,2220], #EWR-POS
             [35,225,1548], #EWR-MBJ
+            [35,230,3922], #EWR-PMI
             [35,236,2004], #EWR-BON
             [35,237,1963], #EWR-AUA
             [35,238,284], #EWR-ORF
@@ -8314,8 +8350,10 @@ The graph contains the following routes
             [35,267,1484], #EWR-RAP
             [35,268,640], #EWR-SDF
             [35,269,281], #EWR-BUF
+            [35,279,4511], #EWR-DBV
             [35,281,461], #EWR-CMH
             [35,283,143], #EWR-ALB
+            [35,287,3490], #EWR-BGO
             [35,291,115], #EWR-BDL
             [35,293,1696], #EWR-SXM
             [35,296,277], #EWR-RIC
@@ -8354,6 +8392,8 @@ The graph contains the following routes
             [35,445,1035], #EWR-SRQ
             [35,451,3381], #EWR-BHX
             [35,475,3166], #EWR-BFS
+            [35,486,3335], #EWR-TFS
+            [35,515,2568], #EWR-PDL
             [35,526,392], #EWR-BGR
             [35,527,266], #EWR-BTV
             [35,529,687], #EWR-HHH
@@ -9002,6 +9042,7 @@ The graph contains the following routes
             [47,2626,2374], #YYZ-SVD
             [47,3322,1622], #YYZ-MZO
             [47,3503,4038], #YYZ-BER
+            [48,3,1869], #YVR-AUS
             [48,5,2505], #YVR-BOS
             [48,8,1751], #YVR-DFW
             [48,11,1968], #YVR-IAH
@@ -9870,6 +9911,7 @@ The graph contains the following routes
             [52,24,5684], #FRA-SJC
             [52,25,4804], #FRA-TPA
             [52,26,5823], #FRA-SAN
+            [52,29,5200], #FRA-SLC
             [52,30,5565], #FRA-LAS
             [52,31,5022], #FRA-DEN
             [52,34,5017], #FRA-MSY
@@ -9903,6 +9945,7 @@ The graph contains the following routes
             [52,78,3715], #FRA-YOW
             [52,79,188], #FRA-BRU
             [52,80,186], #FRA-MUC
+            [52,83,4844], #FRA-RSW
             [52,84,516], #FRA-MAN
             [52,85,3635], #FRA-YUL
             [52,88,384], #FRA-LCY
@@ -9968,6 +10011,7 @@ The graph contains the following routes
             [52,178,4383], #FRA-CLT
             [52,179,107], #FRA-LUX
             [52,180,5343], #FRA-CUN
+            [52,187,4577], #FRA-STL
             [52,198,117], #FRA-DUS
             [52,201,5010], #FRA-CMB
             [52,202,1162], #FRA-LIS
@@ -10160,9 +10204,11 @@ The graph contains the following routes
             [52,3277,1948], #FRA-VDA
             [52,3308,1471], #FRA-SZF
             [52,3503,270], #FRA-BER
+            [53,8,5208], #HEL-DFW
             [53,12,4103], #HEL-JFK
             [53,13,5597], #HEL-LAX
             [53,16,5171], #HEL-MIA
+            [53,22,4764], #HEL-SEA
             [53,23,5417], #HEL-SFO
             [53,49,1147], #HEL-LHR
             [53,50,1154], #HEL-LGW
@@ -10529,6 +10575,7 @@ The graph contains the following routes
             [55,3261,263], #SYD-NAA
             [55,3278,443], #SYD-WTB
             [55,3430,431], #SYD-BXG
+            [56,12,9526], #SIN-JFK
             [56,13,8756], #SIN-LAX
             [56,22,8059], #SIN-SEA
             [56,23,8433], #SIN-SFO
@@ -10780,6 +10827,7 @@ The graph contains the following routes
             [58,12,6831], #DXB-JFK
             [58,13,8321], #DXB-LAX
             [58,15,7737], #DXB-MCO
+            [58,16,7828], #DXB-MIA
             [58,18,7228], #DXB-ORD
             [58,22,7406], #DXB-SEA
             [58,23,8085], #DXB-SFO
@@ -11568,6 +11616,7 @@ The graph contains the following routes
             [63,158,1376], #AKL-OOL
             [63,160,2247], #AKL-CNS
             [63,165,5502], #AKL-SGN
+            [63,197,1457], #AKL-MCY
             [63,205,5520], #AKL-TPE
             [63,213,5548], #AKL-KIX
             [63,231,2019], #AKL-ADL
@@ -11998,6 +12047,7 @@ The graph contains the following routes
             [67,76,5608], #PVG-ZRH
             [67,79,5604], #PVG-BRU
             [67,80,5451], #PVG-MUC
+            [67,81,6067], #PVG-CHC
             [67,85,7049], #PVG-YUL
             [67,93,4831], #PVG-ARN
             [67,100,1150], #PVG-MNL
@@ -12467,6 +12517,7 @@ The graph contains the following routes
             [69,1686,260], #BOM-RAJ
             [69,1687,603], #BOM-GWL
             [70,1,4387], #AMS-ATL
+            [70,3,5074], #AMS-AUS
             [70,5,3445], #AMS-BOS
             [70,8,4905], #AMS-DFW
             [70,10,3854], #AMS-IAD
@@ -13741,6 +13792,7 @@ The graph contains the following routes
             [76,241,4673], #ZRH-PUJ
             [76,243,5834], #ZRH-SJO
             [76,248,919], #ZRH-RIX
+            [76,249,2592], #ZRH-RUH
             [76,251,998], #ZRH-AGP
             [76,252,1669], #ZRH-FNC
             [76,255,1345], #ZRH-AYT
@@ -14463,6 +14515,7 @@ The graph contains the following routes
             [81,63,463], #CHC-AKL
             [81,65,189], #CHC-WLG
             [81,66,1551], #CHC-BNE
+            [81,67,6067], #CHC-PVG
             [81,158,1494], #CHC-OOL
             [81,294,1800], #CHC-NAN
             [81,901,2210], #CHC-RAR
@@ -14513,6 +14566,7 @@ The graph contains the following routes
             [83,45,994], #RSW-PHL
             [83,46,1086], #RSW-DTW
             [83,47,1189], #RSW-YYZ
+            [83,52,4844], #RSW-FRA
             [83,80,5021], #RSW-MUC
             [83,87,4768], #RSW-CGN
             [83,147,967], #RSW-PIT
@@ -14774,7 +14828,9 @@ The graph contains the following routes
             [85,18,746], #YUL-ORD
             [85,20,2178], #YUL-PHX
             [85,21,713], #YUL-RDU
+            [85,22,2276], #YUL-SEA
             [85,23,2531], #YUL-SFO
+            [85,26,2454], #YUL-SAN
             [85,30,2233], #YUL-LAS
             [85,31,1607], #YUL-DEN
             [85,35,331], #YUL-EWR
@@ -14878,6 +14934,7 @@ The graph contains the following routes
             [85,1451,477], #YUL-YZV
             [85,1452,408], #YUL-ZBF
             [85,1455,844], #YUL-FSP
+            [86,4,1756], #YEG-BNA
             [86,8,1629], #YEG-DFW
             [86,11,1853], #YEG-IAH
             [86,13,1358], #YEG-LAX
@@ -15885,6 +15942,7 @@ The graph contains the following routes
             [96,5,3058], #EDI-BOS
             [96,10,3465], #EDI-IAD
             [96,12,3244], #EDI-JFK
+            [96,15,4155], #EDI-MCO
             [96,35,3257], #EDI-EWR
             [96,45,3337], #EDI-PHL
             [96,49,331], #EDI-LHR
@@ -16187,6 +16245,7 @@ The graph contains the following routes
             [99,1,1910], #YYC-ATL
             [99,3,1671], #YYC-AUS
             [99,4,1698], #YYC-BNA
+            [99,5,2090], #YYC-BOS
             [99,8,1522], #YYC-DFW
             [99,9,2477], #YYC-FLL
             [99,11,1746], #YYC-IAH
@@ -17026,6 +17085,7 @@ The graph contains the following routes
             [106,13,8287], #DOH-LAX
             [106,16,7662], #DOH-MIA
             [106,18,7115], #DOH-ORD
+            [106,22,7393], #DOH-SEA
             [106,45,6780], #DOH-PHL
             [106,49,3255], #DOH-LHR
             [106,50,3238], #DOH-LGW
@@ -17204,6 +17264,7 @@ The graph contains the following routes
             [106,3420,1813], #DOH-CNN
             [106,3503,2721], #DOH-BER
             [107,12,3622], #ORY-JFK
+            [107,13,5660], #ORY-LAX
             [107,23,5574], #ORY-SFO
             [107,35,3636], #ORY-EWR
             [107,49,227], #ORY-LHR
@@ -17607,6 +17668,8 @@ The graph contains the following routes
             [109,3392,676], #MXP-OHD
             [109,3441,1467], #MXP-DBB
             [109,3503,514], #MXP-BER
+            [110,5,4740], #ATH-BOS
+            [110,10,5152], #ATH-IAD
             [110,18,5446], #ATH-ORD
             [110,35,4940], #ATH-EWR
             [110,45,5019], #ATH-PHL
@@ -18691,6 +18754,7 @@ The graph contains the following routes
             [125,1724,795], #CPT-WVB
             [126,1,8434], #JNB-ATL
             [126,12,7967], #JNB-JFK
+            [126,35,7988], #JNB-EWR
             [126,49,5635], #JNB-LHR
             [126,51,5425], #JNB-CDG
             [126,52,5396], #JNB-FRA
@@ -20003,6 +20067,7 @@ The graph contains the following routes
             [146,12,5661], #TLV-JFK
             [146,13,7555], #TLV-LAX
             [146,16,6587], #TLV-MIA
+            [146,18,6162], #TLV-ORD
             [146,23,7402], #TLV-SFO
             [146,35,5676], #TLV-EWR
             [146,45,5755], #TLV-PHL
@@ -20361,6 +20426,7 @@ The graph contains the following routes
             [151,244,390], #ONT-SMF
             [151,369,1334], #ONT-BJX
             [151,389,1279], #ONT-GDL
+            [151,420,2283], #ONT-SAL
             [152,1,749], #ROC-ATL
             [152,5,342], #ROC-BOS
             [152,6,277], #ROC-BWI
@@ -20584,12 +20650,14 @@ The graph contains the following routes
             [160,3278,831], #CNS-WTB
             [161,1,5742], #IST-ATL
             [161,5,4798], #IST-BOS
+            [161,8,6257], #IST-DFW
             [161,10,5208], #IST-IAD
             [161,11,6353], #IST-IAH
             [161,12,4984], #IST-JFK
             [161,13,6832], #IST-LAX
             [161,16,5952], #IST-MIA
             [161,18,5456], #IST-ORD
+            [161,22,6051], #IST-SEA
             [161,23,6684], #IST-SFO
             [161,47,5074], #IST-YYZ
             [161,49,1545], #IST-LHR
@@ -22904,6 +22972,7 @@ The graph contains the following routes
             [187,45,811], #STL-PHL
             [187,46,439], #STL-DTW
             [187,47,653], #STL-YYZ
+            [187,52,4577], #STL-FRA
             [187,83,980], #STL-RSW
             [187,147,552], #STL-PIT
             [187,149,1703], #STL-PDX
@@ -23174,6 +23243,7 @@ The graph contains the following routes
             [195,3,809], #PVR-AUS
             [195,8,983], #PVR-DFW
             [195,11,891], #PVR-IAH
+            [195,12,2302], #PVR-JFK
             [195,13,1218], #PVR-LAX
             [195,18,1784], #PVR-ORD
             [195,20,973], #PVR-PHX
@@ -23227,6 +23297,7 @@ The graph contains the following routes
             [196,2394,79], #OGG-MUE
             [197,55,520], #MCY-SYD
             [197,57,903], #MCY-MEL
+            [197,63,1457], #MCY-AKL
             [197,231,1036], #MCY-ADL
             [198,1,4493], #DUS-ATL
             [198,5,3550], #DUS-BOS
@@ -24453,6 +24524,7 @@ The graph contains the following routes
             [217,16,3658], #KEF-MIA
             [217,17,2934], #KEF-MSP
             [217,18,2934], #KEF-ORD
+            [217,21,3009], #KEF-RDU
             [217,22,3608], #KEF-SEA
             [217,23,4190], #KEF-SFO
             [217,25,3590], #KEF-TPA
@@ -24636,6 +24708,7 @@ The graph contains the following routes
             [223,2620,238], #POS-SLU
             [223,2626,176], #POS-SVD
             [224,1,5834], #LOS-ATL
+            [224,10,5434], #LOS-IAD
             [224,11,6501], #LOS-IAH
             [224,12,5243], #LOS-JFK
             [224,49,3107], #LOS-LHR
@@ -24887,7 +24960,9 @@ The graph contains the following routes
             [229,1428,646], #SOU-TLN
             [229,1758,1449], #SOU-JSI
             [229,1937,94], #SOU-ACI
+            [229,2114,567], #SOU-AVN
             [229,3321,495], #SOU-CMF
+            [230,35,3922], #PMI-EWR
             [230,49,837], #PMI-LHR
             [230,50,813], #PMI-LGW
             [230,51,653], #PMI-CDG
@@ -25581,6 +25656,7 @@ The graph contains the following routes
             [245,8,1319], #RTB-DFW
             [245,11,1096], #RTB-IAH
             [245,16,767], #RTB-MIA
+            [245,31,1957], #RTB-DEN
             [245,47,1932], #RTB-YYZ
             [245,85,2144], #RTB-YUL
             [245,246,162], #RTB-TGU
@@ -25720,6 +25796,7 @@ The graph contains the following routes
             [249,71,3960], #RUH-KUL
             [249,72,2448], #RUH-PRG
             [249,75,2286], #RUH-VIE
+            [249,76,2592], #RUH-ZRH
             [249,77,2669], #RUH-GVA
             [249,79,2854], #RUH-BRU
             [249,80,2483], #RUH-MUC
@@ -27164,6 +27241,7 @@ The graph contains the following routes
             [278,33,234], #HRL-SAT
             [278,38,277], #HRL-HOU
             [278,186,460], #HRL-DAL
+            [279,35,4511], #DBV-EWR
             [279,50,1049], #DBV-LGW
             [279,51,876], #DBV-CDG
             [279,52,692], #DBV-FRA
@@ -27495,6 +27573,7 @@ The graph contains the following routes
             [286,1192,493], #AMM-NJF
             [286,1193,598], #AMM-ISU
             [286,1205,1255], #AMM-DWC
+            [286,1225,1155], #AMM-IAS
             [286,1265,1753], #AMM-FMM
             [286,1741,921], #AMM-BEN
             [286,1767,1224], #AMM-MRA
@@ -27505,6 +27584,7 @@ The graph contains the following routes
             [286,3435,1326], #AMM-MJI
             [286,3503,1818], #AMM-BER
             [287,12,3480], #BGO-JFK
+            [287,35,3490], #BGO-EWR
             [287,49,647], #BGO-LHR
             [287,50,665], #BGO-LGW
             [287,51,786], #BGO-CDG
@@ -30690,6 +30770,7 @@ The graph contains the following routes
             [364,8,284], #AEX-DFW
             [364,11,190], #AEX-IAH
             [365,1,918], #CZM-ATL
+            [365,3,945], #CZM-AUS
             [365,8,1056], #CZM-DFW
             [365,11,838], #CZM-IAH
             [365,16,556], #CZM-MIA
@@ -30793,6 +30874,7 @@ The graph contains the following routes
             [372,9,787], #BZE-FLL
             [372,11,967], #BZE-IAH
             [372,13,2175], #BZE-LAX
+            [372,15,873], #BZE-MCO
             [372,16,767], #BZE-MIA
             [372,17,1909], #BZE-MSP
             [372,31,1825], #BZE-DEN
@@ -31155,7 +31237,9 @@ The graph contains the following routes
             [403,11,1480], #LIR-IAH
             [403,12,2195], #LIR-JFK
             [403,13,2626], #LIR-LAX
+            [403,15,1262], #LIR-MCO
             [403,16,1104], #LIR-MIA
+            [403,23,2945], #LIR-SFO
             [403,31,2336], #LIR-DEN
             [403,35,2191], #LIR-EWR
             [403,38,1457], #LIR-HOU
@@ -31414,6 +31498,7 @@ The graph contains the following routes
             [420,74,5381], #SAL-MAD
             [420,134,1939], #SAL-LIM
             [420,136,782], #SAL-MEX
+            [420,151,2283], #SAL-ONT
             [420,180,544], #SAL-CUN
             [420,243,405], #SAL-SJO
             [420,245,261], #SAL-RTB
@@ -33022,6 +33107,7 @@ The graph contains the following routes
             [485,1421,2266], #ACE-MMX
             [485,1426,1125], #ACE-ZAZ
             [485,3503,2128], #ACE-BER
+            [486,35,3335], #TFS-EWR
             [486,49,1820], #TFS-LHR
             [486,50,1808], #TFS-LGW
             [486,51,1768], #TFS-CDG
@@ -34448,6 +34534,7 @@ The graph contains the following routes
             [514,3503,815], #OLB-BER
             [515,5,2387], #PDL-BOS
             [515,12,2549], #PDL-JFK
+            [515,35,2568], #PDL-EWR
             [515,47,2802], #PDL-YYZ
             [515,50,1548], #PDL-LGW
             [515,52,1881], #PDL-FRA
@@ -36422,6 +36509,8 @@ The graph contains the following routes
             [592,2565,445], #CTG-ADZ
             [592,3279,297], #CTG-BLB
             [593,9,1575], #CLO-FLL
+            [593,12,2566], #CLO-JFK
+            [593,15,1749], #CLO-MCO
             [593,16,1558], #CLO-MIA
             [593,70,5647], #CLO-AMS
             [593,74,5156], #CLO-MAD
@@ -49780,6 +49869,7 @@ The graph contains the following routes
             [2113,500,330], #EBU-BIA
             [2113,519,1293], #EBU-SAW
             [2113,1371,940], #EBU-FEZ
+            [2114,229,567], #AVN-SOU
             [2114,500,249], #AVN-BIA
             [2114,501,240], #AVN-AJA
             [2114,1237,227], #AVN-LIG
@@ -50961,6 +51051,7 @@ The graph contains the following routes
             [2539,360,332], #PUU-BOG
             [2539,593,210], #PUU-CLO
             [2539,3129,129], #PUU-LQM
+            [2540,9,1386], #BGA-FLL
             [2540,360,180], #BGA-BOG
             [2540,417,444], #BGA-PTY
             [2540,593,331], #BGA-CLO
@@ -50983,6 +51074,7 @@ The graph contains the following routes
             [2551,360,679], #LET-BOG
             [2551,3125,319], #LET-LCR
             [2551,3128,199], #LET-LPD
+            [2552,15,1578], #EOH-MCO
             [2552,360,144], #EOH-BOG
             [2552,2548,128], #EOH-IBE
             [2552,2550,134], #EOH-APO
