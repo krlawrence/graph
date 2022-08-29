@@ -3,8 +3,8 @@ This folder contains several files of sample data in various formats including t
 
 ## About the data referenced in the book
 
-Two versions of the air-routes data set files are provided. The file `air-routes.graphml` contains the full graph containing over 40,000 routes and over 3,300 airports. The file `air-routes-small.graphml` just has routes between 46 airports all located in the US.
-All of the examples in the book are based on `air-routes.graphml`.
+Two versions (sizes) of the air-routes data set files are provided. The file `air-routes.graphml` contains the full graph containing over 40,000 routes and over 3,300 airports. The file `air-routes-small.graphml` just has routes between 46 airports all located in the US.
+All of the examples in the book are based on `air-routes.graphml`. These are the versions used by examples in the book. This way, even as the data is updated (see "Latest data" below), the examples in the book can always be verified against these original versions.
 
 The small script called *'load-air-routes-graph.groovy'* can be used to load the graph into a TinkerGraph from within the Gremlin Console. Edit the script before using it to adjust the location of where you put the GraphML file on your system.
 
@@ -16,7 +16,7 @@ The `edges.csv` file is intended to be used with the `GraphFromCSV.java` sample 
 
 ## Latest data
 
-The two files `air-routes-latest.graphml` and `air-routes-small-latest.graphml` contain additional routes and airports added since the original version was uploaded. They are provided in case anyone wants to experiment with some more recent data. The latest data set adds 129 additional airports and 7,132 additional routes to the original `air-routes.graphml` data set.
+The two files `air-routes-latest.graphml` and `air-routes-small-latest.graphml` contain additional routes and airports added since the original version was uploaded. They are provided in case anyone wants to experiment with some more recent data. The latest data set adds 130 airports and 7,237 routes to the original `air-routes.graphml` data set.
 
 ## Additional formats
 
