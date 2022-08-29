@@ -76,7 +76,7 @@ while i < ids.length-1
   if distance == 0
     errorExit(ERROR_NO_ROUTE, pair)
   end
-  puts "#{pair}= #{mrg.fmtsep(distance)}"
+  puts "#{pair} = #{mrg.fmtsep(distance)}"
   distances << distance
   i += 1
 end

@@ -4,7 +4,7 @@
 <!-- Intended for learning purposes only and not for travel planning!                  -->
 <!--                                                                                   -->
 <!-- Author: Kelvin R. Lawrence                                                        -->
-<!-- Graph version : 0.88   Date: 2022-Jul-09                                          -->
+<!-- Graph version : 0.89   Date: 2022-Aug-29                                          -->
 <!--                                                                                   -->
 <!-- Please send details of errors in the graph or suggestions to:                     -->
 <!-- e-mail: gfxman@yahoo.com , twitter: @gfxman                                       -->
@@ -103,10 +103,10 @@
     <node id='0'>
       <data key='labelV'>version</data>
       <data key='type'>version</data>
-      <data key='code'>0.88</data>
-      <data key='date'>2022-07-10 16:49:16 UTC</data>
+      <data key='code'>0.89</data>
+      <data key='date'>2022-08-29 14:10:18 UTC</data>
       <data key='author'>Kelvin R. Lawrence</data>
-      <data key='desc'>Air Routes Data - Version: 0.88 Generated: 2022-07-10 16:49:16 UTC; Graph created by Kelvin R. Lawrence; Please let me know of any errors you find in the graph or routes that should be added.</data>
+      <data key='desc'>Air Routes Data - Version: 0.89 Generated: 2022-08-29 14:10:18 UTC; Graph created by Kelvin R. Lawrence; Please let me know of any errors you find in the graph or routes that should be added.</data>
     </node>
     <node id='1'>
       <data key='labelV'>airport</data>
