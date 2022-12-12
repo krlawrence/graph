@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------------------
-# make-merge.rb
+# make-map.rb
 #
 # Example of using the MakeRouteGraph class to create a list of maps that 
 # can be used to create the airport nodes using a map injection pattern.
