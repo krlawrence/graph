@@ -10,16 +10,23 @@
 # the data.
 #
 # Author: Kelvin R Lawrence  27th November-2013 - Present
+#
+# LATER: Use getAirportData() rather than explicit AIRPORT_DATA.
+#        Add steps to include the version, continent, and country nodes.
 #----------------------------------------------------------------------------------------
 require_relative '../mrg/mrg-core'
 require_relative '../mrg/mrg-constants'
 
 make = 5          # Number of airports to include, can be command line overridden.
 big = true        # Use the full airport set
-stringId = false  # Set to true if you prefer string ID values
+stringId = false  # Set to true if you prefer string ID values, can be command line overridden.
 
 if ARGV.size > 0
   make = ARGV[0].to_i
+
+  if ARGV.size > 1
+    stringId = ARGV[1] == 's' ? true : false
+  end  
 end
 
 mrg = MakeRouteGraph.new(allAirports:big)

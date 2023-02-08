@@ -82,10 +82,68 @@ class MakeRouteGraph
   end
   
   # ---------------------------------------------------------------------------------------
+  # Return the currently loaded airport data up to a given limit.
+  # ---------------------------------------------------------------------------------------
+  def getAirportData(limit:AIRPORT_DATA.size)
+    return AIRPORT_DATA[0...limit]
+  end
+  
+  # ---------------------------------------------------------------------------------------
+  # Return the size of the currently loaded country data.
+  # ---------------------------------------------------------------------------------------
+  def getCountryCount()
+    return COUNTRIES.size
+  end
+  
+  # ---------------------------------------------------------------------------------------
+  # Return the currently loaded country data up to a given limit.
+  # ---------------------------------------------------------------------------------------
+  def getCountryData(limit:COUNTRIES.size)
+    if limit == COUNTRIES.size
+      return COUNTRIES
+    else
+      res = {}
+      COUNTRIES.keys[0...limit].each do |k| 
+        res[k] = COUNTRIES[k]
+      end
+    end
+    return res
+  end
+  
+  # ---------------------------------------------------------------------------------------
+  # Return the size of the currently loaded continent data.
+  # ---------------------------------------------------------------------------------------
+  def getContinentCount()
+    return CONTINENTS.size
+  end
+  
+  # ---------------------------------------------------------------------------------------
+  # Return the currently loaded continent data up to a given limit.
+  # ---------------------------------------------------------------------------------------
+  def getContinentData(limit:CONTINENTS.size)
+    if limit == CONTINENTS.size
+      return CONTINENTS
+    else
+      res = {}
+      CONTINENTS.keys[0...limit].each do |k| 
+        res[k] = CONTINENTS[k]
+      end
+    end
+    return res
+  end
+  
+  # ---------------------------------------------------------------------------------------
   # Return the size of the currently loaded route data.
   # ---------------------------------------------------------------------------------------
   def getRouteCount()
     return ROUTE_DATA.size
+  end
+
+  # ---------------------------------------------------------------------------------------
+  # Return the currently loaded route data up to a given limit.
+  # ---------------------------------------------------------------------------------------
+  def getRouteData(limit:10)
+    return ROUTE_DATA[0...limit]
   end
 
   # ---------------------------------------------------------------------------------------
