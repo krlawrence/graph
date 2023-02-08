@@ -6,7 +6,7 @@
 # release. For more details see the TINKERPOP-2681 Jira ticket.
 #
 # If the data this script creates is used as the source to a Groovy list of maps, then
-# a query such as `g.inject(maps).unfold().merge(identity())` can be used to "upsert"
+# a query such as `g.inject(maps).unfold().mergeV()` can be used to "upsert"
 # the data.
 #
 # Author: Kelvin R Lawrence  27th November-2013 - Present
@@ -14,8 +14,9 @@
 require_relative '../mrg/mrg-core'
 require_relative '../mrg/mrg-constants'
 
-make = 5
-big = true
+make = 5          # Number of airports to include, can be command line overridden.
+big = true        # Use the full airport set
+stringId = false  # Set to true if you prefer string ID values
 
 if ARGV.size > 0
   make = ARGV[0].to_i
@@ -25,7 +26,7 @@ mrg = MakeRouteGraph.new(allAirports:big)
 
 set = []
 make.times do |idx|
-  id = AIRPORT_DATA[idx][APT_ID]
+  id = stringId ? "'#{AIRPORT_DATA[idx][APT_ID]}'" : AIRPORT_DATA[idx][APT_ID] 
   code = AIRPORT_DATA[idx][APT_IATA]
   icao = AIRPORT_DATA[idx][APT_ICAO]
   runways = AIRPORT_DATA[idx][APT_RWYS]
