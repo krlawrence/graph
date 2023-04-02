@@ -3,6 +3,7 @@ This folder contains the AsciiDoc source file used to produce the HTML, XML (DOC
 
 
 **LATEST NEWS:**  
+- [Apr-2-2023] Many exciting new features have been added to TinkerPop/Gremlin in the 3.6.x line of updates. This will require quite a few updates to the manuscript. As a start, two tracking issues are being used for the key features that need adding - see [#115](https://github.com/krlawrence/graph/issues/115) and [#240](https://github.com/krlawrence/graph/issues/240). These issues include updates from both the 3.5.x and 3.6.x lines.
 - [May-4-2022] The latest preview draft of revision 283 (TP 3.5.2) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
 - [Oct-26-2019] Revision 282 (TP 3.4.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.   
 
