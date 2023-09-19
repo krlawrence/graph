@@ -1,0 +1,4773 @@
+[[msc]]
+MISCELLANEOUS QUERIES AND THEIR RESULTS
+---------------------------------------
+
+In this chapter you will find more Gremlin queries that operate on the 'air-routes'
+graph. All of these queries build upon the topics  covered in the prior sections.
+In this section I have included lots of examples of the output returned by running
+queries. In cases where the output is rather lengthy I have either truncated it or
+laid it out in columns to make it easier to read and to save space. It is my hope
+also that from reading the examples in this section that you will get a sense for how
+good data modelled as a graph can be when used for analysis. I also think that the
+queries in this section show that you can achieve useful results from a graph using
+nothing more than some OLTP style queries and a TinkerGraph. This is actually a great
+example of an ideal use case for TinkerGraph. Even if you have your main data in a
+massive hosted graph, extracting parts of it and doing analysis locally using
+TinkerGraph is a technique that can make you very productive.
+
+[[countmore]]
+Counting more things
+~~~~~~~~~~~~~~~~~~~~
+
+To get things started, let's look at a few more examples that basically just count
+occurrences and distributions of things but are a little more complex than the
+examples we looked at earlier in the book.
+
+[[noairports]]
+Which countries have no airports?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This first query looks for any 'country' vertices that have no outgoing edges. This
+indicates that there are no airports in the graph for those countries.
+
+[source,groovy]
+----
+// Are there any countries that have no airports?
+g.V().hasLabel('country').not(out()).values('desc')
+----
+
+So it seems there are six countries for which no airports were found.
+
+[source,groovy]
+----
+Andorra
+Liechtenstein
+Monaco
+Montserrat
+Pitcairn
+San Marino
+----
+
+The previous query is a slightly shorter form of the two queries below which would
+both yield the same results. Note the use of the '"__"' prefix in front of the 'not'
+step in the second query. This is because 'not' is a reserved word in Groovy and has
+to be prefixed in this way when not directly connected to a prior step by a dot.
+
+[source,groovy]
+// Are there any countries that have no airports?
+----
+g.V().hasLabel('country').where(out().count().is(0)).values('desc')
+
+g.V().hasLabel('country').where(__.not(out())).values('desc')
+
+----
+
+[[noroutes]]
+Which airports have no routes?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+There are a few airports in the graph that currently have no commercial routes. This
+is either because they used to have service and it was discontinued or they are new
+airports still awaiting service to start. We can write a query to easily find these
+"orphan" airports. Note that this is query based on the version 0.77 release of
+`air-routes.graphml`.
+
+TIP: You can always find the version of the `air-routes.graphml` file used for the
+examples in the book and also the most recent data set in the `sample-data` folder
+located at https://github.com/krlawrence/graph/tree/master/sample-data .
+
+In more recent updates of the data set, some of these airports
+do now have commercial airline service.
+
+
+[source,groovy]
+----
+
+g.V().hasLabel('airport').not(bothE('route')).values('code').fold()
+----
+
+When we run the query, you can see we find quite a few orphan airport nodes that have
+no outgoing or incoming routes.
+
+[source,groovy]
+----
+[ILG,TWB,TUA,BVS,KGG,RIG,INT,APA,BWU,BID,NBW,SFH,CVT,AFW,PSY,HLE]
+----
+
+[[runwaydist]]
+What is the distribution of runways?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+We can easily count the distribution per airport of runways. We can observe from the
+results of running the query that the vast majority of airports in the graph have
+either one or two runways.
+
+[source,groovy]
+----
+// What is the distribution of runways in the graph
+g.V().hasLabel('airport').groupCount().by('runways')
+
+[1:2316,2:762,3:225,4:51,5:14,6:4,7:1,8:1]
+----
+
+[[mostroutes]]
+Airports with the most routes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This next query finds all airports that have more than 180 outgoing routes and
+returns their IATA codes.
+
+[source,groovy]
+----
+// Airports with more than 180 outgoing routes
+g.V().hasLabel('airport').
+      where(out('route').count().is(gt(180))).values('code').fold()
+
+[ATL,DFW,IAH,JFK,LAX,ORD,DEN,EWR,YYZ,LHR,LGW,CDG,FRA,DXB,PEK,PVG,FCO,AMS,BCN,MAD,MUC,MAN,STN,DME,IST]
+----
+
+We could improve our query a bit to include the IATA code and the exact number of
+outgoing routes in the returned result. There are a few different ways that we could
+do this. One way that is quite convenient is to use 'group'.
+
+[source,groovy]
+----
+// Same basic query but return the airport code and the route count
+g.V().hasLabel('airport').
+      where(out('route').count().is(gt(180))).
+      group().by('code').by(out().count())
+----
+
+I have laid the results out in a grid to make them easier to read.
+
+[source,groovy]
+----
+[ORD:232,PVG:201,LAX:195,CDG:262,
+ STN:186,JFK:187,DFW:221,LHR:191,
+ MUC:237,DME:214,EWR:182,AMS:269,
+ IST:270,DEN:188,BCN:190,DXB:229,
+ IAH:192,MAD:192,FCO:189,FRA:272,
+ PEK:234,ATL:232,YYZ:181,MAN:182,
+ LGW:200]
+----
+
+We can add one further refinement to the query. This time the results are ordered by
+the number or routes in descending order. Note the use of 'local' to make sure that
+'order' is applied to the contents of the collection that was generated by the
+'group' step.
+
+[source,groovy]
+----
+// Same query with ordered results
+g.V().hasLabel('airport').
+      where(out('route').count().is(gt(180))).
+      group().by('code').by(out().count()).
+      order(local).by(values,desc)
+----
+
+I have again laid the results out in a grid.
+
+[source,groovy]
+----
+[FRA:272,IST:270,AMS:269,CDG:262,
+ MUC:237,PEK:234,ORD:232,ATL:232,
+ DXB:229,DFW:221,DME:214,PVG:201,
+ LGW:200,LAX:195,IAH:192,MAD:192,
+ LHR:191,BCN:190,FCO:189,DEN:188,
+ JFK:187,STN:186,EWR:182,MAN:182,
+ YYZ:181]
+----
+
+As I mentioned earlier in the book, the number of incoming and outgoing routes for
+any given airport will not always be the same due to how airlines operate their
+flight routings. The query below looks for any airports that have more than 400 total
+routes (inbound and outbound).
+
+[source,groovy]
+----
+// Airports with more than 400 total routes
+g.V().hasLabel('airport').
+      where(both('route').count().is(gt(400))).
+      values('code').fold()
+
+[ATL,DFW,ORD,CDG,FRA,DXB,PEK,PVG,AMS,MUC,DME,IST]
+----
+
+[[oneroute]]
+Airports with just one route
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+There are, perhaps surprisingly, a large number of airports that only have one route.
+The query below will figure out just how many fall into that category.
+
+[source,groovy]
+----
+// How many airports have only one route?
+g.V().hasLabel('airport').
+  where(out().count().is(eq(1))).count()
+
+770
+----
+
+[[onerunway]]
+Single runway airports with the most routes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+It is interesting to look at how busy some single runway airports are. The query
+below looks for the ten airports with just one runway that have the most outgoing
+routes. You will notice that I have included London Gatwick in the query using an
+'or' step. This is because while technically Gatwick is listed in the graph as an
+airport with two runways, in practice the second runway is primarily used as a
+taxiway and reserved for emergency use only. Therefore, Gatwick is really a single
+runway airport. This also makes the query a bit more interesting!
+
+[source,groovy]
+----
+g.V().or(has('airport','runways',1),has('code','LGW')).
+      order().by(out().count(),desc).limit(10).
+      project('apt','city','routes').
+      by('code').by('city').by(out().count())
+----
+
+When we run the query here are the results we get back. One interesting observation
+is that three of the top five busiest single runway airports are in England.
+
+[source,groovy]
+----
+[apt:LGW,city:London,routes:200]
+[apt:STN,city:London,routes:186]
+[apt:CTU,city:Chengdu,routes:124]
+[apt:LIS,city:Lisbon,routes:116]
+[apt:BHX,city:Birmingham,routes:109]
+[apt:SAW,city:Istanbul,routes:109]
+[apt:KMG,city:Kunming,routes:107]
+[apt:ALC,city:Alicante,routes:106]
+[apt:CKG,city:Chongqing,routes:106]
+[apt:XIY,city:Xianyang,routes:105]
+----
+
+[[runwaycountproject]]
+Another way of counting runways
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Let's assume we wanted to count the runways in the graph and for each number of
+runways produce a simple map result where the runway number and total count of
+airports having that number of runways  are each meaningfully labeled. One way we
+could do that is to use a 'groupCount' step to calculate the distribution of runways
+and then use a 'project' step to produce the nicely labeled result. That is what the
+query below does. Notice that an 'unfold' step is used so that the results of
+the 'groupCount' which itself produces a map, can be further processed.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').
+      groupCount().by('runways').
+      unfold().
+      project('runways','count').by(keys).by(values)
+----
+
+When run we get a nice map back showing us the number of runways and for each the
+total count. Each value has a meaningful key name of 'runways' and 'count'
+respectively.
+
+[source,groovy]
+----
+[runways:1,count:2316]
+[runways:2,count:762]
+[runways:3,count:225]
+[runways:4,count:51]
+[runways:5,count:14]
+[runways:6,count:4]
+[runways:7,count:1]
+[runways:8,count:1]
+----
+
+Notice that if the unfold step had not been used, a very different result would have
+been generated.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').
+      groupCount().by('runways').
+      project('runways','count').by(keys).by(values)
+
+[runways:[1,2,3,4,5,6,7,8],count:[2316,762,225,51,14,4,1,1]]
+----
+[[canadamost]]
+Airports with the most routes in Canada
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following query finds the top 10 airports in Canada sorted by descending number
+of outgoing routes. Just for fun, this time I used the 'index' method to include a
+one based index as part of the results.
+
+[source,groovy]
+----
+g.V().has('country','code','CA').out().
+      order().by(out().count(),desc).limit(10).
+      project('apt','city','routes').
+      by('code').by('city').by(out().count()).indexed(1)
+----
+
+Here are the results of running the query along with the index that we added.
+
+[source,groovy]
+----
+[1,[apt:YYZ,city:Toronto,routes:181]]
+[2,[apt:YUL,city:Montreal,routes:101]]
+[3,[apt:YVR,city:Vancouver,routes:94]]
+[4,[apt:YYC,city:Calgary,routes:68]]
+[5,[apt:YEG,city:Edmonton,routes:41]]
+[6,[apt:YHZ,city:Halifax,routes:40]]
+[7,[apt:YWG,city:Winnipeg,routes:32]]
+[8,[apt:YOW,city:Ottawa,routes:31]]
+[9,[apt:YZF,city:Yellowknife,routes:20]]
+[10,[apt:YQB,city:Quebec City,routes:19]]
+----
+
+[[ukdist]]
+Distribution of UK airports
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+How many airports are there in each of the UK regions of England, Scotland,
+Wales and Northern Ireland?
+
+[source,groovy]
+----
+g.V().has('country','code','UK').out('contains').groupCount().by('region')
+
+[GB-ENG:27,GB-WLS:3,GB-NIR:3,GB-SCT:25]
+----
+
+[[countrydist]]
+Distribution of airports by country
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This query uses 'groupCount' to produce a map of key value pairs where the key is the
+two character ISO country code and the value is the number of airports that country
+has.
+
+[source,groovy]
+----
+// How many airports does each country have in the graph?
+g.V().hasLabel('airport').
+      groupCount().by('country')
+----
+
+When run the query produces quite a lot of output. As the values are not sorted it is
+hard to find the countries with the most airports. Note that the 'groupCount' step
+does not include countries that had no airports. In other words if the count is zero
+the country was skipped.
+
+[source,groovy]
+----
+[PR:6,PT:14,PW:1,PY:2,QA:1,AE:10,AF:4,AG:1,AI:1,AL:1,AM:2,AO:14,AR:36,AS:1,AT:6,RE:2,AU:124,AW:1,AZ:5,RO:14,BA:4,BB:1,RS:2,BD:7,BE:5,RU:120,BF:2,BG:4,RW:2,BH:1,BI:1,BJ:1,BL:1,BM:1,BN:1,BO:15,SA:26,BQ:3,SB:17,BR:115,SC:2,BS:18,SD:5,SE:39,BT:1,SG:1,BW:4,SH:2,SI:1,BY:2,BZ:13,SK:2,SL:1,SN:3,SO:5,CA:203,SR:1,SS:1,CC:1,CD:11,ST:1,SV:1,CF:1,CG:3,CH:5,SX:1,CI:1,SY:2,SZ:1,CK:6,CL:17,CM:5,CN:209,CO:50,CR:13,TC:4,TD:1,CU:12,CV:7,TG:1,TH:32,CW:1,CX:1,CY:3,TJ:4,CZ:5,TL:1,TM:1,TN:8,TO:1,TR:48,TT:2,DE:33,TV:1,TW:9,TZ:8,DJ:1,DK:8,DM:1,DO:7,UA:15,UG:4,UK:58,DZ:29,US:579,EC:15,EE:3,EG:10,EH:2,UY:2,UZ:11,ER:1,VC:1,ES:42,ET:14,VE:24,VG:2,VI:2,VN:21,VU:26,FI:20,FJ:10,FK:2,FM:4,FO:1,FR:58,WF:2,GA:2,WS:1,GD:1,GE:3,GF:1,GG:2,GH:5,GI:1,GL:14,GM:1,GN:1,GP:1,GQ:2,GR:39,GT:2,GU:1,GW:1,GY:2,HK:1,HN:6,HR:8,HT:2,YE:9,HU:2,ID:67,YT:1,IE:7,IL:5,IM:1,IN:73,ZA:20,IQ:6,IR:44,IS:5,IT:36,ZM:8,JE:1,ZW:3,JM:2,JO:2,JP:63,KE:14,KG:2,KH:3,KI:2,KM:1,KN:2,KP:1,KR:15,KS:1,KW:1,KY:3,KZ:20,LA:8,LB:1,LC:2,LK:6,LR:2,LS:1,LT:3,LU:1,LV:1,LY:10,MA:14,MD:1,ME:2,MF:1,MG:13,MH:2,MK:1,ML:1,MM:14,MN:10,MO:1,MP:2,MQ:1,MR:3,MS:1,MT:1,MU:2,MV:8,MW:2,MX:59,MY:34,MZ:10,NA:4,NC:1,NE:1,NF:1,NG:18,NI:1,NL:5,NO:49,NP:10,NR:1,NZ:25,OM:4,PA:5,PE:20,PF:30,PG:26,PH:38,PK:21,PL:13,PM:1]
+----
+
+
+If we wanted to sort the list in descending order using the numeric values we could
+adjust the query as follows. Once again note the use of 'local' to specify how the
+ordering is applied.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').
+      groupCount().by('country').
+      order(local).by(values,desc)
+----
+
+This time it is much easier to see which countries have the most airports.
+
+[source,groovy]
+----
+[US:579,CN:209,CA:203,AU:124,RU:120,BR:115,IN:73,ID:67,JP:63,MX:59,UK:58,FR:58,CO:50,NO:49,TR:48,IR:44,ES:42,SE:39,GR:39,PH:38,AR:36,IT:36,MY:34,DE:33,TH:32,PF:30,DZ:29,SA:26,VU:26,PG:26,NZ:25,VE:24,VN:21,PK:21,FI:20,ZA:20,KZ:20,PE:20,BS:18,NG:18,SB:17,CL:17,BO:15,UA:15,EC:15,KR:15,PT:14,AO:14,RO:14,ET:14,GL:14,KE:14,MA:14,MM:14,BZ:13,CR:13,MG:13,PL:13,CU:12,CD:11,UZ:11,AE:10,EG:10,FJ:10,LY:10,MN:10,MZ:10,NP:10,TW:9,YE:9,TN:8,TZ:8,DK:8,HR:8,ZM:8,LA:8,MV:8,BD:7,CV:7,DO:7,IE:7,PR:6,AT:6,CK:6,HN:6,IQ:6,LK:6,AZ:5,BE:5,SD:5,SO:5,CH:5,CM:5,CZ:5,GH:5,IL:5,IS:5,NL:5,PA:5,AF:4,BA:4,BG:4,BW:4,TC:4,TJ:4,UG:4,FM:4,NA:4,OM:4,BQ:3,SN:3,CG:3,CY:3,EE:3,GE:3,ZW:3,KH:3,KY:3,LT:3,MR:3,PY:2,AM:2,RE:2,RS:2,BF:2,RW:2,SC:2,SH:2,BY:2,SK:2,SY:2,TT:2,EH:2,UY:2,VG:2,VI:2,FK:2,WF:2,GA:2,GG:2,GQ:2,GT:2,GY:2,HT:2,HU:2,JM:2,JO:2,KG:2,KI:2,KN:2,LC:2,LR:2,ME:2,MH:2,MP:2,MU:2,MW:2,PW:1,QA:1,AG:1,AI:1,AL:1,AS:1,AW:1,BB:1,BH:1,BI:1,BJ:1,BL:1,BM:1,BN:1,BT:1,SG:1,SI:1,SL:1,SR:1,SS:1,CC:1,ST:1,SV:1,CF:1,SX:1,CI:1,SZ:1,TD:1,TG:1,CW:1,CX:1,TL:1,TM:1,TO:1,TV:1,DJ:1,DM:1,ER:1,VC:1,FO:1,WS:1,GD:1,GF:1,GI:1,GM:1,GN:1,GP:1,GU:1,GW:1,HK:1,YT:1,IM:1,JE:1,KM:1,KP:1,KS:1,KW:1,LB:1,LS:1,LU:1,LV:1,MD:1,MF:1,MK:1,ML:1,MO:1,MQ:1,MS:1,MT:1,NC:1,NE:1,NF:1,NI:1,NR:1,PM:1]
+----
+
+If we wanted to sort by the country code, the 'key' in other words, we could change
+the query accordingly. In this case we will use 'by(keys,asc)' to get a sort in
+ascending order. If we wanted to sort in descending order by key we could use
+'by(keys,desc)' instead.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').
+      groupCount().by('country').
+      order(local).by(keys,asc)
+----
+
+This time the results are now sorted using the country codes in ascending
+alphabetical order.
+
+[source,groovy]
+----
+[AE:10,AF:4,AG:1,AI:1,AL:1,AM:2,AO:14,AR:36,AS:1,AT:6,AU:124,AW:1,AZ:5,BA:4,BB:1,BD:7,BE:5,BF:2,BG:4,BH:1,BI:1,BJ:1,BL:1,BM:1,BN:1,BO:15,BQ:3,BR:115,BS:18,BT:1,BW:4,BY:2,BZ:13,CA:203,CC:1,CD:11,CF:1,CG:3,CH:5,CI:1,CK:6,CL:17,CM:5,CN:209,CO:50,CR:13,CU:12,CV:7,CW:1,CX:1,CY:3,CZ:5,DE:33,DJ:1,DK:8,DM:1,DO:7,DZ:29,EC:15,EE:3,EG:10,EH:2,ER:1,ES:42,ET:14,FI:20,FJ:10,FK:2,FM:4,FO:1,FR:58,GA:2,GD:1,GE:3,GF:1,GG:2,GH:5,GI:1,GL:14,GM:1,GN:1,GP:1,GQ:2,GR:39,GT:2,GU:1,GW:1,GY:2,HK:1,HN:6,HR:8,HT:2,HU:2,ID:67,IE:7,IL:5,IM:1,IN:73,IQ:6,IR:44,IS:5,IT:36,JE:1,JM:2,JO:2,JP:63,KE:14,KG:2,KH:3,KI:2,KM:1,KN:2,KP:1,KR:15,KS:1,KW:1,KY:3,KZ:20,LA:8,LB:1,LC:2,LK:6,LR:2,LS:1,LT:3,LU:1,LV:1,LY:10,MA:14,MD:1,ME:2,MF:1,MG:13,MH:2,MK:1,ML:1,MM:14,MN:10,MO:1,MP:2,MQ:1,MR:3,MS:1,MT:1,MU:2,MV:8,MW:2,MX:59,MY:34,MZ:10,NA:4,NC:1,NE:1,NF:1,NG:18,NI:1,NL:5,NO:49,NP:10,NR:1,NZ:25,OM:4,PA:5,PE:20,PF:30,PG:26,PH:38,PK:21,PL:13,PM:1,PR:6,PT:14,PW:1,PY:2,QA:1,RE:2,RO:14,RS:2,RU:120,RW:2,SA:26,SB:17,SC:2,SD:5,SE:39,SG:1,SH:2,SI:1,SK:2,SL:1,SN:3,SO:5,SR:1,SS:1,ST:1,SV:1,SX:1,SY:2,SZ:1,TC:4,TD:1,TG:1,TH:32,TJ:4,TL:1,TM:1,TN:8,TO:1,TR:48,TT:2,TV:1,TW:9,TZ:8,UA:15,UG:4,UK:58,US:579,UY:2,UZ:11,VC:1,VE:24,VG:2,VI:2,VN:21,VU:26,WF:2,WS:1,YE:9,YT:1,ZA:20,ZM:8,ZW:3]
+----
+
+Note that we can use 'select' to only return one or more of the full set of key/value
+pairs returned. Here is an example of doing just that.
+
+[source,groovy]
+----
+// Only return the values for Germany, China, Holland and the US.
+g.V().hasLabel('airport').
+      groupCount().by('country').
+      select('DE','CN','NL','US')
+
+[DE:32, CN:179, NL:5, US:566]
+----
+
+Because the 'air-routes' graph also has country specific vertices, we could chose to
+write the previous queries a different way. We could start by finding country
+vertices and then see how many airport vertices each one is connected to. In this
+instance, because a 'group' step is being used, countries with no airports will be
+included.
+
+[source,groovy]
+----
+// Another way to ask the question above, this time by counting the
+// edges (out degree) from each country
+
+g.V().hasLabel('country').
+      group().by('code').by(outE().count()).
+      order(local).by(values,desc)
+----
+
+This time the countries with no airports *are* included in the results.
+
+[source,groovy]
+----
+[US:579,CN:209,CA:204,AU:125,RU:122,BR:115,IN:74,ID:67,JP:63,MX:59,UK:58,FR:58,CO:50,NO:49,TR:48,IR:45,ES:42,SE:39,GR:39,PH:39,AR:37,IT:36,MY:34,DE:33,TH:32,PF:30,DZ:29,SA:26,VU:26,PG:26,NZ:25,VE:24,VN:21,PK:21,FI:20,ZA:20,KZ:20,PE:20,BS:18,NG:18,SB:17,CL:17,BO:15,UA:15,EC:15,KR:15,PT:14,AO:14,RO:14,ET:14,GL:14,KE:14,MA:14,MM:14,BZ:13,CR:13,MG:13,PL:13,CU:12,CD:11,UZ:11,AE:10,EG:10,FJ:10,LY:10,MN:10,MZ:10,NP:10,TW:9,YE:9,TN:8,TZ:8,DK:8,HR:8,ZM:8,LA:8,MV:8,BD:7,CV:7,DO:7,IE:7,PR:6,AT:6,CK:6,HN:6,IQ:6,LK:6,AZ:5,BE:5,SD:5,SO:5,CH:5,CM:5,CZ:5,GH:5,IL:5,IS:5,NA:5,NL:5,PA:5,AF:4,BA:4,BG:4,BW:4,TC:4,TJ:4,UG:4,FM:4,OM:4,BQ:3,SN:3,CG:3,CY:3,EE:3,GE:3,ZW:3,KH:3,KY:3,LT:3,MR:3,PY:2,AM:2,RE:2,RS:2,BF:2,RW:2,SC:2,SH:2,SI:2,BY:2,SK:2,SY:2,TT:2,EH:2,UY:2,VG:2,VI:2,FK:2,WF:2,GA:2,GG:2,GQ:2,GT:2,GY:2,HT:2,HU:2,JM:2,JO:2,KG:2,KI:2,KN:2,LC:2,LR:2,ME:2,MH:2,MP:2,MU:2,MW:2,PW:1,QA:1,AG:1,AI:1,AL:1,AS:1,AW:1,BB:1,BH:1,BI:1,BJ:1,BL:1,BM:1,BN:1,BT:1,SG:1,SL:1,SR:1,CC:1,SS:1,ST:1,CF:1,SV:1,SX:1,CI:1,SZ:1,TD:1,TG:1,CW:1,CX:1,TL:1,TM:1,TO:1,TV:1,DJ:1,DM:1,ER:1,VC:1,FO:1,WS:1,GD:1,GF:1,GI:1,GM:1,GN:1,GP:1,GU:1,GW:1,HK:1,YT:1,IM:1,JE:1,KM:1,KP:1,KS:1,KW:1,LB:1,LS:1,LU:1,LV:1,MD:1,MF:1,MK:1,ML:1,MO:1,MQ:1,MS:1,MT:1,NC:1,NE:1,NF:1,NI:1,NR:1,PM:1,AD:0,SM:0,LI:0,MC:0,PN:0]
+----
+
+If we only wanted to see the last few of the sorted results we could add a 'tail'
+step with 'local' scope to the query.
+
+[source,groovy]
+----
+g.V().hasLabel('country').
+      group().by('code').by(outE().count()).
+      order(local).by(values,desc).
+      tail(local,20)
+
+[LV:1,MD:1,MF:1,MK:1,ML:1,MO:1,MQ:1,MS:1,MT:1,NC:1,NE:1,NF:1,NI:1,NR:1,PM:1,AD:0,SM:0,LI:0,MC:0,PN:0]
+
+----
+
+[[continentdist]]
+Distribution of airports by continent
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+We can use a similar query to the one above to find out how many airports are located in
+each of the seven continents. As you can see from the output, a key/value map is again
+returned where the key is the continent code and the value is the number of airports in
+that continent. Note that currently  there are no airports with regular scheduled service
+in Antarctica!
+
+[source,groovy]
+----
+// How many airports are there in each continent?
+g.V().hasLabel('continent').group().by('code').by(out().count())
+
+[EU:583,AS:932,NA:978,OC:284,AF:294,AN:0,SA:303]
+----
+
+Distribution of routes per airport
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+We have already examined various ways to calculate the distribution of routes in the
+graph. The following query will, for each airport, return a key value pair where the
+key is the airport code and the value is the number of outgoing routes from that
+airport. Because there are over 3,000 airports in the graph, this query will produce
+a large results. I decided not to include those results here. The second query just
+picks the results from the map for a few airports. Those results are shown.
+
+[source,groovy]
+----
+// How many flights are there from each airport?
+g.V().hasLabel('airport').out().groupCount().by('code')
+
+// count the routes from all the airports and then select a few.
+g.V().hasLabel('airport').out().groupCount().by('code').
+      select('AUS','AMS','JFK','DUB','MEX')
+
+[AUS:59,AMS:272,JFK:186,DUB:165,MEX:105]
+----
+
+This next query essentially asks the same question about how many outgoing routes
+each airport has. However, rather than return the count for each airport
+individually, it groups the ones with the same number of routes together. As this
+query returns a lot of data I just included a few lines from the full result below
+the query.
+
+[source,groovy]
+----
+// Same query except sorted into groups by ascending count
+g.V().hasLabel('airport').
+      group().by(out().count()).by('code').
+      order(local).by(keys)
+
+----
+As can be seen this time the count value is the key and the airport codes are the
+values.
+
+[source,groovy]
+----
+76:[TPA,BNE,PDX],77:[RIX,WUH],78:[IBZ,PTY],79:[ADD,AYT],80:[MNL,BOG,XMN,CSX],81:[SFB],82:[GLA,HND],83:[CAI,MDW,OTP],84:[VCE,BRS,HGH],85:[JNB,MLA,NAP,RUH],86:[BOM,SHJ],89:[BWI],90:[CMN],91:[LPA,VKO],92:[SXF],93:[DCA,GRU,LYS],94:[SLC,YVR,SYD,MRS,TFS],95:[STR,CRL],97:[NCE,AUH],98:[BUD,WAW],101:[YUL],102:[BGY],104:[LTN,JED,SZX],105:[PHX,MEX,TLV,HAM,XIY],106:[ALC,CUN,CKG],107:[HEL,EDI,KMG],108:[DEL],109:[BHX,SAW],110:[TPE],112:[NRT],113:[GVA],114:[SEA],115:[PRG],116:[CGN,LIS],118:[ATH,TXL],119:[OSL],122:[KUL],123:[MCO],124:[MXP,CTU],126:[AGP],127:[ORY],129:[PHL],130:[BOS],132:[BKK],133:[LED],136:[IAD],137:[DTW],141:[SFO],142:[FLL],143:[ARN,PMI],144:[MSP,ICN],145:[LAS,CPH],146:[SIN],151:[HKG],152:[ZRH],156:[SVO],162:[VIE],163:[DOH],164:[CAN],165:[DUB],166:[DUS],168:[CLT],171:[MIA],180:[BRU],181:[YYZ],182:[EWR,MAN],186:[STN],187:[JFK],188:[DEN],189:[FCO],190:[BCN],191:[LHR],192:[IAH,MAD],195:[LAX],200:[LGW],201:[PVG],214:[DME],221:[DFW],229:[DXB],232:[ATL,ORD],234:[PEK],237:[MUC],262:[CDG],269:[AMS],270:[IST],272:[FRA]]
+
+----
+
+As the above query returns a lot of data, we can also extract specific values we are
+interested in as follows. Only airports with 105 outgoing routes are selected.
+
+[source,groovy]
+----
+// Which of these airports have 105 outgoing routes?
+g.V().hasLabel('airport').
+      group().by(out().count()).by('code').next().get(105L)
+----
+
+NOTE: Currently 'select' can only take a string value as the key so we have to
+use the slightly awkward 'next().get()' syntax to get a numeric key from a
+result.
+
+This time the results only include the airports with 105 outgoing routes.
+
+[source,groovy]
+----
+PHX
+MEX
+TLV
+HAM
+XIY
+----
+
+
+[[groupvar]]
+Using groupCount with a traversal variable
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+So far we have just used 'groupCount' with no parameters. When used in that way,
+'groupCount' behaves like a 'map' step in that it passes the transformed data on to
+the next step. However, if you specify the name of a traversal variable as a
+parameter, the results of the count will be stored in that variable and 'groupCount'
+will act the same way as a 'sideEffect' would, nothing is passed on from 'groupCount'
+to the next step. We can use this capability to keep track of things during a query
+while not actually changing the overall state of the traversal.
+
+The example below starts at the vertex 'V(3)' and goes 'out' from there. A
+'groupCount' step is then used to group the vertices we visited by a count of the
+number of runways each has. We then go 'out' again and count how many vertices we
+found and save that result in the variable 'b'. Note that the 'groupCount' when used
+in this way did not pass anything on to the following step. Finally we use 'select'
+to return our two variables as the results of the query.
+
+[source,groovy]
+----
+g.V(3).out().groupCount('a').by('runways').
+       out().count().as('b').select('a','b')
+
+[a:[1:2,2:9,3:17,4:22,5:4,6:3,7:1,8:1],b:5942]
+----
+
+In the next section we will see another example of a 'groupCount' step that uses a
+traversal variable.
+
+[[gcconstant]]
+Combining 'groupCount' and 'constant'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You can use a 'constant' value in combination with a 'groupCount' step as one way of
+setting the name of the key that will be used in the result. The example below shows
+a 'groupCount' step that is provided a traversal variable '"a"' as a parameter and a
+constant as part of the 'by' modulator. The query starts by finding any airports in
+the US state of Oklahoma. A 'constant' step is used to tell the 'groupCount' step
+what to use as the key name in the result. At the end of the query a 'cap' step is
+used to close and return the contents of '"a"'.
+
+[source,groovy]
+----
+g.V().has('airport','region','US-OK').groupCount('a').by(constant('OK')).cap('a')
+----
+
+If we run the query, here is what we will get back. Notice the key is our constant
+value '"OK"' and the value is the number of airports found in Oklahoma.
+
+[source,groovy]
+----
+[OK:4]
+----
+
+The example above is intended purely to demonstrate the fact that you can use a
+'constant' value with 'groupCount'. However, for this specific example, you would
+probably code a query something like the one below instead.
+
+[source,groovy]
+----
+g.V().has('airport','region','US-OK').groupCount().by('region')
+
+[US-OK:4]
+----
+
+[[chainchoose]]
+Combining 'choose' and 'groupCount'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Using the ideas discussed above, we can write a query that chains several
+'choose' steps together to build a result set made up of various key:value pairs
+representing different things that we are interested in counting. The query below
+looks at all vertices that represent an airport. For each vertex found, various
+properties are examined using a 'choose' step. If the test returns 'true' a count,
+stored in the traversal variable "'a"' is incremented. Note how each of the choose
+steps is 'dot chained' together. When used in this way 'choose' behaves in the same
+way as a 'sideEffect' in that all of the airport vertices are passed to the next
+choose rather than just those that pass the _if_ test.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').
+      choose(has('runways',4), groupCount('a').by(constant('four'))).
+      choose(has('runways',lte(2)), groupCount('a').by(constant('low'))).
+      choose(has('runways',gte(6)), groupCount('a').by(constant('high'))).
+      choose(has('country','FR'), groupCount('a').by(constant('France'))).
+      groupCount('a').by(constant('total')).cap('a')
+----
+
+If we run the query this is what we might get back. We counted 3375 total airports,
+found six airports that have six or more runways, 3079 that have two or fewer and
+found 58 airports in France.
+
+[source,groovy]
+----
+[total:3374,high:6,low:3078,four:51,France:58]
+----
+
+Using 'choose' and 'groupCount' in this way provides a very nice pattern for counting
+somewhat disparate things during a traversal.
+
+[[nestedgroup]]
+Nesting one 'group' step inside another
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Many examples of both the 'groupCount' and 'group' steps have already been presented
+in this book. However, something I have not touched on so far, which by now may be
+obvious but perhaps not, is that you can nest one 'group' step inside another one.
+This is made possible by the fact that the 'by' modulators that are used to tell the
+'group' step precisely what you want grouped can take arbitrary traversals. Take a
+look at the example below. Hopefully the indentation makes it easier to read. We
+begin by simply finding five airports and starting a group. The key for each group
+will be one of the codes for each of these airports. This is specified by the first
+'by' modulator. For the value part of each group, specified by the second 'by'
+modulator, we start a second traversal. That traversal begins by finding five places
+you can fly to from each of the five airports that we initially found. Then another
+'group' step is used to group each of those airports by the number of total outgoing
+routes they have.
+
+[source,groovy]
+----
+g.V().hasLabel("airport").limit(5).
+      group().
+        by('code').
+        by(out("route").limit(5).
+           group().
+             by('code').
+             by(out("route").count()))
+----
+
+When the query is run here is what we get back. As expected the outer group has keys
+that represent the first five airports that were found. The inner group has the five
+airport destinations as the keys and their total outgoing route counts as their
+values. I pretty printed the output a bit to make it easier to read.
+
+[source,groovy]
+----
+[BNA:[DCA:93,DFW:221,BWI:89,FLL:142,IAD:136],
+ ANC:[IAH:192,LAX:195,DFW:221,PDX:76,FAI:19],
+ BOS:[YVR:94,LHR:191,CDG:262,YYZ:181,LGW:200],
+ ATL:[MEI:4,MLB:6,MSL:2,MCN:2,MBS:4],
+ AUS:[MEX:105,FRA:272,LHR:191,PIT:54,YYZ:181]]
+----
+
+So what we have created is a group, essentially a map, that has airport codes as the
+key and an additional group as the values. Therefore, given each group is made up of
+key value pairs, we can use a 'select' step to only pick a few of the results.
+
+[source,groovy]
+----
+g.V().hasLabel("airport").limit(5).
+      group().
+        by('code').
+        by(out("route").limit(5).
+           group().
+             by('code').
+             by(out("route").count())).
+      select('ANC','ATL')
+----
+
+This time only the selected results are returned
+
+[source,groovy]
+----
+[ANC:[IAH:192,LAX:195,DFW:221,PDX:76,FAI:19],
+ ATL:[MEI:4,MLB:6,MSL:2,MCN:2,MBS:4]]
+----
+
+If you want to select results from one of the inner groups you can do that as well
+using an additional 'select' step.
+
+[source,groovy]
+----
+g.V().hasLabel("airport").limit(5).
+      group().
+        by('code').
+        by(out("route").limit(5).
+           group().
+             by('code').
+             by(out("route").count())).
+      select('ANC').
+      select('IAH','LAX')
+----
+
+This will first select the result with a key of 'ANC' and then from that group select
+the results for the keys of 'IAH' and 'LAX' only.
+
+[source,groovy]
+----
+[IAH:192,LAX:195]
+----
+
+[[eu-usa]]
+Analysis of routes between Europe and the USA
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The next few queries show how you can use a graph like 'air-routes' to perform
+analysis on a particular industry segment. The following queries analyze the
+distribution and availability of routes between airports across Europe and airports
+in the United States. First of all let's just find out how many total routes there are
+between airports anywhere in Europe and airports in the USA.
+
+[source,groovy]
+----
+// How many routes from anywhere in Europe to the USA?
+
+g.V().has('continent','code','EU').
+      out().out().has('country','US').
+      count()
+
+351
+----
+
+So we now know that there are 345 different routes. Remember though that the
+'air-routes' graph does not track the number of airlines that operate any of these
+routes. The graph just stores the data that at least one airline operates each of
+these unique route pairs. Let's dig a bit deeper into the 345 and find out how many
+US airports have flights that arrive from Europe.
+
+[source,groovy]
+----
+// How many different US airports have routes from Europe?
+
+g.V().has('continent','code','EU').
+      out().out().has('country','US').
+      dedup().count()
+
+38
+----
+
+So we can now see that the 345 routes from European airports arrive at one of 38
+airports in the United States. We can dig a bit deeper and look at the distribution
+of these routes across the 38 airports.
+
+[source,groovy]
+----
+//What is the distribution of the routes amongst those US airports?
+
+g.V().has('continent','code','EU').
+      out().out().has('country','US').
+      groupCount().by('code').
+      order(local).by(values,asc)
+----
+
+John F. Kennedy airport (JFK) in New York appears to have the most routes from Europe
+with Newark (EWR) having the second most.
+
+[source,groovy]
+----
+[PHX:1,CVG:1,RSW:1,BDL:2,SJC:2,BWI:2,AUS:2,RDU:2,MSY:2,SAN:3,SLC:3,PDX:3,PIT:3,TPA:4,SFB:4,OAK:4,DTW:5,SWF:5,MSP:5,DEN:5,FLL:6,CLT:7,DFW:7,PVD:7,SEA:8,IAH:8,MCO:10,LAS:10,ATL:14,SFO:15,PHL:17,IAD:19,ORD:21,BOS:22,LAX:23,MIA:25,EWR:33,JFK:40]
+----
+
+Now let's repeat the process but looking at the European end of the routes. First of
+all, we can calculate how many European airports have flights to the United States.
+
+[source,groovy]
+----
+// How many European airports have service to the USA?
+
+g.V().has('continent','code','EU').
+      out().as('a').
+      out().has('country','US').
+      select('a').dedup().count()
+
+53
+----
+
+Just as we did for the airports in the US we can figure out the distribution of
+routes for the European airports.
+
+[source,groovy]
+----
+// What is the distribution of US routes amongst
+// the European airports?
+
+g.V().has('continent','code','EU').
+      out().as('a').
+      out().has('country','US').
+      select('a').groupCount().by('code').
+      order(local).by(values,asc)
+----
+
+It appears that London Heathrow (LHR) offers the
+most US destinations and Frankfurt (FRA) the second most.
+
+[source,groovy]
+----
+[RIX:1,TER:1,BRS:1,STN:1,NCE:1,KRK:1,ORK:1,KBP:1,PDL:1,DME:1,BEG:1,AGP:1,HAM:1,OPO:2,STR:2,VCE:2,BHX:2,ORY:2,ATH:2,MXP:3,BFS:3,BGO:3,GVA:3,VKO:3,HEL:3,WAW:4,SVO:4,GLA:4,EDI:5,SNN:5,CGN:5,TXL:6,VIE:6,LIS:6,BRU:7,ARN:7,OSL:8,IST:9,BCN:10,MAD:11,LGW:11,DUS:11,CPH:11,FCO:12,ZRH:13,MAN:13,DUB:15,MUC:16,AMS:18,KEF:18,CDG:22,FRA:24,LHR:27]
+----
+
+Lastly, we can find out what the list of routes flown is. For this example I decided
+to just return 10 of the 345 routes. Note how the 'path' step returns all parts of
+the traversal including the continent code 'EU'. We could remove that part of the
+result by adding a 'from' modulator as shown earlier in the "<<pathintro>>" section.
+
+[source,groovy]
+----
+// Selected routes from Europe to the USA.
+
+g.V().has('continent','code','EU').
+      out().out().
+      has('country','US').
+      path().by('code').
+      limit(10)
+----
+
+The first 10 results returned feature routes from Warsaw, Belgrade and Istanbul.
+
+[source,groovy]
+----
+[EU,WAW,JFK]
+[EU,WAW,LAX]
+[EU,WAW,ORD]
+[EU,WAW,EWR]
+[EU,BEG,JFK]
+[EU,IST,ATL]
+[EU,IST,BOS]
+[EU,IST,IAD]
+[EU,IST,IAH]
+[EU,IST,JFK]
+----
+
+[[mapreduce]]
+Using 'fold' to do simple Map-Reduce computations
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Earlier in the book we saw examples of 'sum' being used to count a
+collection of values. You can also use 'fold' to do something similar but in a
+more 'map-reduce' type of fashion.
+
+First of all, here is a query that uses 'fold' in a way that we have already seen. It
+will find all routes from Austin and uses a 'fold' step to return a list of those
+names.
+
+[source,groovy]
+----
+g.V().has('code','AUS').
+      out('route').
+      values('city').fold()
+----
+
+As expected the results show all of the cities that you can fly to from Austin
+collected into a single list.
+
+[source,groovy]
+----
+[Toronto,London,Frankfurt,Mexico City,Pittsburgh,Portland,Charlotte,Cancun,Memphis,Cincinnati,Indianapolis,Kansas City,Dallas,St Louis,Albuquerque,Chicago,Lubbock,Harlingen,Guadalajara,Pensacola,Valparaiso,Orlando,Branson,St Petersburg-Clearwater,Atlanta,Nashville,Boston,Baltimore,Washington D.C.,Dallas,Fort Lauderdale,Washington D.C.,Houston,New York,Los Angeles,Orlando,Miami,Minneapolis,Chicago,Phoenix,Raleigh,Seattle,San Francisco,San Jose,Tampa,San Diego,Long Beach,Santa Ana,Salt Lake City,Las Vegas,Denver,New Orleans,Newark,Houston,El Paso,Cleveland,Oakland,Philadelphia,Detroit]
+----
+
+However, what if we wanted to reduce our results further? Take a look at the modified
+version of our query below. It finds all routes from Austin and looks at the names of
+the destination cities. However, rather than return all the names, this time the
+'fold' step is used differently and effectively reduces the city names to a single
+value. That value being the total number of characters in all of those city names. We
+have seen 'fold' used elsewhere in the book but this time we provide 'fold' with a
+parameter and a closure. The parameter is passed to the closure as the first variable
+and the name of the city as the second. The closure then adds the zero and the length
+of each name effectively producing a running total.
+
+[source,groovy]
+----
+g.V().has('code','AUS').out('route').values('city').
+      fold(0) {a,b -> a + b.length()}
+
+530
+----
+
+NOTE: While this query will work as-is on TinkerGraph within the Gremlin Console,
+some graph systems are more strict about their type checking and sandboxing of Groovy
+closures. To be on the safe side you can always explicitly type cast the closure as
+follows.
+
+[source,groovy]
+----
+g.V().has('code','AUS').out('route').values('city').
+                       fold(0) {a,b -> (int)a + ((String)b).length()}
+----
+
+
+[[meanmode]]
+Distribution of routes in the graph (mode and mean)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+An example of a common question we might want to answer with a network graph, of
+which air routes are an example, is "how are the routes in my graph distributed
+between airport vertices?". We can also use this same query to find the statistical
+'mode' (most common number) for a set of routes.
+
+Take a look at the next query that shows how we can do analysis on the distribution
+of routes throughout the graph. We are only interested in vertices that are airports and
+for those vertices we want to count how many outgoing routes each airport has. We want
+to return the results as a set of ordered 'key:value' pairs where the key is the
+number of outgoing routes and the value is the number of airports that have that
+number of outgoing routes.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').
+      groupCount().by(out('route').count()).
+      order(local).by(values,desc)
+----
+
+When we run the query we get back the results below. As the results are sorted in
+descending order by value, we can see that the 'mode' (most common) number of
+outgoing routes is actually just one route and that 786 airports have just one
+outgoing route. We can see that 654 airports have just two routes and so on. We can
+also see at the other end of the scale that one airport has 237 outgoing routes.
+
+[source,groovy]
+----
+[1:770,2:654,3:369,4:234,5:148,6:116,7:93,8:81,9:68,10:61,12:43,11:39,13:39,15:31,16:27,19:25,20:25,22:25,14:19,18:18,0:16,17:15,33:15,23:14,30:13,31:13,21:12,32:12,35:11,37:11,24:9,25:9,39:9,26:8,27:8,36:8,41:8,42:8,47:8,59:8,29:7,34:7,40:7,44:7,55:7,63:7,43:6,48:6,50:6,67:6,28:5,45:5,61:5,62:5,64:5,94:5,105:5,52:4,54:4,68:4,70:4,80:4,85:4,38:3,51:3,53:3,56:3,60:3,74:3,76:3,83:3,84:3,93:3,104:3,106:3,107:3,46:2,57:2,58:2,65:2,73:2,77:2,78:2,79:2,82:2,86:2,91:2,95:2,97:2,98:2,109:2,116:2,118:2,124:2,143:2,144:2,145:2,182:2,192:2,232:2,262:1,269:1,270:1,272:1,49:1,66:1,69:1,71:1,72:1,75:1,81:1,89:1,90:1,92:1,101:1,102:1,108:1,110:1,112:1,113:1,114:1,115:1,119:1,122:1,123:1,126:1,127:1,129:1,130:1,132:1,133:1,136:1,137:1,141:1,142:1,146:1,151:1,152:1,156:1,162:1,163:1,164:1,165:1,166:1,168:1,171:1,180:1,181:1,186:1,187:1,188:1,189:1,190:1,191:1,195:1,200:1,201:1,214:1,221:1,229:1,234:1,237:1]
+----
+
+We could change our query above, replacing 'out()' with '__.in()' and we could find
+out the distribution of incoming routes. Remembering that in an air route network
+there is not always a one to one equivalent number of outgoing to incoming routes due
+to the way airlines plan their routes.
+
+Another change we could make to our query is to change the ordering to use the key
+field for each key:value pair and this time sort in ascending order.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').
+      groupCount().by(out('route').count()).
+      order(local).by(keys,asc)
+----
+
+When we run our query again we get the results below. Looking at the data sorted
+this way helps some new interesting facts stand out. The most interesting thing
+we can immediately spot is that there are 16 airports that currently have no
+outgoing routes at all!
+
+[source,groovy]
+----
+
+[0:16,1:770,2:654,3:369,4:234,5:148,6:116,7:93,8:81,9:68,10:61,11:39,12:43,13:39,14:19,15:31,16:27,17:15,18:18,19:25,20:25,21:12,22:25,23:14,24:9,25:9,26:8,27:8,28:5,29:7,30:13,31:13,32:12,33:15,34:7,35:11,36:8,37:11,38:3,39:9,40:7,41:8,42:8,43:6,44:7,45:5,46:2,47:8,48:6,49:1,50:6,51:3,52:4,53:3,54:4,55:7,56:3,57:2,58:2,59:8,60:3,61:5,62:5,63:7,64:5,65:2,66:1,67:6,68:4,69:1,70:4,71:1,72:1,73:2,74:3,75:1,76:3,77:2,78:2,79:2,80:4,81:1,82:2,83:3,84:3,85:4,86:2,89:1,90:1,91:2,92:1,93:3,94:5,95:2,97:2,98:2,101:1,102:1,104:3,105:5,106:3,107:3,108:1,109:2,110:1,112:1,113:1,114:1,115:1,116:2,118:2,119:1,122:1,123:1,124:2,126:1,127:1,129:1,130:1,132:1,133:1,136:1,137:1,141:1,142:1,143:2,144:2,145:2,146:1,151:1,152:1,156:1,162:1,163:1,164:1,165:1,166:1,168:1,171:1,180:1,181:1,182:2,186:1,187:1,188:1,189:1,190:1,191:1,192:2,195:1,200:1,201:1,214:1,221:1,229:1,232:2,234:1,237:1,262:1,269:1,270:1,272:1]
+----
+
+If we wanted to find the statistical mean number of routes in the graph we could
+easily write a query like the one below to tell us how many airports and
+outgoing routes in total there are in the graph.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').union(count(),out('route').count()).fold()
+
+[3374,43400]
+----
+
+We could then use the Gremlin Console do the division for us to calculate the mean.
+
+[source,groovy]
+----
+gremlin> 43400/3374
+
+==>12.8630705394
+----
+
+However, Gremlin also has a 'mean' step that we can take advantage of if we can
+figure out a way to use it in this case that will do the work for us. Take a look at
+the next query. The key thing to note here is the way 'local' has been used. This
+will cause Gremlin to essentially do what we did a bit more manually above. If we did
+not include 'local' the answer would just be the total number of outgoing routes as
+Gremlin would essentially calculate 43400/1. By using local we force Gremlin to in
+essence create an array containing the number of routes for each airport, add those
+values up and divide by the number of elements in the array (the number of airports).
+I hope that makes sense. If it is confusing try the query yourself on the gremlin
+console with and without local and try it without the 'mean' step. You will see all
+of the interim values instead!
+
+[source,groovy]
+----
+g.V().hasLabel('airport').local(out('route').count()).mean()
+
+12.863070539419088
+----
+
+So it seems there is an average of just over 12 outgoing routes per airport in
+the graph whichever way we decide to calculate it!
+
+Now that we have a query figured out for calculating the average number of
+outgoing routes per airport, we can easily tweak it to do the same for incoming
+routes and combined, incoming and outgoing, routes.
+
+[source,groovy]
+----
+// Average number of incoming routes
+g.V().has('type','airport').local(__.in('route').count()).mean()
+
+12.863070539419088
+
+// Average number of outgoing and incoming routes
+g.V().has('type','airport').local(both('route').count()).mean()
+
+25.726141078838175
+----
+
+How many routes are there from airports in London (UK)?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This next query can be used to figure out how many outgoing routes each of the
+airports classified as being in (or near) London, England has. Note that we
+first find all airports in England using 'has('region','GB-ENG')'. If we did
+not do this we would pick up airports in other countries as well such as
+London, Ontario, in Canada.
+
+[source,groovy]
+----
+g.V().has('region','GB-ENG').has('city','London').
+      group().by('code').by(out().count())
+
+[LCY:42,LHR:191,LTN:104,STN:186,LGW:200]
+----
+
+Here is a twist on the above theme. How many places can I get to from London in two
+hops but not including flights that end up back in London? It turns out there are
+over 2,000 places!  Notice how 'aggregate' is used to store the set of London
+airports as a collection that can be referenced later on in the query to help with
+ruling out any flights that would end up back in London.
+
+[source,groovy]
+----
+// Leave from London, fly with one stop, not ending back in London, how many places?
+g.V().has('region','GB-ENG').has('city','London').aggregate('lon').
+      out().out().dedup().where(without('lon')).count()
+
+2236
+----
+
+We could have written the previous query like this and avoided using 'aggregate' but
+to me, this feels more clumsy and somewhat repetitive.
+
+[source,groovy]
+----
+g.V().has('region','GB-ENG').has('city','London').out().out().dedup().
+      not(and(has('city','London'),has('region','GB-ENG'))).count()
+
+2236
+----
+
+[[englandroutes]]
+How many routes are there between airports in England?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+We can use an 'aggregate' step to quite elegantly find the routes that exist between
+airports located in England. The following query finds all airports in England and
+orders them by airport code. It then collects those airports using an 'aggregate'
+step. Finally the aggregated collection is used to find routes to airports also
+within the UK. Note that as written, this query finds routes in both directions if
+they exist.
+
+[source,groovy]
+----
+// Flights within England
+g.V().has('region','GB-ENG').order().by('code').aggregate('a').
+      out().where(within('a')).path().by('code')
+----
+
+Here are the routes found when the query is run. I arranged the results into columns
+to save space.
+
+[source,groovy]
+----
+[BHX,NCL]   [LBA,SOU]   [MAN,NQY]   [NQY,ISC]
+[BRS,NCL]   [LBA,NQY]   [MAN,NWI]   [NQY,LGW]
+[EMA,SOU]   [LCY,MAN]   [MAN,EXT]   [NQY,MAN]
+[EXT,MAN]   [LEQ,ISC]   [MAN,LHR]   [NQY,LPL]
+[EXT,NQY]   [LGW,NQY]   [MAN,LCY]   [NQY,LBA]
+[EXT,ISC]   [LGW,NCL]   [NCL,SOU]   [NWI,MAN]
+[HUY,NWI]   [LHR,MAN]   [NCL,BRS]   [NWI,HUY]
+[ISC,NQY]   [LHR,LBA]   [NCL,BHX]   [SOU,MAN]
+[ISC,EXT]   [LHR,NCL]   [NCL,LHR]   [SOU,EMA]
+[ISC,LEQ]   [LPL,NQY]   [NCL,LGW]   [SOU,LBA]
+[LBA,LHR]   [MAN,SOU]   [NQY,EXT]   [SOU,NCL]
+----
+
+Here is a different way the query can be written. This time a 'where' step is used to
+filter out the previously seen airport pairs so we only get routes in one direction.
+
+[source,groovy]
+----
+g.V().has('region','GB-ENG').order().by('code').as('a').
+      out().has('region','GB-ENG').as('b').
+      where('a',lt('b')).by('code').
+      path().by('code')
+----
+
+As you can see this time we only get each airport pair back once regardless of route
+direction.
+
+[source,groovy]
+----
+[BHX,NCL]   [LBA,NQY]
+[BRS,NCL]   [LCY,MAN]
+[EMA,SOU]   [LGW,NQY]
+[EXT,MAN]   [LGW,NCL]
+[EXT,NQY]   [LHR,MAN]
+[EXT,ISC]   [LHR,NCL]
+[HUY,NWI]   [LPL,NQY]
+[ISC,NQY]   [MAN,SOU]
+[ISC,LEQ]   [MAN,NQY]
+[LBA,LHR]   [MAN,NWI]
+[LBA,SOU]   [NCL,SOU]
+----
+
+[[topten]]
+What are the top ten airports by route count?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Earlier we calculated which airports have the most routes. These next three queries
+are of a similar nature but produce a tables of the top ten airports in terms of
+incoming, outgoing and overall routes. As mentioned before, because of the way some airlines
+route flights, the number of outgoing and incoming routes to an airport will not
+always be the same. For example, several KLM Airlines flights from Amsterdam to
+airports in Africa continue on to other African airports before returning to
+Amsterdam. As a result there are more inbound routes from than out bound routes to
+these airports. In each example below the 'project' step is used to generate the
+results in a easily readable form.
+
+First of all, this query will find the ten airports with the most incoming routes,
+sorted in descending order.
+
+[source,groovy]
+----
+// Find the top ten overall in terms of incoming routes
+g.V().hasLabel('airport').
+      order().by(__.in('route').count(),desc).limit(10).
+      project('ap','routes').by('code').by(__.in('route').count())
+----
+
+So it seems that Frankfurt and Amsterdam are tied for the most incoming routes. It is
+worth remembering that the version of the graph used for the examples in the book
+represents a moment in time. If these queries are re run at a later date on a newer
+version of the graph the results will quite likely be different. This is because
+airlines regularly add, and in some cases drop, routes.
+
+[source,groovy]
+----
+[ap:FRA,routes:272]
+[ap:AMS,routes:272]
+[ap:IST,routes:270]
+[ap:CDG,routes:262]
+[ap:MUC,routes:237]
+[ap:PEK,routes:235]
+[ap:ATL,routes:232]
+[ap:ORD,routes:232]
+[ap:DXB,routes:229]
+[ap:DFW,routes:221]
+----
+
+Now let's do the same thing but for outgoing routes.
+
+[source,groovy]
+----
+// Find the top ten overall in terms of outgoing routes
+g.V().hasLabel('airport').
+      order().by(out('route').count(),desc).limit(10).
+      project('ap','routes').by('code').by(out('route').count())
+----
+
+This time Frankfurt has the most routes. This reinforces a point that I made earlier.
+The number of incoming and outgoing routes for a given airport will not always be the
+same. This is because of the way airlines route flights. Some flights continue to
+other destinations before returning so there will not always be direct flights
+between airport pairs in both directions. I know as a passenger this is something
+that I find frustrating!
+
+[source,groovy]
+----
+[ap:FRA,routes:272]
+[ap:IST,routes:270]
+[ap:AMS,routes:269]
+[ap:CDG,routes:262]
+[ap:MUC,routes:237]
+[ap:PEK,routes:234]
+[ap:ATL,routes:232]
+[ap:ORD,routes:232]
+[ap:DXB,routes:229]
+[ap:DFW,routes:221]
+----
+
+Lastly, let's find the top ten airports ordered by the total number of incoming and
+outgoing routes that they have.
+
+[source,groovy]
+----
+// Find the top ten overall in terms of total routes
+g.V().hasLabel('airport').
+      order().by(both('route').count(),desc).limit(10).
+      project('ap','routes').by('code').by(both('route').count())
+----
+
+As expected, Frankfurt is the airport with the most overall routes. One small
+side note while on the topic of airline routes. The graph does not track the frequency
+at which any given route is operated. What this means is that the airport with the
+most routes is not necessarily also the busiest. This is because many routes are
+operated multiple times a day. I did not try to include this data in the graph as it
+changes too often for me to keep up with.
+
+[source,groovy]
+----
+[ap:FRA,routes:544]
+[ap:AMS,routes:541]
+[ap:IST,routes:540]
+[ap:CDG,routes:524]
+[ap:MUC,routes:474]
+[ap:PEK,routes:469]
+[ap:ATL,routes:464]
+[ap:ORD,routes:464]
+[ap:DXB,routes:458]
+[ap:DFW,routes:442]
+----
+
+[[localfold]]
+Using 'local' while counting things
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In some of the earlier sections we saw examples of 'local' scope being used. Here is
+another example of how 'local' scope can be used while counting things to achieve a
+desired result.
+
+Take a look at the query below. It finds any airports that have six or more runways
+and then returns the airport's IATA code along with the number of runways it has.
+
+[source,groovy]
+----
+g.V().has('airport','runways',gte(6)).values('code','runways').fold()
+----
+
+Here is the output from running the query. As you can see what is returned is a list
+of airport codes with each followed by its runway count.
+
+[source,groovy]
+----
+[BOS,6,DFW,7,ORD,8,DEN,6,DTW,6,AMS,6]
+----
+
+While the output returned by the previous query is not bad, it might be nice to have
+what is returned be a set of code and runway pairs each in its own list. We can
+achieve this result by having the 'fold' step applied to the interim or 'local'
+results of the query.
+
+Take a look at the modified form of the query below. Part of the query is now wrapped
+inside of a 'local' step.
+
+[source,groovy]
+----
+g.V().has('airport','runways',gte(6)).local(values('code','runways').fold())
+----
+
+Here is the output from running our modified form of the query. Each airport code and
+runway value pair is now in its own individual list.
+
+[source,groovy]
+----
+[BOS,6]
+[DFW,7]
+[ORD,8]
+[DEN,6]
+[DTW,6]
+[AMS,6]
+----
+
+[[noedges]]
+How many vertices have no edges?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In the air routes graph there are some vertices that have no outgoing edges, some
+that have no incoming edges and a few, such as the vertex for the continent
+of Antarctica, that have neither. We can use some simple
+queries to count how many of each type exist.
+
+[source,groovy]
+----
+// Vertices with no outgoing edges.
+g.V().not(outE()).count()
+
+23
+
+// Vertices with no incoming edges.
+g.V().not(inE()).count()
+
+245
+
+// Vertices with no edges.
+g.V().not(bothE()).count()
+
+7
+----
+
+The queries above provide a nice shorthand way of writing queries that we could also
+write using 'where' steps. As shown below.
+
+[source,groovy]
+----
+g.V().where(outE().count().is(0)).count()
+
+23
+----
+
+[[wherefly]]
+Where can I fly to from here?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In this section you will find some more examples of queries that explore different
+questions along the lines of "Where can I fly to from here?".
+
+[[doesanyrouteexist]]
+Does any route exist between two airports?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+We have already looked at different ways to discover shortest routes (by hops)
+between two airports using queries such as the one below. This query looks for a
+single route between Austin (AUS) and the Canadian city of Peawanuck in Ontario. It
+just so happens that Peawanuck is one of the hardest places to get to from Austin in
+the whole air-routes graph. In fact, to get there, requires six stops along the way!
+With that in mind, the query below can easily run out of memory or time out trying to
+find even a single route as there is so much work to do to analyze all of the
+possible routes.
+
+
+[source,groovy]
+----
+g.V().has('code','AUS').
+      repeat(out().simplePath()).
+        until(has('code','YPO')).
+      limit(1).
+      path().by('code')
+----
+
+In cases such as this we can take a slightly different approach that will let us know
+if any route exists and in fact will execute very efficiently. Note that this query
+cannot find multiple routes but is very useful when trying to answer the question
+"does any route exist?".
+
+[source,groovy]
+----
+g.V().has('code','AUS').
+      repeat(out().dedup()).
+        until(has('code','YPO')).
+      path().by('code')
+
+[AUS,YYZ,YTS,YMO,YFA,ZKE,YAT,YPO]
+----
+
+The difference between the two queries is the addition of a 'dedup' step. This
+ensures we only ever visit any airport along the route once no matter how we got
+there. This is different from the 'simplePath' step which makes sure we do not loop
+back on ourselves during a traversal but allows us to visit the same airport multiple
+times so long as we got there using a different path. Even if we were to make the
+task of finding a route harder by explicitly avoiding a specific stop the execution
+remains very efficient due to the 'dedup' step being used.
+
+[source,groovy]
+----
+g.V().has('code','AUS').
+      repeat(out().has('code',without('YYZ')).dedup()).
+        until(has('code','YPO')).
+      path().by('code')
+
+[AUS,BOS,YTZ,YTS,YMO,YFA,ZKE,YAT,YPO]
+----
+
+Keep in mind that this trick is only useful when trying to figure out if any route
+(or path) exists in a group between a pair of vertices. It cannot be used to find
+multiple routes but is still a very useful pattern to be aware of. You will see a
+variation of this technique used again in the "<<longestroutes>>" section.
+
+[[uscatoindia]]
+Where in the USA or Canada can I fly to from any airport in India?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This first query looks for routes to the USA or Canada from any airport in India.
+
+[source,groovy]
+----
+// Where in the USA or Canada can I fly to from any airport in India?
+g.V().has('country','code','IN').out().out().
+      has('country',within('US','CA')).path().by('code')
+----
+
+Here are the results of running the query. Note that because we used the 'path' step
+the country code for India "IN" is included in the output.
+
+[source,groovy]
+----
+[IN,DEL,IAD]
+[IN,DEL,JFK]
+[IN,DEL,ORD]
+[IN,DEL,SFO]
+[IN,DEL,EWR]
+[IN,DEL,YYZ]
+[IN,DEL,YVR]
+[IN,BOM,EWR]
+[IN,BOM,YYZ]
+----
+
+[[flleurope]]
+Which cities in Europe can I fly to from Ft. Lauderdale in Florida?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This query looks for routes from Fort Lauderdale in Florida to cities in Europe.
+
+[source,groovy]
+----
+// Where can I fly to in Europe from Ft. Lauderdale?
+g.V().has('code','FLL').out().as('a').in('contains').
+      has('code','EU').select('a').values('city')
+----
+
+Here are the results of running the query.
+
+[source,groovy]
+----
+London
+Paris
+Oslo
+Stockholm
+Copenhagen
+----
+
+[[clteusa]]
+Where can I fly to from Charlotte, to cities in Europe or South America?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This query looks for routes from Charlotte, North Carolina to cities in Europe or
+South America.
+
+[source,groovy]
+----
+// Flights from Charlotte to airports in Europe or South America
+g.V().has('code','CLT').out().as('a').in('contains').
+      has('code',within('EU','SA')).select('a').by('code')
+----
+
+Here are the results of running the query.
+
+[source,groovy]
+----
+LHR     FCO
+CDG     MAD
+FRA     MUC
+GIG     DUB
+GRU
+----
+
+[[usalon]]
+Where in the United States can I fly from to airports in London?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This query looks for routes from any one of the five airports in the
+London area in the UK that end up in the United States.
+
+[source,groovy]
+----
+// Where in the United States can I fly to non-stop from any of the
+// airports in and around London in the UK?
+g.V().has('airport','code',within('LHR','LCY','LGW','LTN','STN')).
+      out().has('country','US').path().by('code')
+----
+
+Here are the results of running the query.
+
+[source,groovy]
+----
+[LHR,AUS]      [LHR,SEA]      [LHR,EWR]
+[LHR,ATL]      [LHR,RDU]      [LHR,DEN]
+[LHR,BWI]      [LHR,SJC]      [LHR,DTW]
+[LHR,BOS]      [LHR,SFO]      [LHR,PHL]
+[LHR,IAD]      [LHR,LAX]      [LGW,SFO]
+[LHR,DFW]      [LHR,JFK]      [LGW,LAS]
+[LHR,MSP]      [LHR,IAH]      [LGW,TPA]
+[LHR,MIA]      [LHR,LAS]      [LGW,FLL]
+[LHR,PHX]      [LHR,CLT]      [LGW,MCO]
+[LHR,ORD]      [LHR,SAN]      [LGW,JFK]
+----
+
+[[txny]]
+Where in New York state can I fly to from any of the airports in Texas?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This query looks for all the routes from any airport in Texas that end up in any of
+the New York state airports.
+
+[source,groovy]
+----
+// Where in New York state can I fly to from any airport in Texas?
+g.V().has('airport','region','US-TX').out().has('region','US-NY').path().by('code')
+----
+
+Here are the results of running the query.
+
+[source,groovy]
+----
+[AUS,JFK]      [IAH,EWR]
+[AUS,EWR]      [SAT,EWR]
+[DFW,EWR]      [SAT,JFK]
+[DFW,JFK]      [HOU,JFK]
+[DFW,LGA]      [HOU,LGA]
+[IAH,JFK]      [HOU,EWR]
+[IAH,LGA]
+----
+
+[[denmex]]
+Which cities in Mexico can I fly to from Denver?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This query looks for routes from Denver to anywhere in Mexico.
+
+[source,groovy]
+----
+// Where in Mexico can I fly to from Denver?
+g.V().has('code','DEN').out().has('country','MX').values('city')
+----
+
+Here are the results of running the query.
+
+[source,groovy]
+----
+Puerto Vallarta
+San Josa del Cabo
+Cozumel
+Mexico City
+Cancun
+----
+
+[[deleu]]
+Which cities in Europe can I fly to from Delhi in India?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This query looks for routes from Delhi that go to any airport in Europe.
+
+[source,groovy]
+----
+// Where in Europe can I fly to from Delhi?
+g.V().has('code','DEL').out().as('a').in("contains").
+      has('code','EU').select('a').by('city')
+----
+
+Here are the results of running the query.
+
+[source,groovy]
+----
+London
+Paris
+Frankfurt
+Helsinki
+Rome
+Amsterdam
+Madrid
+Vienna
+Zurich
+Brussels
+Munich
+Stockholm
+Moscow
+Milan
+Istanbul
+Copenhagen
+Birmingham
+----
+
+[[aggrroutes]]
+Finding all routes between London, Munich and Paris
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In the following example we find all the routes between airports in London, Munich
+and Paris. Notice how by using 'aggregate' to collect the results of the first
+'within' test that we don't have to repeat the names in the second 'within', we can
+just refer to the aggregated collection.
+
+[source,groovy]
+----
+g.V().has('city',within('London','Munich','Paris')).aggregate('a').out().
+      where(within('a')).path().by('code')
+----
+
+Here is what we might get back from the query. I have laid the results out in columns
+to save space.
+
+[source,groovy]
+----
+[LHR,MUC]   [CDG,LHR]   [MUC,STN]   [STN,MUC]
+[LHR,ORY]   [CDG,LGW]   [MUC,LHR]   [ORY,LCY]
+[LHR,CDG]   [CDG,MUC]   [MUC,LGW]   [ORY,MUC]
+[LGW,MUC]   [CDG,LCY]   [MUC,CDG]   [ORY,LHR]
+[LGW,CDG]   [MUC,LTN]   [LCY,CDG]   [LTN,CDG]
+[CDG,LTN]   [MUC,ORY]   [LCY,ORY]   [LTN,MUC]
+----
+
+[[moredist]]
+More analysis of distances between airports
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In this section you will find some more queries that examine distances between
+airports. The query below returns a nice list of all the routes from Austin (AUS)
+along with their distances. The results are sorted in ascending order by distance.
+
+[source,groovy]
+----
+// Distances of all routes from AUS along with destination IATA CODE
+g.V().has('code','AUS').outE().order().by('dist',asc).
+      inV().path().by('code').by('dist')
+----
+
+Here are the results of running the query. For ease of reading I again broke the
+results into four columns.
+
+[source,groovy]
+----
+[AUS,142,IAH]      [AUS,755,GDL]       [AUS,1080,LAS]       [AUS,1430,PHL]
+[AUS,152,HOU]      [AUS,755,BNA]       [AUS,1080,SLC]       [AUS,1476,SJC]
+[AUS,183,DFW]      [AUS,768,DEN]       [AUS,1110,FLL]       [AUS,1493,OAK]
+[AUS,189,DAL]      [AUS,809,ATL]       [AUS,1140,DTW]       [AUS,1500,SFO]
+[AUS,274,HRL]      [AUS,866,PHX]       [AUS,1160,SAN]       [AUS,1500,EWR]
+[AUS,341,LBB]      [AUS,922,CUN]       [AUS,1173,CLE]       [AUS,1520,JFK]
+[AUS,444,MSY]      [AUS,925,TPA]       [AUS,1220,LGB]       [AUS,1690,BOS]
+[AUS,527,ELP]      [AUS,972,MDW]       [AUS,1230,LAX]       [AUS,1712,PDX]
+[AUS,558,MEM]      [AUS,973,ORD]       [AUS,1294,IAD]       [AUS,1768,SEA]
+[AUS,618,ABQ]      [AUS,994,MCO]       [AUS,1313,DCA]       [AUS,4901,LHR]
+[AUS,722,STL]      [AUS,1030,CLT]      [AUS,1339,BWI]       [AUS,5294,FRA]
+[AUS,748,MEX]      [AUS,1040,MSP]      [AUS,1357,YYZ]
+----
+
+This query finds all routes from DFW that are longer than 4,000 miles and returns the
+airport codes and the distances. Notice the use of two 'by' modulators in this query
+to decide which values are returned from the source vertex, the edge and the
+destination vertex respectively. Also note that only two were specified but three
+values are returned. This works because 'by' is processed in a round robin fashion if
+there are more values than 'by' modulators.
+
+[source,groovy]
+----
+// Where can I fly to from DFW that is more than 4,000 miles away?
+g.V().has('code','DFW').outE('route').has('dist',gt(4000)).inV().
+                        path().by('code').by('dist')
+----
+
+Here are the results of running the query.
+
+[source,groovy]
+----
+[DFW,8105,HKG]   [DFW,8022,DXB]
+[DFW,6951,PEK]   [DFW,6822,ICN]
+[DFW,7332,PVG]   [DFW,5228,GIG]
+[DFW,4905,AMS]   [DFW,5119,GRU]
+[DFW,4950,MAD]   [DFW,5299,EZE]
+[DFW,4736,LHR]   [DFW,4884,SCL]
+[DFW,4933,CDG]   [DFW,7914,DOH]
+[DFW,5127,FRA]   [DFW,8053,AUH]
+[DFW,6410,NRT]   [DFW,5015,DUS]
+[DFW,8574,SYD]   [DFW,5597,FCO]
+----
+
+The previous results are not sorted in any way. We could modify the query to include
+an 'order' step so that the results are sorted in descending order by distance.
+
+[source,groovy]
+----
+g.V().has('code','DFW').outE('route').has('dist',gt(4000)).
+      order().by('dist',desc).inV().
+      path().by('code').by('dist')
+----
+
+Here are the, now sorted, results.
+
+[source,groovy]
+----
+[DFW,8574,SYD]    [DFW,5299,EZE]
+[DFW,8105,HKG]    [DFW,5228,GIG]
+[DFW,8053,AUH]    [DFW,5127,FRA]
+[DFW,8022,DXB]    [DFW,5119,GRU]
+[DFW,7914,DOH]    [DFW,5015,DUS]
+[DFW,7332,PVG]    [DFW,4950,MAD]
+[DFW,6951,PEK]    [DFW,4933,CDG]
+[DFW,6822,ICN]    [DFW,4905,AMS]
+[DFW,6410,NRT]    [DFW,4884,SCL]
+[DFW,5597,FCO]    [DFW,4736,LHR]
+----
+
+This next query also finds all routes longer than 4,000 miles but this time
+originating in London Gatwick. Note also the use of 'where' to query the edge
+distance. The 'has' form is simpler but I show 'where' being used just to
+demonstrate an alternative way we could do it. Note that this query uses
+three 'by' modulators as each of the values returned is from a different
+property of the respective vertices and edges.
+
+[source,groovy]
+----
+// Routes longer than 4,000 miles starting at LGW
+g.V().has('code','LGW').outE().where(values('dist').is(gt(4000L))).
+      inV().path().by('code').by('dist').by('city')
+----
+
+Here are the results from running the query.
+
+[source,groovy]
+----
+[LGW, 5287, MalT]              [LGW, 4380, Calgary]
+[LGW, 4618, Varadero]          [LGW, 5987, Cape Town]
+[LGW, 5147, Tianjin]           [LGW, 4680, Kingston]
+[LGW, 5303, Chongqing]         [LGW, 4953, Cancun]
+[LGW, 4410, Ft. Lauderdale]    [LGW, 5399, Colombo]
+[LGW, 5463, Los Angeles]       [LGW, 4197, Bridgetown]
+[LGW, 4341, Orlando]           [LGW, 4076, St. George]
+[LGW, 5374, San Francisco]     [LGW, 4408, Port of Spain]
+[LGW, 4416, Tampa]             [LGW, 4699, Montego Bay]
+[LGW, 5236, Las Vegas]         [LGW, 4283, Punta Cana]
+[LGW, 5364, Oakland]           [LGW, 5419, San Jose]
+[LGW, 4731, Vancouver]         [LGW, 4662, Havana]
+[LGW, 5982, Hong Kong]         [LGW, 6053, Port Louis]
+[LGW, 5070, Beijing]           [LGW, 4222, Vieux Fort]
+----
+
+This next query is similar to the previous ones. We look for any routes from DFW that
+are longer than 4,500 miles. However, there are a few differences in this query
+worthy of note. First of all it uses the preferred 'has' technique again to test the
+distance whereas in the previous query we used 'where'. Also this time we just list
+the distance and the destination airport's code and we sort the end result using a
+'sort'. We also use 'select' and 'as' rather than the perhaps more succinct 'path'
+and 'by' to show a different way of achieving effectively the same results. The
+'path' and 'by' combination were introduced more recently into TinkerPop and I find
+that to be a more convenient syntax to use most of the time but both ways work and
+both have their benefits. We should also note that I show 'sort' being used here just
+to show a different way of ordering results, but in most cases we can re-write our
+query to use 'order'. This use of 'sort' requires a Groovy closure to be provided.
+This may not work when working with commercial graph databases that disallow
+closures. You will find several examples of 'order' being used throughout this book.
+The 'order' step is introduced in the "<<sort>>" section. As much as possible staying
+with the pure Gremlin syntax and avoiding closures is recommended.
+
+[source,groovy]
+----
+// Routes from DFW that are over 4,500 miles in length.
+// Sorted into ascending order
+
+g.V().hasLabel('airport').has('code','DFW').outE().has('dist',gt(4500)).as('e').
+      inV().as('c').select('e','c').by('dist').by('code').sort(){it.e}
+----
+
+In general, I find using 'path' rather than 'select' and 'as' to be cleaner. However,
+as discussed in the "<<pathwarn>>" section, there are issues with 'path' consuming
+memory that you will likely run into with more complex queries so it is always good
+to have some options as to how you write your Gremlin queries. Here is the output
+produced by this query.
+
+[source,groovy]
+----
+[e:4736, c:LHR]     [e:5597, c:FCO]
+[e:4884, c:SCL]     [e:6410, c:NRT]
+[e:4905, c:AMS]     [e:6822, c:ICN]
+[e:4933, c:CDG]     [e:6951, c:PEK]
+[e:4950, c:MAD]     [e:7332, c:PVG]
+[e:5015, c:DUS]     [e:7914, c:DOH]
+[e:5119, c:GRU]     [e:8022, c:DXB]
+[e:5127, c:FRA]     [e:8053, c:AUH]
+[e:5228, c:GIG]     [e:8105, c:HKG]
+[e:5299, c:EZE]     [e:8574, c:SYD]
+----
+
+For the sake of completeness, here is the query re-written to use an 'order' step
+rather than a call to 'sort' as a post processing step at the end of the query. In
+general this is the recommended way of achieving sorted results.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').has('code','DFW').outE().has('dist',gt(4500)).
+      order().by('dist').as('e').inV().as('c').
+      select('e','c').by('dist').by('code')
+----
+
+Note that the results are ordered before being collected using the 'select' step.
+Here is the output from running the modified query
+
+[source,groovy]
+----
+[e:4736,c:LHR]     [e:5597,c:FCO]
+[e:4884,c:SCL]     [e:6410,c:NRT]
+[e:4905,c:AMS]     [e:6822,c:ICN]
+[e:4933,c:CDG]     [e:6951,c:PEK]
+[e:4950,c:MAD]     [e:7332,c:PVG]
+[e:5015,c:DUS]     [e:7914,c:DOH]
+[e:5119,c:GRU]     [e:8022,c:DXB]
+[e:5127,c:FRA]     [e:8053,c:AUH]
+[e:5228,c:GIG]     [e:8105,c:HKG]
+[e:5299,c:EZE]     [e:8574,c:SYD]
+----
+
+The query can also be written with the 'order' step coming after the 'select' step.
+As follows:
+
+[source,groovy]
+----
+g.V().hasLabel('airport').has('code','DFW').outE().has('dist',gt(4500)).as('e').
+inV().as('c').select('e','c').by('dist').by('code').order().by(select('e')
+----
+
+[[gt8k]]
+Finding routes longer than 8,000 miles
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This next set of queries show various ways of finding and presenting all routes
+longer than 8,000 miles. Each query improves upon the one before by adding some
+additional feature or using a step that simplifies the query. First of all let's just
+find all routes longer than 8,000 miles. This will includes routes in both directions
+between airport pairs.
+
+[source,groovy]
+----
+// All routes longer than 8,000 miles
+g.V().as('src').outE('route').
+      has('dist',gt(8000)).inV().as('dest').
+      select('src','dest').by('code')
+----
+
+Here is what our query produces. As before I have arranged the output in columns to
+aid readability.
+
+[source,groovy]
+----
+[src:ATL,dest:JNB]    [src:DXB,dest:IAH]
+[src:DFW,dest:SYD]    [src:DXB,dest:LAX]
+[src:DFW,dest:DXB]    [src:DXB,dest:SFO]
+[src:DFW,dest:HKG]    [src:DXB,dest:AKL]
+[src:DFW,dest:AUH]    [src:HKG,dest:DFW]
+[src:IAH,dest:DXB]    [src:HKG,dest:JFK]
+[src:IAH,dest:DOH]    [src:HKG,dest:EWR]
+[src:JFK,dest:HKG]    [src:AKL,dest:DXB]
+[src:LAX,dest:DOH]    [src:AKL,dest:DOH]
+[src:LAX,dest:AUH]    [src:DOH,dest:IAH]
+[src:LAX,dest:JED]    [src:DOH,dest:LAX]
+[src:LAX,dest:RUH]    [src:DOH,dest:AKL]
+[src:LAX,dest:DXB]    [src:JNB,dest:ATL]
+[src:SFO,dest:SIN]    [src:MEX,dest:CAN]
+[src:SFO,dest:DXB]    [src:AUH,dest:DFW]
+[src:SFO,dest:AUH]    [src:AUH,dest:LAX]
+[src:EWR,dest:HKG]    [src:AUH,dest:SFO]
+[src:SYD,dest:DFW]    [src:JED,dest:LAX]
+[src:SIN,dest:SFO]    [src:RUH,dest:LAX]
+[src:DXB,dest:DFW]    [src:CAN,dest:MEX]
+----
+
+Now let's improve the query by including the distance of each route in the query
+results.
+
+[source,groovy]
+----
+// Find routes longer than 8,000 miles.
+// Include the distance in returned values.
+g.V().as('src').
+      outE().has('dist',gt(8000)).as('e').
+      inV().as('dest').
+      select('src','e','dest').by('code').by('dist')
+----
+
+Here is the modified output showing the distance between the airports.
+
+[source,groovy]
+----
+[src:ATL,e:8434,dest:JNB]     [src:DXB,e:8150,dest:IAH]
+[src:DFW,e:8574,dest:SYD]     [src:DXB,e:8321,dest:LAX]
+[src:DFW,e:8022,dest:DXB]     [src:DXB,e:8085,dest:SFO]
+[src:DFW,e:8105,dest:HKG]     [src:DXB,e:8818,dest:AKL]
+[src:DFW,e:8053,dest:AUH]     [src:HKG,e:8105,dest:DFW]
+[src:IAH,e:8150,dest:DXB]     [src:HKG,e:8054,dest:JFK]
+[src:IAH,e:8030,dest:DOH]     [src:HKG,e:8047,dest:EWR]
+[src:JFK,e:8054,dest:HKG]     [src:AKL,e:8818,dest:DXB]
+[src:LAX,e:8287,dest:DOH]     [src:AKL,e:9025,dest:DOH]
+[src:LAX,e:8372,dest:AUH]     [src:DOH,e:8030,dest:IAH]
+[src:LAX,e:8314,dest:JED]     [src:DOH,e:8287,dest:LAX]
+[src:LAX,e:8246,dest:RUH]     [src:DOH,e:9025,dest:AKL]
+[src:LAX,e:8321,dest:DXB]     [src:JNB,e:8434,dest:ATL]
+[src:SFO,e:8433,dest:SIN]     [src:MEX,e:8754,dest:CAN]
+[src:SFO,e:8085,dest:DXB]     [src:AUH,e:8053,dest:DFW]
+[src:SFO,e:8139,dest:AUH]     [src:AUH,e:8372,dest:LAX]
+[src:EWR,e:8047,dest:HKG]     [src:AUH,e:8139,dest:SFO]
+[src:SYD,e:8574,dest:DFW]     [src:JED,e:8314,dest:LAX]
+[src:SIN,e:8433,dest:SFO]     [src:RUH,e:8246,dest:LAX]
+[src:DXB,e:8022,dest:DFW]     [src:CAN,e:8754,dest:MEX]
+----
+
+Next let's simplify things a bit. While using 'as' and 'select' gets the job done,
+using 'path' and 'by' shortens the query and makes it more readable. As before
+remember the warning that in some cases using 'path' can consume large amounts of
+memory. That should not be an issue for us here as we are writing a fairly simple
+query still.
+
+[source,groovy]
+----
+// Note that this also changes the way the result is returned
+g.V().outE().has('dist',gt(8000)).
+       inV().path().by('code').by('dist')
+----
+
+The output indeed now looks more readable.
+
+[source,groovy]
+----
+[ATL,8434,JNB]   [LAX,8314,JED]   [DXB,8150,IAH]   [DOH,8287,LAX]
+[DFW,8574,SYD]   [LAX,8246,RUH]   [DXB,8321,LAX]   [DOH,9025,AKL]
+[DFW,8022,DXB]   [LAX,8321,DXB]   [DXB,8085,SFO]   [JNB,8434,ATL]
+[DFW,8105,HKG]   [SFO,8433,SIN]   [DXB,8818,AKL]   [MEX,8754,CAN]
+[DFW,8053,AUH]   [SFO,8085,DXB]   [HKG,8105,DFW]   [AUH,8053,DFW]
+[IAH,8150,DXB]   [SFO,8139,AUH]   [HKG,8054,JFK]   [AUH,8372,LAX]
+[IAH,8030,DOH]   [EWR,8047,HKG]   [HKG,8047,EWR]   [AUH,8139,SFO]
+[JFK,8054,HKG]   [SYD,8574,DFW]   [AKL,8818,DXB]   [JED,8314,LAX]
+[LAX,8287,DOH]   [SIN,8433,SFO]   [AKL,9025,DOH]   [RUH,8246,LAX]
+[LAX,8372,AUH]   [DXB,8022,DFW]   [DOH,8030,IAH]   [CAN,8754,MEX]
+
+----
+
+Our query is looking pretty good but it would be nice to not report the same route
+pair twice. In other words the distance between two airports in just one direction
+is all we really want. This adds a little complexity to things as we have to find a
+way to 'filter' out the routes that we want to ignore. One way to do this is to
+filter by making sure the code for the source airport is less than the code for the
+destination airport. This may seem a bit odd but it is a way of saying we only want
+route pairs we have not already seen. Consider the case of the route between ATL and
+JNB. The less than ('lt') test works as we will allow the route between ATL and JNB
+through (as ATL is alphabetically less than JNB) but the route between JNB and ATL
+will be filtered out. This is a useful technique that can be very helpful in many
+situations where you are filtering out unwanted results. So let's modify the query as
+shown below to apply this filter.
+
+[source,groovy]
+----
+// We could avoid returning both directions of
+// travel by refining our query as follows.
+g.V().as('a').outE().has('dist',gt(8000)).
+      inV().as('b').
+      filter(select('a','b').by('code').where('a', lt('b'))).
+      path().by('code').by('dist')
+----
+
+Here is the output from running the modified query. As you can see the route from ATL
+to JNB is still shown but the reverse route from JNB to ATL is now gone. The same is
+true for all the other 'return journey' routes.
+
+[source,groovy]
+----
+[ATL,8434,JNB]     [HKG,8054,JFK]
+[DFW,8574,SYD]     [AKL,8818,DXB]
+[DFW,8022,DXB]     [AKL,9025,DOH]
+[DFW,8105,HKG]     [DOH,8030,IAH]
+[LAX,8246,RUH]     [DOH,8287,LAX]
+[SFO,8433,SIN]     [AUH,8053,DFW]
+[EWR,8047,HKG]     [AUH,8372,LAX]
+[DXB,8150,IAH]     [AUH,8139,SFO]
+[DXB,8321,LAX]     [JED,8314,LAX]
+[DXB,8085,SFO]     [CAN,8754,MEX]
+----
+
+Lastly, now that we have the routes we want, let's tweak the query so that the routes
+are sorted by descending order of distance. We can do this by adding an 'order'
+step after finding the routes we are interested in.
+
+[source,groovy]
+----
+// As above but sorted by route lengths.
+g.V().as('a').outE().has('dist',gt(8000)).
+      order().by('dist',desc).
+      inV().as('b').
+      filter(select('a','b').by('code').where('a', lt('b'))).
+      path().by('code').by('dist')
+----
+
+Here are the results again, this time sorted by route distance in descending order.
+
+[source,groovy]
+----
+[AKL,9025,DOH]     [LAX,8246,RUH]
+[AKL,8818,DXB]     [DXB,8150,IAH]
+[CAN,8754,MEX]     [AUH,8139,SFO]
+[DFW,8574,SYD]     [DFW,8105,HKG]
+[ATL,8434,JNB]     [DXB,8085,SFO]
+[SFO,8433,SIN]     [HKG,8054,JFK]
+[AUH,8372,LAX]     [AUH,8053,DFW]
+[DXB,8321,LAX]     [EWR,8047,HKG]
+[JED,8314,LAX]     [DOH,8030,IAH]
+[DOH,8287,LAX]     [DFW,8022,DXB]
+----
+
+As part of the TinkerPop 3.2.3 release an additional capability was added to the
+'where' step that allows it to be followed by a 'by' modulator. This allows us,
+should we so desire, to simplify our query a bit more as follows.
+
+[source,groovy]
+----
+//Query changed to take advantage of the where().by() construct
+g.V().as('s').
+      outE().has('dist',gt(8000)).
+      order().by('dist',desc).inV().as('f').
+      where('f',lt('s')).by('code').
+      path().by('code').by('dist')
+----
+
+As you can see, we got the same results from our modified query. Well, almost the same
+results! Notice that we actually got the 'return routes' returned. So for example,
+we got the route from DXB to AKL and not the route from AKL to DXB that we got in the
+prior case. This is because we compared the values in the opposite order!
+
+[source,groovy]
+----
+[DOH,9025,AKL]     [RUH,8246,LAX]
+[DXB,8818,AKL]     [IAH,8150,DXB]
+[MEX,8754,CAN]     [SFO,8139,AUH]
+[SYD,8574,DFW]     [HKG,8105,DFW]
+[JNB,8434,ATL]     [SFO,8085,DXB]
+[SIN,8433,SFO]     [JFK,8054,HKG]
+[LAX,8372,AUH]     [DFW,8053,AUH]
+[LAX,8321,DXB]     [HKG,8047,EWR]
+[LAX,8314,JED]     [IAH,8030,DOH]
+[LAX,8287,DOH]     [DXB,8022,DFW]
+----
+
+As an interesting side note, and this would be true for the queries above as well, if
+we replace the 'lt' with a 'gt' we will get the routes returned in the reverse order.
+
+
+[source,groovy]
+----
+g.V().as('s').
+      outE().has('dist',gt(8000)).
+      order().by('dist',desc).inV().as('f').
+      where('f',gt('s')).by('code').
+      path().by('code').by('dist')
+----
+
+Using the prior query the first result was '[DOH,9025,AKL]'. As you will
+see below, our first result is now '[AKL,9025,DOH]'.
+
+[source,groovy]
+----
+[AKL,9025,DOH]     [LAX,8246,RUH]
+[AKL,8818,DXB]     [DXB,8150,IAH]
+[CAN,8754,MEX]     [AUH,8139,SFO]
+[DFW,8574,SYD]     [DFW,8105,HKG]
+[ATL,8434,JNB]     [DXB,8085,SFO]
+[SFO,8433,SIN]     [HKG,8054,JFK]
+[AUH,8372,LAX]     [AUH,8053,DFW]
+[DXB,8321,LAX]     [EWR,8047,HKG]
+[JED,8314,LAX]     [DOH,8030,IAH]
+[DOH,8287,LAX]     [DFW,8022,DXB]
+----
+
+Finding the 20 longest routes in the graph
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+We could write the query from the previous section a different way looking at edges
+first and using the 'project' step instead of using the 'as' and 'select' steps.
+While in general it is not recommended to start a query with 'g.E()' as there are
+typically a lot more edges than vertices in a graph this does illustrate a useful
+pattern. Also, just to change things a bit, this time we just look for the 20 longest
+routes rather than looking for routes longer than 8,000 miles. We again filter the
+results to only show the route in one direction. Note that the limit step is passed a
+parameter of 40 rather than 20 as we know we will be filtering out the same route in
+the return direction so we will actually only get 20 routes back.
+
+[source,groovy]
+----
+g.E().hasLabel('route').
+      order().by('dist',desc).limit(40).
+      project('a','b','c').
+        by(inV().values('code')).
+        by('dist').
+        by(outV().values('code')).
+      filter(select('a','c')).where('a',lt('c'))
+----
+
+Here are the results from running the query.
+
+[source,groovy]
+----
+[a:AKL,b:9025,c:DOH]    [a:LAX,b:8246,c:RUH]
+[a:AKL,b:8818,c:DXB]    [a:DXB,b:8150,c:IAH]
+[a:CAN,b:8754,c:MEX]    [a:AUH,b:8139,c:SFO]
+[a:DFW,b:8574,c:SYD]    [a:DFW,b:8105,c:HKG]
+[a:ATL,b:8434,c:JNB]    [a:DXB,b:8085,c:SFO]
+[a:SFO,b:8433,c:SIN]    [a:HKG,b:8054,c:JFK]
+[a:AUH,b:8372,c:LAX]    [a:AUH,b:8053,c:DFW]
+[a:DXB,b:8321,c:LAX]    [a:EWR,b:8047,c:HKG]
+[a:JED,b:8314,c:LAX]    [a:DOH,b:8030,c:IAH]
+[a:DOH,b:8287,c:LAX]    [a:DFW,b:8022,c:DXB]
+----
+
+For completeness, here is the query rewritten slightly to again start with airport
+vertices rather than with all 'route' edges but using 'as' and 'select' steps rather
+than using a 'path' step as used in the previous section. A 'where' step followed by
+a 'by' modulator is still used in this case. So once again, it is clear there are
+often many ways to get the results that you are looking for. The key is to think
+about which form of a query will be the most effective for the data that you are
+working with.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').as('a').
+      outE().as('b').
+      order().by('dist',desc).limit(40).
+      inV().as('c').
+      where('a',lt('c')).by('code').
+      select('a','b','c').by('code').by('dist')
+----
+
+When the query is run the results look like the ones from the prior query.
+
+[source,groovy]
+----
+[a:AKL,b:9025,c:DOH]    [a:LAX,b:8246,c:RUH]
+[a:AKL,b:8818,c:DXB]    [a:DXB,b:8150,c:IAH]
+[a:CAN,b:8754,c:MEX]    [a:AUH,b:8139,c:SFO]
+[a:DFW,b:8574,c:SYD]    [a:DFW,b:8105,c:HKG]
+[a:ATL,b:8434,c:JNB]    [a:DXB,b:8085,c:SFO]
+[a:SFO,b:8433,c:SIN]    [a:HKG,b:8054,c:JFK]
+[a:AUH,b:8372,c:LAX]    [a:AUH,b:8053,c:DFW]
+[a:DXB,b:8321,c:LAX]    [a:EWR,b:8047,c:HKG]
+[a:JED,b:8314,c:LAX]    [a:DOH,b:8030,c:IAH]
+[a:DOH,b:8287,c:LAX]    [a:DFW,b:8022,c:DXB]
+----
+
+[[longesteach]]
+Finding the longest route from each airport
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following query can be used to find the longest route from each airport in
+the graph. I included a 'limit' step so that just a few results are returned but
+if you were to remove it then every airport in the graph would be represented in
+the query results. A local step is used so that for each airport all of its
+outgoing routes are analyzed. Those routes are ordered in descending order and
+only the first one is selected in each case.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').limit(10).
+      local(outE().
+            order().by('dist',desc).
+            inV().
+            path().
+              by('code').
+              by('dist').
+              limit(1))
+----
+
+When run the query produces the following results.
+
+[source,groovy]
+----
+[ATL,8434,JNB]
+[ANC,3260,IAH]
+[AUS,5294,FRA]
+[BNA,1972,SEA]
+[BOS,7952,HKG]
+[BWI,3622,LHR]
+[DCA,2434,SFO]
+[DFW,8574,SYD]
+[FLL,7808,DXB]
+[IAD,7487,DEL]
+----
+
+
+[[aggrunion]]
+Combining 'aggregate', 'union' and 'filter' to compute distances
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This next query is similar to the one we looked at in the <<aggrroutes>> section.
+It uses 'aggregate', 'union', 'filter' and 'where' to factor certain airports in and
+out of a query. We find all airports in London, Munich and Paris and then count the
+total distance of all routes from those airports as the first half of a 'union'. The
+second half of the 'union' only counts the distances of routes that end up in one of
+our three selected cities.
+
+[source,groovy]
+----
+g.V().has('city',within('London','Munich','Paris')).
+      aggregate('a').
+      outE().
+      union(values('dist').sum(),
+            filter(inV().where((within('a')))).
+              values('dist').sum())
+----
+
+Here are the results from running the query. As expected the first number is a
+lot bigger than the second one as it is the total distance of all routes from
+the selected airports whereas the second number only reflects the total
+distance of all routes between those airports.
+
+[source,groovy]
+----
+2276209
+8906
+----
+
+More queries that analyze distances
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Calculating the distance between two directly connected airports is very easy. All we
+have to do is look at the 'dist' property of the edge that connects them. We can do
+this using the 'select' and 'as' steps or in more recent versions of TinkerPop we can
+use 'path' and 'by'. I prefer the latter technique. Both ways are shown in the
+examples below that find the distance between Austin and Mexico City
+
+[source,groovy]
+----
+// Distance between the AUS and MEX airports
+g.V().has('code','AUS').outE().as('e').
+      inV().has('code','MEX').
+      select('e').values('dist')
+
+748
+----
+
+As above but using 'path' and 'by'.
+
+[source,groovy]
+----
+// Distance between the AUS and MEX airports
+g.V().has('code','AUS').outE().
+      inV().has('code','MEX').
+      path().by('code').by('dist')
+
+[AUS, 748, MEX]
+----
+
+Here are some more queries that are based on the distance between airports. The first
+query calculates how many routes there are between 100 and 200 miles. As an exercise,
+If you remove the call to 'count' the query will list the routes. As you can see
+there are a lot of them!
+
+[source,groovy]
+----
+// Routes Between 100 and 200 miles in length
+g.V().outE().has('dist',within(100..200)).
+      inV().
+      path().by('code').by('dist').
+      count()
+
+3029
+----
+
+The next query is similar to the previous one but only counts routes that are between
+airports located in the United States. As before, if you remove the call to 'count'
+the routes will be returned.
+
+[source,groovy]
+----
+// Routes Between 100 and 200 miles in length, but only within the US.
+g.V().has('airport','country','US').
+      outE().has('dist',within(100..200)).
+      inV().has('country','US').
+      path().by('code').by('dist').
+      count()
+
+583
+----
+
+Lastly, this query returns a list of all the routes from San Antonio along with their
+distances. Some of the results are shown.
+
+[source,groovy]
+----
+// Return a list of routes and their distances,
+// starting from San Antonio (SAT)
+
+g.V().has('code','SAT').
+  outE('route').inV().
+  path().by('code').by('dist')
+----
+
+Here are just a few of the results that this query returned.
+
+[source,groovy]
+----
+[SAT,872,ATL]      [SAT,1140,MIA]
+[SAT,820,BNA]      [SAT,698,MEX]
+[SAT,1410,BWI]     [SAT,1097,MSP]
+[SAT,248,DFW]      [SAT,1093,CLT]
+[SAT,1360,IAD]     [SAT,1040,ORD]
+[SAT,190,IAH]      [SAT,931,CUN]
+[SAT,1580,JFK]     [SAT,841,PHX]
+[SAT,1210,LAX]     [SAT,624,MEM]
+[SAT,1038,MCO]     [SAT,1772,SEA]
+[SAT,1423,YYZ]     [SAT,707,MCI]
+----
+
+
+[[AUSLHR-OS]]
+How far is it from AUS to LHR with one stop?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The next query begins to address the question "How far is it from AUS to LHR with one
+stop?". We can quite easily come up with a query given what we now know about Gremlin
+that will show us all possible options with one stop between AUS and LHR along with
+the respective route distances.
+
+[source,groovy]
+----
+// Return all ways of getting from AUS to LHR with one stop.
+// Include the distances between each of the airports in the
+// query result.
+
+g.V().has('airport','code','AUS').
+      outE().inV().outE().inV().
+      has('code','LHR').
+      path().by('code').by('dist')
+----
+
+The output from running the query produces a nice set of data showing the starting,
+intermediate and destination airports with the distances in miles between each. It
+would be nice though if we could find a way to show the total distance that I will
+have to travel in each case. That is the topic of the next section!
+
+[source,groovy]
+----
+[AUS,1476,SJC,5352,LHR]       [AUS,183,DFW,4736,LHR]
+[AUS,1500,SFO,5350,LHR]       [AUS,1339,BWI,3622,LHR]
+[AUS,1768,SEA,4783,LHR]       [AUS,1500,EWR,3453,LHR]
+[AUS,866,PHX,5255,LHR]        [AUS,1690,BOS,3254,LHR]
+[AUS,973,ORD,3939,LHR]        [AUS,768,DEN,4655,LHR]
+[AUS,1040,MSP,4001,LHR]       [AUS,1080,LAS,5213,LHR]
+[AUS,1230,LAX,5439,LHR]       [AUS,809,ATL,4198,LHR]
+[AUS,1520,JFK,3440,LHR]       [AUS,1160,SAN,5469,LHR]
+[AUS,1140,DTW,3753,LHR]       [AUS,1357,YYZ,3544,LHR]
+[AUS,142,IAH,4820,LHR]        [AUS,5294,FRA,406,LHR]
+[AUS,1430,PHL,3533,LHR]       [AUS,748,MEX,5529,LHR]
+[AUS,1294,IAD,3665,LHR]       [AUS,1030,CLT,3980,LHR]
+----
+
+[[sackauslhr]]
+Using 'sack' to calculate the shortest AUS-LHR route with one stop
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Consider a typical use case for air travel. We want to calculate the shortest
+distance we will have to travel to go from one airport to another with only one stop.
+Let's take a real example. What are the ten shortest distances from AUS to LHR with
+one stop on the way?  Given what we know of Gremlin so far we can pretty easily come
+up with a query that will give us routes from AUS to LHR with just one stop like we
+did in the previous section. However, what is not so obvious, and this is an area
+where the TinkerPop documentation is a little weak, is working out how to keep a
+running total of values as we traverse a graph. This is where the 'sack' step comes
+in. As you will hopefully recall from some of the earlier sections, a 'sack' allows
+us to define a place where we can put things as the graph traversal proceeds. We can
+give the sack an in initial value and can add to it during the traversal and then use
+it as part of the information that our query will return. Take a look at the
+rather lengthy query below. I have laid it out in a way that I hope makes it easy to
+read.
+
+[source,groovy]
+----
+// Shortest distances from AUS to LHR with one stop
+g.withSack(0).
+  V().has('code','AUS').
+      outE().
+      sack(sum).by('dist').
+      inV().
+      outE().
+      sack(sum).by('dist').
+      inV().has('code','LHR').
+      sack().
+      order().by(asc).limit(10).
+      path().
+        by('code').
+        by('dist').
+        by('code').
+        by('dist').
+        by('code').
+        by()
+----
+
+On the first line of the query, we initialize our sack with the value zero. During
+the query, each time we take an outgoing edge, we add the distance value for that
+edge to the sack. We filter out routes in the normal way by only keeping destinations
+that are 'LHR'. After finding the routes we care about we take the values that are
+stored in our sack and use them to sort our results in ascending order. Finally on
+we process the paths that we have taken. Note that the sack value is included
+as part of the path output and referenced using a 'by' modulator that has no
+parameter. Running the query will produce the following results:
+
+[source,groovy]
+----
+[AUS, 1140, DTW, 3753, LHR, 4893]
+[AUS, 1357, YYZ, 3544, LHR, 4901]
+[AUS, 973,  ORD, 3939, LHR, 4912]
+[AUS, 183,  DFW, 4736, LHR, 4919]
+[AUS, 1690, BOS, 3254, LHR, 4944]
+[AUS, 1500, EWR, 3453, LHR, 4953]
+[AUS, 1294, IAD, 3665, LHR, 4959]
+[AUS, 1520, JFK, 3440, LHR, 4960]
+[AUS, 1339, BWI, 3622, LHR, 4961]
+[AUS, 142,  IAH, 4820, LHR, 4962]
+----
+
+NOTE: In Tinkerpop 3.3 the syntax of 'sack' was changed. Where previously you would
+write something like 'sack(sum,''runways'')' you are now required to write
+'sack(sum).by(''runways'')'. The prior format was already deprecated in Tinkerpop
+3.2.5 but is now fully removed starting with Tinkerpop 3.3.
+
+We could add a little post processing to our query to only output the airport codes
+and the total mileage. Given this is post processing of a small data set, using a bit
+of in-line code does not feel too ugly here.
+
+[source,groovy]
+----
+g.withSack(0).V().
+  has('code','AUS').
+  outE().
+  sack(sum).by('dist').
+  inV().
+  outE().
+  sack(sum).by('dist').
+  inV().has('code','LHR').
+  sack().
+  order().by(asc).limit(10).
+  path().
+    by('code').
+    by('dist').
+    by('code').
+    by('dist').
+    by('code').
+    by().
+  toList().
+  each(){println "${it[0]} --> ${it[2]} --> ${it[4]} ${it[5]} miles"}[];
+----
+
+Here is what our modified query, with the Groovy post processing added, produces.
+
+[source,groovy]
+----
+AUS --> DTW --> LHR 4893 miles
+AUS --> YYZ --> LHR 4901 miles
+AUS --> ORD --> LHR 4912 miles
+AUS --> DFW --> LHR 4919 miles
+AUS --> BOS --> LHR 4944 miles
+AUS --> EWR --> LHR 4953 miles
+AUS --> IAD --> LHR 4959 miles
+AUS --> JFK --> LHR 4960 miles
+AUS --> BWI --> LHR 4961 miles
+AUS --> IAH --> LHR 4962 miles
+----
+
+[[anothersack]]
+Another example of how 'sack' can be used
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The query below finds all airports with more than 200 routes and returns them as a
+map of airport code and route count pairs.
+
+[source,groovy]
+----
+// Print a table of airports with more than 200 routes and the number of routes
+g.V().hasLabel('airport').
+      where(out().count().is(gt(200))).
+      group().
+        by('code').
+        by(outE().count())
+----
+
+Here are the results that the query generates.
+
+[source,groovy]
+----
+[ORD:226, DFW:216, FRA:254, CDG:253, PEK:232, AMS:257, ATL:232, MUC:219, IST:259, DME:206, DXB:225]
+----
+
+The prevous query is a perfectly good way to achieve the desired result. Just for fun
+let's produce the same results using a 'sack'. This is intended just as an example of
+how 'sack' works and is not the way you would actually want to perform this specific
+query. That said, it is useful to have an example where the contents of the sack is
+more complex than a simple integer value. At the start of the query we initialize our
+sack with an empty map '[:]'. Later in the query, for each airport that has more than
+200 outgoing routes, we update the map by adding the airport code and the route count
+to the map. Note that the value part of each map entry is produced using a traversal.
+So while this query is most definitely overkill for the task (as demonstrated by the
+much simpler query above) it does provide us with another example of how you can use
+sacks in powerful ways to store data as your query iterates.
+
+[source,groovy]
+----
+// The same query but done using the new sack() step in TinkerPop 3
+// shown as an example only. The prior query works just fine for this.
+
+g.withSack([:]).
+  V().hasLabel('airport').
+  where(out().count().is(gt(200))).
+  sack{m,v -> m[v.value('code')]=g.V(v).out().count().next()}.
+  fold().sack()
+----
+
+Here are the results that the new query generates. Other than the fact that the
+results came back in a different order they are the same.
+
+[source,groovy]
+----
+[ATL:232, DFW:216, ORD:226, CDG:253, FRA:254, DXB:225, PEK:232, AMS:257, MUC:219, DME:206, IST:259]
+----
+
+The 'fold' step is needed in the query above to make sure that the result we get back
+is returned as a map. If we left the 'fold' off we would just get the values stored
+in the sack returned as a list of integers. Note that while the list of airports is
+the same as the previous query, the order is different. This is a result of the way
+the 'group' step did its work in the previous query. Order should never be relied
+upon. If you need a specific order for the results of a query it is always
+recommended to perform an explicit 'order' step as appropriate.
+
+For completeness, a way of sorting the results of our original query by ascending
+route count (values) is shown below.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').
+      where(out().count().is(gt(200))).
+      group().by('code').by(outE().count()).
+      order(local).by(values)
+
+[DME:213,DFW:221,DXB:229,ORD:232,PEK:232,ATL:232,MUC:237,CDG:260,FRA:266,AMS:269,IST:270]
+----
+
+If you wanted to sort using the airport codes you could do it as follows. This time
+we will sort the results of the 'sack' based query.
+
+[source,groovy]
+----
+g.withSack([:]).
+  V().hasLabel('airport').where(out().count().is(gt(200))).
+  sack{m,v -> m[v.value('code')]=g.V(v).out().count().next()}.
+  fold().
+  sack().
+  order(local).by(keys)
+
+[AMS:269,ATL:232,CDG:260,DFW:221,DME:213,DXB:229,FRA:266,IST:270,MUC:237,ORD:232,PEK:232]
+----
+
+As well as using 'withSack' to initialize a 'sack' you can also use the 'assign'
+operator to do it. The query below uses a constant value of 0 to initialize the sack
+and then uses the sack to count the number or runways that the airports you can fly
+to from Austin have. At the end of the query we perform a 'sum' step against the sack
+which will contain a list holding number of runways for each individual airport so we
+need to add all of those to get a single grand total.
+
+
+[source,groovy]
+----
+g.V().has('code','AUS').
+      sack(assign).by(constant(0)).
+      out().
+      sack(sum).by('runways').
+      sack().sum()
+
+212
+----
+
+[[latlonmanual]]
+Using latitude, longitude and geographical region in queries
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The 'air-routes' graph stores the geographic coordinates (latitude and longitude) of
+each airport as floating point numbers. Some graph systems such as JanusGraph have
+geographic coordinate and shape (geospatial) functions built in, but TinkerGraph does
+not. Moreover, GraphML does not offer any specific geospatial support. To keep
+things simple and flexible, the air routes data set does not assume any specific back
+end capabilities. Having coordinates provided as basic floating point
+numbers still allows us to write some interesting geospatial queries.
+
+So far, we have not taken advantage of these latitude and longitude coordinates in
+queries. In this section I have included some queries that perform interesting
+geospatial calculations using just the standard Gremlin steps.
+
+Here is a simple query that finds any airports located North of 77 degrees latitude.
+Note that a 'where' step could be used instead of 'filter' as they are synonymous in
+this case.
+
+[source,groovy]
+----
+g.V().filter(values('lat').is(gt(77))).valueMap('city','lat')
+----
+
+As discussed earlier in the book, you can often just use 'has' steps instead of
+'where' or 'filter' steps. We could have written the previous query as follows.
+
+[source,groovy]
+----
+g.V().has('lat',gt(77)).valueMap('city','lat')
+----
+
+It turns out that just two airports in the graph are located that far North as shown
+below in the results from running either form of the query.
+
+[source,groovy]
+----
+[city:[Longyearbyen],lat:[78.2461013793945]]
+[city:[Qaanaaq],lat:[77.4886016846]]
+----
+
+We could modify our query to look for airports with a latitude value outside of a
+provided upper and lower bound thus finding the most Northerly and Southerly airports
+with a single query. Here is a simple example of such a query.
+
+[source,groovy]
+----
+g.V().has('lat',outside(-50,77)).order().by('lat',asc).valueMap('city','lat')
+----
+
+Here are the airports found by running the query.
+
+[source,groovy]
+----
+[city:[Ushuahia],lat:[-54.8433]]
+[city:[Rio Grande],lat:[-53.7777]]
+[city:[Punta Arenas],lat:[-53.0026016235352]]
+[city:[Mount Pleasant],lat:[-51.8227996826172]]
+[city:[Stanley],lat:[-51.6856994628906]]
+[city:[Puerto Natales],lat:[-51.671501159668]]
+[city:[Rio Gallegos],lat:[-51.6089]]
+[city:[El Calafate],lat:[-50.2803001404]]
+[city:[Qaanaaq],lat:[77.4886016846]]
+[city:[Longyearbyen],lat:[78.2461013793945]]
+----
+
+Note that while writing the above query it might have seemed appropriate to use a
+'without' step with a range such as '-50..77' but that will not work as without looks
+for exact matches against the values in the range and the range generated is of the
+form '-50,-49,-48' and so on, so the only airports that would get filtered out would
+be the ones having a latitude value that exactly matches one of the values generated
+by the range. This is why the 'outside' step is so useful in cases like this.
+
+This next query just returns the coordinates for London Heathrow.
+
+[source,groovy]
+----
+
+// Query latitude and longitude for LHR
+g.V().has('airport','code','LHR').valueMap('lat','lon')
+
+[lon:[-0.461941003799], lat:[51.4706001282]]
+----
+
+This next query returns the code, latitude and longitude for all airports in London,
+England. Note that because there are other cities in the world also called London,
+such as London, Ontario in Canada, we have to take advantage of the region code
+'GB-ENG' to only return airports in London, England.
+
+[source,groovy]
+----
+g.V().has('airport','city','London').has('region','GB-ENG').valueMap('code','lat','lon')
+[code:[LHR], lon:[-0.461941003799], lat:[51.4706001282]]
+[code:[LGW], lon:[-0.190277993679047], lat:[51.1481018066406]]
+[code:[LCY], lon:[0.055278], lat:[51.505278]]
+[code:[STN], lon:[0.234999999404], lat:[51.8849983215]]
+[code:[LTN], lon:[-0.368333011865616], lat:[51.874698638916]]
+----
+
+Now that we know how to query the geographic coordinates, we can write a query to
+find out which airports in the graph are very close to the Greenwich Meridian. In
+this case we will look for any airports that have a longitude between -0.1 and 0.1
+
+[source,groovy]
+----
+// Which airports are very close to the Greenwich Meridian ?
+g.V().hasLabel('airport').has('lon',between(-0.1,0.1)).valueMap('code','lon')
+
+[code:[LCY], lon:[0.055278]]
+[code:[LDE], lon:[-0.006438999902457]]
+[code:[LEH], lon:[0.0880559980869293]]
+[code:[CDT], lon:[0.0261109992862]]
+----
+
+This next query can be used to find out which airports are closest to the equator.
+
+[source,groovy]
+----
+// Which airports are closest to the Equator ?
+g.V().hasLabel('airport').has('lat',between(-0.1,0.1)).valueMap('code','lat')
+
+[code:[EBB], lat:[0.0423859991133213]]
+[code:[MDK], lat:[0.0226000007242]]
+[code:[KIS], lat:[-0.0861390009522438]]
+[code:[MCP], lat:[0.0506640002131]]
+[code:[LGQ], lat:[0.0930560007691]]
+----
+
+The code below will find all the airports in the geographic area defined by a one
+degree box around London Heathrow. This type of thing can be done using the Geo shape
+classes provided by JanusGraph but given we are not at that part of the book yet
+this is the next best way!
+
+[source,groovy]
+----
+lat = g.V().has('code','LHR').values('lat').next()
+lon = g.V().has('code','LHR').values('lon').next()
+
+g.V().hasLabel('airport').where(and(
+                          values('lon').is(between(lon-1,lon+1)),
+                          values('lat').is(between(lat-1,lat+1)))).
+                          valueMap('code','lat','lon')
+----
+
+As we have discussed earlier in this book, it is often possible to avoid use of
+'and' step by chaining 'has' steps together. The code below is equivalent to the code
+above but avoids the use of 'where' and 'and'.
+
+[source,groovy]
+----
+lat = g.V().has('code','LHR').values('lat').next()
+lon = g.V().has('code','LHR').values('lon').next()
+
+g.V().hasLabel('airport').has('lon',between(lon-1,lon+1)).
+                          has('lat',between(lat-1,lat+1)).
+                          valueMap('code','lat','lon')
+----
+
+Here is the output produced by running either of the snippets of code above inside
+the Gremlin Console.
+
+[source,groovy]
+----
+[code:[LHR],lon:[-0.461941003799],lat:[51.4706001282]]
+[code:[LGW],lon:[-0.190277993679047],lat:[51.1481018066406]]
+[code:[LCY],lon:[0.055278],lat:[51.505278]]
+[code:[STN],lon:[0.234999999404],lat:[51.8849983215]]
+[code:[LTN],lon:[-0.368333011865616],lat:[51.874698638916]]
+[code:[SOU],lon:[-1.35679996013641],lat:[50.9502983093262]]
+----
+
+In the "<<tranges>>" section we came up with a query (shown below) to find routes
+with one stop between Austin and Las Vegas, using only airports in the United States
+or Canada and avoiding PHX and LAX for plane changes.
+
+[source,groovy]
+----
+g.V().has('airport','code','AUS').out().
+      has('country',within('US','CA')).
+      has('code',without('PHX','LAX')).out().
+      has('code','LAS').path().by('code')
+----
+
+Now that we know how to use the longitude and latitude coordinates stored in the air
+routes graph, we could for fun, write this query a different way. If you take a look
+at the query below you will see we have added a 'where' step. We still check that we
+are only looking at airports in the United States or Canada but then, in the 'where'
+step, we further limit the airports we want to consider further by saying we are only
+interested if their longitude value is less than that of Austin. In other words, we
+only want to change planes at an airport that is to the West of Austin. This is
+actually an improvement on the previous query that would have returned routes that
+included plane changes in New York and Nashville among other places. With our new
+query, no airport that is East of Austin will be considered as a place to change
+planes.
+
+[source,groovy]
+----
+// AUS to LAS with one stop but the stop has to be in the US or Canada
+// and West of Austin while avoiding PHX and LAX.
+
+g.V().has('airport','code','AUS').as('aus').out().
+      has('country',within('US','CA')).
+      where(lt('aus')).by('lon').
+      has('code',without('PHX','LAX')).out().
+      has('code','LAS').path().by('code')
+----
+
+Below you will find the output from running the query. If you know your airport codes
+you will see that all of these airports are indeed to the West of Austin. We might
+want to improve the query even more however, to factor in sensible nearby airports
+that are not to the West of Austin. For example, Dallas Fort Worth (DFW) is not
+included in the results as it is situated North of Austin but also a little to the
+East. We will leave it as an exercise to come up with a refinement to the query so
+that Dallas is also included!.
+
+[source,groovy]
+----
+[AUS,PDX,LAS]
+[AUS,ABQ,LAS]
+[AUS,LBB,LAS]
+[AUS,SEA,LAS]
+[AUS,SFO,LAS]
+[AUS,SJC,LAS]
+[AUS,SAN,LAS]
+[AUS,LGB,LAS]
+[AUS,SNA,LAS]
+[AUS,SLC,LAS]
+[AUS,DEN,LAS]
+[AUS,ELP,LAS]
+[AUS,OAK,LAS]
+----
+
+Here is one more example that is similar to the previous one. First of all we store
+the longitude of the Dallas (DFW) airport in the variable 'dfw'. Then we use that
+variable to find routes to Las Vegas (LAS) from Austin (AUS) that have one stop but
+avoid Phoenix (PHX) and Los Angeles (LAX) and only have a plane change either in
+Dallas or to the West of Dallas. Note that we use 'lte' and not 'lt' when testing the
+longitude value. It we used 'lt' instead that would also rule out Dallas as an
+option. This query, as in the prior one, has the effect of ruling out plane changes
+at airports further to the East of Austin than Dallas.
+
+[source,groovy]
+----
+dfw = g.V().has('code','DFW').values('lon').next()
+
+g.V().has('airport','code','AUS').as('aus').out().
+      has('country',within('US','CA')).
+      has('lon',lte(dfw)).
+      has('code',without('PHX','LAX')).out().
+      has('code','LAS').path().by('code')
+----
+
+Here is what we get back when we run the query. Still lots of choices even if we
+avoid LAX and PHX it seems.
+
+
+[source,groovy]
+----
+[AUS,PDX,LAS]
+[AUS,ONT,LAS]
+[AUS,ABQ,LAS]
+[AUS,LBB,LAS]
+[AUS,DFW,LAS]
+[AUS,SEA,LAS]
+[AUS,SFO,LAS]
+[AUS,SJC,LAS]
+[AUS,SAN,LAS]
+[AUS,LGB,LAS]
+[AUS,SNA,LAS]
+[AUS,SLC,LAS]
+[AUS,DEN,LAS]
+[AUS,ELP,LAS]
+[AUS,OAK,LAS]
+----
+
+Let's look at one last query that uses the 'region' property, present on all
+airport vertices in the graph.
+
+The query below starts at the DFW airport then looks for all routes to airports also
+within the United States. Next those airports are grouped by their region code and
+airport code. Finally a few states are selected. The query ends with an 'unfold' step
+to make the results a bit more readable.
+
+[source,groovy]
+----
+g.V().has('airport','code','DFW').out().has('country','US').
+      group().by('region').by('code').
+      select('US-CA','US-TX','US-FL','US-CO','US-IL').unfold()
+
+----
+
+Below you can see the query results. Each of the selected states is listed along with
+a list of airports reachable from DFW.
+
+[source,groovy]
+----
+US-CA=[LAX, SFO, SJC, SAN, SNA, OAK, ONT, PSP, SMF, FAT, SBA]
+US-TX=[AUS, IAH, SAT, HOU, ELP, LBB, MAF, CRP, ABI, ACT, CLL,
+       BPT, AMA, BRO, GGG, GRK, LRD, MFE, SJT, SPS, TYR]
+US-FL=[FLL, MCO, MIA, PBI, TPA, RSW, TLH, JAX, PNS, VPS]
+US-CO=[DEN, COS, DRO, GJT, EGE, HDN, ASE, GUC, MTJ]
+US-IL=[ORD, PIA, BMI, CMI, MLI, SPI]
+----
+
+In the next section we will look at a more complicated query that builds upon the
+examples above and performs distance calculations using the latitude and longitude
+coordinates present on the airport vertices.
+
+[[GreatCircle]]
+Using the 'math' step to calculate Great Circle distances
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If the latitude and longitude of two places on the Earth are known, the approximate
+distance between them can be calculated using the Haversine Great Circle Distance
+formula. The formula includes some trigonometrical calculations that can be done in
+Gremlin using the 'math' step.
+
+NOTE: If you are interested in better understanding the mathematics used by the
+Haversine formula, details can be found
+https://en.wikipedia.org/wiki/Haversine_formula[here].
+
+In this section I have included two queries. The first calculates the distance
+between Austin and Dallas Fort Worth using a somewhat inflexible approach. This
+reflects my first attempt to create a query that computes Great Circle distances all
+in Gremlin. The airport codes are embedded in the query. Having got that working I
+realized a more generic query would be better. The second example allows an arbitrary
+source and destination to be specified.
+
+Let's take a look at the queries. At first, the number of steps used may look a bit
+daunting, but if you work your way through it section by section it's actually fairly
+straightforward. The Haversine formula needs a couple of constant values. These are
+injected into the query using 'withSideEffect' steps. The first constant, 'rdeg'
+represents one degree in radians. This is the result from dividing PI by 180. The
+second constant 'gcmiles' represents the average radius of the Earth in miles. This
+allows for the imperfect spherical shape of the Earth where the radius varies closer
+to the poles.
+
+In my first attempt at producing a query, I used a 'has' step to find the AUS and DFW
+airports and then produced a group with the airport codes being the keys and a
+projection of their latitude and longitude being the values. If we take just that
+part of the query and run it this is what we get back.
+
+[source,groovy]
+----
+g.withSideEffect("rdeg", 0.017453293).
+  withSideEffect("gcmiles",3956).
+  V().
+  has('code',within('AUS','DFW')).
+  group().
+    by('code').
+    by(project('lat','lon').
+      by('lat').
+      by('lon'))
+
+[DFW:[lat:32.896800994873,lon:-97.0380020141602],
+ AUS:[lat:30.1944999694824,lon:-97.6698989868164]]
+----
+
+The Haversine formula requires us to calculate the differences between the latitude
+and longitude of the two coordinates. The next part of the query does that. A project
+step 'project('ladiff','lgdiff','lat1','lon1','lat2','lon2')' is used to collect all
+the values we need.
+
+[source,groovy]
+----
+g.withSideEffect("rdeg", 0.017453293).
+  withSideEffect("gcmiles",3956).
+  V().
+  has('code',within('AUS','DFW')).
+  group().
+    by('code').
+    by(project('lat','lon').
+      by('lat').
+      by('lon')).
+  as('grp').
+  project('ladiff','lgdiff','lat1','lon1','lat2','lon2').
+    by(project('la1','la2').
+         by(select('AUS').select('lat')).
+         by(select('DFW').select('lat')).
+       math('(la2 - la1) * rdeg')).
+    by(project('lg1','lg2').
+         by(select('AUS').select('lon')).
+         by(select('DFW').select('lon')).
+       math('(lg2 - lg1) * rdeg')).
+    by(select('grp').select('AUS').select('lat')).
+    by(select('grp').select('AUS').select('lon')).
+    by(select('grp').select('DFW').select('lat')).
+    by(select('grp').select('DFW').select('lon'))
+----
+
+Here are the results. A map has been generated containing the differences as well as
+the original coordinates.
+
+[source,groovy]
+----
+[ladiff:0.04716405157034253,
+ lgdiff:0.011028683009581777,
+ lat1:30.1944999694824,
+ lon1:-97.6698989868164,
+ lat2:32.896800994873,
+ lon2:-97.0380020141602]
+----
+
+The purpose of collecting the values like this is so they can be fed into the 'math'
+step to complete the calculation. One key takeaway from this example is the way that
+a 'math' step can be fed values from a prior 'project' step. The final calculations
+perform the necessary trigonometry as required by the Haversine formula. Here is the
+complete version of my first attempt at solving this problem in Gremlin.
+
+[source,groovy]
+----
+g.withSideEffect("rdeg", 0.017453293).
+  withSideEffect("gcmiles",3956).
+  V().
+  has('code',within('AUS','DFW')).
+  group().
+    by('code').
+    by(project('lat','lon').
+      by('lat').
+      by('lon')).
+  as('grp').
+  project('ladiff','lgdiff','lat1','lon1','lat2','lon2').
+    by(project('la1','la2').
+         by(select('AUS').select('lat')).
+         by(select('DFW').select('lat')).
+       math('(la2 - la1) * rdeg')).
+    by(project('lg1','lg2').
+         by(select('AUS').select('lon')).
+         by(select('DFW').select('lon')).
+       math('(lg2 - lg1) * rdeg')).
+    by(select('grp').select('AUS').select('lat')).
+    by(select('grp').select('AUS').select('lon')).
+    by(select('grp').select('DFW').select('lat')).
+    by(select('grp').select('DFW').select('lon')).
+  math('(sin(ladiff/2))^2 + cos(lat1*rdeg) * cos(lat2*rdeg) * (sin(lgdiff/2))^2').
+  math('gcmiles * (2 * asin(sqrt(_)))')
+----
+
+We can see that the distance from Austin to Dallas Fort Worth is approximately 190
+miles.
+
+[source,groovy]
+----
+190.2483140396514
+----
+
+A few adjustments are needed to make the query more flexible. I wanted to have a
+query where you just provide any two airport codes at the start. This makes it easy
+to parameterize the query when working with code. The main difference from my first
+attempt is that the source and target airports are located at the start and
+individually labelled. The `group` step is replaced by a `select` step and given a
+label of "grp". The remainder of the query refers to "grp" as needed.
+
+[source,groovy]
+----
+g.withSideEffect("rdeg", 0.017453293).
+  withSideEffect("gcmiles",3956).
+  V().has('code','AUS').as('src').
+  V().has('code','DFW').as('dst').
+  select('src','dst').
+    by(project('lat','lon').
+         by('lat').
+         by('lon')).
+  as('grp').
+  project('ladiff','lgdiff','lat1','lon1','lat2','lon2').
+    by(project('la1','la2').
+         by(select('grp').select('src').select('lat')).
+         by(select('grp').select('dst').select('lat')).
+       math('(la2 - la1) * rdeg')).
+    by(project('lg1','lg2').
+         by(select('grp').select('src').select('lon')).
+         by(select('grp').select('dst').select('lon')).
+       math('(lg2 - lg1) * rdeg')).
+    by(select('grp').select('src').select('lat')).
+    by(select('grp').select('src').select('lon')).
+    by(select('grp').select('dst').select('lat')).
+    by(select('grp').select('dst').select('lon')).
+  math('(sin(ladiff/2))^2 + cos(lat1*rdeg) * cos(lat2*rdeg) * (sin(lgdiff/2))^2').
+  math('gcmiles * (2 * asin(sqrt(_)))')
+----
+
+The result from the more general purpose version of the query is the same as before.
+
+[source,groovy]
+----
+190.2483140396514
+----
+
+NOTE: The code for this query is available in the sample-code folder at https://github.com/krlawrence/graph/blob/master/sample-code/great-circle.groovy
+
+We can go one step further and parameterize the query. Everything shown below can be
+done using the Gremlin Console but it also represents the way you might use this
+query within an application. This time San Francisco and Tokyo Narita are used as the
+origin and destination.
+
+[source,groovy]
+----
+start = 'SFO'
+stop = 'NRT'
+
+g.withSideEffect("rdeg", 0.017453293).
+  withSideEffect("gcmiles",3956).
+  V().has('code',start).as('src').
+  V().has('code',stop).as('dst').
+  select('src','dst').
+    by(project('lat','lon').
+         by('lat').
+         by('lon')).
+  as('grp').
+  project('ladiff','lgdiff','lat1','lon1','lat2','lon2').
+    by(project('la1','la2').
+         by(select('grp').select('src').select('lat')).
+         by(select('grp').select('dst').select('lat')).
+       math('(la2 - la1) * rdeg')).
+    by(project('lg1','lg2').
+         by(select('grp').select('src').select('lon')).
+         by(select('grp').select('dst').select('lon')).
+       math('(lg2 - lg1) * rdeg')).
+    by(select('grp').select('src').select('lat')).
+    by(select('grp').select('src').select('lon')).
+    by(select('grp').select('dst').select('lat')).
+    by(select('grp').select('dst').select('lon')).
+  math('(sin(ladiff/2))^2 + cos(lat1*rdeg) * cos(lat2*rdeg) * (sin(lgdiff/2))^2').
+  math('gcmiles * (2 * asin(sqrt(_)))')
+
+5108.80166113392
+----
+
+We will revisit the topic of performing geospatial queries in the "<<janusgeo>>"
+section where some additional capabilities that JanusGraph offers are discussed.
+
+
+[[via]]
+Finding routes that go via a specific airport
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We have seen a number of examples that use a 'has' step to filter routes. The example
+below looks for five routes that start in Austin (AUS) and go via Dallas (DFW).
+
+[source,groovy]
+----
+g.V().has('code','AUS').
+      out().has('code','DFW').
+      out().
+      limit(5).
+      path().by('code')
+----
+
+When run the query, as expected finds us five routes that start in AUS and stop at
+DFW on the way.
+
+[source,groovy]
+----
+[AUS,DFW,ATL]
+[AUS,DFW,ANC]
+[AUS,DFW,AUS]
+[AUS,DFW,BNA]
+[AUS,DFW,BOS]
+----
+
+This technique works well if we know which stop we want to be in DFW. However, we
+might want to write a query that can only return results that include a visit to a
+specific airport anywhere in the journey. Let's build an example in two stages. First
+of all look at the query below. It looks for ten routes that start in Austin and end
+up in Edinburgh only stopping along the way in US or the UK airports.
+
+[source,groovy]
+----
+g.V().
+  has('code','AUS').
+  repeat(out().simplePath().has('country',within('US','UK'))).
+    until(has('code','EDI')).
+  path().by('code').
+  limit(10)
+----
+
+When run we get the following results.
+
+[source,groovy]
+----
+[AUS,LHR,EDI]
+[AUS,JFK,EDI]
+[AUS,EWR,EDI]
+[AUS,LHR,MAN,EDI]
+[AUS,LHR,BHD,EDI]
+[AUS,LHR,INV,EDI]
+[AUS,LHR,JFK,EDI]
+[AUS,LHR,EWR,EDI]
+[AUS,PIT,JFK,EDI]
+[AUS,PIT,EWR,EDI]
+----
+
+However, for the sake of making the example more interesting, let's assume that we
+only want to get back routes that go via Manchester (MAN). We can do this by
+adjusting the prior query to look for "MAN" as it traverses the graph and keep track,
+using  a sack, of paths that encounter Manchester along the way. Once we arrive at
+EDI we use a 'where' step to filter out routes where the value of the sack is
+anything but "1". A value of "1" means we encountered Manchester along the way.
+
+[source,groovy]
+----
+g.withSack(0).V().
+  has('code','AUS').
+  repeat(out().simplePath().has('country',within('US','UK')).
+         choose(has('code','MAN'),sack(sum).by(constant(1)))).
+    until(has('code','EDI')).
+  where(sack().is(1)).
+  path().by('code').
+  limit(10)
+----
+
+When the modified query is run, each result includes MAN in the path.
+
+[source,groovy]
+----
+[AUS,LHR,MAN,EDI]
+[AUS,ATL,MAN,EDI]
+[AUS,BOS,MAN,EDI]
+[AUS,IAD,MAN,EDI]
+[AUS,IAH,MAN,EDI]
+[AUS,JFK,MAN,EDI]
+[AUS,LAX,MAN,EDI]
+[AUS,MCO,MAN,EDI]
+[AUS,MIA,MAN,EDI]
+[AUS,ORD,MAN,EDI]
+----
+
+If we you increase the limit step to use a value such as 30, then you will start to
+see that MAN can appear in any position in the path.
+
+[source,groovy]
+----
+[AUS,LHR,GLA,MAN,EDI]
+[AUS,LHR,ABZ,MAN,EDI]
+[AUS,LHR,BHD,MAN,EDI]
+[AUS,LHR,INV,MAN,EDI]
+----
+
+[[storesideeffect]]
+Using 'store' and a 'sideEffect' to make a set of unique values
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Take a look at the query below. All it does is return the city names for the airports
+that have IDs between 1 and 200 (inclusive). The list is sorted by ascending aplhabetic
+order.
+
+[source,groovy]
+----
+g.V().hasId(between(1,201)).values('city').order().fold()
+----
+
+And here are the names that get returned. If you look closely at the list you
+will see that city names like 'Dallas' and 'London' appear more than once.
+
+[source,groovy]
+----
+[Abu Dhabi, Addis Ababa, Albuquerque, Alicante, Alice Springs, Amsterdam, Anchorage, Athens, Atlanta, Auckland, Austin, Ayers Rock, Baltimore, Bankok, Barcelona, Beijing, Belgrade, Bengaluru, Berlin, Bilbao, Bologna, Boston, Brisbane, Brussels, Budapest, Buenos Aires, Cairns, Cairo, Calgary, Calicut, Canberra, Cancun, Cape Town, Cedar Rapids, Charlotte, Chennai, Chicago, Chicago, Christchurch, Cincinnati, Cleveland, Cologne, Copenhagen, Dallas, Dallas, Denver, Detroit, Doha, Dubai, Dublin, Durban, Dusseldorf, Edinburgh, Edmonton, El Paso, Fairbanks, Fort Lauderdale, Fort Myers, Frankfurt, Geneva, Genoa, Glasgow, Gold Coast, Gothenburg, Hagta, Halifax, Hamburg, Harrison, Helsinki, Ho Chi Minh City, Hong Kong, Honolulu, Houston, Houston, Hyderabad, Ibiza, Indianapolis, Istanbul, Johannesburg, Kahului, Kansas City, Kingston, Kolkata, Kuala Lumpur, Kuwait, Larnaca, Las Vegas, Lima, Liverpool, London, London, London, London, Long Beach, Los Angeles, Luqa, Luxembourg, Madrid, Manama, Manchester, Manila, Maroochydore, Melbourne, Memphis, Menorca, Mexico City, Miami, Milan, Milwaukee, Minneapolis, Mombasa, Montevideo, Montreal, Moscow, Moscow, Mumbai, Munich, Nairobi, Nantes, Naples, Nashville, New Delhi, New Orleans, New York, New York, Newark, Nice, Nottingham, Oaklahoma City, Oakland, Omaha, Ontario, Orlando, Osaka, Oslo, Ottawa, Palm Springs, Paris, Paris, Perth, Philadelphia, Phnom Penh, Phoenix, Pisa, Pittsburgh, Portland, Portland, Prague, Puerto Vallarta, Raleigh, Rio de Janeiro, Rochester, Rochester, Rome, Salina, Salt Lake City, San Antonio, San Diego, San Francisco, San Jose, San Juan, Santa Ana, Santa Fe, Santiago, Sao Paulo, Seattle, Seoul, Shanghai, Shannon, Singapore, Sofia, St Louis, St. Johns, Stockholm, Stuttgart, Sydney, Tallahassee, Tampa, Tel Aviv, Tenerife, Tokyo, Tokyo, Toronto, Tucson, Tulsa, Turin, Vancouver, Venice, Venice, Verona, Vienna, Warsaw, Washington D.C., Washington D.C., Wellington, West Palm Beach, White Plains, Winnipeg, Zagreb, Zurich]
+----
+
+Just to be sure, we can count how many city names we got back.
+
+[source,groovy]
+----
+g.V().hasId(between(1,201)).values('city').order().count()
+
+200
+----
+
+What would be nice is if the duplicate names only appeared once. There are other ways
+we could write this query such as using 'dedup' but let's rewrite it using 'store'
+and a 'Set' as I think doing that demonstrates a capability quite well that is
+useful in more complex scenarios than this one. By starting a query using
+'withSideEffect' we can setup a named place we can 'store' things into later in our
+query and we can also give the store a type. In this case I chose to use a 'Set'.
+What this query does is store the City names of the first 200 vertices in the graph into
+a Set and then displays them. As we know from our first attempt, city names, like
+Dallas, appear more than once. However if we look at the Set that we get back from
+our modified query (because by default Sets do not store duplicates) we will only see the
+names Dallas and London appearing once.
+
+[source,groovy]
+----
+
+g.withSideEffect("x", [] as Set).V().hasId(between(1,201)).
+  values('city').store('x').cap('x').unfold().order().fold()
+----
+
+Here are the city names that we get back after running our modified query. You will notice
+that all of the duplicate names are now gone.
+
+[source,groovy]
+----
+[Abu Dhabi, Addis Ababa, Albuquerque, Alicante, Alice Springs, Amsterdam, Anchorage, Athens, Atlanta, Auckland, Austin, Ayers Rock, Baltimore, Bankok, Barcelona, Beijing, Belgrade, Bengaluru, Berlin, Bilbao, Bologna, Boston, Brisbane, Brussels, Budapest, Buenos Aires, Cairns, Cairo, Calgary, Calicut, Canberra, Cancun, Cape Town, Cedar Rapids, Charlotte, Chennai, Chicago, Christchurch, Cincinnati, Cleveland, Cologne, Copenhagen, Dallas, Denver, Detroit, Doha, Dubai, Dublin, Durban, Dusseldorf, Edinburgh, Edmonton, El Paso, Fairbanks, Fort Lauderdale, Fort Myers, Frankfurt, Geneva, Genoa, Glasgow, Gold Coast, Gothenburg, Hagta, Halifax, Hamburg, Harrison, Helsinki, Ho Chi Minh City, Hong Kong, Honolulu, Houston, Hyderabad, Ibiza, Indianapolis, Istanbul, Johannesburg, Kahului, Kansas City, Kingston, Kolkata, Kuala Lumpur, Kuwait, Larnaca, Las Vegas, Lima, Liverpool, London, Long Beach, Los Angeles, Luqa, Luxembourg, Madrid, Manama, Manchester, Manila, Maroochydore, Melbourne, Memphis, Menorca, Mexico City, Miami, Milan, Milwaukee, Minneapolis, Mombasa, Montevideo, Montreal, Moscow, Mumbai, Munich, Nairobi, Nantes, Naples, Nashville, New Delhi, New Orleans, New York, Newark, Nice, Nottingham, Oaklahoma City, Oakland, Omaha, Ontario, Orlando, Osaka, Oslo, Ottawa, Palm Springs, Paris, Perth, Philadelphia, Phnom Penh, Phoenix, Pisa, Pittsburgh, Portland, Prague, Puerto Vallarta, Raleigh, Rio de Janeiro, Rochester, Rome, Salina, Salt Lake City, San Antonio, San Diego, San Francisco, San Jose, San Juan, Santa Ana, Santa Fe, Santiago, Sao Paulo, Seattle, Seoul, Shanghai, Shannon, Singapore, Sofia, St Louis, St. Johns, Stockholm, Stuttgart, Sydney, Tallahassee, Tampa, Tel Aviv, Tenerife, Tokyo, Toronto, Tucson, Tulsa, Turin, Vancouver, Venice, Verona, Vienna, Warsaw, Washington D.C., Wellington, West Palm Beach, White Plains, Winnipeg, Zagreb, Zurich]
+----
+
+And just to make sure we got fewer names back this time let's count them again.
+
+[source,groovy]
+----
+g.withSideEffect("x", [] as Set).V().hasId(between(1,201)).
+  values('city').store('x').cap('x').unfold().count()
+
+186
+----
+
+As I mentioned at the start of this section, you could achieve this result other ways. For
+example, here is a version of the query that uses 'dedup' instead of 'store'.
+
+[source,groovy]
+----
+g.V().hasId(between(1,201)).values('city').dedup().count()
+
+186
+----
+
+This is clearly a simpler query in this case but you will find cases where the example
+that uses 'withSideEffect' and 'store' will come in very handy, especially in cases where
+you want to store things into a Set or List from multiple parts of a traversal such as the
+one below that finds and counts all the unique city names across multiple hops from a
+starting airport.
+
+[source,groovy]
+----
+g.withSideEffect("x", [] as Set).V().hasId(3).as('a').values('city').store('x').
+   select('a').out().as('b').values('city').store('x').
+   select('b').out().values('city').store('x').cap('x').unfold().count()
+
+804
+----
+
+Lastly on this topic, let's look at one more interesting use case. It is quite common
+to want to get back from a query a collection of vertices and edges. This is often
+because we want to examine properties on both the vertices and the edges. Imagine a
+small graph that has the following relationships.
+
+(A->B),
+(A->C),
+(A->D),
+(C->D),
+(C->E),
+(D->F)
+
+
+The code below can be used to create this graph using the Gremlin console and
+TinkerGraph.
+
+[source,groovy]
+----
+graph=TinkerGraph.open()
+g=graph.traversal()
+
+g.addV("A").as("a").
+  addV("B").as("b").
+  addV("C").as("c").
+  addV("D").as("d").
+  addV("E").as("e").
+  addV("F").as("f").
+  addE("knows").from("a").to("b").
+  addE("knows").from("a").to("c").
+  addE("knows").from("a").to("d").
+  addE("knows").from("c").to("d").
+  addE("knows").from("c").to("e").
+  addE("knows").from("d").to("f")
+----
+
+We can see the IDs that were allocated for each vertex by looking at the 'valueMap'.
+
+[source,groovy]
+----
+g.V().valueMap(true)
+
+[id:0,label:A]
+[id:1,label:B]
+[id:2,label:C]
+[id:3,label:D]
+[id:4,label:E]
+[id:5,label:F]
+----
+
+Likewise we can look at the edges to see what IDs each edge was given.
+
+[source,groovy]
+----
+g.E()
+
+e[6][0-knows->1]
+e[7][0-knows->2]
+e[8][0-knows->3]
+e[9][2-knows->3]
+e[10][2-knows->4]
+e[11][3-knows->5]
+----
+
+Now that we have our test graph created let's take a look at the query we will need
+to develop. The problem we want to solve is to start from vertex A, find all of the
+edges that go out from vertex A and also all of the vertices at the other ends of those
+edges. Lastly we also want to find any edges between the vertices that are also
+connected to A but ignore edges that connect to vertices that are not also connected to
+A. In simple terms we want a query that will return all of the relationships except
+(C->E) and (D-F) as A is not connected to E or F.
+
+Using the 'withSideEffect' pattern that we used earlier in this section we can again
+develop a query that will collect for us the vertices and edges that we are interested
+in. I added line numbers to make it easier to discuss what is going on but please,
+note that these are not part of the query itself.
+
+[source,groovy]
+----
+1: g.withSideEffect('x', [] as Set).
+2:     V(0L).store('x').
+3:     bothE().store('x').
+4:     otherV().store('x').
+5:     aggregate('tgtlist').
+6:     bothE().as('ref').otherV().where(within('tgtlist')).
+7:     select('ref').store('x').cap('x').unfold()
+----
+
+Let's look at the query above line by line.
+
+//[%hardbreaks]
+----
+1: Start the query and define 'x' as our, initially empty, Set.
+2: Start at vertex 0 and 'store' it into our set 'x'.
+3: Store all of the edges connected to 'V(0)' into our set.
+4: Store the vertices connected to 'V(0)' into our set.
+5: Aggregate all of these target vertices into 'tgtlist'.
+6: Find more edges but only remember them if they connect to vertices also connected
+to 'V(0)'.
+7: Store the edges we found in 'x' and finally return the set as the overall result of the
+query. The 'unfold' just makes the output a little easier to read.
+----
+
+Here is the output we get from running the query. As you can see, the vertices and edges
+that we were not interested in have been correctly left out of the result set.
+
+[source,groovy]
+----
+v[0]
+e[5][0-knows->1]
+v[1]
+e[6][0-knows->2]
+v[2]
+e[7][0-knows->3]
+v[3]
+e[8][2-knows->3]
+----
+
+As you start to work with graphs and start to do more complex querying, this pattern
+of query based around 'withSideEffect' is extremely useful to keep in mind.
+
+[[dfwcopy]]
+Making a copy of the DFW vertex
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+It is sometimes useful to be able to create a new vertex using the label and
+properties from one or more existing vertices. In this section I am going to present
+a small case study that shows how I investigated the creation of a query that could
+create a copy of the Dallas Fort Worth (DFW) airport vertex.
+
+Creating a vertex using the label from another vertex is quite straightforward. The
+two queries shown below use the label from the DFW Airport vertex as the label for a
+new vertex.
+
+My first thought was to do this as follows.
+
+[source,groovy]
+----
+g.addV().property(label,V().has('code','DFW').label())
+----
+
+The query above does work but it felt a bit cumbersome and I also realized I was
+going to need a way to refer to the DFW vertex more than once so I changed the query
+as follows and ran it.
+
+[source,groovy]
+----
+g.V().has('code','DFW').as('dfw').
+      addV().property(label, select('dfw').label())
+
+v[57525]
+----
+
+If we examine the new vertex we can see that it does indeed have the correct label.
+
+[source,groovy]
+----
+g.V(57525).valueMap(true)
+
+[label:airport,id:57525]
+----
+
+Now we need to expand the query to also copy the property key names and their values
+from the DFW vertex into our new vertex. Earlier in the book we looked at ways that a
+'select' step combined with the 'keys' and 'values' keywords can be used to select
+values from a map. We can use that same technique here.
+
+First of all let's remind ourselves about the properties of the DFW airport.
+
+[source,groovy]
+----
+g.V().has('code','DFW').properties()
+
+vp[country->US]
+vp[code->DFW]
+vp[longest->13401]
+vp[city->Dallas]
+vp[elev->607]
+vp[icao->KDFW]
+vp[lon->-97.0380020141602]
+vp[type->airport]
+vp[region->US-TX]
+vp[runways->7]
+vp[lat->32.896800994873]
+vp[desc->Dallas/Fort Worth...]
+----
+
+Let's also count how many properties there are listed above.
+
+[source,groovy]
+----
+g.V().has('code','DFW').properties().count()
+
+12
+----
+
+So we need to add some steps to our query that will copy the twelve keys and values
+from these twelve properties belonging to the DFW vertex into our new one.
+
+Below is the first query I tried when thinking about how to do this. The goal of the
+query is to first capture the properties from the DFW airport and then to add them to
+the new vertex being created.
+
+[source,groovy]
+----
+g.V().has('code','DFW').as('dfw').
+      addV().property(label, select('dfw').label()).as('new').
+             property(select('dfw').properties().key(),
+                      select('dfw').properties().value())
+----
+
+When I ran it I got this result which looked encouraging as a new vertex had clearly
+been created.
+
+
+[source,groovy]
+----
+v[53767]
+----
+
+However, when I inspected my new vertex I saw I had only managed to copy one of the
+twelve properties over. So it was time to delete that vertex and have a bit of a
+rethink.
+
+[source,groovy]
+----
+g.V(53767).valueMap(true).unfold()
+
+country=[US]
+label=airport
+id=53767
+
+g.V(53767).drop()
+----
+
+What I realized was that my first attempt at copying the properties was only ever
+going to copy one property as that was essentially what I had asked it to do. If it's
+not quite clear why this is the case, hopefully it will become clearer once you look
+at the results from the profile step that are shown later in this section. I realized
+that what I needed to do was to first get all of the DFW properties and then add them
+to the new vertex. So I changed the query as shown below.
+
+[source,groovy]
+----
+g.V().has('code','DFW').as('dfw').
+      addV().property(label, select('dfw').label()).as('new').
+      select('dfw').properties().as('dfwprops').
+      select('new').property(select('dfwprops').key(),
+                             select('dfwprops').value())
+----
+
+When run, this is what I saw in the Gremlin console. This is more output than I
+wanted to get from the query but it has clearly done more work this time. If you
+count the number of rows below you will find it also adds up to twelve. So this time
+I got one result per property it would appear.
+
+[source,groovy]
+----
+[53768]
+[53768]
+[53768]
+[53768]
+[53768]
+[53768]
+[53768]
+[53768]
+[53768]
+[53768]
+[53768]
+[53768]
+----
+
+In a moment I will explore a way to get rid of the unwanted output but first let's
+examine the contents of the new vertex.
+
+[source,groovy]
+----
+g.V(53768).valueMap(true).unfold()
+
+country=[US]
+code=[DFW]
+longest=[13401]
+city=[Dallas]
+lon=[-97.0380020141602]
+type=[airport]
+elev=[607]
+label=airport
+icao=[KDFW]
+id=53768
+region=[US-TX]
+runways=[7]
+lat=[32.896800994873]
+desc=[Dallas/Fort Worth International Airport]
+----
+
+So a large part of my original goal has now been achieved. A vertex has been created
+that is a copy in all but ID value of the original DFW vertex. So, what can be done
+about the unwanted list of vertices that came back as the results from the query?
+
+First of all, let's take a look at what the 'profile' step can tell us about this
+query. Note that I deleted the new vertex using a 'drop' step before running this
+query so it did not pick up both the old and new DFW vertices.
+
+[source,groovy]
+----
+g.V(53768).drop()
+
+g.V().has('code','DFW').as('dfw').
+      addV().property(label, select('dfw').label()).as('new').
+      select('dfw').properties().as('dfwprops').
+      select('new').property(select('dfwprops').key(),
+                             select('dfwprops').value()).profile()
+
+----
+
+If you look at the results below you can see that for each property key/value pair,
+a traverser was spawned. This explains why we got twelve results back. This also
+explains why my first attempt at writing this query failed. If you were to profile
+that query you would find that it only spawns one traverser rather than the twelve
+that we need to be successful.
+
+
+[source,console]
+----
+Traversal Metrics      Step                      Count Traver-  Time   %Dur
+                                                       sers      (ms)
+===================================================================================
+TinkerGraphStep(vertex,[code.eq(DFW)])@[dfw]        1     1    1.416    28.85
+AddVertexStep({label=[[SelectOneStep(last,dfw),...  1     1    1.840    37.47
+  SelectOneStep(last,dfw)                           1     1    0.171
+  NoOpBarrierStep(2500)                             1     1    0.092
+  LabelStep                                         1     1    0.059
+SelectOneStep(last,dfw)                             1     1    0.132     2.70
+NoOpBarrierStep(2500)                               1     1    0.032     0.66
+PropertiesStep(property)@[dfwprops]                12    12    0.094     1.92
+SelectOneStep(last,new)                            12    12    0.127     2.60
+NoOpBarrierStep(2500)                              12    12    0.065     1.34
+AddPropertyStep({value=[[SelectOneStep(last,dfw... 12    12    1.200    24.45
+  SelectOneStep(last,dfwprops)                     12    12    0.168
+  NoOpBarrierStep(2500)                            12    12    0.064
+  PropertyKeyStep                                  12    12    0.066
+  SelectOneStep(last,dfwprops)                     12    12    0.134
+  NoOpBarrierStep(2500)                            12    12    0.070
+  PropertyValueStep                                12    12    0.043
+                                            >TOTAL  -     -    4.911
+
+----
+
+As you will hopefully recall from our discussion of the 'addV' and 'property' steps
+earlier in Chapter 4, a 'property' step returns the vertex that the property was
+added to and not the new property itself. This allows multiple 'addV' and 'property'
+steps to be chained together.
+
+So we need a way to still create our new properties but not have the twelve
+traversers return any results to us. Hopefully your reaction to this is something
+like "This feels like a good place to introduce a 'sideEffect' step into the query".
+If that was your reaction you are right!
+
+Before running the new query we need to clean up the work done by the prior one.
+
+[source,groovy]
+----
+g.V().has('code','DFW')
+
+[8]
+[53767]
+
+g.V(53767).drop()
+----
+
+So now let's wrap the creation of the properties into a 'sideEffect' step that should
+stop the unwanted results from being returned.The modified  version of the query is
+shown below.
+
+[source,groovy]
+----
+g.V().has('code','DFW').as('dfw').
+      addV().property(label, select('dfw').label()).as('new').
+      sideEffect(select('dfw').properties().as('dfwprops').
+                 select('new').property(select('dfwprops').key(),
+                                        select('dfwprops').value()))
+----
+
+When we run the modified version of the query this is what we get back.
+
+[source,groovy]
+----
+[53780]
+----
+
+This is a lot better as we now just got back the new vertex one time as the result.
+Let's double check that the query has worked as intended.
+
+
+[source,groovy]
+----
+g.V(53780).valueMap(true).unfold()
+
+country=[US]
+code=[DFW]
+longest=[13401]
+city=[Dallas]
+lon=[-97.0380020141602]
+type=[airport]
+elev=[607]
+label=airport
+icao=[KDFW]
+id=53780
+region=[US-TX]
+runways=[7]
+lat=[32.896800994873]
+desc=[Dallas/Fort Worth International Airport]
+----
+
+In this small case study I have tried to show how I was able to evolve a query in
+stages and also to adapt to unexpected outcomes along the way. You could use
+essentially the same technique shown in this section to also copy one or more edges
+if you needed to.
+
+
+[[btree]]
+Modelling an ordered binary tree as a graph
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can of course model a tree structure as a graph. The following code will create a
+new graph containing an ordered binary tree. A graph like this is sometimes referred
+to as a 'connected acyclic' graph as there are no cycles in the graph. This means
+that once you leave a node there is no other path you could take that will allow you
+to get there again. By contrast the air routes graph is an example of a 'cyclic'
+graph as there are clearly many ways to revisit vertices.
+
+[source,groovy]
+----
+// Builds a small ordered Binary (BST) Tree
+graph=TinkerGraph.open()
+g=graph.traversal()
+g.addV('root').property('data',9).as('root').
+  addV('node').property('data',5).as('b').
+  addV('node').property('data',2).as('c').
+  addV('node').property('data',11).as('d').
+  addV('node').property('data',15).as('e').
+  addV('node').property('data',10).as('f').
+  addV('node').property('data',1).as('g').
+  addV('node').property('data',8).as('h').
+  addV('node').property('data',22).as('i').
+  addV('node').property('data',16).as('j').
+  addE('left').from('root').to('b').
+  addE('left').from('b').to('c').
+  addE('right').from('root').to('d').
+  addE('right').from('d').to('e').
+  addE('right').from('e').to('i').
+  addE('left').from('i').to('j').
+  addE('left').from('d').to('f').
+  addE('right').from('b').to('h').
+  addE('left').from('c').to('g')
+----
+
+We could of course use the 'max' and the 'min' steps to find the largest and smallest
+values in the graph. However, the queries below show how we can do it using the
+semantics of an ordered binary tree.
+
+[source,groovy]
+----
+// Find the largest value in the graph
+g.V().hasLabel('root').repeat(out('right')).
+                       until(out('right').count().is(0)).values('data')
+
+22
+
+// Find the smallest value in the graph
+g.V().hasLabel('root').repeat(out('left')).
+                       until(out('left').count().is(0)).values('data')
+
+1
+----
+
+As a side note, here is a different way we could have written the query using 'not'
+instead of 'count'. As 'not' is a reserved word in Groovy, as we discussed
+in the "<<rword>>" section, we have to prefix it with the '__.' notation.
+
+[source,groovy]
+----
+g.V().hasLabel('root').repeat(out('left')).
+                       until(__.not(out('left'))).values('data')
+----
+
+If we wanted to see the values that the 'repeat' is encountering as it traverses the
+tree we could add an 'emit' step and get the values of each node the 'repeat' visits.
+Note that this does not include the value from the root node.
+
+
+[source,groovy]
+----
+g.V().hasLabel('root').repeat(out('left')).emit().values('data')
+
+5
+2
+1
+----
+
+Perhaps a nicer way to look at all the values we encountered as we traversed the tree
+would be to use 'path' as follows. Note that this does include the root node's value.
+
+[source,groovy]
+----
+g.V().hasLabel('root').repeat(out('left')).
+                       until(__.not(out('left'))).path().by('data')
+
+[9,5,2,1]
+----
+
+We can see all of the possible paths through the tree by running the following query.
+
+[source,groovy]
+----
+g.V().hasLabel('root').repeat(out()).times(4).emit().path().by('data')
+
+[9,5]
+[9,11]
+[9,5,2]
+[9,5,8]
+[9,11,10]
+[9,11,15]
+[9,5,2,1]
+[9,11,15,22]
+[9,11,15,22,16]
+----
+
+We briefly explored the TinkerPop Tree API in the "<<tre>>" section. We could use
+what we discussed there to create a Tree object from our Binary Tree graph as
+follows.
+
+
+[source,groovy]
+----
+t=g.V().hasLabel('root').repeat(out()).emit().tree().by('data').next()
+----
+
+Just to be sure we can query what kind of object we just created.
+
+[source,groovy]
+----
+t.getClass()
+
+class org.apache.tinkerpop.gremlin.process.traversal.step.util.Tree
+----
+
+If we print the tree we can see how it has been created from our original graph. If
+you study the nesting closely you will see that it does indeed represent the original
+binary tree data that we used to create the graph.
+
+[source,groovy]
+----
+println t
+
+[9:[5:[2:[1:[:]], 8:[:]], 11:[10:[:], 15:[22:[16:[:]]]]]]
+----
+
+We can use the 'getObjectsAtDepth' method to further investigate the tree structure.
+
+[source,groovy]
+----
+t.getObjectsAtDepth(1)
+
+9
+
+t.getObjectsAtDepth(2)
+
+5
+11
+
+t.getObjectsAtDepth(3)
+
+2
+8
+10
+15
+
+t.getObjectsAtDepth(4)
+
+1
+22
+
+t.getObjectsAtDepth(5)
+
+16
+----
+
+[[mapstr]]
+Using 'map' to produce a concatenated result string
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In the example below we use 'map' to build a string containing the airport code
+concatenated with the city the airport is in for airports in England.
+
+[source,groovy]
+----
+g.V().has('airport','region','GB-ENG').limit(10).
+  map{it.get().value('code')+" "+it.get().value('city')}
+----
+
+Here are the results of running the query.
+
+[source,groovy]
+----
+LHR London
+LGW London
+MAN Manchester
+LCY London
+STN London
+EMA Nottingham
+LPL Liverpool
+LTN London
+SOU Southampton
+LBA Leeds
+----
+
+
+[[randwalk]]
+Randomly walking a graph
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+When doing analysis of a graph sometimes you just want to randomly traverse or 'walk'
+parts of the graph. The example below shows a query that starts at the Austin (AUS)
+vertex and then randomly goes to five connected vertices from there. The 'random
+walk' is achieved by picking a sample of one of the possible edges connected to the
+vertex we are currently at by sampling using the distance property of the edge and
+then moving to the vertex at the other end of that edge.
+
+[source,groovy]
+----
+// Random walk with five hops
+g.V().has('code','AUS').
+      repeat(bothE('route').
+         sample(1).by('dist').otherV()).
+      times(5).
+      path().by('code').by('dist')
+----
+
+Below are the results of running the query five times. You can see each graph walk
+starts at AUS and then goes to five places from there. The path shown displays the
+names of the other airports and the distances between them.
+
+[source,groovy]
+----
+[AUS,992,SFB,828,MDT,592,ORD,234,DTW,500,LGA]
+
+[AUS,957,CVG,374,ATL,1890,SAN,2276,DCA,204,PIT]
+
+[AUS,1209,PIT,1399,CUN,941,BJX,729,IAH,1384,BZN]
+
+[AUS,748,MEX,1252,PHX,5255,LHR,2487,LXR,492,JED]
+
+[AUS,722,STL,717,DCA,893,RSW,1103,HPN,563,CLT]
+----
+
+In the previous example, every random walk began at the same place. However, if we
+wanted a more random walk that starts from a different airport each time we could
+instead use a 'sample' step to at the start of the query to pick a random airport to
+start from out of the set of all vertices with an 'airport' label.
+
+[source,groovy]
+----
+// Random walk with five hops
+g.V().hasLabel('airport').sample(1).
+      repeat(bothE('route').
+        sample(1).by('dist').otherV()).
+      times(5).
+      path().by('code').by('dist')
+----
+
+When run five times , as shown below, each walk begins at a different airport.
+
+[source,groovy]
+----
+[OMA,1144,LGA,584,CVG,750,BOS,6682,NRT,5951,VCE]
+
+[CLE,244,ROC,263,JFK,8054,HKG,7952,BOS,7288,PVG]
+
+[EMA,1126,AGP,969,PMO,708,VIE,5684,NRT,5152,DOH]
+
+[SNN,387,LGW,1349,KBP,264,KHE,434,IST,2831,DEL]
+
+[ARN,1814,LEI,1232,PRG,433,BRU,1384,SVO,3598,PEK]
+----
+
+Another way to write the query involves the introduction of a 'local' step. In this
+case the 'repeat' step is applied against the current local state of the traversal.
+In this way we can achieve multiple random walks. The 'limit(5)' at the end of the
+query limits the number of random walks returned to just five. Note that if the
+'local' step was removed only one walk would occur.
+
+[source,groovy]
+----
+// Five random walks each of five hops
+g.V().hasLabel('airport').
+      repeat(local(bothE('route').
+        sample(1).by('dist').otherV())).
+      times(5).
+      path().by('code').by('dist').limit(5)
+----
+
+When run, five results such as those shown below are returned.
+
+[source,groovy]
+----
+[ATL,1301,ASE,845,SFO,2580,MIA,596,ATL,546,PBI]
+[ANC,2547,PHX,1999,BWI,368,BOS,3576,CGN,4745,MIA]
+[AUS,922,CUN,931,SAT,248,DAL,1378,LGA,736,MKE]
+[BNA,630,DFW,1430,SJC,2110,ATL,2180,SEA,4868,AMS]
+[BOS,3838,MUC,4024,JFK,8054,HKG,858,YNZ,901,HRB]
+----
+
+[[sevendegrees]]
+Seven degrees of separation!
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+No, the word seven in the heading above is not a mistake, read on! Most people I am
+sure have heard of the famous "Six degrees of separation" theory. The theory
+essentially states that for any living person, using "friend of a friend" style
+connections, none of us is farther removed than six friendship relationships from
+anyone else.
+
+NOTE: You can read more about the Six degrees of separation theory on Wikipedia at
+this location https://en.wikipedia.org/wiki/Six_degrees_of_separation.
+
+I decided it would be fun to run an experiment using the `air-routes` data set to see
+how far any airport, that is not a known orphan vertex, is from a major hub airport.
+For this experiment I decided to use London Heathrow (LHR) airport as my target.
+
+I came up with the queries below in order to do this. The first thing I wanted to do
+was establish how many connections I would be looking for.
+
+First of all I double checked how many airports are in the graph.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').count()
+
+3374
+----
+
+Next I remembered there are some orphan airports that have no routes so we have to
+rule those out. We can do this using a technique similar to the one that was
+discussed in the "<<noroutes>> section.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').not(outE('route')).count()
+
+16
+----
+
+So we know that there are 16 airports we need to ignore for this experiment. Leaving
+us with 3358 airports we care about but one of those will be LHR so we also need to
+discount that one as we are not looking for cyclic paths. So, we need a query that
+proves there is a route between all of these 3357 remaining airports and London
+Heathrow but ignores the orphan airports and Heathrow itself as starting points.
+
+The core part of the query is shown below. I started out using just one hop for
+testing purposes. The query starts by ignoring LHR and the orphan nodes. It next uses
+a 'union' step within 'local' scope to try and find a single path in one hop between
+the starting airport and LHR. The result, for each starting airport will either be a
+path containing the codes of all the airports from the starting airport to LHR or if
+LHR was not reached the path will just contain the starting airport. Just to test
+this part of the query I used a hop count of 1 and limited the results to just 10.
+
+[source,groovy]
+----
+g.V().has('airport','code',neq('LHR')).
+       filter(out('route').count().is(neq(0))).
+       local(union(
+              identity().values('code'),
+              local(repeat(out().simplePath()).
+                      emit().times(1).
+                      has('code','LHR').
+                      limit(1)).
+              path().by('code')).
+              fold()).
+        limit(10)
+
+----
+
+As you can see, the query we have so far seems to be working. We either get back a
+starting airport and a path or just a starting airport if no route was found. This is
+why I used the 'union' step to guarantee that at a minimum the starting airport is
+returned. The 'local' scope is used as I wanted the results for each starting airport
+to be in a separate list.
+
+[source,groovy]
+----
+[ATL,[ATL,LHR]]
+[ANC]
+[AUS,[AUS,LHR]]
+[BNA]
+[BOS,[BOS,LHR]]
+[BWI,[BWI,LHR]]
+[DCA]
+[DFW,[DFW,LHR]]
+[FLL]
+[IAD,[IAD,LHR]]
+
+----
+
+The final piece missing from the query is a way to decide if we reached LHR and count
+the number of times we succeeded in doing so. This is done by checking to see that
+the length of the result returned has more than one item in it. In other words, did
+we get back more than just the starting airport code. To do this, the 'where' step
+filters out the paths that did not reach LHR in the specified number of steps.
+Finally, rather than displaying the paths as I did in my testing, we now count how
+many of the starting airports were able to get to LHR. For my first round of tests I
+decided to see how many of the airports can reach LHR in five hops.
+
+[source,groovy]
+----
+g.V().has('airport','code',neq('LHR')).
+      filter(out('route').count().is(neq(0))).
+      local(union(
+             identity().values('code'),
+             local(repeat(out().simplePath()).
+                     emit().times(5).
+                     has('code','LHR').
+                     limit(1)).
+             path().by('code')).
+             fold().
+             where(count(local).is(gt(1)))).
+      count()
+
+3345
+----
+
+As you can see, with five hops were were able to reach LHR from 3345 of the 3357
+airports we are testing. Next I ran the query again but using six hops.
+
+
+[source,groovy]
+----
+g.V().has('airport','code',neq('LHR')).
+      filter(out('route').count().is(neq(0))).
+      local(union(
+             identity().values('code'),
+             local(repeat(out().simplePath()).
+                     emit().times(6).
+                     has('code','LHR').
+                     limit(1)).
+             path().by('code')).
+             fold().
+             where(count(local).is(gt(1)))).
+      count()
+
+3354
+----
+
+So with six hops 3354 of our 3357 airports were able to get to LHR. I then tried
+seven hops and found that all but two of the airports were able to reach LHR
+
+[source,groovy]
+----
+g.V().has('airport','code',neq('LHR')).
+      filter(out('route').count().is(neq(0))).
+      local(union(
+             identity().values('code'),
+             local(repeat(out().simplePath()).
+                     emit().times(7).
+                     has('code','LHR').
+                     limit(1)).
+             path().by('code')).
+             fold().
+             where(count(local).is(gt(1)))).
+      count()
+
+3355
+----
+
+This made me curious. I was fairly convinced that there are no airports in the graph
+that would not be able to reach LHR in seven hops unless of course they were orphans
+but we have already ruled those out as part of our query. So, I decided to go with 30
+hops just to make sure. However I still got the answer 3355.
+
+[source,groovy]
+----
+g.V().has('airport','code',neq('LHR')).
+      filter(out('route').count().is(neq(0))).
+      local(union(
+             identity().values('code'),
+             local(repeat(out().simplePath()).
+                     emit().times(30).
+                     has('code','LHR').
+                     limit(1)).
+             path().by('code')).
+             fold().
+             where(count(local).is(gt(1)))).
+      count()
+
+3355
+----
+
+This left me with an interesting conclusion. There must be two airports in the graph
+that are not orphans, in other words they have some routes, but they are isolated
+from the main network. So I needed a query to find them which is the subject of the
+next section. What the queries in this section did prove is that from any airport in
+the graph, with the exception of the two cases we need to investigate further, London
+LHR can be reached in seven hops or less. Hence the title of this section being
+"Seven degrees of separation" rather than "Six" !
+
+[[mininetworks]]
+Finding isolated sub-networks
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+As discussed above, while I was working on the queries for the previous section I
+realized that there are two airports in the graph that are not true orphans, as they
+do have routes between each other but that they are part of a small network that is
+not itself connected to the main route network. In other words, the network is an
+isolated mini network within the main graph and you can never get to London from
+either one of them. After more analysis I realized that this was actually due to an
+error in my data set which I have fixed in subsequent updates but if you are using
+the version 0.77 level of `air-routes` then the following query will yield the
+results shown.
+
+To solve the puzzle of the missing airports, I only had to slightly modify the seven
+degrees of separation query. Note that if you use the most recent version of the
+`air-routes` data set, this particular error is fixed, but you will find other
+isolated networks within the main graph exist. However, these are not due to errors
+but rather because there truly are a set of airports in Portugal connected to each
+other via commuter airlines but with no way to get from any one of them to the main,
+worldwide route network.
+
+So, here is the modified form of the query.
+
+[source,groovy]
+----
+g.V().has('airport','code',neq('LHR')).
+      filter(out('route').count().is(neq(0))).
+      local(union(
+             identity().values('code'),
+             local(repeat(out().simplePath()).
+                     emit().times(7).
+                     has('code','LHR').
+                     limit(1)).
+             path().by('code')).
+             fold().
+             where(count(local).is(1))).
+       unfold()
+----
+
+The only change made to this query from the one used in the prior section is that the
+'where' step has been changed to 'where(count(local).is(1)))' so that it now looks
+for paths of length one. These represent the airports for which no route to LHR was
+found. Then rather than 'count' the paths an 'unfold' is used to return the codes for
+the airports that had no route.
+
+When the query is run, the codes for the airports with no route to London are
+revealed. These airports are truly connected to each other but isolated from the main
+route network.
+
+[source,groovy]
+----
+HPB
+VAK
+----
+
+Just to verify my findings I ran a couple of queries to double check on the routes
+from each of these airports. As you can see they were just connected to each other.
+
+[source,groovy]
+----
+g.V().has('code','HPB').out().path().by('code')
+[HPB,VAK]
+
+g.V().has('code','VAK').out().path().by('code')
+[VAK,HPB]
+----
+
+This proved both an interesting and useful exercise and uncovered some errors in the
+graph that had slipped through my error checking!
+
+[[longestroutes]]
+Looking for the journey requiring the most stops
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Sometimes it is interesting to ponder questions such as "Starting from a given
+airport what are the most difficult places to get to?". For the sake of this example
+let's define "difficult to get to" as meaning "requires the most hops". By modifying
+the query from the previous section we can come up with a way to detect some longest
+routes. At the end of the section I have also included examples that show alternative
+ways to generate the same result.
+
+The query shown below finds every airport that has out going routes and is not Austin
+(AUS). For each airport found an attempt is made to get to Austin in ten or fewer
+hops. For each airport the attempt is only made once. I decided to use a value of 10
+as I was already fairly confident that there would be no airports further away in
+terms of stops than that. However, it really does not matter what value is used so
+long as it is big enough. A value of 100 does not adversely affect the query given
+that the 'emit' step will return a result as soon as AUS is reached. The query will
+find a single path between each starting airport and AUS. The 'where' step on the
+last line of the query only keeps any paths that have a length of eight or more. So
+essentially that says find me only routes that take at least seven hops to get to
+Austin as AUS.
+
+[source,groovy]
+----
+g.V().has('airport','code',neq('AUS')).
+      filter(out('route').count().is(neq(0))).
+      local(repeat(out().simplePath()).
+              emit(has('code','AUS')).
+              times(10).limit(1)).
+      path().by('code').
+      where(count(local).is(gte(8)))
+----
+
+When run, the query may take a few seconds to complete, but should not take more than
+that on a typical laptop or desktop. Here are the results of running the query.
+
+[source,groovy]
+----
+[YPO,YAT,ZKE,YFA,YMO,YTS,YYZ,AUS]
+[YZG,YIK,AKV,YPX,YGL,YUL,ATL,AUS]
+[THU,NAQ,JUV,JAV,GOH,KEF,PIT,AUS]
+----
+
+The query could also be written using 'repeat' and 'until' steps as shown below.
+
+[source,groovy]
+----
+g.V().has('airport','code',neq('AUS')).
+      filter(out('route').count().is(neq(0))).
+      local(repeat(out().simplePath()).
+        until(has('code','AUS').or().loops().is(8)).
+        has('code','AUS').limit(1)).
+      path().by('code').
+      where(count(local).is(gte(8)))
+----
+
+As before, the same three paths are found.
+
+[source,groovy]
+----
+[YPO,YAT,ZKE,YFA,YMO,YTS,YYZ,AUS]
+[YZG,YIK,AKV,YPX,YGL,YUL,ATL,AUS]
+[THU,NAQ,JUV,JAV,GOH,KEF,PIT,AUS]
+----
+
+[[quicklyfindhardest]]
+Quickly finding the hardest to get to airports
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+There are other ways we could write a query that looks for "hard to get to" airports.
+The technique shown below essentially relies on using a de-duplication strategy to
+make sure you only visit an airport exactly once. Note this is different from the way
+the 'sideEffect' step works. That step allows a query to fan out and visit the same
+vertex from many places, a many to one type of pattern, but will not allow a
+traversal to loop back on itself. By using a de-duplication approach we only visit a
+vertex exactly once and remove all other instances of it as the query progresses.
+This gives the query processor a lot less work to do and as a result the query
+executes more efficiently. The queries below do a bit less filtering than the ones
+above but work well if all you are looking for are destinations that, from a given
+starting point, require at least a specified number of hops to reach.
+
+This time I decided to start with Austin (AUS) and look for any airports that are
+only reachable in seven hops. The fact that we are removing duplicates along the way
+guarantees that there is not a shorter path to the destinations found. If you are
+good at reading backwards, you will see that the results match those found above but
+in the reverse order.
+
+The first example keeps track of where it has been using a 'store' step and only
+continues on to places it has not seen before until seven hops have completed.
+
+[source,groovy]
+----
+g.V().has('code','AUS').
+      repeat(out().where(without('a')).store('a')).
+        times(7).
+      path().
+        by('code')
+----
+
+As you can see the results look familiar.
+
+[source,groovy]
+----
+[AUS,YYZ,YUL,YGL,YPX,AKV,YIK,YZG]
+[AUS,YYZ,CPH,SFJ,JAV,JUV,NAQ,THU]
+[AUS,YYZ,YTS,YMO,YFA,ZKE,YAT,YPO]
+----
+
+This alternate version of the query uses a 'dedup' step to achieve the same goal. On
+most Gremlin query engines this is an efficient way to look for targets only
+reachable in at least the given number of hops. This query is similar to the one used
+in the "<<doesanyrouteexist>>" section.
+
+[source,groovy]
+----
+g.V().has('code','AUS').
+      repeat(out().dedup()).
+        times(7).
+      path().
+        by('code')
+----
+
+Once again the same results are generated.
+
+[source,groovy]
+----
+[AUS,YYZ,YUL,YGL,YPX,AKV,YIK,YZG]
+[AUS,YYZ,CPH,SFJ,JAV,JUV,NAQ,THU]
+[AUS,YYZ,YTS,YMO,YFA,ZKE,YAT,YPO]
+----
+
+When looking for longest routes in a graph, especially in a highly connected one, you
+need to be careful. Notice how I chose a very specific target or a specific number of
+hops for my searches.
+
+NOTE: Looking for longest paths must be done carefully as it can result in very long
+running queries.
+
+If you were to try and write a query that arbitrarily looked for the longest route
+between any two airports you run the risk of writing a query that runs for an
+extremely long time. In many ways the concept of "longest path" can be viewed as an
+anti pattern. This is especially true in highly connected graphs of which
+`air-routes` is an example.
+
+[[unwantededges]]
+Finding unwanted parallel edges
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In general terms there are many reasons in a graph that there could be more than one
+edge between the same two vertices in the same direction. Most property graph
+systems allow this and many data models take advantage of this capability. We call
+these parallel edges. However, in the 'air-routes' graph we only model the existence
+of a route using a single edge from airport A to airport B. It is considered an error
+for there to be more than one edge between the same two airports in the same
+direction. Note this does not include an edge going the other way (from B to A).
+
+During development of the 'air-routes' graph, when I was still cleaning up the data,
+I frequently ran into problems with parallel edges getting included in the graph by
+mistake. I realized I could use Gremlin to help me detect these error cases.
+
+Initially I tried something very basic, that still required quite a bit of manual
+reading of the output. I used the following query to tell me if for a given airport
+there was more than one outgoing edge to any other airport. This required me to have
+a hunch ahead of time which airport vertices might have an issue. Far from ideal when
+there are over 3,300 airport vertices in the graph.
+
+[source,groovy]
+----
+g.V().has('code','LHR').out().groupCount().by('code').
+  order(local).by(values,desc).next().values().max()
+----
+
+If the answer came back greater than one I then ran the following query and manually
+looked at each result to see where the duplicate edge was.
+
+[source,groovy]
+----
+g.V().has('code','LHR').out().groupCount().by('code').order(local).by(values,desc)
+----
+
+As I said this was a very manual and time consuming process. I clearly needed a
+better query. Given what we know about 'groupCount' I realized I could write an
+arbitrary query to tell me how many times every single route in the graph exists.
+However, given there are over 43,000 routes I was not going to be able to check that
+manually. So as is often the best way with Gremlin I built up my query in stages.
+First of all I wrote the query to count the occurrence of all routes. I have not
+shown all the output from this query as it would take tens of pages but as you can
+see from what we have shown, this result would still need a person studying all of
+the results. Far from ideal!
+
+[source,groovy]
+----
+g.V().as("a").out().as("b").groupCount().by(select("a","b"))
+
+[[a:v[1],b:v[3]]:1,[a:v[1],b:v[6]]:1,[a:v[1],b:v[7]]:1 ...
+----
+
+I then added a filter to only select any routes that occurred more than once. Note
+that I had to use 'unfold' before I applied the 'filter' to turn the map back into a
+stream of values that could be filtered.
+
+[source,groovy]
+----
+g.V().as("a").out().as("b").groupCount().by(select("a","b")).unfold().
+                            filter(select(values).is(gt(1)))
+----
+Next I added one more step to tell me which routes contained the error.
+
+[source,groovy]
+----
+g.V().as("a").out().as("b").groupCount().by(select("a","b")).unfold().
+                            filter(select(values).is(gt(1))).select(keys)
+----
+
+One of the errors I ran into was that I had erroneously added the LHR to JFK route
+twice into the graph. LHR has the ID of 49 and JFK has the ID of 12. When I ran the
+above query I got the following output which told me exactly which route I needed to
+correct. This is clearly a much more useful query than the prior ones. I could
+happily have stopped at this point but I wanted to see if I could improve the query
+some more.
+
+[source,groovy]
+----
+[a:v[49],b:v[12]]
+----
+
+I was still not totally happy with my query as I really wanted it to give me back the
+airport codes. So I added a few more tweaks to do the 'groupCount' using the airport
+codes. I have also left the 'select(keys)' off the end of this query as I think it
+aids understanding to see what is returned before that step is performed.
+
+[source,groovy]
+----
+g.V().as("a").out().as("b").select('a','b').by('code').groupCount().unfold()
+                           .filter(select(values).is(gt(1)))
+----
+
+So what we get back when we run that query is the airport codes as well of the number
+of times they have appeared connected to each other by a parallel edge. This is
+actually a key/value pair where the contents of the '{}' are the keys and the '=2'
+part is the value. You could reasonably argue that this is sufficient for me to go
+and fix the mistake in the graph. However I want to add just a couple of additional
+steps to demonstrate other possible refinements that you may find useful in other
+circumstances.
+
+[source,groovy]
+----
+{a=LHR, b=JFK}=2
+----
+
+If we don't want the '=2' part returned we can just select the keys part.
+[source,groovy]
+----
+g.V().as("a").out().as("b").select('a','b').by('code').groupCount().unfold()
+                           .filter(select(values).is(gt(1))).select(keys)
+----
+
+This is what was now returned. Note that the keys themselves are returned in a map
+using the 'a' and 'b' terms from our 'as' step.
+
+[source,groovy]
+----
+[a:LHR,b:JFK]
+----
+
+This is almost exactly what I wanted but we can add one more tiny step to clean up the
+output by just selecting the values from the map returned.
+
+[source,groovy]
+----
+g.V().as("a").out().as("b").select('a','b').by('code').groupCount().unfold()
+                           .filter(select(values).is(gt(1))).select(keys).select(values)
+----
+So here is the final output, just the codes for the airports with parallel edges
+that needed fixing.
+
+[source,groovy]
+----
+[LHR,JFK]
+----
+
+TIP: Note how I built up my Gremlin query in stages to solve this problem. I
+recommend this as a sensible way to approach all but the most basic of queries that
+you may need to write. Doing it this way has the advantage that you can also check
+that each part of the query is working the way you intend it to before you add more
+parts to it.
+
+[[groupcountpath]]
+Using 'groupCount' with 'path' to find duplicate edges
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The prior example found duplicate edges by working with a map created using 'select'
+and 'groupCount' steps. It is also possible to use a 'path' step inside a
+'groupCount' step to achieve a similar result.
+
+First of all let's create a duplicate edge between Austin (AUS) and Cancun (CUN).
+
+[source,groovy]
+----
+g.V().has('code','AUS').addE('route').to(V().has('code','CUN'))
+
+e[53791][3-route->180]
+----
+
+We can now use a 'groupCount' step containing a 'path' step to look for duplicate
+edges originating in Austin. I used a 'limit' step just to reduce the amount of
+output a bit.
+
+[source,groovy]
+----
+g.V().has('code','AUS').out().
+      groupCount().by(path().by('code')).limit(local,5)
+----
+
+As you can see from the results below the route between AUS and CUN has a count of 2
+associated with it.
+
+[source,groovy]
+----
+[[AUS,CUN]:2,[AUS,MDW]:1,[AUS,MIA]:1,[AUS,DFW]:1,[AUS,BWI]:1]
+----
+
+Note that this technique does not replace the full query shown in the prior section.
+It is more intended to show that you can place a 'path' step inside of a 'groupCount'
+step and achieve some useful results.
+
+
+[[flr]]
+Finding the longest flight route between two adjacent airports in the graph
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This section is in a way a case study in the good and the bad of the Gremlin query
+language. I have documented here the learning steps I went through to get what I
+thought was a very simple question expressed as a single Gremlin query. This
+documents well the Good,the bad and the sometimes ugly aspects of working with
+Gremlin. On the good side it is powerful and some things that should be easy are
+easy. On the bad side, some things that appear easy are in fact very hard to get
+right especially if you want to build a single query to do a job rather than break it
+up into a set of smaller programmatic steps. Let's look at an example of this with a
+real-world query.
+
+The query we want to build is to find the route(s) in the graph that are of the
+maximum length between any two airports. It turns out that this simple looking query
+takes a lot of work to get right if you want to handle the case where there could be
+more than one route that is of the maximum length (return flights between the same
+two airports don't count as different routes for this example).
+
+While using a 'max' step, as shown below, might seem like the obvious and easy to do
+what we need, because of the way that 'max' is implemented it will not work.
+Currently the 'max' and 'min' steps cause the prior paths that have been taken in a
+traversal to be lost. There is an issue open against TinkerPop for this but until
+that issue gets resolved, we need to explore other ways of achieving our desired
+result.
+
+[source,groovy]
+----
+g.E().hasLabel('route').as('e').values('dist').max().select('e')
+----
+
+First of all we could do this (below) The down side of this approach is that both
+queries have to look at a lot of edges which is likely to use additional memory and
+CPU to process.
+
+[source,groovy]
+----
+r=g.E().hasLabel('route').values('dist').max().next()
+g.E().has('dist',r).bothV().values('code')
+----
+
+This next query is more efficient as using an ID means the edges are only searched
+once, but this approach would miss the case where more than one route was of the same
+(max) length so it does not meet our required success criteria.
+
+[source,groovy]
+----
+r=g.E().hasLabel('route').as('e').order().by('dist', desc).limit(1).select('e').id().next()
+g.E(r).dist
+g.E(r).bothV().values('code')
+----
+
+This query is what Daniel Kuppitz from the TinkerPop team recommended after we
+discussed this on the mailing list and it does indeed work but from where we started
+our experiments to build up this query from there is a non trivial journey!
+
+[source,groovy]
+----
+g.E().hasLabel("route").order().by("dist", desc).store("d").by("dist").
+  filter(values("dist").as("cd").select("d").by(limit(local, 1)).as("md").where("cd",eq("md"))).
+  project("from","to","dist").by(outV()).by(inV()).by("dist")
+----
+
+Finally, to output airport codes rather than just vertices, we can tweak the query
+one more time as follows.
+
+[source,groovy]
+----
+g.E().hasLabel("route").order().by("dist",desc).store("d").by("dist").\
+  filter(values("dist").as("cd").select("d").by(limit(local, 1)).as("md").where("cd",eq("md"))).\
+  project("from","to","dist").by(outV().values('code')).by(inV().values('code')).by("dist")
+----
+
+Now we are ready to run our query. This is the output from it. Notice how both routes
+are between the same city pairs. We could have further refined our query to only show
+such combinations once but I will leave that as an exercise for the reader!
+
+[source,groovy]
+----
+[from:DXB,to:AKL,dist:8818]
+[from:AKL,to:DXB,dist:8818]
+----
+
+[[miscq]]
+Miscellaneous other queries
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The examples in this section demonstrate a few miscellaneous features and queries
+that we have not yet had a chance to examine. Over time, these queries should
+probably be moved to other sections of the book.
+
+Using a calculation inside of an 'is' step
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+It is possible to use a mathematical expression inside of an 'is' step. At times this
+comes in quite handy. The example below simply divides 500 by 2 as part of a test.
+Clearly you would normally just enter 250 but this shows the capability.
+
+[source,groovy]
+----
+g.V().hasLabel('airport').where(out().count().is(gt(500/2))).values('code')
+
+CDG
+FRA
+AMS
+IST
+----
+
+The capability becomes more interesting when used in conjunction with a variable.
+
+[source,groovy]
+----
+a = 500
+
+g.V().hasLabel('airport').where(out().count().is(gt(a/2))).values('code')
+
+CDG
+FRA
+AMS
+IST
+----
+
+Here is one more example where we start by setting the variable 'a' to the value that
+represents the maximum number of routes from any single airport. The we use a query
+to find all the airports that have at least as many outgoing routes as 50 fewer than
+our value 'a'.
+
+[source,groovy]
+----
+a = g.V().local(out('route').count()).max().next()
+
+g.V().hasLabel('airport').where(out().count().is(gt(a-50))).
+      project('apt','routes').by('code').by(out().count())
+
+[apt:ATL,routes:232]
+[apt:ORD,routes:232]
+[apt:CDG,routes:262]
+[apt:FRA,routes:272]
+[apt:DXB,routes:230]
+[apt:PEK,routes:234]
+[apt:AMS,routes:269]
+[apt:MUC,routes:237]
+[apt:IST,routes:270]
+----

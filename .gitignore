@@ -1,5 +1,7 @@
-book/Gremlin-Graph-Guide.epub
-book/Gremlin-Graph-Guide.html
-book/Gremlin-Graph-Guide.mobi
-book/Gremlin-Graph-Guide.pdf
-book/Gremlin-Graph-Guide.xml
+*.iml
+**/.idea
+book/Practical-Gremlin.epub
+book/Practical-Gremlin.html
+book/Practical-Gremlin.mobi
+book/Practical-Gremlin.pdf
+book/Practical-Gremlin.xml

@@ -1,0 +1,3521 @@
+[[beyond]]
+MOVING BEYOND THE CONSOLE AND TINKERGRAPH
+-----------------------------------------
+
+Most of the examples we have looked at so far were produced using the Gremlin console
+and the TinkerGraph in-memory graph all running on a single machine. However, there
+are many ways to deploy and interact with a graph while still using Gremlin and
+optionally the Gremlin Console, and many of them go beyond doing everything on a
+single machine. The Apache TinkerPop package for example includes a component called
+Gremlin Server. Gremlin Server allows you to host a graph database locally or
+remotely and talk to it over HTTP or WebSockets. The Gremlin console supports
+accessing graphs both locally or remotely or you can access them using your own code
+or other tools or even command line utilities such as 'curl'.
+
+For a production environment it is likely you will use a technology such as JanusGraph
+backed by something like HBase or Cassandra and an indexing technology such as
+Solr or Elasticsearch. In these cases the way you work with and manage
+the graph and the way that query results are returned will vary.
+
+In some cases data returned will be in the form of a GraphSON (JSON) in others it
+might be as variables within a program. There are also ways to work with graphs using
+Gremlin from a Python Notebook. You might setup your own on-premise graph system or
+you might use a hosted service. It's quite possible you might still
+wish to connect to a remote graph using Gremlin Server via the Gremlin Console but
+you just as likely could use 'curl' or some other HTTP/REST type of technology. So
+that is a long winded way of saying that once you move beyond the basics and head
+towards putting a system into production, there are a lot of options to consider.
+
+In this section you will find a selection of examples from these more sophisticated
+environments. The focus of this book so far has been to teach the Gremlin query and
+traversal language, using the Gremlin Console and TinkerGraph as our learning
+environment. However, it would be remiss to end our discussion without at least
+touching on some of these other environments, how you might configure them and why
+you might use them. The following sections are an attempt to whet your appetite for
+moving beyond the Gremlin Console into the world of graph application programming and
+graph system deployment!
+
+
+[[javatinker]]
+Working with TinkerGraph from a Java Application
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+So far in this book we have looked at many ways of working with a TinkerGraph
+from within the Gremlin Console. As you start to create more sophisticated
+applications you will find that the Gremlin Console is just one of the tools you will
+need to have available in your toolbox. It is very likely, if not certain, that you
+will want to write standalone applications that can work with a graph. There are a
+number of different language bindings currently available for TinkerPop 3. One of the
+most widely used is the Java API. Apache TinkerPop itself is coded in Java.
+
+NOTE: You will find several Java samples at the GitHub repository associated with
+this book. https://github.com/krlawrence/graph
+
+As briefly discussed already, when building a commercial application, you may
+need capabilities such as ACID transactions and would not use TinkerGraph as your
+graph database in those cases. There are however, places where TinkerGraph may be
+just what you need. One example might be doing analysis on a static graph that can
+fit into memory on your laptop. The 'air-routes' graph is a good example of such a
+graph. As a first step towards writing standalone applications that use different
+graph database back ends, lets look at a few examples of how you can create a Java
+application that uses Gremlin and TinkerGraph.
+
+[[tpinterfaces]]
+The Apache TinkerPop interfaces and classes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+There are a number of Java interfaces and classes, defined by the Apache TinkerPop
+project, that you will want to become familiar with. The most recent JavaDoc format
+API documentation is always available at
+http://tinkerpop.apache.org/javadocs/current/full
+
+The TinkerPop JavaDoc is a bit lacking in terms of English prose but is still a
+useful source of reference information when it comes to methods, parameters and
+types. Once you have coded up a couple of test programs and got them running, you
+should find it gets easier to make progress faster. To that end I recommend you take
+a look at the sample code I have included with the book.
+
+When using the Gremlin Console your environment is pre-configured for you so you do
+not have to import any classes or interfaces. However, as soon as you move to the
+domain of the standalone Java application you will need to start importing the
+relevant classes that your application builds upon and learn to do a few other things
+that you may not have realized that the Gremlin Console was doing on your behalf.
+
+By way of a reasonable start, here are some imports that will enable us to do a
+number of Gremlin tasks from a Java application. As you add more capabilities to your
+application you will of course need to add the appropriate import statements.
+
+Take particular note of the rather odd import of the class called +++"__"+++
+(underscore underscore) on the second line. This is required to enable calling
+methods such as 'in()' and 'out()' in a traversal where there is no prior step
+to "dot" attach them to (such as inside of a 'repeat' step). If you prefer you
+can statically import the +++"__"+++ class which will make explicit use of
++++".__"+++ in your code unnecessary except where you are faced with reserved
+word conflicts as discussed earlier in this book.
+
+[source,java]
+----
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
+import org.apache.tinkerpop.gremlin.process.traversal.Path;
+import org.apache.tinkerpop.gremlin.process.traversal.*;
+import org.apache.tinkerpop.gremlin.structure.Edge;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
+import org.apache.tinkerpop.gremlin.structure.io.IoCore;
+import org.apache.tinkerpop.gremlin.tinkergraph.structure.*;
+import java.io.IOException;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
+----
+
+[[javatp1]]
+Writing our first TinkerPop Java program
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Now that we have some imports in place, we can start to craft the basic outline of a
+Java application. The code below defines a class called 'TinkerGraphTest', and defines a
+'main' method that creates an in memory TinkerGraph and loads the air routes GraphML
+data. Note that as we are now going to be running as a Java program we have to catch
+exceptions. This is another thing that is hidden from you when you are working within
+the Gremlin Console.
+
+TIP: The source code for TinkerGraphTest.java is available in the 'sample-code' folder
+located at https://github.com/krlawrence/graph/tree/master/sample-code.
+
+Lastly in this initial class definition we create a
+'GraphTraversalSource' and we make a Gremlin query to get the property 'valueMap' for
+the Austin airport vertex and print it. The 'toString' method provided by the 'Map'
+should give us some useful output. Take note of the call to 'next()'. This terminates
+the graph traversal and causes the result to be returned. If this call is left off
+you will not get back what you were expecting!
+
+[source,java]
+----
+public class TinkerGraphTest
+{
+  public static void main(String[] args)
+  {
+    TinkerGraph tg = TinkerGraph.open() ;
+
+    try
+    {
+      tg.io(IoCore.graphml()).readGraph("./air-routes.graphml");
+    }
+    catch( IOException e )
+    {
+      System.out.println("File not found");
+      System.exit(1);
+    }
+    GraphTraversalSource g = tg.traversal();
+    Map<String,?> aus = g.V().has("code","AUS").valueMap().next();
+    System.out.println(aus);
+  }
+}
+----
+
+[[javacompile]]
+Compiling our code
+^^^^^^^^^^^^^^^^^^
+
+Before we can test our program we of course need to compile it. The easiest way to do
+this while experimenting is to setup the Java 'classpath' to include the TinkerPop JAR
+files. Once you get into writing bigger solutions you will most likely be using a
+tool like Apache Maven to control your build. For the purpose of our experiments
+here, simple use of the 'classpath' will suffice.
+
+The following lines of Bash shell script will setup what you need to both build and
+run our small test program. Note that the 'GREMLIN' variable should be set to point
+to the root directory of wherever your TinkerPop JAR files are. Later when we start
+using JanusGraph you will see that rather than TinkerGraph we will need to adjust
+these settings to point to the JanusGraph JAR files.
+
+----
+# Root directory for Gremlin Console install
+GREMLIN=...
+
+# Path to Gremlin core JARs
+LIBPATH=$GREMLIN/lib/*
+
+# Path to TinkerGraph JARs
+EXTPATH=$GREMLIN/ext/*
+
+#Path to additional JARs
+ADDL=$GREMLIN/ext/tinkergraph-gremlin/lib/*
+
+# Classpath
+export CP=$CLASSPATH:$LIBPATH:$EXTPATH:$ADDL
+
+
+# Compile
+javac -cp $CP TinkerGraphTest.java
+----
+
+Assuming everything we have coded so far compiled OK, then we can run it using the
+same 'classpath' that we created previously.
+
+----
+# Run
+java -cp $CP TinkerGraphTest
+----
+
+The output we get back should look something like the following. If it does, take 30
+seconds to celebrate as you have just successfully built and run your first TinkerPop
+aware Java app!
+
+[source,java]
+----
+{country=[US], code=[AUS], longest=[12250], city=[Austin], elev=[542], icao=[KAUS], lon=[-97.6698989868164], type=[airport], region=[US-TX], runways=[2], lat=[30.1944999694824], desc=[Austin Bergstrom International Airport]}
+----
+
+[[javaadd]]
+Adding to our Java program
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Now that we have a basic skeleton application that compiles and runs, we can start to
+add more experiments to it. If we add the two lines below we can extract the city
+name from the value map that we just generated. From now on as we add to our program
+I am just going to show the lines that we add and the additional output that those
+new lines will generate.
+
+[source,java]
+----
+List city = (List)(aus.get("city"));
+System.out.println("The AUS airport is in " + city.get(0));
+----
+
+So when we compile and run again we should now see this additional line of output.
+
+[source,console]
+----
+The AUS airport is in Austin
+----
+
+If we wanted to nicely print out all of the values returned in our value map we could
+do it as follows.
+
+[source,java]
+----
+aus.forEach( (k,v) -> System.out.println("Key: " + k + ": Value: " + v));
+----
+
+Which will generate this output.
+
+[source,java]
+----
+Key: country: Value: [US]
+Key: code: Value: [AUS]
+Key: longest: Value: [12250]
+Key: city: Value: [Austin]
+Key: elev: Value: [542]
+Key: icao: Value: [KAUS]
+Key: lon: Value: [-97.6698989868164]
+Key: type: Value: [airport]
+Key: region: Value: [US-TX]
+Key: runways: Value: [2]
+Key: lat: Value: [30.1944999694824]
+Key: desc: Value: [Austin Bergstrom International Airport]
+----
+
+So we now know one way to get the property values from a vertex and manipulate them.
+Let's now add something a bit more interesting to our program. The following two
+lines count the number of airports you can fly to non stop starting at
+Dallas Fort Worth (DFW) and print out that result for us.
+
+[source,java]
+----
+Long n = g.V().has("code","DFW").out().count().next();
+System.out.println("There are " + n + " routes from Dallas");
+----
+
+[source,console]
+----
+There are 221 routes from Dallas
+----
+
+Let's now add some code to retrieve the airport IATA codes of these 221 airports that we
+can fly to non stop from DFW. Note that this time we ended our query with a call to
+the 'toList()' method. This will terminate the traversal, and as the name implies,
+return the results to us in a list. An 'order' step is used in the traversal so that
+we get the airport codes back in ascending order.
+
+[source,java]
+----
+List fromDfw = g.V().has("code","DFW").out().
+                     order().by("code").values("code").toList();
+
+System.out.println(fromDfw);
+----
+
+The new output that we get back should look like this.
+
+[source,java]
+----
+[ABI, ABQ, ACT, AEX, AGU, AMA, AMS, ANC, ASE, ATL, AUH, AUS, BDL, BHM, BIL, BIS, BJX, BKG, BMI, BNA, BOG, BOI, BOS, BPT, BRO, BTR, BWI, BZE, BZN, CAE, CCS, CDG, CHA, CHS, CID, CLE, CLL, CLT, CMH, CMI, CNM, COS, COU, CRP, CUN, CUU, CVG, CVN, CZM, DAY, DCA, DEN, DOH, DRO, DSM, DTW, DUS, DXB, EGE, ELP, EVV, EWR, EZE, FAR, FAT, FCO, FLL, FRA, FSD, FSM, FWA, GCK, GCM, GDL, GEG, GGG, GIG, GJT, GLH, GPT, GRI, GRK, GRR, GRU, GSO, GSP, GUA, GUC, HDN, HKG, HNL, HOU, HSV, IAD, IAH, ICN, ICT, IND, JAC, JAN, JAX, JFK, JLN, KOA, LAS, LAW, LAX, LBB, LCH, LEX, LFT, LGA, LHR, LIM, LIR, LIT, LRD, MAD, MAF, MBJ, MCI, MCO, MEI, MEM, MEX, MFE, MGA, MGM, MHK, MIA, MID, MKE, MLI, MLM, MLU, MOB, MSN, MSP, MSY, MTJ, MTY, MYR, MZT, NAS, NRT, OAK, OGG, OKC, OMA, ONT, ORD, ORF, PBC, PBI, PDX, PEK, PHL, PHX, PIA, PIB, PIT, PLS, PNS, PSP, PTY, PUJ, PVG, PVR, QRO, RAP, RDU, RIC, RNO, ROW, RSW, RTB, SAF, SAL, SAN, SAT, SAV, SBA, SCL, SDF, SEA, SFO, SGF, SHV, SJC, SJD, SJO, SJT, SJU, SLC, SLP, SMF, SNA, SPI, SPS, STL, SUX, SWO, SYD, TLH, TPA, TRC, TUL, TUS, TVC, TXK, TYR, TYS, UIO, VPS, XNA, YEG, YUL, YVR, YYC, YYZ, ZCL]
+----
+
+The next lines will find all routes from London Heathrow to any airport in the United
+States. A list of paths will be returned where each path contains the airport codes
+and the distance between them.
+
+[source,java]
+----
+List <Path> lhrToUsa = g.V().has("code","LHR").outE().inV().
+                             has("country","US").
+                             path().by("code").by("dist").toList();
+
+lhrToUsa.forEach((k) -> System.out.println(k));
+----
+
+The output should look like this. I arranged the results in columns to aid
+readability.
+
+[source,java]
+----
+[LHR, 4896, PDX]     [LHR, 4820, IAH]    [LHR, 3665, IAD]
+[LHR, 3980, CLT]     [LHR, 4414, MIA]    [LHR, 3860, RDU]
+[LHR, 3254, BOS]     [LHR, 4001, MSP]    [LHR, 4783, SEA]
+[LHR, 3622, BWI]     [LHR, 3440, JFK]    [LHR, 3939, ORD]
+[LHR, 4198, ATL]     [LHR, 5439, LAX]    [LHR, 5255, PHX]
+[LHR, 4901, AUS]     [LHR, 5469, SAN]    [LHR, 5350, SFO]
+[LHR, 4736, DFW]     [LHR, 4850, SLC]    [LHR, 3753, DTW]
+[LHR, 5352, SJC]     [LHR, 3453, EWR]    [LHR, 4655, DEN]
+[LHR, 4616, MSY]     [LHR, 5213, LAS]    [LHR, 3533, PHL]
+----
+
+The final part of our first Java program shows how to perform a simple 'repeat'
+operation. The code below will look for any cities in the UK that you can get to from
+Austin with one stop on the way. A key thing to note here is that we have to prefix
+the call to 'out()' with the strangely named class +++"__."+++ that we mentioned at
+the start of this discussion of using Java with TinkerPop. If you do not include the
++++"__."+++ prefix you will get a compilation error as the compiler does not know
+where the 'out' step is from.
+
+[source,java]
+----
+List <Object> eng =
+      g.V().has("code","AUS").repeat(__.out()).times(2).
+            has("region","GB-ENG").values("city").dedup().toList();
+
+System.out.println("\nPlaces in England I can get to with one stop from AUS.\n");
+eng.forEach( (p) -> System.out.print(p + " "));
+----
+
+The code we just added should generate output that looks like this.
+
+[source,console]
+----
+Places in England I can get to with one stop from AUS.
+
+Birmingham Bristol London Manchester Leeds Newcastle
+----
+
+[[javastatics]]
+Important Classes and Enums to be aware of
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When you are using the Gremlin Console, as I have already mentioned, a few things are
+done for you that you need to take care of yourself when writing standalone Java
+code. A key area that I have found that people making the jump from the console to
+Java find confusing is figuring out which Classes and Enums have been statically
+imported "behind the scenes" and how to access those same capabilities from Java. You
+should also bookmark the TinkerPop javadoc pages as you can find more detail on all
+of the classes and enums covered below there. The latest javadoc is always available
+at http://tinkerpop.apache.org/javadocs/current/full/
+
+TIP: There is a sample program called TestImports.java in the 'sample-code' folder
+located at https://github.com/krlawrence/graph/tree/master/sample-code that
+demonstrates these constructs being used.
+
+The tables below show some commonly used Gremlin keywords in the left column. The
+second column shows how you would reference those same keywords explicitly from a
+Java program. The third column shows an example of the context in which they might be
+used in a Java program. You may chose to statically import some of these classes into
+your code. I prefer to use the explicit prefix but that is a matter of personal
+preference in many cases. There is a table of all the available predicates in the
+"<<tranges>>" section. For the special +++".__"+++ class I have just shown a few
+examples. In general you use this prefix when you have nothing prior in the query
+that you can "dot chain" to.
+
+If you need to specify how a property value should be treated when added to a vertex
+you can use one of the keywords defined as part of the 'Cardinality' enum
+which is part of the 'VertexProperty' interface.
+
+.Cardinality
+[cols="1,1,3"]
+|==============================================================================
+|single  | Cardinality.local | property(Cardinality.single,"mykey","ABC")
+|list    | Cardinality.list  | property(Cardinality.list,"mykey","ABC")
+|set     | Cardinality.set   | property(Cardinality.set,"mykey","ABC")
+|==============================================================================
+
+When local scope needs to be specified as a parameter of sort order direction needs
+to be specified the statics defined in the  'Scope' and 'Order' Enums can be used.
+
+NOTE: The 'Order.incr' and 'Order.decr' enumerations were deprecated in the TinkerPop
+3.3.4 release in favor of 'Order.asc' and 'Order.desc' to bring the keywords more
+into line with other commonly used query languages. As of TinkerPop 3.5.0, 'incr' and
+'decr' were removed from the Gremlin query language altogether.
+
+.Scope and ordering
+[cols="1,1,3"]
+|==============================================================================
+|local   | Scope.local    | order(Scope.local)
+|global  | Scope.global   | order(Scope.global)
+|desc    | Order.desc     | order().by(Order.desc)
+|decr    | Order.decr     | order().by(Order.decr)  [Deprecated since 3.3.4, removed
+in 3.5.0]
+|asc     | Order.asc      | order().by(Order.asc)
+|incr    | Order.incr     | order().by(Order.incr)  [Deprecated since 3.3.4, removed
+in 3.5.0]
+|shuffle | Order.shuffle  | order().by(Order.shuffle)
+|==============================================================================
+
+If you need to access the keys or values from a map data structure you can use the
+statics defined in the 'Column' enum.
+
+.Keys and values
+[cols="1,1,3"]
+|==============================================================================
+|keys    | Column.keys    | order().by(Column.keys)
+|values  | Column.values  | order().by(Column.values)
+|==============================================================================
+
+When accessing the 'id' and 'label' values from a 'valueMap' you need to use the
+statics defined in the 'T' Enum. The same is true if you want to access the keys and
+values from a set of properties.
+
+.Label and id
+[cols="1,1,3"]
+|==============================================================================
+|label   | T.label        | valueMap(true).next().get(T.label)
+|id      | T.id           | valueMap(true).next().get(T.id)
+|key     | T.key          | properties().order().by(T.key)
+|value   | T.value        | properties().order().by(T.value)
+|==============================================================================
+
+When there is no previous step to "dot chain" to then we can use the +++".__"+++
+class as our prefix. If you look at the javadoc for the class you will see it defines
+static methods that we can use to call Gremlin functionality in cases like the ones
+shown below.
+
+.Anonymous references
+[cols="1,1,3"]
+|==============================================================================
+|out     | +++__+++.out         | repeat(+++__+++.out())
+|in      | +++__+++.in          | order().by(+++__+++.in("contains"))
+|constant| +++__+++.constant    | union(+++__+++.constant("b"),+++__+++.constant("a"))
+|==============================================================================
+
+Whenever we need to use a predicate to perform a test, we can use the static methods
+defined in the 'P' class. Not all the methods defined are shown below.
+
+.Predicates
+[cols="1,1,3"]
+|==============================================================================
+|gt      | P.gt           | has("runways",P.gt(3))
+|gte     | P.gte          | has("runways",P.gte(5))
+|lt      | P.lt           | has("runways",P.lt(2))
+|lte     | P.lte          | has("runways",P.lte(2))
+|eq      | P.eq           | has("city",P.eq("Dallas"))
+|neq     | P.neq          | has("city",P.neq("Dallas"))
+|within  | P.within       | has("city",P.within("Dallas","Austin"))
+|without | P.without      | has("city",P.without("Dallas"))
+|inside  | P.inside       | has("runways",P.inside(3,5))
+|outside | P.outside      | has("runways",P.outside(2,5))
+|between | P.between      | has("runways",P.between(2,5))
+|==============================================================================
+
+The Apache TinkerPop release 3.4 introduced some new text predicates and a new TextP
+class.
+
+.Text Predicates
+[cols="1,1,3"]
+|==============================================================================
+|startingWith    | TextP.startingWith     | has("city",TextP.startingWith("Dal"))
+|endingWith      | TextP.endingWith       | has("city",TextP.endingWith("as"))
+|containing      | TextP.containing       | has("city",TextP.containing("all"))
+|notStartingWith | TextP.notStartingWith  | has("city",TextP.notStartingWith("Dal"))
+|notEndingWith   | TextP.notEndingWith    | has("city",TextP.notEndingWith("as"))
+|notContaining   | TextP.notContaining    | has("city",TextP.notContaining("all"))
+|==============================================================================
+
+If a traversal path has multiple values associated with a single label, such as '"x"'
+then you can use the 'first', 'last' , 'all' and 'mixed' statics that are defined as
+part of the 'Pop' Enum. As the name suggest, 'first' returns the first item in a
+collection. Specifying 'last' returns the last item and 'all' returns all of the
+items in a collection. Specifying 'mixed' will return a 'List' if the collection has
+more than one item. Otherwise an 'Object' will be returned.
+
+.First, last, all and mixed
+[cols="1,1,3"]
+|==============================================================================
+|first   | Pop.first      | select(Pop.first,"x")
+|last    | Pop.last       | select(Pop.last,"x")
+|all     | Pop.all        | select(Pop.all,"x")
+|mixed   | Pop.mixed      | select(Pop.mixed,"x")
+|==============================================================================
+
+When working with a 'sack' the operators like 'sum' and 'assign' are defined in the
+'Operator' Enum.
+
+.Operators
+[cols="1,1,3"]
+|==============================================================================
+|sum     | Operator.sum   |sack(Operator.sum)
+|minus   | Operator.minus |sack(Operator.minus)
+|mult    | Operator.mult  |sack(Operator.mult)
+|div     | Operator.div   |sack(Operator.div)
+|assign  | Operator.assign|sack(Operator.assign).by(constant(0))
+|min     | Operator.min   |sack(Operator.min)
+|max     | Operator.max   |sack(Operator.max)
+|addAll  | Operator.addAll|sack(Operator.addAll)
+|and     | Operator.and   |sack(Operator.and)
+|or      | Operator.or    |sack(Operator.or)
+|==============================================================================
+
+The 'Direction' Enum defines constants that are used in association with edge
+direction.
+
+.Direction
+[cols="1,1,3"]
+|==============================================================================
+|IN      | Direction.IN   | myEdge.vertices(Direction.IN)
+|OUT     | Direction.OUT  | myEdge.vertices(Direction.OUT)
+|BOTH    | Direction.BOTH | myEdge.vertices(Direction.BOTH)
+|==============================================================================
+
+
+The 'Pick' Enum defines constants that are used in association with the 'branch',
+`choose` and `option` steps.
+
+.Pick
+[cols="1,1,3"]
+|==============================================================================
+|none    | Pick.none      | option(none,constant('no match'))
+|any     | Pick.any       | option(any,constant('any picked'))
+|==============================================================================
+
+
+Another useful tip, that was shared on the Gremlin Users mailing list, is that you
+can ask the Gremlin Console to show you a list of everything that has been imported
+on your behalf "behind the scenes" using the command ':show imports'. What might
+typically be returned is shown below. I included a version check in the output so in
+case this changes in the future you can see which version of Gremlin I queried.
+
+[source,groovy]
+----
+gremlin> Gremlin.version
+==>3.4.10
+----
+
+Here is the list of imports that the Gremlin Console has setup for us quietly behind
+the scenes when we started it. Take particular note of the ones that are 'static'
+imports as those are the ones that contain the definitions we discussed above.
+
+[source,groovy]
+----
+gremlin> :show imports
+Custom imports:
+  org.apache.tinkerpop.gremlin.structure.*
+  org.apache.tinkerpop.gremlin.structure.util.*
+  org.apache.tinkerpop.gremlin.structure.util.reference.*
+  org.apache.tinkerpop.gremlin.process.traversal.*
+  org.apache.tinkerpop.gremlin.process.traversal.step.*
+  org.apache.tinkerpop.gremlin.process.traversal.step.util.*
+  org.apache.tinkerpop.gremlin.process.remote.*
+  org.apache.tinkerpop.gremlin.structure.util.empty.*
+  org.apache.tinkerpop.gremlin.structure.io.*
+  org.apache.tinkerpop.gremlin.structure.io.graphml.*
+  org.apache.tinkerpop.gremlin.structure.io.graphson.*
+  org.apache.tinkerpop.gremlin.structure.io.gryo.*
+  org.apache.commons.configuration.*
+  org.apache.tinkerpop.gremlin.process.traversal.strategy.decoration.*
+  org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.*
+  org.apache.tinkerpop.gremlin.process.traversal.strategy.finalization.*
+  org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.*
+  org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.*
+  org.apache.tinkerpop.gremlin.process.traversal.util.*
+  org.apache.tinkerpop.gremlin.process.computer.*
+  org.apache.tinkerpop.gremlin.process.computer.traversal.step.map.*
+  org.apache.tinkerpop.gremlin.process.computer.clustering.connected.*
+  org.apache.tinkerpop.gremlin.process.computer.clone.*
+  org.apache.tinkerpop.gremlin.process.computer.bulkdumping.*
+  org.apache.tinkerpop.gremlin.process.computer.bulkloading.*
+  org.apache.tinkerpop.gremlin.process.computer.clustering.peerpressure.*
+  org.apache.tinkerpop.gremlin.process.computer.traversal.*
+  org.apache.tinkerpop.gremlin.process.computer.ranking.pagerank.*
+  org.apache.tinkerpop.gremlin.process.computer.search.path.*
+  org.apache.tinkerpop.gremlin.process.computer.traversal.strategy.optimization.*
+  org.apache.tinkerpop.gremlin.process.computer.traversal.strategy.decoration.*
+  org.apache.tinkerpop.gremlin.util.*
+  org.apache.tinkerpop.gremlin.util.iterator.*
+  org.apache.tinkerpop.gremlin.util.function.*
+  java.util.*
+  java.sql.*
+  static org.apache.tinkerpop.gremlin.structure.io.IoCore.*
+  static org.apache.tinkerpop.gremlin.process.traversal.P.*
+  static org.apache.tinkerpop.gremlin.process.traversal.AnonymousTraversalSource.*
+  static org.apache.tinkerpop.gremlin.process.traversal.TextP.*
+  static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.*
+  static org.apache.tinkerpop.gremlin.process.computer.Computer.*
+  static org.apache.tinkerpop.gremlin.util.TimeUtil.*
+  static org.apache.tinkerpop.gremlin.util.function.Lambda.*
+  static org.apache.tinkerpop.gremlin.process.traversal.SackFunctions.Barrier.*
+  static org.apache.tinkerpop.gremlin.structure.VertexProperty.Cardinality.*
+  static org.apache.tinkerpop.gremlin.structure.Column.*
+  static org.apache.tinkerpop.gremlin.structure.Direction.*
+  static org.apache.tinkerpop.gremlin.process.traversal.Operator.*
+  static org.apache.tinkerpop.gremlin.process.traversal.Order.*
+  static org.apache.tinkerpop.gremlin.process.traversal.Pop.*
+  static org.apache.tinkerpop.gremlin.process.traversal.Scope.*
+  static org.apache.tinkerpop.gremlin.structure.T.*
+  static org.apache.tinkerpop.gremlin.process.traversal.step.TraversalOptionParent.Pick.*
+  org.apache.tinkerpop.gremlin.driver.*
+  org.apache.tinkerpop.gremlin.driver.exception.*
+  org.apache.tinkerpop.gremlin.driver.message.*
+  org.apache.tinkerpop.gremlin.driver.ser.*
+  org.apache.tinkerpop.gremlin.driver.remote.*
+  org.apache.tinkerpop.gremlin.tinkergraph.structure.*
+  org.apache.tinkerpop.gremlin.tinkergraph.process.computer.*
+----
+
+As discussed earlier, you can always use the 'getClass' method or simply '.class'
+while using the Gremlin Console to, in many cases, find out where something is
+defined. As we saw in the examples earlier in this section, lot of the keywords such
+as  'values', 'id' and 'local' are defined as Enums so you can use 'getClass' on them
+directly. A few examples are shown below.
+
+[source,groovy]
+----
+gremlin> label.getClass()
+==>class org.apache.tinkerpop.gremlin.structure.T$1
+gremlin> key.getClass()
+==>class org.apache.tinkerpop.gremlin.structure.T$3
+gremlin> keys.getClass()
+==>class org.apache.tinkerpop.gremlin.structure.Column$1
+gremlin> values.getClass()
+==>class org.apache.tinkerpop.gremlin.structure.Column$2
+gremlin> local.getClass()
+==>class org.apache.tinkerpop.gremlin.process.traversal.Scope
+gremlin> Order.class
+==>class org.apache.tinkerpop.gremlin.process.traversal.Order
+gremlin> Column.class
+==>class org.apache.tinkerpop.gremlin.structure.Column
+----
+
+If you compare this output to the tables above you can see that we have been able to
+verify that, for example, that 'label' and 'key' are defined in the 'T' Enum. We can
+also see that 'keys' and 'values' are indeed defined in the 'Column' Enum. Lastly, we
+can see that 'local' is, as we expected, defined in the 'Scope' Enum.
+
+[[javapredicates]]
+Using Gremlin predicates in a Java application
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+As discussed in the previous section, when you use a Gremlin predicate such as 'eq'
+or 'neq' from a Java program you need to prefix it with a '"P."' which is a reference
+to the TinkerPop class of the same name where a set of static methods, representing
+the Gremlin predicates, are defined.
+
+TIP: You will find a sample program called GraphRegion.java, which contains the code
+used in this section, in the sample files directory located at
+https://github.com/krlawrence/graph/tree/master/sample-code.
+
+Take a look at the code below. A method called 'findByRegion' is defined that takes
+a String representing a three character airport IATA code as input. The method then
+uses a Gremlin query to figure out which geographical region the specified airport is
+in and then returns all airports also in that region. Note the use of 'P.eq' as part
+of the 'where' step. This is another case of where, because we are not running inside
+the Gremlin console, we have to more precisely specify things.
+
+[source,java]
+----
+// Find all airports in the region of the specified airport
+public void findByRegion(String iata)
+{
+  System.out.println("\nRegion code lookup for " + iata );
+
+  List<List<Object>> list =
+  g.V().has("code",iata).values("region").as("r").
+    V().hasLabel("airport").as("a").values("region").
+        where(P.eq("r")).by().
+        local(__.select("a").values("city","code","region").fold()).toList();
+
+  for(List t : list)
+  {
+    System.out.println(t);
+  }
+}
+----
+
+If we were to call the 'findByRegion' method, passing in a parameter of 'DEN',
+representing the airport in Denver Colorado, the following output should be returned.
+
+[source,console]
+----
+Region code lookup for DEN
+[COS, Colorado Springs, US-CO]
+[DEN, Denver, US-CO]
+[DRO, Durango, US-CO]
+[GJT, Grand Junction, US-CO]
+[EGE, Eagle, US-CO]
+[HDN, Hayden, US-CO]
+[APA, Denver, US-CO]
+[TEX, Telluride, US-CO]
+[ASE, Aspen, US-CO]
+[ALS, Alamosa, US-CO]
+[CEZ, Cortez, US-CO]
+[GUC, Gunnison, US-CO]
+[MTJ, Montrose, US-CO]
+[PUB, Pueblo, US-CO]
+----
+
+
+[[javacheck]]
+Checking to see if a query returned a result
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+It is often important to know if a query returned a result before trying to reference
+it to avoid those pesky Java Null Pointer Exceptions. Without worrying about Java for
+a second consider the query below purely from a Gremlin point of view.
+
+[source,groovy]
+----
+g.V().has("code","AUS").outE().as("edge").inV().has("code","SYD").
+                        select("edge").by("dist")
+----
+
+The query finds the Austin (AUS) airport and then looks for an outgoing edge
+connecting Austin with Sydney (SYD) and then returns the distance value from that
+edge. The problem here is that there is no direct route between Austin and Sydney and
+therefore no edge to retrieve the distance from. In other words, this query returns no
+result. Now, within the Gremlin Console this is not a problem as we just get nothing
+back and life goes on. However, take a look at the code below which is a first
+attempt at moving the query into Java code.
+
+
+[source,java]
+----
+Long result =
+      g.V().has("code","AUS").outE().as("edge").inV().has("code","SYD").
+            select("edge").by("dist").next();
+----
+
+On the surface, this looks fine. However, were we to execute this code we would get a
+Null Pointer Exception as when we try to call 'next' there is no result to process as
+there is no edge between Austin and Sydney and hence no distance value to process.
+
+TIP: You will find a sample program called GraphSearch2.java, which contains the code
+used in this section, in the sample files directory located at
+https://github.com/krlawrence/graph/tree/master/sample-code.
+
+
+So we need a way to check to see if we go a valid result. One such way is to store
+the result of the query into a list. Then, worst case, if no results are found, we
+will get an empty list back. So, we can rewrite the query as follows.
+
+[source,java]
+----
+List result =
+      g.V().has("code","AUS").outE().as("edge").inV().has("code","SYD").
+            select("edge").by("dist").toList();
+----
+
+Now that the result is in a list we can safely check to see if we got any results.
+
+[source,java]
+----
+if (result.isEmpty())
+{
+  System.out.println("No results were found");
+}
+else
+{
+  System.out.println("The distance is " + result.get(0));
+}
+----
+
+
+If we wanted a "pure Gremlin" solution, without using a List and without doing some
+post processing, one way we could do it is to use the 'coalesce' step and return a
+special constant value, in this case minus one, to indicate that there were no
+results found.
+
+[source,java]
+----
+Integer d = (Integer)
+    g.V().has("code","AUS").outE().as("edge").inV().has("code","SYD").
+          select("edge").by("dist").fold().
+          coalesce(__.unfold(),__.constant(-1)).next();
+----
+
+If the route exists the distance will be found and returned, otherwise a value of
+'"-1"' will be returned. This is really using the same concept as the 'toList'
+example except in this case we generate the list using the 'fold' step within the
+query itself. The 'unfold' will return a result if the list is not null, otherwise
+the constant value will be returned as 'coalesce' returns the first to yield a
+result.
+
+There are of course many other ways that you might come up with to solve this problem
+but using lists often provides a fairly easy to use solution.
+
+[[javacreate]]
+Creating a new graph from a Java application
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The code below creates a new (empty) TinkerGraph instance, creates a graph traversal
+source object and then uses a traversal to create a small graph.
+
+TIP: The full source code for this sample can be found in the file CreateGraph.java
+located at https://github.com/krlawrence/graph/tree/master/sample-code
+
+Note the call to 'iterate()' at the end of the traversal. When running as a
+standalone application this is necessary. This is another of those little things that
+the Gremlin Console does for you without you realizing it that we have to remember to
+do ourselves when not running inside the console.
+
+[source,java]
+----
+// Create a new (empty) TinkerGrap
+TinkerGraph tg = TinkerGraph.open() ;
+
+// Create a Traversal source object
+GraphTraversalSource g = tg.traversal();
+
+// Add some nodes and vertices - Note the use of "iterate".
+g.addV("airport").property("code","AUS").as("aus").
+  addV("airport").property("code","DFW").as("dfw").
+  addV("airport").property("code","LAX").as("lax").
+  addV("airport").property("code","JFK").as("jfk").
+  addV("airport").property("code","ATL").as("atl").
+  addE("route").from("aus").to("dfw").
+  addE("route").from("aus").to("atl").
+  addE("route").from("atl").to("dfw").
+  addE("route").from("atl").to("jfk").
+  addE("route").from("dfw").to("jfk").
+  addE("route").from("dfw").to("lax").
+  addE("route").from("lax").to("jfk").
+  addE("route").from("lax").to("aus").
+  addE("route").from("lax").to("dfw").iterate();
+----
+
+Having created a new graph we can run some queries to make sure it looks correct.
+Firstly, let's check that the vertices were created and look at the IDs that were
+allocated to them. As with prior examples, a call to 'valueMap' with a parameter of
+'true' will return what we need. What we will get back from this code is a list of
+maps, with each map containing keys for the airport code, the vertex ID and the
+vertex label.
+
+[source,java]
+----
+List<Map<Object,Object>> vm = new ArrayList<Map<Object,Object>>() ;
+
+vm = g.V().valueMap(true).toList();
+----
+
+Having got our list of maps back we can process them. Note that to get the 'id' and
+'label' values from the map I had to prefix the key name with a '"T."'. This is
+because while most of property keys are Strings, IDs and labels are a special case.
+If you look at the TinkerPop documentation you will see that T is a Java Enum that
+contains definitions for 'T.id', 'T.label', 'T.value' and 'T.key'. When working with
+Gremlin in Java it is important to remember that we need to use the '"T."' prefix in
+cases where when using the Gremlin Console we would not have to.
+
+[source,java]
+----
+// Dislpay the code property as well as the label and id.
+for( Map m : vm)
+{
+  System.out.println(((List)(m.get("code"))).get(0) + " " +
+                             m.get(T.id) + " " + m.get(T.label));
+}
+----
+
+If all has gone well during graph creation, we should get back a list like the one
+below that shows us the ID that has been given to each vertex.
+
+[source,java]
+----
+AUS 0 airport
+DFW 2 airport
+LAX 4 airport
+JFK 6 airport
+ATL 8 airport
+----
+
+Finally, let's check that the edges were created correctly by displaying all of the
+paths between vertices in our new graph.
+
+[source,java]
+----
+// Display the routes in the graph we just created
+
+List<Path> paths = new ArrayList<Path>();
+
+paths = g.V().out().path().by("code").toList();
+
+for (Path p : paths)
+{
+  System.out.println(p.toString());
+}
+----
+
+Once again, if everything has worked as expected, here is what we should get back.
+
+[source,java]
+----
+[AUS, DFW]
+[AUS, ATL]
+[DFW, JFK]
+[DFW, LAX]
+[LAX, JFK]
+[LAX, AUS]
+[LAX, DFW]
+[ATL, DFW]
+[ATL, JFK]
+----
+
+[[javasave]]
+Saving a graph from a Java application
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Having created our new graph, we may want to save it. The code below shows how to
+save the graph as either GraphSON (TinkerPop's JSON format) or as GraphML (XML). This
+is another instance where we have to do a bit more work as we are running in a
+standalone program and not inside the Gremlin Console. Our attempts to save our data
+have to catch any exceptions that may occur. This code is also included as part of
+the CreateGraph.java sample program.
+
+[source,java]
+----
+// Save the graph we just created as GraphML (XML) or GraphSON (JSON)
+try
+{
+  // If you want to save the graph as GraphML uncomment the next line
+  tg.io(IoCore.graphml()).writeGraph("mygraph.graphml");
+
+  // If you want to save the graph as JSON uncomment the next line
+  tg.io(IoCore.graphson()).writeGraph("mygraph.json");
+}
+catch (IOException ioe)
+{
+  System.out.println("Graph failed to save");
+}
+----
+
+[[groovyapp]]
+Working with TinkerGraph from a Groovy application
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Earlier in this book, in the "<<grv>>" section we explored the ways that you can
+use Groovy code within the Gremlin Console. However, we have not yet looked at how
+you can use a standalone Groovy application to work with a TinkerGraph.
+
+NOTE: You will find several Groovy samples at the GitHub repository associated with
+this book. https://github.com/krlawrence/graph
+
+In this section we will rewrite parts of the test application we coded in Java
+earlier in Groovy. A lot of what was covered in the "<<javatinker>>" section is
+equally relevant here and I have not duplicated that material. So even if you are
+writing a Groovy application please also give that section a read.
+
+TIP: The examples in this section are taken from a sample program called
+TinkerGraphTest.groovy that you will find in the sample code folder located at
+https://github.com/krlawrence/graph/tree/master/sample-code.
+
+It is assumed that you have downloaded and installed Groovy for your environment and
+have set the PATH to point to wherever the Groovy binaries are located. Just as in
+the Java example, the first thing we need to do is pull in via 'import' all of the
+TinkerPop 3 classes that our program will use.
+
+[source,groovy]
+----
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
+import org.apache.tinkerpop.gremlin.process.traversal.Path;
+import org.apache.tinkerpop.gremlin.process.traversal.*;
+import org.apache.tinkerpop.gremlin.structure.Edge;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
+import org.apache.tinkerpop.gremlin.structure.io.IoCore;
+import org.apache.tinkerpop.gremlin.tinkergraph.structure.*;
+import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph;
+import org.apache.tinkerpop.gremlin.util.Gremlin;
+import java.io.IOException;
+----
+
+Having imported the classes we need, we can make a start on our application.
+Initially we are just going to display the version of TinkerPop that we are using.
+
+[source,groovy]
+----
+println "The Gremlin version is ${Gremlin.version()}"
+
+def tg = TinkerGraph.open()
+----
+
+We are now ready to create a new TinkerGraph instance and try to load the air routes
+graph. We can do this in Groovy just like we did in the Java example. Unlike Java,
+however, Groovy does not require you to catch exceptions that may get thrown but as a
+best practice it is probably a good idea to still do so when you need to take some
+specific action if an exception does happen.
+
+[source,groovy]
+----
+println "Loading the air-routes graph...\n"
+
+// Load the air-routes graph
+try
+{
+  tg.io(IoCore.graphml()).readGraph("air-routes.graphml");
+}
+catch (IOException e)
+{
+  println "Could not load the graph file"
+  System.exit(0);
+}
+----
+
+Assuming we did not get an exception we can go ahead and create our graph traversal
+object.
+
+[source,groovy]
+----
+// Create a graph traversal source object and find the Austin airport vertex
+def g = tg.traversal()
+----
+
+First we just do a simple query to find the vertex representing the AUS airport and
+use 'println' to display some information about it.
+
+[source,groovy]
+----
+def aus = g.V().has('code','AUS').valueMap().next()
+
+println aus
+----
+
+NOTE: Just as when we were looking at building a Java application, you need to
+terminate your query with a step such as 'next', 'toList' or 'fill' to make sure you
+get back the results that you expect.
+
+Now we have the beginnings of an application it's time to make sure we can compile
+it. The key thing we need to do is make sure we pickup the TinkerPop specific JAR
+files as shown in the next section.
+
+[[groovyc]]
+Compiling our Groovy application
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In the Java example, I included the CLASSPATH on the 'javac' invokation using the
+'-cp' flag. That can also be done when using Groovy, however, if you are using
+Microsoft Windows as your build environment you may find that using '-cp' gives
+unexpected errors. Therefore, it is recommended to define the CLASSPATH variable in
+your environment before running the Groovy compiler.
+
+The commands below work in a Bash shell but could be easily ported to other
+environments. The GREMLIN variable should point to wherever you have installed and
+unzipped the Gremlin Console download
+
+----
+# Root directory for Gremlin Console install
+GREMLIN=...
+
+# Path to Gremlin core JARs
+LIBPATH=$GREMLIN/lib/*
+
+# Path to TinkerGraph JARs
+EXTPATH=$GREMLIN/ext/*
+
+#Path to additional JARs
+ADDL=$GREMLIN/ext/tinkergraph-gremlin/lib/*
+
+# Classpath
+export CLASSPATH=$CLASSPATH:$LIBPATH:$EXTPATH:$ADDL
+
+# Compile
+groovyc TinkerGraphTest.groovy
+----
+
+Running our Groovy application
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Assuming everything compiled cleanly we can now run our Groovy application.
+
+[source,groovy]
+----
+groovy TinkerGraphTest
+----
+
+And here is the sort of output we should get back.
+
+[source,groovy]
+----
+Gremlin version is 3.3.1
+Loading the air-routes graph...
+
+[country:[US], code:[AUS], longest:[12250], city:[Austin], elev:[542], icao:[KAUS], lon:[-97.6698989868164], type:[airport], region:[US-TX], runways:[2], lat:[30.1944999694824], desc:[Austin Bergstrom International Airport]]
+----
+
+Now that we have a small skeleton of a test program running, we can start to add a
+few more interesting features to it.
+
+
+Adding to our Groovy application
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The code below demonstrates how to work with the 'valueMap' for the Austin vertex
+that we created a few lines back in our program.
+
+[source,groovy]
+----
+// Retieve the city name property and display it
+def city = aus['city']
+println "\nThe AUS airport is in ${city[0]}\n"
+
+// Iterate through the keys we got back and print them along with their values
+aus.each {println "${it.key} : ${it.value[0]}"}
+----
+
+If we were to re-compile and run our program now, the lines that we added will
+generate the following output.
+
+[source,groovy]
+----
+The AUS airport is in Austin
+
+country : US
+code : AUS
+longest : 12250
+city : Austin
+elev : 542
+icao : KAUS
+lon : -97.6698989868164
+type : airport
+region : US-TX
+runways : 2
+lat : 30.1944999694824
+desc : Austin Bergstrom International Airport
+----
+
+As we did in our Java program earlier, we can add a query to see how many routes
+there are that originate at the DFW airport.
+
+[source,groovy]
+----
+def n = g.V().has("code","DFW").out().count().next()
+println "\nThere are  ${n} routes from Dallas"
+
+There are  221 routes from Dallas
+----
+
+Next we can add some code to find the IATA codes representing the places that we can
+fly to from DFW.
+
+[source,groovy]
+----
+// Where can I fly to from DFW?
+def fromDfw = g.V().has("code","DFW").out().values("code").toList()
+println "\nHere are the places you can fly to from DFW\n"
+println fromDfw
+----
+
+When we run the code we should get back some results that look like this.
+
+[source,groovy]
+----
+Here are the places you can fly to from DFW
+
+[CID, HNL, HOU, SAN, SNA, SLC, LAS, DEN, SAT, MSY, EWR, DTW, ELP, SJU, CLE, OAK, TUS, SAF, PHL, GEG, BZN, JAC, GCM, MEI, PIB, KOA, SUX, SBA, ASE, CVN, BKG, BIS, GUC, MTJ, TVC, CNM, GLH, SWO, BIL, MAF, BDL, RAP, SDF, SHV, BOI, LBB, RNO, CMH, ICT, ACT, CLL, ABI, SGF, RIC, CCS, TXK, PIA, LEX, GUA, CRP, MTY, AMA, BJX, BMI, BOG, BPT, DSM, MYR, AEX, CZM, AGU, COU, DAY, CUU, DRO, BRO, BTR, BZE, CAE, CHA, CHS, CMI, GCK, GDL, GGG, GJT, GPT, EVV, FAR, FAT, FSD, FSM, FWA, JAN, JLN, YYZ, LAW, YVR, LCH, LHR, LFT, CDG, LIR, GRI, GRK, GRR, GSO, GSP, MLI, PEK, MLM, PVG, MLU, FCO, MOB, AMS, MSN, MAD, MZT, RSW, PBC, FRA, LRD, NRT, MFE, SYD, MGM, DXB, MHK, HKG, QRO, ICN, ROW, GIG, SAL, GRU, SAV, EZE, SJD, LIM, SJT, SCL, SLP, MEX, SPI, YUL, PLS, YEG, PNS, YYC, PTY, DOH, OKC, TYS, ONT, VPS, AUH, XNA, CLT, ZCL, CUN, EGE, PSP, HDN, MEM, UIO, CVG, MID, TYR, ATL, ANC, TLH, SPS, PIT, TRC, PDX, ABQ, MKE, OMA, TUL, PVR, OGG, DUS, LGA, NAS, STL, JFK, LAX, AUS, IND, MGA, BNA, MCI, BOS, BWI, DCA, FLL, IAD, IAH, JAX, PUJ, SJO, SMF, RTB, COS, SJC, HSV, TPA, BHM, LIT, ORF, SFO, MCO, MBJ, MIA, MSP, ORD, PBI, PHX, RDU, SEA]
+----
+
+The code below will discover all of the airports in the United States that you can
+fly to from London's Heathrow airport (LHR). Only the first 10 results are selected
+using a 'limit' step. A 'path' step is used to nicely return the airport pairs and
+the distance between them. What we get back is a list of paths so we can use a simple
+Groovy 'each' loop to print the results.
+
+[source,groovy]
+----
+def lhrToUsa = g.V().has("code","LHR").outE().inV().
+                     has("country","US").limit(10).
+                     path().by("code").by("dist").toList()
+
+println "\nFrom LHR to airports in the USA (only 10 shown)\n"
+
+lhrToUsa.each {println it}
+----
+
+Here are the 10 routes that were returned when I ran the code having added this new
+query.
+
+[source,groovy]
+----
+From LHR to airports in the USA (only 10 shown)
+
+[LHR, 4896, PDX]
+[LHR, 3980, CLT]
+[LHR, 4198, ATL]
+[LHR, 4901, AUS]
+[LHR, 3254, BOS]
+[LHR, 3622, BWI]
+[LHR, 4736, DFW]
+[LHR, 3665, IAD]
+[LHR, 4820, IAH]
+[LHR, 3440, JFK]
+----
+
+Finally, lets write the code to find the airports in England that you can get to from
+Austin with no more than one stop.
+
+[source,groovy]
+----
+def eng = g.V().has("code","AUS").repeat(__.out()).emit().times(2).
+                has("region","GB-ENG").dedup().values("code").toList();
+
+println "\nAirports in England reachable with no more than one stop from AUS"
+println "\n${eng}\n"
+----
+
+Here are the results, looks like we can get to a total of nine different airports if
+we make no more than one stop on the way.
+
+[source,groovy]
+----
+Airports in England reachable with no more than one stop from AUS
+
+[LHR, BRS, LGW, STN, MAN, BHX, LBA, NCL, LCY]
+----
+
+Now that we have a somewhat interesting Groovy application up and running, should you
+so choose, you can build upon this foundation just as we did in the "<<javatinker>>"
+section.
+
+
+[[groovypredicates]]
+Using Gremlin predicates in a Groovy application
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Just as we had to do when writing a standalone Java application, when you use a
+Gremlin predicate such as 'eq' or 'neq' from a Groovy program you need to prefix it
+with a '"P."' which references the TinkerPop class of the same name where a
+set of static methods, representing the Gremlin predicates, are defined.
+
+TIP: You will find a sample program called GraphRegion.groovy, which contains the
+code used in this section, in the sample files directory located at
+https://github.com/krlawrence/graph/tree/master/sample-code.
+
+In the code below, the 'findByRegion' method that we wrote in Java earlier has been
+ported to Groovy. As before a String representing a three character airport IATA code
+is expected as input. The method then uses a Gremlin query to figure out which
+geographical region the specified airport is in and then returns all airports also in
+that region. Once again, note the use of 'P.eq' as part of the 'where' step.
+
+[source,groovy]
+----
+def findByRegion(iata)
+{
+  println("\nRegion code lookup for " + iata )
+
+  def list =
+    g.V().has("code",iata).values("region").as("r").
+      V().hasLabel("airport").as("a").values("region").
+          where(P.eq("r")).by().
+          local(__.select("a").values("city","code","region").fold()).toList()
+
+  list.each {println it}
+}
+----
+
+[[janusintro]]
+Introducing JanusGraph
+~~~~~~~~~~~~~~~~~~~~~~~
+
+So far we have been using the TinkerGraph graph that is included with Apache
+TinkerPop in our examples. Once you move beyond learning about Gremlin and its
+related technologies and moving towards a production deployment, you will need a
+graph store that provides capabilities such as reliable persistence, the ability to
+define schemas and support for ACID transactions. The JanusGraph project, which
+began in 2016 as an open source fork of the popular Titan graph database, is hosted by
+the Linux Foundation and provides these advanced capabilities.
+
+In this book I have attempted to provide a reasonable amount of JanusGraph
+coverage but it is still recommended to become familiar with the official
+JanusGraph documentation where you will find more in depth discussions of advanced
+topics and explanations of the many settings that you can manipulate to suit your
+needs.
+
+JanusGraph can run on a laptop, which is useful for learning and experimenting, but
+it is designed to handle very large graphs stored on distributed clusters. It can
+handle graphs containing billions of vertices and edges. As we shall discuss, JanusGraph
+is designed to work with a variety of persistent storage options including
+Apache Cassandra and Apache HBase as well as indexing technology such as Apache Solr
+and Elasticsearch.
+
+.Here are some useful JanusGraph resources
+Runtime download (JAR files and more)::
+http://janusgraph.org/
+Documentation::
+http://docs.janusgraph.org/latest/.
+API Documentation::
+http://docs.janusgraph.org/latest/javadoc.html
+http://javadoc.io/doc/org.janusgraph/janusgraph-core/0.2.0
+
+In the following sections we will take an in depth look at JanusGraph and other
+technologies that, when combined, provide a way to build and deploy a massively
+scalable graph database solution. We will start by quickly looking at how to install
+JanusGraph and access it from the Gremlin Console before getting into more advanced
+topics including how to create and manage both schemas and indexes and how to use the
+transactional capabilities provided by JanusGraph.
+
+It is also recommended that you read and get familiar with the official JanusGraph
+documentation as well as reading what is presented below.
+
+[[janusinstall]]
+Installing JanusGraph
+^^^^^^^^^^^^^^^^^^^^^
+
+JanusGraph itself is very easy to install. You just have to download the ZIP file
+and unzip it into a convenient location. Having done that you can immediately begin
+to experiment with it if you use the 'inmemory' option which is explained more in the
+<<janusinmemory>> section below. However, for a production deployment you will
+probably be using JanusGraph in conjunction with some sort of persistent storage, an
+indexing service and other components that will also have to be installed. We will
+get into that a bit later on. The download page has information regarding versions of
+related technologies like Apache Cassandra and Apache Solr that JanusGraph has been
+tested with.
+
+NOTE: It is important to remember that JanusGraph does not have its own process, it
+is not a delivered as a service that you run, rather it is a set of Java classes that
+have to be invoked either from your own code, the Gremlin Console hosted using
+something like Gremlin Server.
+
+The install package for JanusGraph is located at http://janusgraph.org/ and is a
+single ZIP file. Once you have it downloaded and unzipped you are ready to experiment
+using the Gremlin Console. As will be discussed below, when working with JanusGraph
+you must use the version of the Gremlin Console that is packaged as part of the
+JanusGraph download.
+
+[[janusconsole]]
+Using JanusGraph from the Gremlin Console
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+A version of the Gremlin Console is included as part of the JanusGraph download. The
+only major difference between this version of the console and the one you get as part
+of the standard Apache TinkerPop download is that the console has been preconfigured
+to recognize and find the JanusGraph specific classes. A good example of one such
+class is 'JanusGraphFactory' that is used from the Console to create a new JanusGraph
+instance.
+
+NOTE: When working with JanusGraph you must use the version of the Gremlin Console
+that is packaged as part of the JanusGraph download.
+
+As mentioned above, JanusGraph is not a standalone service, it is a set of Java
+classes that still need to be invoked by a calling process. The Gremlin Console can
+play that role. After you have unzipped JanusGraph you will find the `gremlin.sh` and
+`gremlin.bat` scripts in the `bin` directory under the JanusGraph parent directory. Once
+you have started the Gremlin Console you can, as we will explore in the next few
+sections, tell JanusGraph about the environment you will be operating in in terms of
+back end store and index.
+
+[[janusinmemory]]
+Using JanusGraph with the 'inmemory' option
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+For almost all production use cases, you will be using JanusGraph along with a
+persistent back end store such as Apache Cassandra or Apache HBase. However while
+experimenting with JanusGraph it is incredibly useful to be able to get up and
+running quickly without having to worry about configuring all of the back end storage
+components. This is made possible by the 'inmemory' option that JanusGraph
+provides. This essentially allows us to use JanusGraph in the same way as we have
+been using TinkerGraph with all of our graph data stored in the memory of the
+computer. The one big difference however is that JanusGraph, even while using the
+'inmemory' storage model, allows us to experiment with features that TinkerGraph does
+not offer, such as schemas and transactions. We will get into those topics a bit
+later on. First, let's create an instance of JanusGraph from the Gremlin console
+that uses the 'inmemory' storage model.
+
+Creating a JanusGraph instance is very similar to the way we created a TinkerGraph
+instance earlier in the book. The only difference is that we use the
+'JanusGraphFactory' to create the graph and in this case we specify 'inmemory' as the
+only parameter to tell JanusGraph that we want to use the all in memory storage
+model. We create our graph traversal object 'g' in just the same way as before.
+
+[source,groovy]
+----
+graph = JanusGraphFactory.open('inmemory')
+g = graph.traversal()
+----
+
+Note that the 'open' command above is a shorthand form of the command shown below.
+
+[source,groovy]
+----
+graph = JanusGraphFactory.build().set("storage.backend","inmemory").open()
+g = graph.traversal()
+----
+
+Now that we have a graph instance created, just like with TinkerGraph, we can query
+which features the graph supports. Earlier in the book in the "<<tgintro>>"
+section we looked at the features offered by TinkerGraph. If we compare those
+features to what JanusGraph offers we can spot some key differences.
+
+We can get the feature set back by calling the 'features' method as shown below. The
+first thing that stands out is that the various features that involve transactions
+are now set to 'true' indicating that JanusGraph supports transactions. We will take
+a look at how to use these transactional capabilities in the next section. Note that
+'Persistence' still shows as 'false' as we are using the 'inmemory' mode. Another
+thing to note is that, unlike with TinkerGraph, 'UserSuppliedIds' is set to false,
+indicating that JanusGraph will create its own ID values and ignore any that we
+provide. The list is formatted in two columns to aid readability.
+
+.JanusGraph features
+----
+graph.features()
+
+> GraphFeatures                            > VertexPropertyFeatures
+>-- Transactions: true                     >-- AddProperty: true
+>-- Computer: true                         >-- RemoveProperty: true
+>-- ConcurrentAccess: true                 >-- NumericIds: false
+>-- ThreadedTransactions: true             >-- StringIds: true
+>-- Persistence: false                     >-- UuidIds: false
+> VariableFeatures                         >-- CustomIds: true
+>-- Variables: true                        >-- AnyIds: false
+>-- LongValues: true                       >-- UserSuppliedIds: false
+>-- BooleanArrayValues: true               >-- Properties: true
+>-- ByteArrayValues: true                  >-- LongValues: true
+>-- DoubleArrayValues: true                >-- BooleanArrayValues: true
+>-- FloatArrayValues: true                 >-- ByteArrayValues: true
+>-- IntegerArrayValues: true               >-- DoubleArrayValues: true
+>-- StringArrayValues: true                >-- FloatArrayValues: true
+>-- LongArrayValues: true                  >-- IntegerArrayValues: true
+>-- StringValues: true                     >-- StringArrayValues: true
+>-- MapValues: true                        >-- LongArrayValues: true
+>-- MixedListValues: false                 >-- StringValues: true
+>-- SerializableValues: false              >-- MapValues: true
+>-- UniformListValues: false               >-- MixedListValues: false
+>-- BooleanValues: true                    >-- SerializableValues: false
+>-- ByteValues: true                       >-- UniformListValues: false
+>-- DoubleValues: true                     >-- BooleanValues: true
+>-- FloatValues: true                      >-- ByteValues: true
+>-- IntegerValues: true                    >-- DoubleValues: true
+> VertexFeatures                           >-- FloatValues: true
+>-- MetaProperties: true                   >-- IntegerValues: true
+>-- AddVertices: true                      > EdgePropertyFeatures
+>-- RemoveVertices: true                   >-- Properties: true
+>-- MultiProperties: true                  >-- LongValues: true
+>-- AddProperty: true                      >-- BooleanArrayValues: true
+>-- RemoveProperty: true                   >-- ByteArrayValues: true
+>-- NumericIds: true                       >-- DoubleArrayValues: true
+>-- StringIds: false                       >-- FloatArrayValues: true
+>-- UuidIds: false                         >-- IntegerArrayValues: true
+>-- CustomIds: false                       >-- StringArrayValues: true
+>-- AnyIds: false                          >-- LongArrayValues: true
+>-- UserSuppliedIds: false                 >-- StringValues: true
+> EdgeFeatures                             >-- MapValues: true
+>-- RemoveEdges: true                      >-- MixedListValues: false
+>-- AddEdges: true                         >-- SerializableValues: false
+>-- AddProperty: true                      >-- UniformListValues: false
+>-- RemoveProperty: true                   >-- BooleanValues: true
+>-- NumericIds: false                      >-- ByteValues: true
+>-- StringIds: false                       >-- DoubleValues: true
+>-- UuidIds: false                         >-- FloatValues: true
+>-- CustomIds: true                        >-- IntegerValues: true
+>-- AnyIds: false
+>-- UserSuppliedIds: false
+----
+
+Now that we have an empty instance of an 'inmemory' JanusGraph we can use it from
+the Gremlin Console just as we did with TinkerGraph in our prior examples. Notice
+that the ID values that JanusGraph generates look quite different (as in they don't
+start at zero) from what we might expect from TinkerGraph.
+
+[source,groovy]
+----
+g.addV('person').property('name','Kelvin')
+v[4232]
+
+g.V().has('name','Kelvin')
+v[4232]
+
+g.V().has('name','Kelvin').id()
+4232
+----
+
+Before we experiment too much more with JanusGraph there are three important subjects
+we need to discuss. One is transactions, another is defining a schema and indexes for
+our vertices, edges and properties and the third is the JanusGraph management API. We
+will cover each of these key subjects in the following sections.
+
+[[janustrans]]
+JanusGraph transactions
+^^^^^^^^^^^^^^^^^^^^^^^
+
+So far we have been mainly using a TinkerGraph to perform our experiments.
+TinkerGraph does not provide support for transactions. To be fair, for the type of
+use cases where TinkerGraph is a good solution this is not really an issue. However,
+a typical use case for JanusGraph might be storing and mutating (updating) a very
+large graph persisted by a back end store. In such an environment, support for
+transactions becomes a lot more important. If you are used to other databases that
+offer transactional support, and as the JanusGraph documentation points out, you
+should not rely on JanusGraph transactions being fully Atomic, Consistent, Isolated
+and Durable (ACID). The amount of ACID support will depend on the backend store being
+used. We will take a look at some of the backend storage options in the
+"<<janusstorage>> section".
+
+NOTE: The official JanusGraph documentation includes detailed coverage of how
+transactions are processed and techniques to use based on different usage scenarios.
+You will always find the latest version here:
+http://docs.janusgraph.org/latest/tx.html
+
+In many cases, when using JanusGraph, you do not have to explicitly open a new
+transaction. Instead, it will be opened for you as needed. Take a look at the example
+below. A transaction is opened when 'addVertex' is called and remains open until
+'commit' is called. Note also that in order to access the JanusGraph transaction
+capabilities, we use the 'tx' method associated with our 'graph' instance. The
+examples below assume you have the Gremlin Console connected to a JanusGraph
+instance. The 'inmemory' JanusGraph we created earlier will work fine for these
+examples as transactions are supported even with 'inmemory' JanusGraph instances.
+Note that I have not shown the warning message that JanusGraph will display reminding
+us that we have not created an index for our new property. We will explore how to
+create an index in the "<<jaindexintro>>" section.
+
+[source,groovy]
+----
+// Start a new transaction
+xyz = graph.addVertex()
+
+v[4344]
+
+// Add a property
+xyz.property('name', 'XYZ')
+
+// Commit the transaction
+graph.tx().commit()
+
+// Check to make sure our new vertex was created
+g.V().has('name','XYZ')
+
+v[4344]
+----
+
+The example above used the 'graph' object to add a vertex. As discussed earlier in
+this book, the TinkerPop documentation recommends against this. Instead it recommends
+adding vertices as part of a traversal as shown below. Note that the 'graph' object
+is still used to 'commit' the transaction.
+
+[source,groovy]
+----
+// Start a new transaction
+g.addV().property('name','XYZ')
+
+v[4216]
+
+// Commit the transaction
+graph.tx().commit()
+
+// Check to make sure our new vertex was created
+g.V().has('name','XYZ')
+
+v[4216]
+----
+
+Sometimes, it may be necessary to undo or 'rollback' what we have done rather than
+continue and 'commit' the transaction. This can be achieved calling the 'rollback'
+method as shown below.
+
+[source,groovy]
+----
+// Start a new transaction
+g.addV().property('name','ABC')
+
+// Rollback the transaction
+graph.tx().rollback()
+
+// Nothing will be returned
+g.V().has('code','ABC')
+----
+
+Note that the JanusGraph Management system, that is the subject of the next section,
+has its own transaction system that is used when creating schema entries and
+otherwise configuring a graph.
+
+[[janusmgmt]]
+The JanusGraph management API
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+JanusGraph includes a management API that is made available via the ManagementSystem
+class. You can use the management API to perform various important functions that
+include querying metadata about the graph, defining the edge, vertex and property
+schema types and creating and updating the index.
+
+You can create an instance of the ManagementSystem object using the 'openManagement'
+method call as shown below.
+
+[source,groovy]
+----
+mgmt = graph.openManagement()
+----
+
+In the following sections we will show how to use the management API to create both a
+schema and an index for the 'air-routes' graph and then load it. Before we do that we
+should take a few minutes to introduce the JanusGraph Management API. For the
+time being, assume we have created an in memory JanusGraph instance and loaded the
+'air-routes' graph into it but have not defined an index or a schema. In this
+situation, JanusGraph will give us the best defaults it can as it loads the graph
+for schema types.
+
+The example below uses the Management API to get a list of all the vertex labels
+currently defined in graph.
+
+[source,groovy]
+----
+mgmt.getVertexLabels()
+
+version
+airport
+country
+continent
+----
+
+This query similarly finds all of the currently defined edge labels.
+
+[source,groovy]
+----
+mgmt.getRelationTypes(EdgeLabel.class)
+
+route
+contains
+----
+
+This query will find all of the currently defined property keys. Note that this
+list will include both vertex and edge property key names
+
+[source,groovy]
+----
+mgmt.getRelationTypes(PropertyKey.class)
+
+dist
+code
+type
+desc
+country
+longest
+city
+elev
+icao
+lon
+region
+runways
+lat
+----
+
+We can query the cardinality of a property.
+
+[source,groovy]
+----
+mgmt.getPropertyKey('code').cardinality()
+
+SINGLE
+----
+
+Note that as we have not so far defined a schema for the 'air-routes' graph. if we
+query the dataType for any of the already loaded properties we will get back
+'Object.class' and by default that is what JanusGraph will use in the absence of a schema
+having been defined.
+
+[source,groovy]
+----
+mgmt.getPropertyKey('code').dataType()
+
+Object.class
+----
+
+We can also test for the existence of a label definition in the graph.
+
+[source,groovy]
+----
+mgmt.containsEdgeLabel('route')
+
+true
+
+mgmt.containsEdgeLabel('travels')
+
+false
+----
+
+[[cardlist]]
+Creating a property with cardinality LIST
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Using the JanusGraph Management API it is possible to specify that a property can
+accept as list of values. This can be done by specifying a cardinality of 'LIST' when
+the property key is created. Unless we explicitly do this, whenever a property is
+created the cardinality will default to 'SINGLE'. The code below can be run from a
+Gremlin Console connected to a JanusGraph instance. A property key called 'mylist' is
+created that can accept 'String' values'. Before the key is created, its cardinality
+is specified as 'LIST'. Always remember to 'commit' the management transaction when you
+are done making changes.
+
+[source,groovy]
+----
+mgmt = graph.openManagement()
+maker = mgmt.makePropertyKey('mylist')
+maker.dataType(String.class)
+maker.cardinality(LIST)
+maker.make()
+mgmt.commit()
+----
+
+Note that the previous steps could be chained together as shown below.
+
+[source,groovy]
+----
+mgmt = graph.openManagement()
+mgmt.makePropertyKey('mylist').dataType(String.class).cardinality(LIST).make()
+mgmt.commit()
+----
+
+Now that we have created a new key, when can use the Management API to check that its
+cardinality is indeed set to 'LIST'. As always, whenever we are done using the API we
+should close the transaction with a call to 'commit'.
+
+[source,groovy]
+----
+mgmt = graph.openManagement()
+mgmt.getPropertyKey('mylist').cardinality()
+
+LIST
+
+mgmt.commit()
+----
+
+We can now create a new vertex and add some values using our new 'mylist' property.
+Note that as our cardinality is 'LIST' and not 'SET' that we can have duplicate values
+associated with our new property.
+
+[source,groovy]
+----
+n = g.addV().property('mylist','one').property('mylist','two').next()
+
+v[3043568]
+
+g.V(n).property(list,'mylist','one')
+g.V(n).valueMap()
+
+// Duplicates allowed
+[mylist:[one,one,two]]
+
+graph.tx().commit()
+----
+
+[[cardset]]
+Creating a property with cardinality SET
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+Using the JanusGraph Management API we can also specify that a property can contain a
+'SET' of values. The difference between a cardinality of 'SET' and a cardinality of
+'LIST' is that sets do not allow duplicate values.
+
+Let's create a new property key called 'numbers' that will accept a set of integer
+values.
+
+[source,groovy]
+----
+mgmt = graph.openManagement()
+mgmt.makePropertyKey('numbers').dataType(Integer.class).cardinality(SET).make()
+----
+
+As before we can double check the cardinality of our new property.
+
+[source,groovy]
+----
+mgmt.getPropertyKey('numbers').cardinality()
+
+SET
+----
+
+Also as before once we are done making changes we need to commit our management
+transaction.
+
+[source,groovy]
+----
+mgmt.commit()
+----
+
+Let's now create a new vertex and do some testing to make sure that JanusGraph does
+enforce the rules we expect from a set. First of all we create a new vertex and put
+the values 1,2 and 3 into the property. This works as expected.
+
+[source,groovy]
+----
+n = g.addV().property('numbers',1).property('numbers',2).property('numbers',3).next()
+
+v[2846792]
+
+g.V(n).valueMap()
+
+[numbers:[1,2,3]]
+----
+
+Now let's try adding a second value of 2 and see what happens. As you can see, our
+second 2 was not added to our set as there was already a 2 present.
+[source,groovy]
+----
+g.V(n).property(set,'numbers',2)
+g.V(n).valueMap()
+
+// Duplicates not allowed
+[numbers:[1,2,3]]
+----
+
+Let's try adding a 4 instead. This works as there is no existing value of 4 already
+in the set.
+
+[source,groovy]
+----
+g.V(n).property(set,'numbers',4)
+g.V(n).valueMap()
+
+[numbers:[1,2,3,4]]
+----
+
+Finally we can commit our graph transaction as we are all done creating properties.
+
+[source,groovy]
+----
+graph.tx().commit()
+----
+
+[[janusschema]]
+Defining a JanusGraph schema for the air-routes graph
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You are not required to define the types and labels of your edges, vertices and
+properties ahead of time but it is strongly recommended that you do so. If you do not
+define anything and load the air routes data for example, it will work fine but JanusGraph
+will make assumptions about various things. One thing it will do is default the
+type of all property keys to Java's 'Object.class' which is not ideal if you want the
+graph to help you enforce stricter type checking. Also, without a schema being
+defined, JanusGraph will default the usage constraint or 'multiplicity' setting on
+all edges to 'MULTI'. We will explain what that means in a minute but in essence it
+means there is no restriction by default on how many edges with the same label that
+can exist between two vertices.
+
+You can use the Management API do define your schema. You can add additional property
+types at any time but once defined you cannot change their types. The only thing you
+can do once they have been created is to change the names of the keys.
+
+A best practice when working with JanusGraph is to define your labels and property
+types before you load any data into the graph. As the graph grows if you find you
+need to add additional property types or labels you are allowed to do that.
+
+Using the management API you can define the labels that will be used by vertices and
+edges. These values must be unique across the graph. You can also define the type and
+cardinality ('SINGLE', 'LIST' or 'SET') of each property key and for edges you can specify
+the allowed usage of edges for any given label ('MULTI', 'MANY2ONE', 'ONE2MANY', 'ONE2ONE' or
+'SIMPLE'). Property key names must also be unique across the graph.
+
+Before we can define a schema for our edge labels we need to understand what each
+option allows and decide on the best fit for each of our edge types.
+
+.The multiplicity options provide the following constraints:
+MULTI::
+- This is the default option if no multiplicity has been defined for an edge with
+a given label. This setting permits multiple edges of the same label between any
+pair of vertices. The 'air-routes' graph uses a multiplicity of 'MULTI' for the
+'routes' edges between airports.
+
+SIMPLE::
+- This setting permits at most one edge of a given label between any pair of
+  vertices. In the 'air-routes' graph this setting is used for the edges between a
+  continent and an airport as an airport cannot be in more than one continent. The
+  same is used for the edges between airports and countries.
+MANY2ONE::
+- This setting permits at most one outgoing edge of a given label name from any vertex
+  in the graph but places no constraint on the number of incoming edges with this
+  label.
+ONE2MANY::
+- This setting permits at most one incoming edge of a given label to any vertex in the
+  graph but places no constraint on the number of outgoing edges
+ONE2ONE::
+- This setting permits at most one incoming and one outgoing edge of a given label to
+  and from any vertex in the graph.
+
+Defining edge labels and usage
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Let's look at how we can use the JanusGraph Management API to specify the
+multiplicty for the 'route' and 'contains' edges used by the 'air-routes' graph.
+
+[source,groovy]
+----
+// Define edge labels and usage
+mgmt = graph.openManagement()
+mgmt.makeEdgeLabel('route').multiplicity(MULTI).make()
+mgmt.makeEdgeLabel('contains').multiplicity(SIMPLE).make()
+mgmt.commit()
+----
+
+Defining vertex labels
+^^^^^^^^^^^^^^^^^^^^^^
+
+Now let's tell JanusGraph about the vertex labels that we are going to be using. The
+'air-routes' graph has four different vertex types, namely, 'version', 'airport',
+'country' and 'continent' so we will create a label for each of those.
+
+[source,groovy]
+----
+// Define vertex labels
+mgmt = graph.openManagement()
+mgmt.makeVertexLabel('version').make()
+mgmt.makeVertexLabel('airport').make()
+mgmt.makeVertexLabel('country').make()
+mgmt.makeVertexLabel('continent').make()
+mgmt.commit()
+----
+
+
+Defining vertex property keys
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Next we need to define the property keys and data types that our vertices will be
+using. The 'air-routes' graph only uses properties that have a cardinality of 'SINGLE'.
+
+[source,groovy]
+----
+// Define vertex property keys
+mgmt = graph.openManagement()
+mgmt.makePropertyKey('code').dataType(String.class).cardinality(Cardinality.SINGLE).make()
+mgmt.makePropertyKey('icao').dataType(String.class).cardinality(Cardinality.SINGLE).make()
+mgmt.makePropertyKey('type').dataType(String.class).cardinality(Cardinality.SINGLE).make()
+mgmt.makePropertyKey('city').dataType(String.class).cardinality(Cardinality.SINGLE).make()
+mgmt.makePropertyKey('country').dataType(String.class).cardinality(Cardinality.SINGLE).make()
+mgmt.makePropertyKey('region').dataType(String.class).cardinality(Cardinality.SINGLE).make()
+mgmt.makePropertyKey('desc').dataType(String.class).cardinality(Cardinality.SINGLE).make()
+mgmt.makePropertyKey('runways').dataType(Integer.class).cardinality(Cardinality.SINGLE).make()
+mgmt.makePropertyKey('elev').dataType(Integer.class).cardinality(Cardinality.SINGLE).make()
+mgmt.makePropertyKey('lat').dataType(Double.class).cardinality(Cardinality.SINGLE).make()
+mgmt.makePropertyKey('lon').dataType(Double.class).cardinality(Cardinality.SINGLE).make()
+mgmt.commit()
+----
+
+Defining edge property keys
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+We also need to define the property keys and data types that will be used on edges.
+Currently the 'air-routes' graph only has one edge property, 'dist' that is used to
+store the distance between two airports.
+
+[source,groovy]
+----
+// Define edge property keys
+mgmt = graph.openManagement()
+mgmt.makePropertyKey('dist').dataType(Integer.class).cardinality(Cardinality.SINGLE).make()
+mgmt.commit()
+----
+
+Now that we have defined our schema, we can use the management API to double check
+that everything we just did looks correct. The snippet of code below can be run from
+within the Gremlin console and will display the property keys along with their data
+types and cardinality settings.
+
+
+[source,groovy]
+----
+// Look at the properties
+mgmt = graph.openManagement()
+types = mgmt.getRelationTypes(PropertyKey.class)
+types.each{println "$it\t: " +
+                    mgmt.getPropertyKey("$it").dataType() +
+                    " " + mgmt.getPropertyKey("$it").cardinality()}
+
+mgmt.commit()
+----
+
+
+This is the output we should get back if our schema creation has succeeded. Note that
+both the edge and vertex property keys are displayed.
+
+[source,groovy]
+----
+lat     : class java.lang.Double SINGLE
+lon     : class java.lang.Double SINGLE
+dist    : class java.lang.Integer SINGLE
+longest : class java.lang.Object SINGLE
+code    : class java.lang.String SINGLE
+icao    : class java.lang.String SINGLE
+type    : class java.lang.String SINGLE
+city    : class java.lang.String SINGLE
+country : class java.lang.String SINGLE
+region  : class java.lang.String SINGLE
+desc    : class java.lang.String SINGLE
+runways : class java.lang.Integer SINGLE
+elev    : class java.lang.Integer SINGLE
+----
+
+
+
+[[janusload]]
+Loading air-routes into a JanusGraph instance
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Now that we know how to create a schema and an index for the 'air-routes' graph
+we can use the same basic steps to load it into a JanusGraph
+instance that we used with TinkerGraph. Note that after loading the graph from the
+XML file we then call 'commit' to finalize the transaction.
+
+[source,groovy]
+----
+graph.io(graphml()).readGraph('air-routes.graphml')
+graph.tx().commit()
+----
+
+Note that had we not defined a schema before loading the 'air-routes' graph that
+JanusGraph would have still created the vertices, edges and properties but using
+default types and settings. A bit later we will look at creating an index for the
+'air-routes' graph as well. It is strongly recommended to create the index as well as
+the schema before loading the data but lets examine a few more things before we
+discuss how to do that.
+
+Unlike TinkerGraph, JanusGraph does not, by default, guarantee to respect user
+provided vertex and edge ID values. Instead it creates its own ID values as vertices
+and edges are added to the graph. You may have noticed from earlier in the book
+or from the `air-routes.graphml` file if you happened to look in there, that the ID
+provided for Austin in the GraphML markup is 3. However, having loaded 'air-routes'
+into JanusGraph if we query the ID for the Austin vertex we can see that it is no
+longer 3. There is a setting that can be changed to force JanusGraph to honor user
+provided ID values but it is not recommended this be used as it will disable some
+other useful JanusGraph features. If you are interested in learning more about this
+option this please refer to the JanusGraph documentation.
+
+[source,groovy]
+----
+g.V().has('code','AUS').id()
+
+4240
+----
+
+Having the graph system allocate its own ID values is not a big problem as we can
+always query the graph to get the ID but it is a reminder that you should not get
+into the habit of relying on any user provided ID values as you work with graphs.
+
+If necessary, as discussed earlier, we can always store important ID values in a
+variable for later use.
+
+[source,groovy]
+----
+ausid = g.V().has('code','AUS').id().next()
+
+g.V(ausid).values('city','desc','region').join(', ')
+
+Austin Bergstrom International Airport, Austin, US-TX
+----
+
+Note that property values are not necessarily returned in the order you requested.
+That can be seen by looking at the example above. Our 'values' step had 'city' first
+but in fact the 'desc' properties value was returned first. Gremlin makes no
+guarantees that items will be returned in the specific order you requested. They are
+returned in the order in which they are found during a traversal. You should not
+build in dependencies to your queries on the order things are returned in. If you
+need a specific ordering you should sort or otherwise manipulate the returned results
+of a query to match your needs.
+
+[[jaindexintro]]
+JanusGraph indexes
+~~~~~~~~~~~~~~~~~~
+
+JanusGraph supports two different types of indexing known as 'graph indexes' and
+'vertex centric indexes' respectively. JanusGraph also supports the use of
+'composite' and 'mixed' indexes as well as the use of external indexing technologies.
+All of these concepts will be discussed and explained in the following sections.
+Using an index will greatly improve performance of your graph queries and is
+something you should get familiar with doing for any graphs that you create or
+manage. While in many cases use of an index is optional by default, I strongly
+recommend that you view it as mandatory. The JanusGraph documentation provides some
+fairly in depth coverage of indexing and can be read by visiting the following URL:
+http://docs.janusgraph.org/latest/indexes.html
+
+[[graphindexes]]
+Graph indexes
+^^^^^^^^^^^^^
+
+If you have used other types of database such as a relational database, you may
+already be familiar with the concept of using an index to speed up random access to
+the entire database. When using JanusGraph that is the role played by a 'graph
+index'. The main job of a 'graph index' is to get you to the starting point of your
+query as efficiently as possible without having to first search the entire graph to
+find the vertices or edges that you are looking for.
+
+You should always establish a 'graph index' for the property keys, or combinations of
+keys, you will use regularly in your queries when working with JanusGraph. In some
+situations you will also need to create 'vertex centric indexes', a subject we will
+discuss next, but most likely this will be part of tuning the performance of your
+graph rather than from the start. Conversely, You should plan on creating your
+'graph indexes' long with your initial graph schema. The simplest form of 'graph
+index' is the composite index that we will see how to create and use soon.
+
+[[vciintro]]
+Vertex centric indexes
+^^^^^^^^^^^^^^^^^^^^^^
+
+A vertex centric index, as the name suggests is an index associated with a vertex.
+These are typically used when the number of incident edges on a given vertex becomes
+significantly large such that it can impact performance. As mentioned above, it is
+likely that when you first create your graph and graph schema that you will just
+create a set of 'graph indexes' and only create 'vertex centric indexes' as the need
+arises.
+
+[[compositeintro]]
+Introducing 'composite' indexes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+A composite index can be used to speed up queries where an exact match with the value
+for  given property key is sufficient. For example, the query below could take
+advantage of a composite index as we are only looking for exact matches where the
+value associated with the 'city' key is the value 'Paris'.
+
+[source,groovy]
+----
+g.V().has('city','Paris')
+----
+
+A composite index can be defined to support queries that use more than one key. For
+example we could create an index that can be used for queries that look at the 'city'
+and 'country' property keys to help with a query like the one below that will find
+the vertex for the airport in the city of London in Ontario, Canada, but not the ones
+in London, England.
+
+[source,groovy]
+----
+g.V().has('city','London').has('country','CA')
+----
+
+A composite index will not help if we want to get more sophisticated and look for
+partial matches, use predicates other than 'equal to' or use regular expressions in
+our queries. That is where the 'mixed index' comes in to play. So for example, a
+composite index would not help with the following query that looks for airports in
+the 'air-routes' graph with more than five runways.
+
+[source,groovy]
+----
+g.V().has('runways',gt(5))
+----
+
+[[mixedintro]]
+Introducing 'mixed' indexes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+As mentioned above, if the queries that you expect to be writing require more than a
+simple test for equality then you will need to create what is referred to as a 'mixed
+index'. Once you decide to create a mixed index you will also need to configure an
+indexing backend such as Apache Solr or Elasticsearch. We will explore the
+use of mixed indexes in the "<<extindex>>" section.
+
+[[compositeindex]]
+Building a composite index to speed up exact match searching
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+It is strongly recommended that you create graph indexes for any property keys that
+you are likely to be using regularly in queries. An index can greatly speed up
+searching a graph as without an index being present JanusGraph has to search your
+entire graph each time you issue a query looking for one or more specific properties.
+If you issue a query that uses property keys that have not been indexed, the query
+will still work but unless warnings have been turned off, JanusGraph will remind you
+that you should consider creating an index to improve the performance of your query.
+
+NOTE: You should be aware that some graph systems running JanusGraph may have disabled
+the ability to do a full graph search thus requiring that you always have an index
+for any property keys that you use in your queries.
+
+Take a look at the example below. We issue a simple query looking for the airport
+with a 'code' property containing the value 'LHR'. Because we have not yet created an
+index for that property key, JanusGraph gives us a warning before also returning the
+vertex that we are looking for. If the administrator of the JanusGraph system you are
+using has disabled the ability to do full graph searches (a feature that is on by
+default but can be disabled) the query below will fail with an error message.
+
+[source,groovy]
+----
+g.V().has('code','LHR')
+
+WARN  org.janusgraph.graphdb.transaction.StandardJanusGraphTx
+    - Query requires iterating over all vertices [(code = LHR)].
+      For better performance, use indexes
+
+v[32904]
+----
+
+If an index is present, before looking at the graph itself, JanusGraph will look at
+the index. If the property key being searched for has been indexed, there will be
+entries in the index pointing to each occurrence of that property key within the
+graph. This enables JanusGraph to directly fetch those elements without having to
+search the entire graph looking for them. With a large graph this can provide a very
+substantial performance improvement. Depending on your indexing needs you may or may
+not need to also use an external indexing technology such as Apache Solr or
+Elasticsearch. The subject of using an external index is discussed a bit later.
+First of all let's take a look at the types of index that you can create that
+JanusGraph can manage by itself without needing help from an external index.
+
+Using JanusGraph you can create and manipulate an index using the Management API. The
+JanusGraph documentation strongly recommends that you always make a call to
+'graph().tx().rollback()' before you start to create an index to make sure that no
+other transactions are currently active.
+
+The example below shows how to use the Management API to create a new composite index
+for the airport 'code' property in the 'air-routes' graph.
+
+[source,groovy]
+----
+// Make sure no other transactions are open
+graph.tx().rollback()
+
+// Open a new management transaction
+mgmt = graph.openManagement()
+
+// Create a composite index for the code key for use with vertices
+idx = mgmt.buildIndex('airportIndex',Vertex.class)
+iata = mgmt.getPropertyKey('code')
+idx.addKey(iata).buildCompositeIndex()
+
+// All done commit our changes to end the transaction
+mgmt.commit()
+----
+
+Having created the index it is important to wait until it is available before trying
+to do anything else. We can do that by calling the 'awaitGraphIndexStatus' method
+that is also part of the JanusGraph Management API.
+
+[source,groovy]
+----
+mgmt.awaitGraphIndexStatus(graph, 'airportIndex').
+     status(SchemaStatus.REGISTERED).call()
+----
+
+If we already have data in the graph we now also need to tell JanusGraph to perform a
+re-index. Once again we use the Management API to do this but this time using the
+'updateIndex' method.
+
+[source,groovy]
+----
+mgmt = graph.openManagement()
+mgmt.updateIndex(mgmt.getGraphIndex("airportIndex"), SchemaAction.REINDEX).get()
+mgmt.commit()
+----
+
+If we re-run the same query we used earlier and got the warning about using indexes from
+JanusGraph, this time we get the same result but without the warning. This tells us
+that JanusGraph was able to satisfy our query using the index that we just created.
+
+[source,groovy]
+----
+g.V().has('code','LHR')
+
+v[32904]
+----
+
+We can also use the JanusGraph Management API to query information about the index
+that we just defined. As you can see below, as we have only created one index so far,
+that is all that is returned.
+
+[source,groovy]
+----
+mgmt = graph.openManagement()
+
+// What indexes are defined?
+v_idxes = mgmt.getGraphIndexes(Vertex.class)
+
+airportIndex
+
+// Print the key names they are associated with
+v_idxes.each {println it.getFieldKeys()}
+
+[code]
+
+mgmt.commit()
+----
+
+It is also possible to define an index that will support a query containing more than
+one key. For example we might want to create an index that would be used to help with
+queries like the one below which is essentially a query looking for any vertex that
+has a 'city' property with a value of 'London' AND a country property with a value
+of 'CA'.
+
+[source,groovy]
+----
+g.V().has('city','London').has('country','CA')
+----
+
+We could define an index to support such a query using the code that follows. Note
+that the only differences from the prior example are that we add two keys rather than
+one to the index. Note also that the 'addKey' methods are called with the 'country'
+key coming before the 'city' key which is the reverse order to which we expect the
+Gremlin query to use the keys.
+
+[source,groovy]
+----
+// Make sure no other transactions are active
+graph.tx().rollback()
+
+// Start a new management transaction
+mgmt = graph.openManagement()
+
+// Find the property keys that we need to index
+city = mgmt.getPropertyKey('city')
+country = mgmt.getPropertyKey('country')
+
+// Create a new index and add our keys
+index = mgmt.buildIndex('byCityAndCountry', Vertex.class)
+index.addKey(country).addKey(city).buildCompositeIndex()
+
+// All done
+mgmt.commit()
+
+// Wait for the index to be active
+mgmt.awaitGraphIndexStatus(graph, 'byCityAndCountry').call()
+
+// Force a re-index
+mgmt = graph.openManagement()
+mgmt.updateIndex(mgmt.getGraphIndex("byCityAndCountry"), SchemaAction.REINDEX).get()
+mgmt.commit()
+----
+
+We can use the Gremlin 'profile' step to verify that JanusGraph is indeed now using
+our new index. I have truncated some of the output so it will fit on the page but you
+can see from the output that the query did indeed use our new index.
+
+[source,groovy]
+----
+g.V().has('city','London').has('country','CA').profile()
+----
+
+Here is the output returned by the query.
+
+[source,console]
+----
+Traversal Metrics
+Step                                              Traversers  Time (ms)
+========================================================================
+JanusGraphStep([],[city.eq(London), country.eq(...      1          1.036
+    \_condition=(city = London AND country = CA)
+    \_isFitted=true
+    \_query=multiKSQ[1]@2147483647
+    \_index=byCityAndCountry
+    \_orders=[]
+    \_isOrdered=true
+  optimization                                                     0.741
+  backend-query                                         1          0.085
+    \_query=byCityAndCountry:multiKSQ[1]@2147483647
+                                            >TOTAL      -          1.036
+----
+
+A script to automate schema creation, indexing and graph loading
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In the sample code directory of my GitHub project for this book you will find a small
+Gremlin (Groovy) script in a file called 'janusgraph-inmemory.groovy'. You can get to
+the file by visiting this URL:
+https://github.com/krlawrence/graph/blob/master/sample-code/janus-inmemory.groovy
+
+The script will create an 'inmemory' JanusGraph instance, define the schema, create
+several indexes and load the `air-routes.graphml` file so that you can try some
+queries using the Gremlin Console. You might find that a good way to experiment with
+the concepts that we have covered in this discussion of JanusGraph so far.
+
+
+[[janpred]]
+Additional JanusGraph text search predicates
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We have already looked, in the "<<tranges>> section, at the predicates TinkerPop
+defines such as 'neq', 'gte' and 'lte'. JanusGraph offers an additional set of
+predicates that can be used when looking for specific patterns within text in a
+graph.
+
+The methods that include the word 'Contains' in their name look for whole words that
+match the specified search pattern. The methods that do not include 'Contains' in the
+name look at the entire string being inspected for matches.
+
+The table below summarizes the additional text search predicates that JanusGraph
+provides.
+
+.Additional JanusGraph text search predicates
+[cols="^1,4"]
+|==============================================================================
+|textContains           | True if a whole word matches the search string provided.
+|textContainsPrefix     | True if at least one word starts with the search string provided.
+|textContainsRegex      | True if at least one word matches the regular expression provided.
+|textContainsFuzzy      | True if a word matches the fuzzy search text provided.
+|textPrefix             | True if the string being inspected starts with the search text.
+|textRegex              | True if the string being inspected matches the regular expression provided.
+|textFuzzy              | True if the string being inspected matches the fuzzy search text.
+|==============================================================================
+
+Let's take a look at each of these predicates and what they offer with examples of
+each being used. First off, the query below will find any vertex that has a 'desc'
+(description) property that contains the word '"Dallas"'. Note that this matches
+'Dallas' followed by any word break character such as a space or a forward slash.
+
+Text comparison predicates
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The simplest of the search predicates allow you to specify an exact match that string
+must be present either as a whole word (complete word match) or as part of the entire
+text being examined. These searches are *not* case sensitive.
+
+[source,groovy]
+----
+g.V().has('desc',textContains("Dallas")).values('desc')
+----
+
+Here is what the query should return.
+
+[source,console]
+----
+Dallas/Fort Worth International Airport
+Dallas Love Field
+----
+
+The word being searched for using 'textContains' does not have to be the first word
+within the string. It just has to exist as a whole word. The query below looks for
+the word '"Love"' appearing anywhere in the 'desc' property.
+
+[source,groovy]
+----
+g.V().has('desc',textContains("Love")).values('desc')
+----
+
+Here is what the query returns.
+
+[source,console]
+----
+Dallas Love Field
+Ernest A. Love Field
+----
+
+In this example the word 'fort' is found no matter where it occurs in the 'city'
+name so long as it occurs as a standalone word.
+
+[source,groovy]
+----
+g.V().has('city',textContains("fort")).values('city')
+----
+
+As you can see in the results below 'Vieux Fort' was found as well as all of the
+cities with names that start with 'Fort'.
+
+[source,console]
+----
+Fort Myers           Fort Worth
+Fort-de-France       Fort McMurray
+Fort Lauderdale      Fort Sandeman
+Fort Wayne           Fort Smith
+Fort St.John         Fort Yukon
+Fort Nelson          Fort Albany
+Fort Chipewyan       Fort Hood/Killeen
+Fort Mcpherson       Vieux Fort
+Fort Smith           Fort Good Hope
+Fort Severn          Fort Frances
+Fort Simpson         Fort Hope
+Fort Leonard Wood    Fort Dodge
+----
+
+
+The query below does not match any whole word in any description anywhere in the
+graph so no results will be returned.
+
+[source,groovy]
+----
+// Matches no whole word so no results
+g.V().has('desc',textContains("Dalla")).values('desc')
+----
+
+If we use 'textContainsPrefix' instead of 'textContains', the search will look for
+whole words that start with the specified text and we will get some results. Take a
+look at the next query and the results it generates.
+
+TIP: Searches using 'textContains' and 'textContainsPrefix' are *not* case sensitive.
+
+[source,groovy]
+----
+g.V().has('desc',textContainsPrefix("dalla")).values('desc')
+----
+
+Here is what the query returns. This time we got some results as 'Dallas' starts with
+the characters 'dalla'. Again, remember these are case insensitive queries.
+
+[source,console]
+----
+Dallas/Fort Worth International Airport
+Dallas Love Field
+----
+
+We could use a 'textContains' query to find airports that have the
+word 'Regional' as part of their description. An example of such a query is given
+below. Only the first five matching airport descriptions found are returned.
+
+[source,groovy]
+----
+g.V().has('desc',textContains('Regional')).values('desc').limit(5)
+----
+
+Here are the descriptions returned by the query.
+
+[source,console]
+----
+Rapid City Regional Airport
+Abilene Regional Airport
+Grand Junction Regional Airport
+San Luis County Regional Airport
+Liberal Mid-America Regional Airport
+----
+
+We could adjust the regional airport query we did above to use  'textContainsPrefix'
+if we wanted to be a bit less specific and look for any airport with 'Reg' at the
+start of any word in its description.
+
+[source,groovy]
+----
+g.V().has('desc',textContainsPrefix('Reg')).values('desc').limit(5)
+----
+
+We still get the same five results back.
+
+[source,console]
+----
+Rapid City Regional Airport
+Abilene Regional Airport
+Grand Junction Regional Airport
+San Luis County Regional Airport
+Liberal Mid-America Regional Airport
+----
+
+The 'textPrefix' predicate will look at the entire string being inspected and compare it to
+the string you provide and only return a result if the string starts with the specified
+pattern. So in this case we look at just the start of the whole string and not at
+individual words within it. The query below looks for any cities whose name starts
+with the characters 'Los'.
+
+[source,groovy]
+----
+g.V().has('city',textPrefix('Los')).values('city')
+----
+
+TIP: Searches using 'textPrefix' *are* case sensitive.
+
+This is what we get back from the query.
+
+[source,console]
+----
+Los Alamos
+Los Angeles
+Los Mochis
+Losuia
+----
+
+Notice how the query did not find the city of 'Chapelco/San Martin de los Andes' as
+in this case the 'Los' is not at the start of the name. If we did want to also have
+that city discovered we could use 'textContainsPrefix' instead as shown below.
+
+[source,groovy]
+----
+g.V().has('city',textContainsPrefix('Los')).values('city')
+----
+
+As you can see this time we also found 'Chapelco/San Martin de los Ande' and it is
+part of the results returned. As before the case of the search term is ignored.
+
+[source,console]
+----
+Los Alamos
+Chapelco/San Martin de los Andes
+Los Angeles
+Los Mochis
+Losuia
+----
+
+Regular expression predicates
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The JanusGraph regular expression predicates recognize the syntax defined as part of
+the Java 1.8 Pattern class that is documented at
+https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html. The Java
+regular expression syntax may be different than the one you are used to so it is
+worth taking a few minutes to study the documentation at that URL.
+
+The query below uses a 'textContainsRegex' predicate to search for any city name that
+contains a word starting with 'for', while ignoring case.
+
+[source,groovy]
+----
+g.V().has('city',textContainsRegex("(?i)for.*")).values('city')
+----
+
+Notice how names that start with 'For' such as 'Fort Myers' as well as city names
+containing words that start with the text 'For' in a subsequent word are found. For example
+'La Fortuna'  and 'View Fort' are also found.
+
+[source,console]
+----
+Fort Myers                Fort Worth
+La Fortuna/San Carlos     Fort McMurray
+Fort-de-France            Fort Sandeman
+Fort Lauderdale           Fortaleza
+Fort Wayne                Fort Smith
+Jerez de la Forntera      Fort Yukon
+Fort St.John              Fort Albany
+Fort Nelson               Fort Hood/Killeen
+Fort Chipewyan            Vieux Fort
+Formosa                   Fort Good Hope
+Fort Mcpherson            Grand Forks
+Fort Smith                Fort Frances
+Juiz de Fora              Fort Hope
+Fort Severn               Fort Dodge
+Fort Simpson              Fort Leonard Wood
+----
+
+The query below shows another way of searching for the word 'dallas' at the start of
+a string of text while ignoring case. This time we use a very simple regular
+expression. Of course, in reality, this yields the same result that we could achieve
+by simply using 'textContainsPrefix'.
+
+[source,groovy]
+----
+// Matches dallas ignoring case
+g.V().has('city',textRegex("(?i)dallas")).valueMap('code','city')
+----
+
+As we can see the query worked as expected.
+
+[source,console]
+----
+[code:[DFW],city:[Dallas]]
+[code:[DAL],city:[Dallas]]
+
+----
+
+If we wanted to expand our search a bit we could modify the regular expression, as
+shown below, to find an city name that starts with the characters 'dal'.
+
+[source,groovy]
+----
+// Matches any city that contains dal followed by anything, ignoring case.
+g.V().has('city',textRegex('(?i)dal.*')).values('city')
+----
+
+This time we get some additional cities back.
+
+[source,console]
+----
+Dallas
+Dallas
+Dalcahue
+Dalat
+Dalaman
+Dalanzadgad
+Dalian
+----
+
+If we instead wanted to get more specific we could again adjust the regular
+expression. This time we look for any city name that starts with any three characters
+followed by the characters 'cah' followed by any number of other characters.
+
+[source,groovy]
+----
+// Anything that matches 3 characters followed by 'cah' followed by anything.
+g.V().has('city',textRegex(".{3}cah.*")).values('city')
+----
+
+Using our modified, and much more specific search pattern we find just one city that
+matches the pattern.
+
+[source,console]
+----
+Dalcahue
+----
+
+Here is another example that looks for a city name that starts with any three
+characters followed by either 'cah' or 'anz' followed by any number of characters.
+
+[source,groovy]
+----
+g.V().has('city',textRegex(".{3}(cah|anz).*")).values('city')
+----
+
+Here is what we get back using this regular expression.
+
+[source,console]
+----
+Dalcahue
+Dalanzadgad
+----
+
+Here is another query that uses a regular expression to find airports that have a
+region code that starts with the characters 'US-' followed by any of 'O', 'R' or 'D'
+followed by any number of characters.
+
+[source,groovy]
+----
+g.V().has('region',textRegex("US-[ORD].*")).
+      local(values('code','region').fold()).fold()
+----
+
+Here is what this query returns.
+
+[source,groovy]
+----
+[[PVD,US-RI],[LMT,US-OR],[SWO,US-OK],[PDX,US-OR],[EUG,US-OR],[MFR,US-OR],[TOL,US-OH],[PDT,US-OR],[CMH,US-OH],[OTH,US-OR],[YNG,US-OH],[OKC,US-OK],[DAY,US-OH],[LAW,US-OK],[LCK,US-OH],[LUK,US-OH],[RDM,US-OR],[DCA,US-DC],[CLE,US-OH],[TUL,US-OK],[CAK,US-OH],[ILG,US-DE],[BID,US-RI]]
+
+----
+
+Here is a slightly more complicated query that uses a regular expression. The pattern
+matches any airport description containing a word that starts with any character
+followed by 'al', optionally followed by another 'l' and then followed by any
+character that is not one of '"s,k,e,i"' ignoring case.
+
+[source,groovy]
+----
+g.V().has('desc',textContainsRegex("(?i).all?[^(s|k|e|i)]")).values('desc')
+----
+
+Here is the list of airport descriptions that the query returns.
+
+[source,console]
+----
+Dinard-Pleurtuit-Saint-Malo Airport
+Walla Walla Regional Airport
+Salt Lake City
+Palm Springs International Airport
+Eduardo Falla Solano Airport
+Palm Beach International Airport
+Salt Cay Airport
+Melville Hall Airport
+Hall Beach Airport
+----
+
+Fuzzy search predicates
+^^^^^^^^^^^^^^^^^^^^^^^
+
+These predicates use the
+https://en.wikipedia.org/wiki/Levenshtein_distance[Levenshtein distance] method to
+decide if a piece of text is 'close enough' to the pattern being looked for. This is
+based on assessing how many characterss would have to change in the pattern word to
+achieve a match in the text being inspected. For example 'pall' would match 'palm',
+'paul' and 'palm'.
+
+The query below uses a fuzzy sort to find any words that are close to the word
+'pall'.
+
+[source,groovy]
+----
+g.V().has('desc',textContainsFuzzy("pall")).values('desc')
+----
+
+Here are the results from running the query. You can see that airport descriptions
+that contain the whole words 'Paul', 'Palm' and 'Hall' have been found.
+
+[source,console]
+----
+Minneapolis-St.Paul International Airport
+Palm Beach International Airport
+Palm Springs International Airport
+John Paul II International Airport Krakow-Balice Airport
+Melville Hall Airport
+Hall Beach Airport
+St Paul Island Airport
+----
+
+This query uses 'textFuzzy' to find cities whose names are close to Dublin.
+[source,groovy]
+----
+g.V().has('city',textFuzzy('Dublin')).values('city')
+----
+
+Here is what the query returns. You can see that the method used by 'fuzzy' searches
+is more than just single character replacement. Note that not all of the city names
+returned are of the same length. To better understand the 'fuzzy search' algorithm it
+is recommended to look at the Wikipedia page mentioned above.
+
+[source,console]
+----
+Yulin
+Hubli
+Dublin
+Lublin
+Dubois
+Dubai
+----
+
+[[janusgeo]]
+The JanusGraph GeoSpatial API
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Earlier, in the "<<latlonmanual>>" section, I provided a few examples of how we could
+write some queries that took advantage of the fact that the airports in the
+'air-routes' graph include their latitude and longitude among their properties. When
+working with JanusGraph there are some additional built in capabilities that we can
+take advantage of.
+
+NOTE: The official JanusGraph API documentation is a good place to read up on the
+GeoShape class and related classes. That documentation can always be found by
+starting here: http://docs.janusgraph.org/latest/javadoc.html
+
+The example below shows one way that we could use the GeoSpatial API to find airports
+within a circle having a 100 kilometer radius with London Heathrow (LHR) at the
+center of that circle. A key class to be aware of is the 'Geoshape' class. It can be
+used to create areas that we can use when testing for other coordinates falling
+within that area.
+
+Notice in the code below that for each airport in the graph a 'point' is created
+based on the latitude and longitude of that airport. A test is then performed to see
+if that 'point' lies within our 100km circle. Only airports that do are passed on to
+the 'valueMap' step. Notice also how a 'map' step is used so that we can do some
+calculations inside of a closure while creating the 'point'.
+
+[source,groovy]
+----
+// Get the lat/lon for LHR
+lon = g.V().has('code','LHR').values('lon').next()
+lat = g.V().has('code','LHR').values('lat').next()
+
+// Create a 100km radius circle with LHR at the center
+boundary = Geoshape.circle(lat,lon,100)
+
+// Find other airports that are within that circle
+g.V().hasLabel('airport').
+      where(map{a=it.get().value('lat');
+                b=it.get().value('lon');
+                Geoshape.point(a,b).within(boundary)}.is(true)).
+                valueMap('code','lat','lon')
+----
+
+Below is the output that you might bet back from running the above query. The query
+can be run as-is from the Gremlin Console connected to a JanusGraph instance
+containing the 'air-routes' graph.
+
+[source,groovy]
+----
+[code:[LGW],lon:[-0.190277993679047],lat:[51.1481018066406]]
+[code:[BZZ],lon:[-1.58361995220184],lat:[51.749964]]
+[code:[STN],lon:[0.234999999404],lat:[51.8849983215]]
+[code:[LTN],lon:[-0.368333011865616],lat:[51.874698638916]]
+[code:[SOU],lon:[-1.35679996013641],lat:[50.9502983093262]]
+[code:[LHR],lon:[-0.461941003799],lat:[51.4706001282]]
+[code:[LCY],lon:[0.055278],lat:[51.505278]]
+[code:[SEN],lon:[0.695555984973907],lat:[51.5713996887207]]
+----
+
+There are many ways we could optimize our query to avoid creating a 'point' for every
+single airport in the graph. In this particular case, we might decide, for example,
+that we are only interested in airports in England. To do this we could add a check
+to our query to make sure that only airports with a region code of 'GB-ENG' are
+tested. Here is the query modified with that check added.
+
+[source,groovy]
+----
+// Find other airports that within 100km of LHR
+g.V().has('airport','region','GB-ENG').
+      where(map{a=it.get().value('lat');
+                b=it.get().value('lon');
+                Geoshape.point(a,b).within(boundary)}.is(true)).
+                valueMap('code','lat','lon')
+----
+
+Here is the output from running the query again. Other than the order in which
+results were returned being different we got the same results. However this query is
+more efficient as it is able to take advantage of the index that we created earlier
+for the 'region' property to filter out all airports not in the region 'GB-ENG'.
+
+[source,groovy]
+----
+[code:[LGW],lon:[-0.190277993679047],lat:[51.1481018066406]]
+[code:[LHR],lon:[-0.461941003799],lat:[51.4706001282]]
+[code:[LCY],lon:[0.055278],lat:[51.505278]]
+[code:[STN],lon:[0.234999999404],lat:[51.8849983215]]
+[code:[LTN],lon:[-0.368333011865616],lat:[51.874698638916]]
+[code:[SOU],lon:[-1.35679996013641],lat:[50.9502983093262]]
+[code:[SEN],lon:[0.695555984973907],lat:[51.5713996887207]]
+[code:[BZZ],lon:[-1.58361995220184],lat:[51.749964]]
+----
+
+Using the GeoSpatial API we can create shapes representing different geographic
+regions and compare them. The example below shows how to create a 100km circle with
+Longdon heathrow (LHR) at the center and a second circle with Manchester (MAN) at the
+center. The 'intersect' method is then used to see if any points appear in both
+circles.
+
+[source,groovy]
+----
+// Create a 100km radius circle with LHR at the center
+
+lon_lhr = g.V().has('code','LHR').values('lon').next()
+lat_lhr = g.V().has('code','LHR').values('lat').next()
+
+lhr_circ = Geoshape.circle(lat_lhr,lon_lhr,100)
+
+// Create a 100km radius circle with MAN at the center
+
+lat_man = g.V().has('code','MAN').values('lat').next()
+lon_man = g.V().has('code','MAN').values('lon').next()
+
+man_circ = Geoshape.circle(lat_man,lon_man,100)
+
+// Do any points in the two circles intersect?
+
+lhr_circ.intersect(man_circ)
+
+false
+----
+
+As you can see the test returns 'false' indicating that there are no shared points.
+To prove that the tests work when points do overlap, let's create another 100km
+circle with Liverpool (LPL) in the middle and compare that one with the Manchester
+circle.
+
+[source,groovy]
+----
+// Create a 100km radius circle with LPL at the center
+
+lat_lpl = g.V().has('code','LPL').values('lat').next()
+lon_lpl = g.V().has('code','LPL').values('lon').next()
+
+lpl_circ = Geoshape.circle(lat_lpl,lon_lpl,100)
+
+// Do any points in the two circles intersect?
+
+lpl_circ.intersect(man_circ)
+
+true
+----
+
+The 'Geoshape' class provides a number of useful methods. If we wanted to verify that
+the latitude and longitude values we got back from the LHR vertex were valid, meaning
+they do indeed represent a point somewhere on Earth, we could do so as follows.
+
+[source,groovy]
+----
+Geoshape.isValidCoordinate(lat,lon)
+
+true
+----
+
+Earlier, in the "<<latlonmanual>>" section I demonstrated the query below. The query
+finds all airports within a conceptual rectangle around the London Heathrow (LHR)
+airport. The rectangle is defined by adding or subtracting one degree of latitude and
+longitude to the opposite diagonals with LHR at the center.
+
+[source,groovy]
+----
+lat = g.V().has('code','LHR').values('lat').next()
+lon = g.V().has('code','LHR').values('lon').next()
+
+g.V().hasLabel('airport').has('lon',between(lon-1,lon+1)).
+                          has('lat',between(lat-1,lat+1)).
+                          valueMap('code','lat','lon')
+----
+
+Here is the output that query produced.
+
+[source,groovy]
+----
+[code:[LHR],lon:[-0.461941003799],lat:[51.4706001282]]
+[code:[LGW],lon:[-0.190277993679047],lat:[51.1481018066406]]
+[code:[LCY],lon:[0.055278],lat:[51.505278]]
+[code:[STN],lon:[0.234999999404],lat:[51.8849983215]]
+[code:[LTN],lon:[-0.368333011865616],lat:[51.874698638916]]
+[code:[SOU],lon:[-1.35679996013641],lat:[50.9502983093262]]
+----
+
+We can use the JanusGraph Geoshape class to rewrite the query as shown below. Instead
+of using a 'circle' this time we will create a 'box' representing a geographical
+region around London Heathrow (LHR).
+
+[source,groovy]
+----
+// Define a box around LHR with opposite diagonal corners
+// each one degree from LHR.
+box = Geoshape.box(lat_lhr-1,lon_lhr-1,lat_lhr+1,lon_lhr+1)
+
+// Find other airports that within the box
+g.V().has('airport','region','GB-ENG').
+      where(map{a=it.get().value('lat');
+                b=it.get().value('lon');
+                Geoshape.point(a,b).within(box)}.is(true)).
+                valueMap('code','lat','lon')
+----
+
+The results from running our new query are shown below. As you can see the same
+airports were found.
+
+[source,groovy]
+----
+[code:[LGW],lon:[-0.190277993679047],lat:[51.1481018066406]]
+[code:[LHR],lon:[-0.461941003799],lat:[51.4706001282]]
+[code:[LCY],lon:[0.055278],lat:[51.505278]]
+[code:[STN],lon:[0.234999999404],lat:[51.8849983215]]
+[code:[LTN],lon:[-0.368333011865616],lat:[51.874698638916]]
+[code:[SOU],lon:[-1.35679996013641],lat:[50.9502983093262]]
+----
+
+I have just shown a few examples of the many things that you can do using the
+JanusGraph GeoSpatial API. If this is an area that interests you I recommend reading
+the API documentation for the 'Geoshape' and related classes.
+
+[[janusstorage]]
+Choosing a persistent storage technology for JanusGraph
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+So far we have concentrated on examples where the graph data resides in the memory of
+the computer system. The only form of persistence we have so far looked at is saving
+an entire graph as JSON or XML and reading it back into memory at a future date.
+Clearly, for many production systems, we need a better story for data persistence. As
+delivered, JanusGraph supports a number of different back end databases that can be
+used to persist graph data. A bit later, in the "<<dockercass>>" section, we will
+explore a simple way to experiment with one of these database options.
+
+Once JanusGraph has been downloaded and installed (unzipped) you will find a
+directory called /conf below the directory where JanusGraph was installed. In this
+directory you will find a number of Java properties files that can be used to connect
+JanusGraph to different back end data stores. Depending upon your configuration these
+property files may work unchanged or may need to be edited. Each property file has
+detailed comments that explain what the various setting do.
+
+NOTE: The official JanusGraph documentation provides detailed configuration
+information for each of the currently supported back end stores.
+http://docs.janusgraph.org/latest/storage-backends.html
+
+Let's now take a brief look at some of the persistent storage options available to us
+when using JanusGraph.
+
+[[berkleyintro]]
+Oracle Berkley DB
+^^^^^^^^^^^^^^^^^
+
+Oracle Berkely DB may be a good choice if your application runs on a single machine
+but needs a persistent store. All data is persisted to the same local disk of the
+system where your application runs. Berkley DB is popular with developers who want to
+develop and test graph applications on a single machine using more than an in-memory
+back end. Assuming you are developing an application using Java or Groovy, the Java
+version of Berkley DB, known as Berkley DB Java Edition, is provided as a set of
+libraries that you embed with your application and run using the same JVM as your
+application. Because Berkley DB JE runs on a single machine, the amount of graph data
+that you can store will depend on the size of the disk available on that machine.
+
+For production systems that only need a modest sized graph this may also be a valid
+choice. If your application is likely to generate very large graphs in excess of 100
+million vertices you will probably need to investigate some of the other, multi node
+cluster capable, storage options that we will discuss next. Berkley DB is probably
+not a good choice if you need multiple users to be accessing and changing the graph
+concurrently.
+
+The JanusGraph '/conf' directory contains a file called
+'janusgraph-berkleyje.properties' that can be used to create a new instance of a
+JanusGraph backed by Berkley as follows.
+
+[source,groovy]
+----
+graph = JanusGraphFactory.open("conf/janusgraph-berkleyje.properties")
+----
+
+Alternatively, as there is not much to configure when using Berkley DB, you could
+decide to pass the properties directly to JanusGraph as follows. The second 'set'
+command specifies where your data will be stored on the disk.
+
+[source,groovy]
+----
+graph = JanusGraphFactory.build().
+          set("storage.backend","berkleyje").
+          set("storage.directory","/mydata").
+          open()
+----
+
+Oracle Berkley DB can be downloaded from the Oracle web site from the following URL.
+http://www.oracle.com/technetwork/database/database-technologies/berkeleydb/overview/index.html
+
+
+[[cassandraintro]]
+Apache Cassandra
+^^^^^^^^^^^^^^^^
+
+If a single machine storage solution, such as that offered by Berkley DB, is
+insufficient for your needs then there are several other choices that offer
+horizontal scaling and high availability. Apache Cassandra is one such choice. Which
+storage solution you chose will depend on many factors that go beyond the scope of
+this book. However, if you already have Apache Cassandra deployed in your
+organization or data center and have people that know how to manage and configure it,
+it might be the right choice for your JanusGraph back end storage needs. Like any big
+data system Apache Cassandra requires tuning and maintenance to get the best
+performance for your workload type. That potentially requires developing new skills
+and doing some experimentation. Apache Cassandra is written in Java and it is
+important to keep a careful eye on the amount of garbage collection taking place
+within the virtual machines that are running your Cassandra instances. Excessive
+garbage collection can significantly impact your graph's performance. There are many
+ways that Cassandra can be deployed ranging from a single instance on your local
+machine to a multi node cluster. How you deploy it will depend on your scalability
+and redundancy needs. Note that Cassandra, like Berkley DB can, if needed, also run
+in embedded mode.
+
+NOTE: For detailed configuration information you should refer to the official JanusGraph
+documentation located at http://docs.janusgraph.org/latest/storage-backends.html.
+
+A bit later, in the "<<dockercass>>" section, we will take a look at deploying a
+single node instance of Cassandra using Docker containers which provides a nice
+environment for development and testing.
+
+The JanusGraph '/conf' directory contains several property files that can be used
+when working with Apache Cassandra. Which one you use will depend on the way you
+chose to deploy Cassandra. Later on we will look at the additional steps you need to
+take to configure your environment when external indexes are used. However, if you
+were using Cassandra without an external index being needed you might connect to it
+as follows.
+
+
+[source,groovy]
+----
+graph = JanusGraphFactory.open("conf/janusgraph-cassandra.properties")
+----
+
+You will need to edit the properties file to contain the host name and IP address of
+your Cassandra system. By default the properties file is configured for use with
+'localhost'.
+
+
+Apache Cassandra can be downloaded from the Apache web site from the following
+URL. http://cassandra.apache.org/
+
+[[scyllaintro]]
+ScyllaDB
+^^^^^^^^
+
+ScyllaDB is API compatible with Apache Cassandra but implemented in C++. The same
+configuration files that you use when working with Apache Cassandra should also work
+with ScyllaDB.
+
+ScyllaDB can be downloaded from the following URL. http://www.scylladb.com/
+
+[[hbaseintro]]
+Apache HBase
+^^^^^^^^^^^^
+
+If you already have a Hadoop and HDFS environment setup or are planning to deploy
+one, then Apache HBase may be a good choice for your JanusGraph data store. Apache
+HBase, like Apache Cassandra, is a database that supports very large tables. There
+are several properties files in the '/conf' directory that can be used to connect
+JanusGraph to an Apache HBase store.
+
+NOTE: For detailed configuration information you should refer to the official JanusGraph
+documentation located at http://docs.janusgraph.org/latest/storage-backends.html.
+
+Which properties file you use will depend on whether or not you need to use an
+external index. However, if you were using HBase without an external index being
+needed you might connect to it as follows.
+
+[source,groovy]
+----
+graph = JanusGraphFactory.open("conf/janusgraph-hbase.properties")
+----
+
+As with the Cassandra properties file, The HBase properties file is preconfigured to
+connect to 'localhost'. You will need to edit it and update the hostname and IP
+address as appropriate before calling 'open' if you want to connect to a different
+machine.
+
+Apache HBase can be downloaded from the Apache web site at the following
+URL. https://hbase.apache.org/
+
+Google Bigtable
+^^^^^^^^^^^^^^^
+
+All of the options discussed so far are open source alternatives that you could
+download and run in-house. For the sake of completeness I am including a few pointers
+to some "for fee" alternatives to hosting your JanusGraph data in house. Google
+Bigtable is API compatible with Apache HBase. It offers a hosted alternative to
+hosting your own HBase cluster for use with JanusGraph. Of course you will have to
+decide if paying for a hosted database service is the way you want to go versus
+hosting your graph data in house or setting up your own environment that you manage
+on a hosting service of your choice.
+
+You can read more about Google Bigtable at the following URL. https://cloud.google.com/bigtable/
+
+IBM Compose for JanusGraph
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+IBM offers a hosted and managed JanusGraph environment via its Compose platform. In
+this environment IBM manages the whole environment for you which includes JanusGraph
+backed by a ScyllaDB cluster. As with Google Bigtable this is a hosted service that
+you pay to use. If the idea of managing a Cassandra compatible cluster for use with
+JanusGraph yourself is not something you want to take on this is an option you can
+consider.
+
+You can read more about this service at the following
+URL. https://www.ibm.com/cloud/compose/janusgraph
+
+Other TinkerPop compatible products and services
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+There are now several other products and cloud hosted environments that do not offer
+JanusGraph support per-se but do offer TinkerPop and Gremlin support backed by other
+stores. There are a selection of both hosted and in-house options to choose from. The
+Apache TinkerPop project maintains a list of TinkerPop compatible graph stores. You
+can find that list here http://tinkerpop.apache.org/providers.html.
+
+What is really good to see is that ApacheTinkerpop, and in particular the Gremlin
+query and traversal language, has become one of the primary ways that people are
+building and interacting with, graph databases.
+
+
+[[dockercass]]
+Using Docker to experiment with Cassandra and JanusGraph
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+I find that using Docker containers can be a great way to quickly get things running
+when you are experimenting with new ideas or new technology, or as if often the case,
+both at the same time! There is a very useful containerized implementation of Apache
+Cassandra available that you can download and get running in a few seconds and use to
+test things with JanusGraph. In this section I will walk you through the steps that I
+use to get a single Cassandra node up and running and use it with JanusGraph to setup
+the 'air-routes' graph. I am going to make the assumption that you have already
+downloaded and installed the necessary Docker runtime for your platform. I do most of
+my Docker testing using Linux systems but there are runtimes available for Windows
+and Mac OS as well. Assuming you have docker installed, Cassandra can be installed
+using a simple 'docker pull' command as shown below.
+
+Note that to make it clearer where commands need to be entered commands that need to
+be entered into the Linux terminal shell are prefixed with  '"sh>"' and commands
+that are entered into the Gremlin Console have the '"gremlin>"' prefix.
+
+[source,console]
+----
+sh> docker pull cassandra
+----
+
+[[cassstart]]
+Starting the Cassandra container
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Once Docker has downloaded the Cassandra image for you, it is quite simple to get a
+single instance of Cassandra up and running. There are different ways that you can
+use to configure Docker. To keep things simple I am going to just use command line
+parameters. The command does several things as shown in the notes below it. I split
+the command over four lines to make it easier to read.
+
+[source,console]
+----
+sh> docker run -d -p 7001:7001 -p 7199:7199 -p 9042:9042 -p 9160:9160 \  <1> <2> <3>
+-v  /var/lib/cassandra:/var/lib/cassandra \  <4>
+-e CASSANDRA_START_RPC=true \  <5>
+--name cass  cassandra   <6>
+----
+<1> Starts a new instance of the Cassandra container.
+<2> Runs the command in the background using the '"-d"' flag.
+<3> Exposes the key ports that Cassandra uses so that JanusGraph can connect to this
+Cassandra instance ('"-p"' flags).
+<4> Maps (mounts) the Cassandra volume to the local disk. This is where the data will
+be stored. If we did not do this the data would be lost whenever the container gets
+deleted ('"-v"' flag).
+<5> Enables Thrift support using the '-e CASSANDRA_START_RPC=true' setting. This is not
+needed if you use CQL which is enabled by default.
+<6> Names the container "cass" which makes it easier for us to refer to it later.
+
+
+If you want to check on the progress of your new container at any time you can just
+check the logs using the command below.
+
+[source,console]
+----
+sh> docker logs cass
+----
+
+As with other Docker containers, our Cassandra container can be stopped and started
+as needed using the following commands. Care should be taken not to stop the
+container if JanusGraph is still busy writing data.
+
+[source,console]
+----
+sh> docker stop cass
+
+sh> docker start cass
+----
+
+[[cassconnect]]
+Connecting JanusGraph to Cassandra
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Now that we have an instance of a Cassandra running, it's time to start the Gremlin
+Console that is included with the JanusGraph download and connect to Cassandra.
+Cassandra supports different protocols that can be used when connecting to it. These
+include Astyanax (from Netflix), Thrift and CQL. In this section I am just going to
+discuss Thrift and CQL. An in depth study of these protocols is beyond the scope of
+this book but if you want to read more about them a few web searches will find you
+plenty of documentation. It should be noted that both Thrift and Astyanax are being
+deprecated in favor of CQL. At some point in the future support for the older
+protocols is likely to be dropped so it is probably a good idea to get comfortable
+using CQL as the primary way that you connect JanusGraph to Cassandra,
+
+TIP: A script called 'janus-cassandra.groovy' is available in the sample-code
+folder at https://github.com/krlawrence/graph/tree/master/sample-code. The script
+will automate everything that we are about to discuss in this section and you are
+encouraged to study it.
+
+A number of properties files are included with the JanusGraph download. They are
+located in the '/conf' folder below the root of the JanusGraph folder. The properties
+files can be used to help connect JanusGraph to a number of different back end
+technologies. These properties files can be edited as needed but so long as you are
+using the default Cassandra ports with Cassandra running on your local machine
+(localhost) you should not have to edit anything for the purpose of this discussion.
+
+NOTE: If you decide to run Cassandra on a remote machine, you will need to edit the
+properties file, or create a new one, so that it contains the appropriate host names
+and IP addresses of the remote system.
+
+If you want to connect JanusGraph to Cassandra using the CQL protocol you can use the
+'janusgraph-cql.properties' file as shown below.
+
+[source,groovy]
+----
+gremlin> graph = JanusGraphFactory.open('conf/janusgraph-cql.properties')
+----
+
+You may see a warning message followed by a long stack trace when you issue this
+command. Despite looking like something horrible has happened this can be ignored and
+things will still work. I believe that this is a known issue in the community.
+
+Aside from a potential warning message, if all goes well you should see something
+like the output below after the command has run. This shows that we have a CQL
+connection to our Cassandra instance running on or local machine at 127.0.0.1.
+
+[source,groovy]
+----
+graphtraversalsource[standardjanusgraph[cql:[127.0.0.1]], standard]
+----
+
+
+If you want to connect JanusGraph to Cassandra using the Thrift protocol you can use
+the 'janusgraph-cassandra.properties' file as shown below.
+
+[source,groovy]
+----
+gremlin> graph = JanusGraphFactory.open('conf/janusgraph-cassandra.properties')
+----
+
+If the command succeeds, you should get back some output that looks like this.
+
+[source,groovy]
+----
+standardjanusgraph[cassandrathrift:[127.0.0.1]]
+----
+
+When either of these commands are run, a new JanusGraph instance will be created and
+JanusGraph will attempt to connect to Cassandra using the specified protocols. The
+first time you connect to a brand new (empty) Cassandra instance you should first
+define the graph's schema by creating key definitions and create any indexes that you
+need before creating any vertices, edges or properties. If you would like to
+experiment with the 'air-routes' data using Cassandra as the backing store, the script
+called `janus-cassandra.groovy` from the `sample-code` folder can be used for this. If
+you prefer you can experiment yourself from the console using the JanusGraph
+management API to create keys and indexes and creating a traversal source object
+before adding any vertices and edges.
+
+If you choose run the `janus-cassandra.groovy` script it will create the keys and
+indexes needed and then load the 'air-routes' graph and also run a few tests to make
+sure everything is working. Note that you only need to do this setup step once as
+next time the data will have already been loaded and the schema defined.
+
+NOTE: As we are storing our graph into an instance of Cassandra where the data is
+being persisted on our local file system, the next time you start JanusGraph and
+re-connect to Cassandra your data will be waiting for you!
+
+To run the script from the Gremlin Console you can just use the ':load' command to
+load it as shown below.
+
+[source,groovy]
+----
+gremlin> :load janus-cassandra.groovy
+----
+
+If the script works as expected you should now be able to query the graph.
+
+[source,groovy]
+----
+gremlin> g.V().has('type','airport').count()
+
+==>3379
+----
+
+Whenever you are finished working with the graph, it is a good idea to close it. Once
+closed you will have to reconnect using one of the two 'open' steps shown above before
+you can start working with it again.
+
+[source,groovy]
+----
+gremlin> graph.close()
+----
+
+If you are reconnecting to your graph, having previously loaded some data and closed
+it, you can use the following commands. If you are using Thrift instead of
+CQL you would use the 'janusgraph-cassandra.properties' file instead.
+
+[source,groovy]
+----
+// Reconnect using CQL
+gremlin> graph = JanusGraphFactory.open('conf/janusgraph-cql.properties')
+
+gremlin> g = graph.traversal()
+----
+
+A common requirement when testing and experimenting is to throw everything away and
+start again. The easiest way to do this is to use the command shown below. This will
+remove all of your data, indexes and schema definitions so only do this if you really
+want to start over.
+
+[source,groovy]
+----
+gremlin> JanusGraphFactory.drop(graph)
+----
+
+Having done a 'drop' operation, if you previously loaded the 'air-routes' data using
+the janus-cassandra.groovy script, you will need to run the script again to get the
+data, indexes and schema back.
+
+One other thing to realize is that using the techniques shown in this section we are
+connecting the Gremlin Console and JanusGraph directly to Cassandra. This means that
+we can issue commands directly from the Gremlin Console without needing to use any
+additional configuration or setup steps other than telling JanusGraph how to connect
+to Cassandra using a properties file. Later in the book we will introduce the Gremlin
+Server that allows you to front end a graph with an HTTP server. Remember also that
+JanusGraph is really a set of Java libraries (JAR files). It does not create any
+processes of its own and does not run as a service. So in this instance JanusGraph is
+running on the process of the Gremlin Console. Cassandra of course is running as a
+standalone service.
+
+[[nodetool]]
+Finding nodetool
+^^^^^^^^^^^^^^^^
+
+If for any reason you need to check on Cassandra settings or overall status, you
+typically use the 'nodetool' command. Because in this case we are using a
+containerized version of the Cassandra code, to run 'nodetool' you need to start a
+shell session inside the container. This can be done using the 'docker exec' command
+as shown below. Once you are inside the container you will find 'nodetool' available
+on the default path. The examples below show how to start a bash session and enter a
+few 'nodetool' commands. Finally we exit the session.
+
+[source,console]
+----
+sh> docker exec -it cass bash
+----
+
+Once the shell process has started the prompt will change and you are now running
+inside the context of the container.
+
+[source,console]
+----
+root@115ed53ef189:/
+----
+
+We can now enter 'nodetool' commands. I have truncated the output a bit to aid
+reading. First, let's check the version of Cassandra we are running.
+
+[source,console]
+----
+root@115ed53ef189:/ nodetool version
+
+ReleaseVersion: 3.11.1
+----
+
+Let's check to see that Thrift is running.
+
+[source,console]
+----
+root@115ed53ef189:/ nodetool statusthrift
+
+running
+----
+
+If you want more information about the overall state of things you can use the
+'nodetool info' command. I have truncated this output.
+
+[source,console]
+----
+root@115ed53ef189:/ nodetool info
+
+ID                     : 094e9a8c-99af-4d32-94da-49ed8c61b9fd
+Gossip active          : true
+Thrift active          : true
+Native Transport active: true
+Load                   : 3.64 MiB
+Generation No          : 1517842270
+Uptime (seconds)       : 2636
+Heap Memory (MB)       : 102.43 / 1956.00
+Off Heap Memory (MB)   : 0.03
+Data Center            : datacenter1
+Rack                   : rack1
+Exceptions             : 0
+----
+
+Once we are done with the container typing 'exit' will return us to the Linux
+terminal session we entered the container from.
+
+[source,console]
+----
+root@115ed53ef189:/ exit
+
+sh>
+----
+
+
+[[extindex]]
+Using an external index with JanusGraph
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+JanusGraph allows an external index to be created using a technology such as
+ElasticSearch or Apache Solr. You would create such an index in cases where you need
+to do more sophisticated pattern matching as part of a graph query. This topic is
+currently a little beyond the main focus of this book which is to give a detailed
+introduction to the Gremlin Query and Traversal language and some of the ways that
+technology can be deployed. You can find a detailed explanation of how to create an
+external index in the JanusGraph documentation which is located at the following
+URLs: https://docs.janusgraph.org/latest/indexes.html and
+https://docs.janusgraph.org/latest/index-backends.html.
