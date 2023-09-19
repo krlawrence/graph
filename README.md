@@ -9,7 +9,7 @@ This repository is the home for the source materials, sample code and examples f
 
 **Quick Start - the latest version**  
 
-To read the latest snapshot of the book right away in a browser (HTML format) click [here](http://kelvinlawrence.net/book/PracticalGremlin.html) or for a PDF version click [here](http://kelvinlawrence.net/book/PracticalGremlin.pdf). These snapshots are updated regularly. You will find other formats including MOBI, EPUB and XML (Docbook) in the [releases](https://github.com/krlawrence/graph/releases)  section. Formal releases will be published periodically assuming there is enough new material to make it worthwhile. If you want to see the absolute latest updates you can always browse the Asciidoc source file (Gremlin-Graph-Guide.adoc) in the /book folder. The PDF version is currently the "official" version. It has a better table of contents, some better formatting and a much nicer title page!
+To read the latest snapshot of the book right away in a browser (HTML format) click [here](http://kelvinlawrence.net/book/PracticalGremlin.html) or for a PDF version click [here](http://kelvinlawrence.net/book/PracticalGremlin.pdf). These snapshots are updated regularly. You will find other formats including MOBI, EPUB and XML (Docbook) in the [releases](https://github.com/krlawrence/graph/releases)  section. Formal releases will be published periodically assuming there is enough new material to make it worthwhile. If you want to see the absolute latest updates you can always browse the Asciidoc source files (Practical-Gremlin.adoc and Section-*.adoc files) in the /book folder. The PDF version is currently the "official" version. It has a better table of contents, some better formatting and a much nicer title page!
 
 **LATEST NEWS:**  
 - [Sep-23-2023] Work has started on a second edition of the book! See the note below for more details.
@@ -56,7 +56,7 @@ The book introduces the Apache TinkerPop 3 Gremlin graph query and traversal lan
 
 ## How this site is organized
 
-The book is being written using a text editor in AsciiDoc format. The source manuscript "Gremlin-Graph-Guide.adoc" can be found in the /book folder. This file will always reflect the most recent updates and will often be ahead of the other formats that will only be updated as part of a formal release. You will find formatted HTML and PDF versions of the book in the releases area. I have also provided DOCBOOK, EPUB and MOBI versions as part of each release. These can be viewed using many tools and e-book readers. Note that currently, only the HTML and PDF versions have all the nice colors for source code listings etc.
+The book is being written using a text editor in AsciiDoc format. The source manuscript "Practical-Gremlin.adoc" can be found in the /book folder. This file will always reflect the most recent updates and will often be ahead of the other formats that will only be updated as part of a formal release. You will find formatted HTML and PDF versions of the book in the releases area. I have also provided DOCBOOK, EPUB and MOBI versions as part of each release. These can be viewed using many tools and e-book readers. Note that currently, only the HTML and PDF versions have all the nice colors for source code listings etc.
 
 Included with the book are sample graph data (GraphML) and program files. You will find these, as well as some screen shots and images, and demos in the following folders.
 
