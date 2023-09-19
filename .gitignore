@@ -1,3 +1,5 @@
+*.iml
+**/.idea
 book/Gremlin-Graph-Guide.epub
 book/Gremlin-Graph-Guide.html
 book/Gremlin-Graph-Guide.mobi

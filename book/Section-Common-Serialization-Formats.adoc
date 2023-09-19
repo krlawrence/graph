@@ -1,0 +1,484 @@
+
+[[serialize]]
+COMMON GRAPH SERIALIZATION FORMATS
+----------------------------------
+
+There are a number of ways that graph data can be stored in a file. In this section I
+have provided a brief overview of a few of them. As you will see there are a number
+of ways you can represent graph data using simple CSV files. There are also XML
+format, JSON formats and many more. Of these, the one that still seems to be
+supported across most tools and platforms is GraphML. Not all of the features offered
+by Apache TinkerPop can be expressed using GraphML however. So let's take a look at
+some of the more commonly used formats.
+
+[[csv]]
+Comma Separated Values (CSV)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+There are a number of ways that a graph can be stored using CSV files. There is no
+single preferred format that I am aware of. However, a common and convenient way,
+especially when vertices contain lots of properties is to use two CSV files. One will
+contain all of the vertex data and the other will contain all of the edge data.
+
+[[csvair]]
+Using two CSV files to represent the air-routes data
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+If we were to store the airport data from the 'air-routes' graph in CSV format we might
+do something like the example below. Note that to improve readability I have not
+included every property (or indeed every airport) in this example. Notice how each
+vertex has a unique ID assigned. This is important as when we define the edges we will
+need the vertex IDs to build the connections.
+
+
+----
+"ID","LABEL","CODE","IATA","CITY","REGION","RUNWAYS","LONGEST","ELEV","COUNTRY"
+"1","airport","ATL","KATL","Atlanta","US-GA","5","12390","1026","US"
+"2","airport","ANC","PANC","Anchorage","US-AK","3","12400","151","US"
+"3","airport","AUS","KAUS","Austin","Austin","US-TX","2","12250","542","US"
+"4","airport","BNA","KBNA","Nashville","US-TN","4","11030","599","US"
+"5","airport","BOS","KBOS","Boston","US-MA","6","10083","19","US"
+"6","airport","BWI","KBWI","Baltimore","US-MD","3","10502","143","US"
+"7","airport","DCA","KDCA","Washington D.C.","US-DC","3","7169","14","US"
+"8","airport","DFW","KDFW","Dallas Ft. Worth","US-TX","7","13401","607","US"
+"9","airport","FLL","KFLL","Fort Lauderdale","US-FL","2","9000","64","US"
+----
+
+For the route data, the edges in our graph, we might use a format like the one below.
+I did not include an edge ID as we typically let the graph system assign those. For
+completeness I did include a label however when every edge is of the same type you
+could choose to leave this out so long as the program ingesting the data knew what
+label to assign. Most graph systems require edges to have a label even if it is
+optional for vertices. This is equally true for the airport data. However, in cases
+where vertices and edges within the same CSV file are of different types then clearly
+for those cases it is best to always include the label for each entry.
+
+----
+"LABEL","FROM","TO","DIST"
+"route",1,3,811
+"route",1,4,214
+"route",2,8,3036
+"route",3,4,755
+"route",4,6,586
+"route",5,1,945
+----
+
+Some graph systems provide ingestion tools that, when presented with a CSV file like
+the ones we have shown here can figure out how to process them and build a graph.
+However, in many other situations you may also find yourself writing your own scripts
+or small programs to do it.
+
+I often find myself writing Ruby or Groovy scripts that can generate CSV or GraphML
+files so that a graph system can ingest them. In some cases I have used scripts to
+take CSV or GraphML data and generate the Gremlin statements that would create the
+graph. This is very similar to another common practice, namely, using a  script to
+generate 'INSERT' statements when working with SQL databases.
+
+I have also written Java and Groovy programs that will read the CSV file and use the
+TinkerPop API or the Gremlin Server REST API to insert vertices and edges into a graph.
+If you work with graph systems for a while you will probably find yourself also doing
+similar things.
+
+Adjacency matrix format
+^^^^^^^^^^^^^^^^^^^^^^^
+
+The examples shown above of how a CSV file can be used to store data about vertices and
+edges presents a convenient way to do it. However, this is by no means the only way
+you could do it. For graphs that do not contain properties you could lay the graph
+out using an 'adjacency matrix' as shown below. The letters represent the vertex labels
+and a 1 indicates there is an edge between them and a zero indicates no edge. This
+format can be useful if your vertices and edges do not have properties and if the graph is
+small but in general is not a great way to try and represent large graphs.
+
+----
+A,B,C,D,E,F,G
+A,0,1,1,0,1,0,1
+B,1,0,0,1,0,1,0
+C,1,1,0,1,1,0,1
+D,0,1,1,0,1,0,1
+E,0,0,0,1,0,1,0
+F,1,1,0,1,0,0,1
+G,1,1,1,0,1,1,0
+----
+
+Adjacency List format
+^^^^^^^^^^^^^^^^^^^^^
+
+The adjacency matrix shown above could also be represented as an 'adjacency list'. In
+this case, the first column of each row represents a vertex. The remaining parts of
+each row represent all of the other vertices that this vertex is connected to.
+
+----
+A,C,D,F,G
+B,A,D,F
+C,A,B,D,E,1
+D,B,C,E,G
+E,D,E
+F,A,B,D,G
+G,A,B,C,E,F
+----
+
+While this is a simple example, it is possible to represent a more complex graph such
+as the 'air-routes' graph in this way. We could build a more complex CSV file where the
+vertex and its properties are listed first, followed by all of the other vertices it
+connects to and the properties for those edges.
+
+Some graph database systems actually store their graphs to disk using a variation of
+this format. JanusGraph in fact uses a system a lot like this when storing vertex and
+edge data to its persistent store.
+
+
+Edge List format
+^^^^^^^^^^^^^^^^
+
+When using an 'edge list' format, each line represents an edge. So our simple example
+could be represented as follows. Only a few edges are shown.
+
+----
+A,C
+A,D
+A,F
+A,G
+B,A
+B,D
+B,F
+C,A
+C,B
+----
+
+There are many ways you could construct an edge list. By way of another simple
+example we could represent routes in the 'air-routes' graph in a format similar to that
+shown below. In this case we also include the label of the edge between each of the
+vertices. The vertices are represented by their ID value.
+
+----
+[1,route,623]
+[1,route,624]
+[1,route,625]
+[1,route,626]
+[1,route,627]
+[1,route,628]
+[1,route,629]
+[1,route,630]
+[1,route,631]
+[1,route,632]
+----
+
+If you wanted to export a very simple version of the 'air-routes' graph, using just the
+airport IATA codes and the edge labels you could write a Gremlin query to do it for
+you as follows. Only the first 10 results returned are shown.
+
+[source,groovy]
+----
+g.V().outE().inV().path().by('code').by(label)
+
+[ATL,route,MBS]
+[ATL,route,MCN]
+[ATL,route,MEI]
+[ATL,route,MLB]
+[ATL,route,MSL]
+[ATL,route,PHF]
+[ATL,route,PIB]
+[ATL,route,SBN]
+[ATL,route,TRI]
+[ATL,route,TTN]
+----
+
+TIP: There is a sample program called GraphFromCSV.java in the sample programs folder
+that shows how to read a CSV file like the one above and create a graph from it.
+
+If you wanted to print the list without the containing square brackets you could take
+advantage of the Java 'forEachRemaining' method from the Iterator interface to add a
+bit of post processing to the end of the query. Once again only the first 10 results
+are shown.
+
+[source,groovy]
+----
+g.V().outE().inV().path().by('code').by(label).
+      forEachRemaining{println it[0] + ',' + it[1] + ',' + it[2]}
+
+ATL,route,MBS
+ATL,route,MCN
+ATL,route,MEI
+ATL,route,MLB
+ATL,route,MSL
+ATL,route,PHF
+ATL,route,PIB
+ATL,route,SBN
+ATL,route,TRI
+ATL,route,TTN
+----
+
+GraphML
+~~~~~~~
+
+To be written
+
+[source,xml]
+----
+<?xml version='1.0' ?>
+<!-- ******************************************************* -->
+<!-- Small sample taken from the air-routes.graphml file.    -->
+<!-- ******************************************************* -->
+
+<graphml xmlns='http://graphml.graphdrawing.org/xmlns'>
+  <key id='type'    for='node' attr.name='type'    attr.type='string'></key>
+  <key id='code'    for='node' attr.name='code'    attr.type='string'></key>
+  <key id='icao'    for='node' attr.name='icao'    attr.type='string'></key>
+  <key id='desc'    for='node' attr.name='desc'    attr.type='string'></key>
+  <key id='region'  for='node' attr.name='region'  attr.type='string'></key>
+  <key id='runways' for='node' attr.name='runways' attr.type='int'></key>
+  <key id='longest' for='node' attr.name='longest' attr.type='int'></key>
+  <key id='elev'    for='node' attr.name='elev'    attr.type='int'></key>
+  <key id='country' for='node' attr.name='country' attr.type='string'></key>
+  <key id='city'    for='node' attr.name='city'    attr.type='string'></key>
+  <key id='lat'     for='node' attr.name='lat'     attr.type='double'></key>
+  <key id='lon'     for='node' attr.name='lon'     attr.type='double'></key>
+  <key id='dist'    for='edge' attr.name='dist'    attr.type='int'></key>
+  <key id='labelV'  for='node' attr.name='labelV'  attr.type='string'></key>
+  <key id='labelE'  for='edge' attr.name='labelE'  attr.type='string'></key>
+
+  <graph id='routes' edgedefault='directed'>
+
+    <node id='1'>
+    <data key='labelV'>airport</data>
+    <data key='type'>airport</data>
+    <data key='code'>ATL</data>
+    <data key='icao'>KATL</data>
+    <data key='city'>Atlanta</data>
+    <data key='desc'>Hartsfield - Jackson Atlanta International Airport</data>
+    <data key='region'>US-GA</data>
+    <data key='runways'>5</data>
+    <data key='longest'>12390</data>
+    <data key='elev'>1026</data>
+    <data key='country'>US</data>
+    <data key='lat'>33.6366996765137</data>
+    <data key='lon'>-84.4281005859375</data>
+  </node>
+
+  <edge id='3610' source='1' target='3'>
+    <data key='labelE'>route</data>
+    <data key='dist'>811</data>
+  </edge>
+
+  </graph>
+</graphml>
+----
+
+GraphSON
+~~~~~~~~
+
+As discussed in the "<<graphmlandjsonintro>>" section, since TinkerPop 3.2.2 there
+have been multiple versions of the GraphSON format. The original 1.0 version did not
+contain any type information. Version 2.0 introduced the concept of including data
+types within the JSON. As part of TinkerPop 3.3 GraphSON 3.0 was introduced to add a
+few additional types. All three formats are still supported. The default is now
+GraphSON 3.0.
+
+To be written
+
+[source,groovy]
+----
+graph=TinkerGraph.open()
+g=graph.traversal()
+g.addV('airport').property('code','AUS').as('aus').
+  addV('airport').property('code','DFW').as('dfw').
+  addV('airport').property('code','LAX').as('lax').
+  addV('airport').property('code','JFK').as('jfk').
+  addV('airport').property('code','ATL').as('atl').
+  addE('route').from('aus').to('dfw').
+  addE('route').from('aus').to('atl').
+  addE('route').from('atl').to('dfw').
+  addE('route').from('atl').to('jfk').
+  addE('route').from('dfw').to('jfk').
+  addE('route').from('dfw').to('lax').
+  addE('route').from('lax').to('jfk').
+  addE('route').from('lax').to('aus').
+  addE('route').from('lax').to('dfw')
+----
+
+Adjacency list format GraphSON
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To be written
+
+[source,json]
+----
+{"id":0,"label":"airport","inE":{"route":[{"id":17,"outV":4}]}, ... }
+{"id":2,"label":"airport","inE":{"route":[{"id":18,"outV":4}, ... ]}}
+{"id":4,"label":"airport","inE":{"route":[{"id":15,"outV":2}]}, ... }
+{"id":6,"label":"airport","inE":{"route":[{"id":16,"outV":4}, ... ]}}
+{"id":8,"label":"airport","inE":{"route":[{"id":11,"outV":0}]}, ... }
+----
+
+[source,json]
+----
+{
+    "id": 0,
+    "label": "airport",
+    "inE": {
+        "route": [{
+            "id": 17,
+            "outV": 4
+        }]
+    },
+    "outE": {
+        "route": [{
+            "id": 10,
+            "inV": 2
+        }, {
+            "id": 11,
+            "inV": 8
+        }]
+    },
+    "properties": {
+        "code": [{
+            "id": 1,
+            "value": "AUS"
+        }]
+    }
+}
+----
+
+[source,json]
+----
+{"id":197,"label":"airport","inE":{"contains":[{"id":46566,"outV":3378},{"id":49931,"outV":3608}],"route":[{"id":9524,"outV":55,"properties":{"dist":520}},{"id":9753,"outV":57,"properties":{"dist":903}},{"id":22158,"outV":231,"properties":{"dist":1036}}]},"outE":{"route":[{"id":20448,"inV":231,"properties":{"dist":1036}},{"id":20446,"inV":55,"properties":{"dist":520}},{"id":20447,"inV":57,"properties":{"dist":903}}]},"properties":{"country":[{"id":2356,"value":"AU"}],"code":[{"id":2357,"value":"MCY"}],"longest":[{"id":2358,"value":5896}],"city":[{"id":2359,"value":"Maroochydore"}],"elev":[{"id":2360,"value":15}],"icao":[{"id":2361,"value":"YBSU"}],"lon":[{"id":2362,"value":153.091003418}],"type":[{"id":2363,"value":"airport"}],"region":[{"id":2364,"value":"AU-QLD"}],"runways":[{"id":2365,"value":2}],"lat":[{"id":2366,"value":-26.6033000946}],"desc":[{"id":2367,"value":"Sunshine Coast Airport"}]}}
+----
+
+
+Wrapped adjacency list format GraphSON
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To be written
+
+[source,json]
+----
+{
+    "vertices": [{
+        "id": 0,
+        "label": "airport",
+        "inE": {
+            "route": [{
+                "id": 17,
+                "outV": 4
+            }]
+        },
+        "outE": {
+            "route": [{
+                "id": 10,
+                "inV": 2
+            }, {
+                "id": 11,
+                "inV": 8
+            }]
+        },
+        "properties": {
+            "code": [{
+                "id": 1,
+                "value": "AUS"
+            }]
+        }
+    }, {
+        "id": 2,
+        "label": "airport",
+        "inE": {
+            "route": [{
+                "id": 18,
+                "outV": 4
+            }, {
+                "id": 10,
+                "outV": 0
+            }, {
+                "id": 12,
+                "outV": 8
+            }]
+        },
+        "outE": {
+            "route": [{
+                "id": 14,
+                "inV": 6
+            }, {
+                "id": 15,
+                "inV": 4
+            }]
+        },
+        "properties": {
+            "code": [{
+                "id": 3,
+                "value": "DFW"
+            }]
+        }
+    }, {
+        "id": 4,
+        "label": "airport",
+        "inE": {
+            "route": [{
+                "id": 15,
+                "outV": 2
+            }]
+        },
+        "outE": {
+            "route": [{
+                "id": 16,
+                "inV": 6
+            }, {
+                "id": 17,
+                "inV": 0
+            }, {
+                "id": 18,
+                "inV": 2
+            }]
+        },
+        "properties": {
+            "code": [{
+                "id": 5,
+                "value": "LAX"
+            }]
+        }
+    }, {
+        "id": 6,
+        "label": "airport",
+        "inE": {
+            "route": [{
+                "id": 16,
+                "outV": 4
+            }, {
+                "id": 13,
+                "outV": 8
+            }, {
+                "id": 14,
+                "outV": 2
+            }]
+        },
+        "properties": {
+            "code": [{
+                "id": 7,
+                "value": "JFK"
+            }]
+        }
+    }, {
+        "id": 8,
+        "label": "airport",
+        "inE": {
+            "route": [{
+                "id": 11,
+                "outV": 0
+            }]
+        },
+        "outE": {
+            "route": [{
+                "id": 12,
+                "inV": 2
+            }, {
+                "id": 13,
+                "inV": 6
+            }]
+        },
+        "properties": {
+            "code": [{
+                "id": 9,
+                "value": "ATL"
+            }]
+        }
+    }]
+}
+----
