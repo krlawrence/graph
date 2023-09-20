@@ -284,7 +284,7 @@ Groovy itself is coded in Java. This means that all of the classes and methods t
 you would expect to have available while writing Groovy or Java programs are also
 available to you as you work with the Gremlin Console. You can intermix additional
 features from Groovy and Java classes along with the features provided by the
-TinkerPop 3 classes as needed. This capability makes Gremlin additionally powerful.
+TinkerPop classes as needed. This capability makes Gremlin additionally powerful.
 You can also take advantage of these features when working with Gremlin Server and
 with other TinkerPop enabled graph services with the caveat that some features may be
 blocked if viewed as a potential security risk to the server or simply because they
@@ -660,11 +660,10 @@ in the "<<testgraph>>" section that is coming up soon.
 Using a traversal to determine a new label name
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In TinkerPop 3.3.1 a new capability was added to the 'addV' and 'addE' steps. This
-new capability allows us to use a traversal to determine what the label used by a new
-vertex or edge should be. Take a look at the query below. We have seen this type of
-query used earlier in the book. It simply tells us what label the vertex representing
-the Austin (AUS) airport has.
+When using the  'addV' and 'addE' steps we can  use a traversal to determine what
+the label used by a new vertex or edge should be. Take a look at the query below.
+We have seen this type of query used earlier in the book. It simply tells us what
+label the vertex representing the Austin (AUS) airport has.
 
 [source,groovy]
 ----
@@ -673,9 +672,8 @@ g.V().has('code','AUS').label()
 airport
 ----
 
-What the new capability added in TinkerPop 3.3.1 allows us to do is include the
-traversal above inside of an 'addV' step as shown below. The first string result
-returned by the provided traversal will be used as the label name.
+The traversal above can be used inside of an 'addV' step as shown below. The first
+string result returned by the provided traversal will be used as the label name.
 
 [source,groovy]
 ----
@@ -693,9 +691,6 @@ g.V(53768).valueMap(true)
 
 [id:53768,code:[XYZ],label:airport]
 ----
-
-TIP: These features require that the graph database system you are using supports
-a TinkerPop version of 3.3.1 or higher.
 
 We can now do something similar to dynamically work out what the label should be for
 an edge between our new airport and Austin.
@@ -1182,15 +1177,15 @@ introduce in this section the concept of a property ID.
 The 'Property' and 'VertexProperty' interfaces
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In a TinkerPop 3 enabled graph, all properties are implementations of the 'Property'
+In a TinkerPop enabled graph, all properties are implementations of the 'Property'
 interface. Vertex properties implement the 'VertexProperty' interface which itself
 extends the 'Property' interface. These interfaces are documented as part of the
-Apache TinkerPop 3 JavaDoc. The interface defines the methods that you can use when
+Apache TinkerPop JavaDoc. The interface defines the methods that you can use when
 working with a vertex property object in your code. One important thing to note about
 vertex properties is that they are immutable. You can create them but once created
 they cannot be updated.
 
-We will look more closely at the Java interfaces that TinkerPop 3 defines in the
+We will look more closely at the Java interfaces that TinkerPop defines in the
 "<<javatinker>>" section a bit later in this book.
 
 The VertexProperty interface does not define any "setter" methods
@@ -1838,8 +1833,8 @@ g.V().has('code','AUS').valueMap('x')
 Adding properties to other properties (meta properties)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-TinkerPop 3 introduced the ability to add a property to another property. Think of
-this in a way as being able to add a bit of metadata about a property to the property
+TinkerPop has the ability to add a property to another property. Think of this in
+a way as being able to add a bit of metadata about a property to the property
 itself. This capability, not surprisingly, is often referred to as '"adding a meta
 property to a property"'. There are a number of use cases where this capability can
 be extremely useful. Common ones might be adding a date that a property was last
@@ -1944,20 +1939,15 @@ a date or ACL information to individual properties.
 Using 'unfold' and 'WithOptions' with Meta Properties
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-A new feature was introduced in Apache TinkerPop version 3.4 that allows us to more
-easily include both properties and their meta properties in the result from a
-'valueMap' step that follows a 'properties' step.
-
+There is an easy way to include both properties and their meta properties in the
+result from a 'valueMap' step that follows a 'properties' step. Using this capability
+requires that the graph database you are using has support for meta properties. The
+examples below build upon the examples shown in the previous section.
 
 TIP: All of the possible values that can be specified using WithOptions can be found
 in the official Apache TinkerPop JavaDoc documentation
 http://tinkerpop.apache.org/javadocs/current/full/org/apache/tinkerpop/gremlin/process/traversal/step/util/WithOptions.html[at
 this location].
-
-To use this new capability
-requires that the graph database you are using has support for both meta properties
-and TinkerPop version 3.4. The examples below build upon the examples shown in the
-previous section.
 
 First of all, we know how to inspect the properties present for any vertex using the
 'properties' step.
@@ -4550,7 +4540,7 @@ Using regular expressions to do fuzzy searches
 
 Let's take a look at one case where use of closures might be helpful. It is a
 common requirement when working with any kind of database to want to do some
-sort of fuzzy text search or even to search using a regular expression. TinkerPop 3
+sort of fuzzy text search or even to search using a regular expression. TinkerPop
 itself does not provide direct support for this. In other words there
 currently is no sophisticated text search method beyond the basic 'has()' type steps
 we have looked at above. However, the underlying graph store can still expose
@@ -4690,135 +4680,17 @@ regex = {new P(bp, it)}
 g.V().has('desc', regex(/^Dal.*/)).values('desc')
 ----
 
-[[vmunroll]]
-Unrolling the lists returned by 'valueMap'
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-In the "<<tp34vm>>" section, I showed some examples that used 'by(unfold())' following
-a 'valueMap' step unroll property values. As you may recall, this means that single
-property values are not returned wrapped inside lists. This feature was introduced in
-TinkerPop 3.4. However, you can achieve the same results using earlier versions of
-TinkerPop, it just takes a bit more work.
-
-In case you jumped ahead to this section, here is an example of the new feature and
-the output it produces.
-
-[source,groovy]
-----
-g.V().has('code','SFO').valueMap().by(unfold()).unfold()
-
-country=US
-code=SFO
-longest=11870
-city=San Francisco
-elev=13
-icao=KSFO
-lon=-122.375
-type=airport
-region=US-CA
-runways=4
-lat=37.6189994812012
-desc=San Francisco International Airport
-----
-
-We could use a query like the one below to achieve the same result. A 'map' step is
-used to unpackage and then repackage the results of the 'valueMap' step with the
-values unrolled from their lists.
-
-[source,groovy]
-----
-g.V().has('code','SFO').
-      valueMap().
-      map(unfold().group().by(keys).by(select(values).unfold())).
-      unfold()
-----
-
-The output looks just like that from the prior query, which is good. However, there
-is still an issue with the query. It will not do quite what we want if any property
-has a list or set of values associated with it.
-
-[source,groovy]
-----
-country=US
-code=SFO
-longest=11870
-city=San Francisco
-elev=13
-icao=KSFO
-lon=-122.375
-type=airport
-region=US-CA
-runways=4
-lat=37.6189994812012
-desc=San Francisco International Airport
-----
-
-Let's imagine we wanted to add an additional region classification of "Bay Area" to
-the San Francisco airport vertex. We might do that as shown below.
-
-[source,groovy]
-----
-g.V().has('code','SFO').property(list,'region','Bay Area')
-----
-
-We can look at the valueMap for the 'region' property to validate we now have a list.
-
-[source,groovy]
-----
-g.V().has('code','SFO').valueMap('region')
-
-[region:[US-CA,Bay Area]]
-----
-If we were to use the 'map' step that we just created, it would try to unroll this
-property which in this case is not what we want as we want to preserve the list. We
-can modify this a little to include a 'choose' step that only unrolls the
-list if it has a length of one.
-
-[source,groovy]
-----
-g.V().has('code','SFO').
-      valueMap().
-      map(unfold().
-        group().
-          by(keys).
-          by(choose(select(values).count(local).is(1),
-                    select(values).unfold(),
-                    select(values)))).
-      unfold()
-----
-
-This time the results are still unrolled except for the 'region' property which
-remained a list.
-
-[source,groovy]
-----
-country=US
-code=SFO
-longest=11870
-city=San Francisco
-elev=13
-icao=KSFO
-lon=-122.375
-type=airport
-region=[US-CA, Bay Area]
-runways=4
-lat=37.6189994812012
-desc=San Francisco International Airport
-----
-
-
-
 [[graphvars]]
 Using graph variables to associate metadata with a graph
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-TinkerPop 3 introduced the concept of graph variables. A graph variable is a
-key/value pair that can be associated with the graph itself. Graph variables are not
-considered part of the graph that you would process with Gremlin traversals but are
-in essence a way to associate metadata with a graph. You can set and retrieve graph
-variables using the 'variables' method of the graph object. Let's assume I wanted to
-add some metadata that allowed me to record who the maintainer of the 'air-routes'
-graph is and when it was last updated. We could do that as follows.
+A graph variable is a key/value pair that can be associated with the graph itself.
+Graph variables are not considered part of the graph that you would process with
+Gremlin traversals but are in essence a way to associate metadata with a graph.
+You can set and retrieve graph variables using the 'variables' method of the graph
+object. Let's assume I wanted to add some metadata that allowed me to record who
+the maintainer of the 'air-routes' graph is and when it was last updated. We could
+do that as follows.
 
 [source,groovy]
 ----
@@ -5108,23 +4980,20 @@ topic. That documentation can be found at
 http://tinkerpop.apache.org/docs/current/reference/#_gremlin_i_o.
 
 There are currently three versions of GraphSON. The original 1.0 version and then
-versions 2.0 and 3.0 that added type information to the format. These were added in
-TinkerPop versions 3.2.2 and 3.3 respectively. The default format
+versions 2.0 and 3.0 that added type information to the format. The default format
 unless explicitly specified is currently GraphSON 3.0
-
 
 [[sav]]
 Saving (serializing) a graph as GraphML (XML) or GraphSON (JSON)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Using TinkerPop 3 you can save a graph either in GraphML or Graphson format. GraphML
-is an industry standard XML format for describing a graph and is recognized by many
-other applications such as Gephi. GraphSON was defined as part of the TinkerPop
-project and is less broadly supported outside of TinkerPop enabled tools and graphs.
+You can save a graph either in GraphML or Graphson format. GraphML is an industry
+standard XML format for describing a graph and is recognized by many other
+applications such as Gephi. GraphSON was defined as part of the TinkerPop project
+and is less broadly supported outside of TinkerPop enabled tools and graphs.
 However, whereas GraphML is considered lossee for some graphs (it does not support
-all of the data types and structures used by TinkerPop 3). GraphSON is not
+all of the data types and structures used by TinkerPop). GraphSON is not
 considered lossee.
-
 
 Saving a graph to a GraphML file can be done using the following Gremlin expression.
 You might want to try it on one of your graphs and look at the output generated. You
@@ -5140,7 +5009,7 @@ also beautify XML files well.
 graph.io(graphml()).writeGraph('my-graph.graphml')
 ----
 
-TinkerPop 3 offers two different JSON packaging options. These are not to be confused
+TinkerPop offers two different JSON packaging options. These are not to be confused
 with the three different syntax versions. The default encoding option  stores each
 vertex in a graph and all of its edges as a single JSON document. This is repeated
 for every vertex in the graph. This is essentially what is known as 'adjacency list'
@@ -5180,7 +5049,7 @@ fos = new FileOutputStream("my-graph.json")
 GraphSONWriter.build().wrapAdjacencyList(true).create().writeGraph(fos,graph)
 ----
 
-TIP: If you are ingesting large amounts of data into a TinkerPop 3 enabled graph, the
+TIP: If you are ingesting large amounts of data into a TinkerPop enabled graph, the
 unwrapped flavor of GraphSON is probably a much better choice than GraphML or wrapped
 GraphSON. Using this format you can stream data into a graph one vertex at a time
 rather than having to try and send the entire graph as a potentially huge JSON file
@@ -5219,7 +5088,7 @@ a GraphSON JSON format file.
 
 
 The only difference between loading a GraphML file or a GraphSON file is in the name
-of the method from the IoCore Tinkerpop 3 class that we use. When we want to load
+of the method from the IoCore Tinkerpop class that we use. When we want to load
 a graphML file we specify 'IoCore.graphml()'.
 
 [source,groovy]
@@ -5262,12 +5131,11 @@ regular Gremlin Console and a TinkerGraph on your laptop. You do not need to be
 connected to a Gremlin Server to use the examples that I am about to present.
 
 The first thing you need to do is create an instance of a GraphSON mapper that can be
-used to generate JSON for us from a query result. Note that since TinkerPop 3.2.2 there
-have been multiple versions of the GraphSON format. The original 1.0 version did not
-contain any type information. Version 2.0 introduced the concept of including data
-types within the JSON. As part of TinkerPop 3.3 GraphSON 3.0 was introduced to add a
-few additional types. All three formats are still supported. The default is now
-GraphSON 3.0.
+used to generate JSON for us from a query result. Thereare  multiple versions of the
+GraphSON format. The original 1.0 version did not contain any type information.
+Version 2.0 introduced the concept of including data types within the JSON. Version
+3.0 was introduced to add a few additional types. All three formats are still
+supported. The default is now GraphSON 3.0.
 
 The example below creates a 'GraphSONMapper' object that will generate GraphSON 1.0
 format JSON.

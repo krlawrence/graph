@@ -267,12 +267,11 @@ To be written
 GraphSON
 ~~~~~~~~
 
-As discussed in the "<<graphmlandjsonintro>>" section, since TinkerPop 3.2.2 there
-have been multiple versions of the GraphSON format. The original 1.0 version did not
-contain any type information. Version 2.0 introduced the concept of including data
-types within the JSON. As part of TinkerPop 3.3 GraphSON 3.0 was introduced to add a
-few additional types. All three formats are still supported. The default is now
-GraphSON 3.0.
+As discussed in the "<<graphmlandjsonintro>>" section, there are multiple versions of
+the GraphSON format. The original 1.0 version did not contain any type information.
+Version 2.0 introduced the concept of including data types within the JSON and
+GraphSON 3.0 introduced a few additional types. All three formats are still
+supported. The default is now GraphSON 3.0.
 
 To be written
 

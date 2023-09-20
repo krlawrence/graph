@@ -2025,9 +2025,8 @@ Here are the results again, this time sorted by route distance in descending ord
 [DOH,8287,LAX]     [DFW,8022,DXB]
 ----
 
-As part of the TinkerPop 3.2.3 release an additional capability was added to the
-'where' step that allows it to be followed by a 'by' modulator. This allows us,
-should we so desire, to simplify our query a bit more as follows.
+The 'where' step can be followed by a 'by' modulator. This allows us, should we so
+desire, to simplify our query a bit more as follows.
 
 [source,groovy]
 ----
@@ -2039,10 +2038,11 @@ g.V().as('s').
       path().by('code').by('dist')
 ----
 
-As you can see, we got the same results from our modified query. Well, almost the same
-results! Notice that we actually got the 'return routes' returned. So for example,
-we got the route from DXB to AKL and not the route from AKL to DXB that we got in the
-prior case. This is because we compared the values in the opposite order!
+As you can see, we got the same results from our modified query. Well, almost the
+same results! Notice that we actually got the 'return routes' returned. So for
+example, we got the route from DXB to AKL and not the route from AKL to DXB that
+we got in the prior case. This is because we compared the values in the opposite
+order!
 
 [source,groovy]
 ----
@@ -2433,11 +2433,6 @@ parameter. Running the query will produce the following results:
 [AUS, 142,  IAH, 4820, LHR, 4962]
 ----
 
-NOTE: In Tinkerpop 3.3 the syntax of 'sack' was changed. Where previously you would
-write something like 'sack(sum,''runways'')' you are now required to write
-'sack(sum).by(''runways'')'. The prior format was already deprecated in Tinkerpop
-3.2.5 but is now fully removed starting with Tinkerpop 3.3.
-
 We could add a little post processing to our query to only output the airport codes
 and the total mileage. Given this is post processing of a small data set, using a bit
 of in-line code does not feel too ugly here.
@@ -2519,8 +2514,8 @@ sacks in powerful ways to store data as your query iterates.
 
 [source,groovy]
 ----
-// The same query but done using the new sack() step in TinkerPop 3
-// shown as an example only. The prior query works just fine for this.
+// The same query but done using the sack() step in TinkerPop shown as an
+// example only. The prior query works just fine for this.
 
 g.withSack([:]).
   V().hasLabel('airport').
