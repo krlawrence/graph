@@ -48,7 +48,7 @@ Any such TinkerPop enabled graph databases can be accessed using the Gremlin que
 language and corresponding API. We can also use the TinkerPop API to write client
 code in languages like Java that can talk to a TinkerPop enabled graph. For most of
 this book we will be working within the Gremlin console with a local graph. However
-in Chapter 6 we will take a look at Gremlin Server and some other TinkerPop 3 enabled
+in Chapter 6 we will take a look at Gremlin Server and some other TinkerPop enabled
 environments. Most of Apache TinkerPop has been developed using Java 8 but there are
 also bindings available for many other programming languages such as Groovy and
 Python. Parts of TinkerPop are themselves developed in Groovy, most notably the
@@ -59,7 +59,7 @@ Gremlin Server. All of these topics are covered in detail in this book.
 The queries used as examples in this book have been tested with Apache TinkerPop
 version {tpvercheck} as well as many prior releases. Tests were performed using the
 TinkerGraph in memory graph and the Gremlin console, as well as
-other TinkerPop 3 enabled graph stores.
+other TinkerPop enabled graph stores.
 
 [[gconsole]]
 The Gremlin console
@@ -74,7 +74,7 @@ console can actually work with graphs that are running locally or remotely but f
 the majority of this book we will keep things simple and focus on local graphs.
 
 To follow along with this tutorial you will need to have installed the Gremlin
-console or have access to a TinkerPop3/Gremlin enabled graph store such as
+console or have access to a TinkerPop/Gremlin enabled graph store such as
 TinkerGraph or JanusGraph.
 
 Regardless of the environment you use, if you work with Apache TinkerPop enabled
@@ -89,7 +89,7 @@ You can download the Gremlin console from the official Apache TinkerPop website:
 http://tinkerpop.apache.org/
 
 It only takes a few minutes to get the Gremlin Console installed and running. You
-just download the ZIP file and 'unzip' it and you are all set. TinkerPop 3 also
+just download the ZIP file and 'unzip' it and you are all set. TinkerPop also
 requires a recent version of Java 8 being installed. We have done all of our testing
 using Java 8 version 1.8.0_131. The Gremlin Console will not work with versions prior
 to 1.8.0_45. If you do not have Java 8 installed it is easy to find and download off
@@ -238,7 +238,7 @@ the following command from inside the Gremlin console.
 ----
 // What version of Gremlin console am I running?
 gremlin>  Gremlin.version()
-==>3.4.10
+==>3.7.0
 ----
 
 One thing that is not at all obvious or apparent is that the Gremlin console quietly
@@ -299,7 +299,7 @@ in help.
 Introducing TinkerGraph
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-As well as the Gremlin Console, the TinkerPop 3 download includes an implementation
+As well as the Gremlin Console, the TinkerPop download includes an implementation
 of an in-memory graph store called TinkerGraph. This book was mostly developed
 using TinkerGraph but we also tested everything using JanusGraph. We will introduce
 JanusGraph later in the "<<janusintro>>" section. The nice thing about TinkerGraph
@@ -308,14 +308,14 @@ laptop or desktop computer and be up and running very quickly. We will also expl
 how to get started with the Gremlin Console and TinkerGraph a bit later in this
 section.
 
-TinkerPop 3 defines a number of capabilities that a graph store should support. Some
-are optional others are not. If supported, you can query any TinkerPop 3 enabled
-graph store to see which features are supported using a command such as
-'graph.features()' once you have established the 'graph' object. We will look at how
-to do that soon. The following list shows the features supported by TinkerGraph. This
-is what you would get back should you call the 'features' method provided by
-TinkerGraph. We have arranged the list in two columns to aid readability. Don't worry
-if not all of these terms make sense right away - we'll get there soon!
+TinkerPop defines a number of capabilities that a graph store should support. Some
+are optional others are not. If supported, you can query any TinkerPop enabled graph
+store to see which features are supported using a command such as 'graph.features()'
+once you have established the 'graph' object. We will look at how to do that soon.
+The following list shows the features supported by TinkerGraph. This is what you
+would get back should you call the 'features' method provided by TinkerGraph. We have
+arranged the list in two columns to aid readability. Don't worry if not all of these
+terms make sense right away - we'll get there soon!
 
 .Output from graph.features()
 ----
@@ -613,103 +613,6 @@ set available. That file can be found in the 'sample-data' folder. Look for a fi
 called `air-routes-latest.graphml`. There is also a README file to go along with the
 updated data set called `README-air-routes-latest.txt` in the same folder.
 
-
-[[mn]]
-TinkerPop 3 migration notes
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-There are still a large number of examples on the internet that show the TinkerPop 2
-way of doing things. Quite a lot of things changed between TinkerPop 2 and TinkerPop
-3. If you were an early adopter and are coming from a TinkerPop 2 environment to a
-TinkerPop 3 environment you may find some of the tips in this section helpful. As
-explained below, using the 'sugar' plugin will make the migration from TinkerPop 2
-easier but it is recommended to learn the full TinkerPop 3 Gremlin syntax and get
-used to using that as soon as possible. Using the full syntax will make your queries
-a lot more portable to other TinkerPop 3 enabled graph systems.
-
-TinkerPop 3 requires a minimum of Java 8 v45. It will not run on earlier versions of
-Java 8 based on our testing.
-
-[[cr]]
-Creating a TinkerGraph TP2 vs TP3
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The way that you create a TinkerGraph changed between TinkerPop 2 and 3.
-[source,groovy]
-----
-graph = new TinkerGraph()  // TinkerPop 2
-graph = TinkerGraph.open() // TinkerPop 3
-----
-
-[[ld2]]
-Loading a graphML file TP2 vs TP3
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-If you have previous experience with TinkerPop 2 you may also have noticed that the
-way a graph is loaded has changed in TinkerPop 3.
-
-[source,groovy]
-----
-graph.loadGraphML('air-routes.graphml') // TinkerPop 2
-graph.io(graphml()).readGraph('air-routes.graphml') // TinkerPop 3
-----
-
-The Gremlin language itself changed quite a bit between TinkerPop 2 and TinkerPop 3.
-The remainder of this book only shows TinkerPop 3 examples.
-
-[[sugarplugin]]
-A word about the TinkerPop.sugar plugin
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The Gremlin console has a set of plug in modules that can be independently enabled or
-disabled. Depending upon your use case you may or may not need to manage plugins.
-
-TinkerPop 2 supported by default some syntactic 'sugar' that allowed shorthand
-forms of queries to be entered when using the Gremlin console. In TinkerPop 3 that
-support has been moved to a plugin and is off by default. It has to be enabled if you
-want to continue to use the same shortcuts that TinkerPop 2 allowed by default.
-
-You can enable 'sugar' support from the Gremlin console as follows:
-
-[source,groovy]
-----
-:plugin use tinkerpop.sugar
-----
-
-TIP: The Gremlin Console remembers which plugins are enabled between restarts.
-
-In the current revision of this book we have tried to remove any dependence on the
-'tinkerPop.sugar' plugin from the examples presented. By not using Sugar, queries
-shown in this book should port very easily to other TinkerPop 3 enabled graph
-platforms. A few of the queries may not work on versions of TinkerPop prior to 3.2 as
-TinkerPop continues to evolve and new features are being added fairly regularly.
-
-The 'tinkerpop.sugar' plugin allows some queries to be expressed in a more shorthand
-or lazy form, often leaving out references to 'values()' and leaving out parenthesis.
-For example:
-
-[source,groovy]
-----
-// With Sugar enabled
-g.V.hasLabel('airport').code
-
-// Without Sugar enabled
-g.V().hasLabel('airport').values('code')
-----
-
-People Migrating from TinkerPop 2 will find the Sugar plugin helps get your existing
-queries running more easily but as a general rule it is recommended to become
-familiar with the longhand way of writing queries as that will enable your queries to
-run as efficiently as possible on graph stores that support TinkerPop 3. Also, due to
-changes introduced with TinkerPop 3, using sugar will not be as performant as using
-the normal Gremlin syntax.
-
-NOTE: _In earlier versions of this book many of the examples showed the 'sugar'
-form. In the current revision we have tried to remove all use of that form. It's
-possible that we may have missed a few and we will continue to check for, and fix,
-any that got missed. Please let me know if you find any that slipped through the
-net!_
-
 [[ld]]
 Loading the air-routes graph using the Gremlin console
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -725,12 +628,11 @@ commands shown below, available in the `/sample-data` directory.
 https://github.com/krlawrence/graph/tree/main/sample-data
 
 These commands create an in-memory TinkerGraph which will use LONG values for the
-vertex, edge and vertex property IDs. TinkerPop 3 introduced the concept of a
-'traversal' so as part of loading a 'graph' we also setup a graph traversal source
-object called 'g' which we will then refer to in our subsequent queries of the graph.
-The 'max-iteration' option tells the Gremlin console the maximum number of lines of
-output that we ever want to see in return from a query. The default, if this is not
-specified, is 100.
+vertex, edge and vertex property IDs. As part of loading a 'graph' we need to setup
+a graph traversal source object called 'g' which we will then refer to in our
+subsequent queries of the graph. The 'max-iteration' option tells the Gremlin
+console the maximum number of lines of output that we ever want to see in return
+from a query. The default, if this is not specified, is 100.
 
 TIP: You can use the 'max-iteration' setting to control how much output the Gremlin
 Console displays.

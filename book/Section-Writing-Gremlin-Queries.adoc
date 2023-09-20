@@ -219,7 +219,7 @@ we have not tried to teach every possible usage of every Gremlin step and method
 rather, We have tried to provide a good and approachable foundation in writing many
 different types of Gremlin query using an interesting and real-world graph.
 
-NOTE: The latest TinkerPop 3 documentation is always available at this URL:
+NOTE: The latest TinkerPop documentation is always available at this URL:
 http://tinkerpop.apache.org/docs/current/reference/
 
 Below are some simple queries against the 'air-routes' graph to get us started. It is
@@ -836,8 +836,8 @@ g.V(3).out().limit(5).path().by(out().count())
 [[pathfromto]]
 Modifying a 'path' using 'from' and 'to' modulators
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-In Apache TinkerPop version 3.2.5 the ability to limit what is returned by the 'path'
-step using 'from' and 'to' modulators was added. This enables us to not return the
+
+The 'from' and 'to' modulators for the 'path' step enables us to not return the
 entire path of a traversal but instead to be more selective.
 
 First of all, look at the example below. In this case we have just used the same
@@ -1040,11 +1040,10 @@ Using 'as', 'select' and 'project' to refer to traversal steps
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Sometimes it is useful to be able to remember a point of a traversal by giving it a
-name (label) and refer to it later on in the same query. This ability was more
-essential in TinkerPop 2 than it is in TinkerPop 3 but it still has many uses. The
-query below uses an 'as' step to attach a label at two different parts of the
-traversal, each representing different vertices that were found. A 'select' step is
-later used to refer back to them.
+name (label) and refer to it later on in the same query. The query below uses an
+'as' step to attach a label at two different parts of the traversal, each
+representing different vertices that were found. A 'select' step is later used to
+refer back to them.
 
 [source,groovy]
 ----
@@ -1527,9 +1526,9 @@ airports will most likely come back in the order they are put into the graph. Th
 not likely to be the case with other graph stores such as JanusGraph. So do not rely
 on any sort of expectation of order when using 'range' to process sets of vertices.
 
-In TinkerPop 3.3 a new 'skip' step was introduced which can be used as an alternative
-to 'range' in some cases. The 'skip' step can be used whenever you would otherwise
-use 'range' where the second parameter would be '-1' meaning "all remaining".
+You can use 'skip' step as an alternative to 'range' in some cases. The 'skip'
+step can be used whenever you would otherwise use 'range' where the second
+parameter would be '-1' meaning "all remaining".
 
 The two examples below will produce the same results.
 
@@ -1700,9 +1699,7 @@ desc=[Austin Bergstrom International Airport]
 NOTE: Notice how each key, like 'country', is followed by a value that is returned as
 an element of a list. This is because it is possible (for vertices but not for edges)
 to provide more than one property value for a given key by encoding them as a list or
-as a set. In the Apache TinkerPop release 3.4 some changes were introduced to make
-it easier to control how these results are returned. Those changes are discussed in
-the next section.
+as a set. We discuss how to better control this output in the paragraphs that follow.
 
 Here are some more examples of how 'valueMap' can be used. If a parameter of 'true'
 is provided, then the results returned will include the ID and label of the element
@@ -1786,22 +1783,12 @@ g.E(5161).valueMap(true)
 [id:5161,dist:1357,label:route]
 ----
 
-[[tp34vm]]
-Changes to 'valueMap' introduced in TinkerPop 3.4
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+There are other ways to control the results that a 'valueMap' step return using
+the 'with()' modulator.
 
-Starting with the Apache TinkerPop 3.4 release, a few changes have been introduced
-that allow easier control of the results that a 'valueMap' step returns. Further, the
-use of 'true' to return the ID and label properties of a Vertex or an Edge was
-deprecated and replaced by the use of a 'with' modulator.
-
-NOTE: The new valueMap configuration options are described in the official
+NOTE: The valueMap configuration options are described in the official
 documentation at the following link
 http://tinkerpop.apache.org/docs/current/reference/#valuemap-step.
-
-The previous ways of using 'valueMap' will still work but over time as Graph DB
-providers adopt TinkerPop 3.4 the examples shown below will become the preferred way
-of controlling the results returned by 'valueMap'.
 
 Instead of using 'valueMap(true)' to include the ID and label of an element (a vertex
 or an edge) in the results, the new 'with(WithOptions.tokens)' construct can
@@ -1872,14 +1859,8 @@ As discussed in the previous section, the property values returned by 'valueMap'
 by default represented as lists even if there is only a single property value
 present.
 
-NOTE: Using versions of TinkerPop prior to 3.4 it is still possible to generate the
-same unrolled results that you get using 'by(unfold())'. How to do that is discussed
-a bit later in the book we need to look at a few other steps such as 'map' first.
-If you want to jump ahead you will find these examples in the "<<vmunroll>>" section.
-
-Starting with TinkerPop 3.4 you can very easily request that these values be returned
-as single values not wrapped in lists. This can be done using a 'by' step modulator
-as shown below.
+You can very easily request that these values be returned as single values not
+wrapped in lists. This can be done using a 'by' step modulator as shown below.
 
 [source,groovy]
 ----
@@ -1915,16 +1896,10 @@ part of the "<<tp34vmmetaprop>>" section.
 An alternative to 'valueMap' - introducing 'elementMap'
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-A new step, 'elementMap', was added to the Gremlin language as part of the Apache
-TinkerPop 3.4.4 release in October 2019. This new step is similar in many ways
-to the 'valueMap' step but makes some things a little easier.
-
-TIP: Make sure the graph database you are using has support for Apache TinkerPop
-at the 3.4.4 level or higher before using 'elementMap' in your queries.
-
-When using 'valueMap' you need to explicitly request that the ID and label of a
-vertex or an edge are included in query results. This is not necessary when
-using 'elementMap'.
+The 'elementMap' step is similar in many ways to the 'valueMap' step but makes
+some things a little easier. When using 'valueMap' you need to explicitly request
+that the ID and label of a vertex or an edge are included in query results. This
+is not necessary when using 'elementMap'.
 
 [source,groovy]
 ----
@@ -2639,17 +2614,10 @@ g.V().hasLabel('airport').values('longest').min()
 ----
 
 It is also possible in more recent versions of Apache TinkerPop to use the 'min' and
-'max' steps with more than just numeric values.
-
-NOTE: Before TinkerPop 3.4 was released 'min' and 'max' could only be used with
-numeric values. It is now possible to also test any values that are considered
-_"comparable"_.
-
-Prior to TinkerPop 3.4, it was only possible to work with purely
-numeric values when using 'min' and 'max'. It is now possible to apply these steps to
-any values that are considered _"comparable"_. So, for example, we can now compare
-strings as well as numbers. The examples below look for the minimum and maximum value
-in the descriptive names of the continents.
+'max' steps with more than just numeric values. These steps apply to any value
+that are considered _"comparable"_. So, for example, we can now compare strings as
+well as numbers. The examples below look for the minimum and maximum value in the
+descriptive names of the continents.
 
 [source,groovy]
 ----
@@ -2658,20 +2626,6 @@ g.V().hasLabel('continent').values('desc').min()
 Africa
 
 g.V().hasLabel('continent').values('desc').max()
-
-South America
-----
-
-Prior to TinkerPop 3.4, a similar result could still be achieved by ordering the
-results and simply returning the first one.
-
-[source,groovy]
-----
-g.V().hasLabel('continent').values('desc').order().limit(1)
-
-Africa
-
-g.V().hasLabel('continent').values('desc').order().by(desc).limit(1)
 
 South America
 ----
@@ -3309,19 +3263,16 @@ OSR
 ----
 
 [[textpredicates]]
-New text search predicates added in TinkerPop 3.4
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Text search predicates
+~~~~~~~~~~~~~~~~~~~~~~
 
-Probably one of, if not the, most anticipated features in Apache TinkerPop version
-3.4 was the addition of new '"predicates"' that aid in performing more focused text
-searches.
+Among the '"predicates"' Gremlin has available are the ones used in performing more
+focused text searches. There are three predicates that search for the existence of
+one or more characters within a string of text and three that search for the non
+existence of one or more characters.
 
 TIP: Additional information on the text predicates can be found in the official
 Apache TinkerPop documentation here: http://tinkerpop.apache.org/docs/current/reference/#a-note-on-predicates
-
-In total, six new predicates were added to the Gremlin query language. There are
-three predicates that search for the existence of one or more characters within a
-string of text and three that search for the non existence of one or more characters.
 
 .Text searching predicates
 [cols="^1,4"]
@@ -3685,7 +3636,6 @@ above sea level. Aircraft need a lot more runway to operate safely at that altit
 [country:[CN], code:[BPX], longest:[18045], city:[Bangda], elev:[14219], icao:[ZUBD], lon:[97.1082992553711], type:[airport], region:[CN-54], runways:[1], lat:[30.5536003112793], desc:[Qamdo Bangda Airport]]
 ----
 
-
 [[sortkeyvalue]]
 Sorting by key or value
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -3694,10 +3644,6 @@ Sometimes, when the results of a query are a set of one or more key:value pairs,
 need to sort by either the key or the value in either ascending or descending order.
 Gremlin offers us ways that we can control the sort in these cases. Examples of how
 this works are shown below.
-
-NOTE: In TinkerPop 3.3 changes to the syntax were made. The previous keywords
-'valueDecr', 'valueIncr', 'keyDecr' and 'keyIncr' are now specified using the form
-'by(keys,asc)' or 'by(values,desc)' etc.
 
 The following example shows the difference between running a query with and without
 the use of 'order' to sort using the keys of the map created by the 'group' step.
@@ -3736,139 +3682,6 @@ g.V().hasLabel('airport').limit(10).
 
 [7:[DFW],6:[BOS],5:[ATL],4:[BNA,IAD],3:[ANC,BWI,DCA],2:[AUS,FLL]]
 ----
-
-[[orderchanges]]
-Changes to 'order' introduced in TinkerPop release 3.3.4
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-On October 15th 2018 a change was introduced as part of the Apache TinkerPop 3.3.4
-release This change deprecated the 'incr' and 'decr' keywords recognized by the
-'order' step in favor of the, new at the time, 'asc' and 'desc' keywords. This book
-and its accompanying code samples have been updated to only use 'asc' and 'desc'. If
-the database you are using supports a version of Apache TinkerPop at the 3.3.4 level
-or higher you should be using the new keywords.
-
-NOTE: The 'Order.incr' and 'Order.decr' enumerations were deprecated in the TinkerPop
-3.3.4 release in favor of 'Order.asc' and 'Order.desc'. This was done bring the
-keywords more into line with other commonly used query languages. As of TinkerPop
-release 3.5.0, those enumerations were completely removed from the Gremlin reference
-implementation and documentation and should no longer be used.
-
-Let's take a look at how queries are affected by these changes. The query below
-finds the 10 airports in England with the most outgoing routes and sorts the results
-in descending order. Prior to TinkerPop 3.3.4 the query would have been written as
-follows.
-
-[source,groovy]
-----
-g.V().has('airport','region','GB-ENG').
-      order().by(out().count(),decr).limit(10).
-      project('a','b').by('code').by(out().count())
-----
-
-Running the query produces the following results.
-
-[source,groovy]
-----
-[a:LGW,b:200]
-[a:LHR,b:191]
-[a:STN,b:186]
-[a:MAN,b:182]
-[a:BHX,b:109]
-[a:LTN,b:104]
-[a:BRS,b:84]
-[a:EMA,b:64]
-[a:LBA,b:62]
-[a:LPL,b:60]
-----
-
-Using the new keywords introduced in the 3.3.4 release, the query can be written as
-shown below.
-
-[source,groovy]
-----
-g.V().has('airport','region','GB-ENG').
-      order().by(out().count(),desc).limit(10).
-      project('a','b').by('code').by(out().count())
-----
-
-The results produced, as you would expect, are the same as before.
-
-[source,groovy]
-----
-[a:LGW,b:200]
-[a:LHR,b:191]
-[a:STN,b:186]
-[a:MAN,b:182]
-[a:BHX,b:109]
-[a:LTN,b:104]
-[a:BRS,b:84]
-[a:EMA,b:64]
-[a:LBA,b:62]
-[a:LPL,b:60]
-----
-
-For completeness let's take a look at the same query but sorted in ascending order
-using both the original 'incr' keyword and the newly introduced 'asc' keyword. As
-with 'incr', this remains the default behavior if neither 'asc' nor 'desc' is
-specified.
-
-
-[source,groovy]
-----
-g.V().has('airport','region','GB-ENG').
-      order().by(out().count(),incr).limit(10).
-      project('a','b').by('code').by(out().count())
-----
-
-This time the query has found the airports with the least outgoing commercial
-aviation routes.
-
-[source,groovy]
-----
-[a:CVT,b:0]
-[a:GLO,b:1]
-[a:LEQ,b:1]
-[a:BZZ,b:1]
-[a:MME,b:2]
-[a:ISC,b:3]
-[a:HUY,b:6]
-[a:BLK,b:9]
-[a:NQY,b:11]
-[a:DSA,b:15]
-----
-
-The query below is modified to use the new 'asc' keyword.
-
-[source,groovy]
-----
-g.V().has('airport','region','GB-ENG').
-      order().by(out().count(),asc).limit(10).
-      project('a','b').by('code').by(out().count())
-----
-
-The results produced are the same as before.
-
-[source,groovy]
-----
-[a:CVT,b:0]
-[a:GLO,b:1]
-[a:LEQ,b:1]
-[a:BZZ,b:1]
-[a:MME,b:2]
-[a:ISC,b:3]
-[a:HUY,b:6]
-[a:BLK,b:9]
-[a:NQY,b:11]
-[a:DSA,b:15]
-----
-
-When TinkerPop 3.3.4 was released, these were not breaking changes. As more graph
-database engines move up to the TinkerPop 3.5.0 level these now become breaking
-changes and 'asc' and 'desc' must be used. In order for your code and other queries
-to be future proof, even if your database is not yet at the TinkerPop 3.5.0 level,
-we recommend making these changes to your code as soon as possible.
-
 
 [[bool]]
 Boolean operations
@@ -4248,17 +4061,12 @@ can be used.
 Using 'where' and 'by' to filter results
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-A new capability was added in the TinkerPop 3.2.4 release that allows a 'where' step
-to be followed with a 'by' modulator. This makes writing certain types of queries a
-lot easier than it was before. Hopefully by now, this capability is supported in many
-TinkerPop enabled graph stores but it is always a good idea to verify the version of
-TinkerPop supported before starting to design queries.
-
-The query below starts at the Austin airport and finds all the airports that you can
-fly to from there. A 'where' 'by' step is then used to filter the results to just
-those airports that have the same number of runways that Austin has. What is really
-nice about this is that we do not have to know ahead of time how many runways Austin
-itself has as that is handled for us by the query.
+A 'where' step can be followed with a 'by' modulator. The query below starts at the
+Austin airport and finds all the airports that you can fly to from there. A 'where'
+'by' step is then used to filter the results to just those airports that have the
+same number of runways that Austin has. What is really nice about this is that we
+do not have to know ahead of time how many runways Austin itself has as that is
+handled for us by the query.
 
 [source,groovy]
 ----
@@ -4620,18 +4428,13 @@ g.V().hasLabel('airport').limit(10).
 
 ----
 
-Starting with the 3.4.3 release of Apache TinkerPop, the 'option' step can now
-include a predicate. A nice improvement allowing additional comparisons to be made
-within the 'option' step. This allows testing that a value is greater than or less
-than another, for example, as part of the 'option' step without needing to write a
-more complex query.
+The 'option' step can also include a predicate, allowing more complex comparisons to
+be made as part of that 'choose'. This allows testing that a value is greater than
+or less than another, for example, as part of the 'option' step without needing to
+write a more complex query.
 
-NOTE:  In the TinkerPop 3.4.3 release, a feature was added allowing the 'option' step
-to include a predicate.
-
-Using this new capability, a query can be written using a more simple syntax. The
-query below creates a group containing the counts of airports that fall into one of
-the categories generated by the 'choose' and 'option' steps. Any airport situated
+The query below creates a group containing the counts of airports that fall into one
+of the categories generated by the 'choose' and 'option' steps. Any airport situated
 above 5,000 feet of elevation will be categorized as "high", greater than 3,000 feet
 as "medium" and all others as "low".
 
@@ -4647,32 +4450,15 @@ g.V().hasLabel('airport').
 [high:157,low:3013,medium:204]
 ----
 
-In TinkerPop releases prior to 3.4.3, the query could still have been written but it
-required the use of nested 'choose' steps.
-
-[source,groovy]
-----
-g.V().hasLabel('airport').
-      groupCount().
-        by(choose(values('elev').is(gt(5000)),
-             constant('high'),
-             choose(values('elev').is(gt(3000)),
-               constant('medium'),
-               constant('low'))))
-
-[high:157,low:3013,medium:204]
-----
-
 [[patmatch]]
 Using 'match' to do pattern matching
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The 'match' step was added in TinkerPop 3 and allows a more declarative style of
-pattern based query to be expressed using Gremlin. 'Match' can be a bit hard to
-master but once you figure it out it can be a very powerful way of traversing a graph
-looking for specific patterns. As we shall see however, sometimes a `where` step is
-more than adequate and can be used to express similar patterns to those supported by
-'match'.
+The 'match' step allows a more declarative style of pattern based query to be
+expressed using Gremlin. 'Match' can be a bit hard to master but once you figure it
+out it can be a very powerful way of traversing a graph looking for specific
+patterns. As we shall see however, sometimes a `where` step is more than adequate
+and can be used to express similar patterns to those supported by 'match'.
 
 Below is an example that uses 'match' to look for airline route patterns where there
 is a flight from one airport to another but no return flight back to the original
@@ -4807,8 +4593,7 @@ g.V().has('code','AUS').as('a').out().as('b').
 ----
 
 As mentioned in the "<<whereby>>" section, this query can be simplified further using
-a 'where' step and a 'by' modulator. This capability was introduced in the TinkerPop
-3.2.4 release.
+a 'where' step and a 'by' modulator.
 
 [source,groovy]
 ----
@@ -6086,10 +5871,11 @@ later.
 Nested and named 'repeat' steps
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Starting with Apache TinkerPop release 3.4 it is now possible to nest a 'repeat' step
-inside another 'repeat' step as well as inside 'emit' and 'until' steps.
+The 'repeat' step can be nested inside another 'repeat' step as well as inside 'emit'
+and 'until' steps.
 
-TIP: The official documentation for these new capabilities can be located here: http://tinkerpop.apache.org/docs/current/reference/#repeat-step
+TIP: The official documentation for these new capabilities can be located here:
+http://tinkerpop.apache.org/docs/current/reference/#repeat-step
 
 It is also possible to label a repeat step with a name so that it can be referenced
 later in a traversal. Nested 'repeat' steps allow for some interesting new graph
@@ -6658,8 +6444,7 @@ detail in the "<<mostroutes>>" section.
 ----
 
 The next query will calculate the route degree based on all, incoming and outgoing,
-routes for ten airports. The query takes advantage of the 'project' step that was
-introduced in TinkerPop 3.2.
+routes for ten airports. The query takes advantage of the 'project' step.
 
 [source,groovy]
 ----
@@ -6705,12 +6490,10 @@ Gremlin's scientific calculator - introducing 'math'
 
 As we have seen in some of the prior sections, there are some Gremlin steps such as
 'sum', 'count' and 'mean' that can be used to perform some fairly basic mathematical
-operations. In Apache TinkerPop version 3.3.1 a new 'math' step was introduced that
-allows us to perform scientific calculator style mathematical operations as part of a
-Gremlin graph traversal. As these operators build upon the Java Math class it is
-worth becoming familiar with that class if you are not already. Be aware that this
-functionality will only be available to you if the graph implementation that you are
-using supports Apache TInkerPop 3.3.1 or higher.
+operations. In addition to those steps, 'math' step was provides us to perform
+scientific calculator style mathematical operations as part of a Gremlin graph
+traversal. As these operators build upon the Java Math class it is worth becoming
+familiar with that class if you are not already.
 
 The table below provides a summary of the available operators sorted alphabetically.
 
@@ -6752,9 +6535,6 @@ itself. There are ways to easily work around this however as we shall see below.
 We have not attempted to give an example of every single operator being used but the
 examples provided should provide all of the basic building blocks you will need to
 incorporate mathematical operators into your own Gremlin queries.
-
-TIP: These features require that the graph database system you are using supports a
-TinkerPop version of 3.3.1 or higher.
 
 [[arithmentic]]
 Performing simple arithmetic
@@ -7238,9 +7018,6 @@ Including an index with results - introducing 'withIndex' and 'indexed'
 If for any reason you wanted an index value included as part of the results from a
 query you can use the Groovy 'withIndex' or 'indexed' methods as shown below.
 
-NOTE: As covered in the next section, a native Gremlin 'index' step was introduced in
-the Apache TinkerPop 3.4 release.
-
 The 'withIndex' method adds the index value at the end of a list whereas the
 'indexed' method adds it at the start. You can provide a starting index value as a
 parameter. If no value is provided the default value for the first index will be
@@ -7287,20 +7064,16 @@ g.V().has('region','US-OK').values('code').indexed(1)
 ----
 
 [[tp34index]]
-The new 'index' step added in TinkerPop 3.4
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The 'index' step
+^^^^^^^^^^^^^^^^
 
-Apache TinkerPop version 3.4, released at the start of 2019, added a native 'index'
-step to the Gremlin language. A new 'with' modulator was also added that can be used
-to control how the index step behaves. Unlike the native 'Groovy' methods, there is
-no way to specify the starting value for the index range.
+The  'index' step adds a counter value to a 'list' or 'map' object and usage only
+really makes sense in that context. As shown below, without a 'fold' step in the
+query, the result set will consist of a number of individual lists all with an index
+of zero.
 
 TIP: The official Apache TinkerPop documentation for the 'index' step can be found at
 the following link http://tinkerpop.apache.org/docs/current/reference/#index-step.
-
-The use of 'index' only really makes sense in the context of a collection such as a
-'list' or a 'map'. As shown below, without a 'fold' step in the query, the result set
-will consist of a number of individual lists all with an index of zero.
 
 [source,groovy]
 ----
@@ -7523,7 +7296,7 @@ g.V().has('runways',gte(6)).values('code')
 Next, let's look at two ways of finding flights from airports in South America to
 Miami. The first query uses 'select' which is what we would have had to do in the
 TinkerPop 2 days. The second query, which feels cleaner to me, uses the 'path' and
-'by' step combination introduced in TinkerPop 3.
+'by' step combination introduced in TinkerPop.
 
 [source,groovy]
 ----

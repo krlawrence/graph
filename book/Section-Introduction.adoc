@@ -89,7 +89,7 @@ it is about continues to evolve. Your help and support is very much appreciated.
 What is this book about?
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-This book introduces the Apache TinkerPop 3 'Gremlin' graph query and traversal
+This book introduces the Apache TinkerPop 'Gremlin' graph query and traversal
 language via real examples featuring real-world graph data. That data along with
 sample code and example applications is available for download from the GitHub
 project as well as many other items. The graph, 'air-routes', is a model of
@@ -103,15 +103,14 @@ NOTE: The examples in this book have been tested using Apache TinkerPop release
 that release to the book.
 
 TinkerGraph is an 'in-memory' graph, meaning nothing gets saved to disk
-automatically. It is shipped as part of the Apache TinkerPop 3 download. The
-goal of this tutorial is to allow someone with little to no prior knowledge to
-get up and going quickly using the Gremlin console and the 'air-routes' graph.
-Later in the book I will discuss using additional technologies such as
-JanusGraph, Apache Cassandra, Gremlin Server and Elasticsearch to build
-scalable and persisted graph stores that can still be traversed using Gremlin
-queries. I will also discuss writing standalone Java and Groovy applications
-as well as using the Gremlin Console. I even slipped a couple of Ruby examples in
-too!
+automatically. It is shipped as part of the Apache TinkerPop download. The goal of
+this tutorial is to allow someone with little to no prior knowledge to get up and
+going quickly using the Gremlin console and the 'air-routes' graph. Later in the
+book I will discuss using additional technologies such as JanusGraph, Apache
+Cassandra, Gremlin Server and Elasticsearch to build scalable and persisted graph
+stores that can still be traversed using Gremlin queries. I will also discuss
+writing standalone Java and Groovy applications as well as using the Gremlin
+Console. I even slipped a couple of Ruby examples in too!
 
 NOTE: In the first few sections of this book I have mainly focussed on
 showing the different types of queries that you can issue using Gremlin. I have not
@@ -165,8 +164,8 @@ evolved, it has become a lot more common to connect to a graph remotely via a
 Gremlin Server.
 Chapter 8 - COMMON GRAPH SERIALIZATION FORMATS::
 - In Chapter eight a discussion is presented of some common Graph serialization file
-formats along with coverage of how to use them in the context of TinkerPop 3
-enabled graphs.
+formats along with coverage of how to use them in the context of TinkerPop enabled
+graphs.
 Chapter 9 - FURTHER READING::
 - I finish up by providing several links to useful web sites where you can find
 tools and documentation for many of the topics and technologies covered in this book.
