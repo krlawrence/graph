@@ -9,7 +9,7 @@
 #----------------------------------------------------------------------------------------
 require_relative '../../make-route-graph/mrg/mrg-core.rb'
 
-numAirports = 9999 # Maximum number of aiports to include (there are less then this available).
+numAirports = 9999 # Maximum number of aiports to include (there are less than this available).
 lastAirportId = 0  # Used to track the ID of the last airport included.
 
 # The number of airports to include can be overridden from the command line which is
@@ -116,9 +116,9 @@ str =  "CREATE \n"
 c = lastNodeId + 1
 
 routes.each do |r| 
-  from = r[0]
-  to = r[1]
-  dist = r[2]
+  from = r[RTE_FROM]
+  to = r[RTE_TO]
+  dist = r[RTE_DIST]
   
   if from <= lastAirportId and to <= lastAirportId
     str << "(a#{from})-[:ROUTE {id: '#{c}', dist: #{dist}}]->(a#{to}),\n"
@@ -130,7 +130,7 @@ str[-2] = ' '
 puts str
 
 #
-# Build the CREATE clause for the contains edges for countries
+# Build the CREATE clause for the contains edges for countries and continents
 #
 puts "\n//Country and Continent contains Airport\n"
 
