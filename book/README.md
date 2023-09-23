@@ -3,10 +3,16 @@ This folder contains the AsciiDoc source file used to produce the HTML, XML (DOC
 
 
 **LATEST NEWS:**  
+- [Sep-23-2023] Work has started on a second edition of the book! See the note below for more details.
 - [Apr-2-2023] Many exciting new features have been added to TinkerPop/Gremlin in the 3.6.x line of updates. This will require quite a few updates to the manuscript. As a start, two tracking issues are being used for the key features that need adding - see [#115](https://github.com/krlawrence/graph/issues/115) and [#240](https://github.com/krlawrence/graph/issues/240). These issues include updates from both the 3.5.x and 3.6.x lines.
 - [May-4-2022] The latest preview draft of revision 283 (TP 3.5.2) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
 - [Oct-26-2019] Revision 282 (TP 3.4.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.   
 
+### Work has begun on the second edition!
+
+September 23rd 2023
+
+Ever since I began working on Practical Gremlin, I viewed it as a living book, and have tried to keep up with new features and changes taking place at Apache TinkerPop, updating the manuscript as TinkerPop and Gremlin evolve. However, and this is great to see, the rate and pace at which new features are appearing in Gremlin has steadily increased over the years. This has made it hard to keep up in a "living book" fashion. Moreover, some of the material currently in Practical Gremlin discusses features and limitations in the language that have since either been improved or deprecated. It's really time to start work on a second edition. I'm excited to annuonce that [Stephen Mallette](https://github.com/spmallette) has graciously offered to help with this task. We have created a [V2](https://github.com/krlawrence/graph/tree/v2) branch and will do most of the second edition work there. Over time, the current mainline branch will be archived, and the V2 branch will become the main one. Many of the new Gremlin features that need adding to the manuscript are captured in a [tracking issue](https://github.com/krlawrence/graph/issues/115) and there is also a [planning board](https://github.com/krlawrence/graph/projects/2#) that we will continue to be used as a way to organize the work ahead. I'm really looking forward to the collaboration with Stephen, and to the production of a fully up to date second edition of Practical Gremlin. Please keep an eye on the latest news section here for more updates.  
 
 ## Releases and change history
 
