@@ -12,12 +12,15 @@ This repository is the home for the source materials, sample code and examples f
 To read the latest snapshot of the book right away in a browser (HTML format) click [here](http://kelvinlawrence.net/book/PracticalGremlin.html) or for a PDF version click [here](http://kelvinlawrence.net/book/PracticalGremlin.pdf). These snapshots are updated regularly. You will find other formats including MOBI, EPUB and XML (Docbook) in the [releases](https://github.com/krlawrence/graph/releases)  section. Formal releases will be published periodically assuming there is enough new material to make it worthwhile. If you want to see the absolute latest updates you can always browse the Asciidoc source file (Gremlin-Graph-Guide.adoc) in the /book folder. The PDF version is currently the "official" version. It has a better table of contents, some better formatting and a much nicer title page!
 
 **LATEST NEWS:**  
+- [Sep-23-2023] Work has started on a second edition of the book! See the note below for more details.
 - [Sep-22-2023] Added a new script to the sample-data folder that can produce Cypher versions of the air-routes data.  
 - [Aug-29-2022] Updated versions of the sample data and corresponding demo apps have been uploaded. 
-- [May-04-2022] The latest preview draft of revision 283 (TP 3.5.1) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
-- [Jun-28-2020] I have started creating a series of [issues](https://github.com/krlawrence/graph/issues) to capture changes and updates I hope to make soon. The issues contain some interesting examples of both new Gremlin features and some additional queries, some of which are quite advanced, that I intend to add to the manuscript as time allows. The issues have been sorted into a Kanban board which can be found in the Projects area. 
-- [Oct-26-2019] Revision 282 (TP 3.4.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
 
+### Work has begun on the second edition!
+
+September 23rd 2023
+
+Ever since I began working on Practical Gremlin, I viewed it as a living book, and have tried to keep up with new features and changes taking place at Apache TinkerPop, updating the manuscript as TinkerPop and Gremlin evolve. However, and this is great to see, the rate and pace at which new features are appearing in Gremlin has steadily increased over the years. This has made it hard to keep up in a "living book" fashion. Moreover, some of the material currently in Practical Gremlin discusses features and limitations in the language that have since either been improved or deprecated. It's really time to start work on a second edition. I'm excited to annuonce that [Stephen Mallette](https://github.com/spmallette) has graciously offered to help with this task. We have created a [V2](https://github.com/krlawrence/graph/tree/v2) branch and will do most of the second edition work there. Over time, the current mainline branch will be archived, and the V2 branch will become the main one. Many of the new Gremlin features that need adding to the manuscript are captured in a [tracking issue](https://github.com/krlawrence/graph/issues/115) and there is also a [planning board](https://github.com/krlawrence/graph/projects/2#) that we will continue to be used as a way to organize the work ahead. I'm really looking forward to the collaboration with Stephen, and to the production of a fully up to date second edition of Practical Gremlin. Please keep an eye on the latest news section here for more updates.
 
 ## Releases and change history
 
@@ -126,6 +129,9 @@ Chapter 9 - FURTHER READING
                                                            
 
 **NEWS ARCHIVE:**  
+- [May-04-2022] The latest preview draft of revision 283 (TP 3.5.1) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
+- [Jun-28-2020] I have started creating a series of [issues](https://github.com/krlawrence/graph/issues) to capture changes and updates I hope to make soon. The issues contain some interesting examples of both new Gremlin features and some additional queries, some of which are quite advanced, that I intend to add to the manuscript as time allows. The issues have been sorted into a Kanban board which can be found in the Projects area. 
+- [Oct-26-2019] Revision 282 (TP 3.4.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
 [Aug-31-2021] Updated versions of the sample data and corresponding demo apps have been uploaded.  
 [Aug-02-2021] The latest preview draft of revision 283 (TP 3.5.1) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.    
 [Jul-31-2021] Updated versions of the sample data and corresponding demo apps have been uploaded.  
