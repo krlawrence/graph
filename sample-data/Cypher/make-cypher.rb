@@ -66,10 +66,10 @@ lastAirportId = c - 1
 puts "\n//Countries\n"
 
 countries = mrg.getCountryData()
-countries.each do |co|
-  code = co[0]
-  desc = co[1][0]
-  id = co[1][1]
+countries.each do |k,v|
+  code = k
+  desc = v[COT_NAME]
+  id = v[COT_ID]
 
   desc.gsub!("'","\\\\'")
 
@@ -85,10 +85,11 @@ puts "\n//Continents\n"
       
 continents = mrg.getContinentData()
 lastNodeId = 0
-continents.each do |co|
-  code = co[0]
-  desc = co[1][0]
-  id = co[1][1]
+continents.each do |k,v|
+  code = k
+  desc = v[COT_NAME]
+  id = v[COT_ID]
+
   str = "CREATE (a#{c}:Continent {id:'#{id}',code:'#{code}', desc:'#{desc}'})"
   c += 1
   puts str
