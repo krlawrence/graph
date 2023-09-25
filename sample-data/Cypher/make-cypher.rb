@@ -9,13 +9,41 @@
 #----------------------------------------------------------------------------------------
 require_relative '../../make-route-graph/mrg/mrg-core.rb'
 
-numAirports = 9999 # Maximum number of aiports to include (there are less than this available).
-lastAirportId = 0  # Used to track the ID of the last airport included.
+numAirports = 9999        # Maximum number of aiports to include (there are less than this available).
+lastAirportId = 0         # Used to track the ID of the last airport included.
+useUppercaseLabels = true # If true, node labels will be camel cased and edge labels will be uppercase,
+                          # otherwise all labels will be in lowercase.
 
 # The number of airports to include can be overridden from the command line which is
-# useful when wanting to create smaller test graphs.
+# useful when wanting to create smaller test graphs. Any second parameter will
+# turn off the use of uppercase labels.
+
 if ARGV.size > 0
   numAirports = ARGV[0].to_i
+
+  if ARGV.size > 1
+    useUppercaseLabels = false
+  end
+end
+
+nodeLabels = Hash(
+  'airport'   => 'airport',
+  'continent' => 'continent',
+  'country'   => 'country',
+  'version'   => 'country' )
+
+edgeLabels = Hash(
+  'route'     => 'route',
+  'contains'  => 'contains' )
+
+if useUppercaseLabels
+  nodeLabels.each do |k,v|
+    nodeLabels[k][0] = nodeLabels[k][0].upcase
+  end
+
+  edgeLabels.each do |k,v|
+    edgeLabels[k].upcase!
+  end
 end
 
 mrg = MakeRouteGraph.new(allAirports:true)
@@ -50,7 +78,7 @@ airports.each do |ap|
   desc.gsub!("'","\\\\'")
   city.gsub!("'","\\\\'")
 
-  str = "CREATE (a#{c}:Airport {id:'#{id}',code:'#{code}',icao:'#{icao}',city:'#{city}',"
+  str = "CREATE (a#{c}:#{nodeLabels['airport']} {id:'#{id}',code:'#{code}',icao:'#{icao}',city:'#{city}',"
   str << "desc:'#{desc}',region:'#{region}',runways:#{runways},longest:#{longest},elev:#{elev},"
   str << "country:'#{country}',continent:'#{continent}',lat:#{lat},lon:#{lon}"
   str << "})"
@@ -73,7 +101,7 @@ countries.each do |k,v|
 
   desc.gsub!("'","\\\\'")
 
-  str = "CREATE (a#{c}:Country {id:'#{id}',code:'#{code}', desc:'#{desc}'})"
+  str = "CREATE (a#{c}:#{nodeLabels['country']} {id:'#{id}',code:'#{code}', desc:'#{desc}'})"
   c += 1
   puts str
 end
@@ -90,7 +118,7 @@ continents.each do |k,v|
   desc = v[COT_NAME]
   id = v[COT_ID]
 
-  str = "CREATE (a#{c}:Continent {id:'#{id}',code:'#{code}', desc:'#{desc}'})"
+  str = "CREATE (a#{c}:#{nodeLabels['continent']} {id:'#{id}',code:'#{code}', desc:'#{desc}'})"
   c += 1
   puts str
   lastNodeId = id
@@ -101,7 +129,7 @@ end
 #
       
 puts "\n//Version\n"
-str = "CREATE (v:Version {id:'0',code:'#{VERSION}',date:'#{VERSION_DATE}',author:'#{AUTHOR}',"
+str = "CREATE (v:#{nodeLabels['version']} {id:'0',code:'#{VERSION}',date:'#{VERSION_DATE}',author:'#{AUTHOR}',"
 desc = "Air Routes Data - Version: #{VERSION} Generated: #{VERSION_TIME}"
 str << "desc:'#{desc}'})"
 puts str
@@ -122,7 +150,7 @@ routes.each do |r|
   dist = r[RTE_DIST]
   
   if from <= lastAirportId and to <= lastAirportId
-    str << "(a#{from})-[:ROUTE {id: '#{c}', dist: #{dist}}]->(a#{to}),\n"
+    str << "(a#{from})-[:#{edgeLabels['route']} {id: '#{c}', dist: #{dist}}]->(a#{to}),\n"
     c += 1
   end
 end
@@ -145,9 +173,9 @@ airports.each do |a|
   fromCont = CONTINENTS[continent][COT_ID]
   
   if id <= lastAirportId
-    str << "(a#{fromCtry})-[:CONTAINS {id: '#{c}'}]->(a#{id}),\n"
+    str << "(a#{fromCtry})-[:#{edgeLabels['contains']} {id: '#{c}'}]->(a#{id}),\n"
     c += 1
-    str << "(a#{fromCont})-[:CONTAINS {id: '#{c}'}]->(a#{id}),\n"
+    str << "(a#{fromCont})-[:#{edgeLabels['contains']} {id: '#{c}'}]->(a#{id}),\n"
     c += 1
   end
 end
