@@ -1,1 +1,2 @@
 *.cypher linguist-vendored
+*.adoc linguist-detectable
