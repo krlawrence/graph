@@ -4562,7 +4562,7 @@ Elasticsearch. In those cases some amount of more sophisticated search methods w
 likely be made available to you. You should always check the documentation for the
 system you are using to see what is recommended.
 
-When working with Tinkergraph and the Gremlin console if we want to do any
+When working with TinkerGraph and the Gremlin console if we want to do any
 sort of text search beyond very basic things like 'city == "Dallas"' then we
 will have to fall back on the Lambda function concept to take advantage of
 underlying Groovy and Java features. Note that even in graph

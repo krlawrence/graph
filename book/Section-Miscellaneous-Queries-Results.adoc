@@ -2433,10 +2433,10 @@ parameter. Running the query will produce the following results:
 [AUS, 142,  IAH, 4820, LHR, 4962]
 ----
 
-NOTE: In Tinkerpop 3.3 the syntax of 'sack' was changed. Where previously you would
+NOTE: In TinkerPop 3.3 the syntax of 'sack' was changed. Where previously you would
 write something like 'sack(sum,''runways'')' you are now required to write
-'sack(sum).by(''runways'')'. The prior format was already deprecated in Tinkerpop
-3.2.5 but is now fully removed starting with Tinkerpop 3.3.
+'sack(sum).by(''runways'')'. The prior format was already deprecated in TinkerPop
+3.2.5 but is now fully removed starting with TinkerPop 3.3.
 
 We could add a little post processing to our query to only output the airport codes
 and the total mileage. Given this is post processing of a small data set, using a bit

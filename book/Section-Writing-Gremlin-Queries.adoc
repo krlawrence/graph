@@ -276,7 +276,7 @@ g.V().has('airport','code','DFW').next().getClass()
 class org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerVertex
 ----
 
-The 'next' step that we used above is one of a series of steps that the Tinkerpop
+The 'next' step that we used above is one of a series of steps that the TinkerPop
 documentation describes as 'terminal steps'. We will see more of these 'terminal
 steps' in use throughout this book. As mentioned above, a terminal step
 essentially ends the graph traversal and returns a concrete object that you can work
@@ -2236,7 +2236,7 @@ Every vertex, every edge and even every property in a graph has a unique ID that
 be used to reference it individually or as part of a group. Beware that the IDs you
 provide when loading a graph from a GraphML or GraphSON file may not in many cases
 end up being the IDs that the back-end graph store actually uses as it builds up your
-graph. Tinkergraph for example will preserve user provided IDs but many graph
+graph. TinkerGraph for example will preserve user provided IDs but many graph
 databases such as JanusGraph generate their own IDs. The same is true when you add
 vertices and edges using a graph traversal or using the TinkerPop API. This is a long
 winded way of saying that you should not depend on the IDs in your GraphML or
@@ -3695,7 +3695,7 @@ need to sort by either the key or the value in either ascending or descending or
 Gremlin offers us ways that we can control the sort in these cases. Examples of how
 this works are shown below.
 
-NOTE: In Tinkerpop 3.3 changes to the syntax were made. The previous keywords
+NOTE: In TinkerPop 3.3 changes to the syntax were made. The previous keywords
 'valueDecr', 'valueIncr', 'keyDecr' and 'keyIncr' are now specified using the form
 'by(keys,asc)' or 'by(values,desc)' etc.
 
@@ -4248,7 +4248,7 @@ can be used.
 Using 'where' and 'by' to filter results
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-A new capability was added in the Tinkerpop 3.2.4 release that allows a 'where' step
+A new capability was added in the TinkerPop 3.2.4 release that allows a 'where' step
 to be followed with a 'by' modulator. This makes writing certain types of queries a
 lot easier than it was before. Hopefully by now, this capability is supported in many
 TinkerPop enabled graph stores but it is always a good idea to verify the version of

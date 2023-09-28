@@ -49,7 +49,7 @@ language and corresponding API. We can also use the TinkerPop API to write clien
 code in languages like Java that can talk to a TinkerPop enabled graph. For most of
 this book we will be working within the Gremlin console with a local graph. However
 in Chapter 6 we will take a look at Gremlin Server and some other TinkerPop 3 enabled
-environments. Most of Apache Tinkerpop has been developed using Java 8 but there are
+environments. Most of Apache TinkerPop has been developed using Java 8 but there are
 also bindings available for many other programming languages such as Groovy and
 Python. Parts of TinkerPop are themselves developed in Groovy, most notably the
 Gremlin Console. The nice thing about that is that we can use Groovy syntax along
@@ -308,7 +308,7 @@ laptop or desktop computer and be up and running very quickly. We will also expl
 how to get started with the Gremlin Console and TinkerGraph a bit later in this
 section.
 
-Tinkerpop 3 defines a number of capabilities that a graph store should support. Some
+TinkerPop 3 defines a number of capabilities that a graph store should support. Some
 are optional others are not. If supported, you can query any TinkerPop 3 enabled
 graph store to see which features are supported using a command such as
 'graph.features()' once you have established the 'graph' object. We will look at how
@@ -679,12 +679,12 @@ You can enable 'sugar' support from the Gremlin console as follows:
 TIP: The Gremlin Console remembers which plugins are enabled between restarts.
 
 In the current revision of this book we have tried to remove any dependence on the
-'TinkerPop.sugar' plugin from the examples presented. By not using Sugar, queries
+'tinkerPop.sugar' plugin from the examples presented. By not using Sugar, queries
 shown in this book should port very easily to other TinkerPop 3 enabled graph
 platforms. A few of the queries may not work on versions of TinkerPop prior to 3.2 as
 TinkerPop continues to evolve and new features are being added fairly regularly.
 
-The 'Tinkerpop.sugar' plugin allows some queries to be expressed in a more shorthand
+The 'tinkerpop.sugar' plugin allows some queries to be expressed in a more shorthand
 or lazy form, often leaving out references to 'values()' and leaving out parenthesis.
 For example:
 

@@ -3200,7 +3200,7 @@ stores. There are a selection of both hosted and in-house options to choose from
 Apache TinkerPop project maintains a list of TinkerPop compatible graph stores. You
 can find that list here http://tinkerpop.apache.org/providers.html.
 
-What is really good to see is that ApacheTinkerpop, and in particular the Gremlin
+What is really good to see is that ApacheTinkerPop, and in particular the Gremlin
 query and traversal language, has become one of the primary ways that people are
 building and interacting with, graph databases.
 
