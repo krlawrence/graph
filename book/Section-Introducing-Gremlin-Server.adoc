@@ -279,14 +279,8 @@ As with Gremlin Server, YAML files can be used to configure a remote connection 
 the Gremlin Console. The Gremlin Console as well as the version that comes bundled
 with JanusGraph includes a set of YAML files that can be used as-is or edited as
 needed. In order to connect the Gremlin Console to the Gremlin Server that we just
-configured, the file 'remote.yaml' can be used. we had to make one change, as shown
-below. We commented out the 'serializer' line and replaced it with a slightly
-modified version. We had to do this because of the version issues we mentioned above.
-At time of writing, JanusGraph supports version V1d0 of the GyroMessageSerializer
-that is used as the communication serialization protocol between the Gremlin Console
-and the Gremlin Server. However, our Gremlin Console was pre-configured with the
-newer version V3d0 of the serializer. It is essential that the console and the server
-be using the same version. If we did not make this change, the Gremlin Console and
+configured, the file 'remote.yaml' can be used. It is essential that the console
+and the server be using the same version. If they are not, the Gremlin Console and
 the Gremlin Server would not be able to correctly communicate. Note that in 'remote
 .yaml' file we also specify the name and port of the Gremlin Server host that we will
 be connecting to. As we are running everything locally the default host name of
@@ -301,8 +295,7 @@ value is if you are connecting to a Gremlin Server using a different port.
 ----
 hosts: [localhost]
 port: 8182
-#serializer: { className: org.apache.tinkerpop.gremlin.driver.ser.GryoMessageSerializerV3d0, config: { serializeResultToString: true }}
-serializer: { className: org.apache.tinkerpop.gremlin.driver.ser.GryoMessageSerializerV1d0, config: { serializeResultToString: true }}
+serializer: { className: org.apache.tinkerpop.gremlin.util.ser.GraphBinaryMessageSerializerV1, config: { serializeResultToString: true }}
 ----
 
 [[remoteconn]]
@@ -542,7 +535,7 @@ Connecting to a Gremlin Server from Java using 'withRemote'
 
 While it is perfectly possible to work directly with the JSON returned from a Gremlin
 Server it is often more desirable to have the results placed directly into variables
-of the appropriate type. If the appropriate Grelmin language driver exists for the
+of the appropriate type. If the appropriate Gremlin language driver exists for the
 programming language that you are using, this is quite easy to setup. In this section
 we will look at connecting to a Gremlin Server from a Java application and taking
 advantage of the 'withRemote' capability that TinkerPop provides.
@@ -561,7 +554,7 @@ import org.apache.tinkerpop.gremlin.driver.Cluster;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.structure.util.empty.EmptyGraph;
 import org.apache.tinkerpop.gremlin.driver.remote.DriverRemoteConnection;
-import org.apache.tinkerpop.gremlin.driver.ser.GryoMessageSerializerV1d0;
+import org.apache.tinkerpop.gremlin.util.ser.GraphBinaryMessageSerializerV1;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
@@ -574,9 +567,9 @@ to and the protocol we want to use. It is important that these settings match wh
 the Gremlin Server is configured to use. For this simple example we are just using
 'localhost' as the host name but the name of any Gremlin Server that you have access
 to can be used instead. The default Gremlin Server port of '8182' is specified and the
-'GyroMessageServializerV1d0' serialization format is selected. Again, this needs to
-match both the protocol and the version of the protocol that your Gremlin Server is
-supporting.
+'GraphBinaryMessageSerializerV1' serialization format is selected. Again, this needs
+to match both the protocol and the version of the protocol that your Gremlin Server
+is supporting.
 
 [source,groovy]
 ----
@@ -587,7 +580,7 @@ public class RemoteClient
     Cluster.Builder builder = Cluster.build();
     builder.addContactPoint("localhost");
     builder.port(8182);
-    builder.serializer(new GryoMessageSerializerV1d0());
+    builder.serializer(new GraphBinaryMessageSerializerV1());
 ----
 
 Once the Cluster.Builder instance has been setup we can use it to create our
@@ -772,9 +765,9 @@ scriptEngines: {
                org.apache.tinkerpop.gremlin.jsr223.ImportGremlinPlugin: {classImports: [java.lang.Math], methodImports: [java.lang.Math#*]},
                org.apache.tinkerpop.gremlin.jsr223.ScriptFileGremlinPlugin: {files: [scripts/air-routes.groovy]}}}}
 serializers:
-  - { className: org.apache.tinkerpop.gremlin.driver.ser.GryoMessageSerializerV3d0, config: { ioRegistries: [org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerIoRegistryV3d0] }}            # application/vnd.gremlin-v3.0+gryo
-  - { className: org.apache.tinkerpop.gremlin.driver.ser.GryoMessageSerializerV3d0, config: { serializeResultToString: true }}                                                                      # application/vnd.gremlin-v3.0+gryo-stringd
-  - { className: org.apache.tinkerpop.gremlin.driver.ser.GraphSONMessageSerializerV1d0, config: { ioRegistries: [org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerIoRegistryV3d0] }}        # application/json
+  - { className: org.apache.tinkerpop.gremlin.util.ser.GraphSONUntypedMessageSerializerV3, config: { ioRegistries: [org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerIoRegistryV3] }}     # application/json
+  - { className: org.apache.tinkerpop.gremlin.util.ser.GraphBinaryMessageSerializerV1 }                                                                                                           # application/vnd.graphbinary-v1.0
+  - { className: org.apache.tinkerpop.gremlin.util.ser.GraphBinaryMessageSerializerV1, config: { serializeResultToString: true }}                                                                 # application/vnd.graphbinary-v1.0-stringd
 metrics: {
   slf4jReporter: {enabled: true, interval: 180000}}
 strictTransactionManagement: false
@@ -789,11 +782,12 @@ resultIterationBatchSize: 64
 ----
 
 Note that we configured the YAML file so that when JSON is returned it is in the
-original V1 GraphSON format. This is done by specifying that the
-'GraphSONMessageSerializerV1d0' message serializer be used. The main difference
-between the V1 format and the newer V3 format is that no type information will be
-returned as part of the V1 format. We find that users find this format much easier to
-read while learning Gremlin.
+original V3 GraphSON format. This is done by specifying that the
+'GraphSONUntypedMessageSerializerV3' message serializer be used. Using an untyped
+form of GraphSON removes embedded types in the response and relies on standard JSON
+data types. We find that users find this format much easier to read while learning
+Gremlin and might be more suitable for use case that do not use TinkerPop serializers
+to process the embedded type information.
 
 The properties file that is referenced in the YAML file is unchanged from the default
 one that comes with Gremlin Server. It creates an empty in-memory TinkerGraph.
