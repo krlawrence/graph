@@ -24,7 +24,7 @@ Ever since I began working on Practical Gremlin, I viewed it as a living book, a
 
 ## Releases and change history
 
-The most recent changes and additions are now being tracked in the [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) file.
+The most recent changes and additions are now being tracked in the [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) file.
 
 **A Special note about releases**
 
@@ -129,28 +129,28 @@ Chapter 9 - FURTHER READING
                                                            
 
 **NEWS ARCHIVE:**  
-- [May-04-2022] The latest preview draft of revision 283 (TP 3.5.1) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
+- [May-04-2022] The latest preview draft of revision 283 (TP 3.5.1) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
 - [Jun-28-2020] I have started creating a series of [issues](https://github.com/krlawrence/graph/issues) to capture changes and updates I hope to make soon. The issues contain some interesting examples of both new Gremlin features and some additional queries, some of which are quite advanced, that I intend to add to the manuscript as time allows. The issues have been sorted into a Kanban board which can be found in the Projects area. 
-- [Oct-26-2019] Revision 282 (TP 3.4.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
+- [Oct-26-2019] Revision 282 (TP 3.4.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
 [Aug-31-2021] Updated versions of the sample data and corresponding demo apps have been uploaded.  
-[Aug-02-2021] The latest preview draft of revision 283 (TP 3.5.1) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.    
+[Aug-02-2021] The latest preview draft of revision 283 (TP 3.5.1) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.    
 [Jul-31-2021] Updated versions of the sample data and corresponding demo apps have been uploaded.  
-[Jul-10-2021] The latest preview draft of revision 283 (TP 3.4.10) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
-[Mar-21-2021] The latest preview draft of revision 283 (TP 3.4.10) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
-[Mar-14-2021] The latest preview draft of revision 283 (TP 3.4.10) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
-[Aug-28-2020] The latest preview draft of revision 283 (TP 3.4.8) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
+[Jul-10-2021] The latest preview draft of revision 283 (TP 3.4.10) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
+[Mar-21-2021] The latest preview draft of revision 283 (TP 3.4.10) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
+[Mar-14-2021] The latest preview draft of revision 283 (TP 3.4.10) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
+[Aug-28-2020] The latest preview draft of revision 283 (TP 3.4.8) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
 [Feb-01-2020] Updated versions of the sample data and corresponding demo apps have been uploaded.   
-[Jan-06-2020] The latest draft of revision 283 (TP 3.4.4 preview) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
+[Jan-06-2020] The latest draft of revision 283 (TP 3.4.4 preview) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
 [Oct-13-2019] Updated versions of the sample data and corresponding demo apps have been uploaded.  
-[Oct-26-2019] Revision 282 (TP 3.4.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
+[Oct-26-2019] Revision 282 (TP 3.4.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
 [Apr-27-2019] Updated versions of the sample data and corresponding demo apps have been uploaded.  
-[Dec-26-2018] Revision 281 (TP 3.3.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
+[Dec-26-2018] Revision 281 (TP 3.3.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
 [Dec-24-2018] Updated versions of the sample data and corresponding demo apps have been uploaded.  
 [Sep-29-2018] Updated versions of the sample data and corresponding demo apps have been uploaded.  
-[Jul-28-2018] Revision 280 (TP 3.3.3) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
-[May-29-2018] Revision 279 (TP 3.3.3) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
-[Mar-28-2018] Revision 278 (TP 3.3.1) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
-[Feb-11-2018] Revision 277 was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/master/ChangeHistory.md) for details.  
+[Jul-28-2018] Revision 280 (TP 3.3.3) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
+[May-29-2018] Revision 279 (TP 3.3.3) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
+[Mar-28-2018] Revision 278 (TP 3.3.1) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
+[Feb-11-2018] Revision 277 was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
 [Jan-12-2018] Revision 276 was just published in all formats. Many updates to book and samples.  
 [Jan-12-2018] Based on feedback I have decided to rename the book "Practical Gremlin" (see issue #29)  
 [Jan-06-2018] Several new Java samples have been added to the sample-code directory and others improved.  
