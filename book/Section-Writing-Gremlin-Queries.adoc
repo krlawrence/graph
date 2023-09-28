@@ -2208,18 +2208,19 @@ Working with IDs
 ~~~~~~~~~~~~~~~~
 
 Every vertex, every edge and even every property in a graph has a unique ID that can
-be used to reference it individually or as part of a group. Beware that the IDs you
-provide when loading a graph from a GraphML or GraphSON file may not in many cases
-end up being the IDs that the back-end graph store actually uses as it builds up your
-graph. TinkerGraph for example will preserve user provided IDs but many graph
-databases such as JanusGraph generate their own IDs. The same is true when you add
-vertices and edges using a graph traversal or using the TinkerPop API. This is a long
-winded way of saying that you should not depend on the IDs in your GraphML or
-GraphSON file that you just loaded remaining unchanged once the data has been loaded
-into the graph store. When you add a new vertex or edge to your graph using a
-traversal, the graph system will automatically generate a new, unique ID for it. If
-you need to figure out the ID for a vertex or an edge you can always get it from a
-query of the graph itself.
+be used to reference it individually or as part of a group. These IDs are immutable
+and therefore, cannot be changed once assigned. Beware that the IDs you provide when
+loading a graph from a GraphML or GraphSON file may not in many cases end up being
+the IDs that the back-end graph store actually uses as it builds up your graph.
+TinkerGraph for example will preserve user provided IDs but many graph databases such
+as JanusGraph generate their own IDs. The same is true when you add vertices and
+edges using a graph traversal or using the TinkerPop API. This is a long winded way
+of saying that you should not depend on the IDs in your GraphML or GraphSON file that
+you just loaded remaining unchanged once the data has been loaded into the graph
+store. When you add a new vertex or edge to your graph using a traversal, the graph
+system will automatically generate a new, unique ID for it. If you need to figure out
+the ID for a vertex or an edge you can always get it from a query of the graph
+itself.
 
 TIP: Don't rely on the graph preserving the ID values you provide. Write code that
 can query the graph itself for ID values. How IDs are managed will be graph database
@@ -2319,7 +2320,8 @@ Working with labels
 ~~~~~~~~~~~~~~~~~~~
 
 It's a good idea when designing a graph to give the vertices and edges meaningful
-labels. You can use these to help refine searches. For example in the 'air-routes'
+labels. As with IDs, labels are immutable and therefore cannot be changed once
+assigned. You can use these to help refine searches. For example in the 'air-routes'
 graph, every airport vertex is labelled 'airport' and every country vertex, not
 surprisingly, is labelled 'country'. Similarly, edges that represent a flight route
 are labelled 'route'. You can use labels in many ways. We already saw the 'hasLabel'
