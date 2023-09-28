@@ -433,7 +433,7 @@ fairly accurate.
 
 NOTE: The `air-routes.graphml` file can be downloded from the `sample-data` folder
 located in the GitHub repository at the following URL:
-https://github.com/krlawrence/graph/tree/master/sample-data
+https://github.com/krlawrence/graph/tree/main/sample-data
 
 Of course, in the real world, routes are added and deleted by airlines all the time
 so please don't use this graph to plan your next vacation or business trip! However,
@@ -593,7 +593,7 @@ of these statistics.
 NOTE: There is a sample script called 'graph-stats.groovy' in
 the GitHub repository located in the 'sample-code' folder that shows how to generate
 some statistics about the graph. The script can be found at the
-following URL: https://github.com/krlawrence/graph/tree/master/sample-code
+following URL: https://github.com/krlawrence/graph/tree/main/sample-code
 
 [[airrouteupdates]]
 Updated versions of the air-route data
@@ -606,7 +606,7 @@ that does also mean that some of the examples shown in the book, such as the lon
 airline route currently being flown, are out of date.
 
 TIP: You can download the very latest air-routes data set from
-https://github.com/krlawrence/graph/blob/master/sample-data/air-routes-latest.graphml
+https://github.com/krlawrence/graph/blob/main/sample-data/air-routes-latest.graphml
 
 If you want to get the most up to date results there is a newer version of the data
 set available. That file can be found in the 'sample-data' folder. Look for a file
@@ -722,7 +722,7 @@ console features are also enabled.
 
 NOTE: There is a file called `load-air-routes-graph.groovy`, that contains the
 commands shown below, available in the `/sample-data` directory.
-https://github.com/krlawrence/graph/tree/master/sample-data
+https://github.com/krlawrence/graph/tree/main/sample-data
 
 These commands create an in-memory TinkerGraph which will use LONG values for the
 vertex, edge and vertex property IDs. TinkerPop 3 introduced the concept of a

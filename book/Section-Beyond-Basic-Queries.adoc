@@ -4923,7 +4923,7 @@ those edges and the vertices that they connect with to the new subgraph being
 created.
 
 TIP: You can find all of the sample data in the book's GitHub repository.
-https://github.com/krlawrence/graph/tree/master/sample-data
+https://github.com/krlawrence/graph/tree/main/sample-data
 
 Let's start with a simple example. One of the sample data sets shipped with this book
 is a small version of the main ''air-routes'' graph called `air-routes-small.graphml`.

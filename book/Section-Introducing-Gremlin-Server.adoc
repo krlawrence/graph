@@ -542,7 +542,7 @@ advantage of the 'withRemote' capability that TinkerPop provides.
 
 TIP: The source code for the example shown in this section comes from the
 'RemoteClient.java' sample located at
-https://github.com/krlawrence/graph/tree/master/sample-code.
+https://github.com/krlawrence/graph/tree/main/sample-code.
 
 Let's look at the small application in sections. First of all it is necessary to
 import the required classes that we will need to make the connection to the server
@@ -662,7 +662,7 @@ Server and issue Gremlin Queries.
 
 TIP: The source code for the Ruby example, 'gremlin-client-http.rb', as shown below,
 is available in the sample-code folder.
-https://github.com/krlawrence/graph/tree/master/sample-code
+https://github.com/krlawrence/graph/tree/main/sample-code
 
 The code below represents a complete, standalone Ruby application. It uses the
 standard Ruby libraries. No additional Ruby Gems or third party libraries should be
@@ -728,7 +728,7 @@ dataset in a TinkerGraph.
 
 NOTE: You will find the configuration files discussed in this section in the
 `sample-data` folder at this location
-https://github.com/krlawrence/graph/tree/master/sample-data.
+https://github.com/krlawrence/graph/tree/main/sample-data.
 
 [[TGConfig]]
 Creating the configuration files

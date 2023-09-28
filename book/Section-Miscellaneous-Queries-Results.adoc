@@ -74,7 +74,7 @@ airports still awaiting service to start. We can write a query to easily find th
 
 TIP: You can always find the version of the `air-routes.graphml` file used for the
 examples in the book and also the most recent data set in the `sample-data` folder
-located at https://github.com/krlawrence/graph/tree/master/sample-data .
+located at https://github.com/krlawrence/graph/tree/main/sample-data .
 
 In more recent updates of the data set, some of these airports
 do now have commercial airline service.
@@ -3081,7 +3081,7 @@ The result from the more general purpose version of the query is the same as bef
 190.2483140396514
 ----
 
-NOTE: The code for this query is available in the sample-code folder at https://github.com/krlawrence/graph/blob/master/sample-code/great-circle.groovy
+NOTE: The code for this query is available in the sample-code folder at https://github.com/krlawrence/graph/blob/main/sample-code/great-circle.groovy
 
 We can go one step further and parameterize the query. Everything shown below can be
 done using the Gremlin Console but it also represents the way you might use this

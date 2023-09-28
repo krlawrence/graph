@@ -197,7 +197,7 @@ Project home::
 Book manuscript in Asciidoc format::
 - This file can be viewed using the GitHub web interface. It will always represent
 the very latest updates.
-- https://github.com/krlawrence/graph/tree/master/book
+- https://github.com/krlawrence/graph/tree/main/book
 Latest PDF and HTML snapshots::
 - These files are regularly updated to reflect any significant changes. These are the
 only generated formats that are updated outside of the full release cycle. The PDF
@@ -224,15 +224,15 @@ have the wrong text. Other than that they should work although you may need to
 change the font size you use on your device to make things easier to read.
 - https://github.com/krlawrence/graph/releases
 Sample data (`air-routes.graphml`)::
-- https://github.com/krlawrence/graph/tree/master/sample-data
+- https://github.com/krlawrence/graph/tree/main/sample-data
 Sample code::
-- https://github.com/krlawrence/graph/tree/master/sample-code
+- https://github.com/krlawrence/graph/tree/main/sample-code
 Example applications::
-- https://github.com/krlawrence/graph/tree/master/demos
+- https://github.com/krlawrence/graph/tree/main/demos
 Change history::
 - If you want to keep up with the changes being made this is the file to keep an eye
 on.
-- https://github.com/krlawrence/graph/blob/master/ChangeHistory.md
+- https://github.com/krlawrence/graph/blob/main/ChangeHistory.md
 
 [[tp34intro]]
 A word about TinkerPop 3.4
@@ -245,7 +245,7 @@ those updates.
 
 NOTE: The change history contains details of everything that has been added over time
 and can be found at this location:
-https://github.com/krlawrence/graph/blob/master/ChangeHistory.md
+https://github.com/krlawrence/graph/blob/main/ChangeHistory.md
 
 Graph database engines that support Apache TinkerPop often take a while to move up to
 new releases and it's always a good idea to verify the exact level the database you are
