@@ -14,7 +14,7 @@ _This will be the first release of work related to the Second Edition  ( [main b
 
 _This will be the final release of work related to the First Edition ( [v1 branch](https://github.com/krlawrence/graph/tree/v1) ). Moving forward new work will focus on the Second Edition ( [main branch](https://github.com/krlawrence/graph/tree/main) ) work._
 
-Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v282-tp-3.4.4...master) between this release and the prior one.
+Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v282-tp-3.4.4...v1) between this release and the prior one.
 - Moved the supported TinkerPop version up to 3.5.2. Issue #228
 - Added a section describing the changes added as part of the TinkerPop 3.6.0 release.
 - Upated all sections to remove any use of `Order.decr` and `Order.incr` except where explicitly discussing their removal from Gremlin as of 3.5.0 in favor of `Order.asc` and `Order.desc`. Issue #228
