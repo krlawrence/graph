@@ -147,7 +147,7 @@ NOTE: 本書の冒頭の数節では、Gremlin を使って発行できるいろ
 - https://github.com/krlawrence/graph
 Asciidoc 形式の本書の原稿::
 - このファイルは、GitHub ウェブインタフェースを使ってみることができる。これは常に最新版を表示する。
-- https://github.com/krlawrence/graph/tree/master/book
+- https://github.com/krlawrence/graph/tree/main/book
 最新のPDFとHTMLのスナップショット::
 - これらのファイルは重要な変更を反映するために定期的に更新される。これらは、完全なリリースサイクルの外で更新される唯一の生成されたフォーマットである。PDFバージョンには、ページ番号付きでページネーションが含まれおり、A4ページサイズを使って生成されている。HTMLバージョンにはこれらの機能は含まれていない。それ以外はほとんど同じだ。
 - http://kelvinlawrence.net/book/PracticalGremlin.pdf
@@ -161,14 +161,14 @@ Asciidoc 形式の本書の原稿::
 - ページ番号がついているので、できればPDFバージョンを使うことをお勧めする。本書をウェブページのように読みたい場合は、HTMLバージョンを使ってほしい。ページネーション、あるいはページ番号は表示されない。DocBook フォーマットは LinuxシステムのYelp のようなツールを使って読むことができるが、主要のものとして含まれているため、私がまだ用意できていない別のフォーマットを生成するのに使うことができる。現在、MOBIとePub のバージョンには問題があり、リンクのテキストが間違っている。それ以外はちゃんと機能するはずだが、読みやすくするためにデバイスで使用するフォントサイズを変更する必要があるかもしれない。
 - https://github.com/krlawrence/graph/releases
 サンプルデータ（`air-routes.graphml`)::
-- https://github.com/krlawrence/graph/tree/master/sample-data
+- https://github.com/krlawrence/graph/tree/main/sample-data
 サンプルコード::
-- https://github.com/krlawrence/graph/tree/master/sample-code
+- https://github.com/krlawrence/graph/tree/main/sample-code
 サンプルアプリケーション::
-- https://github.com/krlawrence/graph/tree/master/demos
+- https://github.com/krlawrence/graph/tree/main/demos
 更新履歴::
 - これまでの変更を追いかけるのであれば、これが注視すべきファイルだ。
-- https://github.com/krlawrence/graph/blob/master/ChangeHistory.md
+- https://github.com/krlawrence/graph/blob/main/ChangeHistory.md
 
 [[tp34intro]]
 === TinkerPop 3.4 に関する用語
@@ -176,7 +176,7 @@ Asciidoc 形式の本書の原稿::
 Apache TinkerPop バージョン 3.4.0 のメジャーアップデートが 2019年1月にリリースされ、その後いくつかのポイントリリースが行われた。本書の例は、3.4.x のプロダクトラインのすべてのリリースでテストされている。これらの更新に必要な新しい例も追加されている。
 
 NOTE: 変更履歴には時間の経過とともに追加されたものすべての詳細が含まれていて、ここに置いてある:
-https://github.com/krlawrence/graph/blob/master/ChangeHistory.md
+https://github.com/krlawrence/graph/blob/main/ChangeHistory.md
 
 Apache TinkerPop をサポートするグラフデータベースエンジンは、多くの場合、新しいリリースに移行するのに時間がかかるので、使用しているデータベースがサポートする正確なレベルを確認することはよい考えだ。
 
@@ -572,7 +572,7 @@ NOTE: 本書の残りの部分を通して、下記の規則が使われる。�
 本書と合わせて、私はビッグデータの観点から、とても小さいがそれでもなお、グラフをアプリケーション間で移動するために利用できるグラフを記述するための標準のXMLフォーマットであるGraphMLに格納される実世界のグラフを提供した。このグラフ、 'air-routes' は私が作成した世界の航空会社の航路ネットワークのモデルであり、かなり正確だ。 
 
 NOTE: air-routes.graphml ファイルは、GitHub リポジトリの下記のURLにあるsample-data フォルダからダウンロードできる：
-https://github.com/krlawrence/graph/tree/master/sample-data
+https://github.com/krlawrence/graph/tree/main/sample-data
 
 もちろん、現実の世界では、航空会社によっていつでも航路は追加、削除されるので、このグラフをあなたの次の休暇や出張の計画に使うのはやめていただきたい。しかしながら、学習ツールとして、私はあなたが、それを有用であり関連しやすいものであるとわかることを期待している。もしあなたが、気になるのであれば、ファイルをテキストエディタにロードして、どのようにレイアウトされているかを調べることができる。グラフを操作する際は、著名なグラフシリアライズフォーマットに慣れてくるだろう。一般的なものの２つはGraphML と GraphSONだ。後者はＪＳＯＮフォーマットで Apache TinkerPop で定義されていて、その環境で頻繁に使われている。GraphML はTinkerPop や、グラフデータを視覚化するための著名なオープンソースツールであるGephi のような、多くの他のツールで広く認識されている。多くのグラフ取り込みツールでもコンマ区切り値形式(CSV) ファイルを利用している。
 
@@ -697,7 +697,7 @@ https：//github.com/krlawrence/graph/tree/master/sample-code
 一貫性を維持するために、本書で紹介しているすべての例は、同じバージョンの、air-routes データセットを使って作成されている。このデータセットは 2017年10月に作成された。例の一貫性を維持することが重要であると考えたが、それは同時に、本書で示されている例の中には、現在飛行中の航空路の中で最長のルートのような、すでに古くなっているものがあるということも意味する。
 
 TIP: 最新のair-routes データセットは下記からダウンロードできる:
-https://github.com/krlawrence/graph/blob/master/sample-data/air-routes-latest.graphml
+https://github.com/krlawrence/graph/blob/main/sample-data/air-routes-latest.graphml
 
 最新の結果が欲しい場合は、新しいバージョンのデータセットが利用可能である。そのファイルは、 'sample-data' フォルダにある。 `air-routes-latest.graphml` というファイルを探してみてほしい。同じフォルダに、 `README-air-routes-latest.txt` という名前のREADMEファイルが、更新されたデータセットと一緒にある。
 
@@ -770,7 +770,7 @@ NOTE: 本書の以前のバージョンでは、多くの例がsugar 形式で�
 Gremlin コンソールを使って航空経路グラフをロードするここにいくつかのコードがある。ファイルに格納し、 ':load' を使ってロードしそれを実行するかあるいは、各行をコンソールに手で入れて実行する。これらのコマンドはコンソール環境をセットアップし、TinkerGraph グラフを作成し、air-routes.graphml ファイルを読み込む。いくつかの追加のコンソール機能も有効になっている。
 
 NOTE: load-air-routes-graph.groovy というファイルがあり、下記のコマンドが含まれている。/sample-data ディレクトリにある。
-https://github.com/krlawrence/graph/tree/master/sample-data
+https://github.com/krlawrence/graph/tree/main/sample-data
 
 これらのコマンドは、頂点、エッジ、頂点プロパティIDにLONG 値を使うインメモリ TinkerGraph を作成する。TinkerPop 3 は 'traversal' の概念を導入したので、 'graph' をロードする部分で、g というグラフトラバーサルソースオブジェクトをセットアップする。これは後続のグラフのクエリで参照される。 'max_iteration' オプションは、Gremlin コンソールに、クエリから返される出力の最大行数を知らせる。この指定がない場合、デフォルトでは100になる。
 
@@ -5644,7 +5644,7 @@ g.V().has('code','SAF').
 
 前述したように、air-routes データセットを操作することはおそらくネストされたrepeat ステップを使う上での理想的なユースケースではない。ほとんどのエッジは経路であり、ほとんどの頂点は、空港だ。しかしながら、データにさまざまな頂点タイプやエッジタイプがあるのであれば、この機能は非常に便利な場合がある。
 
-NOTE: sample-code フォルダに、小さなソーシャルグラフを生成し、様々なネストされたrepeatステップ操作を実行するスタンドアロンのサンプルがある。このサンプルは下記に置いてある: https://github.com/krlawrence/graph/blob/master/sample-code/nested-repeat.groovy
+NOTE: sample-code フォルダに、小さなソーシャルグラフを生成し、様々なネストされたrepeatステップ操作を実行するスタンドアロンのサンプルがある。このサンプルは下記に置いてある: https://github.com/krlawrence/graph/blob/main/sample-code/nested-repeat.groovy
 
 ネストされた'repeat'ステップを使う際、'loops'ステップがどのrepeatステップに接続されているかを知るには、各'repeat'ステップに独自のラベル名を付ける必要がある。下記の例では、'repeat'ステップに'"r1"'のラベルをつけ、そのラベルを後続の'loops'ステップで参照している。明らかに、この例にはネストされた繰り返しは含まれていないが、この新しいラベル付け機能がどのように使えるかは示せているのではないかと思う。
 
@@ -5735,7 +5735,7 @@ g.V().has('code','SFO').
 これで、各深度で、アクセスしている頂点の数をカウントできるクエリができたので、これを使って、返す数を制限する制約を追加することができる。
 
 TIP: 下記のクエリは、下記にあるsample-code フォルダのrestricted-repeat.groovy というスクリプトとして利用可能である。
-https://github.com/krlawrence/graph/tree/master/sample-code.
+https://github.com/krlawrence/graph/tree/main/sample-code.
 
 クエリの更新したバージョンを下記に示す。最初に'groupCount'によって生成されたマップを選択し、そこから現在の'loops'の値を使ってマップからエントリを選択する'where'ステップが追加された。頂点は、これまでに5つ以下が検出された場合にのみ、'where'ステップフィルタによって渡される。
 
@@ -10799,7 +10799,7 @@ tree.getObjectsAtDepth(2)
 Gremlin を使うと、扱っている大規模なグラフ内の頂点とエッジのサブセットである。サブグラフを作成することができる。一度作成すると、サブグラフを扱うために、その新しいグラフに固有でメイングラフの処理に使われているものとは別のトラバーサルソースオブジェクトを生成する。サブグラフは、'subgraph'トラバーサルステップを使って生成される。'subgraph'は（頂点ではなく）エッジで機能し、それらのエッジとそれらが接続する頂点の両方を、作成される新しいサブグラフに追加されることに注意してほしい。
 
 TIP: すべてのサンプルデータは本書のGitHub リポジトリにある。
-https://github.com/krlawrence/graph/tree/master/sample-data
+https://github.com/krlawrence/graph/tree/main/sample-data
 
 簡単な例から始めよう。本書に同梱されているサンプルデータセットの1つは、air-routes-small.graphml という、メインの''air-routes''グラフの小さいバージョンだ。これには完全グラフの最初の46空港間の経路が含まれている。エッジと頂点を完全グラフから抽出することによって、これらの空港間のフライトを表すサブグラフを生成するクエリを非常に簡単に書くことができる。下記のクエリを見てほしい。まず、IDが1から46に含まれる全ての頂点を見つける。次に、すべての出エッジを見つけるが、１から46 の同じIDの範囲内の空港に到達しないものはすべて除外する。最後に、'subgraph'ステップを使ってそれらのエッジと頂点を新しいサブグラフに追加する。この'subgraph'ステップにはラベルを付ける必要があることに注意してほしい。この場合、私は、'+++'+++a+++'+++'を使った。これにより、必要に応じて、トラバーサルの複数の部分から新しいサブグラフを追加できるようになる。この場合、これ以上追加する必要はないので、'cap'ステップを使って、'subgraph'の作成を完了する。変数'subg'には新しく作成されたグラフへの参照が含まれる。
 
@@ -11619,7 +11619,7 @@ g.V().hasLabel('country').where(__.not(out())).values('desc')
 
 グラフには、現在商用経路がない空港がいくつかある。これは、以前はサービスされていたが廃止されたか、サービスの開始を待っている新しい空港だからだ。これらの「孤立した」空港を簡単に見つけるためのクエリを書くことができる。これは、air-routes.graphml のバージョン 0.77 に基づくクエリであることに注意してほしい。
 
-TIP: 本書の例で用いられている air-routes.graphml ファイルのバージョンと最新のデータセットは, https://github.com/krlawrence/graph/tree/master/sample-data にあるsample-data フォルダにある。
+TIP: 本書の例で用いられている air-routes.graphml ファイルのバージョンと最新のデータセットは, https://github.com/krlawrence/graph/tree/main/sample-data にあるsample-data フォルダにある。
 
 データセットの最近の更新では、これらの空港の一部に商用空港会社のサービスがある。
 
@@ -14054,7 +14054,7 @@ g.withSideEffect("rdeg", 0.017453293).
 190.2483140396514  
 ----
 
-NOTE: このクエリのコードは、 https://github.com/krlawrence/graph/blob/master/sample-code/great-circle.groovy のsample-codeフォルダーにある。
+NOTE: このクエリのコードは、 https://github.com/krlawrence/graph/blob/main/sample-code/great-circle.groovy のsample-codeフォルダーにある。
 
 さらに一歩進んで、クエリをパラメータ化することができる。下記に示す全ては、Gremlin コンソールを使って実行することができるが、アプリケーション内でこのクエリを実行する方法も表している。今回は、サンフランシスコと東京成田を出発地、目的地として使っている。
 
@@ -15463,7 +15463,7 @@ import java.util.Set;
 
 これで、いくつかのインポートが完了したので、Java アプリケーションの基本的なアウトラインの作成を始めることができる。下記のコードは、'TinkerGraphTest'というクラスを定義し、メモリ内にTinkerGraph を作成し、'main'メソッドを定義し、air routes GraphML データをロードする。今はJavaプログラムとして実行しようとしているので、例外をキャッチする必要があることに注意してほしい。これはGremlin コンソールで作業している際には隠蔽されている別のものだ。
 
-TIP: TinkerGraphTest.java のソースコードは、 https://github.com/krlawrence/graph/tree/master/sample-code にあるsample-code フォルダに置いてある。
+TIP: TinkerGraphTest.java のソースコードは、 https://github.com/krlawrence/graph/tree/main/sample-code にあるsample-code フォルダに置いてある。
 
 最後に、この初期クラスの定義で GraphTraversalSource を作成し、Gremlin クエリを作成してオースティン空港頂点のプロパティ valueMap  を取得して出力する。'Map'に用意されている'toString'メソッドにより、有用な出力がもたらされるはずだ。next() の呼び出しには注意してほしい。これによりグラフトラバーサルが終了し、結果が返される。この呼び出しをなくすと、期待したものが返らなくなる。
 
@@ -15658,7 +15658,7 @@ Birmingham Bristol London Manchester Leeds Newcastle
 
 すでに述べたように、Gremlin コンソールを使っている場合、スタンドアロンのJava コードを書くときに自分で気にする必要があるいくつかが行われる。コンソールから Java へジャンプする人々が混乱していることに気づいた重要な領域は、どのクラスや列挙子が「舞台裏で」静的にインポートされているのか、Javaからそれらの同じ機能へどのようにアクセスされるのかを理解することだ。下記で説明するすべてのクラスや列挙子のより詳しい説明を見つけることができるので、TinkerPop javadoc のページもブックマークしておくべきだろう。最新のjavadoc は常に、 http://tinkerpop.apache.org/javadocs/current/full/ にある。
 
-TIP: TestImports.java というサンプルプログラムが、 https://github.com/krlawrence/graph/tree/master/sample-code にある sample-code フォルダにあり、これらの構成が使われていることが示されている。
+TIP: TestImports.java というサンプルプログラムが、 https://github.com/krlawrence/graph/tree/main/sample-code にある sample-code フォルダにあり、これらの構成が使われていることが示されている。
 
 下記の表は、左側のカラムに、一般的に使われるGremlin キーワードを示す。2つ目のカラムにはJava プログラムからこれらの同じキーワードを明示的に参照する方法を示している。3つ目のカラムは、Javaプログラムで使われる可能性のあるコンテキストの例を示している。これらのクラスの一部をコードへ静的にインポートする選択することができる。私は明示的なプレフィクスを使うのを好むが、多くの場合、それは個人的な好みの問題である。使用可能なすべての述部の表が "<<tranges>>"のセクションにある。特別な +++".__"+++ クラスについては、いくつかの例を示した。一般に、このプレフィクスを使うのは、”ドットチェイン" できるクエリの前に何もない場合だ。
 
@@ -15902,7 +15902,7 @@ gremlin> Column.class
 
 前のセクションで説明したように、Javaプログラムから'eq'や'neq'のようなGremlin 述部を使う場合は、プレフィクス "'P.'" を付ける必要がある。これは、同じ名前のTinkerPop クラス参照であり、Gremlin 述部を表す一連の静的メソッドが定義されている。
 
-TIP: 本セクションで使われているコードを含むGraphRegion.java というサンプルプログラムが、 https://github.com/krlawrence/graph/tree/master/sample-code にあるサンプルファイルディレクトリにある。
+TIP: 本セクションで使われているコードを含むGraphRegion.java というサンプルプログラムが、 https://github.com/krlawrence/graph/tree/main/sample-code にあるサンプルファイルディレクトリにある。
 
 下記のコードを見ていただきたい。'findByRegion'というメソッドが定義されていて、3文字の空港IATAコードを表す文字列を入力として受け取る。次にこのメソッドは、Gremlin クエリを使って、指定された空港がどの地理的地域にあるかを把握し、次に、その地域にあるすべての空港を返す。'where'ステップの一部として'P.eq'を使っていることに注意してほしい。これは、Gremlin コンソール内で実行されていないので、より厳密に指定する必要がある別のケースだ。
 
@@ -15970,7 +15970,7 @@ Long result =
 
 表面的には、これは問題ないように見える。しかしながら、このコードを実行すると、'next'を呼び出そうとして、オースティンとシドニー間にエッジがなく、処理する距離の値がないので、処理する結果がないため、NullPointerException が発生する。
 
-TIP: 本セクションで使われているコードを含む、GraphSearch2.java というサンプルプログラムが、 https://github.com/krlawrence/graph/tree/master/sample-code にあるsample-code ディレクトリにある。
+TIP: 本セクションで使われているコードを含む、GraphSearch2.java というサンプルプログラムが、 https://github.com/krlawrence/graph/tree/main/sample-code にあるsample-code ディレクトリにある。
 
 したがって、有効な結果が得られているかをチェックする方法が必要だ。そのような方法の1つに、クエリの結果をリストに保存するというものがある。そうすると、最悪の場合、結果が見つからない場合は、空のリストが返される。なので、クエリを次のように書き換えることができる。
 
@@ -16014,7 +16014,7 @@ Integer d = (Integer)
 
 下記のコードは、新しい ( 空の ) TinkerGraph インスタンスを生成し、グラフトラバーサルソースオブジェクトを生成してから、トラバーサルを使って、小さなグラフを作成する。
 
-TIP: このサンプルの完全なソースコードは https://github.com/krlawrence/graph/tree/master/sample-code に置いてある、CreateGraph.java のファイルにある。
+TIP: このサンプルの完全なソースコードは https://github.com/krlawrence/graph/tree/main/sample-code に置いてある、CreateGraph.java のファイルにある。
 
 トラバーサルの最後で、'iterate()'が呼び出されていることに注意してほしい。スタンドアローンアプリケーションとして実行する際、これが必要になる。これは、Gremlinコンソールがあなたにわからない形で実行する別のささいなことであり、コンソール内で実行するのではない場合に、自分で実行すべきことを覚えておくべきことだ。
 
@@ -16137,7 +16137,7 @@ NOTE: いくつかの Groovy のサンプルが 本書に関連する GitHub リ
 
 本セクションでは、以前にJava でコーディングしたテストアプリケーションの一部を Groovy で書き直す。”<<javatinker>>" のセクションで取り上げた内容の多くはここでも同様に関連しているが、中身は重複していない。なので、Groovy アプリケーションをすでに書いていたとしても、このセクションを読んでいただきたい。
 
-TIP: 本セクションの例は、 https://github.com/krlawrence/graph/tree/master/sample-code にあるサンプルコードフォルダに置いてある、TinkerGraphTest.groovy というサンプルプログラムから抜粋したものだ。
+TIP: 本セクションの例は、 https://github.com/krlawrence/graph/tree/main/sample-code にあるサンプルコードフォルダに置いてある、TinkerGraphTest.groovy というサンプルプログラムから抜粋したものだ。
 
 すでに、ご自身の環境にGroovy をダウンロード、インストールして、Groovy バイナリが配置されている場所を指すように、PATH を設定済みであることを前提としている。Java の例と同様、最初にすべきことは、プログラムで使っているすべての TinkerPop 3 のクラスを'import'経由で取り込むことだ。
 
@@ -16373,7 +16373,7 @@ Airports in England reachable with no more than one stop from AUS
 
 スタンドアローンの Java アプリケーションを書く際に行ったのと同じように、Groovy  プログラムから'eq'や'neq'のような Gremlin 述部を使う場合は、Gremlin 述部を表す一連の静的メソッドが定義されている同じ名前の TinkerPop クラスを参照する'"P."'プレフィクスを付ける必要がある。
 
-TIP: 本セクションで使ったコードを含むGraphRegion.groovyというサンプルプログラムは、 https://github.com/krlawrence/graph/tree/master/sample-code にあるサンプルファイルのディレクトリに置いてある。
+TIP: 本セクションで使ったコードを含むGraphRegion.groovyというサンプルプログラムは、 https://github.com/krlawrence/graph/tree/main/sample-code にあるサンプルファイルのディレクトリに置いてある。
 
 下記のコードでは、以前にJavaで書いた'findByRegion'メソッドが Groovy に移植されている。前と同様、3文字の空港 IATA コードを表す文字列が入力として期待されている。このメソッドは、Gremlin クエリを使ってどの地理的地域に指定された空港があるかを把握し、その地域の他のすべての空港を返す。再度、'where'ステップの一部として'P.eq'を使っていることに注意してほしい。
 
@@ -17166,7 +17166,7 @@ JanusGraphStep([],[city.eq(London), country.eq(...      1          1.036
 ==== キーマを自動生成、インデクシング、グラフロードするスクリプト
 
 本書のための、私の GitHub プロジェクトのサンプルコードディレクトリには、`janusgraph-inmemory.groovy` という小さな Gremlin (Groovy) スクリプトがファイルにある。このURL にアクセスすれば、ファイルにアクセスできる：
-https://github.com/krlawrence/graph/blob/master/sample-code/janus-inmemory.groovy
+https://github.com/krlawrence/graph/blob/main/sample-code/janus-inmemory.groovy
 
 スクリプトは'inmemoy' JanusGraph インスタンスを作成し、スキーマを定義し、いくつかのインデックスを作成し、 air-routes.graphml ファイルをロードして、Gremlin コンソールを使っていくつかのクエリを試すことができるようにする。JanusGraphのこの説明でこれまで扱ってきた 概念を実験する良い方法があると思う。
 
@@ -17860,7 +17860,7 @@ sh> docker start cass
 
 これで、Cassandra のインスタンスが実行されたので、JanusGraph のダウンロードに含まれている Gremlin コンソールを起動し、Cassandra に接続する。Cassandra は接続に使える様々なプロトコルをサポートする。これらには、Astyanax (Netflix より)、Thrift、CQL が含まれる。本セクションでは、Thrift と CQL について説明する。これらのプロトコルについての詳細な調査については本書の範囲を超えているが、それらについてもっと読みたいのであれば、いくつかのWeb検索でたくさんのドキュメントが見つかるだろう。Thrift と Astyanax の両方はすでに廃止されていてCQLが採用されていることに注意してほしい。将来のある時点では、古いプロトコルのサポートが終了していると思われるので、JanusGraph を Cassandra に接続する主な手段としておそらくCQL を快適に使うのをお勧めする。
 
-TIP: janus-cassandra.groovyt というスクリプトが https://github.com/krlawrence/graph/tree/master/sample-code の sample-code フォルダに用意されている。このスクリプトは本セクションで説明していることすべてを自動化するので、学習することをお勧めする。
+TIP: janus-cassandra.groovyt というスクリプトが https://github.com/krlawrence/graph/tree/main/sample-code の sample-code フォルダに用意されている。このスクリプトは本セクションで説明していることすべてを自動化するので、学習することをお勧めする。
 
 JanusGraph のダウンロードには、多数のプロパティファイルが含まれている。それらは、JanusGraph フォルダのルート配下の'/conf'フォルダにある。これらのプロパティファイルは、JanusGraph を様々なバックエンドテクノロジに接続するのに使うことができる。これらのプロパティファイルは必要に応じて編集することができるが、ローカルマシン(localhost) で実行されている Cassandra で デフォルトの Cassandra ポートを使う限り、この説明のために何も編集する必要はない。
 
@@ -18371,7 +18371,7 @@ sh> curl -X POST -d "{\"gremlin\":\"g.V().has('code','AUS')\"}" \
 
 Gremlin サーバから返されたJSONを直接操作することは完全に可能ではあるが、多くの場合、結果を適切な田尾ぷの変数に直接代入する方がより望ましい。使っているプログラミング言語に、適切な Gremlin 言語ドライバが存在するのであれば、これは設定するのは全く簡単だ。本セクションでは、Java アプリケーションから Gremlin サーバに接続し、TinkerPopで用意されている'withRemote'機能を利用する方法についてみていく。
 
-TIP: 本セクションで示される例のソースコードは  https://github.com/krlawrence/graph/tree/master/sample-code にある RemoteClient.java のサンプルからのものだ。
+TIP: 本セクションで示される例のソースコードは  https://github.com/krlawrence/graph/tree/main/sample-code にある RemoteClient.java のサンプルからのものだ。
 
 小さなアプリケーションを断片ごとにみてみよう。まず、サーバへのコネクションを生成して、クエリ結果を取得するのに必要なクラスをインポートする必要がある。
 
@@ -18459,7 +18459,7 @@ NCL , Newcastle Airport
 私の知る限り、本稿の執筆時点では、Ruby プログラマが利用できる 公式の Gremlin 言語バインディングは存在しない。したがってこれは、小さな量のコードを使って、Ruby プログラマが Gremlin サーバに接続して、 Gremlin クエリを発行する方法を示すのに最適なユースケースだ。
 
 TIP: 下記に示すように、Rubyの例のソースコードである、gremlin-client-http.rbは、sample-code フォルダにある。
-https://github.com/krlawrence/graph/tree/master/sample-code
+https://github.com/krlawrence/graph/tree/main/sample-code
 
 下記のコードは、完全なスタンドアロンのRubyアプリケーションを表している。標準のRuby ライブラリを使っていて、追加の Ruby Gems やサードパーティライブラリは必要としない。示されている例は、 ローカルマシンで実行されているGremlin サーバに接続する。HTTP POST リクエストをパッケージ化して、Gremlin サーバに送信する。HTTPリクエストのボディは、JSONでエンコードされている。
 
@@ -18505,7 +18505,7 @@ Response code from the server was 200
 
 JanusGraph や Cassandora のデプロイへのリモートアクセスを提供する方法としてGremlinサーバを構成する方法についてすでに見てきた。基本的な TinkerGraph、インメモリグラフをバックエンドとしてGremlin サーバをセットアップすると便利なことがある。リモートのTinkerPop 対応のグラフデータベースで最終的に機能するコードを開発しているが、ローカルでテストと開発を行いたい場合にこれは便利な方法である。Gremlin サーバはクラウドにホストされているマシンで実行される、真のリモートエンドポイントとして構成することは可能だが、ローカルコンピュータで実行するように構成することもできる。私は実験中この方法でラップトップ上に設定することがよくある。本セクションでは、TinkerGraph で air-routes データセットをホストするローカルで実行されるGremlin サーバを構成する手順をウォークスルーする。
 
-NOTE: 本セクションで説明されている設定ファイルは https://github.com/krlawrence/graph/tree/master/sample-data のsample-dataフォルダにある。
+NOTE: 本セクションで説明されている設定ファイルは https://github.com/krlawrence/graph/tree/main/sample-data のsample-dataフォルダにある。
 
 [[TGConfig]]
 ==== 設定ファイルを作成する
