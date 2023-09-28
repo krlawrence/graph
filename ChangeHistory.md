@@ -2,7 +2,17 @@
 
 Starting with the v275 release, this file will contain a record of the major changes and updates made in each release.
 
+## Release V2-001 change history (Release date TBD)
+_This will be the first release of work related to the Second Edition  ( [main branch](https://github.com/krlawrence/graph/tree/main) ) work._ The original First Edition work can still be found  on the [v1 branch](https://github.com/krlawrence/graph/tree/v1) .
+
+- Changes to the site layout and toolchain
+  - Split the single (big) asciidoc file into multiple files with one file per major section.
+- Structural changes to the book
+  - Removed specific mentions of early TinkerPop versions. The Second Edition will focus on Gremlin as it is today (after many years of evolution). 
+
 ## Release 283 change history (Release date TBD)
+
+_This will be the final release of work related to the First Edition ( [v1 branch](https://github.com/krlawrence/graph/tree/v1) ). Moving forward new work will focus on the Second Edition ( [main branch](https://github.com/krlawrence/graph/tree/main) ) work._
 
 Here is a link to the [Git diffs](https://github.com/krlawrence/graph/compare/v282-tp-3.4.4...master) between this release and the prior one.
 - Moved the supported TinkerPop version up to 3.5.2. Issue #228
