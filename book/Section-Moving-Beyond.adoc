@@ -72,8 +72,8 @@ http://tinkerpop.apache.org/javadocs/current/full
 The TinkerPop JavaDoc is a bit lacking in terms of English prose but is still a
 useful source of reference information when it comes to methods, parameters and
 types. Once you have coded up a couple of test programs and got them running, you
-should find it gets easier to make progress faster. To that end I recommend you take
-a look at the sample code I have included with the book.
+should find it gets easier to make progress faster. To that end we recommend you
+take a look at the sample code we have included with the book.
 
 When using the Gremlin Console your environment is pre-configured for you so you do
 not have to import any classes or interfaces. However, as soon as you move to the
@@ -216,7 +216,7 @@ Adding to our Java program
 Now that we have a basic skeleton application that compiles and runs, we can start to
 add more experiments to it. If we add the two lines below we can extract the city
 name from the value map that we just generated. From now on as we add to our program
-I am just going to show the lines that we add and the additional output that those
+we are just going to show the lines that we add and the additional output that those
 new lines will generate.
 
 [source,java]
@@ -308,7 +308,7 @@ List <Path> lhrToUsa = g.V().has("code","LHR").outE().inV().
 lhrToUsa.forEach((k) -> System.out.println(k));
 ----
 
-The output should look like this. I arranged the results in columns to aid
+The output should look like this. We arranged the results in columns to aid
 readability.
 
 [source,java]
@@ -355,9 +355,9 @@ Birmingham Bristol London Manchester Leeds Newcastle
 Important Classes and Enums to be aware of
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When you are using the Gremlin Console, as I have already mentioned, a few things are
-done for you that you need to take care of yourself when writing standalone Java
-code. A key area that I have found that people making the jump from the console to
+When you are using the Gremlin Console, as we have already mentioned, a few things
+are done for you that you need to take care of yourself when writing standalone Java
+code. A key area that we have found that people making the jump from the console to
 Java find confusing is figuring out which Classes and Enums have been statically
 imported "behind the scenes" and how to access those same capabilities from Java. You
 should also bookmark the TinkerPop javadoc pages as you can find more detail on all
@@ -372,9 +372,9 @@ The tables below show some commonly used Gremlin keywords in the left column. Th
 second column shows how you would reference those same keywords explicitly from a
 Java program. The third column shows an example of the context in which they might be
 used in a Java program. You may chose to statically import some of these classes into
-your code. I prefer to use the explicit prefix but that is a matter of personal
+your code. We prefer to use the explicit prefix but that is a matter of personal
 preference in many cases. There is a table of all the available predicates in the
-"<<tranges>>" section. For the special +++".__"+++ class I have just shown a few
+"<<tranges>>" section. For the special +++".__"+++ class we have just shown a few
 examples. In general you use this prefix when you have nothing prior in the query
 that you can "dot chain" to.
 
@@ -541,8 +541,8 @@ The 'Pick' Enum defines constants that are used in association with the 'branch'
 Another useful tip, that was shared on the Gremlin Users mailing list, is that you
 can ask the Gremlin Console to show you a list of everything that has been imported
 on your behalf "behind the scenes" using the command ':show imports'. What might
-typically be returned is shown below. I included a version check in the output so in
-case this changes in the future you can see which version of Gremlin I queried.
+typically be returned is shown below. We included a version check in the output so in
+case this changes in the future you can see which version of Gremlin we queried.
 
 [source,groovy]
 ----
@@ -856,7 +856,7 @@ vm = g.V().valueMap(true).toList();
 ----
 
 Having got our list of maps back we can process them. Note that to get the 'id' and
-'label' values from the map I had to prefix the key name with a '"T."'. This is
+'label' values from the map we had to prefix the key name with a '"T."'. This is
 because while most of property keys are Strings, IDs and labels are a special case.
 If you look at the TinkerPop documentation you will see that T is a Java Enum that
 contains definitions for 'T.id', 'T.label', 'T.value' and 'T.key'. When working with
@@ -958,7 +958,7 @@ this book. https://github.com/krlawrence/graph
 
 In this section we will rewrite parts of the test application we coded in Java
 earlier in Groovy. A lot of what was covered in the "<<javatinker>>" section is
-equally relevant here and I have not duplicated that material. So even if you are
+equally relevant here and we have not duplicated that material. So even if you are
 writing a Groovy application please also give that section a read.
 
 TIP: The examples in this section are taken from a sample program called
@@ -1048,7 +1048,7 @@ files as shown in the next section.
 Compiling our Groovy application
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In the Java example, I included the CLASSPATH on the 'javac' invokation using the
+In the Java example, we included the CLASSPATH on the 'javac' invokation using the
 '-cp' flag. That can also be done when using Groovy, however, if you are using
 Microsoft Windows as your build environment you may find that using '-cp' gives
 unexpected errors. Therefore, it is recommended to define the CLASSPATH variable in
@@ -1187,7 +1187,7 @@ println "\nFrom LHR to airports in the USA (only 10 shown)\n"
 lhrToUsa.each {println it}
 ----
 
-Here are the 10 routes that were returned when I ran the code having added this new
+Here are the 10 routes that were returned when we ran the code having added this new
 query.
 
 [source,groovy]
@@ -1280,7 +1280,7 @@ define schemas and support for ACID transactions. The JanusGraph project, which
 began in 2016 as an open source fork of the popular Titan graph database, is hosted by
 the Linux Foundation and provides these advanced capabilities.
 
-In this book I have attempted to provide a reasonable amount of JanusGraph
+In this book we have attempted to provide a reasonable amount of JanusGraph
 coverage but it is still recommended to become familiar with the official
 JanusGraph documentation where you will find more in depth discussions of advanced
 topics and explanations of the many settings that you can manipulate to suit your
@@ -1517,9 +1517,9 @@ capabilities, we use the 'tx' method associated with our 'graph' instance. The
 examples below assume you have the Gremlin Console connected to a JanusGraph
 instance. The 'inmemory' JanusGraph we created earlier will work fine for these
 examples as transactions are supported even with 'inmemory' JanusGraph instances.
-Note that I have not shown the warning message that JanusGraph will display reminding
-us that we have not created an index for our new property. We will explore how to
-create an index in the "<<jaindexintro>>" section.
+Note that we have not shown the warning message that JanusGraph will display
+reminding us that we have not created an index for our new property. We will explore
+how to create an index in the "<<jaindexintro>>" section.
 
 [source,groovy]
 ----
@@ -2073,7 +2073,7 @@ JanusGraph supports two different types of indexing known as 'graph indexes' and
 All of these concepts will be discussed and explained in the following sections.
 Using an index will greatly improve performance of your graph queries and is
 something you should get familiar with doing for any graphs that you create or
-manage. While in many cases use of an index is optional by default, I strongly
+manage. While in many cases use of an index is optional by default, we strongly
 recommend that you view it as mandatory. The JanusGraph documentation provides some
 fairly in depth coverage of indexing and can be read by visiting the following URL:
 http://docs.janusgraph.org/latest/indexes.html
@@ -2323,8 +2323,8 @@ mgmt.commit()
 ----
 
 We can use the Gremlin 'profile' step to verify that JanusGraph is indeed now using
-our new index. I have truncated some of the output so it will fit on the page but you
-can see from the output that the query did indeed use our new index.
+our new index. We have truncated some of the output so it will fit on the page but
+you can see from the output that the query did indeed use our new index.
 
 [source,groovy]
 ----
@@ -2354,16 +2354,15 @@ JanusGraphStep([],[city.eq(London), country.eq(...      1          1.036
 A script to automate schema creation, indexing and graph loading
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In the sample code directory of my GitHub project for this book you will find a small
-Gremlin (Groovy) script in a file called 'janusgraph-inmemory.groovy'. You can get to
-the file by visiting this URL:
+In the sample code directory of our GitHub project for this book you will find a
+small Gremlin (Groovy) script in a file called 'janusgraph-inmemory.groovy'. You can
+get to the file by visiting this URL:
 https://github.com/krlawrence/graph/blob/master/sample-code/janus-inmemory.groovy
 
 The script will create an 'inmemory' JanusGraph instance, define the schema, create
 several indexes and load the `air-routes.graphml` file so that you can try some
 queries using the Gremlin Console. You might find that a good way to experiment with
 the concepts that we have covered in this discussion of JanusGraph so far.
-
 
 [[janpred]]
 Additional JanusGraph text search predicates
@@ -2792,8 +2791,8 @@ Dubai
 The JanusGraph GeoSpatial API
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Earlier, in the "<<latlonmanual>>" section, I provided a few examples of how we could
-write some queries that took advantage of the fact that the airports in the
+Earlier, in the "<<latlonmanual>>" section, we provided a few examples of how we
+could write some queries that took advantage of the fact that the airports in the
 'air-routes' graph include their latitude and longitude among their properties. When
 working with JanusGraph there are some additional built in capabilities that we can
 take advantage of.
@@ -2941,7 +2940,7 @@ Geoshape.isValidCoordinate(lat,lon)
 true
 ----
 
-Earlier, in the "<<latlonmanual>>" section I demonstrated the query below. The query
+Earlier, in the "<<latlonmanual>>" section we demonstrated the query below. The query
 finds all airports within a conceptual rectangle around the London Heathrow (LHR)
 airport. The rectangle is defined by adding or subtracting one degree of latitude and
 longitude to the opposite diagonals with LHR at the center.
@@ -2999,9 +2998,9 @@ airports were found.
 [code:[SOU],lon:[-1.35679996013641],lat:[50.9502983093262]]
 ----
 
-I have just shown a few examples of the many things that you can do using the
-JanusGraph GeoSpatial API. If this is an area that interests you I recommend reading
-the API documentation for the 'Geoshape' and related classes.
+We have just shown a few examples of the many things that you can do using the
+JanusGraph GeoSpatial API. If this is an area that interests you, we recommend
+reading the API documentation for the 'Geoshape' and related classes.
 
 [[janusstorage]]
 Choosing a persistent storage technology for JanusGraph
@@ -3169,10 +3168,10 @@ Google Bigtable
 ^^^^^^^^^^^^^^^
 
 All of the options discussed so far are open source alternatives that you could
-download and run in-house. For the sake of completeness I am including a few pointers
-to some "for fee" alternatives to hosting your JanusGraph data in house. Google
-Bigtable is API compatible with Apache HBase. It offers a hosted alternative to
-hosting your own HBase cluster for use with JanusGraph. Of course you will have to
+download and run in-house. For the sake of completeness we are including a few
+pointers to some "for fee" alternatives to hosting your JanusGraph data in house.
+Google Bigtable is API compatible with Apache HBase. It offers a hosted alternative
+to hosting your own HBase cluster for use with JanusGraph. Of course you will have to
 decide if paying for a hosted database service is the way you want to go versus
 hosting your graph data in house or setting up your own environment that you manage
 on a hosting service of your choice.
@@ -3210,17 +3209,17 @@ building and interacting with, graph databases.
 Using Docker to experiment with Cassandra and JanusGraph
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-I find that using Docker containers can be a great way to quickly get things running
+We find that using Docker containers can be a great way to quickly get things running
 when you are experimenting with new ideas or new technology, or as if often the case,
 both at the same time! There is a very useful containerized implementation of Apache
 Cassandra available that you can download and get running in a few seconds and use to
-test things with JanusGraph. In this section I will walk you through the steps that I
-use to get a single Cassandra node up and running and use it with JanusGraph to setup
-the 'air-routes' graph. I am going to make the assumption that you have already
-downloaded and installed the necessary Docker runtime for your platform. I do most of
-my Docker testing using Linux systems but there are runtimes available for Windows
-and Mac OS as well. Assuming you have docker installed, Cassandra can be installed
-using a simple 'docker pull' command as shown below.
+test things with JanusGraph. In this section we will walk you through the steps that
+we use to get a single Cassandra node up and running and use it with JanusGraph to
+setup the 'air-routes' graph. We are going to make the assumption that you have
+already downloaded and installed the necessary Docker runtime for your platform. We
+do most of our Docker testing using Linux systems but there are runtimes available
+for Windows and Mac OS as well. Assuming you have docker installed, Cassandra can be
+installed using a simple 'docker pull' command as shown below.
 
 Note that to make it clearer where commands need to be entered commands that need to
 be entered into the Linux terminal shell are prefixed with  '"sh>"' and commands
@@ -3237,8 +3236,8 @@ Starting the Cassandra container
 
 Once Docker has downloaded the Cassandra image for you, it is quite simple to get a
 single instance of Cassandra up and running. There are different ways that you can
-use to configure Docker. To keep things simple I am going to just use command line
-parameters. The command does several things as shown in the notes below it. I split
+use to configure Docker. To keep things simple we are going to just use command line
+parameters. The command does several things as shown in the notes below it. We split
 the command over four lines to make it easier to read.
 
 [source,console]
@@ -3286,7 +3285,7 @@ Connecting JanusGraph to Cassandra
 Now that we have an instance of a Cassandra running, it's time to start the Gremlin
 Console that is included with the JanusGraph download and connect to Cassandra.
 Cassandra supports different protocols that can be used when connecting to it. These
-include Astyanax (from Netflix), Thrift and CQL. In this section I am just going to
+include Astyanax (from Netflix), Thrift and CQL. In this section we are just going to
 discuss Thrift and CQL. An in depth study of these protocols is beyond the scope of
 this book but if you want to read more about them a few web searches will find you
 plenty of documentation. It should be noted that both Thrift and Astyanax are being
@@ -3320,7 +3319,7 @@ gremlin> graph = JanusGraphFactory.open('conf/janusgraph-cql.properties')
 
 You may see a warning message followed by a long stack trace when you issue this
 command. Despite looking like something horrible has happened this can be ignored and
-things will still work. I believe that this is a known issue in the community.
+things will still work. We believe that this is a known issue in the community.
 
 Aside from a potential warning message, if all goes well you should see something
 like the output below after the command has run. This shows that we have a CQL
@@ -3455,7 +3454,7 @@ inside the context of the container.
 root@115ed53ef189:/
 ----
 
-We can now enter 'nodetool' commands. I have truncated the output a bit to aid
+We can now enter 'nodetool' commands. We have truncated the output a bit to aid
 reading. First, let's check the version of Cassandra we are running.
 
 [source,console]
@@ -3475,7 +3474,7 @@ running
 ----
 
 If you want more information about the overall state of things you can use the
-'nodetool info' command. I have truncated this output.
+'nodetool info' command. We have truncated this output.
 
 [source,console]
 ----

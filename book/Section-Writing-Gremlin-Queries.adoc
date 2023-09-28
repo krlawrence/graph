@@ -10,7 +10,7 @@ you are more interested in adding new vertices, edges and properties or modifyin
 existing properties you may want to jump to Chapter 4 and in particular the
 "<<addnodes>>" section.
 
-In this chapter we will begin to look at the Gremlin query language. I will start
+In this chapter we will begin to look at the Gremlin query language. We will start
 off with a quick look at how Gremlin and SQL differ and are yet in some ways similar,
 then present some fairly basic queries and finally get into some more
 advanced concepts. Hopefully each set of examples presented, building upon things
@@ -64,7 +64,7 @@ select country,count(country) from airports group by country;
 ----
 
 We can do this in Gremlin using the 'air-routes' graph with a query like the one below
-(I will explain what all of this means later on in the book).
+(We will explain what all of this means later on in the book).
 
 
 [source,groovy]
@@ -214,9 +214,9 @@ throughout the book, including many other forms of the 'has' step, but these few
 enough to get us started.
 
 You can refer to the official Apache TinkerPop documentation for full details on all
-of the graph traversal steps that are used in this tutorial. With this tutorial I
-have not tried to teach every possible usage of every Gremlin step and method,
-rather, I have tried to provide a good and approachable foundation in writing many
+of the graph traversal steps that are used in this tutorial. With this tutorial
+we have not tried to teach every possible usage of every Gremlin step and method,
+rather, We have tried to provide a good and approachable foundation in writing many
 different types of Gremlin query using an interesting and real-world graph.
 
 NOTE: The latest TinkerPop 3 documentation is always available at this URL:
@@ -640,9 +640,9 @@ g.V().has('airport','code','AUS').out('route').values('code').fold()
 ----
 
 Despite having just stated that consistently using edge labels in queries is a good
-idea, unless you truly do want to get back all edges or all connected vertices, I
-will break my own rule quite a bit in this book. The reason for this is purely to
-save space and make the queries I present shorter.
+idea, unless you truly do want to get back all edges or all connected vertices,
+We will break our own rule quite a bit in this book. The reason for this is purely to
+save space and make the queries we present shorter.
 
 Here are a few more simple queries similar to the previous one. The first example can
 be used to answer the question "Where can I fly to from Austin, with one stop on the
@@ -840,7 +840,7 @@ In Apache TinkerPop version 3.2.5 the ability to limit what is returned by the '
 step using 'from' and 'to' modulators was added. This enables us to not return the
 entire path of a traversal but instead to be more selective.
 
-First of all, look at the example below. In this case I have just used the same
+First of all, look at the example below. In this case we have just used the same
 'path' constructs used in the prior examples. The query returns the first 10 routes
 found starting at Austin (AUS) with one stop on the way.
 
@@ -1426,8 +1426,8 @@ g.V().hasLabel('airport').range(0,20).values('code')
 We can also limit a traversal by specifying a maximum amount of time that it is
 allowed to run for. The following query is restricted to a maximum limit of ten
 milliseconds. The query looks for routes from Austin (AUS) to London Heathrow (LHR).
-All the parts of this query are explained in detail later on in this book but I think
-what they do is fairly clear. The 'repeat' step is explained in detail in the
+All the parts of this query are explained in detail later on in this book but we
+think what they do is fairly clear. The 'repeat' step is explained in detail in the
 "<<sp>>" section.
 
 [source,groovy]
@@ -1437,7 +1437,7 @@ g.V().has('airport','code','AUS').
       repeat(timeLimit(10).out()).until(has('code','LHR')).path().by('code')
 ----
 
-Here is what the query above returned when run on my laptop.
+Here is what the query above returned when run on our laptop.
 
 [source,groovy]
 ----
@@ -1473,7 +1473,7 @@ the 'limit' and 'range' steps used in the previous section to return the first 2
 elements of a query result. We can also use the 'range' step to select different
 range of vertices by giving a non zero starting offset and an ending offset. The
 'range' offsets are zero based, and while the official documentation states that the
-ranges are inclusive/inclusive it actually appears from my testing that they are
+ranges are inclusive/inclusive it actually appears from our testing that they are
 inclusive/exclusive.
 
 [source,groovy]
@@ -2000,8 +2000,8 @@ g.E(5161).project('v','IN','OUT').
             unfold()
 ----
 
-The results of running the query are shown below. I added an unfold step to the query
-just to make the results a little easier to read.
+The results of running the query are shown below. We added an unfold step to the
+query just to make the results a little easier to read.
 
 [source,groovy]
 ----
@@ -2117,7 +2117,7 @@ setr = g.V().has('airport','region','US-TX').
 As a side note, in many cases we can use the 'dedup' step to remove duplicates from a
 result. However, it is worth knowing that a set can be created as a result type as in
 some cases this can be very useful. The example below performs the same 'runways'
-query using a 'dedup' step. I added an 'order' step so that it is easier to compare
+query using a 'dedup' step. We added an 'order' step so that it is easier to compare
 the results with the previous query.
 
 [source,groovy]
@@ -2478,7 +2478,7 @@ g.V().hasLabel('airport').local(out('route').count()).mean()
 The result this time is a much more believable answer. Notice how this time we placed
 the __out(''route'').count()__ steps inside a 'local' step. The query below,
 with the mean step removed, shows what is happening during the traversal as this
-query runs. I truncated the output to just show a few lines.
+query runs. We truncated the output to just show a few lines.
 
 [source,groovy]
 ----
@@ -2533,7 +2533,7 @@ g.V().has('region','GB-SCT').order().by('code').
 
 ----
 
-Here are the results of running the modified query. I have arranged the results in
+Here are the results of running the modified query. We have arranged the results in
 two columns to aid readability.
 
 [source,groovy]
@@ -3185,16 +3185,16 @@ g.V().hasLabel('airport').sample(20).values('code')
 Using 'Math.random' to more randomly select a single vertex
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-While the 'sample' step allows you to select one or more vertices at random, in my
+While the 'sample' step allows you to select one or more vertices at random, in our
 testing, at least when using a TinkerGraph, it tends to favor vertices with lower
-index values. So for example, in a test I ran this query 1000 times.
+index values. So for example, in a test we ran this query 1000 times.
 
 [source,groovy]
 ----
 g.V().hasLabel('airport').sample(1).id()
 ----
 
-What I found was that I always got back an ID of less than 200. This leads me to
+What we found was that we always got back an ID of less than 200. This leads me to
 believe that the 'sample(1)' call is doing something similar to this
 
 [source,groovy]
@@ -3202,8 +3202,8 @@ believe that the 'sample(1)' call is doing something similar to this
 g.V().hasLabel('airport').coin(0.01).limit(1)
 ----
 
-Look at the code below. Even if I run that simple experiment many times it always gives
-results similar to these.
+Look at the code below. Even if we run that simple experiment many times it always
+gives results similar to these.
 
 [source,groovy]
 ----
@@ -3221,8 +3221,8 @@ results similar to these.
 67
 ----
 
-Given the air routes graph has over 3,300 airport vertices I wanted to come up with a
-query that gave a more likely result of picking any one airport from across all of
+Given the air routes graph has over 3,300 airport vertices we wanted to come up with
+a query that gave a more likely result of picking any one airport from across all of
 the possible airports in the graph. By taking advantage of the Java Math class we can
 do something that does seem to much more 'randomly' pick one airport from across all
 of the possible airports. Take a look at the snippets of Groovy/Gremlin code below.
@@ -3279,7 +3279,7 @@ from that list.
 
 It is likely that this apparent lack of randomness is more specific to TinkerGraph
 and the fact that it will respect user provided ID values whereas other graph systems
-will probably store vertices in a more random order to begin with. Indeed when I ran
+will probably store vertices in a more random order to begin with. Indeed when we ran
 these queries on JanusGraph the 'sample' step did yield a better selection of
 airports from across the graph.
 
@@ -3397,7 +3397,7 @@ characters "Dal" as expected.
 [Dalat, Dallas, Dalcahue, Dalaman, Dalian, Dalanzadgad]
 ----
 
-As I mentioned, all of the text predicates are case sensitive. If we were
+As we mentioned, all of the text predicates are case sensitive. If we were
 to search for city names starting with the characters "dal" we would not find any
 matches. The query below demonstrates this.
 
@@ -3567,7 +3567,7 @@ order. Note that the sort does not have to be the last step of a query. It is
 perfectly OK to sort things in the middle of a query before moving on to a further
 step. We can see examples of that in the first two queries below. Note that the first
 query will return different results than the second one due to the placement of the
-'limit' step. I used 'fold' at the end of the query to collect all of the results
+'limit' step. We used 'fold' at the end of the query to collect all of the results
 into a list. The 'fold' step can also do more than this. It provides a way of doing
 the 'reduce' part of map-reduce operations. We will see some other examples of its
 use elsewhere in this book, such as in the "<<mapreduce>>" section.
@@ -3640,7 +3640,7 @@ g.V().hasLabel('airport').order().by('longest',desc).valueMap().
       select('code','longest').limit(10)
 ----
 
-Here is the output from running the query. To save space I have split the results
+Here is the output from running the query. To save space we have split the results
 into two columns.
 
 [source,groovy]
@@ -3866,8 +3866,8 @@ The results produced are the same as before.
 When TinkerPop 3.3.4 was released, these were not breaking changes. As more graph
 database engines move up to the TinkerPop 3.5.0 level these now become breaking
 changes and 'asc' and 'desc' must be used. In order for your code and other queries
-to be future proof, even if your database is not yet at the TinkerPop 3.5.0 level, I
-recommend making these changes to your code as soon as possible.
+to be future proof, even if your database is not yet at the TinkerPop 3.5.0 level,
+we recommend making these changes to your code as soon as possible.
 
 
 [[bool]]
@@ -3875,7 +3875,7 @@ Boolean operations
 ~~~~~~~~~~~~~~~~~~
 
 Gremlin provides a set of logical operators such as 'and', 'or' and 'not' that can be
-used to form Boolean (true/false) type queries. In a lot of cases I find that 'or'
+used to form Boolean (true/false) type queries. In a lot of cases we find that 'or'
 can be avoided by using 'within' for example and that 'not' can be sometimes avoided
 by using 'without' but it is still good to know that these operators exist. The
 'and' operator can sometimes be avoided by chaining 'has' steps together. That said
@@ -3990,7 +3990,7 @@ g.V().hasLabel('airport').where(and(out().count().is(lt(100)),
 [BUD:98,STR:95,NCE:97,AUH:97,WAW:98,CRL:95]
 ----
 
-As I have pointed out several times already, there are often many ways to write a
+As we have pointed out several times already, there are often many ways to write a
 query that will produce the same result. Here is an example of the previous two
 queries rewritten to use a 'between' step instead of an 'and' step. Remember that
 'between' is inclusive/exclusive, so we have to specify 101 as the upper bound and 95
@@ -4041,7 +4041,7 @@ g.V().hasLabel('airport').
 ----
 
 The 'where' step was used lot in the examples above. Hopefully the effect of using it
-was clear. Nonetheless I will explain in more detail how the 'where' step works in
+was clear. Nonetheless we will explain in more detail how the 'where' step works in
 the next section.
 
 
@@ -4158,9 +4158,10 @@ are returned.
 
 This pattern comes in useful whenever you want to use a traversal inside of a 'where'
 step and negate the results. Of course, there are other ways we could write this
-particular query but I wanted to show an example of this technique being used. For completeness,
-two simpler ways of writing this query that do not use 'where' at all are shown below
-but there will be cases where combining 'not' and 'where' are your best option.
+particular query but we wanted to show an example of this technique being used. For
+completeness, two simpler ways of writing this query that do not use 'where' at all
+are shown below but there will be cases where combining 'not' and 'where' are your
+best option.
 
 [source,groovy]
 ----
@@ -4351,7 +4352,7 @@ with their region code and country code.
 [a:YXU,r:CA-ON,b:CA]
 ----
 
-As I mentioned the above query was used just as an example. In reality the following
+As we mentioned the above query was used just as an example. In reality the following
 query that does not use any 'where' steps would have sufficed in this case.
 
 [source,groovy]
@@ -4590,7 +4591,7 @@ might code a 'switch' statement as follows.
 ----
 
 We can write a Gremlin query that follows the same pattern as our Java 'switch'
-statement. As in the Java example I decided to lay our query out across multiple
+statement. As in the Java example we decided to lay our query out across multiple
 lines to aid readability and clarity.
 
 [source,groovy]
@@ -4780,7 +4781,7 @@ g.V().has('code','AUS').
       select('outa').valueMap().select('code','runways')
 ----
 
-As I mentioned, the example above is not the best way to write this query and it can
+As we mentioned, the example above is not the best way to write this query and it can
 be done without using a 'match' step at all and just using a 'where' step as shown in
 the three examples below. Each one is simpler than its predecessor.
 
@@ -4819,10 +4820,10 @@ g.V().has('code','AUS').as('a').out().
 So, while there is often a simpler way to write a query that avoids using the 'match'
 step, for some queries, especially in more complex cases, it provides a useful and
 powerful way to express in a more declarative way, a set of criteria that must be
-met. However, before I resort to using a 'match' step I always think carefully about
-other ways that I could write the query that might be simpler. I do this because the
-syntax of the 'match' step can be tricky to get right without a fair bit of trial and
-error in my experience.
+met. However, before we resort to using a 'match' step we always think carefully
+about other ways that we could write the query that might be simpler. We do this
+because the syntax of the 'match' step can be tricky to get right without a fair bit
+of trial and error in our experience.
 
 [[patternwhere]]
 Pattern matching using a 'where' step
@@ -5041,7 +5042,7 @@ g.V().hasLabel("airport").sample(10).
       local(union(id(),values("code","city")).fold())
 ----
 
-Here is the output I got back from running the query.
+Here is the output we got back from running the query.
 
 [source,groovy]
 ----
@@ -5242,7 +5243,7 @@ filtered out from the calculation.
 It is worth noting that it is not required that every traversal inside of a union
 step returns a result. The returned results will include any of the traversals that
 did return something. The example below demonstrates this. Of course in practice you
-would not write this particular query this way. However, I think this example
+would not write this particular query this way. However, we think this example
 demonstrates a feature of the 'union' step that it is important to understand.
 
 [source,groovy]
@@ -5355,7 +5356,7 @@ g.V().has('code','AUS').out().aggregate('nonstop').
 ----
 
 After the first 'out' step all of the vertices that were found are stored in a
-collection I chose to call 'nonstop'. Then, after the second 'out' we can add a
+collection we chose to call 'nonstop'. Then, after the second 'out' we can add a
 'where' step that essentially says "only keep the vertices that are not part of the
 nonstop collection". We still do the 'dedup' step as otherwise we will still end up
 counting a lot of the remaining airports more than once.
@@ -5638,7 +5639,7 @@ g.V(3).both().count()
 ----
 
 This next query can be used to show us the 120 vertices that we just counted in the
-previous query. I sorted the results and used 'fold' to build them into a list to
+previous query. We sorted the results and used 'fold' to build them into a list to
 make the results easier to read. Note how vertex 3 is *not* returned as part of the
 results. This is important, for as we shall see in a few examples time, this is not
 always the case.
@@ -5838,7 +5839,7 @@ As is often the case when working with Gremlin there is more than one way to ach
 the same result. The 'loops' step, that can be used to control how long a repeat loop
 runs, is essentially equivalent to the 'times' step. Take a look at the two queries
 below. Both achieve the same result. The first uses 'loops' while the second uses
-'times'. I prefer the readability offered by the use of 'times'.
+'times'. We prefer the readability offered by the use of 'times'.
 
 [source,groovy]
 ----
@@ -6122,7 +6123,7 @@ Addis Ababa (ADD) and one of Oslo (OSL), Bangkok (BKK) or Mumbai (BOM).
 [SAF,DFW,CRP,LBB,AUS,ATL,LOS,ADD,BOM]
 ----
 
-As I mentioned, working with the air routes data set does not perhaps present an
+As we mentioned, working with the air routes data set does not perhaps present an
 ideal use case for using nested repeat steps. Most of the edges are routes and most
 of the vertices are airports. However, if your data had a broader variety of vertex
 and edge types, this capability may come in quite handy.
@@ -6295,7 +6296,7 @@ depth, five routes are returned. This is the result we are looking for!
 [SFO,ANC,DFW,BWI]
 ----
 
-At first glance, the 'where' step used above can be confusing. I have included
+At first glance, the 'where' step used above can be confusing. We have included
 some examples below that hopefully help explain the behavior more easily. First
 of all, the query below simply creates a map using 'groupCount' based on five
 vertex IDs where the key is simply a constant literal value. As there is no
@@ -6396,7 +6397,7 @@ results in this instance but if we let it run for longer than just ten results i
 would ultimately find a lot more cyclic paths as it is not restricted to just going
 out one hop from its starting point. Indeed, if we did not restrict the number of
 results we wanted the query would ultimately find every cyclic route in the graph.
-That query could run for quite a while so I would not recommend trying it!
+That query could run for quite a while so we would not recommend trying it!
 
 [source,groovy]
 ----
@@ -6537,7 +6538,7 @@ a high or low "fan out" of possible routes depending on the query direction.
 A warning that the 'path' and 'as' steps can also be memory intensive
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The Gremlin 'path' step is incredibly useful and I find myself using it a lot.
+The Gremlin 'path' step is incredibly useful and we find ourselves using it a lot.
 However, there are some downsides to the use of 'path', especially when searching
 entire graphs for non trivial results. Even if the paths that you are looking for
 are less difficult to find than in the prior section, you should be aware that
@@ -6747,8 +6748,8 @@ The 'math' step behaves differently from other steps that we have looked at so f
 as much as the entire expression is passed in as a single string. This means that you
 can use labels you have assigned as part of a traversal but you cannot use external
 variables or static constant references such as 'Math.PI' inside the expression
-itself. There are ways to easily work around this however as we shall see below. I
-have not attempted to give an example of every single operator being used but the
+itself. There are ways to easily work around this however as we shall see below.
+We have not attempted to give an example of every single operator being used but the
 examples provided should provide all of the basic building blocks you will need to
 incorporate mathematical operators into your own Gremlin queries.
 
@@ -7027,7 +7028,7 @@ g.inject(0).math('signum(_)')
 ----
 
 We can use this capability to build a query that reports which side of
-the Greenwich meridian an airport is located. Note that I had to use the '"D"'
+the Greenwich meridian an airport is located. Note that we had to use the '"D"'
 suffix on the numbers in the 'option' steps as 'math' returns a double precision
 result.
 
@@ -7069,10 +7070,10 @@ Calculating a standard deviation
 
 We could use the new 'math' step to implement a query that calculates the standard
 deviation for the number of runways each airport in the graph has. This allows us to
-see use of the 'sqrt' and power (+++^+++) operators. I broke the solution into three
+see use of the 'sqrt' and power (+++^+++) operators. We broke the solution into three
 queries rather than try to force it all into one. Even now the final query of the
-three is complicated enough I think! Notice how multiple 'math' steps are used in the
-same query with the results from one being used as input to the next.
+three is complicated enough we think! Notice how multiple 'math' steps are used in
+the same query with the results from one being used as input to the next.
 
 
 First of all let's calculate the mean (or average) number of runways in the graph.
@@ -7190,7 +7191,7 @@ Using this approach means that we can avoid making multiple round trips to the g
 to generate the values we need. The query is not really a lot more complex either.
 Which technique you find more convenient may come down to personal preference. Making
 multiple queries in general is not always a bad thing but in this case using a single
-query I think makes sense as it does not add much additional complexity to the steps
+query we think makes sense as it does not add much additional complexity to the steps
 involved.
 
 [[mathproject]]
@@ -7226,8 +7227,8 @@ g.V().has('code','AUS').
 118.0
 ----
 
-There are obviously many other operators that I have not provided examples for but
-hopefully the ones I have provided give you a feel for ways that the 'math' step can
+There are obviously many other operators that we have not provided examples for but
+hopefully the ones we have provided give you a feel for ways that the 'math' step can
 be used to create interesting queries.
 
 [[withindex]]
@@ -7720,7 +7721,7 @@ g.V().hasLabel('airport').where(__.in('contains').has('code','AF')).as('a').
       out().has('country','US').as('b').select('a','b').by('code')
 ----
 
-If we run the query we should get results that look like this. I have laid them out
+If we run the query we should get results that look like this. We have laid them out
 in two columns to save space.
 
 [source,groovy]

@@ -5,7 +5,7 @@ GETTING STARTED
 Let's take a look at what you will need to have installed and what tools you will
 need available to make best use of the examples contained in this tutorial. The key
 thing that you will need is the Apache TinkerPop project's Gremlin Console download.
-In the sections below I will walk you through a discussion of what you need to
+In the sections below we will walk you through a discussion of what you need to
 download and how to set it up.
 
 
@@ -90,7 +90,7 @@ http://tinkerpop.apache.org/
 
 It only takes a few minutes to get the Gremlin Console installed and running. You
 just download the ZIP file and 'unzip' it and you are all set. TinkerPop 3 also
-requires a recent version of Java 8 being installed. I have done all of my testing
+requires a recent version of Java 8 being installed. We have done all of our testing
 using Java 8 version 1.8.0_131. The Gremlin Console will not work with versions prior
 to 1.8.0_45. If you do not have Java 8 installed it is easy to find and download off
 the Web. The download also includes all of the JAR files that are needed to write a
@@ -286,7 +286,7 @@ g.V().count().next()
 
 ----
 
-For the remainder of this book I am not going to show the 'gremlin>' prompt or
+For the remainder of this book we are not going to show the 'gremlin>' prompt or
 the '==>' output identifier as part of each example, just to reduce clutter a bit.
 You can assume that each command was entered and tested using the Gremlin console
 however.
@@ -301,11 +301,12 @@ Introducing TinkerGraph
 
 As well as the Gremlin Console, the TinkerPop 3 download includes an implementation
 of an in-memory graph store called TinkerGraph. This book was mostly developed
-using TinkerGraph but I also tested everything using JanusGraph. I will introduce
+using TinkerGraph but we also tested everything using JanusGraph. We will introduce
 JanusGraph later in the "<<janusintro>>" section. The nice thing about TinkerGraph
 is that for learning and testing things you can run everything you need on your
-laptop or desktop computer and be up and running very quickly. I will also explain how to
-get started with the Gremlin Console and TinkerGraph a bit later in this section.
+laptop or desktop computer and be up and running very quickly. We will also explain
+how to get started with the Gremlin Console and TinkerGraph a bit later in this
+section.
 
 Tinkerpop 3 defines a number of capabilities that a graph store should support. Some
 are optional others are not. If supported, you can query any TinkerPop 3 enabled
@@ -313,7 +314,7 @@ graph store to see which features are supported using a command such as
 'graph.features()' once you have established the 'graph' object. We will look at how
 to do that soon. The following list shows the features supported by TinkerGraph. This
 is what you would get back should you call the 'features' method provided by
-TinkerGraph. I have arranged the list in two columns to aid readability. Don't worry
+TinkerGraph. We have arranged the list in two columns to aid readability. Don't worry
 if not all of these terms make sense right away - we'll get there soon!
 
 .Output from graph.features()
@@ -378,7 +379,7 @@ used in production deployments if an all in memory graph fits the bill. Typicall
 TinkerGraph is used to explore static (unchanging) graphs but you can also use it
 from a programming language like Java and mutate its contents if you want to.
 However, TinkerGraph does not support some of the more advanced features you will
-find in implementations like JanusGraph such as transactions and external indexes. I
+find in implementations like JanusGraph such as transactions and external indexes. We
 will cover these topics as part of the discussion of JanusGraph in the <<janusintro>>
 section later on. One other thing worth noting in the list above is that
 'UserSuppliedIds' is set to true for vertex and edge ID values. This means that if
@@ -424,10 +425,10 @@ instance of a graph traversal source object.
 Introducing the air-routes graph
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Along with this book I have provided what is, in big data terms, a very small, but
+Along with this book we have provided what is, in big data terms, a very small, but
 nonetheless real-world graph that is stored in GraphML, a standard XML format for
 describing graphs that can be used to move graphs between applications. The graph,
-'air-routes' is a model I built of the world airline route network that is
+'air-routes' is a model we built of the world airline route network that is
 fairly accurate.
 
 NOTE: The `air-routes.graphml` file can be downloded from the `sample-data` folder
@@ -436,7 +437,7 @@ https://github.com/krlawrence/graph/tree/master/sample-data
 
 Of course, in the real world, routes are added and deleted by airlines all the time
 so please don't use this graph to plan your next vacation or business trip! However,
-as a learning tool I hope you will find it useful and easy to relate to. If you feel
+as a learning tool we hope you will find it useful and easy to relate to. If you feel
 so inclined you can load the file into a text editor and examine how it is laid out.
 As you work with graphs you will want to become familiar with popular graph
 serialization formats. Two common ones are GraphML and GraphSON. The latter is a
@@ -445,14 +446,14 @@ GraphML is widely recognized by TinkerPop and many other tools as well such as
 Gephi, a popular open source tool for visualizing graph data. A lot of graph
 ingestion tools also still use comma separated values (CSV) format files.
 
-We will briefly look at loading and saving graph data in Sections 2 and 4. I take a
+We will briefly look at loading and saving graph data in Sections 2 and 4. We take a
 look at different ways to work with graph data stored in text format
 files including importing and exporting graph data in the "<<serialize>>" section
 towards the end of the book.
 
 The 'air-routes' graph contains several vertex types that are specified using labels.
 The most common ones being 'airport' and 'country'. There are also vertices for each
-of the seven continents ('continent') and a single 'version' vertex that I provided
+of the seven continents ('continent') and a single 'version' vertex that we provided
 as a way to test which version of the graph you are using.
 
 Routes between airports are modeled as edges. These edges carry the 'route' label and
@@ -484,7 +485,7 @@ the following properties. The word in parenthesis indicates the type of the prop
 
 We can use Gremlin once the air route graph is loaded to show us what properties an
 airport vertex has. As an example here is what the Austin airport vertex looks
-like. I will explain the steps that make up the Gremlin query shortly. First we need
+like. We will explain the steps that make up the Gremlin query shortly. First we need
 to dig a little bit into how to load the data and configure a few preferences.
 
 [source,groovy]
@@ -508,7 +509,7 @@ lat=[30.1944999694824]
 lon=[-97.6698989868164]
 ----
 
-Even though the airport vertex label is 'airport' I chose to also have a property
+Even though the airport vertex label is 'airport' we chose to also have a property
 called 'type' that also contains the string 'airport'. This was done to aid with
 indexing when working with other graph database systems and is explained in more
 detail later in this book.
@@ -600,7 +601,7 @@ Updated versions of the air-route data
 
 To keep things consistent, all of the examples presented in this book were produced
 using the same version of the air-routes data set. That data set was generated in
-October 2017. While I felt it was important that the examples remained consistent
+October 2017. While we felt it was important that the examples remained consistent
 that does also mean that some of the examples shown in the book, such as the longest
 airline route currently being flown, are out of date.
 
@@ -627,7 +628,7 @@ used to using that as soon as possible. Using the full syntax will make your que
 a lot more portable to other TinkerPop 3 enabled graph systems.
 
 TinkerPop 3 requires a minimum of Java 8 v45. It will not run on earlier versions of
-Java 8 based on my testing.
+Java 8 based on our testing.
 
 [[cr]]
 Creating a TinkerGraph TP2 vs TP3
@@ -677,7 +678,7 @@ You can enable 'sugar' support from the Gremlin console as follows:
 
 TIP: The Gremlin Console remembers which plugins are enabled between restarts.
 
-In the current revision of this book I have tried to remove any dependence on the
+In the current revision of this book we have tried to remove any dependence on the
 'TinkerPop.sugar' plugin from the examples presented. By not using Sugar, queries
 shown in this book should port very easily to other TinkerPop 3 enabled graph
 platforms. A few of the queries may not work on versions of TinkerPop prior to 3.2 as
@@ -704,9 +705,10 @@ changes introduced with TinkerPop 3, using sugar will not be as performant as us
 the normal Gremlin syntax.
 
 NOTE: _In earlier versions of this book many of the examples showed the 'sugar'
-form. In the current revision I have tried to remove all use of that form. It's
-possible that I may have missed a few and I will continue to check for, and fix, any
-that got missed. Please let me know if you find any that slipped through the net!_
+form. In the current revision we have tried to remove all use of that form. It's
+possible that we may have missed a few and we will continue to check for, and fix,
+any that got missed. Please let me know if you find any that slipped through the
+net!_
 
 [[ld]]
 Loading the air-routes graph using the Gremlin console
@@ -824,22 +826,22 @@ of this is vertex and edge 'labels' which are typically not indexed but are some
 very useful items to specify at the start of a query. As most of the examples in
 this book are intended to work just fine with only a basic TinkerGraph the subject of
 indexes is not covered in detail until Chapter 6 "<<beyond>>" . However, as
-TinkerGraph does have some indexing capability I have also included some discussion
-of it in the "<<tinkerindex>>" section. In Chapter 6 where I start to look at
-additional technologies such as JanusGraph I have included a more in depth discussion
-of indexing as part of that coverage. You should always refer to the specific
-documentation for the graph system you are using to decide what you need to do about
-creating an index and schema for your graph. I will explain what TinkerGraph is in
-the next section. I won't be discussing the creation of an explicit schema again
-until Chapter 6. When working with TinkerGraph there is no need to define a schema
-ahead of time. The types of each property are derived at creation time. This is a
-really convenient feature and allows us to get productive and do some experimenting
-really quickly.
+TinkerGraph does have some indexing capability we have also included some discussion
+of it in the "<<tinkerindex>>" section. In Chapter 6 where we start to look at
+additional technologies such as JanusGraph we have included a more in depth
+discussion of indexing as part of that coverage. You should always refer to the
+specific documentation for the graph system you are using to decide what you need to
+do about creating an index and schema for your graph. we will explain what
+TinkerGraph is in the next section. We won't be discussing the creation of an
+explicit schema again until Chapter 6. When working with TinkerGraph there is no need
+to define a schema ahead of time. The types of each property are derived at
+creation time. This is a really convenient feature and allows us to get productive
+and do some experimenting really quickly.
 
 NOTE: In production systems, especially those where the graphs are large, the task of
 creating and managing the parts of the index is often handed to an additional
 software component such as Apache Solr or Elasticsearch.
 
 In general for any graph database, regardless of whether it is optional or not, use of an
-index should be considered a best practice. As I mentioned, even TinkerGraph has a
+index should be considered a best practice. As we mentioned, even TinkerGraph has a
 way to create an index should you want to.

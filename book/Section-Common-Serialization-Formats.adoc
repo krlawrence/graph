@@ -3,10 +3,10 @@
 COMMON GRAPH SERIALIZATION FORMATS
 ----------------------------------
 
-There are a number of ways that graph data can be stored in a file. In this section I
-have provided a brief overview of a few of them. As you will see there are a number
-of ways you can represent graph data using simple CSV files. There are also XML
-format, JSON formats and many more. Of these, the one that still seems to be
+There are a number of ways that graph data can be stored in a file. In this section
+we have provided a brief overview of a few of them. As you will see there are a
+number of ways you can represent graph data using simple CSV files. There are also
+XML format, JSON formats and many more. Of these, the one that still seems to be
 supported across most tools and platforms is GraphML. Not all of the features offered
 by Apache TinkerPop can be expressed using GraphML however. So let's take a look at
 some of the more commonly used formats.
@@ -16,7 +16,7 @@ Comma Separated Values (CSV)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 There are a number of ways that a graph can be stored using CSV files. There is no
-single preferred format that I am aware of. However, a common and convenient way,
+single preferred format that we are aware of. However, a common and convenient way,
 especially when vertices contain lots of properties is to use two CSV files. One will
 contain all of the vertex data and the other will contain all of the edge data.
 
@@ -24,7 +24,7 @@ contain all of the vertex data and the other will contain all of the edge data.
 Using two CSV files to represent the air-routes data
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 If we were to store the airport data from the 'air-routes' graph in CSV format we might
-do something like the example below. Note that to improve readability I have not
+do something like the example below. Note that to improve readability we have not
 included every property (or indeed every airport) in this example. Notice how each
 vertex has a unique ID assigned. This is important as when we define the edges we will
 need the vertex IDs to build the connections.
@@ -44,8 +44,8 @@ need the vertex IDs to build the connections.
 ----
 
 For the route data, the edges in our graph, we might use a format like the one below.
-I did not include an edge ID as we typically let the graph system assign those. For
-completeness I did include a label however when every edge is of the same type you
+We did not include an edge ID as we typically let the graph system assign those. For
+completeness we did include a label however when every edge is of the same type you
 could choose to leave this out so long as the program ingesting the data knew what
 label to assign. Most graph systems require edges to have a label even if it is
 optional for vertices. This is equally true for the airport data. However, in cases
@@ -67,13 +67,13 @@ the ones we have shown here can figure out how to process them and build a graph
 However, in many other situations you may also find yourself writing your own scripts
 or small programs to do it.
 
-I often find myself writing Ruby or Groovy scripts that can generate CSV or GraphML
-files so that a graph system can ingest them. In some cases I have used scripts to
+We often find ourself writing Ruby or Groovy scripts that can generate CSV or GraphML
+files so that a graph system can ingest them. In some cases we have used scripts to
 take CSV or GraphML data and generate the Gremlin statements that would create the
 graph. This is very similar to another common practice, namely, using a  script to
 generate 'INSERT' statements when working with SQL databases.
 
-I have also written Java and Groovy programs that will read the CSV file and use the
+We have also written Java and Groovy programs that will read the CSV file and use the
 TinkerPop API or the Gremlin Server REST API to insert vertices and edges into a graph.
 If you work with graph systems for a while you will probably find yourself also doing
 similar things.
