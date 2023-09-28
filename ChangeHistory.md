@@ -6,6 +6,8 @@ Starting with the v275 release, this file will contain a record of the major cha
 _This will be the first release of work related to the Second Edition  ( [main branch](https://github.com/krlawrence/graph/tree/main) ) work._ The original First Edition work can still be found  on the [v1 branch](https://github.com/krlawrence/graph/tree/v1) .
 
 - Changes to the site layout and toolchain
+  - The default branch is now called [main](https://github.com/krlawrence/graph).
+  - The First Edition work has been moved to the [v1](https://github.com/krlawrence/graph/tree/v1) branch.
   - Split the single (big) asciidoc file into multiple files with one file per major section.
 - Structural changes to the book
   - Removed specific mentions of early TinkerPop versions. The Second Edition will focus on Gremlin as it is today (after many years of evolution). 
