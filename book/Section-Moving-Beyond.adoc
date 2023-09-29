@@ -914,16 +914,13 @@ the CreateGraph.java sample program.
 [source,java]
 ----
 // Save the graph we just created as GraphML (XML) or GraphSON (JSON)
-try
-{
+try {
   // If you want to save the graph as GraphML uncomment the next line
-  tg.io(IoCore.graphml()).writeGraph("mygraph.graphml");
+  g.io("mygraph.xml").write();
 
   // If you want to save the graph as JSON uncomment the next line
-  tg.io(IoCore.graphson()).writeGraph("mygraph.json");
-}
-catch (IOException ioe)
-{
+  //g.io("mygraph.json").write();;
+} catch (IOException ioe) {
   System.out.println("Graph failed to save");
 }
 ----
