@@ -268,10 +268,13 @@ GraphSON
 ~~~~~~~~
 
 As discussed in the "<<graphmlandjsonintro>>" section, there are multiple versions of
-the GraphSON format. The original 1.0 version did not contain any type information.
-Version 2.0 introduced the concept of including data types within the JSON and
-GraphSON 3.0 introduced a few additional types. All three formats are still
-supported. The default is now GraphSON 3.0.
+the GraphSON format. There are currently three versions of GraphSON and each has an
+option to include embedded type information or to rely on standard JSON types. The
+original 1.0 version has a complicated embedded type format that is difficult to
+parse and is typically not used anymore. Version 2.0 introduce a new embedded type
+format that is much more compact and easier to parse and 3.0 added a few additional
+types to the format. The default format unless explicitly specified is currently
+GraphSON 3.0.
 
 To be written
 

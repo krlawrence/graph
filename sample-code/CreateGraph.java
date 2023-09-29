@@ -35,7 +35,7 @@ public class CreateGraph
     // If you want to check your Gremlin version, uncomment the next line
     //System.out.println("Gremlin version is: " + Gremlin.version());
 
-    // Create a new (empty) TinkerGrap
+    // Create a new (empty) TinkerGraph
     TinkerGraph tg = TinkerGraph.open() ;
     
     // Create a Traversal source object
@@ -106,10 +106,10 @@ public class CreateGraph
     try
     {
       // If you want to save the graph as GraphML uncomment the next line
-      tg.io(IoCore.graphml()).writeGraph("mygraph.graphml");
+      g.io("mygraph.xml").write();
       
       // If you want to save the graph as JSON uncomment the next line
-      //tg.io(IoCore.graphson()).writeGraph("mygraph.json");
+      //g.io("mygraph.json").write();;
     }
     catch (IOException ioe)
     {
