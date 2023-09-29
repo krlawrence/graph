@@ -1,65 +1,54 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-//v281 (TP 3.3.5), January 28th 2019
-v283-preview, May 4th 2022
+v2-001-preview, September 29th 2023
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Wed May 04, 2022 08:20:08 CDT
+// Fri Sep 29, 2023 16:08:40 CDT
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
 :source-highlighter: pygments
 :pygments-style: paraiso-dark
 :title-logo-image: CoverArt.png
-//:pygments-style: lovelace
-//:source-highlighter: rouge
-//:source-highlighter: coderay
-//:pygments-style: native
-//:pygments-style: monokai
-//:pygments-style: manni
-//:pygments-style: vim
 :toc:
 :toclevels: 4
-:revision: 283-preview
-//:revision: 281 (TP 3.3.5)
+:revision: v2-001-preview
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: May 4th 2022
-:tpvercheck: 3.5.2
-
-// NOTE1: I updated the paraiso-dark style so that source code with a style of text
-//        has a white foreground color. The default was unreadable,
-// NOTE2: These notes are encoded using a minimal level of Asciidoc markup. You can read
-// them as-is or generate HTML or other output formats from this file using the
-// 'asciidoc' processor available on most Linux systems or via Cygwin on
-// Windows. On Mac OS X the easiest way to install asciidoc is probably via
-// Homebrew. You can also install Asciidoctor, a Ruby Gem, as an alternative to
-// Asciidoc which is written in Python.
+:draftdate: September 29th 2023
+:tpvercheck: 3.7.0
+//
+// Some notes about the Asciidoc files and processor
+// -------------------------------------------------
+// 1. You may need to update the paraiso-dark style so that source code blocks 
+//    with a style of text have a white foreground color. The default can be
+//    unreadable.
+// 2. These notes are encoded using a minimal level of Asciidoc markup. You can read
+//    them as-is or generate HTML or other output formats from this file using most
+//    asciidoc processors.
+// 3. The tool used to produce PracticalGremlin.html is Asciidoctor (Ruby).
+// 4. The tool used to produce PracticalGremlin.pdf is Asciidoctor-pdf (Ruby).
 // 
-// NOTE3: In my tests, Asciidoctor seems a lot faster than Asciidoc and it has now become my
-//       preferred way of processing this file.
-// 
-// As well as 'asciidoc' or Asciidoctor, the 'source-highlight' utility will also need to
-// be installed if you want to process this file using Asciidoc and get source code
-// highlighting. To get the table of contents to render correctly, the 'toclevels'
-// setting needs to be set to 3 in asciidoc.conf. There are alternatives to
-// 'source-highlight' such as Pygments that can also be used. Pygments, like
-// source-highlight, will need to be installed before it can be used.
-// 
-// Currently I find that Asciidoctor + pygments produces the most pleasing output.
-// 
+// Currently source code highlighting is handled by Pygments
+// https://docs.asciidoctor.org/asciidoctor/latest/syntax-highlighting/pygments/
+//
 // To use the Asciidoctor/Pygments combo you will need to install:
 //   1. Asciidoctor (via gem)
 //   2. pygments.rb (via gem)
 // 
-// You probably should not need to manually install the pip piece as it is bundled
-// in the Gem but if it does not work you may,
+// You should not need to manually install the pip piece as it is bundled
+// in the Gem but if it does not work you may. Pygments needs Python installed in
+// order to run.
 // 
 //   3. pygments (via pip)
 // 
-// <img src="GremlinEaselNoText.png">
-// <h1>PRACTICAL GREMLIN:<br>An Apache TinkerPop Tutorial</h1>
+// The lines below need to be manually added to the HTML file (around line 515) so
+// that the book cover art image appears BEFORE the asciidoc document header. The
+// <h1> line already in the HTML file should be replaced by these two lines. The PNG
+// file also needs to be located in the same place as the HTML file when it is
+// viewed.
+//
 //<img src="PRACTICAL-GREMLIN-Revised-v2.png">
 //<h1>PRACTICAL GREMLIN:<br>An Apache TinkerPop Tutorial</h1>
 
