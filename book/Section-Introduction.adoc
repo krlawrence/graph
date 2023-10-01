@@ -4,27 +4,38 @@ INTRODUCTION
 
 .This book is a work in progress. Feedback is very much encouraged and welcomed!
 
+Welcome to the second edition
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Practical Gremlin was first published in 2017. In the years that followed, the Apache
+TinkerPop graph computing framework has continued to evolve.  While it was possible
+to keep the first edition mostly up to date, and to publish periodic updates, there
+comes a time when so much has changed that it makes more sense to take a step back
+and release a second edition. The book has been updated to include the most recent
+new features added to Gremlin and related technologies. Material such as discussions
+of migrating from old versions of Gremlin, and discussions of how to work around
+features then lacking, but since added, have been removed.
+ 
 The title of this book could equally well be '"A getting started guide for users of
 graph databases and the Gremlin query language featuring hints, tips and sample
 queries"'. It turns out that is a bit too long to fit on one line for a heading
 but in a single sentence that describes the focus of this work pretty well.
 
-I have resisted the urge to try and cover every single feature of TinkerPop one after
-the other in a reference manual fashion. Instead, what I have tried to do is capture
-the learning process that I myself have gone through using what I hope is a sensible
-flow from getting started to more advanced topics. To get the most from this book I
-recommend having the Gremlin console open with my sample data loaded as you follow
-along. I have not assumed that anyone reading this has any prior knowledge of Apache
-TinkerPop, the Gremlin query language or related tools. I will introduce everything
-you need to get started in Chapter 2.
+As with the first edition, I have resisted the urge to cover every single feature of
+TinkerPop one after the other in a reference manual fashion. Instead, what I have
+tried to do is capture the learning process that I myself have gone through using
+what I hope is a sensible flow from getting started to more advanced topics. To get
+the most from this book I recommend having the Gremlin console open, with the air
+route sample data loaded, as you follow along. I have not assumed that anyone reading
+this book has any prior knowledge of Apache TinkerPop, the Gremlin query language or
+related tools.  Everything you need to get started is introduced in Chapter 2.
 
-I hope people find what follows useful. It definitely remains a work in progress and
-more will be added in the coming weeks and months as time permits. I am hopeful that
-what is presented so far is of some use to anyone, who like me, is learning to use
-the Gremlin query and traversal language and related technologies.
+I hope people continue to find what follows useful. It definitely remains a work in
+progress as the Apache TinkerPop framework, and in particular, the Gremlin query
+language, continues to evolve.
 
-A lot of additional material, including the book in many different formats such as
-PDF, HTML, ePub and MOBI as well as sample code and data, can be found at the
+The book is available in multiple formats including PDF, HTML, ePub and MOBI. Those
+versions, along with sample code and data, can be found at the
 https://github.com/krlawrence/graph[project's home on GitHub]. You will find a
 summary of everything that is available in the "<<samplesintro>>" section.
 
