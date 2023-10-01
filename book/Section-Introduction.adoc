@@ -1,3 +1,4 @@
+// vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
 INTRODUCTION
 ------------
 
@@ -465,3 +466,4 @@ Similarly, when discussing the connections between vertices I use the term 'edge
 the plural form, 'edges'. In other books and articles you may also see terms like
 'relationship' or 'arc' used.  Again these terms are synonymous in the context of
 graphs.
+// vim: set tw=85 cc=+1 wrap spell redrawtime=20000
