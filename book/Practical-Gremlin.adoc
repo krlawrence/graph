@@ -1,9 +1,9 @@
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
 Kelvin R. Lawrence <gfxman@yahoo.com>
-v2-001-preview, September 29th 2023
+v2-001-preview, October 1st 2023
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-// Fri Sep 29, 2023 16:08:40 CDT
+// Sun Oct 01, 2023 16:15:46 CDT 
 //:Author:    Kelvin R. Lawrence
 //:Email:     gfxman@yahoo.com
 :Numbered:
@@ -16,7 +16,7 @@ v2-001-preview, September 29th 2023
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
-:draftdate: September 29th 2023
+:draftdate: October 1st, 2023
 :tpvercheck: 3.7.0
 //
 // Some notes about the Asciidoc files and processor

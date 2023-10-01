@@ -64,9 +64,9 @@ that I hope you will find informative. I call it a 'living book' as my goal is t
 regularly make updates as I discover things that need adding while also trying to
 keep the content as up to date as possible as Apache TinkerPop itself evolves.
 
-I would like to say very heartfelt *Thank You* to all those that have encouraged me
-to keep going with this adventure! It has required quite a lot of work but also
-remains a lot of fun.
+I remain extremely grateful to all those that have encouraged me to keep going with
+this adventure. Keeping up with a moving target requires a fair bit of work, but
+remains a lot of fun!
 
 Kelvin R. Lawrence +
 First draft: October 5th, 2017 +
@@ -197,7 +197,7 @@ to find the key components is provided below. The examples in this book make use
 sample graph called 'air-routes' which contains a graph based on the world airline
 route network between over 3,370 airports. The sample graph data, quite a bit of
 sample code and some larger demo applications can all be found at the same GitHub
-location that hosts the book manuscript. You will also find releases of the the book
+location that hosts the book manuscript. You will also find releases of the book
 in various formats (HTML, PDF, DocBook/XML, MOBI and EPUB) at the same GitHub
 location. The sample programs include standalone Java, Groovy, Python and Ruby
 examples as well as many examples that can be run from the Gremlin Console. There
