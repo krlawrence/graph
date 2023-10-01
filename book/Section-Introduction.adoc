@@ -2,7 +2,8 @@
 INTRODUCTION
 ------------
 
-NOTE: This book is a work in progress. Feedback is very much encouraged and welcomed! Please do so by opening Git issues as appropriate.
+NOTE: This book is a work in progress. Feedback is very much encouraged and welcomed!
+Please open Git issues as appropriate.
 
 Welcome to the second edition
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -10,16 +11,21 @@ Welcome to the second edition
 Practical Gremlin was first published in 2017. In the years that followed, the Apache
 TinkerPop graph computing framework has continued to evolve.  While it was possible
 to keep the first edition mostly up to date, and to publish periodic updates, there
-comes a time when so much has changed that it makes more sense to take a step back
+comes a time when so much has changed that it makes more sense to take a step back,
 and release a second edition. The book has been updated to include the most recent
-new features added to Gremlin and related technologies. Material such as discussions
-of migrating from old versions of Gremlin, and discussions of how to work around
-features then lacking, but since added, have been removed.
- 
-The title of this book could equally well be '"A getting started guide for users of
-graph databases and the Gremlin query language featuring hints, tips and sample
-queries"'. It turns out that is a bit too long to fit on one line for a heading
-but in a single sentence that describes the focus of this work pretty well.
+new features added to the Gremlin query language and related technologies. Material
+such as discussions of migrating from old versions of Gremlin, and discussions of how
+to work around features then lacking, but since added, have been removed. The
+following paragraph was used to introduce the first edition. It remains as true today
+as it was then. 
+
+[quote, Practical Gremlin first edition, October 2017]
+____
+The title of this book could equally well be '"A getting started
+guide for users of graph databases and the Gremlin query language featuring hints,
+tips and sample queries"'. It turns out that is a bit too long to fit on one line for
+a heading but in a single sentence that describes the focus of this work pretty well.
+____
 
 As with the first edition, I have resisted the urge to cover every single feature of
 TinkerPop one after the other in a reference manual fashion. Instead, what I have
