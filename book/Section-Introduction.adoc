@@ -64,18 +64,19 @@ that I hope you will find informative. I call it a 'living book' as my goal is t
 regularly make updates as I discover things that need adding while also trying to
 keep the content as up to date as possible as Apache TinkerPop itself evolves.
 
-I remain extremely grateful to all those that have encouraged me to keep going with
+I remain extremely grateful to all those who have encouraged me to keep going with
 this adventure. Keeping up with a moving target requires a fair bit of work, but
 remains a lot of fun!
 
 Kelvin R. Lawrence +
-First draft: October 5th, 2017 +
-Current draft: {draftdate} +
+First draft (first edition): October 5th, 2017 +
+Current draft (second edition): {draftdate} +
 
 Providing feedback
 ~~~~~~~~~~~~~~~~~~
-Please let me know about any mistakes you find in this material and also please feel
-free to send me feedback of any sort. Suggested improvements are especially welcome.
+
+Please let me know about any mistakes you find in this material, and also please feel
+free to provide feedback of any sort. Suggested improvements are especially welcome.
 A good way to provide feedback is by opening an issue in the GitHub repository
 located at https://github.com/krlawrence/graph. You are currently reading revision
 {revision} of the book.
@@ -117,24 +118,23 @@ the Gremlin console running with a TinkerGraph. How to set that environment up i
 covered in the <<gremlininstall>> section below.
 
 NOTE: The examples in this book have been tested using Apache TinkerPop release
-{tpvercheck}. However, work remains to be done to add coverage of new features in
-that release to the book.
+{tpvercheck}.
 
 TinkerGraph is an 'in-memory' graph, meaning nothing gets saved to disk
-automatically. It is shipped as part of the Apache TinkerPop download. The goal of
-this tutorial is to allow someone with little to no prior knowledge to get up and
-going quickly using the Gremlin console and the 'air-routes' graph. Later in the
-book I will discuss using additional technologies such as JanusGraph, Apache
-Cassandra, Gremlin Server and Elasticsearch to build scalable and persisted graph
-stores that can still be traversed using Gremlin queries. I will also discuss
-writing standalone Java and Groovy applications as well as using the Gremlin
-Console. I even slipped a couple of Ruby examples in too!
+automatically. It is included as part of the Apache TinkerPop download. The goal of
+this tutorial is to allow someone with little to no prior knowledge, to get up and
+going quickly using the Gremlin Console and the 'air-routes' graph. Later in the book
+we discuss using additional technologies such as JanusGraph, Apache Cassandra,
+Gremlin Server and Elastic Search. These capabilities enable the creation of scalable
+and persisted graph stores that can still be explored using Gremlin queries. Writing
+standalone applications in languages such as Java, Groovy, and Python is also covered
+in the later chapters.
 
-NOTE: In the first few sections of this book I have mainly focussed on
-showing the different types of queries that you can issue using Gremlin. I have not
-tried to show all of the output that you will get back from entering these queries
-but have selectively shown examples of output. I go a lot deeper into things in
-chapters 4, 5 and 6.
+NOTE: The first few sections of the book focus on showing some basic Gremlin queries
+that are both useful and yet easy to understand. By the end of Chapter 3 you should
+have a basic understanding of how to explore the air routes graph using commonly used
+Gremlin steps. Chapters 4, 5, and 6 explore Gremlin in more depth.
+
 
 .How this book is organized
 Chapter 1 - INTRODUCTION::
