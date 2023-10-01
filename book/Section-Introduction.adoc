@@ -2,7 +2,7 @@
 INTRODUCTION
 ------------
 
-.This book is a work in progress. Feedback is very much encouraged and welcomed!
+NOTE: This book is a work in progress. Feedback is very much encouraged and welcomed! Please do so by opening Git issues as appropriate.
 
 Welcome to the second edition
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
