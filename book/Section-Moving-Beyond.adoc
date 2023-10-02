@@ -1259,7 +1259,7 @@ So far we have been using the TinkerGraph graph that is included with Apache
 TinkerPop in our examples. Once you move beyond learning about Gremlin and its
 related technologies and moving towards a production deployment, you will need a
 graph store that provides capabilities such as reliable persistence, the ability to
-define schemas and support for indexing. The JanusGraph project, which
+define schemas and support for external indexing. The JanusGraph project, which
 began in 2016 as an open source fork of the popular Titan graph database, is hosted by
 the Linux Foundation and provides these advanced capabilities.
 
@@ -1273,7 +1273,7 @@ JanusGraph can run on a laptop, which is useful for learning and experimenting, 
 it is designed to handle very large graphs stored on distributed clusters. It can
 handle graphs containing billions of vertices and edges. As we shall discuss, JanusGraph
 is designed to work with a variety of persistent storage options including
-Apache Cassandra and Apache HBase as well as indexing technology such as Apache Solr
+Apache Cassandra and Apache HBase as well as external indexing technology such as Apache Solr
 and Elasticsearch.
 
 .Here are some useful JanusGraph resources
@@ -1358,7 +1358,7 @@ provides. This essentially allows us to use JanusGraph in the same way as we hav
 been using TinkerGraph with all of our graph data stored in the memory of the
 computer. The one big difference however is that JanusGraph, even while using the
 'inmemory' storage model, allows us to experiment with features that TinkerGraph does
-not offer, such as schemas and indexing. If you want to host your graph on a single
+not offer, such as schemas and external indices. If you want to host your graph on a single
 machine and you don't need persistence support, you could also use 'inmemory' storage model in
 producton. We will get into those topics a bit later on. First, let's create an
 instance of JanusGraph from the Gremlin console that uses the 'inmemory' storage model.
