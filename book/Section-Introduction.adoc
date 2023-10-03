@@ -81,6 +81,10 @@ A good way to provide feedback is by opening an issue in the GitHub repository
 located at https://github.com/krlawrence/graph. You are currently reading revision
 {revision} of the book.
 
+NOTE: The change history contains details of everything that has been added over time
+and can be found at this location:
+https://github.com/krlawrence/graph/blob/main/ChangeHistory.md
+
 I am grateful to those who have already taken the time to review the manuscript and
 open issues or submit pull requests.
 
@@ -251,18 +255,35 @@ Change history::
 on.
 - https://github.com/krlawrence/graph/blob/main/ChangeHistory.md
 
-[[tp34intro]]
-A word about TinkerPop 3.4
+[[tpevolution]]
+Apache TinkerPop Evolution
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Over the last 15 years, TinkerPop, and especially Gremlin, have evolved substantially
+from their earliest versions. What we now know as Apache TinkerPop is the result of
+an open source project created in 2009 and moved to the Apache Software Foundation
+(ASF) in 2015, after the final release of TinkerPop version 2.  The first official
+release of Apache TinkerPop 3.0 came in July of 2015, with the project being promoted
+to Apache's "top-level" status the following year. 
+
+If you are new to TinkerPop and Gremlin, you can probably skip the next few sections.
+They appeared in the fist edition as a way to highlight key new features in more
+recent releases, beginning with TinkerPop 3.4. They have been left in the second
+edition as there are still people using older versions and it can be useful to have a
+list of when some new features arrived.
+
+NOTE: The complete ApacheTinkerPop change history can be found at
+https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc
+
+[[tp34intro]]
+TinkerPop 3.4
+^^^^^^^^^^^^^
 
 A major update to Apache TinkerPop, version 3.4.0, was released in January 2019 and a
 number of point releases followed. The examples in this book have been tested with
 all releases of the 3.4.x line. New examples have also been added as necessitated by
 those updates.
 
-NOTE: The change history contains details of everything that has been added over time
-and can be found at this location:
-https://github.com/krlawrence/graph/blob/main/ChangeHistory.md
 
 Graph database engines that support Apache TinkerPop often take a while to move up to
 new releases and it's always a good idea to verify the exact level the database you are
@@ -270,7 +291,7 @@ using supports.
 
 NOTE: Full details of all the new features added in the TinkerPop 3.4.x releases can be
 found at the following link:
-https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc
+https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc#tinkerpop-340-avant-gremlin-construction-3-for-theremin-and-flowers
 
 As well as updating the book, I continue incrementally adding coverage of these
 features to the `sample-code` folder. Samples currently added include
@@ -278,8 +299,8 @@ features to the `sample-code` folder. Samples currently added include
 capability. It can be loaded and run from the Gremlin console.
 
 [[tp35intro]]
-Introducing TinkerPop 3.5
-~~~~~~~~~~~~~~~~~~~~~~~~~
+TinkerPop 3.5
+^^^^^^^^^^^^^
 
 Apache TinkerPop 3.5.0 was released in May 2021. This update introduced a number of
 improvements in areas such as Gremlin client drivers, the Gremlin Server and overall
@@ -301,11 +322,11 @@ strings.
 
 NOTE: Full details of all the new features added in the TinkerPop 3.5.x releases can be
 found at the following link:
-https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc
+https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc#tinkerpop-350-the-sleeping-gremlin-no-18-entracte-symphonique
 
 [[tp36intro]]
-Introducing TinkerPop 3.6
-~~~~~~~~~~~~~~~~~~~~~~~~~
+TinkerPop 3.6
+^^^^^^^^^^^^^
 
 Apache TinkerPop 3.6.0 was released in April 2022. Coming almost exactly a year after
 the initial 3.5.0 release, this is one of the most significant TinkerPop releases
@@ -342,7 +363,17 @@ supports before trying to use these new features.
 
 NOTE: Full details of all the new features added in the TinkerPop 3.6.x releases can be
 found at the following link:
-https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc
+https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc#tinkerpop-360-tinkerheart
+
+[[tp37intro]]
+Introducing TinkerPop 3.7
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+IMPORTANT: TODO - Add details for TinkerPop 3.7
+
+NOTE: Full details of all the new features added in the TinkerPop 3.6.x releases can be
+found at the following link:
+https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc#tinkerpop-370-gremfir-master-of-the-pan-flute  
 
 [[whygraph]]
 So what is a graph database and why should I care?
