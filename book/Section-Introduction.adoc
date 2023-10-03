@@ -352,11 +352,6 @@ throw an exception. This work began as part of the TinkerPop 3.5.2 update and is
 completed as of TinkerPop 3.6.0.
 - A new 'fail' step that can be used to abort a query in a controlled way.
 
-Over time, new sections will be added to this book that cover each of these features
-in detail.
-
-As always, check the level of ApacheTinkerPop the graph database you are using
-supports before trying to use these new features.
 
 NOTE: Full details of all the new features added in the TinkerPop 3.6.x releases can be
 found at the following link:
@@ -368,7 +363,7 @@ Introducing TinkerPop 3.7
 
 IMPORTANT: TODO - Add details for TinkerPop 3.7
 
-NOTE: Full details of all the new features added in the TinkerPop 3.6.x releases can be
+NOTE: Full details of all the new features added in the TinkerPop 3.7.x releases can be
 found at the following link:
 https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc#tinkerpop-370-gremfir-master-of-the-pan-flute  
 
