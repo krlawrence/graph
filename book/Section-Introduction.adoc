@@ -267,36 +267,33 @@ release of Apache TinkerPop 3.0 came in July of 2015, with the project being pro
 to Apache's "top-level" status the following year. 
 
 If you are new to TinkerPop and Gremlin, you can probably skip the next few sections.
-They appeared in the fist edition as a way to highlight key new features in more
-recent releases, beginning with TinkerPop 3.4. They have been left in the second
-edition as there are still people using older versions and it can be useful to have a
-list of when some new features arrived.
+They appeared in a slightly modified form, as part of the first edition, and provided
+a way to highlight the arrival of key new features. These notes have been left in the
+second edition as there are still people using older versions of Gremlin, and it can
+be useful to have a list like this to cross reference.
 
 NOTE: The complete ApacheTinkerPop change history can be found at
 https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc
+
+Graph database engines that support Apache TinkerPop often take a while to move up to
+new releases, and it's always a good idea to verify the exact level the database you
+are using supports.
+
+This version of the book covers features of Gremlin available as part of the
+TinkerPop {tpvercheck} release. As appropriate, notes and examples have been added,
+that show other ways to perform tasks that new features may make simpler. In some
+cases, notes have been added to point out when more recent features first appeared. 
 
 [[tp34intro]]
 TinkerPop 3.4
 ^^^^^^^^^^^^^
 
 A major update to Apache TinkerPop, version 3.4.0, was released in January 2019 and a
-number of point releases followed. The examples in this book have been tested with
-all releases of the 3.4.x line. New examples have also been added as necessitated by
-those updates.
-
-
-Graph database engines that support Apache TinkerPop often take a while to move up to
-new releases and it's always a good idea to verify the exact level the database you are
-using supports.
+number of point releases followed. 
 
 NOTE: Full details of all the new features added in the TinkerPop 3.4.x releases can be
 found at the following link:
 https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc#tinkerpop-340-avant-gremlin-construction-3-for-theremin-and-flowers
-
-As well as updating the book, I continue incrementally adding coverage of these
-features to the `sample-code` folder. Samples currently added include
-`nested-repeat.groovy` that demonstrates the use of the new nested repeat step
-capability. It can be loaded and run from the Gremlin console.
 
 [[tp35intro]]
 TinkerPop 3.5
