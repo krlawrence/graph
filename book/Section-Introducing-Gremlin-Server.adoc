@@ -1,3 +1,5 @@
+// vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
+
 [[gremlinserver]]
 INTRODUCING GREMLIN SERVER
 --------------------------

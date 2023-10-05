@@ -1,3 +1,4 @@
+// vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
 [[beq]]
 BEYOND BASIC QUERIES
 --------------------
@@ -5831,3 +5832,5 @@ g2.V().order().by('gremlin.pageRankVertexProgram.pageRank',desc).limit(10).
 We have barely scratched the surface in this section on these new TinkerPop OLAP
 capabilities. If this is an area that you are interested in we strongly recommend
 reading the official TinkerPop reference documentation.
+
+
