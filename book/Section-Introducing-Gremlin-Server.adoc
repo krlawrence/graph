@@ -7,7 +7,7 @@ INTRODUCING GREMLIN SERVER
 So far in this book we have looked at a few different ways to setup a TinkerPop
 enabled graph store. Initially we focussed on running a TinkerGraph or a JanusGraph
 graph locally with the data kept in memory. We also looked at how to configure
-Cassandra with JanusGraph  so that you could connect to it from the Gremlin Console.
+Cassandra with JanusGraph so that you could connect to it from the Gremlin Console.
 As you will recall, Cassandra could be running locally or remotely but either way
 successfully making the connection to it required knowing the specific details of the
 back end configuration. This included knowing the IP addresses, ports and protocols

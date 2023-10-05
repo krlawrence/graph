@@ -4,65 +4,40 @@
 INTRODUCING JANUS GRAPH
 -----------------------
 
-Most of the examples we have looked at so far were produced using the Gremlin console
-and the TinkerGraph in-memory graph all running on a single machine. However, there
-are many ways to deploy and interact with a graph while still using Gremlin and
-optionally the Gremlin Console, and many of them go beyond doing everything on a
-single machine. The Apache TinkerPop package for example includes a component called
-Gremlin Server. Gremlin Server allows you to host a graph database locally or
-remotely and talk to it over HTTP or WebSockets. The Gremlin console supports
-accessing graphs both locally or remotely or you can access them using your own code
-or other tools or even command line utilities such as 'curl'.
+This chapter could also be called "Moving beyond TinkerGraph", as that is what we are
+going to focus on next. TinkerGraph has served us well in our journey thus far, but
+there comes a time when you need to evaluate options for a graph database that
+supports concepts such as persistent storage, high availability, data durability,
+ACID transactions, advanced indexing, schema definition and enforcement, and remote
+access. 
 
-For a production environment it is likely you will use a technology such as JanusGraph
-backed by something like HBase or Cassandra and an indexing technology such as
-Solr or Elasticsearch. In these cases the way you work with and manage
-the graph and the way that query results are returned will vary.
+There are several open source and commercial options available these days.
+One of the open source choices that supports most of the features listed above, is
+JanusGraph, and that is be the technology we focus on in this chapter. 
 
-In some cases data returned will be in the form of a GraphSON (JSON) in others it
-might be as variables within a program. There are also ways to work with graphs using
-Gremlin from a Python Notebook. You might setup your own on-premise graph system or
-you might use a hosted service. It's quite possible you might still
-wish to connect to a remote graph using Gremlin Server via the Gremlin Console but
-you just as likely could use 'curl' or some other HTTP/REST type of technology. So
-that is a long winded way of saying that once you move beyond the basics and head
-towards putting a system into production, there are a lot of options to consider.
-
-In this section you will find a selection of examples from these more sophisticated
-environments. The focus of this book so far has been to teach the Gremlin query and
-traversal language, using the Gremlin Console and TinkerGraph as our learning
-environment. However, it would be remiss to end our discussion without at least
-touching on some of these other environments, how you might configure them and why
-you might use them. The following sections are an attempt to whet your appetite for
-moving beyond the Gremlin Console into the world of graph application programming and
-graph system deployment!
-
-
+NOTE: While the Apache TinkerPop 3.7.0 release did introduce a version of TinkerGraph
+that supports transactions, most of the other features on our list fall outside the
+design scope of TinkerGraph.
 
 [[janusintro]]
 Getting started with JanusGraph
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-So far we have been using the TinkerGraph graph that is included with Apache
-TinkerPop in our examples. Once you move beyond learning about Gremlin and its
-related technologies and moving towards a production deployment, you will need a
-graph store that provides capabilities such as reliable persistence, the ability to
-define schemas and support for external indexing. The JanusGraph project, which
-began in 2016 as an open source fork of the popular Titan graph database, is hosted by
-the Linux Foundation and provides these advanced capabilities.
+The JanusGraph project was created at the LinuxFoundation in 2016 as a fork of the
+open source Titan graph database. Siince then it has become popular amongst graph
+database users, and offers a broad feature set, and significant flexibility in terms
+of integration with storage backends and external indexing technologies.
 
-In this book we have attempted to provide a reasonable amount of JanusGraph
-coverage but it is still recommended to become familiar with the official
-JanusGraph documentation where you will find more in depth discussions of advanced
-topics and explanations of the many settings that you can manipulate to suit your
-needs.
+NOTE: We have attempted to provide a reasonable coverage of many JanusGraph features,
+but it is still recommended to become familiar with the official documentation where
+you will find more in depth discussions of advanced topics and configuration options.
 
-JanusGraph can run on a laptop, which is useful for learning and experimenting, but
-it is designed to handle very large graphs stored on distributed clusters. It can
-handle graphs containing billions of vertices and edges. As we shall discuss, JanusGraph
-is designed to work with a variety of persistent storage options including
-Apache Cassandra and Apache HBase as well as external indexing technology such as Apache Solr
-and Elasticsearch.
+Just like TinkerGraph, JanusGraph can easily be run on a laptop, which is useful for
+learning and experimenting, but it is designed for much more complex cases, and  to
+handle very large graphs with billions of nodes and edges, stored on distributed
+clusters. JanusGraph is designed to work with a variety of persistent storage options
+including Apache Cassandra, and Apache HBase, as well as external indexing
+technologies such as Apache Solr, and Elasticsearch.
 
 .Here are some useful JanusGraph resources
 Runtime download (JAR files and more)::
@@ -97,18 +72,19 @@ related technologies like Apache Cassandra and Apache Solr that JanusGraph has b
 tested with.
 
 NOTE: It is important to remember that JanusGraph does not have its own process, it
-is not a delivered as a service that you run, rather it is a set of Java libraries that
-have to be invoked either from your own code, the Gremlin Console, or the JanusGraph Server
-available in the install package.
+is not a delivered as a service that you run, rather it is a set of Java libraries
+that have to be invoked either from your own code, the Gremlin Console, or the
+JanusGraph Server available in the install package.
 
-The install package for JanusGraph is located at https://github.com/JanusGraph/janusgraph/releases
-and is a single ZIP file. 'JanusGraph-version.zip' contains the JanusGraph core
-libraries, the JanusGraph server, and the Gremlin console. 'JanusGraph-full-version.zip'
-in addition contains Apache Cassandra and Elasticsearch binaries which are the recommended
-default storage and indexing backends for you to try out. Once you have
-it downloaded and unzipped you are ready to experiment using the Gremlin Console.
-As will be discussed below, when working with JanusGraph you must use the version
-of the Gremlin Console that is packaged as part of the JanusGraph download.
+The install package for JanusGraph is located at
+https://github.com/JanusGraph/janusgraph/releases and is a single ZIP file.
+'JanusGraph-version.zip' contains the JanusGraph core libraries, the JanusGraph
+server, and the Gremlin console. 'JanusGraph-full-version.zip' in addition contains
+Apache Cassandra and Elasticsearch binaries which are the recommended default storage
+and indexing backends for you to try out. Once you have it downloaded and unzipped
+you are ready to experiment using the Gremlin Console.  As will be discussed below,
+when working with JanusGraph, you must use the version of the Gremlin Console that is
+packaged as part of the JanusGraph download.
 
 [[janusconsole]]
 Using JanusGraph from the Gremlin Console

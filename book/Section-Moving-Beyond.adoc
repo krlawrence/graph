@@ -22,7 +22,7 @@ In this chapter we start the journey by introducing ways to access TinkerGraph
 directly, embedded with your application code, from programming languages such as
 Java and Groovy. Later, we introduce ways to use these same programming
 languages, and others, to connect to a Gremlin Server and other remotely hosted graph
-databases. 
+databases. First, let's take a look at the Apache TinkerPop Java API. 
 
 [[javatinker]]
 Working with TinkerGraph from a Java Application
