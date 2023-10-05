@@ -13,7 +13,7 @@ To read the latest snapshot of the book right away in a browser (HTML format) cl
 
 **LATEST NEWS:**  
 - [Sep-23-2023] Work has started on a second edition of the book! See the note below for more details.
-- [Sep-22-2023] Added a new script to the sample-data folder that can produce Cypher versions of the air-routes data.  
+- [Sep-22-2023] Added a script to the sample-data folder for producing Cypher versions of the air-routes data.  
 - [Aug-29-2022] Updated versions of the sample data and corresponding demo apps have been uploaded. 
 
 ### Work has begun on the second edition!
