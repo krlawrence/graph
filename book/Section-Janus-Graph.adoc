@@ -1929,18 +1929,6 @@ on a hosting service of your choice.
 
 You can read more about Google Bigtable at the following URL. https://cloud.google.com/bigtable/
 
-IBM Compose for JanusGraph
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-IBM offers a hosted and managed JanusGraph environment via its Compose platform. In
-this environment IBM manages the whole environment for you which includes JanusGraph
-backed by a ScyllaDB cluster. As with Google Bigtable this is a hosted service that
-you pay to use. If the idea of managing a Cassandra compatible cluster for use with
-JanusGraph yourself is not something you want to take on this is an option you can
-consider.
-
-You can read more about this service at the following
-URL. https://www.ibm.com/cloud/compose/janusgraph
 
 Other TinkerPop compatible products and services
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
