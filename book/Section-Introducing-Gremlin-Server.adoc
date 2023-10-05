@@ -4,17 +4,15 @@
 INTRODUCING GREMLIN SERVER
 --------------------------
 
-So far in this book we have looked at a few different ways to setup a TinkerPop
-enabled graph store. Initially we focussed on running a TinkerGraph or a JanusGraph
-graph locally with the data kept in memory. We also looked at how to configure
-Cassandra with JanusGraph so that you could connect to it from the Gremlin Console.
-As you will recall, Cassandra could be running locally or remotely but either way
-successfully making the connection to it required knowing the specific details of the
-back end configuration. This included knowing the IP addresses, ports and protocols
-being used.
+So far we have looked at a few different ways to setup a TinkerPop enabled graph
+store. Initially we focussed on running a TinkerGraph locally. Next we looked at
+JanusGraph, both as an in memory store, and connected to Cassandra, running locally
+or remotely. In each case, successfully making the connection to Cassandra, required
+knowledge of specific configuration details; such as IP addresses, ports and the
+protocols being used.
 
 While this may be acceptable in scenarios where it is OK for the user of the graph to
-have this level of insight and access into the back end there are many scenarios
+have this level of insight and access into the back end, there are many scenarios
 where it is desirable to keep most of the implementation detail hidden and access
 secured. This is where Gremlin Server comes in.
 
@@ -29,7 +27,6 @@ methods. You can connect to it from a Gremlin console, from a command line using
 allowing us to hide the graph implementation details. It allows people using
 programming languages that do not yet have Apache TinkerPop language bindings to work
 with a graph using simple HTTP protocols.
-
 
 NOTE: The official Apache TinkerPop documentation includes in depth coverage of
 configuring and using Gremlin Server.

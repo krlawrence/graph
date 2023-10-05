@@ -23,10 +23,10 @@ design scope of TinkerGraph.
 Getting started with JanusGraph
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The JanusGraph project was created at the LinuxFoundation in 2016 as a fork of the
-open source Titan graph database. Siince then it has become popular amongst graph
-database users, and offers a broad feature set, and significant flexibility in terms
-of integration with storage backends and external indexing technologies.
+The JanusGraph project was created at the Linux Foundation in 2016 as a fork of the
+open source Titan graph database, and has since become popular amongst graph database
+users. JanusGraph offers a broad feature set, and significant flexibility in terms of
+integration with storage backends and external indexing technologies.
 
 NOTE: We have attempted to provide a reasonable coverage of many JanusGraph features,
 but it is still recommended to become familiar with the official documentation where
@@ -103,8 +103,8 @@ that is packaged as part of the JanusGraph download.
 As mentioned above, JanusGraph is not a standalone service, it is a set of Java
 classes that still need to be invoked by a calling process. The Gremlin Console can
 play that role. After you have unzipped JanusGraph you will find the `gremlin.sh` and
-`gremlin.bat` scripts in the `bin` directory under the JanusGraph parent directory. Once
-you have started the Gremlin Console you can, as we will explore in the next few
+`gremlin.bat` scripts in the `bin` directory under the JanusGraph parent directory.
+Once you have started the Gremlin Console you can, as we will explore in the next few
 sections, tell JanusGraph about the environment you will be operating in in terms of
 store backend and index backend.
 
