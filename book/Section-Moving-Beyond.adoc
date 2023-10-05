@@ -3,39 +3,26 @@
 MOVING BEYOND THE GREMLIN CONSOLE
 ---------------------------------
 
-Most of the examples we have looked at so far were produced using the Gremlin console
-and the TinkerGraph in-memory graph all running on a single machine. However, there
-are many ways to deploy and interact with a graph while still using Gremlin and
-optionally the Gremlin Console, and many of them go beyond doing everything on a
-single machine. The Apache TinkerPop package for example includes a component called
-Gremlin Server. Gremlin Server allows you to host a graph database locally or
-remotely and talk to it over HTTP or WebSockets. The Gremlin console supports
-accessing graphs both locally or remotely or you can access them using your own code
-or other tools or even command line utilities such as 'curl'.
+The focus of this book so far has been to teach the Gremlin query language, using the
+Gremlin Console and TinkerGraph as our learning environment. This is indeed a great
+way to learn, and that environment can be setup quickly, as we have seen, on a single
+laptop, or desktop, computer. Even as you move towards more sophisticated
+environments, keeping the Gremlin Console nearby is recommended as an easy way to
+experiment with new ideas.
 
-For a production environment it is likely you will use a technology such as JanusGraph
-backed by something like HBase or Cassandra and an indexing technology such as
-Solr or Elasticsearch. In these cases the way you work with and manage
-the graph and the way that query results are returned will vary.
+As we start to think about using graphs to solve problems in a production
+environment, we need some additional tools. We have to consider things such as
+programming language interfaces, persistent storage, making graphs available using
+servers, and more advanced indexing. Those topics are the focus of this chapter, and
+the two that follow. Hopefully this will whet your appetite for moving beyond the
+Gremlin Console, and into the world of graph application programming and graph system
+deployment! 
 
-In some cases data returned will be in the form of a GraphSON (JSON) in others it
-might be as variables within a program. There are also ways to work with graphs using
-Gremlin from a Python Notebook. You might setup your own on-premise graph system or
-you might use a hosted service. It's quite possible you might still
-wish to connect to a remote graph using Gremlin Server via the Gremlin Console but
-you just as likely could use 'curl' or some other HTTP/REST type of technology. So
-that is a long winded way of saying that once you move beyond the basics and head
-towards putting a system into production, there are a lot of options to consider.
-
-In this section you will find a selection of examples from these more sophisticated
-environments. The focus of this book so far has been to teach the Gremlin query and
-traversal language, using the Gremlin Console and TinkerGraph as our learning
-environment. However, it would be remiss to end our discussion without at least
-touching on some of these other environments, how you might configure them and why
-you might use them. The following sections are an attempt to whet your appetite for
-moving beyond the Gremlin Console into the world of graph application programming and
-graph system deployment!
-
+In this chapter we start the journey by introducing ways to access TinkerGraph
+directly, embedded with your application code, from programming languages such as
+Java and Groovy. Later, we introduce ways to use these same programming
+languages, and others, to connect to a Gremlin Server and other remotely hosted graph
+databases. 
 
 [[javatinker]]
 Working with TinkerGraph from a Java Application

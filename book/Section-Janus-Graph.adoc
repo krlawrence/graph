@@ -1,8 +1,8 @@
 
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
 [[janusgraph]]
-JANUS GRAPH
------------
+INTRODUCING JANUS GRAPH
+-----------------------
 
 Most of the examples we have looked at so far were produced using the Gremlin console
 and the TinkerGraph in-memory graph all running on a single machine. However, there
@@ -40,8 +40,8 @@ graph system deployment!
 
 
 [[janusintro]]
-Introducing JanusGraph
-~~~~~~~~~~~~~~~~~~~~~~~
+Getting started with JanusGraph
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 So far we have been using the TinkerGraph graph that is included with Apache
 TinkerPop in our examples. Once you move beyond learning about Gremlin and its
