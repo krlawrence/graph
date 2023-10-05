@@ -64,6 +64,8 @@ include::Section-Miscellaneous-Queries-Results.adoc[]
 
 include::Section-Moving-Beyond.adoc[]
 
+include::Section-Janus-Graph.adoc[]
+
 include::Section-Introducing-Gremlin-Server.adoc[]
 
 include::Section-Common-Serialization-Formats.adoc[]
