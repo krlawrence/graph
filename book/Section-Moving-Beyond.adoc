@@ -1256,7 +1256,7 @@ So far we have been using the TinkerGraph graph that is included with Apache
 TinkerPop in our examples. Once you move beyond learning about Gremlin and its
 related technologies and moving towards a production deployment, you will need a
 graph store that provides capabilities such as reliable persistence, the ability to
-define schemas and support for ACID transactions. The JanusGraph project, which
+define schemas and support for external indexing. The JanusGraph project, which
 began in 2016 as an open source fork of the popular Titan graph database, is hosted by
 the Linux Foundation and provides these advanced capabilities.
 
@@ -1270,17 +1270,16 @@ JanusGraph can run on a laptop, which is useful for learning and experimenting, 
 it is designed to handle very large graphs stored on distributed clusters. It can
 handle graphs containing billions of vertices and edges. As we shall discuss, JanusGraph
 is designed to work with a variety of persistent storage options including
-Apache Cassandra and Apache HBase as well as indexing technology such as Apache Solr
+Apache Cassandra and Apache HBase as well as external indexing technology such as Apache Solr
 and Elasticsearch.
 
 .Here are some useful JanusGraph resources
 Runtime download (JAR files and more)::
 http://janusgraph.org/
 Documentation::
-http://docs.janusgraph.org/latest/.
+http://docs.janusgraph.org/.
 API Documentation::
-http://docs.janusgraph.org/latest/javadoc.html
-http://javadoc.io/doc/org.janusgraph/janusgraph-core/0.2.0
+http://javadoc.io/doc/org.janusgraph/janusgraph-core/
 
 In the following sections we will take an in depth look at JanusGraph and other
 technologies that, when combined, provide a way to build and deploy a massively
@@ -1307,15 +1306,18 @@ related technologies like Apache Cassandra and Apache Solr that JanusGraph has b
 tested with.
 
 NOTE: It is important to remember that JanusGraph does not have its own process, it
-is not a delivered as a service that you run, rather it is a set of Java classes that
-have to be invoked either from your own code, the Gremlin Console hosted using
-something like Gremlin Server.
+is not a delivered as a service that you run, rather it is a set of Java libraries that
+have to be invoked either from your own code, the Gremlin Console, or the JanusGraph Server
+available in the install package.
 
-The install package for JanusGraph is located at http://janusgraph.org/ and is a
-single ZIP file. Once you have it downloaded and unzipped you are ready to experiment
-using the Gremlin Console. As will be discussed below, when working with JanusGraph
-you must use the version of the Gremlin Console that is packaged as part of the
-JanusGraph download.
+The install package for JanusGraph is located at https://github.com/JanusGraph/janusgraph/releases
+and is a single ZIP file. 'JanusGraph-version.zip' contains the JanusGraph core
+libraries, the JanusGraph server, and the Gremlin console. 'JanusGraph-full-version.zip'
+in addition contains Apache Cassandra and Elasticsearch binaries which are the recommended
+default storage and indexing backends for you to try out. Once you have
+it downloaded and unzipped you are ready to experiment using the Gremlin Console.
+As will be discussed below, when working with JanusGraph you must use the version
+of the Gremlin Console that is packaged as part of the JanusGraph download.
 
 [[janusconsole]]
 Using JanusGraph from the Gremlin Console
@@ -1337,14 +1339,15 @@ play that role. After you have unzipped JanusGraph you will find the `gremlin.sh
 `gremlin.bat` scripts in the `bin` directory under the JanusGraph parent directory. Once
 you have started the Gremlin Console you can, as we will explore in the next few
 sections, tell JanusGraph about the environment you will be operating in in terms of
-back end store and index.
+store backend and index backend.
 
 [[janusinmemory]]
 Using JanusGraph with the 'inmemory' option
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 For almost all production use cases, you will be using JanusGraph along with a
-persistent back end store such as Apache Cassandra or Apache HBase. However while
+persistent storage backend such as Apache Cassandra, Apache HBase, Google Cloud BigTable,
+ScyllaDB, Oracle Berkeley DB, DataStax Astra, Amazon Keyspace, etc. However while
 experimenting with JanusGraph it is incredibly useful to be able to get up and
 running quickly without having to worry about configuring all of the back end storage
 components. This is made possible by the 'inmemory' option that JanusGraph
@@ -1352,9 +1355,10 @@ provides. This essentially allows us to use JanusGraph in the same way as we hav
 been using TinkerGraph with all of our graph data stored in the memory of the
 computer. The one big difference however is that JanusGraph, even while using the
 'inmemory' storage model, allows us to experiment with features that TinkerGraph does
-not offer, such as schemas and transactions. We will get into those topics a bit
-later on. First, let's create an instance of JanusGraph from the Gremlin console
-that uses the 'inmemory' storage model.
+not offer, such as schemas and external indices. If you want to host your graph on a single
+machine and you don't need persistence support, you could also use 'inmemory' storage model in
+producton. We will get into those topics a bit later on. First, let's create an
+instance of JanusGraph from the Gremlin console that uses the 'inmemory' storage model.
 
 Creating a JanusGraph instance is very similar to the way we created a TinkerGraph
 instance earlier in the book. The only difference is that we use the
