@@ -28,25 +28,26 @@ databases. First, let's take a look at the Apache TinkerPop Java API.
 Working with TinkerGraph from a Java Application
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-So far in this book we have looked at many ways of working with a TinkerGraph
-from within the Gremlin Console. As you start to create more sophisticated
-applications you will find that the Gremlin Console is just one of the tools you will
-need to have available in your toolbox. It is very likely, if not certain, that you
-will want to write standalone applications that can work with a graph. There are a
-number of different language bindings currently available for TinkerPop. One of the
-most widely used is the Java API. Apache TinkerPop itself is coded in Java.
+So far in this book we have looked at many ways of working with a TinkerGraph from
+within the Gremlin Console. As you start to create more sophisticated applications,
+you will find that the Gremlin Console is just one of the tools to keep in your
+toolbox. It is very likely, if not certain, that you will want to write standalone
+applications that can work with graph data. There are a number of different
+programming language bindings currently available for TinkerPop. One of the most
+widely used is the Java API. Apache TinkerPop itself is coded mostly in Java.
 
 NOTE: You will find several Java samples at the GitHub repository associated with
 this book. https://github.com/krlawrence/graph
 
-As briefly discussed already, when building a commercial application, you may
-need capabilities such as ACID transactions and would not use TinkerGraph as your
-graph database in those cases. There are however, places where TinkerGraph may be
-just what you need. One example might be doing analysis on a static graph that can
-fit into memory on your laptop. The 'air-routes' graph is a good example of such a
-graph. As a first step towards writing standalone applications that use different
-graph database back ends, lets look at a few examples of how you can create a Java
-application that uses Gremlin and TinkerGraph.
+When building a commercial application, you may need capabilities such as high
+availability and durability, and would not use TinkerGraph as your graph database in
+those cases. There are however, places where TinkerGraph may be just what you need.
+One example might be doing analysis on a static graph that can fit into memory on
+your laptop. The 'air-routes' graph is a good example of such a graph. You might also
+have a large graph stored on a server, but just need to export part of it to do local
+analysis. As a first step towards writing standalone applications that use different
+graph database implementations, lets look at a few examples of how you can create a
+Java application that uses Gremlin and TinkerGraph.
 
 [[tpinterfaces]]
 The Apache TinkerPop interfaces and classes
@@ -60,18 +61,19 @@ http://tinkerpop.apache.org/javadocs/current/full
 The TinkerPop JavaDoc is a bit lacking in terms of English prose but is still a
 useful source of reference information when it comes to methods, parameters and
 types. Once you have coded up a couple of test programs and got them running, you
-should find it gets easier to make progress faster. To that end we recommend you
-take a look at the sample code we have included with the book.
+should find it gets easier to make progress faster. To that end, we recommend you
+take a look at the sample code included with the book.
 
-When using the Gremlin Console your environment is pre-configured for you so you do
-not have to import any classes or interfaces. However, as soon as you move to the
-domain of the standalone Java application you will need to start importing the
-relevant classes that your application builds upon and learn to do a few other things
-that you may not have realized that the Gremlin Console was doing on your behalf.
+When using the Gremlin Console, your environment is pre-configured for you so, for
+the most pat, you do not have to import any classes or interfaces. However, as soon
+as you move to the domain of the standalone Java application you will need to start
+importing the classes that your application needs. You will probably discover a few
+other things that the Gremlin Console was doing on your behalf.
 
-By way of a reasonable start, here are some imports that will enable us to do a
-number of Gremlin tasks from a Java application. As you add more capabilities to your
-application you will of course need to add the appropriate import statements.
+By way of a reasonable start, some of the most common imports needed by a Java
+application working with Gremlin, are listed below below. As you add more
+capabilities to your application you will of course need to add the appropriate
+import statements.
 
 Take particular note of the rather odd import of the class called +++"__"+++
 (underscore underscore) on the second line. This is required to enable calling
@@ -79,7 +81,7 @@ methods such as 'in()' and 'out()' in a traversal where there is no prior step
 to "dot" attach them to (such as inside of a 'repeat' step). If you prefer you
 can statically import the +++"__"+++ class which will make explicit use of
 +++".__"+++ in your code unnecessary except where you are faced with reserved
-word conflicts as discussed earlier in this book.
+word conflicts as discussed in prior chapters.
 
 [source,java]
 ----

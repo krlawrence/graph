@@ -4,8 +4,8 @@
 INTRODUCING GREMLIN SERVER
 --------------------------
 
-So far we have looked at a few different ways to setup a TinkerPop enabled graph
-store. Initially we focussed on running a TinkerGraph locally. Next we looked at
+We have now explored a few ways to setup a TinkerPop enabled graph
+store. Initially we focussed on running TinkerGraph locally. Next we looked at
 JanusGraph, both as an in memory store, and connected to Cassandra, running locally
 or remotely. In each case, successfully making the connection to Cassandra, required
 knowledge of specific configuration details; such as IP addresses, ports and the
