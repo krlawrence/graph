@@ -8,8 +8,10 @@ _This will be the first release of work related to the Second Edition  ( [main b
 - Changes to the site layout and toolchain
   - The default branch is now called [main](https://github.com/krlawrence/graph).
   - The First Edition work has been moved to the [v1](https://github.com/krlawrence/graph/tree/v1) branch.
-  - Split the single (big) asciidoc file into multiple files with one file per major section.
+  - Split the single (big) Asciidoc file into multiple files with one file per major section.
 - Structural changes to the book
+  - Coverage of JanusGraph moved to its own chapter.
+  - Reworked the introduction to the chapters adjacent to the JanusGraph one.
   - Removed specific mentions of early TinkerPop versions. The Second Edition will focus on Gremlin as it is today (after many years of evolution). 
 
 ## Release 283 change history (Release date TBD)
