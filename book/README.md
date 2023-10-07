@@ -1,64 +1,85 @@
 ![map](https://github.com/krlawrence/graph/raw/main/images/PRACTICAL-GREMLIN-Revised-v2.png?raw=true, "Book cover art")  
 This folder contains the AsciiDoc source files used to produce the HTML, XML (DOCBOOK), EPUB, MOBI and PDF output.
 
+## About the files in this folder
 
-**LATEST NEWS:**  
-- [Sep-23-2023] Work has started on a second edition of the book! See the note below for more details.
-- [Apr-2-2023] Many exciting new features have been added to TinkerPop/Gremlin in the 3.6.x line of updates. This will require quite a few updates to the manuscript. As a start, two tracking issues are being used for the key features that need adding - see [#115](https://github.com/krlawrence/graph/issues/115) and [#240](https://github.com/krlawrence/graph/issues/240). These issues include updates from both the 3.5.x and 3.6.x lines.
-- [May-4-2022] The latest preview draft of revision 283 (TP 3.5.2) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
-- [Oct-26-2019] Revision 282 (TP 3.4.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.   
+The 'Practical-Gremlin.adoc' file is the root file to the book that includes the other 'Section-*.adoc' files that make up its contents. You can browse the 'Practical-Gremlin.adoc' and the various 'Section-*.adoc' files directly from within GitHub, but you will not get the full color coding and other niceties that are present in the HTML and PDF versions as they have been run through an AsciiDoc processor and had various style sheets and code pretty printers applied. Your mileage may vary, but I find the HTML and PDF versions to be the most pleasing to read. The PDF version includes page numbers, the HTML version is one continuous document. The '.adoc' files will always contain the most recent updates. The other formats (HTML,DocBook,PDF,ePub and MOBI) will be generated once there are enough updates to make it worthwhile creating a 'release'. 
 
-### Work has begun on the second edition!
-
-September 23rd 2023
-
-Ever since I began working on Practical Gremlin, I viewed it as a living book, and have tried to keep up with new features and changes taking place at Apache TinkerPop, updating the manuscript as TinkerPop and Gremlin evolve. However, and this is great to see, the rate and pace at which new features are appearing in Gremlin has steadily increased over the years. This has made it hard to keep up in a "living book" fashion. Moreover, some of the material currently in Practical Gremlin discusses features and limitations in the language that have since either been improved or deprecated. It's really time to start work on a second edition. I'm excited to announce that [Stephen Mallette](https://github.com/spmallette) has graciously offered to help with this task. We have created a [V1](https://github.com/krlawrence/graph/tree/v1) branch which archives the first edition progress. Work for the second edition will simply occur on the default branch. Many of the new Gremlin features that need adding to the manuscript are captured in a [tracking issue](https://github.com/krlawrence/graph/issues/115) and there is also a [planning board](https://github.com/krlawrence/graph/projects/2#) that we will continue to be used as a way to organize the work ahead. I'm really looking forward to the collaboration with Stephen, and to the production of a fully up to date second edition of Practical Gremlin. Please keep an eye on the latest news section here for more updates.  
-
-## Releases and change history
-
-The most recent changes and additions are now being tracked in the [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) file.
-
-**A special note about releases**
-
-Starting with revision 274 (Dec 24 2017), all of the output files (XML, EPUB, MOBI, HTML and PDF) will now be stored using Git releases. Going forward, this should reduce the amount of disk space required for people who create forks of this project. The releases are located [here](https://github.com/krlawrence/graph/releases).
-
-NOTE: In order to prune the unwanted files from the project, as part of the v274 release,  the commit history for the output files had to be removed. If you had previously cloned or forked this project please create a new clone or fork. Sorry for the inconvenience but this will get you back approximately 60% (27+ mb) of the disk space that was being taken up and will help anyone else making a clone.
-
-**About the files in this folder**
-
-The 'Practical-Gremlin.adoc' file is the root file to the book that includes the other 'Section-*.adoc' files that make up its contents. You can browse the 'Practical-Gremlin.adoc' and the various 'Section-*.adoc' files directly from within the GitHub (web interface) and it will work, but you will not get the full color coding and other niceties that are present in the HTML and PDF versions as they have been run through an AsciiDoc processor and had various style sheets and code pretty printers applied. Your mileage may vary, but I find the HTML version to be the most pleasing to read. The '.adoc' files will always contain the most recent updates. The other formats (HTML,DocBook,PDF,ePub and MOBI) will be generated once there are enough updates to make it worthwhile generating a 'release'. If you want to build the output format files yourself they can be generated by running the 'make-book.sh' script. The script assumes you have Asciidoctor installed (which is a Ruby Gem) as well as Pygments.rb (another Ruby Gem). To do the conversion to MOBI and EPUB the script assumes that Calibre and Pandoc are installed. I have successfully built the book on several Linux distros including Ubuntu, CentOS and Red Hat. I have successfully used Asciidoctor on Mac OS as well, but I always use Linux to produce the EPUB abd MOBI versions.
-
-To read the HTML file please either downloaded it to your computer or visit http://kelvinlawrence.net/book/PracticalGremlin.html as it is too big for Git to display inside its web user interface. 
-
-To view the PDF please either download it and use a PDF viewer or visit http://kelvinlawrence.net/book/PracticalGremlin.pdf
+## Building the book
+If you want to build the output format files yourself they can be generated by running the 'make-book.sh' script. The script assumes you have Asciidoctor installed (which is a Ruby Gem) as well as Pygments.rb (another Ruby Gem). To do the conversion to MOBI and EPUB the script assumes that Calibre and Pandoc are installed. I have successfully built the book on several Linux distros including Ubuntu, CentOS and Red Hat. I have successfully used Asciidoctor on Mac OS as well, but I always use Linux to produce the EPUB abd MOBI versions.
 
 The XML (DOCBOOK) file is generated using Asciidoctor and can be viewed on Linux using the Yelp tool among many others or used to produce other formats. The EPUB and MOBI files can be viewed using most popular e-book readers and some browsers.
 
 Please note that the DOCBOOK, EPUB and MOBI format files currently do not have all of the nice source code highlighting and colors that the HTML and PDF versions have.
 
+## Preview releases
 
-**ARCHIVED NEWS:**  
-[Aug-2-2021] The latest preview draft of revision 283 (TP 3.5.1) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
-[Jul-10-2021] The latest preview draft of revision 283 (TP 3.4.10) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
-[Mar-21-2021] The latest preview draft of revision 283 (TP 3.4.8) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
-[Mar-14-2021] The latest preview draft of revision 283 (TP 3.4.8) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
-[Aug-28-2020] The latest preview draft of revision 283 (TP 3.4.10) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
-[Jan-06-2020] Revision 283 (TP 3.4.4 preview) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.   
-[Oct-26-2019] Revision 282 (TP 3.4.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
-[Dec-26-2018] Revision 281 (TP 3.3.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
-[Jul-28-2018] Revision 280 (TP 3.3.3) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
-[May-29-2018] Revision 279 (TP 3.3.3) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
-[Mar-28-2018] Revision 278 (TP 3.3.1) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
-[Feb-11-2018] Revision 277 was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
-[Jan-12-2018] Revision 276 was just plublished in all formats. Many updates to book and samples.  
-[Jan-12-2018] Based on feedback I have decided to rename the book "Practical Gremlin" (see issue #29)  
-[Jan-03-2018] Revision 275 was just published in all formats. Lots of updates to book and sample code.  
-[Dec-24-2017] Revision 274 was just published in all formats. Now using releases to store output files.  
-[Dec-12-2017] Revision 273 was just published in all formats. Fixes issue #12. Also added additonal clarifications.  
-[Nov-23-2017] Revision 272 was just published in all formats. Many updates to sections 3 and 4.  
-[Nov-03-2017] Revision 271 was just published in all formats. Several improvements and additions.  
-[Oct-27-2017] Revision 270 was just published in all formats. Fixes issue #6 and adds more to Janus section.  
-[Oct-23-2017] Quite a lot has been added to the Janus Graph section - more to come soon.  
-[Oct-15-2017] Experimental - The /book folder now includes DOCBOOK, EPUB and MOBI format versions of the book.  
-[Oct-11-2017] I improved the section that introduces the 'repeat' step.  
-[Oct-10-2017] Several sections have been improved, I also made updates to reflect changes made in Tinkerpop 3.3
+Preview versions of the book in HTML and PDF format are more often produced and uploaded than the formal releases in all formats. 
+
+**An early preview of the second edition is not yet available, but will be soon. You can read the latest on GitHub as noted above, or build the files locally.** Preview versions of the first edition are still available
+at (HTML) http://kelvinlawrence.net/book/PracticalGremlin.html and (PDF) http://kelvinlawrence.net/book/PracticalGremlin.pdf
+
+## How the book is organized
+This is the current layout of the second edition. As work progresses additional chapters
+may be added and the layout further refined.
+
+Chapter 1 - INTRODUCTION
+- We start our journey with a brief introduction to Apache Tinkerpop and a quick look
+  at why Graph databases are of interest to us. We also discuss how the book is
+  organized and where to find additional materials; such as sample code and data
+  sets. 
+
+Chapter 2 - GETTING STARTED
+- Many of the examples throughout the book use the Gremlin Console and TinkerGraph,
+  and both are introduced in this chapter. We also introduce the air-routes example
+  graph - `air-routes.graphml` -  used throughout the book.
+
+Chapter 3 - WRITING GREMLIN QUERIES
+- Now that the basics have been covered, things start to get a lot more interesting!
+  It's time to start writing Gremlin queries. We
+  briefly explore how we could have built the 'air-routes' graph using a
+  relational database, and then look at how SQL and Gremlin are both similar in some
+  way,s and very different in others. We then introduce several of the key Gremlin
+  query language '"steps"'. We focus on exploring the graph rather than changing it
+  in this chapter.
+
+Chapter 4 - BEYOND BASIC QUERIES
+- Having now introduced Gremlin in some detail, we introduce the Gremlin steps that
+  can be used to create, modify, and delete, data. We present a selection of best
+  practices and start to explore some more advanced query writing.
+
+Chapter 5 - MISCELLANEOUS QUERIES AND THE RESULTS THEY GENERATE
+- Using the Gremlin steps introduced in Chapters 3 and 4, we are now ready to use
+  what we have learned so far and write queries that analyze the air-routes graph in
+  more depth, and answer more complicated questions. The material presented includes
+  a discussion of analyzing distances, route distribution, and writing geospatial
+  queries.
+
+Chapter 6 - MOVING BEYOND THE GREMLIN CONSOLE
+- The next step in our journey is to move beyond the Gremlin console and take a look
+  at interacting with a TinkerGraph using Java and Groovy applications.
+
+Chapter 7 - INTRODUCING JANUS GRAPH
+- As we continue the journey beyond the Gremlin Console, we now also move beyond
+  TinkerGraph. This chapter introduces JanusGraph and includes a discussion of
+  defining schema, managing trabsactions, and different storage and indexing options.
+
+Chapter 8 - INTRODUCING GREMLIN SERVER
+- Our journey so far has focussed on working with graphs in a "directly attached"
+  fashion. We now introduce Gremlin Server as a way to deploy and interact with
+  remotely hosted graphs.
+
+Chapter 9 - COMMON GRAPH SERIALIZATION FORMATS
+- Having introduced Gremlin Server we take a look at some common Graph serialization
+  file formats along with coverage of how to use them in the context of TinkerPop
+  enabled graphs. We take a close look at the TinkerPop GraphSON (JSON) format which
+  is  used extensively when using Gremlin queries in conjunction with a Gremlin
+  Server.
+
+Chapter 10 - FURTHER READING
+- Our journey to explore Apache TinkerPop and Gremlin concludes with a look at
+  useful sources of further reading. We present l links to useful web sites where you
+  can find tools and documentation for many of the topics and technologies covered in
+  this book. 
+
+  
