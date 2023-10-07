@@ -7,11 +7,13 @@
 
 This repository is the home for the source materials, sample code and examples for the book "Practical Gremlin - An Apache TinkerPop Tutorial". This is also the home for the `air-routes` dataset referenced throughout the book and samples.
 
-**Quick Start - the latest version**  
+### Quick Start - the latest version
+
+**A preview release for the second edition is not yet available - but will be soon. The first edition is still available at the links below**
 
 To read the latest snapshot of the book right away in a browser (HTML format) click [here](http://kelvinlawrence.net/book/PracticalGremlin.html) or for a PDF version click [here](http://kelvinlawrence.net/book/PracticalGremlin.pdf). These snapshots are updated regularly. You will find other formats including MOBI, EPUB and XML (Docbook) in the [releases](https://github.com/krlawrence/graph/releases)  section. Formal releases will be published periodically assuming there is enough new material to make it worthwhile. If you want to see the absolute latest updates you can always browse the Asciidoc source files (Practical-Gremlin.adoc and Section-*.adoc files) in the /book folder. The PDF version is currently the "official" version. It has a better table of contents, some better formatting and a much nicer title page!
 
-**LATEST NEWS:**  
+### LATEST NEWS 
 - [Sep-23-2023] Work has started on a second edition of the book! See the note below for more details.
 - [Sep-22-2023] Added a script to the sample-data folder for producing Cypher versions of the air-routes data.  
 - [Aug-29-2022] Updated versions of the sample data and corresponding demo apps have been uploaded. 
@@ -24,14 +26,11 @@ Ever since I began working on Practical Gremlin, I viewed it as a living book, a
 
 ## Releases and change history
 
-The most recent changes and additions are now being tracked in the [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) file.
+The most recent changes and additions are tracked in the [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) file.
 
 **A Special note about releases**
 
-Starting with revision 274 (Dec 24 2017), all of the output files (XML, EPUB, MOBI, HTML and PDF) will now be stored using Git releases. Going forward, this should reduce the amount of disk space required for people who create forks of this project. The release notes and downloadable materials are located [here](https://github.com/krlawrence/graph/releases).
-
-NOTE: In order to prune the unwanted files from the project the commit history for the output files had to be removed as part of making the v274 release. If you had previously cloned or forked this project please create a new clone or fork. Sorry for the inconvenience but this will get you back approximately 60% (27+ mb) of the disk space that was being taken up and will help anyone else making a clone.
-
+Starting with revision 274 (Dec 24th 2017), all of the output files (XML, EPUB, MOBI, HTML and PDF) will now be stored using Git releases. Going forward, this should reduce the amount of disk space required for people who create forks of this project. The release notes and downloadable materials are located [here](https://github.com/krlawrence/graph/releases).
 
 Details of how to build the various output formats from the Asciidoc source are contained in the README.md under the *book* folder.
 
