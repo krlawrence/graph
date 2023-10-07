@@ -102,19 +102,31 @@ open issues or submit pull requests.
 Some words of thanks
 ~~~~~~~~~~~~~~~~~~~~
 
-I would like to thank my former colleagues, Graham Wallis, Jason Plurad and Adam
-Holley for their help in refining and improving several of the queries contained in
-this book. Gremlin is definitely a bit of a team sport. We spent many fun hours
-discussing the best way to handle different types of queries and traversals!
+No open source project can succeed without dedicated contributors, and equally
+dedicated users. Apache TinkerPop continues to be not just a technology, but a
+vibrant community as well. This book would have no audience but for the continued
+hard work, and interest, of that community.
 
-I would also be remiss if I did not give a big shout out to all of the folks that
-spend a lot of time replying to questions and suggestions on the
+As always, Special thanks should go to , Marko Rodriguez, Daniel Kuppitz, Stephen
+Mallette and others, who created TinkerPop and Gremlin, and drove its evolution for
+many years. I'm also grateful to Stephen for his help in putting this second edition
+of the book together.
+
+Inspiration as to what topics people are interested in often comes from seeing the
+active discussions on-line at venues such as
+https://stackoverflow.com/questions/tagged/gremlin[StackOverflow] and the
 https://groups.google.com/forum/#!forum/gremlin-users[Gremlin Users Google Group].
-Special thanks should go to Daniel Kuppitz, Marko Rodriguez and Stephen Mallette, key
-members of the team that created and maintains Apache TinkerPop.
+Since the first edition of this book was released, Apache TinkerPop now also has an
+active Discord channel where many exciting topics get discussed daily.
+
+I continue to be grateful for the contributions of my former colleagues, Graham
+Wallis, Jason Plurad and Adam Holley who helped refine and improve several of the
+example queries contained in the first edition of this book. Gremlin is definitely a
+bit of a team sport. We spent many fun hours discussing the best way to handle
+different types of queries and traversals!
 
 Lastly, I would like to thank everyone who has submitted feedback and ideas via
-e-mail as well as GitHub issues and pull requests. That is the best part about this
+e-mail or GitHub issues, and pull requests. That is the best part about this
 being a 'living book' we can continue to improve and evolve it just as the technology
 it is about continues to evolve. Your help and support is very much appreciated.
 
