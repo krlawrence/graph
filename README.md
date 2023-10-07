@@ -56,7 +56,7 @@ The book introduces the Apache TinkerPop 3 Gremlin graph query and traversal lan
 
 ## How this site is organized
 
-The book is being written using a text editor in AsciiDoc format. The source manuscript "Practical-Gremlin.adoc" can be found in the /book folder. This file will always reflect the most recent updates and will often be ahead of the other formats that will only be updated as part of a formal release. You will find formatted HTML and PDF versions of the book in the releases area. I have also provided DOCBOOK, EPUB and MOBI versions as part of each release. These can be viewed using many tools and e-book readers. Note that currently, only the HTML and PDF versions have all the nice colors for source code listings etc.
+The book is being written using a text editor in AsciiDoc format. The source manuscript "Practical-Gremlin.adoc" can be found in the /book folder. These files always reflect the most recent updates and will often be ahead of the other formats that are only updated as part of a formal release. You will find formatted HTML and PDF versions of the book in the releases area. Formal releases also include DOCBOOK, EPUB and MOBI versions. These can be viewed using many tools and e-book readers. Note that currently, only the HTML and PDF versions have all the nice colors for source code listings etc.
 
 Included with the book are sample graph data (GraphML) and program files. You will find these, as well as some screen shots and images, and demos in the following folders.
 
@@ -66,20 +66,26 @@ Included with the book are sample graph data (GraphML) and program files. You wi
 - /images
 - /demos
 
-## How the book is organized
+The air-routes data set, along with tools to manipulate it and generate different file formats, is located here:
 
-Chapter 1 - INTRODUCTION::
+- /make-route-graph
+  
+## How the book is organized
+This is the current layout of the second edition. As work progresses additional chapters
+may be added and the layout further refined.
+
+Chapter 1 - INTRODUCTION
 - We start our journey with a brief introduction to Apache Tinkerpop and a quick look
   at why Graph databases are of interest to us. We also discuss how the book is
   organized and where to find additional materials; such as sample code and data
   sets. 
 
-Chapter 2 - GETTING STARTED::
+Chapter 2 - GETTING STARTED
 - Many of the examples throughout the book use the Gremlin Console and TinkerGraph,
   and both are introduced in this chapter. We also introduce the air-routes example
   graph - `air-routes.graphml` -  used throughout the book.
 
-Chapter 3 - WRITING GREMLIN QUERIES::
+Chapter 3 - WRITING GREMLIN QUERIES
 - Now that the basics have been covered, things start to get a lot more interesting!
   It's time to start writing Gremlin queries. We
   briefly explore how we could have built the 'air-routes' graph using a
@@ -88,47 +94,48 @@ Chapter 3 - WRITING GREMLIN QUERIES::
   query language '"steps"'. We focus on exploring the graph rather than changing it
   in this chapter.
 
-Chapter 4 - BEYOND BASIC QUERIES::
+Chapter 4 - BEYOND BASIC QUERIES
 - Having now introduced Gremlin in some detail, we introduce the Gremlin steps that
   can be used to create, modify, and delete, data. We present a selection of best
   practices and start to explore some more advanced query writing.
 
-Chapter 5 - MISCELLANEOUS QUERIES AND THE RESULTS THEY GENERATE::
+Chapter 5 - MISCELLANEOUS QUERIES AND THE RESULTS THEY GENERATE
 - Using the Gremlin steps introduced in Chapters 3 and 4, we are now ready to use
   what we have learned so far and write queries that analyze the air-routes graph in
   more depth, and answer more complicated questions. The material presented includes
   a discussion of analyzing distances, route distribution, and writing geospatial
   queries.
 
-Chapter 6 - MOVING BEYOND THE GREMLIN CONSOLE::
+Chapter 6 - MOVING BEYOND THE GREMLIN CONSOLE
 - The next step in our journey is to move beyond the Gremlin console and take a look
   at interacting with a TinkerGraph using Java and Groovy applications.
 
-Chapter 7 - INTRODUCING JANUS GRAPH::
+Chapter 7 - INTRODUCING JANUS GRAPH
 - As we continue the journey beyond the Gremlin Console, we now also move beyond
   TinkerGraph. This chapter introduces JanusGraph and includes a discussion of
   defining schema, managing trabsactions, and different storage and indexing options.
 
-Chapter 8 - INTRODUCING GREMLIN SERVER::
+Chapter 8 - INTRODUCING GREMLIN SERVER
 - Our journey so far has focussed on working with graphs in a "directly attached"
   fashion. We now introduce Gremlin Server as a way to deploy and interact with
   remotely hosted graphs.
 
-Chapter 9 - COMMON GRAPH SERIALIZATION FORMATS::
+Chapter 9 - COMMON GRAPH SERIALIZATION FORMATS
 - Having introduced Gremlin Server we take a look at some common Graph serialization
   file formats along with coverage of how to use them in the context of TinkerPop
   enabled graphs. We take a close look at the TinkerPop GraphSON (JSON) format which
   is  used extensively when using Gremlin queries in conjunction with a Gremlin
   Server.
 
-Chapter 10 - FURTHER READING::
+Chapter 10 - FURTHER READING
 - Our journey to explore Apache TinkerPop and Gremlin concludes with a look at
   useful sources of further reading. We present l links to useful web sites where you
   can find tools and documentation for many of the topics and technologies covered in
   this book. 
                                                            
+---
 
-**NEWS ARCHIVE:**  
+**NEWS ARCHIVE**  
 - [May-04-2022] The latest preview draft of revision 283 (TP 3.5.1) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
 - [Jun-28-2020] I have started creating a series of [issues](https://github.com/krlawrence/graph/issues) to capture changes and updates I hope to make soon. The issues contain some interesting examples of both new Gremlin features and some additional queries, some of which are quite advanced, that I intend to add to the manuscript as time allows. The issues have been sorted into a Kanban board which can be found in the Projects area. 
 - [Oct-26-2019] Revision 282 (TP 3.4.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
