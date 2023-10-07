@@ -11,7 +11,7 @@ This repository is the home for the source materials, sample code and examples f
 
 **A preview release for the second edition is not yet available - but will be soon. The first edition is still available at the links below**
 
-To read the latest snapshot of the book right away in a browser (HTML format) click [here](http://kelvinlawrence.net/book/PracticalGremlin.html) or for a PDF version click [here](http://kelvinlawrence.net/book/PracticalGremlin.pdf). These snapshots are updated regularly. You will find other formats including MOBI, EPUB and XML (Docbook) in the [releases](https://github.com/krlawrence/graph/releases)  section. Formal releases will be published periodically assuming there is enough new material to make it worthwhile. If you want to see the absolute latest updates you can always browse the Asciidoc source files (Practical-Gremlin.adoc and Section-*.adoc files) in the /book folder. The PDF version is currently the "official" version. It has a better table of contents, some better formatting and a much nicer title page!
+To read the latest snapshot of the book right away in a browser (HTML format) click [here](http://kelvinlawrence.net/book/PracticalGremlin.html) or for a PDF version click [here](http://kelvinlawrence.net/book/PracticalGremlin.pdf). These snapshots are updated regularly. You will find other formats including MOBI, EPUB and XML (Docbook) in the [releases](https://github.com/krlawrence/graph/releases)  section. Formal releases will be published periodically assuming there is enough new material to make it worthwhile. If you want to see the absolute latest updates you can always browse the AsciiDoc source files (`Practical-Gremlin.adoc` and `Section-*.adoc` files) in the /book folder. The PDF version is currently the "official" version. It has a better table of contents, page numbers, and some better formatting.
 
 ### LATEST NEWS 
 - [Sep-23-2023] Work has started on a second edition of the book! See the note below for more details.
@@ -22,7 +22,7 @@ To read the latest snapshot of the book right away in a browser (HTML format) cl
 
 September 23rd 2023
 
-Ever since I began working on Practical Gremlin, I viewed it as a living book, and have tried to keep up with new features and changes taking place at Apache TinkerPop, updating the manuscript as TinkerPop and Gremlin evolve. However, and this is great to see, the rate and pace at which new features are appearing in Gremlin has steadily increased over the years. This has made it hard to keep up in a "living book" fashion. Moreover, some of the material currently in Practical Gremlin discusses features and limitations in the language that have since either been improved or deprecated. It's really time to start work on a second edition.  I'm excited to announce that [Stephen Mallette](https://github.com/spmallette) has graciously offered to help with this task. We have created a [V1](https://github.com/krlawrence/graph/tree/v1) branch which archives the first edition progress. Work for the second edition will simply occur on the default branch. Many of the new Gremlin features that need adding to the manuscript are captured in a [tracking issue](https://github.com/krlawrence/graph/issues/115) and there is also a [planning board](https://github.com/krlawrence/graph/projects/2#) that we will continue to be used as a way to organize the work ahead. I'm really looking forward to the collaboration with Stephen, and to the production of a fully up-to-date second edition of Practical Gremlin. Please keep an eye on the latest news section here for more updates.
+Ever since I began working on Practical Gremlin, I viewed it as a living book, and have tried to keep up with new features and changes taking place at Apache TinkerPop, updating the manuscript as TinkerPop and Gremlin evolve. However, and this is great to see, the rate and pace at which new features are appearing in Gremlin has steadily increased over the years. This has made it hard to keep up in a "living book" fashion. Moreover, some of the material currently in Practical Gremlin discusses features and limitations in the language that have since either been improved or deprecated. It's really time to start work on a second edition.  I'm excited to announce that [Stephen Mallette](https://github.com/spmallette) has graciously offered to help with this task. We have created a [V1](https://github.com/krlawrence/graph/tree/v1) branch which archives the first edition progress. Work for the second edition will simply occur on the default branch. Many of the new Gremlin features that need adding to the manuscript are captured in a [tracking issue](https://github.com/krlawrence/graph/issues/115) and there is also a [planning board](https://github.com/krlawrence/graph/projects/2#) that will continue to be used as a way to organize the work ahead. I'm really looking forward to the collaboration with Stephen, and to the production of a fully up-to-date second edition of Practical Gremlin. Please keep an eye on the latest news section here for more updates.
 
 ## Releases and change history
 
@@ -32,7 +32,7 @@ The most recent changes and additions are tracked in the [change history](https:
 
 Starting with revision 274 (Dec 24th 2017), all of the output files (XML, EPUB, MOBI, HTML and PDF) will now be stored using Git releases. Going forward, this should reduce the amount of disk space required for people who create forks of this project. The release notes and downloadable materials are located [here](https://github.com/krlawrence/graph/releases).
 
-Details of how to build the various output formats from the Asciidoc source are contained in the README.md under the *book* folder.
+Details of how to build the various output formats from the AsciiDoc source are contained in the `README.md` file under the *book* folder.
 
 ## How this book came to be
 
@@ -51,7 +51,7 @@ October 6th, 2017
 
 The title of this book could equally well be "A getting started guide for users of graph databases and the Gremlin query language featuring hints, tips and sample queries". It turns out that is a bit too too long to fit on one line for a heading but in a single sentence that describes the focus of this book pretty well.
 
-The book introduces the Apache TinkerPop 3 Gremlin graph query and traversal language via real examples against a real world graph. They are given as a set of working examples against a graph that is also provided in the sample-data folder. The graph, air-routes.graphml, is a model of the world airline route network between 3,367 airports including 43,160 routes. The examples we present will work unmodified with the air-routes.graphml file loaded into the Gremlin console running with a TinkerGraph.
+The book introduces the Apache TinkerPop 3 Gremlin graph query and traversal language via real examples against a real world graph. They are given as a set of working examples against a graph that is also provided in the sample-data folder. The graph, air-routes.graphml, is a model of the world airline route network between 3,367 airports including 43,160 routes. The examples presented will work unmodified with the air-routes.graphml file loaded into the Gremlin console running with a TinkerGraph.
 
 ## How this site is organized
 
@@ -73,18 +73,18 @@ The air-routes data set, along with tools to manipulate it and generate differen
 This is the current layout of the second edition. As work progresses additional chapters
 may be added and the layout further refined.
 
-Chapter 1 - INTRODUCTION
+**Chapter 1 - INTRODUCTION**
 - We start our journey with a brief introduction to Apache Tinkerpop and a quick look
   at why Graph databases are of interest to us. We also discuss how the book is
   organized and where to find additional materials; such as sample code and data
   sets. 
 
-Chapter 2 - GETTING STARTED
+**Chapter 2 - GETTING STARTED**
 - Many of the examples throughout the book use the Gremlin Console and TinkerGraph,
   and both are introduced in this chapter. We also introduce the air-routes example
   graph - `air-routes.graphml` -  used throughout the book.
 
-Chapter 3 - WRITING GREMLIN QUERIES
+**Chapter 3 - WRITING GREMLIN QUERIES**
 - Now that the basics have been covered, things start to get a lot more interesting!
   It's time to start writing Gremlin queries. We
   briefly explore how we could have built the 'air-routes' graph using a
@@ -93,40 +93,40 @@ Chapter 3 - WRITING GREMLIN QUERIES
   query language '"steps"'. We focus on exploring the graph rather than changing it
   in this chapter.
 
-Chapter 4 - BEYOND BASIC QUERIES
+**Chapter 4 - BEYOND BASIC QUERIES**
 - Having now introduced Gremlin in some detail, we introduce the Gremlin steps that
   can be used to create, modify, and delete, data. We present a selection of best
   practices and start to explore some more advanced query writing.
 
-Chapter 5 - MISCELLANEOUS QUERIES AND THE RESULTS THEY GENERATE
+**Chapter 5 - MISCELLANEOUS QUERIES AND THE RESULTS THEY GENERATE**
 - Using the Gremlin steps introduced in Chapters 3 and 4, we are now ready to use
   what we have learned so far and write queries that analyze the air-routes graph in
   more depth, and answer more complicated questions. The material presented includes
   a discussion of analyzing distances, route distribution, and writing geospatial
   queries.
 
-Chapter 6 - MOVING BEYOND THE GREMLIN CONSOLE
+**Chapter 6 - MOVING BEYOND THE GREMLIN CONSOLE**
 - The next step in our journey is to move beyond the Gremlin console and take a look
   at interacting with a TinkerGraph using Java and Groovy applications.
 
-Chapter 7 - INTRODUCING JANUS GRAPH
+**Chapter 7 - INTRODUCING JANUS GRAPH**
 - As we continue the journey beyond the Gremlin Console, we now also move beyond
   TinkerGraph. This chapter introduces JanusGraph and includes a discussion of
   defining schema, managing trabsactions, and different storage and indexing options.
 
-Chapter 8 - INTRODUCING GREMLIN SERVER
+**Chapter 8 - INTRODUCING GREMLIN SERVER**
 - Our journey so far has focussed on working with graphs in a "directly attached"
   fashion. We now introduce Gremlin Server as a way to deploy and interact with
   remotely hosted graphs.
 
-Chapter 9 - COMMON GRAPH SERIALIZATION FORMATS
+**Chapter 9 - COMMON GRAPH SERIALIZATION FORMATS**
 - Having introduced Gremlin Server we take a look at some common Graph serialization
   file formats along with coverage of how to use them in the context of TinkerPop
   enabled graphs. We take a close look at the TinkerPop GraphSON (JSON) format which
   is  used extensively when using Gremlin queries in conjunction with a Gremlin
   Server.
 
-Chapter 10 - FURTHER READING
+**Chapter 10 - FURTHER READING**
 - Our journey to explore Apache TinkerPop and Gremlin concludes with a look at
   useful sources of further reading. We present l links to useful web sites where you
   can find tools and documentation for many of the topics and technologies covered in
