@@ -68,64 +68,64 @@ Included with the book are sample graph data (GraphML) and program files. You wi
 
 ## How the book is organized
 
-Chapter 1 - INTRODUCTION
-- I start off by briefly doing a recap on why Graph databases are of interest to us
-  and discuss some good use cases for graphs. I also provide pointers to the sample
-  programs and other additional materials referenced by the book.  
-  
-Chapter 2 - GETTING STARTED
-- In Chapter two I introduce several of the components of Apache TinkerPop and
-  also introduce the `air-routes.graphml` file that will be used as the graph the
-  majority of examples shown in this book are based on.  
-  
-Chapter 3 - WRITING GREMLIN QUERIES
-- In Chapter three things start to get a lot more interesting! I start discussing
-  how to use the Gremlin graph traversal and
-  query language to interrogate the 'air-routes' graph. I begin by comparing how we
-  could have built the 'air-routes' graph using a more traditional relational database
-  and then look at how SQL and Gremlin are both similar in some ways and very
-  different in others. For the rest of the Chapter, I introduce several of
-  the key Gremlin methods, or as they are often called, '"steps"'. I
-  mostly focus on reading the graph (not adding or deleting things) in this Chapter.  
-  
-Chapter 4 - BEYOND BASIC QUERIES
-- In Chapter four the focus moves beyond just reading the graph and I describe how to add
-  vertices (nodes), edges and properties as well as how to delete and update them.
-  I also present a discussion of various best practices. I also start to explore
-  some slightly more advanced topics in this chapter.  
-  
-Chapter 5 - MISCELLANEOUS QUERIES AND THE RESULTS THEY GENERATE  
-- In Chapter five I focus on using what has been covered in the prior Chapters to write
-  queries that have a more real-world feel. I present a lot more examples of the
-  output from running queries in this Chapter. I also start to discuss topics such
-  as analyzing distances, route distribution and writing geospatial queries.  
-  
-Chapter 6 - MOVING BEYOND THE CONSOLE AND TINKERGRAPH  
-- In Chapter six I start to expand the focus to concepts beyond using the Gremlin
-  Console and a TinkerGraph. I
-  start by looking at how you can write standalone Java and Groovy applications that
-  can work with a graph. I then introduce JanusGraph and take a fairly detailed
-  look at its capabilities such as support for transactions, schemas and indexes.
-  Various technology choices for back end persistent stores
-  and indexes are explored along the way.  
-  
-Chapter 7 - INTRODUCING GREMLIN SERVER  
-- In Chapter seven, Gremlin Server is introduced. I begin to explore connecting to
-  and working with a remote graph both from the Gremlin Console and the command line
-  as well as from code. When this book was first released, the majority of "real
-  world" use cases
-  focussed on directly attached or even in memory graphs. As Apache TinkerPop has
-  evolved, it has become a lot more common to connect to a graph remotely via a
-  Gremlin Server.  
-  
-Chapter 8 - COMMON GRAPH SERIALIZATION FORMATS  
-- In Chapter eight a discussion is presented of some common Graph serialization file
-  formats along with coverage of how to use them in the context of TinkerPop 3
-  enabled graphs.  
-  
-Chapter 9 - FURTHER READING  
-- I finish up by providing several links to useful web sites where you can find
-  tools and documentation for many of the topics and technologies covered in this book.
+Chapter 1 - INTRODUCTION::
+- We start our journey with a brief introduction to Apache Tinkerpop and a quick look
+  at why Graph databases are of interest to us. We also discuss how the book is
+  organized and where to find additional materials; such as sample code and data
+  sets. 
+
+Chapter 2 - GETTING STARTED::
+- Many of the examples throughout the book use the Gremlin Console and TinkerGraph,
+  and both are introduced in this chapter. We also introduce the air-routes example
+  graph - `air-routes.graphml` -  used throughout the book.
+
+Chapter 3 - WRITING GREMLIN QUERIES::
+- Now that the basics have been covered, things start to get a lot more interesting!
+  It's time to start writing Gremlin queries. We
+  briefly explore how we could have built the 'air-routes' graph using a
+  relational database, and then look at how SQL and Gremlin are both similar in some
+  way,s and very different in others. We then introduce several of the key Gremlin
+  query language '"steps"'. We focus on exploring the graph rather than changing it
+  in this chapter.
+
+Chapter 4 - BEYOND BASIC QUERIES::
+- Having now introduced Gremlin in some detail, we introduce the Gremlin steps that
+  can be used to create, modify, and delete, data. We present a selection of best
+  practices and start to explore some more advanced query writing.
+
+Chapter 5 - MISCELLANEOUS QUERIES AND THE RESULTS THEY GENERATE::
+- Using the Gremlin steps introduced in Chapters 3 and 4, we are now ready to use
+  what we have learned so far and write queries that analyze the air-routes graph in
+  more depth, and answer more complicated questions. The material presented includes
+  a discussion of analyzing distances, route distribution, and writing geospatial
+  queries.
+
+Chapter 6 - MOVING BEYOND THE GREMLIN CONSOLE::
+- The next step in our journey is to move beyond the Gremlin console and take a look
+  at interacting with a TinkerGraph using Java and Groovy applications.
+
+Chapter 7 - INTRODUCING JANUS GRAPH::
+- As we continue the journey beyond the Gremlin Console, we now also move beyond
+  TinkerGraph. This chapter introduces JanusGraph and includes a discussion of
+  defining schema, managing trabsactions, and different storage and indexing options.
+
+Chapter 8 - INTRODUCING GREMLIN SERVER::
+- Our journey so far has focussed on working with graphs in a "directly attached"
+  fashion. We now introduce Gremlin Server as a way to deploy and interact with
+  remotely hosted graphs.
+
+Chapter 9 - COMMON GRAPH SERIALIZATION FORMATS::
+- Having introduced Gremlin Server we take a look at some common Graph serialization
+  file formats along with coverage of how to use them in the context of TinkerPop
+  enabled graphs. We take a close look at the TinkerPop GraphSON (JSON) format which
+  is  used extensively when using Gremlin queries in conjunction with a Gremlin
+  Server.
+
+Chapter 10 - FURTHER READING::
+- Our journey to explore Apache TinkerPop and Gremlin concludes with a look at
+  useful sources of further reading. We present l links to useful web sites where you
+  can find tools and documentation for many of the topics and technologies covered in
+  this book. 
                                                            
 
 **NEWS ARCHIVE:**  
