@@ -46,21 +46,21 @@ The programming interfaces allow providers of graph databases to build systems t
 are TinkerPop enabled and allow application programmers to write programs that talk
 to those systems.
 
-Any such TinkerPop enabled graph databases can be accessed using the Gremlin query
+Any TinkerPop enabled graph databases can be accessed using the Gremlin query
 language and corresponding API. We can also use the TinkerPop API to write client
-code in languages like Java that can talk to a TinkerPop enabled graph. For most of
+code, in languages like Java, that can talk to a TinkerPop enabled graph. For most of
 this book we will be working within the Gremlin console with a local graph. However
-in Chapter 6 we will take a look at Gremlin Server and some other TinkerPop enabled
-environments. Most of Apache TinkerPop has been developed using Java 8 but there are
-also bindings available for many other programming languages such as Groovy and
-Python. Parts of TinkerPop are themselves developed in Groovy, most notably the
-Gremlin Console. The nice thing about that is that we can use Groovy syntax along
-with Gremlin when entering queries into the Console or sending them via REST API to a
-Gremlin Server. All of these topics are covered in detail in this book.
+in Chapters 7 and 8 we take a look at Gremlin Server and some other TinkerPop enabled
+environments. Most of Apache TinkerPop has been developed using Java but there are
+also bindings available for many other programming languages such as Groovy, Python,
+Go, Javascript, and C#. Parts of TinkerPop are themselves developed in Groovy, most
+notably the Gremlin Console. The nice thing about that is that we can use Groovy
+syntax along with Gremlin when entering queries into the Console or sending them via
+REST API to a Gremlin Server. All of these topics are covered in detail.
 
 The queries used as examples in this book have been tested with Apache TinkerPop
-version {tpvercheck} as well as many prior releases. Tests were performed using the
-TinkerGraph in memory graph and the Gremlin console, as well as
+version {tpvercheck} as well as some prior releases where appropriate. Tests were
+performed using the TinkerGraph in memory graph and the Gremlin console, as well as
 other TinkerPop enabled graph stores.
 
 [[gconsole]]
@@ -86,17 +86,20 @@ graphs, the Gremlin console should always be installed on your machine!
 Downloading, installing and launching the console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You can download the Gremlin console from the official Apache TinkerPop website:
-
+You can download the Gremlin console from the official Apache TinkerPop website at 
 http://tinkerpop.apache.org/
 
 It only takes a few minutes to get the Gremlin Console installed and running. You
-just download the ZIP file and 'unzip' it and you are all set. TinkerPop also
-requires a recent version of Java 8 being installed. We have done all of our testing
-using Java 8 version 1.8.0_131. The Gremlin Console will not work with versions prior
-to 1.8.0_45. If you do not have Java 8 installed it is easy to find and download off
-the Web. The download also includes all of the JAR files that are needed to write a
-standalone Java or Groovy TinkerPop application but that is a topic for later!
+just download the ZIP, 'unzip' it, and you are all set. TinkerPop also
+requires Java to be at version 8 or higher.The Gremlin Console will not work with
+versions of Java 8 prior to 1.8.0_45. 
+
+NOTE: For more information on the compatability of Gremlin with versions of Java and
+other languages, please see the https://tinkerpop.apache.org/docs/current/upgrade/[official documentation].
+
+The Gremlin Console download also includes all of the JAR files that are needed to
+write a standalone Java or Groovy TinkerPop application but that is a topic for
+later!
 
 When you start the Gremlin console you will be presented with a banner/logo and a
 prompt that will look something like this. Don't worry about the plugin messages yet
