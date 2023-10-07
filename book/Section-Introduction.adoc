@@ -2,8 +2,18 @@
 INTRODUCTION
 ------------
 
-NOTE: This book is a work in progress. Feedback is very much encouraged and welcomed!
-Please open Git issues as appropriate.
+You are reading an early preview release of _Practical Gremlin - An Apache TinkerPop
+Tutorial, Second Edition_. A lot of work remains, to add coverage of many new Gremlin
+features and to update, as appropriate, material from the first edition. Much of the
+material remains accurate, but in some cases new Gremlin features have since been
+introduced, providing better ways of achieving the results previously described. The
+goal for the second edition is to bring the material fully up-to-date and to reflect
+the most recent Apache TinkerPop releases. Much of the work yet to be done can be
+seen by visiting the https://github.com/krlawrence/graph/projects/2[planning board].
+
+CAUTION: This book is a work in progress. Feedback is very much encouraged and
+welcomed!  Please open https://github.com/krlawrence/graph/issues[GitHub issues] as
+appropriate .
 
 Welcome to the second edition
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
