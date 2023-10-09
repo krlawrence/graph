@@ -25,8 +25,8 @@ Gremlin is the name of the graph traversal and query language that TinkerPop pro
 for working with property graphs. Gremlin can be used with any graph store that is
 Apache TinkerPop enabled. Gremlin is a fairly imperative language but also has some
 more declarative constructs as well. Using Gremlin we can traverse a graph looking
-for values, patterns and relationships we can add or delete vertices and edges, we can
-create sub-graphs and lots more.
+for values, patterns and relationships, we can add or delete vertices and edges, we
+can create sub-graphs, and lots more.
 
 [[gremlinandsql]]
 A quick look at Gremlin and SQL
