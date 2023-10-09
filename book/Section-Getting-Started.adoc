@@ -721,25 +721,27 @@ will not work on any graph system that requires all queries to be backed by an i
 Such graph stores tend not to allow what are sometimes called 'full graph searches'
 for cases where a particular item in a graph is not backed by an index. One example
 of this is vertex and edge 'labels' which are typically not indexed but are sometimes
-very useful items to specify at the start of a query. As most of the examples in
-this book are intended to work just fine with only a basic TinkerGraph the subject of
-indexes is not covered in detail until Chapter 6 "<<beyond>>" . However, as
-TinkerGraph does have some indexing capability we have also included some discussion
-of it in the "<<tinkerindex>>" section. In Chapter 6 where we start to look at
-additional technologies such as JanusGraph we have included a more in depth
-discussion of indexing as part of that coverage. You should always refer to the
-specific documentation for the graph system you are using to decide what you need to
-do about creating an index and schema for your graph. we will explain what
-TinkerGraph is in the next section. We won't be discussing the creation of an
-explicit schema again until Chapter 6. When working with TinkerGraph there is no need
-to define a schema ahead of time. The types of each property are derived at
-creation time. This is a really convenient feature and allows us to get productive
-and do some experimenting really quickly.
+very useful items to specify at the start of a query. 
+
+As most of the examples in this book are intended to work just fine with only a basic
+TinkerGraph the subject of indexes is not covered in detail until Chapter 6
+"<<beyond>>" . However, as TinkerGraph does have some indexing capability we have
+also included some discussion of it in the "<<tinkerindex>>" section. In Chapter 7,
+where JanusGraph is introduced, we have included a more in depth discussion of
+indexing as part of that coverage. You should always refer to the specific
+documentation for the graph system you are using to decide what you need to do about
+creating an index and schema for your graph. 
+
+TIP: In general for any graph database, regardless of whether it is optional or not,
+use of an index should be considered a best practice.
+
+We won't be discussing the creation of an explicit schema again until Chapter 7
+"<<janusintro>>". When working with TinkerGraph there is no need to define a schema
+ahead of time. The types of each property are derived at creation time. This is a
+really convenient feature and allows us to get productive and do some experimenting
+really quickly.
 
 NOTE: In production systems, especially those where the graphs are large, the task of
-creating and managing the parts of the index is often handed to an additional
-software component such as Apache Solr or Elasticsearch.
+creating and managing indexes may include use of additional software components; such
+as Apache Solr or Elasticsearch.
 
-In general for any graph database, regardless of whether it is optional or not, use of an
-index should be considered a best practice. As we mentioned, even TinkerGraph has a
-way to create an index should you want to.
