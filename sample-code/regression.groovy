@@ -1,6 +1,6 @@
 ;[] // Regression tests designed to be run from the Gremlin Console with the
 ;[] // air routes graph loaded. This script is tuned for the version of the graphml
-;[] // file shipped with the book (0.77). The Gremlin version should be 3.3.1 or
+;[] // file shipped with the book (0.77). The Gremlin version should be 3.7.0 or
 ;[] // higher. This script is intended to be run each time a new Apache TinkerPop
 ;[] // version is released to make sure the examples in the book are still working.
 ;[] // This script will be added to as time permits to increase coverage.
@@ -22,7 +22,7 @@ n=status("Checking Gremlin version",n);[]
 ver=Gremlin.version();[]
 println "Reported version is $ver";[]
 
-assert ver[0]=='3' && ((ver[2]=='3' && ver[4].toInteger() >= 1) 
+assert ver[0]=='3' && ((ver[2]>='7' && ver[4].toInteger() >= 0) 
        || (ver[2]=='4' && ver[4].toInteger() >= 0)
        || (ver[2]=='5' && ver[4].toInteger() >= 0)
        || (ver[2]=='6' && ver[4].toInteger() >= 0));[]
@@ -632,7 +632,8 @@ assert a[50] == 'US-WY';[]
 n=status( "Checking property keys",n);[]
 a=g.V().has('airport','code','DFW').properties().key().fold().next();[]
 assert a.size() == 12;[]
-assert a == ['country','code','longest','city','elev','icao','lon','type','region','runways','lat','desc'];[]
+assert a.sort() ==
+['city','code','country','desc','elev','icao','lat','lon','longest','region','runways','type'];[]
 
 n=status( "Checking property cardinality of LIST",n);[]
 g.addV('test').property('a',1).property('a',2).property('a',3).iterate();[]
