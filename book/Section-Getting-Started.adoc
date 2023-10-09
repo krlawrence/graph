@@ -403,11 +403,28 @@ command.
 
 Once the TinkerGraph plugin is enabled you will need to close and re-load the Gremlin
 console. After doing that, you can create a new TinkerGraph instance from the console
-as follows.
+as follows
 
 [source,groovy]
 ----
 g = TinkerGraph.open().traversal()
+----
+
+which is shorthand for
+[source,groovy]
+----
+graph = TinkerGraph.open()
+g = graph.traversal()
+----
+
+In general you will not need access to the 'graph' object, and most operations can be
+performed using graph traversals spawned from the 'g' object. One exception to this
+is when you want to ask a graph like TinkerGraph what features it supports. In such
+cases you still need to use
+
+[source,groovy]
+----
+graph.features()
 ----
 
 In some cases you will want to pass parameters to the 'open' method providing more
