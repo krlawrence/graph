@@ -2,6 +2,8 @@
 //
 // To execute use the console command ":load load-air-routes-graph.groovy"
 //
+// This file uses the deprecated way of creating a graph and loading data. See
+// the file load-air-routes34.groovy to see the currently recommended way.
 
 conf = new BaseConfiguration()
 conf.setProperty("gremlin.tinkergraph.vertexIdManager","LONG")

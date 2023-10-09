@@ -628,7 +628,7 @@ into the console manually. These commands will setup the console environment, cr
 a TinkerGraph graph and load the `air-routes.graphml` file into it. Some extra
 console features are also enabled.
 
-NOTE: There is a file called `load-air-routes-graph.groovy`, that contains the
+NOTE: There is a file called `load-air-routes-graph34.groovy`, that contains the
 commands shown below, available in the `/sample-data` directory.
 https://github.com/krlawrence/graph/tree/main/sample-data
 
@@ -654,9 +654,8 @@ conf = new BaseConfiguration()
 conf.setProperty("gremlin.tinkergraph.vertexIdManager","LONG")
 conf.setProperty("gremlin.tinkergraph.edgeIdManager","LONG")
 conf.setProperty("gremlin.tinkergraph.vertexPropertyIdManager","LONG");[]
-graph = TinkerGraph.open(conf)
-graph.io(graphml()).readGraph('air-routes.graphml')
-g=graph.traversal()
+g = TinkerGraph.open(conf).traversal()
+g.io("/mydata/air-routes.graphml"). with(IO.reader,IO.graphml).read().iterate()
 :set max-iteration 1000
 ----
 
