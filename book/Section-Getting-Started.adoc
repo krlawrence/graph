@@ -655,7 +655,7 @@ NOTE: Setting the ID manager as shown above is important. If you do not do this,
 default, when using TinkerGraph, ID values will have to be specified as strings such
 as '"3"' rather than just the numeral '3'.
 
-If you download the `load-air-routes-graph.groovy` file, once the console is up and
+If you download the `load-air-routes-graph34.groovy` file, once the console is up and
 running you can load that file by entering the command below. Doing this will save
 you a fair bit of time as each time you restart the console you can just reload your
 configuration file and the environment will be configured and the graph loaded and
@@ -663,7 +663,7 @@ you can get straight to writing queries.
 
 [source,groovy]
 ----
-:load load-air-routes-graph.groovy
+:load load-air-routes-graph34.groovy
 ----
 
 TIP: As a best practice you should use the full path to the location where the
