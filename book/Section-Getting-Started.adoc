@@ -407,24 +407,16 @@ as follows.
 
 [source,groovy]
 ----
-graph = TinkerGraph.open()
+g = TinkerGraph.open().traversal()
 ----
 
-In many cases you will want to pass parameters to the 'open' method that give more
+In some cases you will want to pass parameters to the 'open' method providing more
 information on how the graph is to be configured. We will explore those options later
-on. Before you can start to issue Gremlin queries against the graph you also need to
-establish a graph traversal source object by calling the new graph's 'traversal'
-method as follows.
+on. The variable called 'g' created above is known as a 'graph traversal source' and
+will be used throughout the book at the start of each query we write.
 
-[source,groovy]
-----
-g = graph.traversal()
-----
-
-NOTE: Throughout the remainder of this book the following convention will be used.
-The variable name 'graph' will be used for any object that represents a graph
-instance and the variable name 'g' will be used for any object that represents an
-instance of a graph traversal source object.
+NOTE: Throughout the remainder of this book the variable name 'g' will be used for
+any object that represents an instance of a graph traversal source object.
 
 [[air]]
 Introducing the air-routes graph
@@ -633,8 +625,8 @@ commands shown below, available in the `/sample-data` directory.
 https://github.com/krlawrence/graph/tree/main/sample-data
 
 These commands create an in-memory TinkerGraph which will use LONG values for the
-vertex, edge and vertex property IDs. As part of loading a 'graph' we need to setup
-a graph traversal source object called 'g' which we will then refer to in our
+vertex, edge and vertex property IDs. As part of loading a graph we need to setup
+a 'graph traversal source' object called 'g' which we will then refer to in our
 subsequent queries of the graph. The 'max-iteration' option tells the Gremlin
 console the maximum number of lines of output that we ever want to see in return
 from a query. The default, if this is not specified, is 100.
@@ -647,7 +639,7 @@ can still load the `air-routes.graphml` file by following the instructions speci
 to that system. Once loaded, the queries below should still work either unchanged or
 with minor modifications.
 
-.load-air-routes-graph.groovy
+.load-air-routes-graph34.groovy
 [source,groovy]
 ----
 conf = new BaseConfiguration()
@@ -655,7 +647,7 @@ conf.setProperty("gremlin.tinkergraph.vertexIdManager","LONG")
 conf.setProperty("gremlin.tinkergraph.edgeIdManager","LONG")
 conf.setProperty("gremlin.tinkergraph.vertexPropertyIdManager","LONG");[]
 g = TinkerGraph.open(conf).traversal()
-g.io("/mydata/air-routes.graphml"). with(IO.reader,IO.graphml).read().iterate()
+g.io("/mydata/air-routes.graphml").with(IO.reader,IO.graphml).read().iterate()
 :set max-iteration 1000
 ----
 

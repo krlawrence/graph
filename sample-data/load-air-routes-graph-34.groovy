@@ -17,6 +17,6 @@ g = TinkerGraph.open(conf).traversal()
 // We need to explicitly tell Gremlin which reader to use as it does not recognize the GraphML
 // file extension. It does recognize XML as an extension so an alternative would be to rename
 // the file.
-g.io("/mydata/air-routes.graphml"). with(IO.reader,IO.graphml).read()
+g.io("/mydata/air-routes.graphml"). with(IO.reader,IO.graphml).read().iterate()
 
 :set max-iteration 1000    
