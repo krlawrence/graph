@@ -159,7 +159,7 @@ a look at how to use these transactional capabilities in the next section. Note 
 'Persistence' still shows as 'false' as we are using the 'inmemory' mode. Another
 thing to note is that, unlike with TinkerGraph, 'UserSuppliedIds' is set to false,
 indicating that JanusGraph will create its own ID values and ignore any that we
-provide. The list is formatted in two columns to aid readability.
+provide by default. Note that since 1.0.0, JanusGraph allows us to provide vertex ids in long and string types, but this functionality has to be explicitly enabled. The list is formatted in two columns to aid readability.
 
 .JanusGraph features
 ----
@@ -220,7 +220,9 @@ graph.features()
 Now that we have an empty instance of an 'inmemory' JanusGraph we can use it from
 the Gremlin Console just as we did with TinkerGraph in our prior examples. Notice
 that the ID values that JanusGraph generates look quite different (as in they don't
-start at zero) from what we might expect from TinkerGraph.
+start at zero) from what we might expect from TinkerGraph. The id generation
+scheme is non-deterministic, meaning you probably won't get the same ID values as
+shown in the example.
 
 [source,groovy]
 ----
@@ -243,12 +245,11 @@ will cover each of these key subjects in the following sections.
 JanusGraph transactions
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-So far we have been mainly using a TinkerGraph to perform our experiments.
-TinkerGraph does not provide support for transactions. To be fair, for the type of
-use cases where TinkerGraph is a good solution this is not really an issue. However,
-a typical use case for JanusGraph might be storing and mutating (updating) a very
-large graph persisted by a back end store. In such an environment, support for
-transactions becomes a lot more important. If you are used to other databases that
+JanusGraph is a production-ready graph database that supports many billions of
+vertices and edges.
+As such, a typical use case for JanusGraph is storing and mutating (updating) a very
+large graph persisted by a storage backend. In such an environment, support for
+transactions is very important. If you are used to other databases that
 offer transactional support, and as the JanusGraph documentation points out, you
 should not rely on JanusGraph transactions being fully Atomic, Consistent, Isolated
 and Durable (ACID). The amount of ACID support will depend on the backend store being
@@ -258,7 +259,7 @@ used. We will take a look at some of the backend storage options in the
 NOTE: The official JanusGraph documentation includes detailed coverage of how
 transactions are processed and techniques to use based on different usage scenarios.
 You will always find the latest version here:
-http://docs.janusgraph.org/latest/tx.html
+https://docs.janusgraph.org/basics/transactions/
 
 In many cases, when using JanusGraph, you do not have to explicitly open a new
 transaction. Instead, it will be opened for you as needed. Take a look at the example
@@ -325,7 +326,7 @@ g.addV().property('name','ABC')
 graph.tx().rollback()
 
 // Nothing will be returned
-g.V().has('code','ABC')
+g.V().has('name','ABC')
 ----
 
 Note that the JanusGraph Management system, that is the subject of the next section,
@@ -387,8 +388,11 @@ list will include both vertex and edge property key names
 ----
 mgmt.getRelationTypes(PropertyKey.class)
 
+lat
 dist
+date
 code
+author
 type
 desc
 country
@@ -399,7 +403,6 @@ icao
 lon
 region
 runways
-lat
 ----
 
 We can query the cardinality of a property.
@@ -413,14 +416,13 @@ SINGLE
 
 Note that as we have not so far defined a schema for the 'air-routes' graph. if we
 query the dataType for any of the already loaded properties we will get back
-'Object.class' and by default that is what JanusGraph will use in the absence of a schema
-having been defined.
+the data type that JanusGraph infers.
 
 [source,groovy]
 ----
 mgmt.getPropertyKey('code').dataType()
 
-Object.class
+class java.lang.String
 ----
 
 We can also test for the existence of a label definition in the graph.
@@ -445,7 +447,7 @@ accept as list of values. This can be done by specifying a cardinality of 'LIST'
 the property key is created. Unless we explicitly do this, whenever a property is
 created the cardinality will default to 'SINGLE'. The code below can be run from a
 Gremlin Console connected to a JanusGraph instance. A property key called 'mylist' is
-created that can accept 'String' values'. Before the key is created, its cardinality
+created that can accept 'String' values. Before the key is created, its cardinality
 is specified as 'LIST'. Always remember to 'commit' the management transaction when you
 are done making changes.
 
@@ -587,9 +589,7 @@ Defining a JanusGraph schema for the air-routes graph
 You are not required to define the types and labels of your edges, vertices and
 properties ahead of time but it is strongly recommended that you do so. If you do not
 define anything and load the air routes data for example, it will work fine but JanusGraph
-will make assumptions about various things. One thing it will do is default the
-type of all property keys to Java's 'Object.class' which is not ideal if you want the
-graph to help you enforce stricter type checking. Also, without a schema being
+will make assumptions about various things. Without a schema being
 defined, JanusGraph will default the usage constraint or 'multiplicity' setting on
 all edges to 'MULTI'. We will explain what that means in a minute but in essence it
 means there is no restriction by default on how many edges with the same label that
