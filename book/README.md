@@ -90,10 +90,10 @@ may be added and the layout further refined.
 - The next step in our journey is to move beyond the Gremlin console and take a look
   at interacting with a TinkerGraph using Java and Groovy applications.
 
-**Chapter 7 - INTRODUCING JANUS GRAPH**
+**Chapter 7 - INTRODUCING JANUSGRAPH**
 - As we continue the journey beyond the Gremlin Console, we now also move beyond
   TinkerGraph. This chapter introduces JanusGraph and includes a discussion of
-  defining schema, managing trabsactions, and different storage and indexing options.
+  defining schema, managing transactions, and different storage and indexing options.
 
 **Chapter 8 - INTRODUCING GREMLIN SERVER**
 - Our journey so far has focussed on working with graphs in a "directly attached"
