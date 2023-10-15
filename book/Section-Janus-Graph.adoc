@@ -1779,37 +1779,37 @@ http://docs.janusgraph.org/latest/storage-backends.html
 Let's now take a brief look at some of the persistent storage options available to us
 when using JanusGraph.
 
-[[berkleyintro]]
-Oracle Berkley DB
+[[berkeleyintro]]
+Oracle Berkeley DB
 ^^^^^^^^^^^^^^^^^
 
-Oracle Berkely DB may be a good choice if your application runs on a single machine
+Oracle Berkeley DB may be a good choice if your application runs on a single machine
 but needs a persistent store. All data is persisted to the same local disk of the
-system where your application runs. Berkley DB is popular with developers who want to
+system where your application runs. Berkeley DB is popular with developers who want to
 develop and test graph applications on a single machine using more than an in-memory
 back end. Assuming you are developing an application using Java or Groovy, the Java
-version of Berkley DB, known as Berkley DB Java Edition, is provided as a set of
+version of Berkeley DB, known as Berkeley DB Java Edition, is provided as a set of
 libraries that you embed with your application and run using the same JVM as your
-application. Because Berkley DB JE runs on a single machine, the amount of graph data
+application. Because Berkeley DB JE runs on a single machine, the amount of graph data
 that you can store will depend on the size of the disk available on that machine.
 
 For production systems that only need a modest sized graph this may also be a valid
 choice. If your application is likely to generate very large graphs in excess of 100
 million vertices you will probably need to investigate some of the other, multi node
-cluster capable, storage options that we will discuss next. Berkley DB is probably
+cluster capable, storage options that we will discuss next. Berkeley DB is probably
 not a good choice if you need multiple users to be accessing and changing the graph
 concurrently.
 
 The JanusGraph '/conf' directory contains a file called
 'janusgraph-berkleyje.properties' that can be used to create a new instance of a
-JanusGraph backed by Berkley as follows.
+JanusGraph backed by Berkeley as follows.
 
 [source,groovy]
 ----
 graph = JanusGraphFactory.open("conf/janusgraph-berkleyje.properties")
 ----
 
-Alternatively, as there is not much to configure when using Berkley DB, you could
+Alternatively, as there is not much to configure when using Berkeley DB, you could
 decide to pass the properties directly to JanusGraph as follows. The second 'set'
 command specifies where your data will be stored on the disk.
 
@@ -1821,7 +1821,7 @@ graph = JanusGraphFactory.build().
           open()
 ----
 
-Oracle Berkley DB can be downloaded from the Oracle web site from the following URL.
+Oracle Berkeley DB can be downloaded from the Oracle web site from the following URL.
 http://www.oracle.com/technetwork/database/database-technologies/berkeleydb/overview/index.html
 
 
@@ -1829,7 +1829,7 @@ http://www.oracle.com/technetwork/database/database-technologies/berkeleydb/over
 Apache Cassandra
 ^^^^^^^^^^^^^^^^
 
-If a single machine storage solution, such as that offered by Berkley DB, is
+If a single machine storage solution, such as that offered by Berkeley DB, is
 insufficient for your needs then there are several other choices that offer
 horizontal scaling and high availability. Apache Cassandra is one such choice. Which
 storage solution you chose will depend on many factors that go beyond the scope of
@@ -1844,7 +1844,7 @@ within the virtual machines that are running your Cassandra instances. Excessive
 garbage collection can significantly impact your graph's performance. There are many
 ways that Cassandra can be deployed ranging from a single instance on your local
 machine to a multi node cluster. How you deploy it will depend on your scalability
-and redundancy needs. Note that Cassandra, like Berkley DB can, if needed, also run
+and redundancy needs. Note that Cassandra, like Berkeley DB can, if needed, also run
 in embedded mode.
 
 NOTE: For detailed configuration information you should refer to the official JanusGraph
