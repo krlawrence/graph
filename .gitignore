@@ -6,8 +6,4 @@
 *.*.*~
 *.iml
 **/.idea
-book/Practical-Gremlin.epub
-book/Practical-Gremlin.html
-book/Practical-Gremlin.mobi
-book/Practical-Gremlin.pdf
-book/Practical-Gremlin.xml
+target/

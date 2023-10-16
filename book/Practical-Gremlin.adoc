@@ -42,15 +42,6 @@ v2-001-preview, October 1st 2023
 // order to run.
 // 
 //   3. pygments (via pip)
-// 
-// The lines below need to be manually added to the HTML file (around line 515) so
-// that the book cover art image appears BEFORE the asciidoc document header. The
-// <h1> line already in the HTML file should be replaced by these two lines. The PNG
-// file also needs to be located in the same place as the HTML file when it is
-// viewed.
-//
-//<img src="PRACTICAL-GREMLIN-Revised-v2.png">
-//<h1>PRACTICAL GREMLIN:<br>An Apache TinkerPop Tutorial</h1>
 
 include::Section-Introduction.adoc[]
 
