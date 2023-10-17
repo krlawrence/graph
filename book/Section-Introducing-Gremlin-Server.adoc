@@ -551,12 +551,13 @@ and retrieve the query results.
 ----
 import org.apache.tinkerpop.gremlin.driver.Cluster;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
-import org.apache.tinkerpop.gremlin.structure.util.empty.EmptyGraph;
 import org.apache.tinkerpop.gremlin.driver.remote.DriverRemoteConnection;
 import org.apache.tinkerpop.gremlin.util.ser.GraphBinaryMessageSerializerV1;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
+
+import static org.apache.tinkerpop.gremlin.process.traversal.AnonymousTraversalSource.traversal;
 ----
 
 We can now define a small Java class that we will call 'RemoteClient' and setup the
@@ -582,7 +583,7 @@ public class RemoteClient
     builder.serializer(new GraphBinaryMessageSerializerV1());
 ----
 
-Once the Cluster.Builder instance has been setup we can use it to create our
+Once the 'Cluster.Builder' instance has been setup we can use it to create our
 'Cluster' instance.
 
 [source,groovy]
@@ -590,27 +591,26 @@ Once the Cluster.Builder instance has been setup we can use it to create our
     Cluster cluster = builder.create();
 ----
 
-Lastly, we need to setup a GraphTraversalSource object for the Gremlin Server hosted
-graph that we will be working with. The TinkerPop documentation recommends that an
-instance of an 'EmptyGraph' is used when creating the traversal. Having done that,
-the 'withRemote' method can be called to establish the remote connection. Note that
-the cluster instance that we just created is passed in as a parameter. While this
-looks a little complicated it is really not a lot different than when we connect to a
-local graph using the Gremlin Console. The only difference is that by setting up the
-remote connection this way, when we start to issue queries against the graph, rather
-than getting JSON objects back, the results will automatically be serialized into
-Java variables for us. This makes our code a lot easier to write and essentially is
-the same code from this point onwards that would also work with a local graph that we
-are directly connected to.
+Lastly, we need to setup a 'GraphTraversalSource' object for the Gremlin Server
+hosted graph that we will be working with. This object is often named "g" by
+convention and is typically created using the statically imported 'traversal()'
+method which in turn allows the call to 'withRemote()' which is called to establish
+the remote connection. Note that the cluster instance that we just created is passed
+in as a parameter. While this looks a little complicated it is really not a lot
+different than when we connect to a local graph using the Gremlin Console. The only
+difference is that by setting up the remote connection this way, when we start to
+issue queries against the graph, rather than getting JSON objects back, the results
+will automatically be serialized into Java variables for us. This makes our code a
+lot easier to write and essentially is the same code from this point onwards that
+would also work with a local graph that we are directly connected to.
 
 [source,groovy]
 ----
-    GraphTraversalSource g =
-      EmptyGraph.instance().traversal().
+    GraphTraversalSource g = traversal().
         withRemote(DriverRemoteConnection.using(cluster));
 ----
 
-We can now use our new graph traversal source object to issue a Gremlin query. The
+We can now use our new 'GraphTraversalSource' object to issue a Gremlin query. The
 results will be placed directly into the 'List' called 'vmaps'. The query finds the
 first 10 airports with a region code of 'GB-ENG' which is short for Great Britain
 - England.
