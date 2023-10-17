@@ -3281,11 +3281,11 @@ Apache TinkerPop documentation here: http://tinkerpop.apache.org/docs/current/re
 [cols="^1,4"]
 |==============================================================================
 |startingWith     | Match text that starts with the given character(s)
-|endingWith       | Match text that ends with the given charcter(s)
+|endingWith       | Match text that ends with the given character(s)
 |containing       | Match text that contains the given character(s)
 |notStartingWith  | Match text that does not start with the given character(s)
-|notEndingWith    | Match text that does not end with the given charcter(s)
-|notContaining    | Match text that does notcontain the given character(s)
+|notEndingWith    | Match text that does not end with the given character(s)
+|notContaining    | Match text that does not contain the given character(s)
 |==============================================================================
 
 In the sections below you will find examples of each predicate being used. Each
@@ -7474,7 +7474,7 @@ g.V().has('code','AUS').out().out().has('code','SYD').path().by('code')
 ----
 
 The following three queries all achieve the same result. They find flights from any
-airport in Africa to any airport in the United States. These queries are intresting
+airport in Africa to any airport in the United States. These queries are interesting
 as the continent information is represented in the graph as edges connecting an
 airport vertex with a continent vertex. This is about as close as Gremlin gets to a SQL
 join statement!

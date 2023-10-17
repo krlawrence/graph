@@ -196,7 +196,7 @@ Chapter 6 - MOVING BEYOND THE GREMLIN CONSOLE::
 Chapter 7 - INTRODUCING JANUS GRAPH::
 - As we continue the journey beyond the Gremlin Console, we now also move beyond
   TinkerGraph. This chapter introduces JanusGraph and includes a discussion of
-  defining schema, managing trabsactions, and different storage and indexing options.
+  defining schema, managing transactions, and different storage and indexing options.
 Chapter 8 - INTRODUCING GREMLIN SERVER::
 - Our journey so far has focussed on working with graphs in a "directly attached"
   fashion. We now introduce Gremlin Server as a way to deploy and interact with

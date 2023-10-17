@@ -791,7 +791,7 @@ do ourselves when not running inside the console.
 
 [source,java]
 ----
-// Create a new (empty) TinkerGrap
+// Create a new (empty) TinkerGraph
 TinkerGraph tg = TinkerGraph.open() ;
 
 // Create a Traversal source object
@@ -838,7 +838,7 @@ cases where when using the Gremlin Console we would not have to.
 
 [source,java]
 ----
-// Dislpay the code property as well as the label and id.
+// Display the code property as well as the label and id.
 for( Map m : vm)
 {
   System.out.println(((List)(m.get("code"))).get(0) + " " +
@@ -1018,7 +1018,7 @@ files as shown in the next section.
 Compiling our Groovy application
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In the Java example, we included the CLASSPATH on the 'javac' invokation using the
+In the Java example, we included the CLASSPATH on the 'javac' invocation using the
 '-cp' flag. That can also be done when using Groovy, however, if you are using
 Microsoft Windows as your build environment you may find that using '-cp' gives
 unexpected errors. Therefore, it is recommended to define the CLASSPATH variable in
@@ -1080,7 +1080,7 @@ that we created a few lines back in our program.
 
 [source,groovy]
 ----
-// Retieve the city name property and display it
+// Retrieve the city name property and display it
 def city = aus['city']
 println "\nThe AUS airport is in ${city[0]}\n"
 

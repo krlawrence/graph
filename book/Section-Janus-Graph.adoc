@@ -124,7 +124,7 @@ computer. The one big difference however is that JanusGraph, even while using th
 'inmemory' storage model, allows us to experiment with features that TinkerGraph does
 not offer, such as schemas and external indices. If you want to host your graph on a single
 machine and you don't need persistence support, you could also use 'inmemory' storage model in
-producton. We will get into those topics a bit later on. First, let's create an
+production. We will get into those topics a bit later on. First, let's create an
 instance of JanusGraph from the Gremlin console that uses the 'inmemory' storage model.
 
 Creating a JanusGraph instance is very similar to the way we created a TinkerGraph
@@ -639,7 +639,7 @@ Defining edge labels and usage
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Let's look at how we can use the JanusGraph Management API to specify the
-multiplicty for the 'route' and 'contains' edges used by the 'air-routes' graph.
+multiplicity for the 'route' and 'contains' edges used by the 'air-routes' graph.
 
 [source,groovy]
 ----

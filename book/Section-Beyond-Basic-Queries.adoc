@@ -1787,7 +1787,7 @@ of 'SET'.
 In the example below we create a new property called 'hw' for vertex 'V(3)' with
 multiple values but using the 'set' keyword rather than the 'list' keyword that we
 have used previously. We then look at the valueMap for the 'hw' property to check
-that inded our set was created.
+that indeed our set was created.
 
 [source,groovy]
 ----

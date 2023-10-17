@@ -18,7 +18,7 @@ http://tinkerpop.apache.org/
 .Apache TinkerPop Getting Started guide
 http://tinkerpop.apache.org/docs/current/tutorials/getting-started/
 
-.Current Apache TinkerPop documention
+.Current Apache TinkerPop documentation
 http://tinkerpop.apache.org/docs/current/reference/
 
 .Apache TinkerPop JavaDoc API reference material
@@ -29,7 +29,7 @@ http://tinkerpop.apache.org/javadocs/current/full/
 .Gremlin IO serialization and file formats documentation
 http://tinkerpop.apache.org/docs/current/dev/io/
 
-.Useful Gremlin "recipies"
+.Useful Gremlin "recipes"
 http://tinkerpop.apache.org/docs/current/recipes/
 
 .Apache TinkerPop documentation describing new features per release

@@ -825,7 +825,7 @@ Starting the Server
 
 As discussed in the "<<serverconfig>>" section, you can start the Gremlin Server in the
 foreground or in the background. For our initial test let's just start the server
-running in the foregorund.
+running in the foreground.
 
 [source,console]
 ----

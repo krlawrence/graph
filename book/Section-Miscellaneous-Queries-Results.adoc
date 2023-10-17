@@ -181,7 +181,7 @@ We have again laid the results out in a grid.
 
 As we mentioned earlier in the book, the number of incoming and outgoing routes for
 any given airport will not always be the same due to how airlines operate their
-flight routings. The query below looks for any airports that have more than 400 total
+flight routing. The query below looks for any airports that have more than 400 total
 routes (inbound and outbound).
 
 [source,groovy]
@@ -2501,7 +2501,7 @@ Here are the results that the query generates.
 [ORD:226, DFW:216, FRA:254, CDG:253, PEK:232, AMS:257, ATL:232, MUC:219, IST:259, DME:206, DXB:225]
 ----
 
-The prevous query is a perfectly good way to achieve the desired result. Just for fun
+The previous query is a perfectly good way to achieve the desired result. Just for fun
 let's produce the same results using a 'sack'. This is intended just as an example of
 how 'sack' works and is not the way you would actually want to perform this specific
 query. That said, it is useful to have an example where the contents of the sack is
@@ -3232,7 +3232,7 @@ Using 'store' and a 'sideEffect' to make a set of unique values
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Take a look at the query below. All it does is return the city names for the airports
-that have IDs between 1 and 200 (inclusive). The list is sorted by ascending aplhabetic
+that have IDs between 1 and 200 (inclusive). The list is sorted by ascending alphabetical
 order.
 
 [source,groovy]

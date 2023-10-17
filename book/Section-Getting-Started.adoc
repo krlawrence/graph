@@ -445,7 +445,7 @@ describing graphs that can be used to move graphs between applications. The grap
 'air-routes' is a model we built of the world airline route network that is
 fairly accurate.
 
-NOTE: The `air-routes.graphml` file can be downloded from the `sample-data` folder
+NOTE: The `air-routes.graphml` file can be downloaded from the `sample-data` folder
 located in the GitHub repository at the following URL:
 https://github.com/krlawrence/graph/tree/main/sample-data
 
