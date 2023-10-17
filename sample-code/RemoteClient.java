@@ -9,12 +9,13 @@
 
 import org.apache.tinkerpop.gremlin.driver.Cluster;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
-import org.apache.tinkerpop.gremlin.structure.util.empty.EmptyGraph;
 import org.apache.tinkerpop.gremlin.driver.remote.DriverRemoteConnection;
 import org.apache.tinkerpop.gremlin.driver.ser.GryoMessageSerializerV1d0;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
+
+import static org.apache.tinkerpop.gremlin.process.traversal.AnonymousTraversalSource.traversal;
 
 public class RemoteClient
 {
@@ -27,8 +28,7 @@ public class RemoteClient
 
     Cluster cluster = builder.create();
 
-    GraphTraversalSource g =
-      EmptyGraph.instance().traversal().
+    GraphTraversalSource g = traversal().
         withRemote(DriverRemoteConnection.using(cluster));
 
     List <Map<Object,Object>> vmaps =
