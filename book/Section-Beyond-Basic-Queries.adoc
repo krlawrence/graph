@@ -1105,8 +1105,8 @@ g.V().has('code','SFO').valueMap()
 [country:[US],code:[SFO],longest:[11870],city:[San Francisco],elev:[13],icao:[KSFO],lon:[-122.375],type:[airport],region:[US-CA],runways:[4],lat:[37.6189994812012],desc:[San Francisco International Airport]]
 ----
 
-Let's now drop the 'desc' property and re-query the property values to prove that it has
-been deleted.
+Let's now drop the 'desc' property and re-query the property values to prove that it
+has been deleted.
 
 [source,groovy]
 ----
@@ -1120,10 +1120,52 @@ g.V().has('code','SFO').valueMap()
 If we wanted to delete all of the properties currently associated with the SFO
 airport vertex we could do that as follows.
 
-
 [source,groovy]
 ----
 g.V().has('code','SFO').properties().drop()
+----
+
+Another common pattern we might consider is to remove a property while simultaneously
+adding a new one. Given what we've learned of Gremlin so far, we might be tempted to
+try to follow 'drop' with another call to 'property' as follows.
+
+[source,groovy]
+----
+g.V().has('code','SFO').properties('desc').drop().property('newProperty','test')
+
+g.V().has('code','SFO').valueMap()
+
+[country:[US],code:[SFO],longest:[11870],city:[San Francisco],lon:[-122.375],type:[airport],elev:[13],icao:[KSFO],region:[US-CA],runways:[4],lat:[37.6189994812012]]
+----
+
+We can see that we did indeed drop the 'desc' property, but the 'newProperty' key
+we'd intended to insert is not present. This example presents an important aspect of
+'drop'. The 'drop' step deletes the objects that flow into it and, as that deleted
+object no longer exists, it also removes the object from the traversal stream. As
+a result, steps following the 'drop' will not have an object to trigger their
+execution. In our example above, 'property' never executes.
+
+TIP: Since 'drop' does not allow steps placed after it to execute, it is often found
+at the end of a traversal. It is worth noting however that its typical position in
+a traversal does not make it a <<var,terminal step>>, i.e. it does not iterate the
+traversal. Since 'drop' returns no results, the usual terminating step to use in
+conjunction with it is 'iterate'.
+
+Despite the 'drop' filter behavior, we'd still like to be able to remove a property
+and then add a new one in the same traversal. In the "<<sideeffect,Using 'sideEffect'
+to do things on the side>>" section, we introduced how 'sideEffect' can be used to
+include additional processing without changing what gets passed on to the next stage
+of the query. We can wrap 'drop' in this step to handle the property removal as a
+side-effect of the traversal execution.
+
+[source,groovy]
+----
+g.V().has('code','SFO').sideEffect(properties('desc').drop()).
+                        property('newProperty','test')
+
+g.V().has('code','SFO').valueMap()
+
+[country:[US],code:[SFO],longest:[11870],newProperty:[test],city:[San Francisco],lon:[-122.375],type:[airport],elev:[13],icao:[KSFO],region:[US-CA],runways:[4],lat:[37.6189994812012]]
 ----
 
 Removing all the edges or vertices in the graph

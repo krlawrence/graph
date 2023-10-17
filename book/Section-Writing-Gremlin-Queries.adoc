@@ -281,12 +281,13 @@ The 'next' step that we used above is one of a series of steps that the TinkerPo
 documentation describes as 'terminal steps'. We will see more of these 'terminal
 steps' in use throughout this book. As mentioned above, a terminal step
 essentially ends the graph traversal and returns a concrete object that you can work
-with further in your application. You will see 'next' and other related steps used in
+with further in your application. We will see 'next' and other related steps used in
 this way when we start to look at using Gremlin from a standalone program a bit
 later on. We could even add a call to 'getMethods()' at the end of the query above to
 get back a list of all the methods and their types supported by the 'TinkerVertex'
-class.
-
+class. If you'd like to jump ahead to learn more about terminal steps you can see
+more examples in the
+"<<var,Assigning query results to a variable with a terminal step>>" section.
 
 [[values]]
 Retrieving property values from a vertex
@@ -1988,8 +1989,8 @@ OUT={id=3, label=airport}
 
 
 [[var]]
-Assigning query results to a variable
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Assigning query results to a variable with a terminal step
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 It is extremely useful to be able to assign the results of a query to a variable. The
 example below stores the results of the 'valueMap' call shown above into a variable
@@ -2005,8 +2006,9 @@ TIP: It is necessary to add a call to 'next' to the end of the query in order fo
 this to work. Forgetting to add the call to 'next' is a very commonly made mistake by
 people getting used to the Gremlin query language. The call to 'next' terminates the
 traversal part of the query and generates a concrete result that can be stored in a
-variable. There are other steps such as 'toList' and 'toSet' that also perform this
-traversal termination action. We will see those steps used later on.
+variable. We refer to 'next' as a "terminal step". There are other terminal steps
+such as 'toList' and 'toSet' that also perform this traversal termination action. We
+will see those steps used later on.
 
 Once you have some results in a variable you can refer to it as you would in any
 other programming language. We will explore mixing Java and Groovy code with your
