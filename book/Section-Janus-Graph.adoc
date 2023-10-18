@@ -1108,7 +1108,7 @@ A script to automate schema creation, indexing and graph loading
 In the sample code directory of our GitHub project for this book you will find a
 small Gremlin (Groovy) script in a file called 'janusgraph-inmemory.groovy'. You can
 get to the file by visiting this URL:
-https://github.com/krlawrence/graph/blob/main/sample-code/janus-inmemory.groovy
+https://github.com/krlawrence/graph/blob/main/sample-code/groovy/janus-inmemory.groovy.
 
 The script will create an 'inmemory' JanusGraph instance, define the schema, create
 several indexes and load the `air-routes.graphml` file so that you can try some
@@ -2032,8 +2032,8 @@ deprecated in favor of CQL. At some point in the future support for the older
 protocols is likely to be dropped so it is probably a good idea to get comfortable
 using CQL as the primary way that you connect JanusGraph to Cassandra,
 
-TIP: A script called 'janus-cassandra.groovy' is available in the sample-code
-folder at https://github.com/krlawrence/graph/tree/main/sample-code. The script
+NOTE: The source code in this section comes from the 'janus-cassandra.groovy' sample
+located at https://github.com/krlawrence/graph/tree/main/sample-code/groovy. The script
 will automate everything that we are about to discuss in this section and you are
 encouraged to study it.
 
@@ -2090,11 +2090,11 @@ JanusGraph will attempt to connect to Cassandra using the specified protocols. T
 first time you connect to a brand new (empty) Cassandra instance you should first
 define the graph's schema by creating key definitions and create any indexes that you
 need before creating any vertices, edges or properties. If you would like to
-experiment with the 'air-routes' data using Cassandra as the backing store, the script
-called `janus-cassandra.groovy` from the `sample-code` folder can be used for this. If
-you prefer you can experiment yourself from the console using the JanusGraph
-management API to create keys and indexes and creating a traversal source object
-before adding any vertices and edges.
+experiment with the 'air-routes' data using Cassandra as the backing store, the
+script called `janus-cassandra.groovy` from the `sample-code/groovy` folder can be
+used for this. If you prefer you can experiment yourself from the console using the
+JanusGraph management API to create keys and indexes and creating a traversal source
+object before adding any vertices and edges.
 
 If you choose run the `janus-cassandra.groovy` script it will create the keys and
 indexes needed and then load the 'air-routes' graph and also run a few tests to make

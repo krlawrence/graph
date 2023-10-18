@@ -604,10 +604,8 @@ graph terminology this is often called the degree of the vertex or just 'vertex 
 Throughout this book you will find Gremlin queries that can be used to generate many
 of these statistics.
 
-NOTE: There is a sample script called 'graph-stats.groovy' in
-the GitHub repository located in the 'sample-code' folder that shows how to generate
-some statistics about the graph. The script can be found at the
-following URL: https://github.com/krlawrence/graph/tree/main/sample-code
+NOTE: The source code in this section comes from the 'graph-stats.groovy' sample
+located in: https://github.com/krlawrence/graph/tree/main/sample-code/groovy.
 
 [[airrouteupdates]]
 Updated versions of the air-route data

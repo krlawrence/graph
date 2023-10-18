@@ -111,15 +111,15 @@ data. Note that as we are now going to be running as a Java program we have to c
 exceptions. This is another thing that is hidden from you when you are working within
 the Gremlin Console.
 
-TIP: The source code for TinkerGraphTest.java is available in the 'sample-code' folder
-located at https://github.com/krlawrence/graph/tree/main/sample-code.
+NOTE: The source code in this section comes from the 'TinkerGraphTest.java' sample
+located at https://github.com/krlawrence/graph/tree/main/sample-code/java.
 
-Lastly in this initial class definition we create a
-'GraphTraversalSource' and we make a Gremlin query to get the property 'valueMap' for
-the Austin airport vertex and print it. The 'toString' method provided by the 'Map'
-should give us some useful output. Take note of the call to 'next()'. This terminates
-the graph traversal and causes the result to be returned. If this call is left off
-you will not get back what you were expecting!
+Lastly in this initial class definition we create a 'GraphTraversalSource' and we
+make a Gremlin query to get the property 'valueMap' for the Austin airport vertex and
+print it. The 'toString' method provided by the 'Map' should give us some useful
+output. Take note of the call to 'next()'. This terminates the graph traversal and
+causes the result to be returned. If this call is left off you will not get back what
+you were expecting!
 
 [source,java]
 ----
@@ -356,8 +356,8 @@ should also bookmark the TinkerPop javadoc pages as you can find more detail on 
 of the classes and enums covered below there. The latest javadoc is always available
 at http://tinkerpop.apache.org/javadocs/current/full/
 
-TIP: There is a sample program called TestImports.java in the 'sample-code' folder
-located at https://github.com/krlawrence/graph/tree/main/sample-code that
+NOTE: The source code in this section comes from the 'TestImports.java' sample
+located at https://github.com/krlawrence/graph/tree/main/sample-code/java and
 demonstrates these constructs being used.
 
 The tables below show some commonly used Gremlin keywords in the left column. The
@@ -662,9 +662,8 @@ or 'neq' from a Java program you need to prefix it with a '"P."' which is a refe
 to the TinkerPop class of the same name where a set of static methods, representing
 the Gremlin predicates, are defined.
 
-TIP: You will find a sample program called GraphRegion.java, which contains the code
-used in this section, in the sample files directory located at
-https://github.com/krlawrence/graph/tree/main/sample-code.
+NOTE: The source code in this section comes from the 'GraphRegion.java' sample
+located at https://github.com/krlawrence/graph/tree/main/sample-code/java.
 
 Take a look at the code below. A method called 'findByRegion' is defined that takes
 a String representing a three character airport IATA code as input. The method then
@@ -750,10 +749,8 @@ On the surface, this looks fine. However, were we to execute this code we would 
 Null Pointer Exception as when we try to call 'next' there is no result to process as
 there is no edge between Austin and Sydney and hence no distance value to process.
 
-TIP: You will find a sample program called GraphSearch2.java, which contains the code
-used in this section, in the sample files directory located at
-https://github.com/krlawrence/graph/tree/main/sample-code.
-
+NOTE: The source code in this section comes from the 'GraphSearch2.java' sample
+located at https://github.com/krlawrence/graph/tree/main/sample-code/java.
 
 So we need a way to check to see if we go a valid result. One such way is to store
 the result of the query into a list. Then, worst case, if no results are found, we
@@ -811,8 +808,8 @@ Creating a new graph from a Java application
 The code below creates a new (empty) TinkerGraph instance, creates a graph traversal
 source object and then uses a traversal to create a small graph.
 
-TIP: The full source code for this sample can be found in the file CreateGraph.java
-located at https://github.com/krlawrence/graph/tree/main/sample-code
+NOTE: The source code in this section comes from the 'CreateGraph.java' sample
+located at https://github.com/krlawrence/graph/tree/main/sample-code/java.
 
 Note the call to 'iterate()' at the end of the traversal. When running as a
 standalone application this is necessary. This is another of those little things that
@@ -963,9 +960,8 @@ earlier in Groovy. A lot of what was covered in the "<<javatinker>>" section is
 equally relevant here and we have not duplicated that material. So even if you are
 writing a Groovy application please also give that section a read.
 
-TIP: The examples in this section are taken from a sample program called
-TinkerGraphTest.groovy that you will find in the sample code folder located at
-https://github.com/krlawrence/graph/tree/main/sample-code.
+NOTE: The source code in this section comes from the 'TinkerGraphTest.groovy' sample
+located at https://github.com/krlawrence/graph/tree/main/sample-code/groovy.
 
 It is assumed that you have downloaded and installed Groovy for your environment and
 have set the PATH to point to wherever the Groovy binaries are located. Just as in
@@ -1246,9 +1242,8 @@ Gremlin predicate such as 'eq' or 'neq' from a Groovy program you need to prefix
 with a '"P."' which references the TinkerPop class of the same name where a
 set of static methods, representing the Gremlin predicates, are defined.
 
-TIP: You will find a sample program called GraphRegion.groovy, which contains the
-code used in this section, in the sample files directory located at
-https://github.com/krlawrence/graph/tree/main/sample-code.
+NOTE: The source code in this section comes from the 'GraphRegion.groovy' sample
+located at https://github.com/krlawrence/graph/tree/main/sample-code/groovy.
 
 In the code below, the 'findByRegion' method that we wrote in Java earlier has been
 ported to Groovy. As before a String representing a three character airport IATA code

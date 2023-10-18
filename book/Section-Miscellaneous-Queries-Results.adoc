@@ -3077,7 +3077,8 @@ The result from the more general purpose version of the query is the same as bef
 190.2483140396514
 ----
 
-NOTE: The code for this query is available in the sample-code folder at https://github.com/krlawrence/graph/blob/main/sample-code/great-circle.groovy
+NOTE: The source code in this section comes from the 'great-circle.groovy' sample
+located at https://github.com/krlawrence/graph/tree/main/sample-code/groovy.
 
 We can go one step further and parameterize the query. Everything shown below can be
 done using the Gremlin Console but it also represents the way you might use this

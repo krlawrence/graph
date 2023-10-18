@@ -525,8 +525,7 @@ to read.
 ----
 
 We have included examples of the different types of JSON result that you are likely
-to
-have to process in the "<<serverjson>>" section that is coming up soon.
+to have to process in the "<<serverjson>>" section that is coming up soon.
 
 [[javagsclient]]
 Connecting to a Gremlin Server from Java using 'withRemote'
@@ -539,9 +538,8 @@ programming language that you are using, this is quite easy to setup. In this se
 we will look at connecting to a Gremlin Server from a Java application and taking
 advantage of the 'withRemote' capability that TinkerPop provides.
 
-TIP: The source code for the example shown in this section comes from the
-'RemoteClient.java' sample located at
-https://github.com/krlawrence/graph/tree/main/sample-code.
+NOTE: The source code in this section comes from the 'RemoteClient.java' sample
+located at https://github.com/krlawrence/graph/tree/main/sample-code/java.
 
 Let's look at the small application in sections. First of all it is necessary to
 import the required classes that we will need to make the connection to the server
@@ -659,9 +657,8 @@ binding support available for Ruby programmers. This is therefore a perfect use 
 to show how, using a small amount of code, a Ruby programmer can connect to a Gremlin
 Server and issue Gremlin Queries.
 
-TIP: The source code for the Ruby example, 'gremlin-client-http.rb', as shown below,
-is available in the sample-code folder.
-https://github.com/krlawrence/graph/tree/main/sample-code
+NOTE: The source code in this section comes from the 'gremlin-client-http.rb' sample
+located at https://github.com/krlawrence/graph/tree/main/sample-code/ruby.
 
 The code below represents a complete, standalone Ruby application. It uses the
 standard Ruby libraries. No additional Ruby Gems or third party libraries should be
