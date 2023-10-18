@@ -7,39 +7,40 @@
 //   2. Load the air routes graph
 //   3. Run a few queries against the graph.
 
-import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
-import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
-import org.apache.tinkerpop.gremlin.process.traversal.Path;
-import org.apache.tinkerpop.gremlin.process.traversal.*;
-import org.apache.tinkerpop.gremlin.structure.Edge;
-import org.apache.tinkerpop.gremlin.structure.Vertex;
-import org.apache.tinkerpop.gremlin.structure.io.IoCore;
-import org.apache.tinkerpop.gremlin.tinkergraph.structure.*;
-import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph;
-import org.apache.tinkerpop.gremlin.util.Gremlin;
-import java.io.IOException;
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
+import org.apache.tinkerpop.gremlin.process.traversal.Path
+import org.apache.tinkerpop.gremlin.process.traversal.*
+import org.apache.tinkerpop.gremlin.structure.Edge
+import org.apache.tinkerpop.gremlin.structure.Vertex
+import org.apache.tinkerpop.gremlin.structure.io.IoCore
+import org.apache.tinkerpop.gremlin.tinkergraph.structure.*
+import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph
+import org.apache.tinkerpop.gremlin.util.Gremlin
+import java.io.IOException
 
 // Query the version of Gremlin/TinkerPop that we are using
 println "Gremlin version is ${Gremlin.version()}"
 
 // Create a new, empty, TinkerGraph instance
-def tg = TinkerGraph.open() 
+def graph = TinkerGraph.open()
+
+// Create our graph traversal source
+def g = graph.traversal()
 
 // Try to load the air routes data
 println "Loading the air-routes graph...\n"
 
 try
 {
-  tg.io(IoCore.graphml()).readGraph("air-routes.graphml");
+  g.io("air-routes.graphml").
+          read().with(IO.writer,IO.graphml).iterate()
 } 
 catch (IOException e)
 {
   println "Could not load the graph file"
-  System.exit(1);
+  System.exit(1)
 }
-
-// Get our graph traversal source object
-def g = tg.traversal()
 
 // Now let's run some queries
 
@@ -91,7 +92,7 @@ v.values().each{println it}
 // call to the out() step.
 
 def eng = g.V().has("code","AUS").repeat(__.out()).emit().times(2).
-                has("region","GB-ENG").dedup().values("code").toList();
+                has("region","GB-ENG").dedup().values("code").toList()
 
 println "\nAirports in England reachable with no more than one stop from AUS"
 println "\n${eng}\n"  

@@ -127,18 +127,20 @@ public class TinkerGraphTest
 {
   public static void main(String[] args)
   {
-    TinkerGraph tg = TinkerGraph.open() ;
+    TinkerGraph tg = TinkerGraph.open();
+    GraphTraversalSource g = tg.traversal();
 
     try
     {
-      tg.io(IoCore.graphml()).readGraph("./air-routes.graphml");
+      g.io("./air-routes.graphml").
+          read().with(IO.writer,IO.graphml).iterate();
     }
     catch( IOException e )
     {
       System.out.println("File not found");
       System.exit(1);
     }
-    GraphTraversalSource g = tg.traversal();
+
     Map<String,?> aus = g.V().has("code","AUS").valueMap().next();
     System.out.println(aus);
   }
@@ -380,7 +382,7 @@ which is part of the 'VertexProperty' interface.
 |set     | Cardinality.set   | property(Cardinality.set,"mykey","ABC")
 |==============================================================================
 
-When local scope needs to be specified as a parameter of sort order direction needs
+When local scope needs to be specified as a parameter or sort order direction needs
 to be specified the statics defined in the  'Scope' and 'Order' Enums can be used.
 
 .Scope and ordering
@@ -459,6 +461,8 @@ The 'TextP' class exposes text search based predicates.
 |notStartingWith | TextP.notStartingWith  | has("city",TextP.notStartingWith("Dal"))
 |notEndingWith   | TextP.notEndingWith    | has("city",TextP.notEndingWith("as"))
 |notContaining   | TextP.notContaining    | has("city",TextP.notContaining("all"))
+|regex           | TextP.regex            | has("city",TextP.regex("D.*"))
+|notRegex        | TextP.notRegex         | has("city",TextP.notRegex("D.*"))
 |==============================================================================
 
 If a traversal path has multiple values associated with a single label, such as '"x"'
@@ -483,29 +487,31 @@ When working with a 'sack' the operators like 'sum' and 'assign' are defined in 
 .Operators
 [cols="1,1,3"]
 |==============================================================================
-|sum     | Operator.sum   |sack(Operator.sum)
-|minus   | Operator.minus |sack(Operator.minus)
-|mult    | Operator.mult  |sack(Operator.mult)
-|div     | Operator.div   |sack(Operator.div)
-|assign  | Operator.assign|sack(Operator.assign).by(constant(0))
-|min     | Operator.min   |sack(Operator.min)
-|max     | Operator.max   |sack(Operator.max)
-|addAll  | Operator.addAll|sack(Operator.addAll)
-|and     | Operator.and   |sack(Operator.and)
-|or      | Operator.or    |sack(Operator.or)
+|sum     | Operator.sum   | sack(Operator.sum)
+|minus   | Operator.minus | sack(Operator.minus)
+|mult    | Operator.mult  | sack(Operator.mult)
+|div     | Operator.div   | sack(Operator.div)
+|assign  | Operator.assign| sack(Operator.assign).by(constant(0))
+|min     | Operator.min   | sack(Operator.min)
+|max     | Operator.max   | sack(Operator.max)
+|addAll  | Operator.addAll| sack(Operator.addAll)
+|and     | Operator.and   | sack(Operator.and)
+|or      | Operator.or    | sack(Operator.or)
 |==============================================================================
 
 The 'Direction' Enum defines constants that are used in association with edge
-direction.
+direction. Note that 'from' and 'to' are friendly aliases of 'OUT' and 'IN' that
+can help make Gremlin read more fluidly at times.
 
 .Direction
 [cols="1,1,3"]
 |==============================================================================
-|IN      | Direction.IN   | myEdge.vertices(Direction.IN)
-|OUT     | Direction.OUT  | myEdge.vertices(Direction.OUT)
-|BOTH    | Direction.BOTH | myEdge.vertices(Direction.BOTH)
+|IN      | Direction.IN   | V().to(Direction.IN)
+|OUT     | Direction.OUT  | V().to(Direction.OUT)
+|BOTH    | Direction.BOTH | V().to(Direction.BOTH)
+|from    | Direction.from | mergeE([(Direction.from):1, ...])
+|to      | Direction.to   | mergeE([(Direction.to):2, ...])
 |==============================================================================
-
 
 The 'Pick' Enum defines constants that are used in association with the 'branch',
 `choose` and `option` steps.
@@ -517,6 +523,30 @@ The 'Pick' Enum defines constants that are used in association with the 'branch'
 |any     | Pick.any       | option(any,constant('any picked'))
 |==============================================================================
 
+The 'Merge' Enum has constants that are associated to the `mergeV` and `mergeE`
+steps. 'onCreate' and 'onMatch' relate to the events triggered by these steps and
+'outV' and 'inV' are used to specify a way to late-bind in and out vertices for these
+operations.
+
+.Merge
+[cols="1,1,3"]
+|==============================================================================
+|onCreate    | Merge.onCreate | option(Merge.onCreate,[name:'alice'])
+|onMatch     | Merge.onMatch  | option(Merge.onMatch,[name:'alice'])
+|outV        | Merge.outV     | option(Merge.outV,select('v'))
+|inV         | Merge.inV      | option(Merge.inV,select('v'))
+|==============================================================================
+
+The 'DT' Enum provides constants representing units of time for the 'dateAdd' step.
+
+.Dates
+ [cols="1,1,3"]
+ |==============================================================================
+ |second    | Date.second  | dateAdd(Date.second, 10)
+ |minute    | Date.minute  | dateAdd(Date.second, 10)
+ |hour      | Date.hour    | dateAdd(Date.second, 10)
+ |day       | Date.day     | dateAdd(Date.second, 10)
+ |==============================================================================
 
 Another useful tip, that was shared on the Gremlin Users mailing list, is that you
 can ask the Gremlin Console to show you a list of everything that has been imported
@@ -905,11 +935,13 @@ the CreateGraph.java sample program.
 ----
 // Save the graph we just created as GraphML (XML) or GraphSON (JSON)
 try {
-  // If you want to save the graph as GraphML uncomment the next line
-  g.io("mygraph.xml").write();
+  // If you want to save the graph as GraphML uncomment the next line. Since this
+  // is Java code it is important to include the iterate() terminal step to execute
+  // the traversal
+  g.io("mygraph.xml").write().iterate();
 
   // If you want to save the graph as JSON uncomment the next line
-  //g.io("mygraph.json").write();;
+  //g.io("mygraph.json").write().iterate();
 } catch (IOException ioe) {
   System.out.println("Graph failed to save");
 }
@@ -942,17 +974,17 @@ TinkerPop classes that our program will use.
 
 [source,groovy]
 ----
-import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
-import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
-import org.apache.tinkerpop.gremlin.process.traversal.Path;
-import org.apache.tinkerpop.gremlin.process.traversal.*;
-import org.apache.tinkerpop.gremlin.structure.Edge;
-import org.apache.tinkerpop.gremlin.structure.Vertex;
-import org.apache.tinkerpop.gremlin.structure.io.IoCore;
-import org.apache.tinkerpop.gremlin.tinkergraph.structure.*;
-import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph;
-import org.apache.tinkerpop.gremlin.util.Gremlin;
-import java.io.IOException;
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
+import org.apache.tinkerpop.gremlin.process.traversal.Path
+import org.apache.tinkerpop.gremlin.process.traversal.*
+import org.apache.tinkerpop.gremlin.structure.Edge
+import org.apache.tinkerpop.gremlin.structure.Vertex
+import org.apache.tinkerpop.gremlin.structure.io.IoCore
+import org.apache.tinkerpop.gremlin.tinkergraph.structure.*
+import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph
+import org.apache.tinkerpop.gremlin.util.Gremlin
+import java.io.IOException
 ----
 
 Having imported the classes we need, we can make a start on our application.
@@ -962,14 +994,15 @@ Initially we are just going to display the version of TinkerPop that we are usin
 ----
 println "The Gremlin version is ${Gremlin.version()}"
 
-def tg = TinkerGraph.open()
+def graph = TinkerGraph.open()
+def g = graph.traversal()
 ----
 
-We are now ready to create a new TinkerGraph instance and try to load the air routes
-graph. We can do this in Groovy just like we did in the Java example. Unlike Java,
-however, Groovy does not require you to catch exceptions that may get thrown but as a
-best practice it is probably a good idea to still do so when you need to take some
-specific action if an exception does happen.
+We are now ready to create a new TinkerGraph instance, 'GraphTraversalSource' named
+"g" and try to load the air routes graph. We can do this in Groovy just like we did
+in the Java example. Unlike Java, however, Groovy does not require you to catch
+exceptions that may get thrown but as a best practice it is probably a good idea to
+still do so when you need to take some specific action if an exception does happen.
 
 [source,groovy]
 ----
@@ -978,12 +1011,13 @@ println "Loading the air-routes graph...\n"
 // Load the air-routes graph
 try
 {
-  tg.io(IoCore.graphml()).readGraph("air-routes.graphml");
+  g.io("air-routes.graphml").
+    read().with(IO.writer,IO.graphml).iterate()
 }
 catch (IOException e)
 {
   println "Could not load the graph file"
-  System.exit(0);
+  System.exit(0)
 }
 ----
 

@@ -29,22 +29,21 @@ public class TinkerGraphTest
     //System.out.println("Gremlin version is " + Gremlin.version());
     
     // Create a new TinkerGraph instance and try to load the air-routes data
-    
     TinkerGraph tg = TinkerGraph.open() ;
+
+    // Create our graph traversal source
+    GraphTraversalSource g = tg.traversal();
     
     try
     {
-      tg.io(IoCore.graphml()).readGraph("air-routes.graphml");
+      g.io("air-routes.graphml").
+              read().with(IO.writer,IO.graphml).iterate();
     }
     catch( IOException e )
     {
       System.out.println("TinkerGraphTest - Air routes GraphML file not found");
       System.exit(0);
     }
-    
-    // Create our graph traversal source
-    
-    GraphTraversalSource g = tg.traversal();
     
     // Run a few simple tests
 
