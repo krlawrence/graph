@@ -24,6 +24,10 @@ with the Gremlin console, if you want to spread a query over multiple lines then
 will need to end each line with a backslash character or with a character such as a
 period or a comma that tells the Gremlin parser that there is more to come.
 
+TIP: TinkerPop offers a Gremlin formatting tool called Gremlint -
+https://tinkerpop.apache.org/gremlint/ - which will apply some basic spacing and
+indenting to make Gremlin more readable.
+
 The following example shows the query we already looked at in the Boolean operations
 section of this book but this time edited so that it could be copy and pasted
 directly into the Gremlin console.
