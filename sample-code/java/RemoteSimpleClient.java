@@ -27,44 +27,40 @@ import java.util.ArrayList;
 // Using a static import avoids needing to use the "__." prefix as in "__.out()"
 import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.*;
 import static org.apache.tinkerpop.gremlin.process.traversal.AnonymousTraversalSource.traversal;
+
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
 
-public class RemoteSimpleClient
-{
-  public static void runTests()
-  {
-    // Create the Cluster object. Note the use of the Serializers object
-    // as a shortcut way to ask for Graph Binary rather than having to 
-    // create an instance of the serializer ourselves.
-    Cluster.Builder builder = Cluster.build();
-    builder.addContactPoint("localhost");
-    builder.port(8182);
-    builder.serializer(Serializers.GRAPHBINARY_V1D0);
+public class RemoteSimpleClient {
+    public static void runTests() {
+        // Create the Cluster object. Note the use of the Serializers object
+        // as a shortcut way to ask for Graph Binary rather than having to
+        // create an instance of the serializer ourselves.
+        Cluster.Builder builder = Cluster.build();
+        builder.addContactPoint("localhost");
+        builder.port(8182);
+        builder.serializer(Serializers.GRAPHBINARY_V1D0);
 
-    Cluster cluster = builder.create();
+        Cluster cluster = builder.create();
 
-    GraphTraversalSource g =
-      traversal().withRemote(DriverRemoteConnection.using(cluster));
-    
-    List<List<Object>> inTexas = 
-      g.V().has("airport","region","US-TX").
-            local(values("code","city").
-            fold()).
-            toList();
+        GraphTraversalSource g =
+                traversal().withRemote(DriverRemoteConnection.using(cluster));
 
-    for ( List x : inTexas)
-    {
-      System.out.println(x);
-    }  
-    
-    cluster.close();
-  }
+        List<List<Object>> inTexas =
+                g.V().has("airport", "region", "US-TX").
+                      local(values("code", "city").fold()).
+                      toList();
+
+        for (List x : inTexas) {
+            System.out.println(x);
+        }
+
+        cluster.close();
+    }
 
 
-  public static void main( String[] args )
-  {
-    RemoteSimpleClient sc = new RemoteSimpleClient();
-    sc.runTests();
-  }
+    public static void main(String[] args) {
+        RemoteSimpleClient sc = new RemoteSimpleClient();
+        sc.runTests();
+    }
 }
 

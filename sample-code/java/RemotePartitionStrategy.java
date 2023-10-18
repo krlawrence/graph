@@ -16,61 +16,61 @@ import org.apache.tinkerpop.gremlin.driver.remote.DriverRemoteConnection;
 import org.apache.tinkerpop.gremlin.driver.ser.GryoMessageSerializerV1d0;
 import org.apache.tinkerpop.gremlin.driver.ser.GryoMessageSerializerV3d0;
 import org.apache.tinkerpop.gremlin.process.traversal.strategy.decoration.PartitionStrategy;
-import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.*;
+
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
 
-public class RemotePartitionStrategy
-{
-  public static void main( String[] args )
-  {
-    String host = "localhost";
-    Cluster.Builder builder = Cluster.build();
-    builder.addContactPoint(host);
-    builder.port(8182);
-    builder.serializer(new GryoMessageSerializerV3d0());
+import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.*;
+import static org.apache.tinkerpop.gremlin.process.traversal.AnonymousTraversalSource.traversal;
 
-    Cluster cluster = builder.create();
+public class RemotePartitionStrategy {
+    public static void main(String[] args) {
+        String host = "localhost";
+        Cluster.Builder builder = Cluster.build();
+        builder.addContactPoint(host);
+        builder.port(8182);
+        builder.serializer(new GryoMessageSerializerV3d0());
 
-    // Create a new traversal source object
-    GraphTraversalSource g =
-      EmptyGraph.instance().traversal().
-        withRemote(DriverRemoteConnection.using(cluster));
-    
-    // Make sure our connection is working.
-    System.out.println(g.V().count().next());
-    
-    PartitionStrategy strategyP1 = 
-      PartitionStrategy.build().
-        partitionKey("partition").
-        writePartition("p1").
-        readPartitions("p1").create();
+        Cluster cluster = builder.create();
 
-    // Test adding elements one by one
-    GraphTraversalSource g2 = g.withStrategies(strategyP1);
-    Object v1 = g2.addV("person").id().next();
-    Object v2 = g2.addV("person").id().next();
-    Object e1 = g2.addE("knows").from(V(v1)).to(V(v2)).id().next();
-    
-    // Test adding all the elements in one query.
-    g2.addV("person").as("a").addV("person").addE("knows").to("a").iterate();
+        // Create a new traversal source object
+        GraphTraversalSource g = traversal().
+                        withRemote(DriverRemoteConnection.using(cluster));
 
-    // Add a vertex without a partition key
-    g.addV("person").id().iterate();
+        // Make sure our connection is working.
+        System.out.println(g.V().count().next());
 
-    // Should be 4, not 5.
-    System.out.println(g.V().has("partition","p1").count().next());
+        PartitionStrategy strategyP1 =
+                PartitionStrategy.build().
+                        partitionKey("partition").
+                        writePartition("p1").
+                        readPartitions("p1").create();
 
-    // Inspect the elements we created.
-    List<Map<Object,Object>> verts = g2.V().hasLabel("person").valueMap(true).toList();
-    verts.forEach((m) -> System.out.println(m));
+        // Test adding elements one by one
+        GraphTraversalSource g2 = g.withStrategies(strategyP1);
+        Object v1 = g2.addV("person").id().next();
+        Object v2 = g2.addV("person").id().next();
+        Object e1 = g2.addE("knows").from(V(v1)).to(V(v2)).id().next();
 
-    List<Map<Object,Object>> edges = g2.E().hasLabel("knows").valueMap(true).toList();
-    edges.forEach((m) -> System.out.println(m));
+        // Test adding all the elements in one query.
+        g2.addV("person").as("a").addV("person").addE("knows").to("a").iterate();
 
-    // All done, close the connection.
-    cluster.close();
-  }
+        // Add a vertex without a partition key
+        g.addV("person").id().iterate();
+
+        // Should be 4, not 5.
+        System.out.println(g.V().has("partition", "p1").count().next());
+
+        // Inspect the elements we created.
+        List<Map<Object, Object>> verts = g2.V().hasLabel("person").valueMap(true).toList();
+        verts.forEach((m) -> System.out.println(m));
+
+        List<Map<Object, Object>> edges = g2.E().hasLabel("knows").valueMap(true).toList();
+        edges.forEach((m) -> System.out.println(m));
+
+        // All done, close the connection.
+        cluster.close();
+    }
 }
 

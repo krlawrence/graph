@@ -9,41 +9,40 @@
 
 import org.apache.tinkerpop.gremlin.driver.Cluster;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
+import org.apache.tinkerpop.gremlin.structure.util.empty.EmptyGraph;
 import org.apache.tinkerpop.gremlin.driver.remote.DriverRemoteConnection;
 import org.apache.tinkerpop.gremlin.driver.ser.GryoMessageSerializerV1d0;
+
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
 
 import static org.apache.tinkerpop.gremlin.process.traversal.AnonymousTraversalSource.traversal;
 
-public class RemoteClient
-{
-  public static void main( String[] args )
-  {
-    Cluster.Builder builder = Cluster.build();
-    builder.addContactPoint("localhost");
-    builder.port(8182);
-    builder.serializer(new GryoMessageSerializerV1d0());
+public class RemoteClient {
+    public static void main(String[] args) {
+        Cluster.Builder builder = Cluster.build();
+        builder.addContactPoint("localhost");
+        builder.port(8182);
+        builder.serializer(new GryoMessageSerializerV1d0());
 
-    Cluster cluster = builder.create();
+        Cluster cluster = builder.create();
 
-    GraphTraversalSource g = traversal().
-        withRemote(DriverRemoteConnection.using(cluster));
+        GraphTraversalSource g = traversal().
+                        withRemote(DriverRemoteConnection.using(cluster));
 
-    List <Map<Object,Object>> vmaps =
-      g.V().has("airport","region","GB-ENG").limit(10).valueMap().toList();
-    
-    System.out.println("\n\nThe following airports were found\n");
-    for (Map <Object,Object> m : vmaps)
-    {
-      ArrayList code = (ArrayList) m.get("code");
-      ArrayList desc = (ArrayList) m.get("desc");
-      System.out.println(code.get(0) + " , " + desc.get(0));
+        List<Map<Object, Object>> vmaps =
+                g.V().has("airport", "region", "GB-ENG").limit(10).valueMap().toList();
+
+        System.out.println("\n\nThe following airports were found\n");
+        for (Map<Object, Object> m : vmaps) {
+            ArrayList code = (ArrayList) m.get("code");
+            ArrayList desc = (ArrayList) m.get("desc");
+            System.out.println(code.get(0) + " , " + desc.get(0));
+        }
+
+        cluster.close();
     }
-
-    cluster.close();
-  }
 }
 
 // The output should look something like this

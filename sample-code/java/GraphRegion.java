@@ -20,6 +20,7 @@ import org.apache.tinkerpop.gremlin.structure.io.IoCore;
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.*;
 import org.apache.tinkerpop.gremlin.structure.T;
 import org.apache.tinkerpop.gremlin.util.Gremlin;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
@@ -27,63 +28,54 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
 
-public class GraphRegion 
-{
-  private TinkerGraph tg;
-  private GraphTraversalSource g;
+public class GraphRegion {
+    private TinkerGraph graph;
+    private GraphTraversalSource g;
 
-  // Try to create a new graph and load the specified GraphML file
-  public boolean loadGraph(String name)
-  {
-    tg = TinkerGraph.open() ;
-    
-    try
-    {
-      tg.io(IoCore.graphml()).readGraph(name);
+    public static void main(String[] args) {
+        // If you want to check your Gremlin version, uncomment the next line
+        //System.out.println("Gremlin version is: " + Gremlin.version());
+
+        GraphRegion gr = new GraphRegion();
+
+        if (gr.loadGraph("air-routes.graphml")) {
+            gr.findByRegion("NCE");  // Nice
+            gr.findByRegion("DEN");  // Denver
+            gr.findByRegion("GVA");  // Geneva
+            gr.findByRegion("NGS");  // Nagasaki
+            gr.findByRegion("CAN");  // Guangzhou
+        }
     }
-    catch( IOException e )
-    {
-      System.out.println("GraphStats - GraphML file not found");
-      return false;
+
+    // Try to create a new graph and load the specified GraphML file
+    public boolean loadGraph(String name) {
+        graph = TinkerGraph.open();
+        g = graph.traversal();
+
+        try {
+            g.io(name).read().with(IO.reader,IO.graphml).iterate();
+        } catch (IOException e) {
+            System.out.println("GraphStats - GraphML file not found");
+            return false;
+        }
+        return true;
     }
-    g = tg.traversal();
-    return true;
-  } 
 
-  // Find all airports in the region of the specified airport
-  //
-  // Note that when used from Java we have to prefix eq with a "P."
-  // Also select has to be prefixed by "__."
-  public void findByRegion(String iata)
-  {
-    System.out.println("\nRegion code lookup for " + iata );
+    // Find all airports in the region of the specified airport
+    //
+    // Note that when used from Java we have to prefix eq with a "P."
+    // Also select has to be prefixed by "__."
+    public void findByRegion(String iata) {
+        System.out.println("\nRegion code lookup for " + iata);
 
-    List<List<Object>> list =  
-    g.V().has("code",iata).values("region").as("r").
-      V().hasLabel("airport").as("a").values("region").
-      where(P.eq("r")).by().
-      local(__.select("a").values("city","code","region").fold()).toList();               
-    
-    for(List t : list)
-    {
-      System.out.println(t);
+        List<List<Object>> list =
+                g.V().has("code", iata).values("region").as("r").
+                      V().hasLabel("airport").as("a").values("region").
+                      where(P.eq("r")).by().
+                      local(__.select("a").values("city", "code", "region").fold()).toList();
+
+        for (List t : list) {
+            System.out.println(t);
+        }
     }
-  }
-
-  public static void main(String[] args) 
-  {
-    // If you want to check your Gremlin version, uncomment the next line
-    //System.out.println("Gremlin version is: " + Gremlin.version());
-
-    GraphRegion gr = new GraphRegion() ;
-
-    if (gr.loadGraph("air-routes.graphml"))
-    {
-      gr.findByRegion("NCE");  // Nice
-      gr.findByRegion("DEN");  // Denver
-      gr.findByRegion("GVA");  // Geneva
-      gr.findByRegion("NGS");  // Nagasaki
-      gr.findByRegion("CAN");  // Guangzhou
-    }
-  }      
 }

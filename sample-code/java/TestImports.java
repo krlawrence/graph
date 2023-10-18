@@ -20,161 +20,154 @@ import org.apache.tinkerpop.gremlin.structure.Column;
 import org.apache.tinkerpop.gremlin.structure.io.IoCore;
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.*;
 import org.apache.tinkerpop.gremlin.structure.T;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
-public class TestImports
-{
-  private TinkerGraph tg;
-  private GraphTraversalSource g;
+public class TestImports {
+    private TinkerGraph graph;
+    private GraphTraversalSource g;
 
-  // Try to create a new graph and load the specified GraphML file
-  public boolean loadGraph(String name)
-  {
-    tg = TinkerGraph.open() ;
-    
-    try
-    {
-      tg.io(IoCore.graphml()).readGraph(name);
+    public static void main(String[] args) {
+        // If you want to check your Gremlin version, uncomment the next line
+        //System.out.println("Gremlin version is: " + Gremlin.version());
+
+        TestImports tim = new TestImports();
+        boolean loaded = tim.loadGraph("air-routes.graphml");
+
+        if (loaded) {
+            tim.runTests();
+        }
     }
-    catch( IOException e )
-    {
-      System.out.println("GraphStats - GraphML file not found");
-      return false;
+
+    // Help make the output easier to read
+
+    // Try to create a new graph and load the specified GraphML file
+    public boolean loadGraph(String name) {
+        graph = TinkerGraph.open();
+        g = graph.traversal();
+
+        try {
+            g.io(name).read().with(IO.reader,IO.graphml).iterate();
+        } catch (IOException e) {
+            System.out.println("GraphStats - GraphML file not found");
+            return false;
+        }
+        return true;
     }
-    g = tg.traversal();
-    return true;
-  }
-  
-  // Help make the output easier to read
 
-  private void showHeader(String str)
-  {
-    String tmp = "***** " +str + " *****" ;
-    String tmp2 = "" ;
+    private void showHeader(String str) {
+        String tmp = "***** " + str + " *****";
+        String tmp2 = "";
 
-    for (int i=0; i<tmp.length();i++) {tmp2 += "*";}
-    System.out.println(tmp2);
-    System.out.println(tmp);
-    System.out.println(tmp2+"\n");
-  }
+        for (int i = 0; i < tmp.length(); i++) {
+            tmp2 += "*";
+        }
+        System.out.println(tmp2);
+        System.out.println(tmp);
+        System.out.println(tmp2 + "\n");
+    }
 
-  // Demonstrate how to use common Gremlin constructs from Java
-  public void runTests()
-  {
-    // ---------------------------------------------------
-    // Examples of using local scope and order with a list
-    // ---------------------------------------------------
-    List results;
+    // Demonstrate how to use common Gremlin constructs from Java
+    public void runTests() {
+        // ---------------------------------------------------
+        // Examples of using local scope and order with a list
+        // ---------------------------------------------------
+        List results;
 
-    showHeader("Scope local order");
+        showHeader("Scope local order");
 
-    results = g.V().has("region","US-TX").values("code").fold().
+        results = g.V().has("region", "US-TX").values("code").fold().
                     order(Scope.local).toList();
 
-    System.out.println(results + "\n");
+        System.out.println(results + "\n");
 
-    showHeader("Scope.local Order.decr");
-    results = g.V().has("region","US-TX").values("code").fold().
+        showHeader("Scope.local Order.decr");
+        results = g.V().has("region", "US-TX").values("code").fold().
                     order(Scope.local).by(Order.desc).toList();
 
-    System.out.println(results + "\n");
+        System.out.println(results + "\n");
 
 
-    // -------------------------
-    // More examples of ordering
-    // -------------------------
-    
-    showHeader("Order.shuffle");
+        // -------------------------
+        // More examples of ordering
+        // -------------------------
 
-    for (int i=0; i<3; i++)
-    {
-      results = g.V().has("region","US-TX").values("code").
-                      order().by(Order.shuffle).toList();
+        showHeader("Order.shuffle");
 
-      System.out.println(results + "\n");
-    }
+        for (int i = 0; i < 3; i++) {
+            results = g.V().has("region", "US-TX").values("code").
+                        order().by(Order.shuffle).toList();
 
-    showHeader("Order.decr");
+            System.out.println(results + "\n");
+        }
 
-    results = g.V().has("region","US-TX").values("code").
+        showHeader("Order.decr");
+
+        results = g.V().has("region", "US-TX").values("code").
                     order().by(Order.desc).toList();
 
-    System.out.println(results + "\n");
+        System.out.println(results + "\n");
 
-    showHeader("Order.incr runways at Texas airports");
+        showHeader("Order.incr runways at Texas airports");
 
-    results = g.V().has("region","US-TX").values("runways").
+        results = g.V().has("region", "US-TX").values("runways").
                     order().by(Order.asc).toList();
 
-    System.out.println(results+"\n");
+        System.out.println(results + "\n");
 
-    // ----------------------------
-    // Examples of using predicates
-    // ----------------------------
+        // ----------------------------
+        // Examples of using predicates
+        // ----------------------------
 
-    
-    showHeader("Predicates Texas cities neq('Dallas')");
 
-    results = g.V().has("region","US-TX").has("city", P.neq("Dallas")).
+        showHeader("Predicates Texas cities neq('Dallas')");
+
+        results = g.V().has("region", "US-TX").has("city", P.neq("Dallas")).
                     values("city").dedup().fold().toList();
 
-    System.out.println(results + "\n");
+        System.out.println(results + "\n");
 
-    showHeader("Predicates Texas cities without('Dallas','Houston','Austin')");
-    
-    results = g.V().has("region","US-TX").
-                    has("city",P.without("Dallas","Houston","Austin")).
+        showHeader("Predicates Texas cities without('Dallas','Houston','Austin')");
+
+        results = g.V().has("region", "US-TX").
+                    has("city", P.without("Dallas", "Houston", "Austin")).
                     values("city").dedup().fold().toList();
 
-    System.out.println(results + "\n");
+        System.out.println(results + "\n");
 
 
-    // --------------------------------------------------
-    // Selecting keys and values from maps and properties
-    // --------------------------------------------------
+        // --------------------------------------------------
+        // Selecting keys and values from maps and properties
+        // --------------------------------------------------
 
-    showHeader("Column.keys Austin vertex");
-    
-    results = g.V().has("airport","code","AUS").valueMap().select(Column.keys).toList();
-    System.out.println(results + "\n");
+        showHeader("Column.keys Austin vertex");
 
-    showHeader("Column.values Austin vertex");
+        results = g.V().has("airport", "code", "AUS").valueMap().select(Column.keys).toList();
+        System.out.println(results + "\n");
 
-    results = g.V().has("airport","code","AUS").valueMap().select(Column.values).toList();
-    System.out.println(results + "\n");
+        showHeader("Column.values Austin vertex");
 
-    List<?> props =  
-        g.V().has("code","SFO").properties().order().by(T.key).toList();
+        results = g.V().has("airport", "code", "AUS").valueMap().select(Column.values).toList();
+        System.out.println(results + "\n");
 
-    showHeader("Order properties by(T.key)");
-    props.forEach((p) -> System.out.println(p));
-    System.out.println();
+        List<?> props =
+                g.V().has("code", "SFO").properties().order().by(T.key).toList();
 
-    // --------------------
-    // Working with labels.
-    // --------------------
-    
-    showHeader("groupCount().by(T.label)");
+        showHeader("Order properties by(T.key)");
+        props.forEach((p) -> System.out.println(p));
+        System.out.println();
 
-    results = g.V().groupCount().by(T.label).toList();
-    System.out.println(results + "\n");
-  }
+        // --------------------
+        // Working with labels.
+        // --------------------
 
-  public static void main(String[] args) 
-  {
-    // If you want to check your Gremlin version, uncomment the next line
-    //System.out.println("Gremlin version is: " + Gremlin.version());
+        showHeader("groupCount().by(T.label)");
 
-    TestImports tim = new TestImports();
-    boolean loaded = tim.loadGraph("air-routes.graphml");
-
-    if (loaded)
-    {
-      tim.runTests();
+        results = g.V().groupCount().by(T.label).toList();
+        System.out.println(results + "\n");
     }
-  }      
 }

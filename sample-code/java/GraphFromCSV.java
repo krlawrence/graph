@@ -1,4 +1,3 @@
-
 // GraphFromCSV.java
 //
 // Simple example of using TinkerGraph with Java
@@ -29,6 +28,7 @@ import org.apache.tinkerpop.gremlin.structure.io.IoCore;
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.*;
 import org.apache.tinkerpop.gremlin.structure.T;
 import org.apache.tinkerpop.gremlin.util.Gremlin;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
@@ -36,101 +36,88 @@ import java.util.Map;
 import java.util.Set;
 import java.io.*;
 
-public class GraphFromCSV
-{
- 
-  private TinkerGraph tg;
-  private GraphTraversalSource g;
+public class GraphFromCSV {
 
-  // Try to create a new empty graph instance
-  public boolean createGraph()
-  {
-    tg = TinkerGraph.open() ;
-    g = tg.traversal();
-    
-    if (tg == null || g==null)
-    {
-      return false;
+    private TinkerGraph graph;
+    private GraphTraversalSource g;
+
+    public static void main(String[] args) {
+        GraphFromCSV gcsv = new GraphFromCSV();
+
+        if (gcsv.createGraph()) {
+            try {
+                String line;
+                String[] values;
+
+                FileReader fileReader = new FileReader("edges.csv");
+
+                BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    //System.out.println(line);
+                    values = line.split(",");
+                    gcsv.addElements(values[0], values[1], values[2]);
+                }
+
+                gcsv.displayGraph();
+                bufferedReader.close();
+            } catch (Exception e) {
+                System.out.println("Unable to open file" + e.toString());
+                //e.printStackTrace();
+            }
+        }
     }
-    return true;
-  }
 
-  // Add the specified vertices and edge. Do not add anything that 
-  // already exists.
-  public boolean addElements(String name1, String label, String name2)
-  {
-    if (tg == null || g==null)
-    {
-      return false;
+    // Try to create a new empty graph instance
+    public boolean createGraph() {
+        graph = TinkerGraph.open();
+        g = graph.traversal();
+
+        if (graph == null || g == null) {
+            return false;
+        }
+        return true;
     }
 
-    // Create a node for 'name1' unless it exists already
-    Vertex v1 = 
-      g.V().has("name",name1).fold().
-            coalesce(__.unfold(),__.addV().property("name",name1)).next();
-
-    // Create a node for 'name2' unless it exists already
-    Vertex v2 = 
-      g.V().has("name",name2).fold().
-            coalesce(__.unfold(),__.addV().property("name",name2)).next();
-
-    // Create an edge between 'name1' and 'name2' unless it exists already
-    g.V().has("name",name1).out(label).has("name",name2).fold().
-          coalesce(__.unfold(),
-                   __.addE(label).from(__.V(v1)).to(__.V(v2))).iterate();
-
-    return true;
-  }
-
-  public void displayGraph()
-  {
-    Long c;
-    c = g.V().count().next();
-    System.out.println("Graph contains " + c + " vertices");
-    c = g.E().count().next();
-    System.out.println("Graph contains " + c + " edges");
-
-    List<Path> edges = g.V().outE().inV().path().by("name").by().toList();
-
-    for (Path p : edges)
-    {
-      System.out.println(p);
-    }
-  }
-
-
-  // Open the sample csv file and build a graph based on its contents
-
-  public static void main(String[] args) 
-  {
-    GraphFromCSV gcsv = new GraphFromCSV();
-    
-    if (gcsv.createGraph())
-    {
-      try 
-      {
-        String line;
-        String [] values;
-
-        FileReader fileReader = new FileReader("edges.csv");
-
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
-
-        while((line = bufferedReader.readLine()) != null) 
-        {
-          //System.out.println(line);
-          values = line.split(",");
-          gcsv.addElements(values[0],values[1],values[2]);
+    // Add the specified vertices and edge. Do not add anything that
+    // already exists.
+    public boolean addElements(String name1, String label, String name2) {
+        if (graph == null || g == null) {
+            return false;
         }
 
-        gcsv.displayGraph();
-        bufferedReader.close();         
-      }
-      catch( Exception e ) 
-      {
-        System.out.println("Unable to open file" + e.toString());
-        //e.printStackTrace();
-      }
-    }  
-  }      
+        // Create a node for 'name1' unless it exists already
+        Vertex v1 =
+                g.V().has("name", name1).fold().
+                      coalesce(__.unfold(), __.addV().property("name", name1)).next();
+
+        // Create a node for 'name2' unless it exists already
+        Vertex v2 =
+                g.V().has("name", name2).fold().
+                      coalesce(__.unfold(), __.addV().property("name", name2)).next();
+
+        // Create an edge between 'name1' and 'name2' unless it exists already
+        g.V().has("name", name1).out(label).has("name", name2).fold().
+              coalesce(__.unfold(),
+                       __.addE(label).from(__.V(v1)).to(__.V(v2))).iterate();
+
+        return true;
+    }
+
+
+    // Open the sample csv file and build a graph based on its contents
+
+    public void displayGraph() {
+        Long c;
+        c = g.V().count().next();
+        System.out.println("Graph contains " + c + " vertices");
+        c = g.E().count().next();
+        System.out.println("Graph contains " + c + " edges");
+
+        List<Path> edges = g.V().outE().inV().path().by("name").by().toList();
+
+        for (Path p : edges) {
+            System.out.println(p);
+        }
+    }
 }

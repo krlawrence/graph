@@ -16,39 +16,39 @@ import org.apache.tinkerpop.gremlin.process.traversal.step.util.event.MutationLi
 import org.apache.tinkerpop.gremlin.process.traversal.strategy.decoration.SubgraphStrategy;
 import org.apache.tinkerpop.gremlin.process.traversal.strategy.decoration.EventStrategy;
 import org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ReadOnlyStrategy;
-import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.*;
+
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
 
-public class RemoteSubgraphStrategy
-{
-  public static void main( String[] args )
-  {
-    Cluster.Builder builder = Cluster.build();
-    builder.addContactPoint("localhost");
-    builder.port(8182);
-    builder.serializer(new GryoMessageSerializerV1d0());
+import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.*;
+import static org.apache.tinkerpop.gremlin.process.traversal.AnonymousTraversalSource.traversal;
 
-    Cluster cluster = builder.create();
+public class RemoteSubgraphStrategy {
+    public static void main(String[] args) {
+        Cluster.Builder builder = Cluster.build();
+        builder.addContactPoint("localhost");
+        builder.port(8182);
+        builder.serializer(new GryoMessageSerializerV1d0());
 
-    GraphTraversalSource g =
-      EmptyGraph.instance().traversal().
-        withRemote(DriverRemoteConnection.using(cluster));
-   
-   // Create a new traversal source object
-    GraphTraversalSource g2;
+        Cluster cluster = builder.create();
 
-    // Create a strategy that filters out anything without
-    // a region code of 'US-TX'
-    g2 = g.withStrategies(
-             SubgraphStrategy.build().
-               vertices(has("region","US-TX")).create());
-    
-    // How many airports are there in Texas?
-    System.out.println(g2.V().count().next());
-   
-   cluster.close();
-  }
+        GraphTraversalSource g = traversal().
+                        withRemote(DriverRemoteConnection.using(cluster));
+
+        // Create a new traversal source object
+        GraphTraversalSource g2;
+
+        // Create a strategy that filters out anything without
+        // a region code of 'US-TX'
+        g2 = g.withStrategies(
+                SubgraphStrategy.build().
+                        vertices(has("region", "US-TX")).create());
+
+        // How many airports are there in Texas?
+        System.out.println(g2.V().count().next());
+
+        cluster.close();
+    }
 }
 

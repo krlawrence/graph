@@ -13,10 +13,11 @@
 // commonly needed set when creating a TinkerPop application.
 
 // Common TinkerPop imports, all may not be needed.
+
 import org.apache.tinkerpop.gremlin.driver.Cluster;
 import org.apache.tinkerpop.gremlin.driver.Client;
-import org.apache.tinkerpop.gremlin.driver.Result;  
-import org.apache.tinkerpop.gremlin.driver.ResultSet;  
+import org.apache.tinkerpop.gremlin.driver.Result;
+import org.apache.tinkerpop.gremlin.driver.ResultSet;
 import org.apache.tinkerpop.gremlin.driver.remote.DriverRemoteConnection;
 import org.apache.tinkerpop.gremlin.driver.ser.Serializers;
 import org.apache.tinkerpop.gremlin.process.traversal.*;
@@ -38,6 +39,7 @@ import org.apache.tinkerpop.gremlin.process.traversal.Bytecode;
 // Using a static import avoids needing to use the "__." prefix as in "__.out()"
 import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.*;
 import static org.apache.tinkerpop.gremlin.process.traversal.AnonymousTraversalSource.traversal;
+
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
 
 // Java classes commonly used in TinkerPop focussed code.
@@ -50,152 +52,127 @@ import java.io.ByteArrayOutputStream;
 /*
  * Simple class that  allows experimentation with submitting Gremlin queries
  * over a web socket connection but as text strings rather than bytecode.
- * 
+ *
  * @author Kelvin R. Lawrence
  */
-public class RemoteSubmitQuery
-{
-  private Cluster cluster;
-  private Client client;
-  
-  String [] queries = 
-  {
-    "g.V().count()",
-    "g.V('3')",
-    "g.V('1','2','3','4').values('city')",
-    "g.V().groupCount().by(label)",
-    "g.V().has('code',within('AUS','SEA','BOS','JFK','LHR')).valueMap()",
-    "g.V().has('code',within('AUS','SEA','BOS','JFK','LHR')).elementMap()",
-    "g.V().hasLabel('airport').sample(30).group().by('country').by('city')",
-    "g.V().has('code','SAF').out()",
-    "g.V().has('code','SAF').out().tree()",
-    "g.V().has('code','SAF').out().path().by('code')",
-    "g.V().hasLabel('airport').limit(20).valueMap()",
-    "g.V().has('code',within('DFW','DXB','AKL','FRA'))." + 
-       "repeat(outE().subgraph('sg').inV()).times(2).cap('sg')",
-    "g.V().outE().subgraph('sg').inV().cap('sg')"
-  };
+public class RemoteSubmitQuery {
+    String[] queries =
+            {
+                    "g.V().count()",
+                    "g.V('3')",
+                    "g.V('1','2','3','4').values('city')",
+                    "g.V().groupCount().by(label)",
+                    "g.V().has('code',within('AUS','SEA','BOS','JFK','LHR')).valueMap()",
+                    "g.V().has('code',within('AUS','SEA','BOS','JFK','LHR')).elementMap()",
+                    "g.V().hasLabel('airport').sample(30).group().by('country').by('city')",
+                    "g.V().has('code','SAF').out()",
+                    "g.V().has('code','SAF').out().tree()",
+                    "g.V().has('code','SAF').out().path().by('code')",
+                    "g.V().hasLabel('airport').limit(20).valueMap()",
+                    "g.V().has('code',within('DFW','DXB','AKL','FRA'))." +
+                            "repeat(outE().subgraph('sg').inV()).times(2).cap('sg')",
+                    "g.V().outE().subgraph('sg').inV().cap('sg')"
+            };
+    private Cluster cluster;
+    private Client client;
 
-  /*
-   * Return the number of queries available
-   */
-   public int numQueries()
-   {
-     return queries.length; 
-   }
-  
-  /*
-   * List the queries available with their index numbers
-   */
-  public void listQueries()
-  {
-    int n = 0;
-    System.out.println("\n");
-    for (String q : queries)
-    {
-      System.out.printf("%3d : %s\n",n,q);
-      n += 1;
-    }
-  }
+    /*
+     * Start testing.
+     */
+    public static void main(String[] args) {
+        int queryId = -1;
+        boolean valid = true;
 
-  /*
-   * Kick off the tests that need to run
-   */
-  public void runTests(int queryToRun)
-  {
-    Client c = createClient();
+        RemoteSubmitQuery rsq = new RemoteSubmitQuery();
+        int available = rsq.numQueries();
 
-    String query = queries[queryToRun];
-    System.out.println("\n========\n" + query + "\n========\n");
-
-    try
-    {
-      List<Result> results  = client.submit(query).all().get();
-      for (Result res : results) 
-      {  
-        System.out.println(res);
-      }
-    }
-    catch (Exception e)
-    {
-      System.out.println("Exception while submitting the query:\n" + query + "\n" + e);
-    }
-    closeConnection();
-  }
-
-  /*
-   * Create a connection to the server and return a Client object.
-   */
-  public Client createClient()
-  {
-    Cluster.Builder builder = Cluster.build();
-
-    // Replace the hostname with the name of the server you are connecting to.
-    builder.addContactPoint("localhost");
-    builder.port(8182);
-    builder.enableSsl(true);
-    builder.serializer(Serializers.GRAPHBINARY_V1D0);
-    builder.maxContentLength(10 * 1024 * 1024);
-    this.cluster = builder.create();
-    this.client = cluster.connect();
-    return(this.client);
-  }
-
-  /*
-   * Close the connection.
-   */
-  public void closeConnection()
-  {
-    System.out.println("Connection closing");
-    try {
-      this.client.close();
-      this.cluster.closeAsync();
-    } 
-    catch (Exception e)
-    {
-      System.out.println("Exception while closing the connection:" + e);
-    }
-  }
-
-  /*
-   * Start testing.
-   */
-  public static void main(String[] args)
-  {
-    int queryId = -1;
-    boolean valid = true;
-
-    RemoteSubmitQuery rsq = new RemoteSubmitQuery();
-    int available = rsq.numQueries();
-    
-    if (args.length > 0)
-    {
-      if ("-?".equals(args[0]))
-      {
-        rsq.listQueries();
-        System.exit(0);
-      }
-      else
-      {
-        try
-        {
-          queryId = Integer.parseInt(args[0]);
+        if (args.length > 0) {
+            if ("-?".equals(args[0])) {
+                rsq.listQueries();
+                System.exit(0);
+            } else {
+                try {
+                    queryId = Integer.parseInt(args[0]);
+                } catch (NumberFormatException nfe) {
+                    valid = false;
+                }
+            }
         }
-        catch(NumberFormatException nfe)
-        {               
-          valid = false;
+        if (valid && queryId >= 0 && queryId < available) {
+            rsq.runTests(queryId);
+        } else {
+            System.out.println("Please enter a number between 0 and " + (available - 1) +
+                    " or enter '-?' to see a list of available queries");
+            System.exit(0);
         }
-      }
     }
-    if (valid && queryId >= 0 && queryId < available)
-    {
-      rsq.runTests(queryId);
+
+    /*
+     * Return the number of queries available
+     */
+    public int numQueries() {
+        return queries.length;
     }
-    else
-    {
-      System.out.println("Please enter a number between 0 and " + (available - 1) + 
-                             " or enter '-?' to see a list of available queries");
-      System.exit(0);
+
+    /*
+     * List the queries available with their index numbers
+     */
+    public void listQueries() {
+        int n = 0;
+        System.out.println("\n");
+        for (String q : queries) {
+            System.out.printf("%3d : %s\n", n, q);
+            n += 1;
+        }
     }
-  }
+
+    /*
+     * Kick off the tests that need to run
+     */
+    public void runTests(int queryToRun) {
+        Client c = createClient();
+
+        String query = queries[queryToRun];
+        System.out.println("\n========\n" + query + "\n========\n");
+
+        try {
+            List<Result> results = client.submit(query).all().get();
+            for (Result res : results) {
+                System.out.println(res);
+            }
+        } catch (Exception e) {
+            System.out.println("Exception while submitting the query:\n" + query + "\n" + e);
+        }
+        closeConnection();
+    }
+
+    /*
+     * Create a connection to the server and return a Client object.
+     */
+    public Client createClient() {
+        Cluster.Builder builder = Cluster.build();
+
+        // Replace the hostname with the name of the server you are connecting to.
+        builder.addContactPoint("localhost");
+        builder.port(8182);
+        builder.enableSsl(true);
+        builder.serializer(Serializers.GRAPHBINARY_V1D0);
+        builder.maxContentLength(10 * 1024 * 1024);
+        this.cluster = builder.create();
+        this.client = cluster.connect();
+        return (this.client);
+    }
+
+    /*
+     * Close the connection.
+     */
+    public void closeConnection() {
+        System.out.println("Connection closing");
+        try {
+            this.client.close();
+            this.cluster.closeAsync();
+        } catch (Exception e) {
+            System.out.println("Exception while closing the connection:" + e);
+        }
+    }
 }
