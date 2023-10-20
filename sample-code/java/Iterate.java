@@ -17,7 +17,6 @@ import org.apache.tinkerpop.gremlin.process.traversal.Path;
 import org.apache.tinkerpop.gremlin.process.traversal.*;
 import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
-import org.apache.tinkerpop.gremlin.structure.io.IoCore;
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.*;
 import org.apache.tinkerpop.gremlin.structure.T;
 
@@ -37,7 +36,7 @@ public class Iterate {
         System.out.println("\nOpening air-routes.graphml...\n");
 
         try {
-            g.io("air-routes.graphml").read().with(IO.reader,IO.graphml).iterate();
+            g.io("air-routes.graphml").read().iterate();
         } catch (IOException e) {
             System.out.println("GraphStats - Air routes GraphML file not found");
             System.exit(1);

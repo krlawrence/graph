@@ -662,7 +662,7 @@ conf.setProperty("gremlin.tinkergraph.vertexIdManager","LONG")
 conf.setProperty("gremlin.tinkergraph.edgeIdManager","LONG")
 conf.setProperty("gremlin.tinkergraph.vertexPropertyIdManager","LONG");[]
 g = TinkerGraph.open(conf).traversal()
-g.io("/mydata/air-routes.graphml").with(IO.reader,IO.graphml).read().iterate()
+g.io("/mydata/air-routes.graphml").read().iterate()
 :set max-iteration 1000
 ----
 

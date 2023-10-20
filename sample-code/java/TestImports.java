@@ -17,7 +17,6 @@ import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.apache.tinkerpop.gremlin.structure.Property;
 import org.apache.tinkerpop.gremlin.structure.Column;
-import org.apache.tinkerpop.gremlin.structure.io.IoCore;
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.*;
 import org.apache.tinkerpop.gremlin.structure.T;
 
@@ -51,7 +50,7 @@ public class TestImports {
         g = graph.traversal();
 
         try {
-            g.io(name).read().with(IO.reader,IO.graphml).iterate();
+            g.io(name).read().iterate();
         } catch (IOException e) {
             System.out.println("GraphStats - GraphML file not found");
             return false;

@@ -13,7 +13,6 @@
 
 import org.apache.tinkerpop.gremlin.process.traversal.*
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
-import org.apache.tinkerpop.gremlin.structure.io.IoCore
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.*
 
 import java.io.IOException
@@ -25,15 +24,14 @@ class Routes {
     // Try to create a new graph and load the specified GraphML file
     def loadGraph(name) {
         tg = TinkerGraph.open()
+        g = tg.traversal()
 
         try {
-            tg.io(IoCore.graphml()).readGraph(name)
-        }
-        catch (IOException e) {
+            g.io(name).read().iterate()
+        } catch (IOException e) {
             println("GraphStats - GraphML file not found")
             return false
         }
-        g = tg.traversal()
         return true
     }
 
@@ -42,14 +40,15 @@ class Routes {
     //
     // Note the use of the prefixes Operator and Order)
     def shortestRouteOneStop(from, to) {
-        def list =
-                g.withSack(0).V().has('code', from).
-                        outE().sack(Operator.sum).by('dist').
-                        inV().outE().sack(Operator.sum).by('dist').
-                        inV().has('code', to).sack().
-                        order().by(Order.asc).limit(10).
-                        path().by('code').by('dist').by('code').by('dist').by('code').by().
-                        toList()
+        def list = g.withSack(0).
+                     V().has('code', from).
+                     outE().sack(Operator.sum).by('dist').
+                     inV().outE().sack(Operator.sum).by('dist').
+                     inV().has('code', to).sack().
+                     order().by(Order.asc).limit(10).
+                     path().
+                       by('code').by('dist').by('code').by('dist').by('code').by().
+                     toList()
 
         list.each {
             printf("%3s %4d %3s %4d %3s %4d\n",

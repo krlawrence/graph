@@ -5016,7 +5016,7 @@ Gremlin has an `io()` step which provides a way to write a graph to file:
 
 [source,groovy]
 ----
-// Using the .xml file extension will save the graph as GraphML
+// Using the .xml (or .graphml) file extension will save the graph as GraphML
 g.io('my-graph.xml').write()
 ----
 

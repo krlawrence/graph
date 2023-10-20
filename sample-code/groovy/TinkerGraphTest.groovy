@@ -29,10 +29,8 @@ def g = graph.traversal()
 println "Loading the air-routes graph...\n"
 
 try {
-    g.io("air-routes.graphml").
-            read().with(IO.writer, IO.graphml).iterate()
-}
-catch (IOException e) {
+    g.io("air-routes.graphml").read().iterate()
+} catch (IOException e) {
     println "Could not load the graph file"
     System.exit(1)
 }
@@ -61,8 +59,8 @@ println fromDfw
 
 // Where in the USA can I fly to from LHR?
 def lhrToUsa = g.V().has("code", "LHR").outE().inV().
-        has("country", "US").limit(10).
-        path().by("code").by("dist").toList()
+                     has("country", "US").limit(10).
+                     path().by("code").by("dist").toList()
 
 println "\nFrom LHR to airports in the USA (only 10 shown)\n"
 //println lhrToUsa
@@ -87,7 +85,7 @@ v.values().each { println it }
 // call to the out() step.
 
 def eng = g.V().has("code", "AUS").repeat(__.out()).emit().times(2).
-        has("region", "GB-ENG").dedup().values("code").toList()
+                has("region", "GB-ENG").dedup().values("code").toList()
 
 println "\nAirports in England reachable with no more than one stop from AUS"
 println "\n${eng}\n"  

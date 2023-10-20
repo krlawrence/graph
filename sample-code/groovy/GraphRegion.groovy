@@ -14,7 +14,6 @@
 import org.apache.tinkerpop.gremlin.process.traversal.*
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
-import org.apache.tinkerpop.gremlin.structure.io.IoCore
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.*
 import org.apache.tinkerpop.gremlin.util.Gremlin
 
@@ -27,15 +26,14 @@ class RegionTest {
     // Try to create a new graph and load the specified GraphML file
     def loadGraph(name) {
         tg = TinkerGraph.open()
+        g = tg.traversal()
 
         try {
-            tg.io(IoCore.graphml()).readGraph(name)
-        }
-        catch (IOException e) {
+            g.io(name).read().iterate()
+        } catch (IOException e) {
             println("GraphStats - GraphML file not found")
             return false
         }
-        g = tg.traversal()
         return true
     }
 
@@ -48,9 +46,9 @@ class RegionTest {
 
         def list =
                 g.V().has("code", iata).values("region").as("r").
-                        V().hasLabel("airport").as("a").values("region").
-                        where(P.eq("r")).by().
-                        local(__.select("a").values("city", "code", "region").fold()).toList()
+                  V().hasLabel("airport").as("a").values("region").
+                  where(P.eq("r")).by().
+                  local(__.select("a").values("city", "code", "region").fold()).toList()
 
         list.each { println it }
     }

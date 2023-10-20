@@ -16,7 +16,6 @@ import org.apache.tinkerpop.gremlin.process.traversal.Path;
 import org.apache.tinkerpop.gremlin.process.traversal.*;
 import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
-import org.apache.tinkerpop.gremlin.structure.io.IoCore;
 import org.apache.tinkerpop.gremlin.structure.T;
 import org.apache.tinkerpop.gremlin.structure.Column;
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.*;
@@ -53,7 +52,7 @@ public class StdDev {
         System.out.println(t1);
 
         try {
-            g.io(name).read().with(IO.reader,IO.graphml).iterate();
+            g.io(name).read().iterate();
         } catch (IOException e) {
             System.out.println("ERROR - GraphML file not found or invalid.");
             return false;
