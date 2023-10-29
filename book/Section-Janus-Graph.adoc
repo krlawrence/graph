@@ -718,33 +718,53 @@ types and cardinality settings.
 ----
 // Look at the properties
 mgmt = graph.openManagement()
-types = mgmt.getRelationTypes(PropertyKey.class)
-types.each{println "$it\t: " +
-                    mgmt.getPropertyKey("$it").dataType() +
-                    " " + mgmt.getPropertyKey("$it").cardinality()}
-
+mgmt.printSchema()
 mgmt.commit()
 ----
 
 
 This is the output we should get back if our schema creation has succeeded. Note that
-both the edge and vertex property keys are displayed.
+both the edge and vertex property keys are displayed. You can see Graph Index (Vertex), Graph Index (Edge), and Relation Index (VCI) sections are empty, because
+we haven't defined any index yet.
 
 [source,groovy]
 ----
-lat     : class java.lang.Double SINGLE
-lon     : class java.lang.Double SINGLE
-dist    : class java.lang.Integer SINGLE
-longest : class java.lang.Object SINGLE
-code    : class java.lang.String SINGLE
-icao    : class java.lang.String SINGLE
-type    : class java.lang.String SINGLE
-city    : class java.lang.String SINGLE
-country : class java.lang.String SINGLE
-region  : class java.lang.String SINGLE
-desc    : class java.lang.String SINGLE
-runways : class java.lang.Integer SINGLE
-elev    : class java.lang.Integer SINGLE
+---------------------------------------------------------------------------------------------------
+Vertex Label Name              | Partitioned | Static                                             |
+---------------------------------------------------------------------------------------------------
+version                        | false       | false                                              |
+airport                        | false       | false                                              |
+country                        | false       | false                                              |
+continent                      | false       | false                                              |
+---------------------------------------------------------------------------------------------------
+Edge Label Name                | Directed    | Unidirected | Multiplicity                         |
+---------------------------------------------------------------------------------------------------
+route                          | true        | false       | MULTI                                |
+contains                       | true        | false       | SIMPLE                               |
+---------------------------------------------------------------------------------------------------
+Property Key Name              | Cardinality | Data Type                                          |
+---------------------------------------------------------------------------------------------------
+lat                            | SINGLE      | class java.lang.Double                             |
+lon                            | SINGLE      | class java.lang.Double                             |
+dist                           | SINGLE      | class java.lang.Integer                            |
+code                           | SINGLE      | class java.lang.String                             |
+icao                           | SINGLE      | class java.lang.String                             |
+type                           | SINGLE      | class java.lang.String                             |
+city                           | SINGLE      | class java.lang.String                             |
+country                        | SINGLE      | class java.lang.String                             |
+region                         | SINGLE      | class java.lang.String                             |
+desc                           | SINGLE      | class java.lang.String                             |
+runways                        | SINGLE      | class java.lang.Integer                            |
+elev                           | SINGLE      | class java.lang.Integer                            |
+---------------------------------------------------------------------------------------------------
+Graph Index (Vertex)           | Type        | Unique    | Backing        | Key:           Status |
+---------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
+Graph Index (Edge)             | Type        | Unique    | Backing        | Key:           Status |
+---------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
+Relation Index (VCI)           | Type        | Direction | Sort Key       | Order    |     Status |
+---------------------------------------------------------------------------------------------------
 ----
 
 
@@ -753,7 +773,7 @@ elev    : class java.lang.Integer SINGLE
 Loading air-routes into a JanusGraph instance
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Now that we know how to create a schema and an index for the 'air-routes' graph
+Now that we know how to create a schema for the 'air-routes' graph
 we can use the same basic steps to load it into a JanusGraph
 instance that we used with TinkerGraph. Note that after loading the graph from the
 XML file we then call 'commit' to finalize the transaction.
@@ -768,19 +788,17 @@ Note that had we not defined a schema before loading the 'air-routes' graph that
 JanusGraph would have still created the vertices, edges and properties but using
 default types and settings. A bit later we will look at creating an index for the
 'air-routes' graph as well. It is strongly recommended to create the index as well as
-the schema before loading the data but lets examine a few more things before we
+the schema before loading the data but let's examine a few more things before we
 discuss how to do that.
 
-Unlike TinkerGraph, JanusGraph does not, by default, guarantee to respect user
-provided vertex and edge ID values. Instead it creates its own ID values as vertices
+Unlike TinkerGraph, JanusGraph does not support user
+provided vertex ID values by default, and does not support edge ID values as of now. Instead it creates its own ID values as vertices
 and edges are added to the graph. You may have noticed from earlier in the book
 or from the `air-routes.graphml` file if you happened to look in there, that the ID
 provided for Austin in the GraphML markup is 3. However, having loaded 'air-routes'
 into JanusGraph if we query the ID for the Austin vertex we can see that it is no
-longer 3. There is a setting that can be changed to force JanusGraph to honor user
-provided ID values but it is not recommended this be used as it will disable some
-other useful JanusGraph features. If you are interested in learning more about this
-option this please refer to the JanusGraph documentation.
+longer 3. There is a setting that can be changed to force JanusGraph to accept user
+provided ID values. If you want to try out this option, please refer to the JanusGraph documentation: https://docs.janusgraph.org/advanced-topics/custom-vertex-id.
 
 [source,groovy]
 ----
@@ -788,10 +806,6 @@ g.V().has('code','AUS').id()
 
 4240
 ----
-
-Having the graph system allocate its own ID values is not a big problem as we can
-always query the graph to get the ID but it is a reminder that you should not get
-into the habit of relying on any user provided ID values as you work with graphs.
 
 If necessary, as discussed earlier, we can always store important ID values in a
 variable for later use.
@@ -819,15 +833,15 @@ JanusGraph indexes
 ~~~~~~~~~~~~~~~~~~
 
 JanusGraph supports two different types of indexing known as 'graph indexes' and
-'vertex centric indexes' respectively. JanusGraph also supports the use of
-'composite' and 'mixed' indexes as well as the use of external indexing technologies.
+'relation indexes' (also known as 'vertex centric indexes', or 'VCI') respectively. Graph indexes can be stored at the primary storage backend (known
+as 'composite indexes') as well as external indexing backend (known as 'mixed indexes').
 All of these concepts will be discussed and explained in the following sections.
 Using an index will greatly improve performance of your graph queries and is
 something you should get familiar with doing for any graphs that you create or
 manage. While in many cases use of an index is optional by default, we strongly
 recommend that you view it as mandatory. The JanusGraph documentation provides some
 fairly in depth coverage of indexing and can be read by visiting the following URL:
-http://docs.janusgraph.org/latest/indexes.html
+https://docs.janusgraph.org/schema/index-management/index-performance/
 
 [[graphindexes]]
 Graph indexes
@@ -845,7 +859,7 @@ keys, you will use regularly in your queries when working with JanusGraph. In so
 situations you will also need to create 'vertex centric indexes', a subject we will
 discuss next, but most likely this will be part of tuning the performance of your
 graph rather than from the start. Conversely, You should plan on creating your
-'graph indexes' long with your initial graph schema. The simplest form of 'graph
+'graph indexes' along with your initial graph schema. The simplest form of 'graph
 index' is the composite index that we will see how to create and use soon.
 
 [[vciintro]]
@@ -854,7 +868,7 @@ Vertex centric indexes
 
 A vertex centric index, as the name suggests is an index associated with a vertex.
 These are typically used when the number of incident edges on a given vertex becomes
-significantly large such that it can impact performance. As mentioned above, it is
+significantly large such that it can impact performance. It's also known as relation index, as it's used to speed up relation look ups. As mentioned above, it is
 likely that when you first create your graph and graph schema that you will just
 create a set of 'graph indexes' and only create 'vertex centric indexes' as the need
 arises.
@@ -864,7 +878,7 @@ Introducing 'composite' indexes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 A composite index can be used to speed up queries where an exact match with the value
-for  given property key is sufficient. For example, the query below could take
+for a given property key is sufficient. For example, the query below could take
 advantage of a composite index as we are only looking for exact matches where the
 value associated with the 'city' key is the value 'Paris'.
 
@@ -912,7 +926,7 @@ Building a composite index to speed up exact match searching
 It is strongly recommended that you create graph indexes for any property keys that
 you are likely to be using regularly in queries. An index can greatly speed up
 searching a graph as without an index being present JanusGraph has to search your
-entire graph each time you issue a query looking for one or more specific properties.
+entire graph each time you issue a query looking for one or more specific properties, unless your query looks up by vertex ID.
 If you issue a query that uses property keys that have not been indexed, the query
 will still work but unless warnings have been turned off, JanusGraph will remind you
 that you should consider creating an index to improve the performance of your query.
@@ -950,18 +964,15 @@ Elasticsearch. The subject of using an external index is discussed a bit later.
 First of all let's take a look at the types of index that you can create that
 JanusGraph can manage by itself without needing help from an external index.
 
-Using JanusGraph you can create and manipulate an index using the Management API. The
-JanusGraph documentation strongly recommends that you always make a call to
-'graph().tx().rollback()' before you start to create an index to make sure that no
-other transactions are currently active.
+Using JanusGraph you can create and manipulate an index using the Management API. It is strongly recommended that you always close all open transactions before you start to create an index to avoid schema staleness problems.
 
 The example below shows how to use the Management API to create a new composite index
 for the airport 'code' property in the 'air-routes' graph.
 
 [source,groovy]
 ----
-// Make sure no other transactions are open
-graph.tx().rollback()
+// Make sure no other transactions are active
+graph.getOpenTransactions().each{tx -> tx.rollback()}
 
 // Open a new management transaction
 mgmt = graph.openManagement()
@@ -996,6 +1007,9 @@ mgmt.updateIndex(mgmt.getGraphIndex("airportIndex"), SchemaAction.REINDEX).get()
 mgmt.commit()
 ----
 
+The above process could be very slow if you have a lot of data, in which case you could
+use MapReduce to reindex existing data in parallel: https://docs.janusgraph.org/schema/index-management/index-reindexing/.
+
 If we re-run the same query we used earlier and got the warning about using indexes from
 JanusGraph, this time we get the same result but without the warning. This tells us
 that JanusGraph was able to satisfy our query using the index that we just created.
@@ -1014,18 +1028,23 @@ that is all that is returned.
 [source,groovy]
 ----
 mgmt = graph.openManagement()
-
-// What indexes are defined?
-v_idxes = mgmt.getGraphIndexes(Vertex.class)
-
-airportIndex
-
-// Print the key names they are associated with
-v_idxes.each {println it.getFieldKeys()}
-
-[code]
-
+// you could also use mgmt.printSchema() to display the entire schema
+mgmt.printIndexes()
 mgmt.commit()
+----
+
+[source,groovy]
+----
+---------------------------------------------------------------------------------------------------
+Graph Index (Vertex)           | Type        | Unique    | Backing        | Key:           Status |
+---------------------------------------------------------------------------------------------------
+airportIndex                   | Composite   | false     | internalindex  | code:         ENABLED |
+---------------------------------------------------------------------------------------------------
+Graph Index (Edge)             | Type        | Unique    | Backing        | Key:           Status |
+---------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
+Relation Index (VCI)           | Type        | Direction | Sort Key       | Order    |     Status |
+---------------------------------------------------------------------------------------------------
 ----
 
 It is also possible to define an index that will support a query containing more than
@@ -1048,7 +1067,7 @@ Gremlin query to use the keys.
 [source,groovy]
 ----
 // Make sure no other transactions are active
-graph.tx().rollback()
+graph.getOpenTransactions().each{tx -> tx.rollback()}
 
 // Start a new management transaction
 mgmt = graph.openManagement()
@@ -1089,17 +1108,18 @@ Here is the output returned by the query.
 Traversal Metrics
 Step                                              Traversers  Time (ms)
 ========================================================================
-JanusGraphStep([],[city.eq(London), country.eq(...      1          1.036
+JanusGraphStep([],[city.eq(London), country.eq(...    1          26.059
+  constructGraphCentricQuery                                     11.676
+  GraphCentricQuery                                               5.962
     \_condition=(city = London AND country = CA)
-    \_isFitted=true
-    \_query=multiKSQ[1]@2147483647
-    \_index=byCityAndCountry
     \_orders=[]
+    \_isFitted=true
     \_isOrdered=true
-  optimization                                                     0.741
-  backend-query                                         1          0.085
-    \_query=byCityAndCountry:multiKSQ[1]@2147483647
-                                            >TOTAL      -          1.036
+    \_query=multiKSQ[1]
+    \_index=byCityAndCountry
+    backend-query                                                 3.709
+      \_query=byCityAndCountry:multiKSQ[1]
+                                            >TOTAL    -          26.059
 ----
 
 A script to automate schema creation, indexing and graph loading
