@@ -30,7 +30,7 @@ nodeLabels = Hash(
   'airport'   => 'airport',
   'continent' => 'continent',
   'country'   => 'country',
-  'version'   => 'country' )
+  'version'   => 'version' )
 
 edgeLabels = Hash(
   'route'     => 'route',
