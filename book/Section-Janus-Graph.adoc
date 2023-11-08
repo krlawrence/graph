@@ -159,7 +159,9 @@ a look at how to use these transactional capabilities in the next section. Note 
 'Persistence' still shows as 'false' as we are using the 'inmemory' mode. Another
 thing to note is that, unlike with TinkerGraph, 'UserSuppliedIds' is set to false,
 indicating that JanusGraph will create its own ID values and ignore any that we
-provide by default. Note that since 1.0.0, JanusGraph allows us to provide vertex ids in long and string types, but this functionality has to be explicitly enabled. The list is formatted in two columns to aid readability.
+provide by default. Note that since 1.0.0, JanusGraph allows us to provide vertex ids
+in long and string types, but this functionality has to be explicitly enabled. The
+list is formatted in two columns to aid readability.
 
 .JanusGraph features
 ----
@@ -724,7 +726,8 @@ mgmt.commit()
 
 
 This is the output we should get back if our schema creation has succeeded. Note that
-both the edge and vertex property keys are displayed. You can see Graph Index (Vertex), Graph Index (Edge), and Relation Index (VCI) sections are empty, because
+both the edge and vertex property keys are displayed. You can see Graph Index
+(Vertex), Graph Index (Edge), and Relation Index (VCI) sections are empty, because
 we haven't defined any index yet.
 
 [source,groovy]
@@ -792,13 +795,15 @@ the schema before loading the data but let's examine a few more things before we
 discuss how to do that.
 
 Unlike TinkerGraph, JanusGraph does not support user
-provided vertex ID values by default, and does not support edge ID values as of now. Instead it creates its own ID values as vertices
-and edges are added to the graph. You may have noticed from earlier in the book
-or from the `air-routes.graphml` file if you happened to look in there, that the ID
-provided for Austin in the GraphML markup is 3. However, having loaded 'air-routes'
-into JanusGraph if we query the ID for the Austin vertex we can see that it is no
-longer 3. There is a setting that can be changed to force JanusGraph to accept user
-provided ID values. If you want to try out this option, please refer to the JanusGraph documentation: https://docs.janusgraph.org/advanced-topics/custom-vertex-id.
+provided vertex ID values by default, and does not support edge ID values as of now.
+Instead it creates its own ID values as vertices and edges are added to the graph.
+You may have noticed from earlier in the book or from the `air-routes.graphml` file
+if you happened to look in there, that the ID provided for Austin in the GraphML
+markup is 3. However, having loaded 'air-routes' into JanusGraph if we query the ID
+for the Austin vertex we can see that it is no longer 3. There is a setting that can
+be changed to force JanusGraph to accept user provided ID values. If you want to try
+out this option, please refer to the JanusGraph documentation:
+https://docs.janusgraph.org/advanced-topics/custom-vertex-id.
 
 [source,groovy]
 ----
@@ -833,14 +838,15 @@ JanusGraph indexes
 ~~~~~~~~~~~~~~~~~~
 
 JanusGraph supports two different types of indexing known as 'graph indexes' and
-'relation indexes' (also known as 'vertex centric indexes', or 'VCI') respectively. Graph indexes can be stored at the primary storage backend (known
-as 'composite indexes') as well as external indexing backend (known as 'mixed indexes').
-All of these concepts will be discussed and explained in the following sections.
-Using an index will greatly improve performance of your graph queries and is
-something you should get familiar with doing for any graphs that you create or
-manage. While in many cases use of an index is optional by default, we strongly
-recommend that you view it as mandatory. The JanusGraph documentation provides some
-fairly in depth coverage of indexing and can be read by visiting the following URL:
+'relation indexes' (also known as 'vertex centric indexes', or 'VCI') respectively.
+Graph indexes can be stored at the primary storage backend (known as 'composite
+indexes') as well as external indexing backend (known as 'mixed indexes'). All of
+these concepts will be discussed and explained in the following sections. Using an
+index will greatly improve performance of your graph queries and is something you
+should get familiar with doing for any graphs that you create or manage. While in
+many cases use of an index is optional by default, we strongly recommend that you
+view it as mandatory. The JanusGraph documentation provides some fairly in depth
+coverage of indexing and can be read by visiting the following URL:
 https://docs.janusgraph.org/schema/index-management/index-performance/
 
 [[graphindexes]]
@@ -868,10 +874,10 @@ Vertex centric indexes
 
 A vertex centric index, as the name suggests is an index associated with a vertex.
 These are typically used when the number of incident edges on a given vertex becomes
-significantly large such that it can impact performance. It's also known as relation index, as it's used to speed up relation look ups. As mentioned above, it is
-likely that when you first create your graph and graph schema that you will just
-create a set of 'graph indexes' and only create 'vertex centric indexes' as the need
-arises.
+significantly large such that it can impact performance. It's also known as relation
+index, as it's used to speed up relation look ups. As mentioned above, it is likely
+that when you first create your graph and graph schema that you will just create a
+set of 'graph indexes' and only create 'vertex centric indexes' as the need arises.
 
 [[compositeintro]]
 Introducing 'composite' indexes
@@ -926,14 +932,15 @@ Building a composite index to speed up exact match searching
 It is strongly recommended that you create graph indexes for any property keys that
 you are likely to be using regularly in queries. An index can greatly speed up
 searching a graph as without an index being present JanusGraph has to search your
-entire graph each time you issue a query looking for one or more specific properties, unless your query looks up by vertex ID.
-If you issue a query that uses property keys that have not been indexed, the query
-will still work but unless warnings have been turned off, JanusGraph will remind you
-that you should consider creating an index to improve the performance of your query.
+entire graph each time you issue a query looking for one or more specific properties,
+unless your query looks up by vertex ID. If you issue a query that uses property keys
+that have not been indexed, the query will still work but unless warnings have been
+turned off, JanusGraph will remind you that you should consider creating an index to
+improve the performance of your query.
 
-NOTE: You should be aware that some graph systems running JanusGraph may have disabled
-the ability to do a full graph search thus requiring that you always have an index
-for any property keys that you use in your queries.
+NOTE: You should be aware that some graph systems running JanusGraph may have
+disabled the ability to do a full graph search thus requiring that you always have an
+index for any property keys that you use in your queries.
 
 Take a look at the example below. We issue a simple query looking for the airport
 with a 'code' property containing the value 'LHR'. Because we have not yet created an
@@ -964,7 +971,9 @@ Elasticsearch. The subject of using an external index is discussed a bit later.
 First of all let's take a look at the types of index that you can create that
 JanusGraph can manage by itself without needing help from an external index.
 
-Using JanusGraph you can create and manipulate an index using the Management API. It is strongly recommended that you always close all open transactions before you start to create an index to avoid schema staleness problems.
+Using JanusGraph you can create and manipulate an index using the Management API. It
+is strongly recommended that you always close all open transactions before you start
+to create an index to avoid schema staleness problems.
 
 The example below shows how to use the Management API to create a new composite index
 for the airport 'code' property in the 'air-routes' graph.
@@ -1302,11 +1311,11 @@ San Luis County Regional Airport
 Liberal Mid-America Regional Airport
 ----
 
-The 'textPrefix' predicate will look at the entire string being inspected and compare it to
-the string you provide and only return a result if the string starts with the specified
-pattern. So in this case we look at just the start of the whole string and not at
-individual words within it. The query below looks for any cities whose name starts
-with the characters 'Los'.
+The 'textPrefix' predicate will look at the entire string being inspected and compare
+it to the string you provide and only return a result if the string starts with the
+specified pattern. So in this case we look at just the start of the whole string and
+not at individual words within it. The query below looks for any cities whose name
+starts with the characters 'Los'.
 
 [source,groovy]
 ----
@@ -1364,8 +1373,8 @@ g.V().has('city',textContainsRegex("(?i)for.*")).values('city')
 ----
 
 Notice how names that start with 'For' such as 'Fort Myers' as well as city names
-containing words that start with the text 'For' in a subsequent word are found. For example
-'La Fortuna'  and 'View Fort' are also found.
+containing words that start with the text 'For' in a subsequent word are found. For
+example 'La Fortuna'  and 'View Fort' are also found.
 
 [source,console]
 ----
@@ -1867,8 +1876,9 @@ machine to a multi node cluster. How you deploy it will depend on your scalabili
 and redundancy needs. Note that Cassandra, like Berkeley DB can, if needed, also run
 in embedded mode.
 
-NOTE: For detailed configuration information you should refer to the official JanusGraph
-documentation located at http://docs.janusgraph.org/latest/storage-backends.html.
+NOTE: For detailed configuration information you should refer to the official
+JanusGraph documentation located at http://docs.janusgraph
+.org/latest/storage-backends.html.
 
 A bit later, in the "<<dockercass>>" section, we will take a look at deploying a
 single node instance of Cassandra using Docker containers which provides a nice
@@ -1915,8 +1925,9 @@ HBase, like Apache Cassandra, is a database that supports very large tables. The
 are several properties files in the '/conf' directory that can be used to connect
 JanusGraph to an Apache HBase store.
 
-NOTE: For detailed configuration information you should refer to the official JanusGraph
-documentation located at http://docs.janusgraph.org/latest/storage-backends.html.
+NOTE: For detailed configuration information you should refer to the official
+JanusGraph documentation located at http://docs.janusgraph
+.org/latest/storage-backends.html.
 
 Which properties file you use will depend on whether or not you need to use an
 external index. However, if you were using HBase without an external index being
@@ -2053,9 +2064,9 @@ protocols is likely to be dropped so it is probably a good idea to get comfortab
 using CQL as the primary way that you connect JanusGraph to Cassandra,
 
 NOTE: The source code in this section comes from the 'janus-cassandra.groovy' sample
-located at https://github.com/krlawrence/graph/tree/main/sample-code/groovy. The script
-will automate everything that we are about to discuss in this section and you are
-encouraged to study it.
+located at https://github.com/krlawrence/graph/tree/main/sample-code/groovy. The
+script will automate everything that we are about to discuss in this section and you
+are encouraged to study it.
 
 A number of properties files are included with the JanusGraph download. They are
 located in the '/conf' folder below the root of the JanusGraph folder. The properties
