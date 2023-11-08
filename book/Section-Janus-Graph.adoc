@@ -1358,11 +1358,20 @@ Losuia
 Regular expression predicates
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+It is worth considering a bit of history when discussing regular expression
+predicates for JanusGraph. JanusGraph introduced text-based predicates many years
+before TinkerPop added them to Gremlin in version 3.6.0. As a result, there are
+text predicates that are JanusGraph specific which have similar functionality to the
+ones officially exposed by Gremlin itself. This section describes the
+JanusGraph-specific text predicates. You can learn more about the official Gremlin
+text predicates in the <<fuzzyregs,"Using regular expressions to do fuzzy searches">>
+section.
+
 The JanusGraph regular expression predicates recognize the syntax defined as part of
 the Java 1.8 Pattern class that is documented at
-https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html. The Java
-regular expression syntax may be different than the one you are used to so it is
-worth taking a few minutes to study the documentation at that URL.
+https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/regex/Pattern.html.
+The Java regular expression syntax may be different than the one you are used to so
+it is worth taking a few minutes to study the documentation at that URL.
 
 The query below uses a 'textContainsRegex' predicate to search for any city name that
 contains a word starting with 'for', while ignoring case.
@@ -1520,7 +1529,7 @@ Fuzzy search predicates
 These predicates use the
 https://en.wikipedia.org/wiki/Levenshtein_distance[Levenshtein distance] method to
 decide if a piece of text is 'close enough' to the pattern being looked for. This is
-based on assessing how many characterss would have to change in the pattern word to
+based on assessing how many characters would have to change in the pattern word to
 achieve a match in the text being inspected. For example 'pall' would match 'palm',
 'paul' and 'palm'.
 
