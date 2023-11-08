@@ -4587,11 +4587,10 @@ Using regular expressions to do fuzzy searches
 
 Let's take a look at one case where use of closures might be helpful. It is a
 common requirement when working with any kind of database to want to do some
-sort of fuzzy text search or even to search using a regular expression. TinkerPop
-itself does not provide direct support for this. In other words there
-currently is no sophisticated text search method beyond the basic 'has()' type steps
-we have looked at above. However, the underlying graph store can still expose
-such capabilities.
+sort of fuzzy text search or even to search using a regular expression. Gremlin
+offers a series of text related predicates for these types of searches. Where
+standard predicates are a part of the 'P' enum, the text specific predicates can be
+found on the 'TextP' enum.
 
 NOTE: Most TinkerPop enabled graph stores that you are likely to use for any sort of
 serious deployment will also be backed by an indexing technology like Solr or
@@ -4599,23 +4598,27 @@ Elasticsearch. In those cases some amount of more sophisticated search methods w
 likely be made available to you. You should always check the documentation for the
 system you are using to see what is recommended.
 
-When working with TinkerGraph and the Gremlin console if we want to do any
-sort of text search beyond very basic things like 'city == "Dallas"' then we
-will have to fall back on the Lambda function concept to take advantage of
-underlying Groovy and Java features. Note that even in graph
-systems backed by a real index the examples we are about to look at should
-still work but may not be the preferred way.
-
 So let's look at some examples. First of all, every airport in the air routes
 graph contains a description which will be something like 'Dallas Fort Worth
 International Airport' in the case of DFW. If we wanted to search the vertices in
-the graph for any airport that has the word 'Dallas' in the description we
-could take advantage of the Groovy 'String.contains()' method and do it like this.
+the graph for any airport that starts with the letter "D" we could use the
+'startingWith' predicate.
+
+[source,groovy]
+----
+// Airport descriptions starting with 'D' - this is case sensitive
+g.V().has('airport', 'desc', TextP.startingWith('D'))
+----
+
+NOTE: There is an analogous 'endingWith' predicate for testing the end of a string.
+
+If we wanted to search the vertices in the graph for any airport that has the word
+'Dallas' in the description we could use 'TextP.containing'.
 
 [source,groovy]
 ----
 // Airport descriptions containing the word 'Dallas'
-g.V().hasLabel('airport').filter{it.get().property('desc').value().contains('Dallas')}
+g.V().has('airport', 'desc', TextP.containing('Dallas'))
 ----
 
 Where things get even more interesting is when you want to use a regular
@@ -4629,103 +4632,16 @@ Dalcahue, Dalat and Dalanzadgad!.
 [source,groovy]
 ----
 // Using a filter to search using a regular expression
-g.V().has('airport','type','airport').filter{it.get().property('city').value ==~/Dallas|Austin/}.values('code')
+g.V().has('airport','type','airport').has('city', TextP.regex('~/Dallas|Austin/')).values('code')
 
 // A regular expression to find any airport with a city name that begins with "Dal"
-g.V().has('airport','type','airport').filter{it.get().property('city').value()==~/^Dal\w*/}.values('city')
+g.V().has('airport','type','airport').has('city', TextP.regex('~/^Dal\w*/')).values('city')
 ----
 
-So in summary it is useful to know about closures and the way you can use them
-with filters but as stated above - use them sparingly and only when a "pure
-Gremlin" alternative does not present itself.
-
-NOTE: We could actually go one step further and create a custom predicate (see
-next section) that handles regular expressions for us.
-
-[[pred]]
-Creating custom tests (predicates)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-TinkerPop comes with a set of built in methods that can be used for testing values.
-These methods are commonly referred to as 'predicates'. Examples of existing Gremlin
-predicates include methods like 'gte()', 'lte()' and 'neq()'. Sometimes, however, it
-is useful to be able to define your own custom predicate that can be passed in to a
-'has('), 'where()' or 'filter()' step as part of a Gremlin query.
-
-The following example uses the Groovy closure syntax to define a custom predicate,
-called 'f', that tests the two values passed in to see if 'x' is greater than twice
-'y'. This new predicate can then be used as part of a 'has()' step by using it as a
-parameter to the 'test()' method. When 'f' is called, it will be passed two
-parameters. The first one will be the value returned in response to asking 'has()' to
-return the property called 'longest'. The second parameter passed to 'f' will be the
-value of 'a' that we provide. This is a simple example, but shows the flexibility
-that Gremlin provides for extending the basic predicates.
-
-[source,groovy]
-----
-// Find the average longest runway length.
-a = g.V().hasLabel('airport').values('longest').mean().next()
-
-// Define a custom predicate
-f = {x,y -> x > y*2}
-
-// Find airports with runways more than twice the average maximum length.
-g.V().hasLabel('airport').has('longest',test(f,a)).values('code')
-----
-
-Creating a regular expression predicate
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-In the previous section we used a closure to filter values using a regular
-expression. Now that we know how to create our own predicates we could go one
-step further and create a predicate that accepts regular expressions for us.
-
-[source,groovy]
-----
-// Create our method
-f = {x,y -> x ==~ y}
-
-// Use it to find any vertices where the description string starts with 'Dal'
-g.V().has('desc',test(f,/^Dal.*/)).values('desc')
-----
-
-We can actually go one step further and create a custom method called 'regex'
-rather than use the 'test' method directly. If the following code seems a bit
-unclear don't worry too much. It works and that may be all you need to know.
-However if you want to understand the TinkerPop API in more detail the
-documentation that can be found on the Apache TinkerPop web page explains things
-like 'P' in detail. Also remember that Gremlin is written in Groovy/Java and we
-take advantage of that here as well.
-
-In the following example, rather than use 'test' directly we use the
-'BiPredicate' functional interface that is part of Java 8. 'BiPredicate' is
-sometimes referred to was a 'two-arity' predicate as it takes two parameters. We
-will create an implementation of the interface called 'bp'. The interface
-requires that we provide one method called 'test' that does the actual
-comparison between two objects and returns a simple true or false result. Like
-we did in the previous section we simply perform a regular expression compare
-using the '==~' operator.
-
-We can then use our 'bp' implementation to build a named closure that we will call
-'regex'. TinkerPop includes a predicate class P that is an implementation of the Java
-Predicate functional interface. We we can use 'P' to build our new 'regex' method. We
-can then pass 'regex' directly to steps like 'has'.
-
-[source,groovy]
-----
-// Create a new BiPredicate that handles regular expression pattern matching
-bp = new java.util.function.BiPredicate<String, String>() {
-         boolean test(String val, String pattern) {
-           return val ==~ pattern  }}
-
-// Create a new closure we can use for regular expression pattern matching.
-regex = {new P(bp, it)}
-
-// Use our new closure to find descriptions that start with 'Dal'. As this
-// unwinds, the contents of 'desc' are passed to the test method as the first parameter
-// and the regex pattern as the second paramter.
-g.V().has('desc', regex(/^Dal.*/)).values('desc')
-----
+Gremlin adheres to the regex syntax prescribed by the Java `Pattern` class documented
+at https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/regex/Pattern.html
+The Java regular expression syntax may be different than the one you are used to so
+it is worth taking a few minutes to study the documentation at that URL.
 
 [[graphvars]]
 Using graph variables to associate metadata with a graph
