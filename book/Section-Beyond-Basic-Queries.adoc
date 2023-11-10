@@ -1334,8 +1334,8 @@ desc
 ----
 
 We could likewise find the names, with duplicates removed, of any property keys
-associated with any outgoing edges from the DFW vertex using this query. Note that edge
-properties are implementations of 'Property' and not 'VertexProperty'.
+associated with any outgoing edges from the DFW vertex using this query. Note that
+edge properties are implementations of 'Property' and not 'VertexProperty'.
 
 [source,groovy]
 ----
@@ -1357,6 +1357,31 @@ g.V().hasLabel("airport").
 
 [longest:25497644, runways:4816]
 ----
+
+[[elementstep]]
+The 'element' traversal step
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When you use the 'properties' step to navigate to a property object, you may find
+that you want to return to the parent element that it is related to. The 'element'
+step is used for this purpose and can be used to navigate from a property back to a
+vertex, edge or vertex property. That final case of a "vertex property" refers to
+situations where you have used 'properties' to access a meta-property as described
+a bit later in the <<metaprop, Adding properties to other properties (meta
+properties)>> section.
+
+[source,groovy]
+----
+g.V().has('airport','code','IAD').
+  properties('code','city').element()
+
+v[10]
+v[10]
+----
+
+In the example shown above, we can see that "v[10]" is returned twice because
+'element' was called twice, once for the "code" property and once for the "city"
+property and both belong to the "v[10]" vertex.
 
 [[propmap]]
 The 'propertyMap' traversal step
