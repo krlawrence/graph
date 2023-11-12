@@ -1167,6 +1167,7 @@ provides.
 |textContainsPrefix     | True if at least one word starts with the search string provided.
 |textContainsRegex      | True if at least one word matches the regular expression provided.
 |textContainsFuzzy      | True if a word matches the fuzzy search text provided.
+|textContainsPhrase     | True if the text string does contain the sequence of words in the search string provided.
 |textPrefix             | True if the string being inspected starts with the search text.
 |textRegex              | True if the string being inspected matches the regular expression provided.
 |textFuzzy              | True if the string being inspected matches the fuzzy search text.
@@ -1520,9 +1521,10 @@ Fuzzy search predicates
 These predicates use the
 https://en.wikipedia.org/wiki/Levenshtein_distance[Levenshtein distance] method to
 decide if a piece of text is 'close enough' to the pattern being looked for. This is
-based on assessing how many characterss would have to change in the pattern word to
+based on assessing how many characters would have to change in the pattern word to
 achieve a match in the text being inspected. For example 'pall' would match 'palm',
-'paul' and 'palm'.
+'paul' and 'palm' with Levenshtein distance being one.
+JanusGraph uses different Levenshtein distance criteria for string of different lengths. It uses 0 for strings of one or two characters (exact match), 1 for strings of three, four or five characters, and 2 for strings of more than five characters.
 
 The query below uses a fuzzy sort to find any words that are close to the word
 'pall'.
@@ -1579,7 +1581,7 @@ take advantage of.
 
 NOTE: The official JanusGraph API documentation is a good place to read up on the
 GeoShape class and related classes. That documentation can always be found by
-starting here: http://docs.janusgraph.org/latest/javadoc.html
+starting here: https://javadoc.io/doc/org.janusgraph/janusgraph-core/latest/index.html
 
 The example below shows one way that we could use the GeoSpatial API to find airports
 within a circle having a 100 kilometer radius with London Heathrow (LHR) at the
@@ -1802,8 +1804,8 @@ property files may work unchanged or may need to be edited. Each property file h
 detailed comments that explain what the various setting do.
 
 NOTE: The official JanusGraph documentation provides detailed configuration
-information for each of the currently supported back end stores.
-http://docs.janusgraph.org/latest/storage-backends.html
+information for each of the currently supported back end stores:
+https://docs.janusgraph.org/storage-backend/
 
 Let's now take a brief look at some of the persistent storage options available to us
 when using JanusGraph.
@@ -1877,8 +1879,8 @@ and redundancy needs. Note that Cassandra, like Berkeley DB can, if needed, also
 in embedded mode.
 
 NOTE: For detailed configuration information you should refer to the official
-JanusGraph documentation located at http://docs.janusgraph
-.org/latest/storage-backends.html.
+JanusGraph documentation located at stores:
+https://docs.janusgraph.org/storage-backend/cassandra/.
 
 A bit later, in the "<<dockercass>>" section, we will take a look at deploying a
 single node instance of Cassandra using Docker containers which provides a nice
@@ -1926,8 +1928,7 @@ are several properties files in the '/conf' directory that can be used to connec
 JanusGraph to an Apache HBase store.
 
 NOTE: For detailed configuration information you should refer to the official
-JanusGraph documentation located at http://docs.janusgraph
-.org/latest/storage-backends.html.
+JanusGraph documentation located at https://docs.janusgraph.org/storage-backend/hbase/.
 
 Which properties file you use will depend on whether or not you need to use an
 external index. However, if you were using HBase without an external index being
@@ -1970,7 +1971,7 @@ stores. There are a selection of both hosted and in-house options to choose from
 Apache TinkerPop project maintains a list of TinkerPop compatible graph stores. You
 can find that list here http://tinkerpop.apache.org/providers.html.
 
-What is really good to see is that ApacheTinkerPop, and in particular the Gremlin
+What is really good to see is that Apache TinkerPop, and in particular the Gremlin
 query and traversal language, has become one of the primary ways that people are
 building and interacting with, graph databases.
 
@@ -1991,7 +1992,7 @@ do most of our Docker testing using Linux systems but there are runtimes availab
 for Windows and Mac OS as well. Assuming you have docker installed, Cassandra can be
 installed using a simple 'docker pull' command as shown below.
 
-Note that to make it clearer where commands need to be entered commands that need to
+Note that to make it clearer where commands need to be entered, commands that need to
 be entered into the Linux terminal shell are prefixed with  '"sh>"' and commands
 that are entered into the Gremlin Console have the '"gremlin>"' prefix.
 
@@ -2014,8 +2015,7 @@ the command over four lines to make it easier to read.
 ----
 sh> docker run -d -p 7001:7001 -p 7199:7199 -p 9042:9042 -p 9160:9160 \  <1> <2> <3>
 -v  /var/lib/cassandra:/var/lib/cassandra \  <4>
--e CASSANDRA_START_RPC=true \  <5>
---name cass  cassandra   <6>
+--name cass  cassandra   <5>
 ----
 <1> Starts a new instance of the Cassandra container.
 <2> Runs the command in the background using the '"-d"' flag.
@@ -2024,9 +2024,7 @@ Cassandra instance ('"-p"' flags).
 <4> Maps (mounts) the Cassandra volume to the local disk. This is where the data will
 be stored. If we did not do this the data would be lost whenever the container gets
 deleted ('"-v"' flag).
-<5> Enables Thrift support using the '-e CASSANDRA_START_RPC=true' setting. This is not
-needed if you use CQL which is enabled by default.
-<6> Names the container "cass" which makes it easier for us to refer to it later.
+<5> Names the container "cass" which makes it easier for us to refer to it later.
 
 
 If you want to check on the progress of your new container at any time you can just
@@ -2054,14 +2052,6 @@ Connecting JanusGraph to Cassandra
 
 Now that we have an instance of a Cassandra running, it's time to start the Gremlin
 Console that is included with the JanusGraph download and connect to Cassandra.
-Cassandra supports different protocols that can be used when connecting to it. These
-include Astyanax (from Netflix), Thrift and CQL. In this section we are just going to
-discuss Thrift and CQL. An in depth study of these protocols is beyond the scope of
-this book but if you want to read more about them a few web searches will find you
-plenty of documentation. It should be noted that both Thrift and Astyanax are being
-deprecated in favor of CQL. At some point in the future support for the older
-protocols is likely to be dropped so it is probably a good idea to get comfortable
-using CQL as the primary way that you connect JanusGraph to Cassandra,
 
 NOTE: The source code in this section comes from the 'janus-cassandra.groovy' sample
 located at https://github.com/krlawrence/graph/tree/main/sample-code/groovy. The
@@ -2079,7 +2069,7 @@ NOTE: If you decide to run Cassandra on a remote machine, you will need to edit 
 properties file, or create a new one, so that it contains the appropriate host names
 and IP addresses of the remote system.
 
-If you want to connect JanusGraph to Cassandra using the CQL protocol you can use the
+The protocol JanusGraph uses to communicate with Cassandra is called CQL. To get started, you can use the
 'janusgraph-cql.properties' file as shown below.
 
 [source,groovy]
@@ -2087,11 +2077,7 @@ If you want to connect JanusGraph to Cassandra using the CQL protocol you can us
 gremlin> graph = JanusGraphFactory.open('conf/janusgraph-cql.properties')
 ----
 
-You may see a warning message followed by a long stack trace when you issue this
-command. Despite looking like something horrible has happened this can be ignored and
-things will still work. We believe that this is a known issue in the community.
-
-Aside from a potential warning message, if all goes well you should see something
+If all goes well you should see something
 like the output below after the command has run. This shows that we have a CQL
 connection to our Cassandra instance running on or local machine at 127.0.0.1.
 
@@ -2100,25 +2086,7 @@ connection to our Cassandra instance running on or local machine at 127.0.0.1.
 graphtraversalsource[standardjanusgraph[cql:[127.0.0.1]], standard]
 ----
 
-
-If you want to connect JanusGraph to Cassandra using the Thrift protocol you can use
-the 'janusgraph-cassandra.properties' file as shown below.
-
-[source,groovy]
-----
-gremlin> graph = JanusGraphFactory.open('conf/janusgraph-cassandra.properties')
-----
-
-If the command succeeds, you should get back some output that looks like this.
-
-[source,groovy]
-----
-standardjanusgraph[cassandrathrift:[127.0.0.1]]
-----
-
-When either of these commands are run, a new JanusGraph instance will be created and
-JanusGraph will attempt to connect to Cassandra using the specified protocols. The
-first time you connect to a brand new (empty) Cassandra instance you should first
+The first time you connect to a brand new (empty) Cassandra instance you should first
 define the graph's schema by creating key definitions and create any indexes that you
 need before creating any vertices, edges or properties. If you would like to
 experiment with the 'air-routes' data using Cassandra as the backing store, the
@@ -2163,8 +2131,7 @@ gremlin> graph.close()
 ----
 
 If you are reconnecting to your graph, having previously loaded some data and closed
-it, you can use the following commands. If you are using Thrift instead of
-CQL you would use the 'janusgraph-cassandra.properties' file instead.
+it, you can use the following commands.
 
 [source,groovy]
 ----
@@ -2231,16 +2198,7 @@ reading. First, let's check the version of Cassandra we are running.
 ----
 root@115ed53ef189:/ nodetool version
 
-ReleaseVersion: 3.11.1
-----
-
-Let's check to see that Thrift is running.
-
-[source,console]
-----
-root@115ed53ef189:/ nodetool statusthrift
-
-running
+ReleaseVersion: 3.11.11
 ----
 
 If you want more information about the overall state of things you can use the
@@ -2252,7 +2210,7 @@ root@115ed53ef189:/ nodetool info
 
 ID                     : 094e9a8c-99af-4d32-94da-49ed8c61b9fd
 Gossip active          : true
-Thrift active          : true
+Thrift active          : false
 Native Transport active: true
 Load                   : 3.64 MiB
 Generation No          : 1517842270
@@ -2280,11 +2238,10 @@ Using an external index with JanusGraph
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 JanusGraph allows an external index to be created using a technology such as
-ElasticSearch or Apache Solr. You would create such an index in cases where you need
+Apache Lucene, ElasticSearch or Apache Solr. You would create such an index in cases where you need
 to do more sophisticated pattern matching as part of a graph query. This topic is
 currently a little beyond the main focus of this book which is to give a detailed
 introduction to the Gremlin Query and Traversal language and some of the ways that
 technology can be deployed. You can find a detailed explanation of how to create an
 external index in the JanusGraph documentation which is located at the following
-URLs: https://docs.janusgraph.org/latest/indexes.html and
-https://docs.janusgraph.org/latest/index-backends.html.
+URLs: https://docs.janusgraph.org/schema/index-management/index-performance/#mixed-index and https://docs.janusgraph.org/index-backend/.
