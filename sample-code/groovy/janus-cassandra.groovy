@@ -10,12 +10,8 @@ println "Creating Cassandra backed Janus Graph instance"; []
 println "==============================================\n"; []
 [] // Create a new graph instance
 [] // Use the following line to use CQL
-[] //graph = JanusGraphFactory.open('conf/janusgraph-cql.properties')
+graph = JanusGraphFactory.open('conf/janusgraph-cql.properties')
 
-[] // Use the following line to use Thrift. Thrift is disabled by default but
-[] // can be enabled using Nodetool or using the CASSANDRA_START_RPC=true
-[] // environment variable.
-graph = JanusGraphFactory.open('conf/janusgraph-cassandra.properties')
 println "\n==============="; []
 println "Defining labels"; []
 println "===============\n"; []
