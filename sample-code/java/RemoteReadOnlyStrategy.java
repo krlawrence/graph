@@ -35,7 +35,7 @@ public class RemoteReadOnlyStrategy {
         Cluster cluster = builder.create();
 
         GraphTraversalSource g = traversal().
-                        withRemote(DriverRemoteConnection.using(cluster));
+                with(DriverRemoteConnection.using(cluster));
 
         // Create a new traversal source object
         GraphTraversalSource g2;

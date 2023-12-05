@@ -43,7 +43,7 @@ public class RemoteSimpleClient {
         Cluster cluster = builder.create();
 
         GraphTraversalSource g =
-                traversal().withRemote(DriverRemoteConnection.using(cluster));
+                traversal().with(DriverRemoteConnection.using(cluster));
 
         List<List<Object>> inTexas =
                 g.V().has("airport", "region", "US-TX").

@@ -17,7 +17,7 @@ v2-001-preview, October 1st 2023
 :icons: font
 //:pdf-page-size: Letter
 :draftdate: October 1st, 2023
-:tpvercheck: 3.7.0
+:tpvercheck: 4.0.0
 //
 // Some notes about the Asciidoc files and processor
 // -------------------------------------------------

@@ -12,6 +12,7 @@ const gremlin = require('gremlin');
 const Graph = gremlin.structure.Graph;
 const __ = gremlin.process.statics;
 const { t,order,cardinality,column,scope,pop,operator,P } = gremlin.process;
+const traversal = gremlin.process.AnonymousTraversalSource.traversal;
 
 // Note that if we just wanted to import 'decr' rather than all of order we could do:
 // const { order: { decr } } = gremlin.process;
@@ -27,7 +28,7 @@ const DriverRemoteConnection = gremlin.driver.DriverRemoteConnection;
 const connection = new DriverRemoteConnection(wspath,{});
 const graph = new Graph();
 console.log("Connecting to :" + wspath);
-const g = graph.traversal().withRemote(connection);
+const g = traversal().with_(connection);
 console.log("Connection created");
 
 // Run a few tests that use the objects we imported above

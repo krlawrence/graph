@@ -1,5 +1,5 @@
 graph = TinkerGraph.open()
-g = graph.traversal()
+g = traversal().with(graph)
 g.addV('airport').property('code', 'AUS').as('aus').
         addV('airport').property('code', 'DFW').as('dfw').
         addV('airport').property('code', 'LAX').as('lax').

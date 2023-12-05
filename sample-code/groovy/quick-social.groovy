@@ -1,5 +1,5 @@
 graph = TinkerGraph.open()
-g = graph.traversal()
+g = traversal().with(graph)
 
 g.addV("A").as("a").
         addV("B").as("b").

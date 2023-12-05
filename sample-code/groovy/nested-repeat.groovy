@@ -13,7 +13,7 @@ conf.setProperty("gremlin.tinkergraph.edgeIdManager", "LONG")
 conf.setProperty("gremlin.tinkergraph.vertexPropertyIdManager", "LONG")
 
 graph = TinkerGraph.open(conf)
-g = graph.traversal()
+g = traversal().with(graph)
 
 g.addV('person').property('name', 'Amy').as('amy').
         addV('person').property('name', 'Bill').as('bill').

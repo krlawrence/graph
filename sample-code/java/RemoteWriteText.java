@@ -55,7 +55,7 @@ public class RemoteWriteText {
         Cluster cluster = builder.create();
 
         GraphTraversalSource g =
-                traversal().withRemote(DriverRemoteConnection.using(cluster));
+                traversal().with(DriverRemoteConnection.using(cluster));
 
 
         // Simple traversal we can use for testing a few things

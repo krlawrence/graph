@@ -1090,7 +1090,7 @@ And here is the sort of output we should get back.
 
 [source,groovy]
 ----
-Gremlin version is 3.7.0
+Gremlin version is 4.0.0
 Loading the air-routes graph...
 
 [country:[US], code:[AUS], longest:[12250], city:[Austin], elev:[542], icao:[KAUS], lon:[-97.6698989868164], type:[airport], region:[US-TX], runways:[2], lat:[30.1944999694824], desc:[Austin Bergstrom International Airport]]

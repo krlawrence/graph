@@ -103,7 +103,7 @@ namespace gremlinTests
         gremlinClient = new GremlinClient(gremlinServer, connectionPoolSettings:cpSettings);
 
         var remoteConnection = new DriverRemoteConnection(gremlinClient, "g");
-        g = Traversal().WithRemote(remoteConnection);
+        g = Traversal().With(remoteConnection);
       }
       catch( Exception e)
       {

@@ -4,7 +4,7 @@
 [] // output from the Gremlin Console.
 
 graph = TinkerGraph.open()
-g = graph.traversal()
+g = traversal().with(graph)
 
 [] // Create the vertices and edges. Note how this is done in a single query
 [] // by chaining all of the steps together.

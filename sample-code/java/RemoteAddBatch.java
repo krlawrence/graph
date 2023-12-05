@@ -33,7 +33,7 @@ public class RemoteAddBatch {
         Cluster cluster = builder.create();
 
         GraphTraversalSource g = traversal().
-                        withRemote(DriverRemoteConnection.using(cluster));
+                        with(DriverRemoteConnection.using(cluster));
 
         // Instead of building the traversal all in one go, the example
         // below shows how to create a traversal and incrementally add to it.

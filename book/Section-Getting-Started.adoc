@@ -243,7 +243,7 @@ the following command from inside the Gremlin console.
 ----
 // What version of Gremlin console am I running?
 gremlin>  Gremlin.version()
-==>3.7.0
+==>4.0.0
 ----
 
 One thing that is not at all obvious or apparent is that the Gremlin console quietly
@@ -411,10 +411,11 @@ g = TinkerGraph.open().traversal()
 ----
 
 which is shorthand for
+
 [source,groovy]
 ----
 graph = TinkerGraph.open()
-g = graph.traversal()
+g = traversal().with(graph)
 ----
 
 In general you will not need access to the 'graph' object, and most operations can be

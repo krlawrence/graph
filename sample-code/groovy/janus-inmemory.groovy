@@ -154,16 +154,19 @@ mgmt.updateIndex(mgmt.getGraphIndex('distIndex'), SchemaAction.REINDEX).get()
 
 mgmt.commit()
 
+println "\n=========================="; []
+println "Acquiring traversal source"; []
+println "==========================\n"; []
+[] // Setup our traversal source object
+g = traversal().with(graph)
+
 [] // Load the air-routes graph and display a few statistics.
 [] // Not all of these steps use the index so Janus Graph will give us some warnings.
 println "\n========================"; []
 println "Loading air-routes graph"; []
 println "========================\n"; []
-graph.io(graphml()).readGraph('air-routes.graphml')
-graph.tx().commit(); []
-
-[] // Setup our traversal source object
-g = graph.traversal()
+g.io('air-routes.graphml').read().iterate()
+g.tx().commit(); []
 
 [] // Display a few statistics
 apt = g.V().has('type', 'airport').count().next(); []

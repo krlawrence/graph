@@ -23,6 +23,7 @@ from gremlin_python import statics
 from gremlin_python.process.graph_traversal import __
 from gremlin_python.process.strategies import *
 from gremlin_python.process.traversal import *
+from gremlin_python.process.anonymous_traversal import traversal
 import sys
 
 # Path to our graph (this assumes a locally running Gremlin Server)
@@ -30,9 +31,8 @@ import sys
 endpoint = 'ws://localhost:8182/gremlin'
 
 # Obtain a graph traversal source using a remote connection
-graph=Graph()
 connection = DriverRemoteConnection(endpoint,'g')
-g = graph.traversal().withRemote(connection)
+g = traversal().with_(connection)
 
 # Helper method to pretty print some headings.
 def heading(s):
