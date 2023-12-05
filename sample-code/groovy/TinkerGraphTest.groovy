@@ -23,7 +23,7 @@ println "Gremlin version is ${Gremlin.version()}"
 def graph = TinkerGraph.open()
 
 // Create our graph traversal source
-def g = graph.traversal()
+def g = traversal().with(graph)
 
 // Try to load the air routes data
 println "Loading the air-routes graph...\n"

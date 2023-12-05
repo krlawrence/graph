@@ -528,15 +528,15 @@ We have included examples of the different types of JSON result that you are lik
 to have to process in the "<<serverjson>>" section that is coming up soon.
 
 [[javagsclient]]
-Connecting to a Gremlin Server from Java using 'withRemote'
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Connecting to a Gremlin Server from Java using 'with'
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 While it is perfectly possible to work directly with the JSON returned from a Gremlin
 Server it is often more desirable to have the results placed directly into variables
 of the appropriate type. If the appropriate Gremlin language driver exists for the
 programming language that you are using, this is quite easy to setup. In this section
 we will look at connecting to a Gremlin Server from a Java application and taking
-advantage of the 'withRemote' capability that TinkerPop provides.
+advantage of the remote connection capability that TinkerPop provides.
 
 NOTE: The source code in this section comes from the 'RemoteClient.java' sample
 located at https://github.com/krlawrence/graph/tree/main/sample-code/java.
@@ -592,20 +592,22 @@ Once the 'Cluster.Builder' instance has been setup we can use it to create our
 Lastly, we need to setup a 'GraphTraversalSource' object for the Gremlin Server
 hosted graph that we will be working with. This object is often named "g" by
 convention and is typically created using the statically imported 'traversal()'
-method which in turn allows the call to 'withRemote()' which is called to establish
-the remote connection. Note that the cluster instance that we just created is passed
-in as a parameter. While this looks a little complicated it is really not a lot
-different than when we connect to a local graph using the Gremlin Console. The only
-difference is that by setting up the remote connection this way, when we start to
-issue queries against the graph, rather than getting JSON objects back, the results
-will automatically be serialized into Java variables for us. This makes our code a
-lot easier to write and essentially is the same code from this point onwards that
-would also work with a local graph that we are directly connected to.
+method which in turn allows the call to 'with()' to bind the traversal source to a
+graph. We've seen 'with()' take a graph instance before, but this time we will use it
+with a reference to a remote connection to a graph in Gremlin Server. Note that the
+cluster instance that we just created is passed in as a parameter. While this looks a
+little complicated it is really not a lot different than when we connect to a local
+graph using the Gremlin Console. The only difference is that by setting up the remote
+connection this way, when we start to issue queries against the graph, rather than
+getting JSON objects back, the results will automatically be serialized into Java
+variables for us. This makes our code a lot easier to write and essentially is the
+same code from this point onwards that would also work with a local graph that we are
+directly connected to.
 
 [source,groovy]
 ----
     GraphTraversalSource g = traversal().
-        withRemote(DriverRemoteConnection.using(cluster));
+        with(DriverRemoteConnection.using(cluster));
 ----
 
 We can now use our new 'GraphTraversalSource' object to issue a Gremlin query. The

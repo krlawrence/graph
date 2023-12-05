@@ -337,7 +337,7 @@ otherwise configuring a graph.
 
 [[janusmgmt]]
 The JanusGraph management API
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 JanusGraph includes a management API that is made available via the ManagementSystem
 class. You can use the management API to perform various important functions that

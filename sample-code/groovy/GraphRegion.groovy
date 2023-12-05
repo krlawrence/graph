@@ -17,16 +17,18 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.*
 import org.apache.tinkerpop.gremlin.util.Gremlin
 
+import static org.apache.tinkerpop.gremlin.process.traversal.AnonymousTraversalSource.traversal;
+
 import java.io.IOException
 
 class RegionTest {
-    private TinkerGraph tg
+    private TinkerGraph graph
     private GraphTraversalSource g
 
     // Try to create a new graph and load the specified GraphML file
     def loadGraph(name) {
-        tg = TinkerGraph.open()
-        g = tg.traversal()
+        graph = TinkerGraph.open()
+        g = traversal().with(graph)
 
         try {
             g.io(name).read().iterate()

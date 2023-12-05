@@ -40,7 +40,7 @@ public class RemoteStats {
         Cluster cluster = builder.create();
 
         GraphTraversalSource g = traversal().
-                        withRemote(DriverRemoteConnection.using(cluster));
+                with(DriverRemoteConnection.using(cluster));
 
         // Run some queries and display a few statistics
 

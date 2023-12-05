@@ -45,7 +45,7 @@ public class RemoteBulkSetTest {
 
         // Create a new traversal source object
         GraphTraversalSource g = traversal().
-                withRemote(DriverRemoteConnection.using(cluster));
+                with(DriverRemoteConnection.using(cluster));
 
         // Find all cities with names that start with "Lon"
         // and return the results as a BulkSet.

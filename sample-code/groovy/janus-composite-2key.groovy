@@ -9,7 +9,7 @@
 [] // output from the Gremlin Console.
 
 [] // Make sure no other transactions are active
-graph.tx().rollback()
+g.tx().rollback()
 
 [] // Start a new management transaction
 mgmt = graph.openManagement()
@@ -35,4 +35,4 @@ mgmt.commit()
 
 [] // Test out our new index. The profile step will show us which index was used
 g.V().has('city', 'London').has('country', 'CA').profile()
-graph.tx().commit()
+g.tx().commit()

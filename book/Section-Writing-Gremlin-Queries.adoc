@@ -797,17 +797,14 @@ representing the number of runways the second airport has.
 ----
 
 It is also possible to use a traversal inside of a 'by' modulator. Such traversals
-are known as '"anonymous traversals"' as they do not include a beginning 'V' or 'E'
-step.
+are known as '"anonymous traversals"' and they are discussed in greater details in
+the <<anonymoustraversals,What are Anonymous Traversals?>> section.
 
-NOTE: Traversals that do not start with a 'V' or 'E' step are referred to as
-'"anonymous traversals"'.
-
-This capability allows us to do things like combine multiple values together as part
-of a path result. The example below finds five routes that start in Austin and
-creates a path result containing the airport code and city name for both the source
-and destination airports. In this case, the anonymous traversal contained within the
-'by' modulator is applied to each element in the path.
+For now, it is enough to know that they allow us to do things like combine multiple
+values together as part of a path result. The example below finds five routes that
+start in Austin and creates a path result containing the airport code and city name
+for both the source and destination airports. In this case, the anonymous traversal
+contained within the 'by' modulator is applied to each element in the path.
 
 [source,groovy]
 ----
@@ -826,7 +823,7 @@ source and destination airports as part of generating the 'path' result.
 
 [source,groovy]
 ----
-g.V(3).out().limit(5).path().by(out().count())
+g.V(3).out().limit(5).path().by(outE().count())
 
 [59,181]
 [59,191]
@@ -1388,6 +1385,7 @@ such as 'outE', 'inE', 'outV' and 'inV'.
 [[limit]]
 Limiting the amount of data returned
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 It is sometimes useful, especially when dealing with large graphs, to limit
 the amount of data that is returned from a query. As shown in the examples
 below, this can be done using the 'limit' and 'tail' steps. A little later in
@@ -1987,7 +1985,6 @@ IN={id=47, label=airport}
 OUT={id=3, label=airport}
 ----
 
-
 [[var]]
 Assigning query results to a variable with a terminal step
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2205,6 +2202,168 @@ println s
 
 [2, 7, 5, 3, 4, 1]
 ----
+
+[[deepdivetraversals]]
+Deep dive on traversal terminology
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In Gremlin, we use the word "traversal" often and there is a fair bit of terminology
+associated with it. Understanding that terminology will greatly help with your
+understanding of Gremlin. To get started in this learning, let's return to how we
+create "g", known as the 'GraphTraversalSource', which is the connection to the graph
+from which we can write Gremlin to query our data.
+
+[source,groovy]
+----
+// create the Graph object which in this case is a TinkerGraph
+graph = TinkerGraph.open()
+
+// create the GraphTraversalSource object
+g = traversal().with(graph)
+----
+
+In looking at the above code, you might wonder where the 'traversal()' method comes
+from. This function is a member of the 'AnonymousTraversalSource' class and it is
+considered good form to statically import it so that it can be called without the
+class. Calling 'traversal()' constructs an anonymous traversal source which is like
+having a graph traversal source without a connection to a graph. Calling 'with()' on
+this object binds it to a particular graph data source and then "g" is ready for you
+to write your queries.
+
+You may see examples in this book, blog posts, or other documentation that shorthand
+the creation of 'g' like
+
+[source,groovy]
+----
+g = TinkerGraph.open().traversal()
+----
+
+While you can take this approach, it does preclude you from having reference to the
+'Graph' object. While this is typically not a problem for TinkerGraph, it can be
+an issue for other TinkerPop-enabled graphs that might require that reference to
+release resources or access provider specific APIs. You will find this the case later
+in this book when you read the "<<janusmgmt,The JanusGraph management API>>"
+section.
+
+Another tempting shorthand is to skip the creation of "g" like
+
+[source,groovy]
+----
+graph = TinkerGraph.open()
+graph.traversal().V()
+----
+
+If you take this approach, you unnecessarily create 'GraphTraversalSource' objects
+which will just end up in garbage collection. Typically, you create 'g' once and then
+reuse it. One of the other benefits to creating 'g' once is that it allows you to set
+configurations on the graph traversal source once rather than for each traversal you
+execute.
+
+Configuration steps are used to setup options on the graph traversal source. These
+steps are prefixed with 'with' and work in a builder pattern style as follows
+
+[source,groovy]
+----
+graph = TinkerGraph.open()
+g = traversal().with(graph)
+
+// construct a GraphTraversalSource configured with ReadOnlyStrategy and a
+// List side-effect named "d"
+g = g.withStrategies(ReadOnlyStrategy.instance()).
+      withSideEffect('d', [1,2,3])
+----
+
+Once 'g' is configured you can then use start steps to spawn a 'Traversal'. In
+TinkerPop, a "traversal" is a term we consider synonymous with "query". In the
+context of querying graphs, the word "traversal" implies movement which aligns with
+the visual image of traversing about the vertices and edges of a graph to get the
+data that you need.
+
+While Gremlin has dozens of steps, not all of them can be used to spawn a
+'Traversal'. Only those found on the 'GraphTraversalSource' can be used to do that.
+The most commonly used start step is 'V', but there are a number of others, like
+'E' to start by traversing edges or 'addV' to add a new vertex to the graph. It is
+important to realize that a 'Traversal' object spawned from 'g' does not do much on
+its own and requires that a terminal step be added to get the query results. This
+point was introduced in the "<<var,Assigning query results to a variable with a
+terminal step>>" section but it is worth revisiting again as it is a common mistake
+made by new Gremlin users. It is easy to illustrate this point clearly with an
+example in Java.
+
+[source,java]
+----
+// create the Traversal object - "t" is just a reference to the traversal and is
+// not the result of "g.V()" being executed
+Traversal t = g.V();
+
+// to get the result we need a terminal step, in this case toList()
+List<Vertex> l1 = t.toList();
+
+// more commonly the traversal has the terminal step added right when it is spawned
+List<Vertex> l2 = g.V().toList();
+----
+
+There is one more piece of terminology to consider and we've touched on them earlier.
+Anonymous traversals were first introduced in the "<<pathintro,What vertices and
+edges did I visit? - Introducing 'path'>>" section, where they were used to modify
+'Path' objects returned from the 'path' step. One of those examples demonstrated how
+a 'by' modulator could be given an anonymous traversal to convert vertices in the
+returned path into a count of the number of outgoing routes from airports.
+
+[source,groovy]
+----
+g.V(3).out().limit(5).path().by(outE().count())
+
+[59,181]
+[59,191]
+[59,272]
+[59,105]
+[59,54]
+----
+
+We often see anonymous traversals used with 'by' but they can actually be used as an
+argument for a great many Gremlin steps making them an integral part of the language.
+Let's take a step back from usage and examine anonymous traversals as a concept.
+Like the anonymous traversal source, an anonymous traversal is one that is not bound
+to a graph. Instead of spawning from 'g', an anonymous traversal spawns from a class
+named with a double-underscore.
+
+[source,groovy]
+----
+// spawns a traversal bound to a graph
+g.V().out()
+
+// spawns an anonymous traversal without binding to a graph
+__.V().out()
+
+// the preferred approach is to statically import V() so that you can omit "__."
+// the following anonymous traversal is the same as the one above
+V().out()
+----
+
+As shown earlier with 'by', an anonymous traversal can be used as an argument for
+many different traversal steps.
+
+[source,groovy]
+----
+g.V().has('airport','code','AUS').
+      repeat(timeLimit(10).out()).until(has('code','LHR')).path().by('code')
+----
+
+Without driving too deeply into the details of the example above, note that we've
+used an anonymous traversal inside of both 'repeat' and 'until'.
+
+In this section, we learned about Gremlin terminology. In summary, here are the key
+points to remember:
+
+* A 'Traversal' is a graph query.
+* A 'GraphTraversalSource' is usually named "g" by convention and spawns 'Traversal'
+objects.
+* When either of these objects are referred to as "anonymous" they are not connected
+to any graph.
+
+Now that you've learned all of this important Gremlin terminology you are well
+prepared for the more advanced topics to come.
 
 [[wid]]
 Working with IDs

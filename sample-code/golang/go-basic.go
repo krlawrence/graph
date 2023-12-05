@@ -59,7 +59,7 @@ func createConnection(host string, port int) (*GraphTraversalSource, *DriverRemo
 	if err != nil {
 		log.Fatalln(err)
 	} else {
-		g = Traversal().WithRemote(drc)
+		g = Traversal().With(drc)
 	}
 	return g, drc, err
 }

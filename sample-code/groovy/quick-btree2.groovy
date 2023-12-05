@@ -4,7 +4,7 @@
 [] // output from the Gremlin Console.
 
 graph = TinkerGraph.open()
-g = graph.traversal()
+g = traversal().with(graph)
 
 g.addV('root').property('data', 9).as('root').
         addV('node').property('data', 5).as('b').

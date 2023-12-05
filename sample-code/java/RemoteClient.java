@@ -29,7 +29,7 @@ public class RemoteClient {
         Cluster cluster = builder.create();
 
         GraphTraversalSource g = traversal().
-                        withRemote(DriverRemoteConnection.using(cluster));
+                with(DriverRemoteConnection.using(cluster));
 
         List<Map<Object, Object>> vmaps =
                 g.V().has("airport", "region", "GB-ENG").limit(10).valueMap().toList();

@@ -11,7 +11,7 @@
 
 [] // Remove these two lines if using a graph db other than TinkerGraph.
 graph = TinkerGraph.open()
-g = graph.traversal()
+g = traversal().with(graph)
 
 g.addV("person").property("name", "Albert").as("albert").
         addV("person").property("name", "Bill").as("bill").

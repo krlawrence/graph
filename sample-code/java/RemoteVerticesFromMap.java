@@ -125,7 +125,7 @@ public class RemoteVerticesFromMap {
 
         this.cluster = builder.create();
         this.drc = DriverRemoteConnection.using(cluster);
-        this.gts = traversal().withRemote(drc);
+        this.gts = traversal().with(drc);
 
         return (gts);
     }

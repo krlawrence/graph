@@ -16,11 +16,13 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSo
 import org.apache.tinkerpop.gremlin.structure.T
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.*
 
+import static org.apache.tinkerpop.gremlin.process.traversal.AnonymousTraversalSource.traversal;
+
 // Create a new (empty) TinkerGrap
-TinkerGraph tg = TinkerGraph.open()
+TinkerGraph graph = TinkerGraph.open()
 
 // Create a Traversal source object
-GraphTraversalSource g = tg.traversal()
+GraphTraversalSource g = traversal().with(graph)
 
 // Add some nodes and vertices - Note the use of "iterate".
 g.addV("airport").property("code", "AUS").as("aus").

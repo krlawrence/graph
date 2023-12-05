@@ -12,6 +12,12 @@ println "==============================================\n"; []
 [] // Use the following line to use CQL
 graph = JanusGraphFactory.open('conf/janusgraph-cql.properties')
 
+println "\n=========================="; []
+println "Acquiring traversal source"; []
+println "==========================\n"; []
+[] // Setup our traversal source object
+g = traversal().with(graph)
+
 println "\n==============="; []
 println "Defining labels"; []
 println "===============\n"; []
@@ -117,14 +123,8 @@ mgmt.awaitGraphIndexStatus(graph, 'distIndex').
 println "\n========================"; []
 println "Loading air-routes graph"; []
 println "========================\n"; []
-graph.io(graphml()).readGraph('air-routes.graphml')
-graph.tx().commit()
-
-println "\n=========================="; []
-println "Acquiring traversal source"; []
-println "==========================\n"; []
-[] // Setup our traversal source object
-g = graph.traversal()
+g.io('air-routes.graphml').read().iterate()
+g.tx().commit()
 
 println "\n=========================="; []
 println "Preparing graph statistics"; []

@@ -36,7 +36,7 @@ public class RemotePartitionStrategy {
 
         // Create a new traversal source object
         GraphTraversalSource g = traversal().
-                        withRemote(DriverRemoteConnection.using(cluster));
+                with(DriverRemoteConnection.using(cluster));
 
         // Make sure our connection is working.
         System.out.println(g.V().count().next());
