@@ -890,17 +890,11 @@ assign a unique ID to each new vertex for us.
 [source,groovy]
 ----
 vertices = [["WYZ","KWYZ"],["XYZ","KXYZ"]]
-for (a in vertices) {graph.addVertex(label,"airport","code",a[0],"iata",a[1])}
+for (a in vertices) {g.addV("airport").property("code",a[0],"iata",a[1]).iterate()}
 ----
 
-We could also have added the vertices using the traversal object 'g' as follows. Notice
-the call to 'next()'. Without this the vertex creation will not work as expected.
-
-[source,groovy]
-----
-vertices = [["WYZ","KWYZ"],["XYZ","KXYZ"]]
-for (a in vertices) {g.addV("airport").property("code",a[0],"iata",a[1]).next()}
-----
+Note the call to 'iterate' at the end for without that terminal step, the query would
+not execute.
 
 This technique of creating vertices and/or edges using a 'for' loop can also be useful
 when working with graphs remotely over HTTP connections. It is a very convenient way
@@ -911,8 +905,57 @@ If you prefer a more Groovy like syntax you can also do this.
 [source,groovy]
 ----
 vertices = [["WYZ","KWYZ"],["XYZ","KXYZ"]]
-vertices.each {g.addV("airport").property("code",it[0],"iata",it[1]).next()}
+vertices.each {g.addV("airport").property("code",it[0]).property("iata",it[1]).iterate()}
 ----
+
+[[addinject]]
+Adding vertices and edges using inject
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The previous section on <<addloop,"Adding vertices and edges using a loop">> used the
+loop semantics of programming languages to add multiple vertices by iterating over an
+array of data. In tihs section we will learn how you can do this entirely with 
+Gremlin steps. As before we construct an array representing our graph data and give
+that to 'inject'. The "looping" we saw previously is similarly produced here by the
+standard Gremlin semantics which takes the array and uses 'unfold' to flatten the 
+data such that each internal array triggers a call to the 'addV' step.
+
+[source,groovy]
+----
+vertices = [["WYZ","KWYZ"],["XYZ","KXYZ"]]
+g.inject(vertices).unfold().as("v").
+  addV("airport").property("code", select("v").limit(local,1)).
+                  property("iata", select("v").tail(local,1))
+----
+
+Each internal array is then given a label of "v" so that it can be referenced later
+in the traversal. We reference it in the calls to 'property' where we 'select' the 
+array and grab either the first item in the array (i.e. the "code") or the last (i.e.
+the "iata") to serve as the property value.
+
+Unlike the approach that uses a more standard Java loop, this approach executes the
+graph mutation in a single query, where as the former approach will execute one 
+query per item in the "vertices" array. 
+
+[[addrepeat]]
+Adding vertices using 'repeat'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The previous section on <<addinject,"Adding vertices and edges using inject">> 
+demonstrated how to use add multiple vertices given an array of data using only 
+Gremlin steps. Another approach worth knowing about is the use of 'repeat' step to 
+achieve a similar end:
+
+[source,groovy]
+----
+g.inject(0).repeat(addV('test').property(T.id, loops())).times(5)
+----
+
+Note the call to 'loops' when setting the identifier for the vertex. The 'loops' step
+tracks the number of times that the 'repeat' has been called, essentially incremeting
+by 1 for each call to 'addV' creating an auto-incremeting identifier. This technique
+for creating vertices is often helpful when there is a need to generate some vertices
+for testing.
 
 [[coaladdv]]
 Using 'coalesce' to only add a vertex if it does not exist
