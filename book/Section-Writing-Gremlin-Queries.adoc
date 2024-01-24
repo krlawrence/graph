@@ -1890,8 +1890,6 @@ NOTE: There are additional 'WithOptions' settings we can use to change how
 properties with meta properties are returned by 'valueMap' This is covered later as
 part of the "<<tp34vmmetaprop>>" section.
 
-
-
 [[element-map]]
 An alternative to 'valueMap' - introducing 'elementMap'
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
