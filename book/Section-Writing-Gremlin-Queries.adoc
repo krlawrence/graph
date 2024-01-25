@@ -2201,6 +2201,33 @@ println s
 [2, 7, 5, 3, 4, 1]
 ----
 
+[[ignoringresults]]
+Ignoring query results with 'iterate'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+There are a number of cases where the results of a query are not of interest to you.
+A common situation where this happens is when you have a graph mutation query and are
+only interested in persisting those changes to the database, but are not interested
+in doing anything with the output that the traversal produces. 
+
+[source,groovy]
+----
+g.addV('airport').property('code','AUS').as('aus').
+  addV('airport').property('code','DFW').as('dfw').
+  addE('route').from('aus').to('dfw').iterate()
+----
+
+In the example above, you can see that we add two vertices and an edge between them
+with the return value being the edge. Has we used 'next' as the terminal step, the 
+query would have returned the newly created edge. With the use of 'iterate' as the 
+the terminal step, the query has no value returned. The vertices are added to the 
+graph along with the edge and the edge is discarded. Additional calls to 'next' after
+'iterate' will result in a 'NoSuchElementException'.
+
+The use of 'iterate' can bring some performance improvements because it signals to 
+the graph that you are not interested in the results which could save some processing
+costs (e.g. serialization, network). 
+
 [[deepdivetraversals]]
 Deep dive on traversal terminology
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

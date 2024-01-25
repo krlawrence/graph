@@ -899,7 +899,8 @@ for (a in vertices) {g.addV("airport").property("code",a[0],"iata",a[1]).iterate
 ----
 
 Note the call to 'iterate' at the end for without that terminal step, the query would
-not execute.
+not execute. If you don't recall why 'iterate' is important you can read about it in
+the "<<ignoringresults>>" section. 
 
 This technique of creating vertices and/or edges using a 'for' loop can also be useful
 when working with graphs remotely over HTTP connections. It is a very convenient way
@@ -916,8 +917,8 @@ vertices.each {
 ----
 
 [[addinject]]
-Adding vertices and edges using inject
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Adding vertices and edges using 'inject'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The previous section on "<<addloop>>" used the loop semantics of programming 
 languages to add multiple vertices by iterating over an array of data. In tihs 
