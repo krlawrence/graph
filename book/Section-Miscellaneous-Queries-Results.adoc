@@ -457,11 +457,11 @@ g.V().hasLabel('country').
 [[continentdist]]
 Distribution of airports by continent
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-We can use a similar query to the one above to find out how many airports are located in
-each of the seven continents. As you can see from the output, a key/value map is again
-returned where the key is the continent code and the value is the number of airports in
-that continent. Note that currently  there are no airports with regular scheduled service
-in Antarctica!
+We can use a similar query to the one above to find out how many airports are located
+in each of the seven continents. As you can see from the output, a key/value map is 
+again returned where the key is the continent code and the value is the number of 
+airports in that continent. Note that currently  there are no airports with regular 
+scheduled service in Antarctica!
 
 [source,groovy]
 ----
@@ -742,8 +742,8 @@ Analysis of routes between Europe and the USA
 The next few queries show how you can use a graph like 'air-routes' to perform
 analysis on a particular industry segment. The following queries analyze the
 distribution and availability of routes between airports across Europe and airports
-in the United States. First of all let's just find out how many total routes there are
-between airports anywhere in Europe and airports in the USA.
+in the United States. First of all let's just find out how many total routes there 
+are between airports anywhere in Europe and airports in the USA.
 
 [source,groovy]
 ----
@@ -932,9 +932,9 @@ between airport vertices?". We can also use this same query to find the statisti
 'mode' (most common number) for a set of routes.
 
 Take a look at the next query that shows how we can do analysis on the distribution
-of routes throughout the graph. We are only interested in vertices that are airports and
-for those vertices we want to count how many outgoing routes each airport has. We want
-to return the results as a set of ordered 'key:value' pairs where the key is the
+of routes throughout the graph. We are only interested in vertices that are airports
+and for those vertices we want to count how many outgoing routes each airport has. We
+want to return the results as a set of ordered 'key:value' pairs where the key is the
 number of outgoing routes and the value is the number of airports that have that
 number of outgoing routes.
 
@@ -1155,9 +1155,9 @@ What are the top ten airports by route count?
 
 Earlier we calculated which airports have the most routes. These next three queries
 are of a similar nature but produce a tables of the top ten airports in terms of
-incoming, outgoing and overall routes. As mentioned before, because of the way some airlines
-route flights, the number of outgoing and incoming routes to an airport will not
-always be the same. For example, several KLM Airlines flights from Amsterdam to
+incoming, outgoing and overall routes. As mentioned before, because of the way some 
+airlines route flights, the number of outgoing and incoming routes to an airport will
+not always be the same. For example, several KLM Airlines flights from Amsterdam to
 airports in Africa continue on to other African airports before returning to
 Amsterdam. As a result there are more inbound routes from than out bound routes to
 these airports. In each example below the 'project' step is used to generate the
@@ -1237,11 +1237,11 @@ g.V().hasLabel('airport').
 ----
 
 As expected, Frankfurt is the airport with the most overall routes. One small
-side note while on the topic of airline routes. The graph does not track the frequency
-at which any given route is operated. What this means is that the airport with the
-most routes is not necessarily also the busiest. This is because many routes are
-operated multiple times a day. We did not try to include this data in the graph as it
-changes too often for me to keep up with.
+side note while on the topic of airline routes. The graph does not track the 
+frequency at which any given route is operated. What this means is that the airport 
+with the most routes is not necessarily also the busiest. This is because many routes
+are operated multiple times a day. We did not try to include this data in the graph 
+as it changes too often for me to keep up with.
 
 [source,groovy]
 ----
@@ -1727,9 +1727,9 @@ Here are the, now sorted, results.
 This next query also finds all routes longer than 4,000 miles but this time
 originating in London Gatwick. Note also the use of 'where' to query the edge
 distance. The 'has' form is simpler but we show 'where' being used just to
-demonstrate an alternative way we could do it. Note that this query uses
-three 'by' modulators as each of the values returned is from a different
-property of the respective vertices and edges.
+demonstrate an alternative way we could do it. Note that this query uses three 'by' 
+modulators as each of the values returned is from a different property of the 
+respective vertices and edges.
 
 [source,groovy]
 ----
@@ -2207,7 +2207,7 @@ When run the query produces the following results.
 Combining 'aggregate', 'union' and 'filter' to compute distances
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This next query is similar to the one we looked at in the <<aggrroutes>> section.
+This next query is similar to the one we looked at in the "<<aggrroutes>>" section.
 It uses 'aggregate', 'union', 'filter' and 'where' to factor certain airports in and
 out of a query. We find all airports in London, Munich and Paris and then count the
 total distance of all routes from those airports as the first half of a 'union'. The
@@ -2501,17 +2501,18 @@ Here are the results that the query generates.
 [ORD:226, DFW:216, FRA:254, CDG:253, PEK:232, AMS:257, ATL:232, MUC:219, IST:259, DME:206, DXB:225]
 ----
 
-The previous query is a perfectly good way to achieve the desired result. Just for fun
-let's produce the same results using a 'sack'. This is intended just as an example of
-how 'sack' works and is not the way you would actually want to perform this specific
-query. That said, it is useful to have an example where the contents of the sack is
-more complex than a simple integer value. At the start of the query we initialize our
-sack with an empty map '[:]'. Later in the query, for each airport that has more than
-200 outgoing routes, we update the map by adding the airport code and the route count
-to the map. Note that the value part of each map entry is produced using a traversal.
-So while this query is most definitely overkill for the task (as demonstrated by the
-much simpler query above) it does provide us with another example of how you can use
-sacks in powerful ways to store data as your query iterates.
+The previous query is a perfectly good way to achieve the desired result. Just for 
+fun let's produce the same results using a 'sack'. This is intended just as an 
+example of how 'sack' works and is not the way you would actually want to perform 
+this specific query. That said, it is useful to have an example where the contents of
+the sack is more complex than a simple integer value. At the start of the query we 
+initialize our sack with an empty map '[:]'. Later in the query, for each airport 
+that has more than 200 outgoing routes, we update the map by adding the airport code 
+and the route count to the map. Note that the value part of each map entry is
+produced using a traversal. So while this query is most definitely overkill for the 
+task (as demonstrated by the much simpler query above) it does provide us with 
+another example of how you can use sacks in powerful ways to store data as your 
+query iterates.
 
 [source,groovy]
 ----
@@ -2595,10 +2596,10 @@ Using latitude, longitude and geographical region in queries
 The 'air-routes' graph stores the geographic coordinates (latitude and longitude) of
 each airport as floating point numbers. Some graph systems such as JanusGraph have
 geographic coordinate and shape (geospatial) functions built in, but TinkerGraph does
-not. Moreover, GraphML does not offer any specific geospatial support. To keep
-things simple and flexible, the air routes data set does not assume any specific back
-end capabilities. Having coordinates provided as basic floating point
-numbers still allows us to write some interesting geospatial queries.
+not. Moreover, GraphML does not offer any specific geospatial support. To keep things
+simple and flexible, the air routes data set does not assume any specific back end 
+capabilities. Having coordinates provided as basic floating point numbers still 
+allows us to write some interesting geospatial queries.
 
 So far, we have not taken advantage of these latitude and longitude coordinates in
 queries. In this section we have included some queries that perform interesting
@@ -3233,8 +3234,8 @@ Using 'store' and a 'sideEffect' to make a set of unique values
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Take a look at the query below. All it does is return the city names for the airports
-that have IDs between 1 and 200 (inclusive). The list is sorted by ascending alphabetical
-order.
+that have IDs between 1 and 200 (inclusive). The list is sorted by ascending 
+alphabetical order.
 
 [source,groovy]
 ----
@@ -3264,11 +3265,11 @@ and a 'Set' as we think doing that demonstrates a capability quite well that is
 useful in more complex scenarios than this one. By starting a query using
 'withSideEffect' we can setup a named place we can 'store' things into later in our
 query and we can also give the store a type. In this case we chose to use a 'Set'.
-What this query does is store the City names of the first 200 vertices in the graph into
-a Set and then displays them. As we know from our first attempt, city names, like
-Dallas, appear more than once. However if we look at the Set that we get back from
-our modified query (because by default Sets do not store duplicates) we will only see the
-names Dallas and London appearing once.
+What this query does is store the City names of the first 200 vertices in the graph 
+into a Set and then displays them. As we know from our first attempt, city names, 
+like Dallas, appear more than once. However if we look at the Set that we get back 
+from our modified query (because by default Sets do not store duplicates) we will 
+only see the names Dallas and London appearing once.
 
 [source,groovy]
 ----
@@ -3277,8 +3278,8 @@ g.withSideEffect("x", [] as Set).V().hasId(between(1,201)).
   values('city').store('x').cap('x').unfold().order().fold()
 ----
 
-Here are the city names that we get back after running our modified query. You will notice
-that all of the duplicate names are now gone.
+Here are the city names that we get back after running our modified query. You will 
+notice that all of the duplicate names are now gone.
 
 [source,groovy]
 ----
@@ -3306,11 +3307,11 @@ g.V().hasId(between(1,201)).values('city').dedup().count()
 186
 ----
 
-This is clearly a simpler query in this case but you will find cases where the example
-that uses 'withSideEffect' and 'store' will come in very handy, especially in cases where
-you want to store things into a Set or List from multiple parts of a traversal such as the
-one below that finds and counts all the unique city names across multiple hops from a
-starting airport.
+This is clearly a simpler query in this case but you will find cases where the 
+example that uses 'withSideEffect' and 'store' will come in very handy, especially in
+cases where you want to store things into a Set or List from multiple parts of a 
+traversal such as the one below that finds and counts all the unique city names 
+across multiple hops from a starting airport.
 
 [source,groovy]
 ----
@@ -3386,16 +3387,16 @@ e[11][3-knows->5]
 
 Now that we have our test graph created let's take a look at the query we will need
 to develop. The problem we want to solve is to start from vertex A, find all of the
-edges that go out from vertex A and also all of the vertices at the other ends of those
-edges. Lastly we also want to find any edges between the vertices that are also
-connected to A but ignore edges that connect to vertices that are not also connected to
-A. In simple terms we want a query that will return all of the relationships except
-(C->E) and (D-F) as A is not connected to E or F.
+edges that go out from vertex A and also all of the vertices at the other ends of 
+those edges. Lastly we also want to find any edges between the vertices that are also
+connected to A but ignore edges that connect to vertices that are not also connected 
+to A. In simple terms we want a query that will return all of the relationships 
+except (C->E) and (D-F) as A is not connected to E or F.
 
 Using the 'withSideEffect' pattern that we used earlier in this section we can again
-develop a query that will collect for us the vertices and edges that we are interested
-in. We added line numbers to make it easier to discuss what is going on but please,
-note that these are not part of the query itself.
+develop a query that will collect for us the vertices and edges that we are 
+interested in. We added line numbers to make it easier to discuss what is going on 
+but please, note that these are not part of the query itself.
 
 [source,groovy]
 ----
@@ -3423,8 +3424,8 @@ to 'V(0)'.
 query. The 'unfold' just makes the output a little easier to read.
 ----
 
-Here is the output we get from running the query. As you can see, the vertices and edges
-that we were not interested in have been correctly left out of the result set.
+Here is the output we get from running the query. As you can see, the vertices and 
+edges that we were not interested in have been correctly left out of the result set.
 
 [source,groovy]
 ----
@@ -4064,7 +4065,7 @@ g.V().hasLabel('airport').count()
 
 Next we remembered there are some orphan airports that have no routes so we have to
 rule those out. We can do this using a technique similar to the one that was
-discussed in the "<<noroutes>> section.
+discussed in the "<<noroutes>>" section.
 
 [source,groovy]
 ----
@@ -4568,9 +4569,13 @@ the output by just selecting the values from the map returned.
 
 [source,groovy]
 ----
-g.V().as("a").out().as("b").select('a','b').by('code').groupCount().unfold()
-                           .filter(select(values).is(gt(1))).select(keys).select(values)
+g.V().as("a").out().as("b").
+  select('a','b').by('code').
+  groupCount().unfold().
+  filter(select(values).is(gt(1))).
+  select(keys).select(values)
 ----
+
 So here is the final output, just the codes for the airports with parallel edges
 that needed fixing.
 
@@ -4673,7 +4678,8 @@ once, but this approach would miss the case where more than one route was of the
 
 [source,groovy]
 ----
-r=g.E().hasLabel('route').as('e').order().by('dist', desc).limit(1).select('e').id().next()
+r=g.E().hasLabel('route').as('e').order().by('dist', desc).
+    limit(1).select('e').id().next()
 g.E(r).dist
 g.E(r).bothV().values('code')
 ----
@@ -4685,8 +4691,12 @@ our experiments to build up this query from there is a non trivial journey!
 [source,groovy]
 ----
 g.E().hasLabel("route").order().by("dist", desc).store("d").by("dist").
-  filter(values("dist").as("cd").select("d").by(limit(local, 1)).as("md").where("cd",eq("md"))).
-  project("from","to","dist").by(outV()).by(inV()).by("dist")
+  filter(values("dist").as("cd").
+         select("d").by(limit(local, 1)).as("md").
+         where("cd",eq("md"))).
+  project("from","to","dist").
+    by(outV()).
+    by(inV()).by("dist")
 ----
 
 Finally, to output airport codes rather than just vertices, we can tweak the query
@@ -4694,9 +4704,14 @@ one more time as follows.
 
 [source,groovy]
 ----
-g.E().hasLabel("route").order().by("dist",desc).store("d").by("dist").\
-  filter(values("dist").as("cd").select("d").by(limit(local, 1)).as("md").where("cd",eq("md"))).\
-  project("from","to","dist").by(outV().values('code')).by(inV().values('code')).by("dist")
+g.E().hasLabel("route").order().by("dist",desc).store("d").by("dist").
+  filter(values("dist").as("cd").
+         select("d").by(limit(local, 1)).as("md").
+         where("cd",eq("md"))).
+  project("from","to","dist").
+    by(outV().values('code')).
+    by(inV().values('code')).
+    by("dist")
 ----
 
 Now we are ready to run our query. This is the output from it. Notice how both routes

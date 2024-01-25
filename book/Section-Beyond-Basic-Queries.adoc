@@ -35,7 +35,7 @@ directly into the Gremlin console.
 [source,groovy]
 ----
 g.V().hasLabel('airport') \
-     .has('region',within('US-TX','US-LA','US-AZ','US-OK'))   \
+     .has('region',within('US-TX','US-LA','US-AZ','US-OK')) \
      .order().by('region',asc)   \
      .valueMap().select('code','region')
 
@@ -47,9 +47,9 @@ line ends with a period which tells the parser that there are more steps coming.
 [source,groovy]
 ----
 g.V().hasLabel('airport').
-      has('region',within('US-TX','US-LA','US-AZ','US-OK')).
-      order().by('region',asc).
-      valueMap().select('code','region')
+  has('region',within('US-TX','US-LA','US-AZ','US-OK')).
+  order().by('region',asc).
+  valueMap().select('code','region')
 
 ----
 
@@ -166,7 +166,8 @@ the graph made it so easy to do.
 ----
 // Flights from any Airport in Africa to any airport in the United States
 g.V().hasLabel('continent').has('code','AF').out().as('a').
-      out().has('country','US').as('b').select('a','b').by('code')
+  out().has('country','US').as('b').
+  select('a','b').by('code')
 ----
 
 We could also have started our query by looking at each airport and looking to
@@ -247,15 +248,15 @@ all, graph traversals of any consequence will include that vertex. Such vertices
 'supernodes' may be unavoidable but with careful planning as you design your graph
 model you can reduce the likelihood that vertices become 'supernodes'. The reason we
 worry about 'supernodes' is that they can significantly impact the performance of
-graph traversals. This is because it is likely that any graph traversal that goes via
-such a vertex will have to look at most if not all of the edges connected to that vertex
-as part of a traversal.
+graph traversals. This is because it is likely that any graph traversal that goes 
+via such a vertex will have to look at most if not all of the edges connected to that
+vertex as part of a traversal.
 
 The 'air-routes' graph does not really have anything that could be classed as a
 'supernode'. The vertex with the most edges is the continent vertex for North America
 that has approximately 980 edges. The busiest airports are IST and AMS and they both
-have just over 530 total edges. So in the case of the 'air-routes' graph we do not have
-to worry too much.
+have just over 530 total edges. So in the case of the 'air-routes' graph we do not 
+have to worry too much.
 
 If we were building a graph of a social network that included famous people we might
 have to worry. Consider some of the people on Twitter with millions of followers.
@@ -264,16 +265,16 @@ face issues.
 
 As you design your graph model it is worth considering that some things are perhaps
 better modelled as a vertex property than as a vertex with lots of edges needing to
-connect to it. For example in the air routes graph there are country vertices and each
-airport is connected to one of the country vertices. In the air routes graph this is not
-a problem as even if all of the airports in the graph were in the same country that
-would still give us fewer than 3,500 edges connected to that vertex. However, imagine
-if we were building a graph of containing a very large number of people. If we had
-several million people in the graph all living in same the country that would be a
-guaranteed way to get a 'supernode' if we modelled that relationship by connecting
-every person vertex to a country vertex using a 'lives in' edge. In such situations, it
-would be far more sensible to make the country where a person lives a property of
-their own vertex.
+connect to it. For example in the air routes graph there are country vertices and 
+each airport is connected to one of the country vertices. In the air routes graph 
+this is not a problem as even if all of the airports in the graph were in the same 
+country that would still give us fewer than 3,500 edges connected to that vertex. 
+However, imagine if we were building a graph of containing a very large number of 
+people. If we had several million people in the graph all living in same the country 
+that would be a guaranteed way to get a 'supernode' if we modelled that relationship 
+by connecting every person vertex to a country vertex using a 'lives in' edge. In 
+such situations, it would be far more sensible to make the country where a person 
+lives a property of their own vertex.
 
 A detailed discussion of 'supernode' mitigation is beyond the scope of this book
 but we encourage you to always be thinking about their possibility as you design your
@@ -344,10 +345,14 @@ will contain a list (array) of the returned values.
 ----
 // Using a Groovy for() loop to iterate over a list returned by Gremlin
 x=g.V().hasLabel('airport').limit(10).toList()
-for (a in x) {println(a.values('code').next()+" "+a.values('icao').next()+" "+a.values('desc').next())}
+for (a in x) {
+  println(a.values('code').next() + " " + a.values('icao').next() + " " + a.values('desc').next())
+}
 
 // We can also do this just using a 'for' loop and not storing anything into a variable.
-for (a in g.V().hasLabel('airport').limit(10).toList()) {println(a.values('code').next()+""+a.values('icao').next())}
+for (a in g.V().hasLabel('airport').limit(10).toList()) {
+  println(a.values('code').next()+""+a.values('icao').next())
+}
 ----
 
 Sometimes (as you have seen above) it is necessary to make a call to 'next' to get
@@ -358,12 +363,14 @@ the result you expect returned to your variable.
 number = g.V().hasLabel('airport').count().next()
 println "The number of airports in the graph is " + number
 ----
+
 Here is another example that makes a Gremlin query inside a 'for' loop.
 
 [source,groovy]
 ----
 for (a in 1..10) print g.V().has(id,a).values('code').next()+" "
 ----
+
 This example returns a hash of vertices, with vertex labels as the keys and the
 code property as the values. It then uses the label names to access the returned
 hash.
@@ -457,14 +464,13 @@ queries while running outside of the Gremlin Console as a standalone application
 Using a variable to feed a traversal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Sometimes it is very useful to store the result of a query in a variable and
-then, later on, use that variable to start a new traversal. You may have noticed we
-did that in the very last example of the prior section where we fed the 'german'
-variable back in to a traversal. By way of another simple
-example, the code below stores the result of the first query in the variable
-'austin' and then uses it to look for routes from Austin in second query.
-Notice how we do this by passing the variable containing the Austin vertex
-into the 'V()' step.
+Sometimes it is very useful to store the result of a query in a variable and then, 
+later on, use that variable to start a new traversal. You may have noticed we did 
+that in the very last example of the prior section where we fed the 'german' variable
+back in to a traversal. By way of another simple example, the code below stores the 
+result of the first query in the variable 'austin' and then uses it to look for 
+routes from Austin in second query. Notice how we do this by passing the variable 
+containing the Austin vertex into the 'V()' step.
 
 [source,groovy]
 ----
@@ -473,11 +479,10 @@ into the 'V()' step.
 ----
 
 You can take this technique one step further and pass an entire saved list of
-vertices to 'V()'. In the next example we first generate a list of all
-airports that are in Scotland and then pass that entire list into 'V()' to
-first of all count how many routes there are from those airports and then we
-start another query that looks for any route from those airports to airports
-in Germany.
+vertices to 'V()'. In the next example we first generate a list of all airports that
+are in Scotland and then pass that entire list into 'V()' to first of all count how 
+many routes there are from those airports and then we start another query that looks 
+for any route from those airports to airports in Germany.
 
 [source,groovy]
 ----
@@ -491,11 +496,11 @@ g.V(a).out().count()
 g.V(a).out().has('country','DE').values('code')
 ----
 
-In this example of using with variables to drive traversals, we again
-create a list of airports. This time we find all the airports in Texas. We
-then use a Groovy 'each' loop to iterate through the list. For each airport in
-the list we print the code of the starting airport and then the codes of every
-airport that you can fly to from there.
+In this example of using with variables to drive traversals, we again create a list 
+of airports. This time we find all the airports in Texas. We then use a Groovy 'each'
+loop to iterate through the list. For each airport in the list we print the code of 
+the starting airport and then the codes of every airport that you can fly to from 
+there.
 
 [source,groovy]
 ----
@@ -516,7 +521,7 @@ just using a Gremlin query with no additional Groovy code. The point of this exa
 is more to show another example of mixing Gremlin, Groovy and variables.
 Knowing that you can do this kind of thing may come in useful as you start to write
 more complicated graph database applications that use Gremlin. You will see this
-type of query done using just Gremlin in the section called "<<unwantededges>>""
+type of query done using just Gremlin in the section called "<<unwantededges>>"
 later in this book.
 
 [source,groovy]
@@ -905,20 +910,22 @@ If you prefer a more Groovy like syntax you can also do this.
 [source,groovy]
 ----
 vertices = [["WYZ","KWYZ"],["XYZ","KXYZ"]]
-vertices.each {g.addV("airport").property("code",it[0]).property("iata",it[1]).iterate()}
+vertices.each {
+  g.addV("airport").property("code",it[0]).property("iata",it[1]).iterate()
+}
 ----
 
 [[addinject]]
 Adding vertices and edges using inject
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The previous section on <<addloop,"Adding vertices and edges using a loop">> used the
-loop semantics of programming languages to add multiple vertices by iterating over an
-array of data. In tihs section we will learn how you can do this entirely with 
-Gremlin steps. As before we construct an array representing our graph data and give
-that to 'inject'. The "looping" we saw previously is similarly produced here by the
-standard Gremlin semantics which takes the array and uses 'unfold' to flatten the 
-data such that each internal array triggers a call to the 'addV' step.
+The previous section on "<<addloop>>" used the loop semantics of programming 
+languages to add multiple vertices by iterating over an array of data. In tihs 
+section we will learn how you can do this entirely with Gremlin steps. As before we 
+construct an array representing our graph data and give that to 'inject'. The 
+"looping" we saw previously is similarly produced here by the standard Gremlin 
+semantics which takes the array and uses 'unfold' to flatten the data such that each 
+internal array triggers a call to the 'addV' step.
 
 [source,groovy]
 ----
@@ -941,10 +948,9 @@ query per item in the "vertices" array.
 Adding vertices using 'repeat'
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The previous section on <<addinject,"Adding vertices and edges using inject">> 
-demonstrated how to use add multiple vertices given an array of data using only 
-Gremlin steps. Another approach worth knowing about is the use of 'repeat' step to 
-achieve a similar end:
+The previous section on "<<addinject>>" demonstrated how to use add multiple vertices
+given an array of data using only Gremlin steps. Another approach worth knowing about
+is the use of 'repeat' step to achieve a similar end:
 
 [source,groovy]
 ----
@@ -961,7 +967,7 @@ for testing.
 Using 'coalesce' to only add a vertex if it does not exist
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In the <<coalconst>> section we looked at how coalesce could be used to return a
+In the "<<coalconst>>" section we looked at how coalesce could be used to return a
 constant value if the other entities that we were looking for did not exist. We can
 reuse that pattern to produce a traversal that will only add a vertex to the graph if
 that vertex has not already been created.
@@ -1027,9 +1033,9 @@ potentially updates or inserts a vertex based on its existence or not.
 
 The query below is perhaps a better example of an '"upsert"'. The query looks to
 see if the vertex with an ID of 3 already exists. If it does it updates the 'runways'
-property of that vertex be the value 3. If it does not exist it creates a new vertex and
-the property. As vertex v[3] already exists that is what the query returns, having
-first updated the 'runways' property.
+property of that vertex be the value 3. If it does not exist it creates a new vertex 
+and the property. As vertex v[3] already exists that is what the query returns, 
+having first updated the 'runways' property.
 
 [source,groovy]
 ----
@@ -1194,16 +1200,15 @@ execution. In our example above, 'property' never executes.
 
 TIP: Since 'drop' does not allow steps placed after it to execute, it is often found
 at the end of a traversal. It is worth noting however that its typical position in
-a traversal does not make it a <<var,terminal step>>, i.e. it does not iterate the
-traversal. Since 'drop' returns no results, the usual terminating step to use in
-conjunction with it is 'iterate'.
+a traversal does not make it a "<<var>>", i.e. it does not iterate the traversal. 
+Since 'drop' returns no results, the usual terminating step to use in conjunction 
+with it is 'iterate'.
 
 Despite the 'drop' filter behavior, we'd still like to be able to remove a property
-and then add a new one in the same traversal. In the "<<sideeffect,Using 'sideEffect'
-to do things on the side>>" section, we introduced how 'sideEffect' can be used to
-include additional processing without changing what gets passed on to the next stage
-of the query. We can wrap 'drop' in this step to handle the property removal as a
-side-effect of the traversal execution.
+and then add a new one in the same traversal. In the "<<sideeffect>>" section, we
+introduced how 'sideEffect' can be used to include additional processing without 
+changing what gets passed on to the next stage of the query. We can wrap 'drop' in 
+this step to handle the property removal as a side-effect of the traversal execution.
 
 [source,groovy]
 ----
@@ -1355,8 +1360,8 @@ vp[desc->Dallas/Fort Worth In]
 
 We have already seen how each property on a vertex or edge is represented as a key
 and value pair. If we wanted to retrieve a list of all of the property keys
-associated with a given vertex we could write a query like the one below that finds all
-of the property keys associated with the DFW vertex in the 'air-routes' graph.
+associated with a given vertex we could write a query like the one below that finds 
+all of the property keys associated with the DFW vertex in the 'air-routes' graph.
 
 [source,groovy]
 ----
@@ -1410,8 +1415,7 @@ that you want to return to the parent element that it is related to. The 'elemen
 step is used for this purpose and can be used to navigate from a property back to a
 vertex, edge or vertex property. That final case of a "vertex property" refers to
 situations where you have used 'properties' to access a meta-property as described
-a bit later in the <<metaprop, Adding properties to other properties (meta
-properties)>> section.
+a bit later in the "<<metaprop>>" section.
 
 [source,groovy]
 ----
@@ -1451,12 +1455,12 @@ Here are the properties returned.
 Properties have IDs too
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-We have seen many examples already that show how both vertices and edges have a unique
-ID. What may not have been obvious however is that properties also have an ID. Unlike
-vertex and edge IDs property IDs are not guaranteed to be unique across the graph.
-Certainly with TinkerGraph we have encountered cases where a vertex and a property
-share the same ID. This is not really an issue because they are used in different
-ways to access their associated graph element.
+We have seen many examples already that show how both vertices and edges have a 
+unique ID. What may not have been obvious however is that properties also have an ID. 
+Unlike vertex and edge IDs property IDs are not guaranteed to be unique across the 
+graph. Certainly with TinkerGraph we have encountered cases where a vertex and a 
+property share the same ID. This is not really an issue because they are used in 
+different ways to access their associated graph element.
 
 The query below returns the vertex property object (vp) for any property in the graph
 that has a value of 'London'.
@@ -1622,14 +1626,14 @@ also be something more sophisticated such as a Set or a List containing multiple
 values. You can think of these values as being an array but depending on how you
 create them you have to work with them differently. In this section we will look at
 how we can create multiple values for a single property key. Such values can be
-setup when the vertex is first created or added afterwards. These more complex type of
-property values are not supported on edges.
+setup when the vertex is first created or added afterwards. These more complex type 
+of property values are not supported on edges.
 
 If we wanted to store the IATA and ICAO codes for the Austin airport in a list
 associated with a single property rather than as separate properties we could have
-created them when we created the Austin vertex follows. You can also add properties to
-an existing vertex that have lists of values. We will look at how to do that later in
-this section.
+created them when we created the Austin vertex follows. You can also add properties 
+to an existing vertex that have lists of values. We will look at how to do that later 
+in this section.
 
 [source,groovy]
 ----
@@ -1894,9 +1898,8 @@ Creating properties that store sets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 So far we have just created values in a list that have 'LIST' cardinality which means
-that duplicate values are allowed. If we wanted to prevent that from
-happening we can use the 'set' keyword when adding properties to force a cardinality
-of 'SET'.
+that duplicate values are allowed. If we wanted to prevent that from happening we can
+use the 'set' keyword when adding properties to force a cardinality of 'SET'.
 
 In the example below we create a new property called 'hw' for vertex 'V(3)' with
 multiple values but using the 'set' keyword rather than the 'list' keyword that we
@@ -2031,7 +2034,8 @@ drop the meta property 'date', but will in fact drop the whole vertex.
 
 [source,groovy]
 ----
-g.V().has('code','AUS').properties().hasValue('AUS').property('date','6/6/2017').drop()
+g.V().has('code','AUS').
+  properties().hasValue('AUS').property('date','6/6/2017').drop()
 ----
 
 To remove a single meta property we need to use drop in this way
@@ -2464,11 +2468,11 @@ present in the list.
 ----
 
 While 'aggregate' and 'store' on the surface appear identical, they actually behave
-differently. The 'aggregate' step will block and immediately gather up everything from
-the prior traversal, whereas the 'store' step will only add things to its collection
-as they are seen. This is sometimes referred to as 'lazy aggregation'. Note also that
-even though we specified a 'limit' of 2, the 'store' step collected three elements as
-the third has already been seen before the limit step is applied.
+differently. The 'aggregate' step will block and immediately gather up everything 
+from the prior traversal, whereas the 'store' step will only add things to its 
+collection as they are seen. This is sometimes referred to as 'lazy aggregation'. 
+Note also that even though we specified a 'limit' of 2, the 'store' step collected 
+three elements as the third has already been seen before the limit step is applied.
 
 [source,groovy]
 ----
@@ -2615,13 +2619,12 @@ Using 'unfold' to unbundle a collection
 
 Sometimes it is desirable to unbundle a collection so that we can work on it further.
 This is what the 'unfold' step does. If we apply 'unfold' to the previous query you
-can see what is generated. The collection that the 'group' step generates is a
-Java HashMap. The 'unfold' step turns the HashMap into a series of HashMap.Node
-elements.
+can see what is generated. The collection that the 'group' step generates is a Map. 
+The 'unfold' step turns the HashMap into a series of "entries" which are essentially 
+just key/value pairs.
 
 [source,groovy]
 ----
-
 g.V().hasLabel('airport').limit(5).group().by('code').by('city').unfold()
 
 BNA=[Nashville]
@@ -2721,6 +2724,79 @@ g.V(3).valueMap().select(values)
 
 [[US],[AUS],[12250],[Austin],[542],[KAUS],[-97.6698989868164],[airport],[US-TX],[2],[30.1944999694824],[Austin Bergstrom International Airport]]
 ----
+
+[[mergecollections]]
+Ways to merge collections
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+We've seen how 'fold' can be used to to collect objects in a stream into a List. If
+the objects themselves are Lists and you wish to merge them together to a new List
+you can also do that with 'fold' after you've first flattened those individual
+List objects with 'unfold'.
+
+[source,groovy]
+----
+g.V().limit(5).map(out().values('code').fold())
+
+[SKZ,KHI]
+[ISB]
+[KHI,MCT,TUK]
+[DXB,KHI,DOH]
+[PEW,PZH]
+
+g.V().limit(5).map(out().values('code').fold()).unfold().fold()
+ 
+[SKZ,KHI,ISB,KHI,MCT,TUK,DXB,KHI,DOH,PEW,PZH]
+----
+
+Merging maps together is slightly more complex than just a simple 'fold' because 
+duplicate keys among the Maps must be resolved in some way. If you are not concerned
+about duplicates or simply want the last pair duplicate to be in the resulting Map 
+you could just use a specific form of 'fold' that include the 'addAll' operator:
+
+[source,groovy]
+----
+g.V().limit(3).valueMap("code","desc")
+
+[code:[MJD],desc:[Moenjodaro Airport]]
+[code:[GIL],desc:[Gilgit Airport]]
+[code:[GWD],desc:[Gwadar International Airport]]
+
+g.V().limit(3).valueMap("code","desc").fold([:], addAll)
+
+[code:[GWD],desc:[Gwadar International Airport]]
+----
+
+You also have the option to use the 'merge' step with collections:
+
+[source,groovy]
+----
+g.V().has("code","IAD").valueMap().select(keys).merge(["name"])
+
+[country,code,longest,city,lon,type,elev,name,icao,region,runways,lat,desc]
+
+g.V().has("code","IAD").valueMap("code","desc").
+  merge(V().has("code","DUB").valueMap("runways"))
+  
+[runways:[2],code:[IAD],desc:[Washington Dulles International Airport]]  
+----
+
+A more complex case for merging Maps occurs when you want to aggregate together 
+values of the same the keys into a list, rather than having them overwrite one 
+another. You can do this with Gremlin with a commonly used pattern of Gremlin steps,
+the basics of which have been explained earlier in this section.
+
+[source,groovy]
+----
+g.V().has("code",within("IAD","DUB")).valueMap("code","desc","runways").
+  unfold().
+  group().by(keys).by(select(values).unfold().fold())
+
+[code:[IAD,DUB],runways:[4,2],desc:[Washington Dulles International Airport,Dublin International Airport]]
+----
+
+The previous example uses 'unfold' incoming Maps to entries and then groups on the 
+keys of those entries thereby building a list of each of the values in the final Map.
 
 [[localcollect]]
 Using 'local' scope with collections
@@ -3351,10 +3427,10 @@ Using 'min' and 'max' with a 'sack'
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 There are many different operators that can be used with sacks. They are defined as
-part of the TinkerPop Java Enum called 'Operator'. Two such operators that we
-can use are 'min' and 'max'. The example below looks at the distances of
-all routes that start at SAF and in each case returns the minimum of the distance or
-400 which is assigned to the sack at the start of the query.
+part of the TinkerPop Java Enum called 'Operator'. Two such operators that we can use
+are 'min' and 'max'. The example below looks at the distances of all routes that 
+start at SAF and in each case returns the minimum of the distance or 400 which is 
+assigned to the sack at the start of the query.
 
 [source,groovy]
 ----
@@ -3428,12 +3504,12 @@ g.withSack(0).
       by('code').by('dist').by('code').by('dist').by('code').by()
 ----
 
-Later, in the <<sackauslhr>> section, we will again use a 'sack' to help calculate
+Later, in the "<<sackauslhr>>" section, we will again use a 'sack' to help calculate
 multi hop route distances using an approach similar to the example above.
 
 So far we have just used simple integer values to initialize our sacks. However it is
 also possible to use non primitive types such as maps when working with a sack. You
-will find an example of 'sack' being used to generate a map in the "<<anothersack>>
+will find an example of 'sack' being used to generate a map in the "<<anothersack>>"
 section.
 
 [[nonsackcalc]]
@@ -3681,9 +3757,9 @@ This time the four hop routes appear first in the results.
 [[AUS,SFO,AKL,WLG],3]
 ----
 
-As a side note, if we wanted to include the path's length rather than the hop count we
-could change the query as shown below. In this case a 'sack' step is not needed as we
-can just count the length of each path.
+As a side note, if we wanted to include the path's length rather than the hop count 
+we could change the query as shown below. In this case a 'sack' step is not needed as
+we can just count the length of each path.
 
 [source,groovy]
 ----
@@ -3804,8 +3880,8 @@ g.withSack([]).V().has('code','SAF').out().
 
 You might be thinking, and you would be right, that we could have achieved the same
 result without using a 'sack' at all and just using a fold 'step' as shown below.
-However, the power of using a 'sack' becomes apparent when you need to build up a list
-containing the results of various parts of the query.
+However, the power of using a 'sack' becomes apparent when you need to build up a 
+list containing the results of various parts of the query.
 
 [source,groovy]
 ----
@@ -4074,9 +4150,9 @@ I found 7 airports in Oregon
 ----
 
 Of course, in reality we would probably just use a 'count' when counting things or
-put them into a list and look at the size of the list returned  but
-the above example gives a nice, and hopefully easy to understand, example of a
-closure being used as part of a 'sideEffect' step.
+put them into a list and look at the size of the list returned  but the above
+example gives a nice, and hopefully easy to understand, example of a closure being 
+used as part of a 'sideEffect' step.
 
 For completeness, here is the query re-written a couple of different ways without the
 use of a 'sideEffect' or closures. If all we wanted was the count we could do this of
@@ -4132,11 +4208,11 @@ g.V().hasLabel('airport').has('city','London')
 We think you will agree that the second version is a lot simpler to read and
 enables Gremlin to do its thing.
 
-Here is one more example of a query that contains a 'sideEffect' step.
-The main part of the query finds airports with 6 runways and counts them. That result
-will still be returned but the side effect will also cause the codes of those
-airports to also be printed. This is a bit of a contrived example but it shows how
-'sideEffect' behaves when combined with a closure.
+Here is one more example of a query that contains a 'sideEffect' step. The main part 
+of the query finds airports with 6 runways and counts them. That result will still be
+returned but the side effect will also cause the codes of those airports to also be 
+printed. This is a bit of a contrived example but it shows how 'sideEffect' behaves 
+when combined with a closure.
 
 [source,groovy]
 ----
@@ -4178,11 +4254,11 @@ Dalat
 Dalanzadgad
 ----
 
-The next example uses a 'filter' step combined with a closure to
-find any airport vertex that has a description containing the letter '"F"' followed by
-a period, as in '"F."'. While this makes an interesting example, there are other ways
-to achieve this result. One such way would be to used a mixed index and special text
-searching predicates. That, however, is a topic for quite a bit later on.
+The next example uses a 'filter' step combined with a closure to find any airport 
+vertex that has a description containing the letter '"F"' followed by a period, as in
+'"F."'. While this makes an interesting example, there are other ways to achieve this
+result. One such way would be to used a mixed index and special text searching 
+predicates. That, however, is a topic for quite a bit later on.
 
 [source,groovy]
 ----
@@ -4886,9 +4962,9 @@ sgt.V().has('code','LAX').out().count()
 ----
 
 Here are some more examples of working with subgraphs. The query below will create a
-subgraph of all vertices and edges directly connected to the Austin (AUS) vertex. Note
-that using 'bothE' means we get incoming and outgoing edges. In these examples the
-more meaningful label 'subGraph' is used to label the subgraph being created.
+subgraph of all vertices and edges directly connected to the Austin (AUS) vertex. 
+Note that using 'bothE' means we get incoming and outgoing edges. In these examples 
+the more meaningful label 'subGraph' is used to label the subgraph being created.
 
 [source,groovy]
 ----
@@ -5465,8 +5541,8 @@ clockWithResult(1) {
 3389
 ----
 
-As you can see by the time we get to the last query, that looks for exactly three stops,
-things take a lot longer to complete.
+As you can see by the time we get to the last query, that looks for exactly three 
+stops, things take a lot longer to complete.
 
 
 [source,groovy]

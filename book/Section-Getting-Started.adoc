@@ -39,7 +39,8 @@ Documentation::
 - http://tinkerpop.apache.org/docs/current/
 - http://tinkerpop.apache.org/docs/current/reference/
 Useful Recipes::
-- A set of examples or "recipes" showing how to perform common graph oriented tasks using Gremlin queries.
+- A set of examples or "recipes" showing how to perform common graph oriented tasks 
+using Gremlin queries.
 - http://tinkerpop.apache.org/docs/current/recipes/
 
 The programming interfaces allow providers of graph databases to build systems that
@@ -385,10 +386,10 @@ TinkerGraph is used to explore static (unchanging) graphs but you can also use i
 from a programming language like Java and mutate its contents if you want to.
 However, TinkerGraph does not support some of the more advanced features you will
 find in implementations like JanusGraph such as transactions and external indexes. We
-will cover these topics as part of the discussion of JanusGraph in the <<janusintro>>
-section later on. One other thing worth noting in the list above is that
-'UserSuppliedIds' is set to true for vertex and edge ID values. This means that if
-you load a graph file, such as a GraphML format file, that specifies ID values for
+will cover these topics as part of the discussion of JanusGraph in the 
+"<<janusintro>>" section later on. One other thing worth noting in the list above is 
+that 'UserSuppliedIds' is set to true for vertex and edge ID values. This means that 
+if you load a graph file, such as a GraphML format file, that specifies ID values for
 vertices and edges then TinkerGraph will honor those IDs and use them. As we shall
 see later this is not the case with some other graph database systems.
 
@@ -580,7 +581,8 @@ Additional observations:
 ----
 
 Here are the Top 15 airports sorted by overall number of routes (in and out). In
-graph terminology this is often called the degree of the vertex or just 'vertex degree'.
+graph terminology this is often called the degree of the vertex or just 
+'vertex degree'.
 
 ----
     POS   ID  CODE  TOTAL     DETAILS
@@ -690,12 +692,12 @@ Once you have the Gremlin Console up and running and have the graph loaded, if
 you feel like it you can cut and paste queries from this book directly into
 the console to see them run.
 
-Once the 'air-routes' graph is loaded you can enter the following command and you will
-get back information about the graph. In the case of a TinkerGraph you will get back
-a useful message telling you how many vertices and edges the graph contains. Note that
-the contents of this message will vary from one graph system to another and should
-not be relied upon as a way to keep track of vertex and edge counts. We will look at
-some other ways of counting things a bit later.
+Once the 'air-routes' graph is loaded you can enter the following command and you 
+will get back information about the graph. In the case of a TinkerGraph you will get 
+back a useful message telling you how many vertices and edges the graph contains. 
+Note that the contents of this message will vary from one graph system to another and
+should not be relied upon as a way to keep track of vertex and edge counts. We will 
+look at some other ways of counting things a bit later.
 
 [source,groovy]
 ----

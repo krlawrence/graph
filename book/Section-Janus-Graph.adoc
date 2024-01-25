@@ -64,7 +64,7 @@ Installing JanusGraph
 JanusGraph itself is very easy to install. You just have to download the ZIP file
 and unzip it into a convenient location. Having done that you can immediately begin
 to experiment with it if you use the 'inmemory' option which is explained more in the
-<<janusinmemory>> section below. However, for a production deployment you will
+"<<janusinmemory>>" section below. However, for a production deployment you will
 probably be using JanusGraph in conjunction with some sort of persistent storage, an
 indexing service and other components that will also have to be installed. We will
 get into that a bit later on. The download page has information regarding versions of
@@ -113,19 +113,20 @@ Using JanusGraph with the 'inmemory' option
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 For almost all production use cases, you will be using JanusGraph along with a
-persistent storage backend such as Apache Cassandra, Apache HBase, Google Cloud BigTable,
-ScyllaDB, Oracle Berkeley DB, DataStax Astra, Amazon Keyspace, etc. However while
-experimenting with JanusGraph it is incredibly useful to be able to get up and
+persistent storage backend such as Apache Cassandra, Apache HBase, Google Cloud 
+BigTable, ScyllaDB, Oracle Berkeley DB, DataStax Astra, Amazon Keyspace, etc. However 
+while experimenting with JanusGraph it is incredibly useful to be able to get up and
 running quickly without having to worry about configuring all of the back end storage
-components. This is made possible by the 'inmemory' option that JanusGraph
-provides. This essentially allows us to use JanusGraph in the same way as we have
-been using TinkerGraph with all of our graph data stored in the memory of the
-computer. The one big difference however is that JanusGraph, even while using the
-'inmemory' storage model, allows us to experiment with features that TinkerGraph does
-not offer, such as schemas and external indices. If you want to host your graph on a single
-machine and you don't need persistence support, you could also use 'inmemory' storage model in
-production. We will get into those topics a bit later on. First, let's create an
-instance of JanusGraph from the Gremlin console that uses the 'inmemory' storage model.
+components. This is made possible by the 'inmemory' option that JanusGraph provides. 
+This essentially allows us to use JanusGraph in the same way as we have been using 
+TinkerGraph with all of our graph data stored in the memory of the computer. The one
+big difference however is that JanusGraph, even while using the 'inmemory' storage 
+model, allows us to experiment with features that TinkerGraph does not offer, such 
+as schemas and external indices. If you want to host your graph on a single machine 
+and you don't need persistence support, you could also use 'inmemory' storage model 
+in production. We will get into those topics a bit later on. First, let's create an
+instance of JanusGraph from the Gremlin console that uses the 'inmemory' storage 
+model.
 
 Creating a JanusGraph instance is very similar to the way we created a TinkerGraph
 instance earlier in the book. The only difference is that we use the
@@ -256,7 +257,7 @@ offer transactional support, and as the JanusGraph documentation points out, you
 should not rely on JanusGraph transactions being fully Atomic, Consistent, Isolated
 and Durable (ACID). The amount of ACID support will depend on the backend store being
 used. We will take a look at some of the backend storage options in the
-"<<janusstorage>> section".
+"<<janusstorage>>" section.
 
 NOTE: The official JanusGraph documentation includes detailed coverage of how
 transactions are processed and techniques to use based on different usage scenarios.
@@ -450,8 +451,8 @@ the property key is created. Unless we explicitly do this, whenever a property i
 created the cardinality will default to 'SINGLE'. The code below can be run from a
 Gremlin Console connected to a JanusGraph instance. A property key called 'mylist' is
 created that can accept 'String' values. Before the key is created, its cardinality
-is specified as 'LIST'. Always remember to 'commit' the management transaction when you
-are done making changes.
+is specified as 'LIST'. Always remember to 'commit' the management transaction when 
+you are done making changes.
 
 [source,groovy]
 ----
@@ -487,8 +488,8 @@ mgmt.commit()
 ----
 
 We can now create a new vertex and add some values using our new 'mylist' property.
-Note that as our cardinality is 'LIST' and not 'SET' that we can have duplicate values
-associated with our new property.
+Note that as our cardinality is 'LIST' and not 'SET' that we can have duplicate 
+values associated with our new property.
 
 [source,groovy]
 ----
@@ -590,8 +591,8 @@ Defining a JanusGraph schema for the air-routes graph
 
 You are not required to define the types and labels of your edges, vertices and
 properties ahead of time but it is strongly recommended that you do so. If you do not
-define anything and load the air routes data for example, it will work fine but JanusGraph
-will make assumptions about various things. Without a schema being
+define anything and load the air routes data for example, it will work fine but 
+JanusGraph will make assumptions about various things. Without a schema being
 defined, JanusGraph will default the usage constraint or 'multiplicity' setting on
 all edges to 'MULTI'. We will explain what that means in a minute but in essence it
 means there is no restriction by default on how many edges with the same label that
@@ -607,9 +608,10 @@ need to add additional property types or labels you are allowed to do that.
 
 Using the management API you can define the labels that will be used by vertices and
 edges. These values must be unique across the graph. You can also define the type and
-cardinality ('SINGLE', 'LIST' or 'SET') of each property key and for edges you can specify
-the allowed usage of edges for any given label ('MULTI', 'MANY2ONE', 'ONE2MANY', 'ONE2ONE' or
-'SIMPLE'). Property key names must also be unique across the graph.
+cardinality ('SINGLE', 'LIST' or 'SET') of each property key and for edges you can 
+specify the allowed usage of edges for any given label ('MULTI', 'MANY2ONE', 
+'ONE2MANY', 'ONE2ONE' or 'SIMPLE'). Property key names must also be unique across the
+graph.
 
 Before we can define a schema for our edge labels we need to understand what each
 option allows and decide on the best fit for each of our edge types.
@@ -627,12 +629,12 @@ SIMPLE::
   continent and an airport as an airport cannot be in more than one continent. The
   same is used for the edges between airports and countries.
 MANY2ONE::
-- This setting permits at most one outgoing edge of a given label name from any vertex
-  in the graph but places no constraint on the number of incoming edges with this
-  label.
+- This setting permits at most one outgoing edge of a given label name from any 
+  vertex in the graph but places no constraint on the number of incoming edges with 
+  this label.
 ONE2MANY::
-- This setting permits at most one incoming edge of a given label to any vertex in the
-  graph but places no constraint on the number of outgoing edges
+- This setting permits at most one incoming edge of a given label to any vertex in 
+  the graph but places no constraint on the number of outgoing edges
 ONE2ONE::
 - This setting permits at most one incoming and one outgoing edge of a given label to
   and from any vertex in the graph.
@@ -675,7 +677,8 @@ Defining vertex property keys
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Next we need to define the property keys and data types that our vertices will be
-using. The 'air-routes' graph only uses properties that have a cardinality of 'SINGLE'.
+using. The 'air-routes' graph only uses properties that have a cardinality of 
+'SINGLE'.
 
 [source,groovy]
 ----
@@ -1016,12 +1019,14 @@ mgmt.updateIndex(mgmt.getGraphIndex("airportIndex"), SchemaAction.REINDEX).get()
 mgmt.commit()
 ----
 
-The above process could be very slow if you have a lot of data, in which case you could
-use MapReduce to reindex existing data in parallel: https://docs.janusgraph.org/schema/index-management/index-reindexing/.
+The above process could be very slow if you have a lot of data, in which case you 
+could use MapReduce to reindex existing data in parallel: 
+https://docs.janusgraph.org/schema/index-management/index-reindexing/.
 
-If we re-run the same query we used earlier and got the warning about using indexes from
-JanusGraph, this time we get the same result but without the warning. This tells us
-that JanusGraph was able to satisfy our query using the index that we just created.
+If we re-run the same query we used earlier and got the warning about using indexes 
+from JanusGraph, this time we get the same result but without the warning. This tells
+us that JanusGraph was able to satisfy our query using the index that we just 
+created.
 
 [source,groovy]
 ----
@@ -1365,8 +1370,7 @@ before TinkerPop added them to Gremlin in version 3.6.0. As a result, there are
 text predicates that are JanusGraph specific which have similar functionality to the
 ones officially exposed by Gremlin itself. This section describes the
 JanusGraph-specific text predicates. You can learn more about the official Gremlin
-text predicates in the <<fuzzyregs,"Using regular expressions to do fuzzy searches">>
-section.
+text predicates in the "<<fuzzyregs>>" section.
 
 The JanusGraph regular expression predicates recognize the syntax defined as part of
 the Java 1.8 Pattern class that is documented at
@@ -1532,8 +1536,10 @@ https://en.wikipedia.org/wiki/Levenshtein_distance[Levenshtein distance] method 
 decide if a piece of text is 'close enough' to the pattern being looked for. This is
 based on assessing how many characters would have to change in the pattern word to
 achieve a match in the text being inspected. For example 'pall' would match 'palm',
-'paul' and 'palm' with Levenshtein distance being one.
-JanusGraph uses different Levenshtein distance criteria for string of different lengths. It uses 0 for strings of one or two characters (exact match), 1 for strings of three, four or five characters, and 2 for strings of more than five characters.
+'paul' and 'palm' with Levenshtein distance being one. JanusGraph uses different 
+Levenshtein distance criteria for string of different lengths. It uses 0 for strings
+of one or two characters (exact match), 1 for strings of three, four or five 
+characters, and 2 for strings of more than five characters.
 
 The query below uses a fuzzy sort to find any words that are close to the word
 'pall'.
@@ -1825,13 +1831,14 @@ Oracle Berkeley DB
 
 Oracle Berkeley DB may be a good choice if your application runs on a single machine
 but needs a persistent store. All data is persisted to the same local disk of the
-system where your application runs. Berkeley DB is popular with developers who want to
-develop and test graph applications on a single machine using more than an in-memory
-back end. Assuming you are developing an application using Java or Groovy, the Java
-version of Berkeley DB, known as Berkeley DB Java Edition, is provided as a set of
-libraries that you embed with your application and run using the same JVM as your
-application. Because Berkeley DB JE runs on a single machine, the amount of graph data
-that you can store will depend on the size of the disk available on that machine.
+system where your application runs. Berkeley DB is popular with developers who want 
+to develop and test graph applications on a single machine using more than an 
+in-memory back end. Assuming you are developing an application using Java or Groovy, 
+the Java version of Berkeley DB, known as Berkeley DB Java Edition, is provided as a 
+set of libraries that you embed with your application and run using the same JVM as 
+your application. Because Berkeley DB JE runs on a single machine, the amount of 
+graph data that you can store will depend on the size of the disk available on that 
+machine.
 
 For production systems that only need a modest sized graph this may also be a valid
 choice. If your application is likely to generate very large graphs in excess of 100
@@ -2078,8 +2085,8 @@ NOTE: If you decide to run Cassandra on a remote machine, you will need to edit 
 properties file, or create a new one, so that it contains the appropriate host names
 and IP addresses of the remote system.
 
-The protocol JanusGraph uses to communicate with Cassandra is called CQL. To get started, you can use the
-'janusgraph-cql.properties' file as shown below.
+The protocol JanusGraph uses to communicate with Cassandra is called CQL. To get 
+started, you can use the 'janusgraph-cql.properties' file as shown below.
 
 [source,groovy]
 ----
@@ -2131,8 +2138,8 @@ gremlin> g.V().has('type','airport').count()
 ----
 
 Whenever you are finished working with the graph, it is a good idea to close it. Once
-closed you will have to reconnect using one of the two 'open' steps shown above before
-you can start working with it again.
+closed you will have to reconnect using one of the two 'open' steps shown above 
+before you can start working with it again.
 
 [source,groovy]
 ----
@@ -2247,10 +2254,11 @@ Using an external index with JanusGraph
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 JanusGraph allows an external index to be created using a technology such as
-Apache Lucene, ElasticSearch or Apache Solr. You would create such an index in cases where you need
-to do more sophisticated pattern matching as part of a graph query. This topic is
-currently a little beyond the main focus of this book which is to give a detailed
-introduction to the Gremlin Query and Traversal language and some of the ways that
-technology can be deployed. You can find a detailed explanation of how to create an
-external index in the JanusGraph documentation which is located at the following
-URLs: https://docs.janusgraph.org/schema/index-management/index-performance/#mixed-index and https://docs.janusgraph.org/index-backend/.
+Apache Lucene, ElasticSearch or Apache Solr. You would create such an index in cases 
+where you need to do more sophisticated pattern matching as part of a graph query. 
+This topic is currently a little beyond the main focus of this book which is to give 
+a detailed introduction to the Gremlin Query and Traversal language and some of the 
+ways that technology can be deployed. You can find a detailed explanation of how to 
+create an external index in the JanusGraph documentation which is located at the 
+following URLs: 
+https://docs.janusgraph.org/schema/index-management/index-performance/#mixed-index and https://docs.janusgraph.org/index-backend/.

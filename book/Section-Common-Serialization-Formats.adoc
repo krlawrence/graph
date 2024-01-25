@@ -24,11 +24,11 @@ contain all of the vertex data and the other will contain all of the edge data.
 [[csvair]]
 Using two CSV files to represent the air-routes data
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-If we were to store the airport data from the 'air-routes' graph in CSV format we might
-do something like the example below. Note that to improve readability we have not
-included every property (or indeed every airport) in this example. Notice how each
-vertex has a unique ID assigned. This is important as when we define the edges we will
-need the vertex IDs to build the connections.
+If we were to store the airport data from the 'air-routes' graph in CSV format we 
+might do something like the example below. Note that to improve readability we have 
+not included every property (or indeed every airport) in this example. Notice how 
+each vertex has a unique ID assigned. This is important as when we define the edges 
+we will need the vertex IDs to build the connections.
 
 
 ----
@@ -75,20 +75,21 @@ graph. This is very similar to another common practice, namely, using a  script 
 generate 'INSERT' statements when working with SQL databases.
 
 We have also written Java and Groovy programs that will read the CSV file and use the
-TinkerPop API or the Gremlin Server REST API to insert vertices and edges into a graph.
-If you work with graph systems for a while you will probably find yourself also doing
-similar things.
+TinkerPop API or the Gremlin Server REST API to insert vertices and edges into a 
+graph. If you work with graph systems for a while you will probably find yourself 
+also doing similar things.
 
 Adjacency matrix format
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-The examples shown above of how a CSV file can be used to store data about vertices and
-edges presents a convenient way to do it. However, this is by no means the only way
-you could do it. For graphs that do not contain properties you could lay the graph
-out using an 'adjacency matrix' as shown below. The letters represent the vertex labels
-and a 1 indicates there is an edge between them and a zero indicates no edge. This
-format can be useful if your vertices and edges do not have properties and if the graph is
-small but in general is not a great way to try and represent large graphs.
+The examples shown above of how a CSV file can be used to store data about vertices 
+and edges presents a convenient way to do it. However, this is by no means the only 
+way you could do it. For graphs that do not contain properties you could lay the 
+graph out using an 'adjacency matrix' as shown below. The letters represent the 
+vertex labels and a 1 indicates there is an edge between them and a zero indicates no
+edge. This format can be useful if your vertices and edges do not have properties and
+if the graph is small but in general is not a great way to try and represent large 
+graphs.
 
 ----
 A,B,C,D,E,F,G
@@ -119,9 +120,9 @@ G,A,B,C,E,F
 ----
 
 While this is a simple example, it is possible to represent a more complex graph such
-as the 'air-routes' graph in this way. We could build a more complex CSV file where the
-vertex and its properties are listed first, followed by all of the other vertices it
-connects to and the properties for those edges.
+as the 'air-routes' graph in this way. We could build a more complex CSV file where 
+the vertex and its properties are listed first, followed by all of the other vertices
+it connects to and the properties for those edges.
 
 Some graph database systems actually store their graphs to disk using a variation of
 this format. JanusGraph in fact uses a system a lot like this when storing vertex and
@@ -147,9 +148,9 @@ C,B
 ----
 
 There are many ways you could construct an edge list. By way of another simple
-example we could represent routes in the 'air-routes' graph in a format similar to that
-shown below. In this case we also include the label of the edge between each of the
-vertices. The vertices are represented by their ID value.
+example we could represent routes in the 'air-routes' graph in a format similar to 
+that shown below. In this case we also include the label of the edge between each of 
+the vertices. The vertices are represented by their ID value.
 
 ----
 [1,route,623]

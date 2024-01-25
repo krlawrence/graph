@@ -105,11 +105,11 @@ Writing our first TinkerPop Java program
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Now that we have some imports in place, we can start to craft the basic outline of a
-Java application. The code below defines a class called 'TinkerGraphTest', and defines a
-'main' method that creates an in memory TinkerGraph and loads the air routes GraphML
-data. Note that as we are now going to be running as a Java program we have to catch
-exceptions. This is another thing that is hidden from you when you are working within
-the Gremlin Console.
+Java application. The code below defines a class called 'TinkerGraphTest', and 
+defines a 'main' method that creates an in memory TinkerGraph and loads the air 
+routes GraphML data. Note that as we are now going to be running as a Java program we
+have to catch exceptions. This is another thing that is hidden from you when you are 
+working within the Gremlin Console.
 
 NOTE: The source code in this section comes from the 'TinkerGraphTest.java' sample
 located at https://github.com/krlawrence/graph/tree/main/sample-code/java.
@@ -151,8 +151,8 @@ Compiling our code
 ^^^^^^^^^^^^^^^^^^
 
 Before we can test our program we of course need to compile it. The easiest way to do
-this while experimenting is to setup the Java 'classpath' to include the TinkerPop JAR
-files. Once you get into writing bigger solutions you will most likely be using a
+this while experimenting is to setup the Java 'classpath' to include the TinkerPop 
+JAR files. Once you get into writing bigger solutions you will most likely be using a
 tool like Apache Maven to control your build. For the purpose of our experiments
 here, simple use of the 'classpath' will suffice.
 
@@ -251,8 +251,8 @@ Key: desc: Value: [Austin Bergstrom International Airport]
 
 So we now know one way to get the property values from a vertex and manipulate them.
 Let's now add something a bit more interesting to our program. The following two
-lines count the number of airports you can fly to non stop starting at
-Dallas Fort Worth (DFW) and print out that result for us.
+lines count the number of airports you can fly to non stop starting at Dallas Fort 
+Worth (DFW) and print out that result for us.
 
 [source,java]
 ----
@@ -265,9 +265,9 @@ System.out.println("There are " + n + " routes from Dallas");
 There are 221 routes from Dallas
 ----
 
-Let's now add some code to retrieve the airport IATA codes of these 221 airports that we
-can fly to non stop from DFW. Note that this time we ended our query with a call to
-the 'toList()' method. This will terminate the traversal, and as the name implies,
+Let's now add some code to retrieve the airport IATA codes of these 221 airports that 
+we can fly to non stop from DFW. Note that this time we ended our query with a call 
+to the 'toList()' method. This will terminate the traversal, and as the name implies,
 return the results to us in a list. An 'order' step is used in the traversal so that
 we get the airport codes back in ascending order.
 
@@ -731,10 +731,10 @@ g.V().has("code","AUS").outE().as("edge").inV().has("code","SYD").
 The query finds the Austin (AUS) airport and then looks for an outgoing edge
 connecting Austin with Sydney (SYD) and then returns the distance value from that
 edge. The problem here is that there is no direct route between Austin and Sydney and
-therefore no edge to retrieve the distance from. In other words, this query returns no
-result. Now, within the Gremlin Console this is not a problem as we just get nothing
-back and life goes on. However, take a look at the code below which is a first
-attempt at moving the query into Java code.
+therefore no edge to retrieve the distance from. In other words, this query returns 
+no result. Now, within the Gremlin Console this is not a problem as we just get 
+nothing back and life goes on. However, take a look at the code below which is a 
+first attempt at moving the query into Java code.
 
 
 [source,java]

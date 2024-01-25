@@ -139,9 +139,9 @@ language via real examples featuring real-world graph data. That data along with
 sample code and example applications is available for download from the GitHub
 project as well as many other items. The graph, 'air-routes', is a model of
 the world airline route network between 3,373 airports including 43,400 routes. The
-examples presented will work unmodified with the `air-routes.graphml` file loaded into
-the Gremlin console running with a TinkerGraph. How to set that environment up is
-covered in the <<gremlininstall>> section below.
+examples presented will work unmodified with the `air-routes.graphml` file loaded 
+into the Gremlin console running with a TinkerGraph. How to set that environment up 
+is covered in the "<<gremlininstall>>" section below.
 
 NOTE: The examples in this book have been tested using Apache TinkerPop release
 {tpvercheck}.
@@ -312,8 +312,8 @@ TinkerPop 3.4
 A major update to Apache TinkerPop, version 3.4.0, was released in January 2019 and a
 number of point releases followed. 
 
-NOTE: Full details of all the new features added in the TinkerPop 3.4.x releases can be
-found at the following link:
+NOTE: Full details of all the new features added in the TinkerPop 3.4.x releases can 
+be found at the following link:
 https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc#tinkerpop-340-avant-gremlin-construction-3-for-theremin-and-flowers
 
 [[tp35intro]]
@@ -338,8 +338,8 @@ the Gremlin language such that dates can be added without needing programming
 language specific constructs. This is useful when sending Gremlin queries as text
 strings.
 
-NOTE: Full details of all the new features added in the TinkerPop 3.5.x releases can be
-found at the following link:
+NOTE: Full details of all the new features added in the TinkerPop 3.5.x releases can
+be found at the following link:
 https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc#tinkerpop-350-the-sleeping-gremlin-no-18-entracte-symphonique
 
 [[tp36intro]]
@@ -374,8 +374,8 @@ completed as of TinkerPop 3.6.0.
 - A new 'fail' step that can be used to abort a query in a controlled way.
 
 
-NOTE: Full details of all the new features added in the TinkerPop 3.6.x releases can be
-found at the following link:
+NOTE: Full details of all the new features added in the TinkerPop 3.6.x releases can 
+be found at the following link:
 https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc#tinkerpop-360-tinkerheart
 
 [[tp37intro]]
@@ -384,8 +384,8 @@ Introducing TinkerPop 3.7
 
 IMPORTANT: TODO - Add details for TinkerPop 3.7
 
-NOTE: Full details of all the new features added in the TinkerPop 3.7.x releases can be
-found at the following link:
+NOTE: Full details of all the new features added in the TinkerPop 3.7.x releases can 
+be found at the following link:
 https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc#tinkerpop-370-gremfir-master-of-the-pan-flute  
 
 [[whygraph]]
@@ -519,12 +519,12 @@ The words 'node' and 'vertex' are synonymous when discussing a graph. Throughout
 book you may find both words used. However, as the Apache TinkerPop documentation
 almost exclusively uses the word 'vertex', as much as possible when discussing
 Gremlin queries and other concepts, I endeavor to stick to the word 'vertex' or the
-plural form 'vertices'. As this book has evolved, I realized my use of these terms had
-become inconsistent and as I continue to make updates, I plan, with a few exceptions,
-such as when discussing binary trees, to standardize on 'vertex' rather than 'node'.
-In that way, this book will be consistent with the official TinkerPop documentation.
-Similarly, when discussing the connections between vertices I use the term 'edge' or
-the plural form, 'edges'. In other books and articles you may also see terms like
-'relationship' or 'arc' used.  Again these terms are synonymous in the context of
-graphs.
+plural form 'vertices'. As this book has evolved, I realized my use of these terms 
+had become inconsistent and as I continue to make updates, I plan, with a few 
+exceptions, such as when discussing binary trees, to standardize on 'vertex' rather 
+than 'node'. In that way, this book will be consistent with the official TinkerPop 
+documentation. Similarly, when discussing the connections between vertices I use the 
+term 'edge' or the plural form, 'edges'. In other books and articles you may also see
+terms like 'relationship' or 'arc' used.  Again these terms are synonymous in the 
+context of graphs.
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000

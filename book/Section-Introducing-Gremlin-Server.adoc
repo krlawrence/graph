@@ -564,10 +564,10 @@ connection to the Gremlin Server. This is done by first of all creating a
 to and the protocol we want to use. It is important that these settings match what
 the Gremlin Server is configured to use. For this simple example we are just using
 'localhost' as the host name but the name of any Gremlin Server that you have access
-to can be used instead. The default Gremlin Server port of '8182' is specified and the
-'GraphBinaryMessageSerializerV1' serialization format is selected. Again, this needs
-to match both the protocol and the version of the protocol that your Gremlin Server
-is supporting.
+to can be used instead. The default Gremlin Server port of '8182' is specified and 
+the 'GraphBinaryMessageSerializerV1' serialization format is selected. Again, this 
+needs to match both the protocol and the version of the protocol that your Gremlin 
+Server is supporting.
 
 [source,groovy]
 ----
@@ -822,8 +822,8 @@ globals << [g : graph.traversal()]
 Starting the Server
 ^^^^^^^^^^^^^^^^^^^
 
-As discussed in the "<<serverconfig>>" section, you can start the Gremlin Server in the
-foreground or in the background. For our initial test let's just start the server
+As discussed in the "<<serverconfig>>" section, you can start the Gremlin Server in 
+the foreground or in the background. For our initial test let's just start the server
 running in the foreground.
 
 [source,console]
