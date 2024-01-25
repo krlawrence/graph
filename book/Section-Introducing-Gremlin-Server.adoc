@@ -592,8 +592,8 @@ Once the 'Cluster.Builder' instance has been setup we can use it to create our
 Lastly, we need to setup a 'GraphTraversalSource' object for the Gremlin Server
 hosted graph that we will be working with. This object is often named "g" by
 convention and is typically created using the statically imported 'traversal()'
-method which in turn allows the call to 'with()' to bind the traversal source to a
-graph. We've seen 'with()' take a graph instance before, but this time we will use it
+method which in turn allows the call to 'with' to bind the traversal source to a
+graph. We've seen 'with' take a graph instance before, but this time we will use it
 with a reference to a remote connection to a graph in Gremlin Server. Note that the
 cluster instance that we just created is passed in as a parameter. While this looks a
 little complicated it is really not a lot different than when we connect to a local

@@ -137,7 +137,7 @@ follows:
 g.V().has('code','AUS').out().out().out().has('code','AGR').path().by('code')
 ----
 
-Adding or removing hops is as simple as adding or removing one or more of the 'out()'
+Adding or removing hops is as simple as adding or removing one or more of the 'out'
 steps which is a lot simpler than having to add additional 'join' clauses to our SQL
 query. This is a simple example, but as queries get more and more complicated in
 heavily connected data sets like networks, the SQL queries get harder and harder to
@@ -1784,7 +1784,7 @@ g.E(5161).valueMap(true)
 ----
 
 There are other ways to control the results that a 'valueMap' step return using
-the 'with()' modulator.
+the 'with' modulator.
 
 NOTE: The valueMap configuration options are described in the official
 documentation at the following link
@@ -2251,7 +2251,7 @@ In looking at the above code, you might wonder where the 'traversal()' method co
 from. This function is a member of the 'AnonymousTraversalSource' class and it is
 considered good form to statically import it so that it can be called without the
 class. Calling 'traversal()' constructs an anonymous traversal source which is like
-having a graph traversal source without a connection to a graph. Calling 'with()' on
+having a graph traversal source without a connection to a graph. Calling 'with' on
 this object binds it to a particular graph data source and then "g" is ready for you
 to write your queries.
 
@@ -2463,7 +2463,7 @@ g.V().hasId(6).out().has(id,lt(46)).path().by('code')
 g.V().hasId(6).out().hasId(lt(46)).path().by('code')
 ----
 
-You can also pass a single ID or multiple IDs directly into the 'V()' step.
+You can also pass a single ID or multiple IDs directly into the 'V' step.
 Take a look at the two examples below.
 
 [source,groovy]
@@ -4395,7 +4395,7 @@ that shows how to perform the query shown above in a Java program.
 There are several things about this query that are interesting. Firstly because we
 are comparing the results of two 'values' steps we do not provide a parameter to the
 'by' step as we do not need to provide a property key. Secondly, we use a second
-'V()' step in the query to find all the airports that have the same airport code as
+'V' step in the query to find all the airports that have the same airport code as
 Nice. Note that this also means that Nice is included in the results. Lastly we wrap
 the part of the query that prepares the output in a form we want in a 'local' step so
 that a separate list is created for each airport.

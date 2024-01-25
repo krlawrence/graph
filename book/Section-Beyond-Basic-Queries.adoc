@@ -470,7 +470,7 @@ that in the very last example of the prior section where we fed the 'german' var
 back in to a traversal. By way of another simple example, the code below stores the 
 result of the first query in the variable 'austin' and then uses it to look for 
 routes from Austin in second query. Notice how we do this by passing the variable 
-containing the Austin vertex into the 'V()' step.
+containing the Austin vertex into the 'V' step.
 
 [source,groovy]
 ----
@@ -479,8 +479,8 @@ containing the Austin vertex into the 'V()' step.
 ----
 
 You can take this technique one step further and pass an entire saved list of
-vertices to 'V()'. In the next example we first generate a list of all airports that
-are in Scotland and then pass that entire list into 'V()' to first of all count how 
+vertices to 'V'. In the next example we first generate a list of all airports that
+are in Scotland and then pass that entire list into 'V' to first of all count how 
 many routes there are from those airports and then we start another query that looks 
 for any route from those airports to airports in Germany.
 
@@ -629,8 +629,8 @@ step.
 g.V().has('code','DFW').addE('route').to(xyz)
 ----
 
-We could have written the previous line to use a second 'V()' step if we had not
-previously saved anything in a variable. Note that while this use of a second 'V()'
+We could have written the previous line to use a second 'V' step if we had not
+previously saved anything in a variable. Note that while this use of a second 'V'
 step will work locally, if you are sending queries to a Gremlin Server (a topic we
 will discuss later in this book) this syntax is not supported and will not work.
 
@@ -4195,7 +4195,7 @@ have been used instead.
 g.V().hasLabel('airport').filter{it.get().property('city').value() =="London"}
 ----
 
-Here is the same query just using the 'has()' step. This is a case where we
+Here is the same query just using the 'has' step. This is a case where we
 should not be using a lambda function as Gremlin can handle this just fine all
 by itself.
 
@@ -4768,7 +4768,7 @@ g.V().has('airport', 'desc', TextP.containing('Dallas'))
 
 Where things get even more interesting is when you want to use a regular
 expression as part of a query. Note that the first example below could also be
-achieved using a Gremlin 'within()' step as it is still really doing exact
+achieved using a Gremlin 'within' step as it is still really doing exact
 string comparisons but it gives us a template for how to write any query
 containing a regular expression. The example that follows finds all airports
 in cities with names that begin with 'Dal' so it will find Dallas, Dalaman, Dalian,

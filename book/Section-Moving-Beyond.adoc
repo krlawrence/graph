@@ -77,7 +77,7 @@ import statements.
 
 Take particular note of the rather odd import of the class called +++"__"+++
 (underscore underscore) on the second line. This is required to enable calling
-methods such as 'in()' and 'out()' in a traversal where there is no prior step
+methods such as 'in' and 'out' in a traversal where there is no prior step
 to "dot" attach them to (such as inside of a 'repeat' step). If you prefer you
 can statically import the +++"__"+++ class which will make explicit use of
 +++".__"+++ in your code unnecessary except where you are faced with reserved
@@ -117,7 +117,7 @@ located at https://github.com/krlawrence/graph/tree/main/sample-code/java.
 Lastly in this initial class definition we create a 'GraphTraversalSource' and we
 make a Gremlin query to get the property 'valueMap' for the Austin airport vertex and
 print it. The 'toString' method provided by the 'Map' should give us some useful
-output. Take note of the call to 'next()'. This terminates the graph traversal and
+output. Take note of the call to 'next'. This terminates the graph traversal and
 causes the result to be returned. If this call is left off you will not get back what
 you were expecting!
 
@@ -267,7 +267,7 @@ There are 221 routes from Dallas
 
 Let's now add some code to retrieve the airport IATA codes of these 221 airports that 
 we can fly to non stop from DFW. Note that this time we ended our query with a call 
-to the 'toList()' method. This will terminate the traversal, and as the name implies,
+to the 'toList' method. This will terminate the traversal, and as the name implies,
 return the results to us in a list. An 'order' step is used in the traversal so that
 we get the airport codes back in ascending order.
 
@@ -318,7 +318,7 @@ readability.
 The final part of our first Java program shows how to perform a simple 'repeat'
 operation. The code below will look for any cities in the UK that you can get to from
 Austin with one stop on the way. A key thing to note here is that we have to prefix
-the call to 'out()' with the strangely named class +++"__."+++ that we mentioned at
+the call to 'out' with the strangely named class +++"__."+++ that we mentioned at
 the start of this discussion of using Java with TinkerPop. If you do not include the
 +++"__."+++ prefix you will get a compilation error as the compiler does not know
 where the 'out' step is from.
@@ -810,7 +810,7 @@ source object and then uses a traversal to create a small graph.
 NOTE: The source code in this section comes from the 'CreateGraph.java' sample
 located at https://github.com/krlawrence/graph/tree/main/sample-code/java.
 
-Note the call to 'iterate()' at the end of the traversal. When running as a
+Note the call to 'iterate' at the end of the traversal. When running as a
 standalone application this is necessary. This is another of those little things that
 the Gremlin Console does for you without you realizing it that we have to remember to
 do ourselves when not running inside the console.
