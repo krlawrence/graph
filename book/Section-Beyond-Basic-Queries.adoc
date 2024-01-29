@@ -563,43 +563,14 @@ Just as likely you may start with a graph like the air routes graph, read from a
 file, but want to add vertices, edges and properties to it over time. In this section
 we will explore various ways of doing just that.
 
-Vertices and edges can be added directly to the graph using the 'graph' object or as
-part of a graph traversal. We will look at both of these techniques over course of
-the following pages.
-
 Adding an airport (vertex) and a route (edge)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The following code uses the 'graph' object that we created when we first loaded the
-'air-routes' graph to create a new airport vertex (node) and then adds a route (edge)
+The following code creates a new airport vertex (node) and then adds a route (edge)
 from it to the existing DFW vertex. We can specify the label name ('airport') and as
 many properties as we wish to while creating the vertex. In this case we just provide
 three. We can additionally add and delete vertex properties after a vertex has been
-created. While using the 'graph' object in this way works, it is strongly recommended
-that the traversal source object 'g' be used instead and that vertices and edges be
-added using a traversal. Examples of how to do that are coming up next.
-
-[source,groovy]
-----
-// Add an imaginary airport with a code of 'XYZ' and connect it to DFW
-xyz = graph.addVertex(label,'airport',
-                      'code','XYZ',
-                      'icao','KXYZ',
-                      'desc','This is not a real airport')
-
-// Find the DFW vertex
-dfw = g.V().has('code','DFW').next()
-
-// Create a route from our new airport to DFW
-xyz.addEdge('route',dfw)
-----
-
-In many cases it is more convenient, and also recommended, to perform each of the
-previous operations using just the traversal object 'g'. The following example does
-just that. We first create a new airport vertex for our imaginary airport and store
-its vertex in the variable 'xyz'. We can then use that stored value when we create
-the edge also using a traversal. As with many parts of the Gremlin language, there is
-more than one way to achieve the same results.
+created. Examples of how to do that are coming up next.
 
 [source,groovy]
 ----
@@ -607,21 +578,27 @@ more than one way to achieve the same results.
 xyz = g.addV('airport').property('code','XYZ').
                         property('icao','KXYZ').
                         property('desc','This is not a real airport').next()
-
 ----
 
-Notice, in the code above, how each property step can be chained to the previous one
-when adding multiple properties. Whether you need to do it while creating a vertex or
-to add and edit properties on a vertex at a later date you can use the same 'property'
-step.
+Notice, in the code above where we add the vertex, how each 'property' step can be 
+chained to the previous one when adding multiple properties. Whether you need to do 
+it while creating a vertex or to add and edit properties on a vertex at a later date
+you can use the same 'property' step.
 
-NOTE: It is strongly recommended that the traversal source object 'g' be used when
-adding, updating or deleting vertices and edges. Using the 'graph' object directly is
-not viewed as a TinkerPop best practice.
+The 'property' step also has a second form that takes a 'Map' of properties as an 
+argument. This form can be useful as a shorthand compared to chained 'property'
+calls, but also because it is common to have data in the form of a 'Map' in the 
+normal course of development.
 
-We can now add a route from DFW to XYZ. We are able
-to use our 'xyz' variable to specify the destination of the new route using a 'to'
-step.
+[source,groovy]
+----
+// Add an imaginary airport with a code of 'XYZ' and connect it to DFW
+xyz = g.addV('airport').
+        property([code: 'XYZ', icao: 'KXYZ', desc, 'This is not a real airport']).next()
+----
+
+We can now add a route from DFW to XYZ. We are able to use our 'xyz' variable to 
+specify the destination of the new route using a 'to' step.
 
 [source,groovy]
 ----
@@ -658,10 +635,6 @@ for the new edge.
 ----
 g.V().has('code','XYZ').as('a').V().has('code','DFW').addE('route').to('a')
 ----
-
-NOTE: In earlier versions of Apache TinkerPop there was an `addOutE` step. That step
-has since been deprecated and removed from the language in favor of always using
-`addE`.
 
 You will see a bigger example that uses 'as' steps while creating vertices and edges
 in the "<<testgraph>>" section that is coming up soon.
@@ -725,7 +698,6 @@ g.E(53770).valueMap(true)
 
 [id:53770,label:route]
 ----
-
 
 [[proptraversal]]
 Using a traversal to seed a property with a list

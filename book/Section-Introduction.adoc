@@ -379,8 +379,8 @@ be found at the following link:
 https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc#tinkerpop-360-tinkerheart
 
 [[tp37intro]]
-Introducing TinkerPop 3.7
-^^^^^^^^^^^^^^^^^^^^^^^^^
+TinkerPop 3.7
+^^^^^^^^^^^^^
 
 IMPORTANT: TODO - Add details for TinkerPop 3.7
 
