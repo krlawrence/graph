@@ -1370,7 +1370,7 @@ before TinkerPop added them to Gremlin in version 3.6.0. As a result, there are
 text predicates that are JanusGraph specific which have similar functionality to the
 ones officially exposed by Gremlin itself. This section describes the
 JanusGraph-specific text predicates. You can learn more about the official Gremlin
-text predicates in the "<<fuzzyregs>>" section.
+text predicates in the "<<regex>>" section.
 
 The JanusGraph regular expression predicates recognize the syntax defined as part of
 the Java 1.8 Pattern class that is documented at

@@ -4273,9 +4273,6 @@ g.V().hasLabel('airport').as('a').values('desc').
 [EUX,F. D. Roosevelt Airport]
 ----
 
-You will see more examples of how to use Lambda expressions with the 'filter' step in
-the "<<fuzzyregs>>" section.
-
 [[mapstep]]
 Introducing the 'Map' step
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -4725,68 +4722,6 @@ When run, this time the results do indeed include the edges as well as the verti
 [v[3],e[5162][3-route->49],v[49],e[8452][49-route->69],v[69]]
 [v[3],e[5162][3-route->49],v[49],e[8454][49-route->71],v[71]]
 ----
-
-[[fuzzyregs]]
-Using regular expressions to do fuzzy searches
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Let's take a look at one case where use of closures might be helpful. It is a
-common requirement when working with any kind of database to want to do some
-sort of fuzzy text search or even to search using a regular expression. Gremlin
-offers a series of text related predicates for these types of searches. Where
-standard predicates are a part of the 'P' enum, the text specific predicates can be
-found on the 'TextP' enum.
-
-NOTE: Most TinkerPop enabled graph stores that you are likely to use for any sort of
-serious deployment will also be backed by an indexing technology like Solr or
-Elasticsearch. In those cases some amount of more sophisticated search methods will
-likely be made available to you. You should always check the documentation for the
-system you are using to see what is recommended.
-
-So let's look at some examples. First of all, every airport in the air routes
-graph contains a description which will be something like 'Dallas Fort Worth
-International Airport' in the case of DFW. If we wanted to search the vertices in
-the graph for any airport that starts with the letter "D" we could use the
-'startingWith' predicate.
-
-[source,groovy]
-----
-// Airport descriptions starting with 'D' - this is case sensitive
-g.V().has('airport', 'desc', TextP.startingWith('D'))
-----
-
-NOTE: There is an analogous 'endingWith' predicate for testing the end of a string.
-
-If we wanted to search the vertices in the graph for any airport that has the word
-'Dallas' in the description we could use 'TextP.containing'.
-
-[source,groovy]
-----
-// Airport descriptions containing the word 'Dallas'
-g.V().has('airport', 'desc', TextP.containing('Dallas'))
-----
-
-Where things get even more interesting is when you want to use a regular
-expression as part of a query. Note that the first example below could also be
-achieved using a Gremlin 'within' step as it is still really doing exact
-string comparisons but it gives us a template for how to write any query
-containing a regular expression. The example that follows finds all airports
-in cities with names that begin with 'Dal' so it will find Dallas, Dalaman, Dalian,
-Dalcahue, Dalat and Dalanzadgad!.
-
-[source,groovy]
-----
-// Using a filter to search using a regular expression
-g.V().has('airport','type','airport').has('city', TextP.regex('~/Dallas|Austin/')).values('code')
-
-// A regular expression to find any airport with a city name that begins with "Dal"
-g.V().has('airport','type','airport').has('city', TextP.regex('~/^Dal\w*/')).values('city')
-----
-
-Gremlin adheres to the regex syntax prescribed by the Java `Pattern` class documented
-at https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/regex/Pattern.html
-The Java regular expression syntax may be different than the one you are used to so
-it is worth taking a few minutes to study the documentation at that URL.
 
 [[graphvars]]
 Using graph variables to associate metadata with a graph

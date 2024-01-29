@@ -798,7 +798,7 @@ representing the number of runways the second airport has.
 
 It is also possible to use a traversal inside of a 'by' modulator. Such traversals
 are known as '"anonymous traversals"' and they are discussed in greater details in
-the "<<anonymoustraversals>>" section.
+the "<<deepdivetraversals>>" section.
 
 For now, it is enough to know that they allow us to do things like combine multiple
 values together as part of a path result. The example below finds five routes that
@@ -3031,122 +3031,6 @@ g.V().hasId(within(1,2,3))
 g.V().hasId(within([1,2,3]))
 ----
 
-You will find more examples of these types of queries in the next two sections.
-
-[[startswith]]
-Using 'between' to simulate 'startsWith'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-One thing that may not be obvious is that when using string values with the 'between'
-predicate the values do not have to specify exact matches. Take a look at the query
-below. This will find any airports in cities whose names start with '"Dal"' as it
-looks for strings between '"Dal"' and '"Dam"' in an inclusive/exclusive fashion. The
-rest of the characters following '"Dal"' in the strings being tested are ignored.
-Note that this is a case sensitive comparison. In other words '"Dal"' and '"dal"' are
-different strings in this context.
-
-TIP: The 'between' predicate can be used to simulate a string 'startsWith' method.
-
-As discussed more in the "<<fuzzyregs>>" section, Gremlin does not currently support
-any methods for applying regular expressions or even more basic text analysis
-operators to strings. This use of the 'between' predicate can at least be used to
-simulate a 'startsWith' type of operator. It is likely that support for additional
-text search predicates will appear in future Apache TinkerPop releases.
-
-[source,groovy]
-----
-g.V().hasLabel('airport').
-      has('city',between('Dal','Dam')).
-      values('city')
-----
-
-Here are the results from running the query. As you can see every city name starts
-with the characters '"Dal"'.
-
-[source,groovy]
-----
-Dallas
-Dallas
-Dalaman
-Dalian
-Dalcahue
-Dalat
-Dalanzadgad
-----
-
-You will notice from the results above that '"Dallas"' appears twice as there are two
-airports with that city name. We could add a 'dedup' step to our query to only return
-unique matches.
-
-[source,groovy]
-----
-g.V().hasLabel('airport').
-      has('city',between('Dal','Dam')).
-      values('city').dedup()
-----
-
-Here are the modified results.
-
-[source,groovy]
-----
-Dallas
-Dalaman
-Dalian
-Dalcahue
-Dalat
-Dalanzadgad
-----
-
-Here is one more example where the range of values being compared is expanded a
-little. This query will find any cities that start with '"Dal"' through '"Dar"'.
-
-[source,groovy]
-----
-g.V().hasLabel('airport').
-      has('city',between('Dal','Dat')).
-      values('city').order().dedup()
-----
-
-As you can see this time, more cities met our search criteria.
-
-[source,groovy]
-----
-Dalaman
-Dalanzadgad
-Dalat
-Dalcahue
-Dalian
-Dallas
-Damascus
-Dandong
-Dangriga
-Daocheng
-Daqing Shi
-Dar es Salaam
-Daru
-Darwin
-----
-
-If you wanted to find strings that begin with a single character you can achieve
-that as follows.
-
-[source,groovy]
-----
-g.V().has('airport','code',between('X','Xa')).
-      values('code').fold()
-----
-
-When run, the query returns all airports with codes that start with the letter '"X"'.
-
-[source,groovy]
-----
-[XNA,XMN,XRY,XIY,XUZ,XSB,XCH,XIL,XFN,XNN,XGR,XFW,XCR,XSC,XQP,XMH,XBJ,XAP,XMS,XKH,XIC,XTG,XKS,XBE,XTO]
-----
-
-While Gremlin does not currently provide any advanced text searching capabilities,
-graph systems such as JanusGraph do offer such capabilities. Those features are
-discussed in the "<<janpred>>" section.
-
-
 [[winout]]
 Refining flight routes analysis using 'not', 'neq', 'within' and 'without'
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3468,9 +3352,11 @@ Apache TinkerPop documentation here: http://tinkerpop.apache.org/docs/current/re
 |startingWith     | Match text that starts with the given character(s)
 |endingWith       | Match text that ends with the given character(s)
 |containing       | Match text that contains the given character(s)
+|regex            | Match text using a regular expression
 |notStartingWith  | Match text that does not start with the given character(s)
 |notEndingWith    | Match text that does not end with the given character(s)
 |notContaining    | Match text that does not contain the given character(s)
+|notRegex         | Match text that does not match a regular expression
 |==============================================================================
 
 In the sections below you will find examples of each predicate being used. Each
@@ -3478,6 +3364,12 @@ predicate is case sensitive so bear that in mind as you use them. To do a case
 insensitive search you can chain multiple steps together combined by an 'or' step.
 
 NOTE: All of these predicates are *_case sensitive_*.
+
+NOTE: Most TinkerPop enabled graph stores that you are likely to use for any sort of
+serious deployment will also be backed by an indexing technology like Solr or
+Elasticsearch. In those cases some amount of more sophisticated search methods will
+likely be made available to you. You should always check the documentation for the
+system you are using to see what is recommended.
 
 These predicates add to the existing Gremlin predicates that we looked at in the
 "<<tranges>>" section.
@@ -3607,6 +3499,34 @@ Yongzhou
 Yangzho
 ----
 
+[[regex]]
+regex
+^^^^^
+
+For more advanced text matching scenarios you can use regular expressions as part of
+a query. Note that the first example below could also be achieved using a Gremlin 
+'within' step as it is still really doing exact string comparisons but it gives us a 
+template for how to write any query containing a regular expression. The example that
+follows finds all airports in cities with names that begin with 'Dal' so it will find
+Dallas, Dalaman, Dalian, Dalcahue, Dalat and Dalanzadgad!.
+
+[source,groovy]
+----
+// Using a filter to search using a regular expression
+g.V().has('airport','type','airport').
+      has('city', TextP.regex('Dallas|Austin')).values('code')
+
+
+// A regular expression to find any airport with a city name that begins with "Dal"
+g.V().has('airport','type','airport').
+      has('city', TextP.regex('^Dal\\w*')).values('city')
+----
+
+Gremlin adheres to the regex syntax prescribed by the Java `Pattern` class documented
+at https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/regex/Pattern.html
+The Java regular expression syntax may be different than the one you are used to so
+it is worth taking a few minutes to study the documentation at that URL.
+
 [[notStartingWith]]
 notStartingWith
 ^^^^^^^^^^^^^^^
@@ -3635,7 +3555,6 @@ g.V().hasLabel('airport').
 3367
 ----
 
-
 [[notEndingWith]]
 notEndingWith
 ^^^^^^^^^^^^^
@@ -3651,11 +3570,9 @@ g.V().hasLabel('airport').
 3373
 ----
 
-
 [[notContaining]]
 notContaining
 ^^^^^^^^^^^^^
-
 
 The query below counts the number of cities that do not contain the string "berg" in
 their name.
@@ -3696,6 +3613,21 @@ is an uppercase "O" and as such is allowed by the constraints that we specified.
 Osh
 Kyzyl
 ----
+
+[[notRegex]]
+notRegex
+^^^^^^^^
+
+The 'notRegex' predicate is mostly present for Gremlin language symmetry as regular 
+expressions can naturally express negations itself. 
+
+
+[source,groovy]
+----
+// A regular expression to find airports not in Dallas or Austin
+g.V().has('airport','type','airport').
+      has('city', TextP.notRegex('Dallas|Austin')).values('code')
+---- 
 
 [[sort]]
 Sorting things - introducing 'order'
