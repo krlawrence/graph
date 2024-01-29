@@ -104,9 +104,9 @@ Elasticsearch. As we did not configure an external index when we setup our
 JanusGraph the lines referring to Elasticsearch inside the properties file should be
 commented out.
 
-The 'scriptEvaluationTimeout' setting is important. It tells the Gremlin Server how
-long to let a query run before terminating it. This essentially establishes the
-maximum amount of time any query will be allowed to run, regardless of whether it has
+The 'evaluationTimeout' setting is important. It tells the Gremlin Server how long to
+let a query run before terminating it. This essentially establishes the maximum 
+amount of time any query will be allowed to run, regardless of whether it has
 completed or not. For this experiment the default setting of 30000 should be more
 than adequate. The value represents the number of milliseconds allowed. If you want
 to allow queries sent to the server to run for longer you can increase this value.
@@ -123,7 +123,7 @@ want to disable the timeout feature you can do that by specifying a timeout valu
 ----
 host: 0.0.0.0
 port: 8182
-scriptEvaluationTimeout: 30000
+evaluationTimeout: 30000
 channelizer: org.apache.tinkerpop.gremlin.server.channel.WsAndHttpChannelizer
 graphs: {
   graph: conf/gremlin-server/janusgraph-cassandra-es-server.properties
@@ -752,7 +752,7 @@ The `gremlin-server-air-routes.yaml` file should be placed in the `/conf` folder
 ----
 host: localhost
 port: 8182
-scriptEvaluationTimeout: 30000
+evaluationTimeout: 30000
 channelizer: org.apache.tinkerpop.gremlin.server.channel.WsAndHttpChannelizer
 graphs: {
   graph: conf/tinkergraph-empty.properties}
