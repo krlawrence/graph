@@ -65,7 +65,7 @@ performed using the TinkerGraph in memory graph and the Gremlin console, as well
 other TinkerPop enabled graph stores.
 
 [[gconsole]]
-The Gremlin console
+The Gremlin Console
 ~~~~~~~~~~~~~~~~~~~
 
 The Gremlin Console is a fairly standard REPL (Read Eval Print Loop) shell. It is
@@ -300,6 +300,41 @@ however.
 TIP: If you want to learn more about the console itself you can refer to the official
 TinkerPop documentation and, even better, have a play with the console and the built
 in help.
+
+[[consolepreferences]]
+Setting up console preferences
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+There are a number of preferences that can be established within the console to make 
+it more suitable for your needs. The ':set' command is used to establish various 
+preference values. Let's look at a few helpful configurations. 
+
+The first option to know is 'max-iteration'. The console will only display the first
+100 lines of output for any command by default. If you'd like to see more you would 
+need to increase this value.
+
+[source,text]
+----
+:set max-iteration 1000
+----
+
+TIP: Set the 'max-iteration' to '-1' to have no limit in the number of lines 
+displayed.
+
+If you are on a system that can display colors, there are a wide range of color 
+options you can modify to suit your needs. The various color settings take a comma
+separated combinatin of a foreground, background and attribute.
+
+[source,text]
+----
+:set error.color black,bg_black,underline
+----
+
+If you'd like to remove console configurations you can use the ':purge preferences'
+command.
+
+TIP: The full list of available preferences can be found in the Apache TinkerPop
+reference documentation https://tinkerpop.apache.org/docs/current/reference/#console-preferences
 
 [[tgintro]]
 Introducing TinkerGraph
@@ -629,10 +664,10 @@ called `air-routes-latest.graphml`. There is also a README file to go along with
 updated data set called `README-air-routes-latest.txt` in the same folder.
 
 [[ld]]
-Loading the air-routes graph using the Gremlin console
+Loading the air-routes graph using the Gremlin Console
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Here is some code you can load the air routes graph using the gremlin console by
+Here is some code you can load the air routes graph using the Gremlin Console by
 putting it into a file and using ':load' to load and run it or by entering each line
 into the console manually. These commands will setup the console environment, create
 a TinkerGraph graph and load the `air-routes.graphml` file into it. Some extra
@@ -645,12 +680,8 @@ https://github.com/krlawrence/graph/tree/main/sample-data
 These commands create an in-memory TinkerGraph which will use LONG values for the
 vertex, edge and vertex property IDs. As part of loading a graph we need to setup
 a 'graph traversal source' object called 'g' which we will then refer to in our
-subsequent queries of the graph. The 'max-iteration' option tells the Gremlin
-console the maximum number of lines of output that we ever want to see in return
-from a query. The default, if this is not specified, is 100.
-
-TIP: You can use the 'max-iteration' setting to control how much output the Gremlin
-Console displays.
+subsequent queries of the graph. We discussed the ':set max-iteration' command in
+<<consolepreferences>>.
 
 If you are using a different graph environment and GraphML import is supported, you
 can still load the `air-routes.graphml` file by following the instructions specific
