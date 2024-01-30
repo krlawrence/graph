@@ -2818,8 +2818,8 @@ South America
 ----
 
 [[tranges]]
-Testing values and ranges of values
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Testing values and ranges of values with P
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We have already seen some ways of testing whether a value is within a certain range.
 Gremlin provides a number of different predicates that we can use to do range
@@ -2842,6 +2842,18 @@ each of these in use throughout this book.
 |without | Must not match any of the values provided. Can be a range or a list
 |==============================================================================
 
+.Other predicates
+[cols="^1,4"]
+|==============================================================================
+|and     | Logical and conjunction
+|or      | Logical or conjunction
+|not     | Negation of a predicateg
+|==============================================================================
+
+NOTE: There are 'and', 'or' and 'not' predicates, but there are also 'and', 'or',
+and 'not' steps. It is often helpful to use the appropriate 'P' or '__' prefix 
+respectively for clairty when using this syntax, but you may also find it required
+if your compiler cannot figure out which you intend to call.
 
 The following queries demonstrate these capabilities being used in different ways.
 First of all, here are some examples of some of the direct compare steps such as 'gt'
@@ -3060,12 +3072,23 @@ g.V().has('airport','code','AUS').
       out().has('code','SYD').path().by('code')
 ----
 
-Similar to the above but adding an 'and' clause to also avoid LAX
+Similar to the above but adding an 'and' clause to also avoid LAX.
 
 [source,groovy]
 ----
 g.V().has('airport','code','AUS').
       out().and(has('code',neq('DFW')),has('code',neq('LAX'))).
+      out().has('code','SYD').path().by('code')
+----
+
+The above syntax uses the '__.and()' step as opposed to the 'P.and()' predicate. We
+can rewrite this query using the latter form which is a bit more compact and 
+readable.
+
+[source,groovy]
+----
+g.V().has('airport','code','AUS').
+      out().has('code',neq('DFW').and(neq('LAX'))).
       out().has('code','SYD').path().by('code')
 ----
 
@@ -3153,6 +3176,55 @@ Mexico City
 Cancun
 Guadalajara
 ----
+
+Returning to the earlier use of 'neq', it is worth considering a subtlety of its
+behavior as compared to various form of of 'not' used in conjuction with 'eq'. Let's
+examine the differences with the following example where we start by getting a vertex
+count and a count of the number of vertices that have a city property.
+
+[source,groovy]
+----
+g.V().count()
+
+3747
+
+g.V().has('city').count()
+
+3502
+----
+
+Recall that 'not' is both a step and a predicate. When used as a predicate from 'P', 
+you essentially negate the state of the predicate given to it directly, so 'eq' 
+simply becomes 'neq' as shown below.
+
+[source,groovy]
+----
+g.V().has('city',neq('I-do-not-exist')).count()
+
+3502
+
+g.V().has('city',P.not(neq('I-do-not-exist'))).count()
+
+3502
+----
+
+Note that there are 3502 results which means that with these forms, the city property
+must exist for the equality to be tested. We'll next see that this is not the case 
+if we try to negate with the 'not' step.
+
+[source,groovy]
+----
+g.V().not(has('city',eq('I-do-not-exist'))).count()
+
+3747
+----
+
+Using 'not' step in the fashion demonstrates all 3747 vertices do not have a city
+property with the name "i-do-not-exist". The difference here is that with 'not' step
+negates the entirety of what 'has' is doing, accounting for a false if the city is
+not present at all or a false where the 'eq' is not satisfied. The predicate for of
+'not' on the other hand does not bother evaluating the predicate at all if the city
+property isn't present.
 
 Using 'coin' and 'sample' to sample a dataset
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
