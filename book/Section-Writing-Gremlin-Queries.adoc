@@ -5515,9 +5515,109 @@ g.V(3).coalesce(has('region','US-TX').values('desc'),constant("Not in Texas"))
 Austin Bergstrom International Airport
 ----
 
+[[coalfail]]
+Combining 'coalesce' with 'fail' step
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+We've not looked at 'fail' step before but it is a very straightforward step. If it
+is encountered in the traversal, it will throw an exception.
+
+[source,groovy]
+----
+g.V().fail()
+
+fail() Step Triggered
+================================
+Message  > fail() step triggered
+Traverser> v[2306]
+  Bulk   > 1
+Traversal> V().fail()
+Metadata > {}
+================================
+----
+
+The above example shows what the Gremlin Console formatting of the generated 
+'FailException'. You can also give it a custom error message.
+
+[source,groovy]
+----
+g.V().fail("failed!!")
+
+fail() Step Triggered
+===============================
+Message  > failed!!
+Traverser> v[2306]
+  Bulk   > 1
+Traversal> V().fail("failed!!")
+Metadata > {}
+===============================
+----
+
+When used with 'coalesce' you can trigger the failure condition if particular 
+traversal does not produce the result you expect. Using the example from the 
+"<<coalconst>>" section, if the airport is in Texas then its description is returned. 
+If it is not in Texas, then the exception is thrown.
+
+[source,groovy]
+----
+g.V(1).coalesce(has('region','US-TX').values('desc'),fail())
+
+fail() Step Triggered
+================================
+Message  > fail() step triggered
+Traverser> v[1]
+  Bulk   > 1
+Traversal> V().fail()
+Metadata > {}
+================================
+
+g.V(3).coalesce(has('region','US-TX').values('desc'),fail())
+
+Austin Bergstrom International Airport
+----
+
+[[bycoal]]
+Using 'coalesce' inside of 'by'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In the "<<coalconst>>" and "<<coalfail>>" sections we saw patterns that have a clear
+applicability to 'by' modulators. Let's look at an example query that uses 
+`groupCount'. 
+
+[source,groovy]
+----
+g.V().groupCount().by("city").
+  unfold().
+  filter(select(values).is(gt(3)))
+  
+San Jose=4
+London=6
+Melbourne=4
+Santa Rosa=4  
+----
+
+In the above example, we do a 'groupCount' by the city of the airport. We 'unfold'
+the 'Map' to entries and then find only those entries that have a count greater than
+3. When we use 'by("city")' we tell Gremlin to ignore vertices that do not have a
+city as a property key. If we'd like to include those in the count, we could use 
+'coalesce' inside of the 'by' so that we could return a 'constant' value to represent
+that missing property.
+
+[source,groovy]
+----
+g.V().groupCount().by(coalesce(values('city'), constant('No City'))).
+  unfold().
+  filter(select(values).is(gt(3)))
+
+San Jose=4
+No City=245
+London=6
+Melbourne=4
+Santa Rosa=4
+----
+
 A bit later in the "<<coaladdv>>" section we will again use 'coalesce' to check to
 see if a vertex already exists before we try to add it.
-
 
 [[optional]]
 Returning one of two possible results - introducing 'optional'
