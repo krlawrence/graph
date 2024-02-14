@@ -943,6 +943,41 @@ try {
 }
 ----
 
+It's worth adding that with TinkerGraph there is a second way to save your data that
+allows it to happen a bit more automatically. If you configure your TinkerGraph at
+startup to include a 'graphLocation' and 'graphFormat', TinkerGraph will 
+automatically save the graph on a call to the 'close'. Earlier, the graph was created
+with the following code:
+
+[source,java]
+----
+// Create a new (empty) TinkerGraph
+TinkerGraph tg = TinkerGraph.open();
+----
+
+The 'open' method has the option to accept a 'Configuration' object. In that 
+configuration we would add those two settings.
+
+[source,java]
+----
+// Create a new (empty) TinkerGraph with a configuration
+Configuration conf = new BaseConfiguration();
+conf.setProperty("gremlin.tinkergraph.graphLocation", "mygraph.xml");
+conf.setProperty("gremlin.tinkergraph.graphLocation", "graphml");
+TinkerGraph tg = TinkerGraph.open(configuration);
+
+...
+
+// call close() to save as GraphML to a file called mygraph.xml
+try {
+    tg.close();
+} catch (Exception ex) {
+  System.out.println("Graph failed to save");
+}
+----
+
+NOTE: 'Configuration' refers to the Apache Configuration library.
+
 [[groovyapp]]
 Working with TinkerGraph from a Groovy application
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
