@@ -2817,6 +2817,273 @@ g.V().hasLabel('continent').values('desc').max()
 South America
 ----
 
+[[textsteps]]
+Working with text
+~~~~~~~~~~~~~~~~~
+
+Gremlin has a wide variety of steps for manipulating text. String values in Gremlin 
+often derive directly from property values, but you may encounter them by other means
+as well. One of these ways is by means of the 'asString' step, which takes any type
+and converts it to a string representation. 
+
+[source,groovy]
+----
+// 18045 is a Long type
+g.V().hasLabel('airport').values('longest').max()
+
+18045
+
+// 18045 is a String type
+g.V().hasLabel('airport').values('longest').max().asString()
+
+18045
+----
+
+Many of the operations you are used to having for working with strings are available
+in Gremlin.
+
+[cols="^1,4"]
+|==============================================================================
+|concat      | Concatenates one or more string value together with the incoming traverser
+|format      | Formats a string using a user supplied template
+|length      | Counts the number of characters in the string
+|lTrim       | Removes whitespace from the left of the string
+|toLower     | Converts the string to all lower case
+|toUpper     | Converts the string to all upper case
+|replace     | Replaces occurences of a specified string with another string value
+|reverse     | Reverses the characters in a string
+|rTrim       | Removes whitespace from the right of the string
+|split       | Splits a string into multiple strings based on a specified delimiter
+|substring   | Exacts a substring from the incoming string based on specified indices
+|trim        | Removes whitespace from both ends of the string
+|==============================================================================
+
+The above steps should be generally recognizable to most developers and are for the 
+most part self-explanatory. Let's look at a few examples of each to get a feel for 
+how they work. We'll start with ones that require the least explanation first.
+
+[source,groovy]
+----
+g.V().has('airport','code',within('IAD','MIA','LAX')).
+  values('city')
+  
+Washington D.C.
+Los Angeles
+Miami
+  
+// convert each city to all lower case with toLower()
+g.V().has('airport','code',within('IAD','MIA','LAX')).
+  values('city').toLower()
+
+washington d.c.
+los angeles
+miami
+
+// convert each city to all upper case with toUpper()
+g.V().has('airport','code',within('IAD','MIA','LAX')).
+  values('city').toUpper()
+
+WASHINGTON D.C.
+LOS ANGELES
+MIAMI
+
+// get the number of characters for each city with length()
+g.V().has('airport','code',within('IAD','MIA','LAX')).
+  values('city').length()
+  
+15
+11
+5
+
+// reverse() the characters for each city
+g.V().has('airport','code',within('IAD','MIA','LAX')).
+  values('city').reverse()  
+  
+.C.D notgnihsaW
+selegnA soL
+imaiM  
+----
+
+The 'substring' step is 0-based (inclusive) and optionally accepts an end index
+(exclusive). 
+
+[source,groovy]
+----
+g.V().has('airport','code',within('IAD','MIA','LAX')).
+  values('code').
+  substring(1)
+
+AD
+AX
+IA
+  
+g.V().has('airport','code',within('IAD','MIA','LAX')).
+  values('code').
+  substring(0, 1)  
+
+I
+L
+M
+----
+
+The 'split' step is a bit different than most of the string manipulation steps in 
+that all the other steps produce one string as an out, whereas 'split' produces a 
+list of strings.
+
+[source,groovy]
+----
+g.V().has('airport','code',within('IAD','MIA','LAX')).
+  values('city').
+  split(' ')
+  
+[Washington,D.C.]
+[Los,Angeles]
+[Miami]  
+----
+
+Sometimes you will want to find occurrences of a particular character or string and
+replace that with another.
+
+[source,groovy]
+----
+g.V().has('airport','code',within('IAD','MIA','LAX')).
+  values('code').replace(' ', '0')
+  
+I0D
+MI0
+L0X
+----
+
+We can use the 'replace' step to help demostrate the steps that remove whitespace.
+The following examples use 'inject' to start the traversal with some strings that 
+include whitespace before and after a character. We will use the various 'trim' steps
+to remove the whitespace and then 'replace' any that is left over to see which bit of
+whitespace has been removed.
+
+[source,groovy]
+----
+g.inject(' x', 'x ', ' x ').lTrim().replace(' ', 'Z')
+
+x
+xZ
+xZ
+
+g.inject(' x', 'x ', ' x ').rTrim().replace(' ', 'Z')
+
+Zx
+x
+Zx
+
+g.inject(' x', 'x ', ' x ').trim().replace(' ', 'Z')
+
+x
+x
+x
+----
+
+When we want to put strings together we can use 'concat'. This most simple form of 
+this step might be best demonstrated by adding a suffix to the end of a string or
+prefix to the start of one.
+
+[source,groovy]
+----
+g.V().has('airport','code',within('IAD','MIA','LAX')).
+  values('code').concat('_suffix')
+
+IAD_suffix
+LAX_suffix
+MIA_suffix
+
+g.V().has('airport','code',within('IAD','MIA','LAX')).
+  values('code').as('c').
+  constant('prefix_').
+  concat(select('c'))
+  
+prefix_IAD
+prefix_LAX
+prefix_MIA  
+----
+
+The 'concat' step has another form to consider where it can take a 'Traversal' as an
+argument for more dynamic use cases. 
+
+[source,groovy]
+----
+g.V().has('airport','code',within('IAD','MIA','LAX')).as('v').
+  values('code').concat(constant(' is in '), select('v').values('city'))
+
+IAD is in Washington D.C.
+LAX is in Los Angeles
+MIA is in Miami
+----
+
+There is an easier way to produce the output shown above. We can use the 'format' 
+step to produce that in a more readable way.
+
+[source,groovy]
+----
+g.V().has('airport','code',within('IAD','MIA','LAX')).
+  format("%{code} is in %{city}")
+ 
+IAD is in Washington D.C.
+LAX is in Los Angeles
+MIA is in Miami
+----
+
+Note how 'format' takes the incoming traverser, in this case an airport vertex, and
+resolve the variable expressions designated by the '%{ }' forms. Here the value in 
+the curly braces is resolved to a property value. They can also be used to resolve 
+to map keys and step names.
+
+[source,groovy]
+----
+g.V().has('airport','code',within('IAD','MIA','LAX')).
+  elementMap().
+  format("%{code} is in %{city}")
+ 
+IAD is in Washington D.C.
+LAX is in Los Angeles
+MIA is in Miami
+----
+
+Another important feature of 'format' is the ability to add positional variables
+which can be transformed using a 'by' modulator. This feature makes 'format' an 
+extremely flexible step.
+
+[source,groovy]
+----
+g.V().has('airport','code',within('IAD','MIA','LAX')).
+  format("%{_} is in %{_} and has %{_} outgoing routes").
+    by('code').
+    by('city').
+    by(outE('route').count())
+ 
+IAD is in Washington D.C. and has 136 outgoing routes
+LAX is in Los Angeles and has 195 outgoing routes
+MIA is in Miami and has 171 outgoing routes
+----
+
+It's worth noting that many of these steps can take a 'Scope' argument. By default,
+the scope is 'global' which means that the step operates on the value of the current 
+traverser in the stream. In contrast, a 'local' scope implies that the incoming 
+traverser in the stream contains a list of values on which the step will be applied.
+So far, we've only looked at 'global' scope usage of these steps, but 'local' scope
+allows for some interesting use cases.
+
+[source,groovy]
+----
+// grab the first letter of each word in each city and lower case it
+g.V().has('airport','code',within('IAD','MIA','LAX')).
+  values('city').
+  split(' ').
+  substring(local,0,1).
+  toLower(local)
+  
+[w,d]
+[l,a]
+[m]  
+----
+
 [[tranges]]
 Testing values and ranges of values with P
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

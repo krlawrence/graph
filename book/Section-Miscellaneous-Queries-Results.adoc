@@ -3908,36 +3908,6 @@ t.getObjectsAtDepth(5)
 16
 ----
 
-[[mapstr]]
-Using 'map' to produce a concatenated result string
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-In the example below we use 'map' to build a string containing the airport code
-concatenated with the city the airport is in for airports in England.
-
-[source,groovy]
-----
-g.V().has('airport','region','GB-ENG').limit(10).
-  map{it.get().value('code')+" "+it.get().value('city')}
-----
-
-Here are the results of running the query.
-
-[source,groovy]
-----
-LHR London
-LGW London
-MAN Manchester
-LCY London
-STN London
-EMA Nottingham
-LPL Liverpool
-LTN London
-SOU Southampton
-LBA Leeds
-----
-
-
 [[randwalk]]
 Randomly walking a graph
 ~~~~~~~~~~~~~~~~~~~~~~~~
