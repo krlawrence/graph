@@ -3084,6 +3084,78 @@ g.V().has('airport','code',within('IAD','MIA','LAX')).
 [m]  
 ----
 
+[[datesteps]]
+Working with dates
+~~~~~~~~~~~~~~~~~~
+
+From birthdays to auditing values like the "createdDate", applications often call you 
+to store dates and times. There are several ways you might store dates in your graph: 
+
+1. A long value representing milliseconds since the epoch
+2. A ISO-8601 formatted date stored as a string
+3. A native 'DateTime' value (if your graph database supports this type)
+
+All three work well in their own way, but if you want to use Gremlin's date steps, 
+you will need an actual date type to use with them, which means that for the first 
+two options you would need to use the 'asDate' step to convert them to date types.
+
+[source,groovy]
+----
+g.inject(1690934400000).asDate()
+
+Tue Aug 01 20:00:00 EDT 2023
+
+g.inject("2023-08-02T00:00:00Z").asDate()
+
+Tue Aug 01 20:00:00 EDT 2023
+----
+
+To construct a date in Gremlin, you can use the 'datetime' function, which takes an
+IOS-8601 formatted string as an argument:
+
+[source,groovy]
+----
+g.inject(datetime("2023-08-02T00:00:00Z"))
+
+Tue Aug 01 20:00:00 EDT 2023
+----
+
+There are two date manipulation steps in Gremlin, 'dateAdd' and 'dateDiff'. The 
+'dateAdd' step adds some number of specified time units to a date value. In the 
+following example we add 1 week to the given date.
+
+[source,groovy]
+----
+g.inject("2023-08-02T00:00:00Z").asDate().dateAdd(DT.day, 7)
+
+Wed Aug 23 20:00:00 EDT 2023
+----
+
+By supplying a negative number of units, we can effect a subtraction operation as 
+shown in the next example.
+
+[source,groovy]
+----
+g.inject("2023-08-02T00:00:00Z").asDate().dateAdd(DT.day, -7)
+
+Tue Jul 25 20:00:00 EDT 2023
+----
+
+The 'DT' enum allows units of time for 'second', 'minute', 'hour', and 'day'.
+
+NOTE: Date conversion in the above examples assume a time zone offset of UTC(+00:00).
+
+The 'dateDiff' step is helpful when you want to find the difference between two 
+dates in epoch time.
+
+[source,groovy]
+----
+g.inject("2023-08-02T00:00:00Z").asDate().
+  dateDiff(constant("2023-08-03T00:00:00Z").asDate())
+
+-86400
+----
+
 [[tranges]]
 Testing values and ranges of values with P
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
