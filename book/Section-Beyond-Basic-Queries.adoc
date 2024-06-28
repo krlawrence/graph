@@ -5255,12 +5255,288 @@ the results of your queries as JSON. Remember that if you do save an entire grap
 JSON, unless you specify otherwise, the default format is GraphSON 3.0 with
 embedded types.
 
+[[traversal-strategies]]
+Understanding TraversalStrategies
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When you write a Gremlin query and iterate it to get a result, the Gremlin execution
+engine will take a moment to examine the query itself to determine if any registered
+'TraversalStrategy' implementations meet their criteria for application. If one or
+more do meet the criteria, then the strategy will modify the traversal according to
+its rules. 
+
+A `TraversalStrategy` can serve many kinds of functions but often serve one of four
+functions:
+
+* Decoration - These strategies embed application-level features into traversal 
+logic.
+* Verification - This is a strategy that does checks to ensure that the traversal is 
+legal for the executing engine.
+* Optimization - These strategies provide a more efficient way to express traversal
+logic than the form original written.
+* Finalization - These strategies make final internal adjustments after all other 
+strategies are executed to ensure the traversal is ready for execution.
+
+TinkerPop automatically registers a number of optimization, verification and 
+finalization strategies by default. Graph database providers who implement TinkerPop
+will usually have some strategies of those types to automatically register as well.
+You would usually choose to add your own decoration strategies should your use case
+call for one. We will discuss that in further detail momentarily, but let's first 
+consider a basic optimization strategey and what it does to provide a more concrete
+example. 
+
+Let's assume that you write the following Gremlin, which calculates the degree of 
+each vertex it encounters:
+
+[source,groovy]
+----
+g.V().map(both().count())
+----
+
+This Gremlin will get you the count you seek, but it is a bit inefficient because it
+chooses to count the adjacent vertices using 'both()' when it could simply count 
+incident edges with 'bothE()' and achieve the same answer without requiring an extra
+traversal to the vertex on the other side. It would have been better to write:
+
+[source,groovy]
+----
+g.V().map(bothE().count())
+----
+
+As you work more with Gremlin, you will come to think in terms of those kinds of 
+efficiencies, but Gremlin has a 'TraversalStrategy' for that called 
+'AdjacentToIncidentStrategy' which will automatically rewrite the Gremlin you wrote 
+in the first example to the one in the second when you execute it. Strategies like 
+this one, and particularly ones registered automatically by the graph database you 
+choose, can have a dramatic effect on the performance of your queries. Generally 
+speaking you don't need to know much about what these types of strategies are doing,
+or feel the need to remove any of the pre-registered strategies.
+
+While those types of strategies aren't critical for most users to understand, it is 
+definitely worth learning about decorative and some verification strategies. These
+strategies offer actual features that can be automatically applied to a traversal 
+that you write which will alter its behavior in ways that might be quite useful to
+you. In the following sections, we will examine some of the more useful user-oriented
+strategies provided by TinkerPop.
+
+NOTE: Some strategies cannot work in remote contexts. 'EventStrategy' and 
+'ElementIdStrategy' are two such strategies that will not work this way.
+
+[[traversal-strategies-verification]]
+Verification strategies
+^^^^^^^^^^^^^^^^^^^^^^^
+
+As a quick reminder, verification strategies validate the contents of a traversal to
+ensure that it conforms with the strategies guidelines. If it does not, then it 
+throws an exception rather than executing. The following strategies that TinkerPop 
+provides tend to be useful:
+
+* 'EdgeLabelVerificationStrategy' - ensures that labels are always used when using
+'out()', 'in()' or 'both()' steps
+* 'ReadOnlyStrategy' - ensures that the traversal contains no mutation steps that 
+could modify the graph
+* 'ReservedKeysVerificationStrategy' - ensures that certain strings are not use for
+property keys, treating them as reserved words
+
+[source,groovy]
+----
+verificationStrategy = EdgeLabelVerificationStrategy.build().
+                                                     throwException().create()
+// results in VerificationException - as out() does not have a label specified
+g.withStrategies(verificationStrategy).V(1).out().iterate();
+
+verificationStrategy = ReadOnlyStrategy.instance();
+// results in VerificationException since a mutation step, addV(), is used
+g.withStrategies(verificationStrategy).addV('airport').iterate();
+
+// by default ReservedKeysVerificationStrategy blocks use of "id" and "label"
+// which are commonly mistaken with T.id and T.label in Gremlin
+verificationStrategy = ReservedKeysVerificationStrategy.build().
+                                                        throwException().create()
+// results in VerificationException since the "id" property key was used
+g.withStrategies(verificationStrategy).addV('airport').property("id",123).iterate();
+----
+
+[[traversal-strategies-partition]]
+PartitionStrategy
+^^^^^^^^^^^^^^^^^
+
+As its name suggests, 'PartitionStrategy' can be used to partition the graph into 
+named groups that allow it to blind traversals from traveling to particular parts of
+the graph. The key advantage to using 'PartitionStrategy' is that it automatically
+handles the insertion of varous filter and mutation steps that would otherwise be
+tedious to write and potentially easy to forget leading to mistakes. Moreover, the 
+entire partitioning abstraction encapsulated in a strategy means that your Gremlin 
+remains more readable in your code as the partition logic isn't applied until 
+traversal execution time. 
+
+For simplicity sake, let's look at an example of "PartitionStrategy' using an empty
+graph and consider a multi-tenant scenario where there are two different users 
+accessing the graph who should not be able to see the other's data. 
+
+[source,groovy]
+----
+graph = TinkerGraph.open()
+
+// create two partitions, one for each tenant. the "partitionKey" refers to the 
+// property in the graph to use to store the partition value for tenant A or B.
+// the "writePartition" is the value to assign to the "partitionKey" when writing
+// to the graph and the "readPartition" is the set of values that the partition is
+// allowed to see when reading from the graph. 
+tenantA = new PartitionStrategy(partitionKey: "_partition", 
+                                writePartition: "a", readPartitions: ["a"])
+tenantB = new PartitionStrategy(partitionKey: "_partition", 
+                                writePartition: "b", readPartitions: ["b"])
+
+// create two instances of "g" each using a different strategy                                
+gA = traversal().withEmbedded(graph).withStrategies(strategyA)
+gB = traversal().withEmbedded(graph).withStrategies(strategyB)
+
+gA.addV() // this vertex has a property of {_partition:"a"}
+gB.addV() // this vertex has a property of {_partition:"b"}
+gB.addV() // this vertex has a property of {_partition:"b"}
+
+
+gA.V().count()
+
+1
+
+gB.V().count()
+
+2
+----
+
+Let's look at how you would have written this same code if you didn't have 
+'PartitionStrategy' and needed this sort of functionality.
+
+[source,groovy]
+----
+graph = TinkerGraph.open()
+
+g = traversal().withEmbedded(graph)
+
+g.addV().property('_partition', 'a')
+g.addV().property('_partition', 'b')
+g.addV().property('_partition', 'b')
+
+
+g.V().has('_partition', 'a').count()
+
+1
+
+g.V().has('_partition', 'b').count()
+
+2
+----
+
+As you can see in the above example, you would have to insert logic that was mostly 
+irrelevant to what the traversal itself is doing. It isn't so hard in the example
+where you just need to add a simple step or two, but consider a more complicated 
+example and you can quickly see how useful this strategy can be if you have this 
+use case.
+
+[source,groovy]
+----
+// if air-routes was partitioned and you used PartitionStrategy, you could write
+// normal Gremlin like this 
+g.V().out('route')
+  filter(bothE('route').count().is(lt(3))).
+  union(both('route').has('code',within('AUS','TUS','YYZ')),
+        bothE('route').has('dist', eq(100).otherV())).
+  valueMap()
+
+// but if you didn't have PartitionStrategy you'd have to write all the partitioning
+// logic yourself in every query. you can see how much harder it is to read, requires
+// more repetitive typing and might be error prone to write  
+g.V().has('_partiition', 'a').
+  out('route').has('_partiition', 'a')
+  filter(bothE('route').has('_partiition', 'a').count().is(lt(3))).
+  union(both('route').
+          has('_partiition', 'a').
+          has('code',within('AUS','TUS','YYZ')),
+        bothE('route').
+          has('_partiition', 'a').
+          has('dist', eq(100).
+          otherV().
+          has('_partiition', 'a'))).
+  valueMap()
+----
+
+NOTE: 'PartitionStrategy' is not always a fit for every situation. Standard rules 
+about Gremlin and graphs still apply. For instance, a node with millions of edges, 
+physically still has millions of edges even when using this strategy where you expect
+to only use it to traverse a small fraction of those edges. The underlying graph 
+database will really just be filtering those edges using the partition key, so you
+query will still be limited to the speed with which it can do that.
+
+[[traversal-strategies-seed]]
+SeedStrategy
+^^^^^^^^^^^^
+
+'SeedStrategy' is mostly helpful when writing tests. Certain Gremlin features aren't 
+determinisitic in what they do, which can make it hard to write good assertions for 
+tests. By using 'SeedStrategy', you can ensure that 'coin()', 'sample()' and 
+'Order.shuffle' will all behave in a deterministic fashion.
+
+[source,groovy]
+----
+seedStrategy = new SeedStrategy(999998L) // specify the seed to reuse
+g.withStrategies(seedStrategy).V().limit(10).values('code').
+  fold().
+  order(local).by(shuffle)
+  
+// repeated executions will always shuffle the same way to return the same result
+[UET,DEA,GWD,LYP,PJG,MJD,RYK,DSK,CJL,GIL]
+----  
+
+[[traversal-strategies-subgraph]]
+SubgraphStrategy
+^^^^^^^^^^^^^^^^
+
+'SubgraphStrategy' is quite similar to 'PartitionStrategy' and it would be worth
+reading <<traversal-strategies-partition>> first to understand the benefits that are
+discussed there as they are quite similar to the benefits gained here. As with 
+'PartitionStrategy', 'SubgraphStrategy' is defined to blind traversals from traveling
+to particular defined portions of the graph. Unlike 'PartitionStrategy' which 
+restricts those places by way of a single property key, i.e. the "partitionKey", this
+strategy allows you to define complex filtering rules using Gremlin itself to help 
+define the subgraph that is available.
+
+The basic idea for using `SubgraphStrategy` is to define filters for vertices, edges,
+or vertex properties to constrain the traversal paths. As previously mentioned, you 
+define the filters with Gremlin.
+
+[source,groovy]
+----
+// define a subgraph that describes "short flights" where you only traverse
+// routes with distances of less than 40 miles
+strategy = new SubgraphStrategy(edges: __.has('dist',lt(40)))
+g.withStrategies(strategy).V().out().count()
+
+362
+
+// extend the previous subgraph to include a subset of vertices, which now will limit
+// queries to traverse edges under 40 miles and also among vertices in the specified
+// set
+strategy = new SubgraphStrategy(
+                 vertices: __.has('code', within(['ADQ','OBU','SHG','AUK','KOT',
+                                                  'KWK','RSH','RSH','PQS','PQS',
+                                                  'KPN','IRC','AET','KWN','ORV',
+                                                  'KGX','VAK','SGY','ANV','HNS',
+                                                  'HNH','SVA','WMO','ELI','KSM',
+                                                  'MNT','WBB','ANI','KYK','SKK'])),
+                 edges: __.has('dist',lt(40)))
+g.withStrategies(strategy).V().out().count()
+
+7
+----    
+
 [[performance]]
 Analyzing the performance of your queries
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Apache TinkerPop includes a class called TimeUtil that provides methods that you can
-use to time how long your queries are taking to run. A second class called
+Apache TinkerPop includes a class called 'TimeUtil' that provides methods that you 
+can use to time how long your queries are taking to run. A second class called
 ProfileStep provides a way to get a more fine grained analysis of where the time is
 spent during execution of a query. In this section, we are going to provide a few
 examples of how to use the methods provided to analyze the execution time of a few
