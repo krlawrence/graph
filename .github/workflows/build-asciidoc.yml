@@ -48,8 +48,8 @@ jobs:
           mkdir ../target
           cp Practical-Gremlin.html ../target/index.html
         env:
-          search_string: "<h1>PRACTICAL GREMLIN: An Apache TinkerPop Tutorial<\/h1>"
-          replace_string: "<img src=\"PRACTICAL-GREMLIN-Revised-v2.png\">\n<h1>PRACTICAL GREMLIN:<br\/>An Apache TinkerPop Tutorial<\/h1>"
+          search_string: "<h1>PRACTICAL GREMLIN: An Apache TinkerPop Tutorial</h1>"
+          replace_string: "<img src=\"PRACTICAL-GREMLIN-Revised-v2.png\">\n<h1>PRACTICAL GREMLIN:<br/>An Apache TinkerPop Tutorial</h1>"
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Upload artifact
