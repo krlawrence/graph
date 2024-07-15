@@ -46,7 +46,7 @@ jobs:
           asciidoctor Practical-Gremlin.adoc
           SEARCH_STRING="<h1>PRACTICAL GREMLIN: An Apache TinkerPop Tutorial<\/h1>"
           REPLACE_STRING='<img src="PRACTICAL-GREMLIN-Revised-v2.png">\n<h1>PRACTICAL GREMLIN:<br\/>An Apache TinkerPop Tutorial<\/h1>'
-          sed -i "s|${SEARCH_STRING}|${REPLACE_STRING}|g" "target/Practical-Gremlin.html"
+          sed -i "s|${SEARCH_STRING}|${REPLACE_STRING}|g" "Practical-Gremlin.html"
           mkdir ../target
           cp Practical-Gremlin.html ../target/index.html
       - name: Setup Pages
