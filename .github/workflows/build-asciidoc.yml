@@ -44,8 +44,12 @@ jobs:
         working-directory: ./book
         run: |
           asciidoctor Practical-Gremlin.adoc
+          sed -i "s/$search_string/$replace_string/g" "target/Practical-Gremlin.html"
           mkdir ../target
           cp Practical-Gremlin.html ../target/index.html
+        env:
+          search_string: <h1>PRACTICAL GREMLIN: An Apache TinkerPop Tutorial<\/h1>
+          replace_string: <img src="PRACTICAL-GREMLIN-Revised-v2.png">\n<h1>PRACTICAL GREMLIN:<br\/>An Apache TinkerPop Tutorial<\/h1>
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Upload artifact
