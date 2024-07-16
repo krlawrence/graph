@@ -373,7 +373,6 @@ throw an exception. This work began as part of the TinkerPop 3.5.2 update and is
 completed as of TinkerPop 3.6.0.
 - A new 'fail' step that can be used to abort a query in a controlled way.
 
-
 NOTE: Full details of all the new features added in the TinkerPop 3.6.x releases can 
 be found at the following link:
 https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc#tinkerpop-360-tinkerheart
@@ -382,7 +381,27 @@ https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc#tinkerpop-360
 TinkerPop 3.7
 ^^^^^^^^^^^^^
 
-IMPORTANT: TODO - Add details for TinkerPop 3.7
+TinkerPop 3.7.0 was released July 2023 and with the follow-on release of 3.7.1 a few
+months later, introduced a large expansion of the Gremlin language, providing long
+awaited featurs for manipulating strings, collections and dates. There were other 
+major features as well, such as TinkerGraph gaining some simple transactional 
+features and the ability for properties to be returned on elements from Gremlin 
+Server, rather than only getting references. Notable improvements include:
+
+* New Gremlin steps for working with strings: 'asString()', 'concat()', 'length()', 
+'toLower()', 'toUpper()', 'trim()', 'lTrim()', 'rTrim()', 'reverse()', 'replace()', 
+'split()', 'substring()', and 'format()'.
+* New Gremlin steps for working with collections: 'any()', 'all()', 'product()', 
+'merge()', 'intersect()', 'combine()', 'conjoin()', 'difference()', 'disjunct()' 
+and 'reverse()'.
+* A new Gremlin steps for working with dates: 'asDate()', 'dateAdd()' and 
+'dateDiff()'.
+* The 'union()' step became available as a start step.
+* Improved syntax for specifying cardinality directly within a 'Map' for use with 
+'mergeV()'.
+* TinkerGraph gained support for simple transactions.
+* Graph elements like 'Vertex' and 'Edge' can now be returned from Gremlin Server 
+with their properties attached using the 'materializeProperties' option.
 
 NOTE: Full details of all the new features added in the TinkerPop 3.7.x releases can 
 be found at the following link:
