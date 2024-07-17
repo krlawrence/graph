@@ -26,23 +26,33 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Install Tools
-        run: |
-          sudo apt-get install calibre
-          sudo apt-get install pandoc
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Cache Ruby Gems
+        uses: actions/cache@v3
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+      
       - name: Install Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.0'
-      - name: Install Gems
+          bundler-cache: true
+                  
+      - name: Install Tools
         run: |
-          gem install asciidoctor
-          gem install pygments.rb
-      - name: Checkout
-        uses: actions/checkout@v4
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends calibre pandoc
+
       - name: Build Documentation
         working-directory: ./book
         run: |
+          gem install asciidoctor
+          gem install pygments.rb
           asciidoctor Practical-Gremlin.adoc
           SEARCH_STRING="<h1>PRACTICAL GREMLIN: An Apache TinkerPop Tutorial<\/h1>"
           REPLACE_STRING='<img src="PRACTICAL-GREMLIN-Revised-v2.png">\n<h1>PRACTICAL GREMLIN:<br\/>An Apache TinkerPop Tutorial<\/h1>'
@@ -50,12 +60,15 @@ jobs:
           mkdir ../target
           cp Practical-Gremlin.html ../target/index.html
           cp ../images/PRACTICAL-GREMLIN-Revised-v2.png ../target
+          
       - name: Setup Pages
         uses: actions/configure-pages@v3
+        
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
           path: 'target'
+          
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
