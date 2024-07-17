@@ -43,12 +43,7 @@ ebook-convert Practical-Gremlin.epub Practical-Gremlin.mobi
 
 ## Preview releases
 
-Preview versions of the book in HTML and PDF format are produced more often than the formal releases in all formats.
-
-**An early preview of the second edition is not yet available, but will be soon. You can read the latest on GitHub as noted above, or build the files locally.** 
-
-Preview versions of the first edition are still available
-at (HTML) http://kelvinlawrence.net/book/PracticalGremlin.html and (PDF) http://kelvinlawrence.net/book/PracticalGremlin.pdf
+Preview versions of the book in HTML are automatically published [here](https://krlawrence.github.io/graph/) as changes arrive to the `main` branch of the repository. 
 
 ## How the book is organized
 This is the current layout of the second edition. As work progresses additional chapters
