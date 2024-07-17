@@ -9,11 +9,12 @@ This repository is the home for the source materials, sample code and examples f
 
 ### Quick Start - the latest version
 
-**A preview release for the second edition is not yet available - but will be soon. The first edition is still available at the links below**
+Preview releases for the second edition are published as HTML automatically as they are authored and can be found [here](https://krlawrence.github.io/graph/). It should be noted when reading this revision of the book that it is still a draft version and under significant modification, so you can expect volatile changes. 
 
-To read the latest snapshot of the book right away in a browser (HTML format) click [here](http://kelvinlawrence.net/book/PracticalGremlin.html) or for a PDF version click [here](http://kelvinlawrence.net/book/PracticalGremlin.pdf). These snapshots are updated regularly. You will find other formats including MOBI, EPUB and XML (Docbook) in the [releases](https://github.com/krlawrence/graph/releases)  section. Formal releases will be published periodically assuming there is enough new material to make it worthwhile. If you want to see the absolute latest updates you can always browse the AsciiDoc source files (`Practical-Gremlin.adoc` and `Section-*.adoc` files) in the /book folder. The PDF version is currently the "official" version. It has a better table of contents, page numbers, and some better formatting.
+The first edition is still available. To view it in a browser (HTML format) click [here](http://kelvinlawrence.net/book/PracticalGremlin.html) or for a PDF version click [here](http://kelvinlawrence.net/book/PracticalGremlin.pdf). These versions are not typically updated anymore. You will find other formats including MOBI, EPUB and XML (Docbook) in the [releases](https://github.com/krlawrence/graph/releases)  section. The PDF version is currently the "official" version. It has a better table of contents, page numbers, and some better formatting.
 
-### LATEST NEWS 
+### LATEST NEWS
+- [Jul-17-2024] Auto-published the book via GitHub Actions as changes arrive to the 'main' branch. 
 - [Sep-23-2023] Work has started on a second edition of the book! See the note below for more details.
 - [Sep-22-2023] Added a script to the sample-data folder for producing Cypher versions of the air-routes data.  
 - [Aug-29-2022] Updated versions of the sample data and corresponding demo apps have been uploaded. 
