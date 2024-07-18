@@ -3084,6 +3084,258 @@ g.V().has('airport','code',within('IAD','MIA','LAX')).
 [m]  
 ----
 
+[[collectionsteps]]
+Working with collections
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Collections are containers for other values and refer to things like 'List', 'Set'
+and 'Map'. Gremlin offers a variety of steps that help construct and manipulate these
+objects. We've already seen how we can use a step like 'fold' to create a 'List' of
+the objects in the traversal stream:
+
+[source, groovy]
+----
+g.V().has('region','GB-ENG').values('runways').dedup().fold()
+
+[2,1,3,4]
+----
+
+As for maps, Gremlin can produce them whenever you use a step like 'group' or 
+'valueMap':
+
+[source,groovy]
+----
+g.V().has('code','AUS').valueMap(true,'region')
+
+[id:3,region:[US-TX],label:airport]
+----
+
+If you look at the result in the example above, collections might contain other 
+collections, as shown with the region key where "US-TX" is in a 'List'. Since 
+collections are core to the Gremlin language the following steps tend to be quite
+helpful in many situations:
+
+[cols="^1,4"]
+|==============================================================================
+|any         | Determines if any object in a 'List' matches a specified predicate
+|all         | Determines if all objects in a 'List' match a specified predicate
+|combine     | Combines an incoming 'List' with the list provided as an argument
+|conjoin     | Takes objects in the incoming 'List' and converts them to a string joined by the specified delimiter  
+|difference  | Calculates the difference between the incoming 'List' and the one provided as an argument
+|disjunct    | Calculates the disjunct set between the incoming 'List' and the provided 'List' argument
+|intersect   | Calculates the intersection between the incoming 'List' and the provided 'List' argument
+|merge       | Merges the incoming collection with the one provided as an argument
+|product     | Calculates the cartesian product of the incoming 'List' and the provided 'List'
+|reverse     | Reverses the order of the incoming 'List'
+|==============================================================================
+
+TIP: The steps noted in the prior table are meant specifically for working with 
+various collections types, but you should also note that many Gremlin steps 
+inherently work with collections. For example, the 'local' versions of 'range', 
+'limit', or 'tail' are good at taking parts of a collection or 'unfold' that can be 
+used to deconstruct collections. These are some obvious examples, but as you learn 
+more about Gremlin you will find many more.
+
+Let's take a deeper look at these steps and how you might use them. We will start
+with the two filtering steps of 'any' and 'all'. Oftentimes you will find yourself in
+a situation where you have written some Gremlin that collects your results into a 
+'List' like the following example where we have the number of runways for all 
+airports in the "US-TX" region collected:
+
+[source,groovy]
+----
+g.V().has('airport','region','US-TX').values('runways').fold()
+
+2,7,3,3,4,4,2,3,2,3,5,2,2,3,3,4,3,2,1,3,2,3,4,3,2,3]
+----
+
+If you were only interested in this result if the 'List' had a value of "4" in it, 
+you could use 'any' and the 'P.eq' predicate:
+
+[source,groovy]
+----
+g.V().has('airport','region','US-TX').values('runways').fold().any(eq(4))
+
+2,7,3,3,4,4,2,3,2,3,5,2,2,3,3,4,3,2,1,3,2,3,4,3,2,3]
+----
+
+Similarly, if you only wanted the 'List' if all the values were greater than 5, then
+you could use 'all':
+
+[source,groovy]
+----
+g.V().has('airport','region','US-TX').values('runways').fold().any(gt(5))
+
+// no results
+----
+
+If you need to push two 'List' objects together, you can use 'combine'. You can see 
+a simple example of this step demonstrated as follows where we combine the incoming
+'List' from 'fold' with a constant 'List' containing the value of 100:
+
+[source,groovy]
+----
+g.V().has('airport','region','US-TX').values('runways').fold().combine([100])
+
+2,7,3,3,4,4,2,3,2,3,5,2,2,3,3,4,3,2,1,3,2,3,4,3,2,3,100]
+----
+
+A more advanced and likely useful form of 'combine' though is to supply a traversal
+as the argument to dynamically choose the 'List' to combine. In the following 
+example, we aggregate the runway values for all of the airports in the "US-VA" region
+into "v" which is a 'List' and has the value '[1,1,2,2,2,2,3,4]'. We then traverse
+'out' along the route edges and to 3 adjacent airport vertices. For each of those 
+vertices, the 'map' step gets the runway value and does a 'fold' to produce a 'List'
+with just that value in it. As a final step, it uses 'combine' to push that single
+value 'List' together with the one stored in the aggregate "v" which we gather 
+dynamically with 'select'.
+
+[source,groovy]
+----
+g.V().has('airport','region',within('US-VA')).
+  aggregate('v').by('runways').
+  out('route').limit(3).
+  map(values('runways').fold().combine(select('v')))
+  
+[4,1,1,2,2,2,2,3,4]
+[4,1,1,2,2,2,2,3,4]
+[3,1,1,2,2,2,2,3,4]  
+----
+
+While we won't visit this form for all the 'List' steps we look at, you will notice 
+that all of these sorts of 'List' transformation steps have both a literal constant 
+form and this more dynamic form that uses a traversal as the  argument. We saw a 
+similar pattern in <<textsteps>. 
+
+The 'conjoin' step is interesting in that it is the only 'map'-like step that 
+transforms the incoming 'List' to a different type. When you use 'conjoin' on a 
+'List', it will take the values within it, transform each to a string and then join
+them all together to a single string using the value that you specify as a delimiter.
+A simple use case for this feature might be to produce a delimited list of values,
+as that could be helpful for doing a fast export of data in a structured form. 
+
+[source,groovy]
+----
+g.V().has('airport','region','US-VA').
+  valueMap('code','longest','city').by(unfold()).
+  map(select(values).conjoin('\t'))
+  
+SHD	6002	Staunton/Waynesboro/Harrisonburg
+ORF	9001	Norfolk
+RIC	9003	Richmond
+IAD	11500	Washington D.C.
+ROA	6800	Roanoke
+CHO	6001	Charlottesville
+PHF	8003	Newport News
+LYH	5799	Lynchburg
+----
+
+Gremlin also allows you to perform basic operations on sets with 'difference', 
+'disjunct', 'interesect' and 'product'. When you use these steps, it is important to
+recognize that they each accept an incoming 'List' or 'Set', but if it is a 'List', 
+it will be treated as a 'Set'. The same can be said for the argument given to these
+steps. The output will be a 'Set'.
+
+[source,groovy]
+----
+g.V().has('airport','region','US-VA').values('code').fold()
+
+[SHD,ORF,RIC,IAD,ROA,CHO,PHF,LYH]
+  
+g.V().has('airport','region','US-VA').values('code').fold().
+  difference(['SHD', 'MIA'])
+  
+[ORF,ROA,LYH,CHO,RIC,IAD,PHF] 
+
+g.V().has('airport','region','US-VA').values('code').fold().
+  disjunct(['SHD', 'MIA'])
+  
+[ORF,MIA,ROA,LYH,CHO,RIC,IAD,PHF]
+
+g.V().has('airport','region','US-VA').values('code').fold().
+  intersect(['SHD', 'MIA']) 
+  
+[SHD]
+
+g.V().has('airport','region','US-VA').values('code').fold().
+  product(['SHD', 'MIA'])   
+
+[[SHD,SHD],[SHD,MIA],[ORF,SHD],[ORF,MIA],[RIC,SHD],[RIC,MIA],[IAD,SHD],[IAD,MIA],
+ [ROA,SHD],[ROA,MIA],[CHO,SHD],[CHO,MIA],[PHF,SHD],[PHF,MIA],[LYH,SHD],[LYH,MIA]]
+----
+
+we should not overlook the fact that these steps can also take a traversal as an 
+argument as shown in the following example that uses 'aggregate' to collect all the 
+airport codes in "US-VA" into a list side-effect of "x" and then  does an 'intersect'
+on that value against a list of codes for outgoing routes:
+
+[source,groovy]
+----
+g.V().has('airport','region','US-VA').aggregate('x').by('code').
+  out('route').values('code').fold().
+  intersect(select('x'))
+  
+[ORF,ROA,CHO,RIC,IAD,SHD]
+----
+
+The 'reverse' step reverses the order of an incoming object. While its typical use
+would be for a list, it could also be used on a string.
+
+[source,groovy]
+----
+g.V().has('airport','region','US-VA').values('code').fold()
+
+[SHD,ORF,RIC,IAD,ROA,CHO,PHF,LYH]
+
+g.V().has('airport','region','US-VA').values('code').fold().reverse()
+
+[LYH,PHF,CHO,ROA,IAD,RIC,ORF,SHD]
+----
+
+When you need to merge two collections together you can use 'merge' step which works 
+for lists, sets and maps. This step is similar to 'combine', but does not allow 
+duplicates. 
+
+[source,groovy]
+----
+g.V().has('airport','region','US-VA').values('code').fold().merge(['MIA','IAD'])
+
+[ORF,MIA,ROA,LYH,CHO,RIC,IAD,SHD,PHF]
+
+g.V().has('airport','region','US-VA').valueMap('code').merge([x: 10])
+
+[x:10,code:[SHD]]
+[x:10,code:[ORF]]
+[x:10,code:[RIC]]
+[x:10,code:[IAD]]
+[x:10,code:[ROA]]
+[x:10,code:[CHO]]
+[x:10,code:[PHF]]
+[x:10,code:[LYH]]
+----
+
+Once again, you may also provide a traversal argument to 'merge' to dynamically 
+provide the object to merge to the incoming one.
+
+[source,groovy]
+----
+g.V().has('airport','region','US-VA').aggregate('x').by('code').
+  out('route').limit(5).values('code').fold().
+  merge(select('x'))
+  
+[ORF,DCA,DFW,PHL,ROA,CLT,LYH,CHO,IAD,RIC,SHD,PHF]  
+----
+
+In the prior example, we gather the airport codes in "x" and then traverse 'out' 
+along route edges and fold 5 of them to a list which we then 'merge' to "x" providing
+a single list output of both lists without duplicates.
+
+The collection steps provide important utility functions for Gremlin. They allow you
+to do helpful transformations to your data that can get your final result into the 
+form your application ultimately needs. They also help make Gremlin queries read more
+concisely where they often replace patterns of other Gremlin steps that do the same
+job making queries much more readable.  
+
 [[datesteps]]
 Working with dates
 ~~~~~~~~~~~~~~~~~~
