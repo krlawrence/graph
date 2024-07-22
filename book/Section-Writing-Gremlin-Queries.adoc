@@ -4960,6 +4960,39 @@ g.V().has('airport','city','London').
 [country:[CA],code:[YXU],region:[CA-ON]]
 ----
 
+We've seen how the number of 'by' modulators correspond to the parameters in the 
+'where' and that they are applied in a round-robin fashion, starting with the 
+value of the traverser being compared and then to the values it is to be compared 
+with. We can further see this on display when we look at a query that uses 'between'
+where there are three arguments to consider. For example, let's imagine we wanted to
+find five airports that have a number of runways that are between one less and one 
+more than 'IAD'. 
+
+[source,groovy]
+----
+g.V().has('airport','code','IAD').values('runways').as('iadl','iadh').
+  V().hasLabel('airport').
+  where(between('iadl','iadh')).
+    by('runways').
+    by(math('_ - 1')).
+    by(math('_ + 1')).
+  limit(5).
+  values('code').fold()
+  
+[ANC,BNA,BWI,DCA,KNS]  
+----
+
+In this prior example, we find IAD and then keep that value in two step labels. Those
+labels are used later as arguments to 'between'. Note that there are three 'by' 
+modulators that follow the 'where'. The first refers to the current airport vertex 
+that we are considering for this filter and that 'by' ensures we use the runways 
+value in the comparison to 'between'. You can see that this initial 'by' relates to 
+an implied reference to the current traverser as there is no label for it present in
+the 'where'. The second two 'by' modulators refers to the step labels in the 
+'between' and do a 'math' operation that subtract and add 1 to the number of runways 
+for 'IAD'. In this way, you get the effect of dynamically calculating filtering 
+arguments based on a prior portion of a query.
+
 Let's imagine that we want to write a query to find all airports that have the same
 region code as the French airport of Nice. Let's assume for now that we do not know
 what the region code is so we cannot just write a simple query to find all airports
