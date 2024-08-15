@@ -72,8 +72,8 @@ airports.each do |ap|
   elev = ap[APT_ELEV]
   country = ap[APT_CTRY]
   continent = ap[APT_CONT]
-  lat = ap[APT_LAT]
-  lon = ap[APT_LON]
+  lat = ap[APT_LAT].to_f
+  lon = ap[APT_LON].to_f
   
   desc.gsub!("'","\\\\'")
   city.gsub!("'","\\\\'")
