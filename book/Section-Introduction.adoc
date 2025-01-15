@@ -405,7 +405,13 @@ with their properties attached using the 'materializeProperties' option.
 
 NOTE: Full details of all the new features added in the TinkerPop 3.7.x releases can 
 be found at the following link:
-https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc#tinkerpop-370-gremfir-master-of-the-pan-flute  
+https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc#tinkerpop-370-gremfir-master-of-the-pan-flute
+
+[tp40intro]]
+TinkerPop 4.0
+^^^^^^^^^^^^^
+
+TinkerPop 4.0.0 is not yet released and is under active development. 
 
 [[whygraph]]
 So what is a graph database and why should I care?
