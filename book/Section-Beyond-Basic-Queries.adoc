@@ -936,11 +936,241 @@ by 1 for each call to 'addV' creating an auto-incremeting identifier. This techn
 for creating vertices is often helpful when there is a need to generate some vertices
 for testing.
 
-[[coaladdv]]
-Using 'coalesce' to only add a vertex if it does not exist
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[[upsert]]
+Using 'mergeV' and 'mergeE' for upserting
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In the "<<coalconst>>" section we looked at how coalesce could be used to return a
+Checking to see if a vertex or edge already exists and then either inserting that 
+element if it does not or updating the element that is found, is a common database
+access pattern often referred to as an 'upsert'. There are a variety of ways to 
+implement an upsert in Gremlin, but the 'mergeV' and 'mergeE' steps are designed 
+specifically for this purpose and offer a wide degree of flexiblity in this task.
+
+Let's assume we wanted to add a new airport, with the code '"XYZ"' but we are not
+sure if the airport might have already been added. We can do all of those things 
+using the most basic form of 'mergeV':
+
+[source,groovy]
+----
+g.mergeV([code:'XYZ'])
+
+v[53865]
+----
+
+As you can see, 'mergeV' takes a 'Map' as an argument where the keys and values
+become the search criteria for the vertex. In the above case, it is similar to 
+writing `has("code","XYZ")' to find a vertex. If 'mergeV' finds a vertex with that 
+code and value, it return it. However, 'mergeV' has a dual purpose. Should the vertex
+not be found, then 'mergeV' will automatically create a new vertex with a "code" of 
+"XYZ" and return that. Evaluating that same query again will result in returning the
+existing 'v[53865]'.
+
+You may match on as many properties as necessary including 'T.id' and 'T.label':
+
+[source,groovy]
+----
+g.mergeV([(T.label): 'airport', (T.id): 999999, code:'XYZ'])
+
+v[999999]
+----
+
+Note that the match must be complete in that all keys designated in the 'Map' must 
+match or else a new vertex will be created. In the example above, there is a vertex
+present that has a code of '"XYZ"', but the one we created initially lacks a 
+'T.label' of "airport" and has a different 'T.id' all together. 
+
+We do not always want to utilize the same criteria for searching as we do creating.
+Most commonly we tend to search by the element identifier, which is the fastest way
+to check for existence. For these cases you will only want to provide that identifier
+to the 'Map' given to 'mergeV' and separately specify the properties you want to use
+to create the vertex if it is not found. You can do this with the 'option' modulator
+and the 'Merge' enum.
+
+[source,groovy]
+----
+g.mergeV([(T.id): 999999]).
+    option(Merge.onCreate, [(T.label): 'airport', code:'XYZ'])
+
+v[999999]
+----
+
+In this prior example, 'mergeV' will match on the vertex identifier of '999999' and
+will return it if found. Otherwise, it will defer to the 'onCreate' action which
+specifies a 'Map' of keys and values to use to create the new vertex. The 'onCreate'
+'Map' inherits keys and values from the search map and would therefore include the 
+'999999' in the creation of the vertex.
+
+As we have a 'onCreate' to deal with the "does not exist" path for the search, we 
+also have a 'onMatch' to allow more control over the "does exist" path to update an 
+existing vertex. For example, if we wanted to change the code to update the code 
+property to a lower-case '"xyz"' in the event the vertex exists, we could write the 
+following:
+
+[source,groovy]
+----
+g.mergeV([(T.id): 999999]).
+    option(Merge.onCreate, [(T.label): 'airport', code:'XYZ'])
+    option(Merge.onMatch, [code:'xyz'])
+
+v[999999]
+----
+
+At this point we've demonstrated the general form of 'mergeV' where you give it a
+'Map' of key/value pairs to use for a search and then use 'option' modulators to 
+provide specific data to use to either create or update based on the initial match.
+For more advanced use cases, we have some additional flexibility in how we supply the
+'Map' arguments as they may all be supplied by way of a 'Traversal':
+
+[source,groovy]
+----
+g.withSideEffect('search', [(T.id): 999998]).
+  withSideEffect('create', [code: 'ZYX', (T.label): 'airport']).
+  withSideEffect('match', [code: 'zyx']).
+  mergeV(select('search')).
+    option(Merge.onCreate, select('create')).
+    option(Merge.onMatch, select('match'))
+    
+v[999998]
+----
+
+The prior example shows how you can use a step like 'select' to dynamically provide
+a 'Map' argument to the various 'mergeV' parameters.
+
+The counterpart to 'mergeV' is 'mergeE' where the same patterns can be used to upsert
+edges. Edges have a bit more complexity in that addition to the property values they
+may have, they also have an 'IN' and an 'OUT' (or 'from' and 'to') vertex that 
+applies to them. Let's assume we want to look for an existing route edge between the 
+'"XYZ"' airport that we just added and '"DFW"'. If we find that edge with that search
+criteria we simply return it, but if it is not found then we will create it with a
+dist property of 0. To do this we need the vertex ids that this edge relates to. We
+can then use those ids to reference them in the search criteria:
+
+[source,groovy]
+----
+g.V().has('code','DFW').id()
+
+8
+
+g.V().has('code','XYZ').id()
+
+999999
+
+g.mergeE([(T.label): 'route', (Direction.from): 8, (Direction.to): 999999]).
+    option(Merge.onCreate, [dist: 0])
+
+e[41224][8-route->999999]
+    
+g.E(41224L).elementMap()
+
+[id:41224,label:route,IN:[id:999999,label:airport],OUT:[id:8,label:airport],dist:0]
+----
+
+It is not possible to create new vertices from 'mergeE' automatically. They must 
+already exist for the edge to be created. In addition to 'onMatch' and 'onCreate', 
+'mergeE' also allows for two other 'option' modulators: 'outV' and 'inV', which lets
+you specify search criteria as a 'Map' for the 'from' and the 'to' of the edge. Using
+that capability we could rewrite the previous example as follows:
+
+[source,groovy]
+----
+g.mergeE([(T.label): 'route', (Direction.from): Merge.outV, (Direction.to): Merge.inV]).
+    option(Merge.outV, [code: 'DFW']).
+    option(Merge.inV, [code: 'XYZ']).
+    option(Merge.onCreate, [dist: 0])
+    
+
+e[41224][8-route->999999]    
+----
+
+This section introduced the basics of the 'mergeV' and 'mergeE' steps, which provide
+a powerful way in which to encapsulate upsert logics for vertices and edges. As you
+continue through the following sections you will find more advanced features with 
+these steps.
+
+Incorporating 'fail' with 'mergeV' or 'mergeE'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+We learned about 'fail' step in <<coalfail>> where it will throw an exception when it
+is encountered. You can incorporate this step into 'mergeV' and 'mergeE' to stop a
+traversal in cases where you don't want the traversal to continue in 'onCreate' or
+'onMatch'.
+
+Let's envision a case where you do not expect the '"XYZ"' airport to be present in 
+the graph and that if it is you do not want the query to proceed any further in its 
+processing. Since the 'option' modulator takes a traversal as an argument, you can 
+give it a fail step for its 'onMatch'.
+
+[source,groovy]
+----
+g.mergeV([code: 'XYZ']).
+    option(Merge.onCreate, [(T.label): 'airport', code:'XYZ']).
+    option(Merge.onMatch, fail('XYZ airport already exists'))
+
+fail() Step Triggered
+=========================================================================================================================================================================
+Message  > XYZ airport already exists
+Traverser> v[999999]
+  Bulk   > 1
+Traversal> fail("XYZ airport already exists")
+Parent   > MergeVertexStep [mergeV(["code":"XYZ"]).option(Merge.onCreate,[(T.label):"airport","code":"XYZ"]).option(Merge.onMatch,__.fail("XYZ airport already exists"))]
+Metadata > {}
+=========================================================================================================================================================================
+----
+
+Note that the output above is the string representation of a 'FailException' as 
+printed in Gremlin Console.
+
+Specifying cardinality with 'mergeV'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Most of the time, vertex properties tend to be modelled with 'single' cardinality.
+However, you may have situations where other cardinalities are used or are using a 
+graph that defaults to a cardinality other than 'single'. The 'mergeV' step provides
+two ways to explicitly set the cardinality for the properties given to it and both
+make use of the 'Cardinality' enum. The first way to do this is to explcitly set the
+cardinality per property value. For example, let's imagine that you want to use 'set'
+cardinality for the code property.
+
+[source,groovy]
+----
+g.mergeV([(T.id): 999999]).
+    option(Merge.onCreate, [(T.label): 'airport', code: set('XYZ')])
+
+v[999999]
+----
+
+By wrapping the '"XYZ"' in the 'set()', which is statically imported from 
+'Cardinality.set', you mark that value in a way that 'mergeV' knows to tell the graph
+to use that specific cardinality for that property. You could also do set this value
+globally for the step by providing it as an argument after the 'Map':
+
+[source,groovy]
+----
+g.mergeV([(T.id): 999999]).
+    option(Merge.onCreate, [(T.label): 'airport', code: 'XYZ'], Cardinality.set)
+
+v[999999]
+----
+
+When you offer 'set' this way, 'mergeV' will assume all property keys to use this 
+cardinality. If there is an explicit cardinality specified, it will override the 
+global setting.
+
+[[coaladdv]]
+[[upsert]]
+When you need more flexibility than 'mergeV' and 'mergeE'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The 'mergeV' and 'mergeE' steps offer a wide breath of options to encapsulate 
+upsert-like logic with varying mechanisms for matching, creating and updating. While
+these steps are extremely flexible, you may yet find a scenario where they do not do
+everything you require. In these cases, you may fall back to a lower order of Gremlin
+steps that can offer more options, but be a bit more complex to implement and 
+possibly lack the same performance capability as different graph providers may not be
+able to optimize these queries as well as the more directly purposed 'mergeV' and
+'mergeE' steps.
+
+In the <<coalconst>> section we looked at how coalesce could be used to return a
 constant value if the other entities that we were looking for did not exist. We can
 reuse that pattern to produce a traversal that will only add a vertex to the graph if
 that vertex has not already been created.
@@ -994,10 +1224,6 @@ g.V().has('code','XYZ').fold().coalesce(unfold(),addV().property('code','XYZ'))
 
 v[53865]
 ----
-
-[[upsert]]
-Using 'coalesce' to derive an 'upsert' pattern
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Using 'coalesce' in this way provides us with a nice pattern for a commonly performed
 task of checking to see if something already exists before we try to update it and
@@ -3077,8 +3303,8 @@ g.V().has('code','DFW').group().by().by(outE().count()).
 DFW
 ----
 
-So, lets now add to our query and create a new vertex with a label 'dfwcount' that is
-going to store the number of routes originating in DFW using a property called
+So, let's now add to our query and create a new vertex with a label 'dfwcount' that 
+is going to store the number of routes originating in DFW using a property called
 'current_count'.
 
 [source,groovy]
