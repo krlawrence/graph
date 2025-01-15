@@ -179,7 +179,7 @@ globals << [hook : [
 ] as LifeCycleHook]
 
 // define the default TraversalSource to bind queries to - this one will be named "g".
-globals << [g : graph.traversal()]
+globals << [g : traversal().with(graph)]
 ----
 
 Now that we have all of our configuration files in place we can start the Gremlin
@@ -815,7 +815,7 @@ globals << [hook : [
   }
 ] as LifeCycleHook]
 
-globals << [g : graph.traversal()]
+globals << [g : traversal().with(graph)]
 ----
 
 [[TGStart]]

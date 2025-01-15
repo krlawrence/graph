@@ -3340,8 +3340,8 @@ TinkerGraph.
 
 [source,groovy]
 ----
-graph=TinkerGraph.open()
-g=graph.traversal()
+graph = TinkerGraph.open()
+g = traversal().with(graph)
 
 g.addV("A").as("a").
   addV("B").as("b").
@@ -3754,8 +3754,8 @@ graph as there are clearly many ways to revisit vertices.
 [source,groovy]
 ----
 // Builds a small ordered Binary (BST) Tree
-graph=TinkerGraph.open()
-g=graph.traversal()
+graph = TinkerGraph.open()
+g = traversal().with(graph)
 g.addV('root').property('data',9).as('root').
   addV('node').property('data',5).as('b').
   addV('node').property('data',2).as('c').

@@ -194,7 +194,7 @@ to create a graph traversal source object for our loaded 'graph'.
 
 [source,groovy]
 ----
-g = graph.traversal()
+g = traversal().with(graph)
 ----
 
 Once we have a graph traversal source object we can use it to start exploring the 

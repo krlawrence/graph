@@ -831,8 +831,8 @@ together.
 
 [source,groovy]
 ----
-graph=TinkerGraph.open()
-g=graph.traversal()
+graph = TinkerGraph.open()
+g = traversal().with(graph)
 g.addV('airport').property('code','AUS').as('aus').
   addV('airport').property('code','DFW').as('dfw').
   addV('airport').property('code','LAX').as('lax').
@@ -1090,7 +1090,7 @@ these steps.
 Incorporating 'fail' with 'mergeV' or 'mergeE'
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-We learned about 'fail' step in <<coalfail>> where it will throw an exception when it
+We learned about 'fail' step in "<<coalfail>>" where it will throw an exception when it
 is encountered. You can incorporate this step into 'mergeV' and 'mergeE' to stop a
 traversal in cases where you don't want the traversal to continue in 'onCreate' or
 'onMatch'.
@@ -1170,7 +1170,7 @@ possibly lack the same performance capability as different graph providers may n
 able to optimize these queries as well as the more directly purposed 'mergeV' and
 'mergeE' steps.
 
-In the <<coalconst>> section we looked at how coalesce could be used to return a
+In the "<<coalconst>>" section we looked at how coalesce could be used to return a
 constant value if the other entities that we were looking for did not exist. We can
 reuse that pattern to produce a traversal that will only add a vertex to the graph if
 that vertex has not already been created.
@@ -5615,8 +5615,8 @@ tenantB = new PartitionStrategy(partitionKey: "_partition",
                                 writePartition: "b", readPartitions: ["b"])
 
 // create two instances of "g" each using a different strategy                                
-gA = traversal().withEmbedded(graph).withStrategies(strategyA)
-gB = traversal().withEmbedded(graph).withStrategies(strategyB)
+gA = traversal().with(graph).withStrategies(strategyA)
+gB = traversal().with(graph).withStrategies(strategyB)
 
 gA.addV() // this vertex has a property of {_partition:"a"}
 gB.addV() // this vertex has a property of {_partition:"b"}
@@ -5639,7 +5639,7 @@ Let's look at how you would have written this same code if you didn't have
 ----
 graph = TinkerGraph.open()
 
-g = traversal().withEmbedded(graph)
+g = traversal().with(graph)
 
 g.addV().property('_partition', 'a')
 g.addV().property('_partition', 'b')
@@ -6219,7 +6219,7 @@ results. In this case we want to look at outgoing 'route' edges and label all re
 [source,groovy]
 ----
 // Page rank based on outgoing routes
-g3 = graph.traversal().withComputer()
+g3 = traversal().with(graph).withComputer()
 
 g3.V().hasLabel('airport').pageRank().by(outE('route')).by('r').
       order().by('r',desc).valueMap('code','r').limit(10)

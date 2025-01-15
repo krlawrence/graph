@@ -137,7 +137,7 @@ model. We create our graph traversal object 'g' in just the same way as before.
 [source,groovy]
 ----
 graph = JanusGraphFactory.open('inmemory')
-g = graph.traversal()
+g = traversal().with(graph)
 ----
 
 Note that the 'open' command above is a shorthand form of the command shown below.
@@ -145,7 +145,7 @@ Note that the 'open' command above is a shorthand form of the command shown belo
 [source,groovy]
 ----
 graph = JanusGraphFactory.build().set("storage.backend","inmemory").open()
-g = graph.traversal()
+g = traversal().with(graph)
 ----
 
 Now that we have a graph instance created, just like with TinkerGraph, we can query
@@ -2154,7 +2154,7 @@ it, you can use the following commands.
 // Reconnect using CQL
 gremlin> graph = JanusGraphFactory.open('conf/janusgraph-cql.properties')
 
-gremlin> g = graph.traversal()
+gremlin> g = traversal().with(graph)
 ----
 
 A common requirement when testing and experimenting is to throw everything away and

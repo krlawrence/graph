@@ -127,8 +127,8 @@ public class TinkerGraphTest
 {
   public static void main(String[] args)
   {
-    TinkerGraph tg = TinkerGraph.open();
-    GraphTraversalSource g = tg.traversal();
+    TinkerGraph graph = TinkerGraph.open();
+    GraphTraversalSource g = traversal().with(graph);
 
     try
     {
@@ -818,10 +818,10 @@ do ourselves when not running inside the console.
 [source,java]
 ----
 // Create a new (empty) TinkerGraph
-TinkerGraph tg = TinkerGraph.open() ;
+TinkerGraph graph = TinkerGraph.open() ;
 
 // Create a Traversal source object
-GraphTraversalSource g = tg.traversal();
+GraphTraversalSource g = traversal().with(graph);
 
 // Add some nodes and vertices - Note the use of "iterate".
 g.addV("airport").property("code","AUS").as("aus").
@@ -952,7 +952,7 @@ with the following code:
 [source,java]
 ----
 // Create a new (empty) TinkerGraph
-TinkerGraph tg = TinkerGraph.open();
+TinkerGraph graph = TinkerGraph.open();
 ----
 
 The 'open' method has the option to accept a 'Configuration' object. In that 
@@ -964,13 +964,13 @@ configuration we would add those two settings.
 Configuration conf = new BaseConfiguration();
 conf.setProperty("gremlin.tinkergraph.graphLocation", "mygraph.xml");
 conf.setProperty("gremlin.tinkergraph.graphLocation", "graphml");
-TinkerGraph tg = TinkerGraph.open(configuration);
+TinkerGraph graph = TinkerGraph.open(configuration);
 
 ...
 
 // call close() to save as GraphML to a file called mygraph.xml
 try {
-    tg.close();
+    graph.close();
 } catch (Exception ex) {
   System.out.println("Graph failed to save");
 }
@@ -1025,7 +1025,7 @@ Initially we are just going to display the version of TinkerPop that we are usin
 println "The Gremlin version is ${Gremlin.version()}"
 
 def graph = TinkerGraph.open()
-def g = graph.traversal()
+def g = traversal()
 ----
 
 We are now ready to create a new TinkerGraph instance, 'GraphTraversalSource' named
@@ -1048,15 +1048,6 @@ catch (IOException e)
   println "Could not load the graph file"
   System.exit(0)
 }
-----
-
-Assuming we did not get an exception we can go ahead and create our graph traversal
-object.
-
-[source,groovy]
-----
-// Create a graph traversal source object and find the Austin airport vertex
-def g = tg.traversal()
 ----
 
 First we just do a simple query to find the vertex representing the AUS airport and

@@ -454,15 +454,11 @@ graph = TinkerGraph.open()
 g = traversal().with(graph)
 ----
 
-In general you will not need access to the 'graph' object, and most operations can be
-performed using graph traversals spawned from the 'g' object. One exception to this
-is when you want to ask a graph like TinkerGraph what features it supports. In such
-cases you still need to use
-
-[source,groovy]
-----
-graph.features()
-----
+The shorthand is helpful to save a bit of typing, but you lose reference to the 
+graph instance which might be helpful when accessing 'graph.features()', creating
+indices or initiating close operations on the graph itself. The longer form generally
+tends to be preferable for this reason. You will read more about this in the 
+"<<deepdivetraversals>>" section.
 
 In some cases you will want to pass parameters to the 'open' method providing more
 information on how the graph is to be configured. We will explore those options later
