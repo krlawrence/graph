@@ -213,7 +213,12 @@ ATL,route,TTN
 GraphML
 ~~~~~~~
 
-To be written
+GraphML is an XML based format designed to serialize an entire graph. This format is
+best used for interoperabiilty with other graph tools and frameworks as it has wide
+support. The format specification can be found at http://graphml.graphdrawing.org/.
+
+The following sample file illustrates what the format looks like. 
+
 
 [source,xml]
 ----
@@ -241,7 +246,7 @@ To be written
 
   <graph id='routes' edgedefault='directed'>
 
-    <node id='1'>
+  <node id='1'>
     <data key='labelV'>airport</data>
     <data key='type'>airport</data>
     <data key='code'>ATL</data>
@@ -265,6 +270,9 @@ To be written
   </graph>
 </graphml>
 ----
+
+NOTE: You can learn more about the specifics of the format itself in TinkerPop's IO 
+Documentation https://tinkerpop.apache.org/docs/current/dev/io/#graphml
 
 GraphSON
 ~~~~~~~~
@@ -486,3 +494,23 @@ To be written
     }]
 }
 ----
+
+NOTE: You can learn more about the specifics of the format itself in TinkerPop's IO 
+Documentation. https://tinkerpop.apache.org/docs/current/dev/io/#graphson
+
+
+GraphBinary
+~~~~~~~~~~~
+
+We mention GraphBinary here mostly for informational purposes as GraphBinary is not 
+meant to be used for persisting graphs to file. It is primarily a network transport
+serialization format used by Gremlin Server compliant systems to communicate with 
+compatible drivers. In general, you do not need to know much about GraphBinary itself
+unless you are implementing a server or a driver. 
+
+NOTE: You can learn more about the specifics of the format itself in TinkerPop's IO 
+Documentation. https://tinkerpop.apache.org/docs/current/dev/io/#graphbinary
+
+
+
+
