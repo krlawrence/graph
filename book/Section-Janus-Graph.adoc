@@ -266,39 +266,15 @@ https://docs.janusgraph.org/basics/transactions/
 
 In many cases, when using JanusGraph, you do not have to explicitly open a new
 transaction. Instead, it will be opened for you as needed. Take a look at the example
-below. A transaction is opened when 'addVertex' is called and remains open until
+below. A transaction is opened when 'addV' is called and remains open until
 'commit' is called. Note also that in order to access the JanusGraph transaction
-capabilities, we use the 'tx' method associated with our 'graph' instance. The
-examples below assume you have the Gremlin Console connected to a JanusGraph
-instance. The 'inmemory' JanusGraph we created earlier will work fine for these
-examples as transactions are supported even with 'inmemory' JanusGraph instances.
-Note that we have not shown the warning message that JanusGraph will display
-reminding us that we have not created an index for our new property. We will explore
-how to create an index in the "<<jaindexintro>>" section.
-
-[source,groovy]
-----
-// Start a new transaction
-xyz = graph.addVertex()
-
-v[4344]
-
-// Add a property
-xyz.property('name', 'XYZ')
-
-// Commit the transaction
-graph.tx().commit()
-
-// Check to make sure our new vertex was created
-g.V().has('name','XYZ')
-
-v[4344]
-----
-
-The example above used the 'graph' object to add a vertex. As discussed earlier in
-this book, the TinkerPop documentation recommends against this. Instead it recommends
-adding vertices as part of a traversal as shown below. Note that the 'graph' object
-is still used to 'commit' the transaction.
+capabilities, we use the 'tx' method associated with our 'g' instance. The examples 
+below assume you have the Gremlin Console connected to a JanusGraph instance. The 
+'inmemory' JanusGraph we created earlier will work fine for these examples as 
+transactions are supported even with 'inmemory' JanusGraph instances. Note that we 
+have not shown the warning message that JanusGraph will display reminding us that we
+have not created an index for our new property. We will explore how to create an 
+index in the "<<jaindexintro>>" section.
 
 [source,groovy]
 ----
@@ -340,10 +316,10 @@ otherwise configuring a graph.
 The JanusGraph management API
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-JanusGraph includes a management API that is made available via the ManagementSystem
-class. You can use the management API to perform various important functions that
-include querying metadata about the graph, defining the edge, vertex and property
-schema types and creating and updating the index.
+JanusGraph includes a management API that is made available via the 
+'ManagementSystem' class. You can use the management API to perform various important
+functions that include querying metadata about the graph, defining the edge, vertex 
+and property schema types and creating and updating the index.
 
 You can create an instance of the ManagementSystem object using the 'openManagement'
 method call as shown below.
@@ -558,6 +534,7 @@ g.V(n).valueMap()
 
 Now let's try adding a second value of 2 and see what happens. As you can see, our
 second 2 was not added to our set as there was already a 2 present.
+
 [source,groovy]
 ----
 g.V(n).property(set,'numbers',2)
@@ -582,7 +559,7 @@ Finally we can commit our graph transaction as we are all done creating properti
 
 [source,groovy]
 ----
-graph.tx().commit()
+g.tx().commit()
 ----
 
 [[janusschema]]
@@ -671,7 +648,6 @@ mgmt.makeVertexLabel('country').make()
 mgmt.makeVertexLabel('continent').make()
 mgmt.commit()
 ----
-
 
 Defining vertex property keys
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -773,20 +749,18 @@ Relation Index (VCI)           | Type        | Direction | Sort Key       | Orde
 ---------------------------------------------------------------------------------------------------
 ----
 
-
-
 [[janusload]]
 Loading air-routes into a JanusGraph instance
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Now that we know how to create a schema for the 'air-routes' graph
-we can use the same basic steps to load it into a JanusGraph
-instance that we used with TinkerGraph. Note that after loading the graph from the
-XML file we then call 'commit' to finalize the transaction.
+Now that we know how to create a schema for the 'air-routes' graph we can use the 
+same basic steps to load it into a JanusGraph instance that we used with TinkerGraph.
+Note that after loading the graph from the XML file we then call 'commit' to finalize
+the transaction.
 
 [source,groovy]
 ----
-graph.io(graphml()).readGraph('air-routes.graphml')
+g.io('air-routes.graphml').read().iterate()
 graph.tx().commit()
 ----
 

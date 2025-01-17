@@ -811,7 +811,8 @@ def globals = [:]
 globals << [hook : [
   onStartUp: { ctx ->
     ctx.logger.info("Loading 'air-routes' graph data.")
-    graph.io(graphml()).readGraph('data/air-routes.graphml')
+    g = traversal().with(graph)
+    g.io('data/air-routes.graphml').read().iterate()
   }
 ] as LifeCycleHook]
 

@@ -1433,19 +1433,6 @@ depending upon how the graph store handles this request.
 g.E().drop()
 ----
 
-You could also use the 'graph' object to do this. The code below uses the graph
-object to retrieve all of the edges and then iterates over them dropping them one by
-one. Again for very large graphs this may not be an ideal approach as this requires
-reading all of the edge definitions into memory. Note that in this case we call the
-'remove' method rather than use 'drop' as we are not using a graph traversal in this
-case.
-
-[source,groovy]
-----
-// Remove all the edges from the graph
-graph.edges().each{it.remove()}
-----
-
 You could also delete the whole graph, vertices and edges, by deleting all of the
 vertices!
 
@@ -4921,70 +4908,6 @@ When run, this time the results do indeed include the edges as well as the verti
 [v[3],e[5162][3-route->49],v[49],e[8454][49-route->71],v[71]]
 ----
 
-[[graphvars]]
-Using graph variables to associate metadata with a graph
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-A graph variable is a key/value pair that can be associated with the graph itself.
-Graph variables are not considered part of the graph that you would process with
-Gremlin traversals but are in essence a way to associate metadata with a graph.
-You can set and retrieve graph variables using the 'variables' method of the graph
-object. Let's assume we wanted to add some metadata that allowed us to record who
-the maintainer of the 'air-routes' graph is and when it was last updated. We could
-do that as follows.
-
-[source,groovy]
-----
-graph.variables().set('maintainer','Kelvin')
-graph.variables().set('updated','July 18th 2017')
-----
-
-You can use any string that makes sense to you when naming your graph variable keys.
-We can use the 'keys' method to retrieve the names of any keys currently in place as
-graph variables.
-
-[source,groovy]
-----
-graph.variables().keys()
-
-updated
-maintainer
-----
-
-The 'asMap' method will return any graph variables that are currently set as a map of
-key/value pairs.
-
-[source,groovy]
-----
-graph.variables().asMap()
-
-updated=July 18th 2017
-maintainer=Kelvin
-----
-
-We can use the 'get' method to retrieve the value of a particular key. Note that the
-value returned is an instance of the 'java.util.Optional' class.
-
-[source,groovy]
-----
-graph.variables().get('updated')
-
-Optional[July 18th 2017]
-----
-
-If you want to delete a graph variable you can use the 'remove' method. In this next
-example we will delete the 'maintainer' graph variable and re-query the variable map
-to prove it has been deleted.
-
-[source,groovy]
-----
-graph.variables().remove('maintainer')
-graph.variables().asMap()
-
-updated=July 18th 2017
-
-----
-
 [[tre]]
 Turning graphs into trees
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -6132,6 +6055,69 @@ Later on we will take a look at using an index with JanusGraph and look at exter
 indexing technologies such as Apache Solr and Elasticsearch that do support
 more complex types of comparison predicates.
 
+[[graphvars]]
+Using graph variables to associate metadata with TinkerGraph
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A graph variable is a key/value pair that can be associated with a TinkerGraph.
+Graph variables are not considered part of the graph that you would process with
+Gremlin traversals but are in essence a way to associate metadata with a graph.
+You can set and retrieve graph variables using the 'variables' method of the graph
+object. Let's assume we wanted to add some metadata that allowed us to record who
+the maintainer of the 'air-routes' graph is and when it was last updated. We could
+do that as follows.
+
+[source,groovy]
+----
+graph.variables().set('maintainer','Kelvin')
+graph.variables().set('updated','July 18th 2017')
+----
+
+You can use any string that makes sense to you when naming your graph variable keys.
+We can use the 'keys' method to retrieve the names of any keys currently in place as
+graph variables.
+
+[source,groovy]
+----
+graph.variables().keys()
+
+updated
+maintainer
+----
+
+The 'asMap' method will return any graph variables that are currently set as a map of
+key/value pairs.
+
+[source,groovy]
+----
+graph.variables().asMap()
+
+updated=July 18th 2017
+maintainer=Kelvin
+----
+
+We can use the 'get' method to retrieve the value of a particular key. Note that the
+value returned is an instance of the 'java.util.Optional' class.
+
+[source,groovy]
+----
+graph.variables().get('updated')
+
+Optional[July 18th 2017]
+----
+
+If you want to delete a graph variable you can use the 'remove' method. In this next
+example we will delete the 'maintainer' graph variable and re-query the variable map
+to prove it has been deleted.
+
+[source,groovy]
+----
+graph.variables().remove('maintainer')
+graph.variables().asMap()
+
+updated=July 18th 2017
+----
+
 [[olapoltp]]
 OLTP vs OLAP
 ~~~~~~~~~~~~
@@ -6275,7 +6261,9 @@ degree test did not come up with.
 The 'pageRank' step used in the prior query is a nice and convenient way for us to
 quickly generate some rankings. However, it is important to understand how the query
 would be written if we were to use the Graph Computer more directly and submit a
-Vertex Program. The example below sets up a 'PageRankVertexProgram' and runs it.
+Vertex Program. You may find yourself taking this approach for your own custom 
+'VertexProgram' implementations when working with a graph that supports OLAP in an
+embedded mode. The example below sets up a 'PageRankVertexProgram' and runs it.
 Notice that the result we get back includes a new graph with 3624 vertices and no
 edges.
 

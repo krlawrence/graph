@@ -407,7 +407,7 @@ NOTE: Full details of all the new features added in the TinkerPop 3.7.x releases
 be found at the following link:
 https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc#tinkerpop-370-gremfir-master-of-the-pan-flute
 
-[tp40intro]]
+[[tp40intro]]
 TinkerPop 4.0
 ^^^^^^^^^^^^^
 
