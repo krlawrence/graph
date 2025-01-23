@@ -6174,6 +6174,79 @@ your own.
 One of the pre configured Vertex Programs is Page Rank. Let's take a look next at one
 way it can be used.
 
+[[translators]]
+Translating Gremlin to different programming languages
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This book mostly focuses on writing Gremln in its Groovy syntax where it is easy to 
+run inside of the Gremlin Console, which is a great convenience when learning or just
+trying to work out a query. The Groovy syntax is actually quite close to the native
+form of the Gremlin language. As most developers tend to write Gremlin in the 
+language they are most comfortable, it isn't always well known that Gremlin has its 
+own grammar that is used for parsing queries. For historical reasons, particularly 
+where Gremlin long ago was wholly built on top of Groovy in versions prior to 
+TinkerPop 3, the grammar for native Gremlin matches quite closely to Groovy's 
+grammar. We refer to this native form of gremlin as 'gremlin-lang'.
+
+The only time that you might encounter gremlin-lang is with Gremlin Server, which
+uses the grammar by default to process queries. The grammar may also be used 
+internally to TinkerPop-enabled graph systems that support the Gremlin Server 
+protocols. Even in those cases, the Gremlin drivers hide that syntax away by 
+translating the Gremlin you write in your programming language to the form expected 
+by the grammar. If you are not using the drivers and are instead using raw HTTP 
+requests, then you must write gremlin-lang yourself as a string to send to the 
+server. When sending direct HTTP requests, it would be possible to use the drivers to
+write Gremlin in your favorite programming langugage, get the gremlin-lang form and 
+then manually submit that as a direct HTTP request, but it's hard to say what the 
+benefit of that approach would be since the drivers are designed to hide that 
+complexity from the application.
+
+If you want to see the gremlin-lang form, you can get it from the traversal itself.
+In the following example, we write our Gremlin in Groovy and then use its 
+'gremlinLang' property (which is a shorthand for Java's 'getGremlinLang()') to get
+the Gremlin native form after giving it the "g" representing the alias for the 
+'GraphTraversalSource':
+
+[source,groovy]
+----
+t = g.V().outE('knows');[]
+t.gremlinLang.getGremlin("g")
+
+g.V().outE("knows")
+----
+
+You can see in the prior example that gremlin-lang is not so different than Groovy.
+The only difference is that the translation has normalized the single quotes to 
+double quotes to define a string. That said, gremlin-lang can also equally accept 
+single quotes for it string representation. The influence from Groovy on gremlin-lang
+is evident here. We can see where the divergence from Groovy though with a slightly
+longer example:
+
+[source,groovy]
+----
+t = g.V().outE('knows').has('weight', 1 as byte);[]
+t.gremlinLang.getGremlin("g")
+
+
+g.V().outE("knows").has("weight",1B)
+----
+
+In Groovy, we define a 'byte' using the 'as' keyword. You can see in the translation
+that gremlin-lang allows for a shorthand of a capital "B" suffix to the number to 
+define a 'byte'. 
+
+If you have gremlin-lang compliant Gremlin, you can translate it to any of the 
+programming languages that TinkerPop supports using the 'GremlinTranslator'. This can
+be helpful if you find an example written in a language you aren't familiar with and 
+wish to convert it to one that you are. 
+
+[source,groovy]
+----
+GremlinTranslator.translate("g.V().outE(\"knows\")", Translator.GO)
+
+g.V().OutE("knows")
+----
+
 [[pagerank]]
 Experiments with Page Rank
 ^^^^^^^^^^^^^^^^^^^^^^^^^^

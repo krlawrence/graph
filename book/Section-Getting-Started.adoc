@@ -54,10 +54,17 @@ this book we will be working within the Gremlin console with a local graph. Howe
 in Chapters 7 and 8 we take a look at Gremlin Server and some other TinkerPop enabled
 environments. Most of Apache TinkerPop has been developed using Java but there are
 also bindings available for many other programming languages such as Groovy, Python,
-Go, Javascript, and C#. Parts of TinkerPop are themselves developed in Groovy, most
-notably the Gremlin Console. The nice thing about that is that we can use Groovy
-syntax along with Gremlin when entering queries into the Console or sending them via
-REST API to a Gremlin Server. All of these topics are covered in detail.
+Go, Javascript, and C#. These bindings help make Gremlin feel comfortable to you as 
+you can work with Gremlin in the idioms of the programming language that you are most
+familiar with.
+
+Even though this book focuses on Gremlin written with Groovy, you should remember 
+that whatever examples you see in Groovy can easily be converted to any other 
+supported programming language. You just need to understand the idioms of the the
+language you are using and converting should be straightforward. For example, Python
+prefers snake case compared to Groovy preferring camel-case. Therefore a Groovy query
+of 'g.addV("person")' just converts to 'g.add_v("person")' in Python. You will read
+more about Gremlin translation in the "<<translators>>" section.
 
 The queries used as examples in this book have been tested with Apache TinkerPop
 version {tpvercheck} as well as some prior releases where appropriate. Tests were
@@ -251,9 +258,9 @@ One thing that is not at all obvious or apparent is that the Gremlin console qui
 imports a large number of Java Classes and Enums on your behalf as it starts up. This
 makes writing queries within the console simpler. However, as we shall explore in the
 "<<javastatics>>" section later, once you start writing standalone programs in Java
-or other languages, you need to actually know what the console did on your behalf. As
-a teaser for what comes later, try typing ':show imports' when using the Gremlin
-Console and see what it returns.
+or other languages, you need to actually know what the console did on your behalf. 
+Reading through that section will help familiarize you with the classes you need to
+import to your application code.
 
 [[gremlinsave]]
 Saving output from the console to a file
