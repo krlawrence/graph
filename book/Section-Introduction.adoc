@@ -285,7 +285,9 @@ from their earliest versions. What we now know as Apache TinkerPop is the result
 an open source project created in 2009 and moved to the Apache Software Foundation
 (ASF) in 2015, after the final release of TinkerPop version 2.  The first official
 release of Apache TinkerPop 3.0 came in July of 2015, with the project being promoted
-to Apache's "top-level" status the following year. 
+to Apache's "top-level" status the following year. After a decade of continuous 
+releases for TinkerPop 3.0, the project released a beta version of 4.0 in January
+2025 for early evaluation.
 
 If you are new to TinkerPop and Gremlin, you can probably skip the next few sections.
 They appeared in a slightly modified form, as part of the first edition, and provided
@@ -411,7 +413,8 @@ https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc#tinkerpop-370
 TinkerPop 4.0
 ^^^^^^^^^^^^^
 
-TinkerPop 4.0.0 is not yet released and is under active development. 
+TinkerPop 4.0.0 has released a beta version for early evaluation of specific features
+and remains under active development. 
 
 [[whygraph]]
 So what is a graph database and why should I care?
