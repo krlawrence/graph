@@ -4947,11 +4947,11 @@ tree.getObjectsAtDepth(2)
 We will see the  Tree API used again in the "<<btree>>" section later on.
 
 [[subgraph]]
-Creating a sub graph
-~~~~~~~~~~~~~~~~~~~~
+Creating a subgraph
+~~~~~~~~~~~~~~~~~~~
 
 Using Gremlin, you can create a subgraph which is a subset of the vertices and edges
-in a larger graph you are working with. Once created, to work with a sub graph, you
+in a larger graph you are working with. Once created, to work with a subgraph, you
 create a traversal source object specific to that new graph and distinct from the one
 being used to process the main graph. Subgraphs are created using the 'subgraph'
 traversal step. Note that 'subgraph' works with edges (not vertices) and adds both
@@ -5056,7 +5056,7 @@ As before we can now work with the newly created subgraph.
 [source,groovy]
 ----
 // Get a traversal source object so that we can traverse
-// the newly created sub graph.
+// the newly created subgraph.
 sgt = subg.traversal()
 
 // What sort of vertices ended up in the subgraph?
@@ -5076,7 +5076,7 @@ multiple 'subgraph' steps.
 
 [source,groovy]
 ----
-// Create a sub graph only of airports in Europe and routes between those airports
+// Create a subgraph only of airports in Europe and routes between those airports
 
 subg = g.V().hasLabel('continent').has('code','EU').
              outE('contains').subgraph('eu-air-routes').inV().as('a').

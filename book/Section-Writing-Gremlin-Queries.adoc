@@ -362,7 +362,7 @@ g.V().has('region')
 g.V().hasNot('region')
 
 // The above is shorthand for
- g.V().not(has('region'))
+g.V().not(has('region'))
 ----
 
 [[count]]
@@ -5555,6 +5555,30 @@ g.V().has('airport','code','DFW').
 [v[8]:221]]
 ----
 
+Another aspect of 'union' to consider is that it can be used as a start step, which
+means that you can essentially start a traversal from multiple points.
+
+[source,groovy]
+----
+g.union(V().has('airport','code','DFW'),
+        V().has('airport','code','IAD')).
+  values('code').fold()
+        
+[DFW,IAD]
+----
+
+The prior example is meant as a demonstration. Typically, it will make more sense to 
+use a `union` this way when you have disparate sets of things you wish to combine to
+a single traversal stream. In this case, you can see that we're just filtering 
+airports by their code. It's more likely that you would write that query as follows:
+
+[source,groovy]
+----
+g.V().has('airport','code',within('DFW','IAD')).values('code').fold()
+
+[DFW,IAD]
+----
+
 [[unionidentity]]
 Introducing the 'identity' step
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -6289,6 +6313,78 @@ g.V().has('code','AUS').
 Dallas
 ----
 
+[[midtraversalve]]
+Using 'V' and 'E' mid-traversal
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+All of our queries so far have used the 'V' and 'E' step to help start a traversal.
+We've seen them at the start of a traversal spawned from 'g' and as a spawn of 
+anonymous child traversals with '__'. As start steps, they inject the objects that 
+flow through the traversal stream. While they are commonly used at the start of a 
+traversal, they can also be used in the middle of one. 
+
+[source,groovy]
+----
+g.V().has('code','AUS').V().has('code', within('DFW','IAD')).
+  values('code').fold()
+
+
+[DFW,IAD]
+----
+
+In the above example, we first find the '"AUS"' airport vertex. That start traverser
+triggers the mid-traversal 'V' that does a lookup for '"DFW"' and '"IAD"'. As a 
+result, we get two vertices as the result. Each traverser that flows to the 
+mid-traversal 'V' will issue that same filter, therefore, if we return two starting
+vertices, we will get some duplication and 4 results as follows:
+
+[source,groovy]
+----
+g.V().has('code',,within('SFO','AUS')).V().has('code', within('DFW','IAD')).
+  values('code').fold()
+
+
+[DFW,IAD,DFW,IAD]
+----
+
+Mid-traversal 'V' has a similar counterpart for edges with 'E' and behaves in the 
+same fashion.
+
+[source,groovy]
+----
+g.V().has('code',within('SFO','AUS')).E(3640)
+
+e[3640][1-route->24]
+e[3640][1-route->24]
+----
+
+You typically find use for these mid-traversal steps when you do a mutation or 
+side-effect first, but then want to traverse a wholly new path after that. Let's look
+at a more advanced example to demonstrate this. First, let's find out what the 
+longest route is leaving '"IAD"':
+
+[source,groovy]
+----
+g.V().has('code','IAD').outE('route').
+  values('dist').max()
+
+7487
+----
+
+Now, let's extend on that query with mid-traversal 'V' to use that result to find 
+"all routes from DFW that are longer than the longest route from IAD":
+
+
+[source,groovy]
+----
+g.V().has('code','IAD').outE('route').
+  values('dist').max().as('iad').
+  V().has('code','DFW').outE('route').as('r').
+  where(values('dist').where(gt('iad'))).
+  inV().values('code').fold()
+
+[SYD,DXB,HKG,DOH,AUH]
+----
 
 [[otherv]]
 Other ways to explore vertices and edges using 'both', 'bothE', 'bothV' and 'otherV'
