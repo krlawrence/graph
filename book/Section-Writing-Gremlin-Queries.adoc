@@ -4960,6 +4960,25 @@ g.V().has('airport','city','London').
 [country:[CA],code:[YXU],region:[CA-ON]]
 ----
 
+As the 'where' step takes a predicate for its matching conditions, it allows for a
+great deal of flexibilty in the types of filtering that you can do. In the following
+example, we find '"IAD"' and use the first three letters of its city name to find
+other airports that start with those three letters:
+
+[source,groovy]
+----
+g.V().has('airport','code','IAD').as('a').
+  V().hasLabel('airport').
+  where(startingWith('a')).
+    by('city').
+    by(values('city').substring(0,3)).
+  values('city')
+----  
+
+Note that the order of the 'by' modulators is such that the first 'by' refers to the
+incoming traverser to 'where' and the second refers to the "a" vertex referenced in
+the 'startingWith'. 
+
 We've seen how the number of 'by' modulators correspond to the parameters in the 
 'where' and that they are applied in a round-robin fashion, starting with the 
 value of the traverser being compared and then to the values it is to be compared 
@@ -5027,11 +5046,6 @@ are comparing the results of two 'values' steps we do not provide a parameter to
 Nice. Note that this also means that Nice is included in the results. Lastly we wrap
 the part of the query that prepares the output in a form we want in a 'local' step so
 that a separate list is created for each airport.
-
-You could write this query other ways, perhaps using a 'match' step but once you
-understand the pattern used above it is both fairly simple and quite powerful.
-
-
 
 [[choose]]
 Using 'choose' to write if...then...else type queries
