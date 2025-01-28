@@ -1755,6 +1755,26 @@ g.V().has('code','AUS').valueMap().select('code','icao','desc')
 [code:[AUS],icao:[KAUS],desc:[Austin Bergstrom International Airport]]
 ----
 
+As an additional example of Gremlin's flexibility, note that you can also restrict 
+the selected keys to all but those you specify.
+
+[source,groovy]
+----
+ g.V('3').valueMap().as('vm').unfold().
+   filter(select(keys).is(without('city','desc')))
+
+country=[US]
+code=[AUS]
+longest=[12250]
+elev=[542]
+icao=[KAUS]
+lon=[-97.6698989868164]
+type=[airport]
+region=[US-TX]
+runways=[2]
+lat=[30.1944999694824]
+----
+
 If you are reading the output of queries that use 'valueMap' on the Gremlin console,
 it is sometimes easier to read the output if you add an 'unfold' step to the end of
 the query as follows. The 'unfold' step will unbundle a collection for us. You will

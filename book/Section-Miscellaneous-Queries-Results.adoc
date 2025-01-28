@@ -4412,6 +4412,17 @@ extremely long time. In many ways the concept of "longest path" can be viewed as
 anti pattern. This is especially true in highly connected graphs of which
 `air-routes` is an example.
 
+As a final point about the prior example, we recall the "<<traversal-strategies>>" 
+section, where we learned that TinkerPop applies some changes to the way a traversal
+is written just before it is iterated to optimize performance where it can. The prior
+example demonstrates a case where certain query patterns will prevent a particular
+strategy from being applied. Normally, the 'repeat().times()' pattern will result in
+the contents of 'repeat' being expanded, where 'repeat(out()).times(2)' becomes, 
+'out().out()' which is more efficient for TinkerPop to execute. But the presence of 
+'dedup()' precludes that transformation to get the query semantics that are 
+presented. This sort of information can become useful when you are looking for your 
+own query optimizations.
+
 [[unwantededges]]
 Finding unwanted parallel edges
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
