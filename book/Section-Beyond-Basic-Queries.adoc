@@ -5404,6 +5404,139 @@ the results of your queries as JSON. Remember that if you do save an entire grap
 JSON, unless you specify otherwise, the default format is GraphSON 3.0 with
 embedded types.
 
+
+[[nulls]]
+Using null in Gremlin
+~~~~~~~~~~~~~~~~~~~~~
+
+Gremlin does allow null values to move through a traversal. Whether or not nulls are
+meaningful to you with Gremlin tends to depend on the graph database that you are 
+using and whether or not it supports storing null values. If the graph does not 
+support that capability, then you won't encounter a null in your traversal pipeline 
+or your results unless you introduce the null value yourself. You might do that by
+way of a side-effect or some other Gremlin step that allows you to supply a value to
+the stream. The following examples demonstrate a few ways that you might choose to
+do this:
+
+[source,groovy]
+----
+g.inject(null)
+
+null
+
+g.V().limit(10).coalesce(has('elev',gt(3000)), constant(null)).fold()
+
+[null,v[2305],null,null,null,null,v[2300],null,v[2308],v[2307]]
+----
+
+The prior examples don't showcase any particular common use case and unless the graph
+itself supports storing null values there is little foundation for injecting them in
+this fashion. For graphs that do support storing null, such as TinkerGraph, you can 
+treat nulls in much the same manner that you do other values in Gremlin. 
+
+NOTE: TinkerGraph is not configured to support null storage by default. You must 
+provide set the 'gremlin.tinkergraph.allowNullPropertyValues' to true in its 
+configuration to enable it.
+
+Before we look too closely at how null is used in a graph that supports it, let's 
+first take a look at what happens with null for graphs that do not. In particular,
+we should look at the 'property' step.
+
+[source,groovy]
+----
+g.addV('airport').property('code',null)
+
+v[41223]
+
+g.V().has('code',null)
+
+// no result
+
+g.V().hasNot('code')
+
+v[41223]
+----
+
+NOTE: For better portability, prefer 'drop' when removing properties.
+
+In the prior example, Gremlin semantics expect that calls to 'property' with a null
+value assignment will result in the step being ignored if the property does not exist
+or removed if it does. The following demonstrates the latter:
+
+[source,groovy]
+----
+g.addV('airport').property('code','XYZ')
+
+v[41224]
+
+g.V(41224).property('code',null)
+
+v[41224]
+
+g.V().hasNot('code')
+
+v[41224]
+----
+
+Now that we've looked at graphs that don't support null, let's look at how Gremlin
+behaves for those that do:
+
+[source,groovy]
+----
+g.addV('airport').property('code',null)
+
+v[41228]
+
+g.V().has('code',null)
+
+v[41228]
+
+g.V().has('code',within('IAD',null)).values('code')
+
+null
+IAD
+----
+
+As you can see in the prior example, the null value is being stored in and retrieved 
+from the graph. By electing to use this feature, you now have the additional burden
+of accounting for null in your query. Gremlin steps tend to behave in null-safe ways
+as shown in the the following examples:
+
+[source,groovy]
+----
+g.V().has('code',within('IAD',null)).values('code').substring(0,1).fold()
+
+[null,I]
+
+g.V().has('code',within('IAD',null)).values('code').length().fold()
+
+[null,3]
+
+g.V().has('code',within('IAD',null)).values('code').groupCount()
+
+[null:1,IAD:1]
+
+g.V().has('code',within('IAD',null)).values('code').order()
+
+null
+IAD
+
+g.V().has('code',within('IAD',null)).values('code').order().by(desc)
+
+IAD
+null
+----
+
+The choice to use null is often made for you as many graphs do not support storing
+nulls at which point injecting them yourself into your queries doesn't tend to 
+provide much added value. In addition, when the graph you are using does support it,
+you should take care in the choice to use it because it will reduce the portability
+of your application by limiting your graph choices as you will have to find another
+that also supports the feature. On the flip side, if you choose a graph that does not
+support null values and use the 'property('key',null)' syntax to remove properties,
+then keep in mind that this syntax will behave quite differently if you switch to a
+graph that suddenly supports storing nulls!
+
 [[traversal-strategies]]
 Understanding TraversalStrategies
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

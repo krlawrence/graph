@@ -643,8 +643,8 @@ Checking to see if a query returned a result
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 It is often important to know if a query returned a result before trying to reference
-it to avoid those pesky Java Null Pointer Exceptions. Without worrying about Java for
-a second consider the query below purely from a Gremlin point of view.
+it to avoid those pesky Java 'NoSuchElementException' errors. Without worrying about
+Java for a second consider the query below purely from a Gremlin point of view.
 
 [source,groovy]
 ----
@@ -669,8 +669,8 @@ Long result =
 ----
 
 On the surface, this looks fine. However, were we to execute this code we would get a
-Null Pointer Exception as when we try to call 'next' there is no result to process as
-there is no edge between Austin and Sydney and hence no distance value to process.
+'NoSuchElementException' as when we try to call 'next' there is no result to process 
+as there is no edge between Austin and Sydney and hence no distance value to process.
 
 NOTE: The source code in this section comes from the 'GraphSearch2.java' sample
 located at https://github.com/krlawrence/graph/tree/main/sample-code/java.
@@ -717,7 +717,7 @@ Integer d = (Integer)
 If the route exists the distance will be found and returned, otherwise a value of
 '"-1"' will be returned. This is really using the same concept as the 'toList'
 example except in this case we generate the list using the 'fold' step within the
-query itself. The 'unfold' will return a result if the list is not null, otherwise
+query itself. The 'unfold' will return a result if the list is not empty, otherwise
 the constant value will be returned as 'coalesce' returns the first to yield a
 result.
 
