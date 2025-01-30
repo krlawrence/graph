@@ -28,7 +28,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        
+
       - name: Cache Ruby Gems
         uses: actions/cache@v3
         with:
@@ -36,13 +36,13 @@ jobs:
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-gems-
-      
+
       - name: Install Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.0'
           bundler-cache: true
-                  
+
       - name: Install Tools
         run: |
           sudo apt-get update
@@ -60,15 +60,15 @@ jobs:
           mkdir ../target
           cp Practical-Gremlin.html ../target/index.html
           cp ../images/PRACTICAL-GREMLIN-Revised-v2.png ../target
-          
+
       - name: Setup Pages
         uses: actions/configure-pages@v3
-        
+
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3
         with:
           path: 'target'
-          
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
