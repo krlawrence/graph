@@ -1210,7 +1210,7 @@ In addition to those basic definitions, there are some other points worth explor
 First, let's take a look at the list of steps that support 'by' modulation, as 'by'
 cannot be used on all steps:
 
-[cols="1,1,1,1",options="header"]
+[cols="1,1,1,1"]
 |==============================================================================
 |'aggregate' |'cyclicPath' |'dedup' |'group'
 |'groupCount' |'math' |'order' |'path'
