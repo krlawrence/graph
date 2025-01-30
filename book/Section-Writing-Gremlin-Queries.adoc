@@ -736,7 +736,7 @@ that look like the following line.
 [LCY,456,GVA]
 ----
 
-The 'by' modulator steps are processed in a round robin fashion. If there are not
+The 'by' modulator steps are processed in a round-robin fashion. If there are not
 enough modulators specified for the total number of elements in the path, Gremlin
 just loops back around to the first 'by' step and so on. So even though there were
 three elements in the path that we wanted to have formatted, we only needed to
@@ -748,8 +748,8 @@ explicit 'by' modulator steps. This would be required if, for example, we wanted
 reference the 'city' property of the third element in the path rather than its
 'code'.
 
-TIP: The 'by' modulator steps are processed in a round robin fashion in cases where
-there are more results to apply them to than 'by' modulators specified.
+TIP: The 'by' modulator steps are processed in a round-robin fashion in cases where
+there are more results to apply them to than the number of 'by' modulators specified.
 
 The example above is equivalent to this longer form of the same query.
 
@@ -1141,10 +1141,9 @@ g.V().has('type','airport').limit(10).as('a','b','c').
         by('code').by('region').by(out().count())
 ----
 
-In the most recent releases of TinkerPop you can also use the new 'project' step and
-achieve the same results that you can get from the combination of 'as' and 'select'
-steps. The example below shows the previous query, rewritten to use 'project' instead
-of 'as' and 'select'.
+The 'project' step can achieve the same results as obtained from the combination of 
+'as' and 'select' steps. The example below shows the previous query, rewritten to use
+'project' instead of 'as' and 'select'.
 
 [source,groovy]
 ----
@@ -1196,6 +1195,117 @@ When we run the modified query, here is the output we get.
 [IATA:FLL,Region:US-FL,Routes:141]
 [IATA:IAD,Region:US-VA,Routes:136]
 ----
+
+[[bymodulators]]
+Traits of 'by' modulators
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+We've seen enough use of the 'by' modulator now to dive deeper on their general 
+behavior. As we learned earlier, a 'by' modulator is a form of step that influences
+the behavior of the step that it is associated with. Moreover, The 'by' modulators
+are processed in a round-robin fashion in cases where there are more results to apply
+them to than the number of 'by' modulators specified.
+
+In addition to those basic definitions, there are some other points worth exploring.
+First, let's take a look at the list of steps that support 'by' modulation, as 'by'
+cannot be used on all steps:
+
+[cols="1,1,1,1",options="header"]
+|==============================================================================
+|'aggregate' |'cyclicPath' |'dedup' |'group'
+|'groupCount' |'math' |'order' |'path'
+|'project' |'propertyMap' |'sack' |'sample'
+|'select' |'simplePath' |'store' |'tree'
+|'valueMap' |'where' | |
+|==============================================================================
+
+Next, let's revisit some usage with 'by' where it is commonly used with 'path' and
+'project'.
+
+[source,groovy]
+----
+g.V().has('airport','code','AUS').
+  out().out().
+  path().by('code').
+  limit(10)
+  
+[AUS,EWR,YYZ]
+[AUS,EWR,YVR]
+[AUS,EWR,LHR]
+[AUS,EWR,CDG]
+[AUS,EWR,FRA]
+[AUS,EWR,NRT]
+[AUS,EWR,DEL]
+[AUS,EWR,DUB]
+[AUS,EWR,HKG]
+[AUS,EWR,PEK]  
+
+g.V().has('type','airport').limit(10).
+      project('a','b','c').
+        by('code').
+        by('region').
+        by(outE().count())
+        
+[a:ATL,b:US-GA,c:232]
+[a:ANC,b:US-AK,c:39]
+[a:AUS,b:US-TX,c:59]
+[a:BNA,b:US-TN,c:55]
+[a:BOS,b:US-MA,c:129]
+[a:BWI,b:US-MD,c:89]
+[a:DCA,b:US-DC,c:93]
+[a:DFW,b:US-TX,c:221]
+[a:FLL,b:US-FL,c:141]
+[a:IAD,b:US-VA,c:136]              
+----
+
+In both of the prior examples, the 'by' modulators were 'productive' which means that
+when the 'by' is used by the modulated step, it generates a result. When the 'by'
+does not emit a result it is said to be 'unproductive' and introduces an important
+aspect of Gremlin semantics. Let's modify the first example with 'path' to make it
+unproductive by introducing a mistype to the property key and referring to it as 
+'"cde"' instead of '"code"':
+
+[source,groovy]
+----
+g.V().has('airport','code','AUS').
+  out().out().
+  path().by('cde').
+  limit(10)
+
+  
+----
+
+The prior example returns no results. The unproductive 'by' to 'path' forces it to 
+behave a bit like a filter. Since 'path' can't use '"cde"' to access a valid property
+key, it simply drops that traverser to prevent an error. Now, let's modify the second
+example to make it unproductive for some cases, particularly those where the number 
+of outgoing edges is less than 100:
+
+[source,groovy]
+----
+g.V().has('type','airport').limit(10).
+      project('a','b','c').
+        by('code').
+        by('region').
+        by(outE().count().is(gt(100)))
+
+[a:ATL,b:US-GA,c:232]
+[a:ANC,b:US-AK]
+[a:AUS,b:US-TX]
+[a:BNA,b:US-TN]
+[a:BOS,b:US-MA,c:129]
+[a:BWI,b:US-MD]
+[a:DCA,b:US-DC]
+[a:DFW,b:US-TX,c:221]
+[a:FLL,b:US-FL,c:141]
+[a:IAD,b:US-VA,c:136]         
+----
+
+As you can see the 'project' step will not emit a key for '"c"' when a modulator is
+unproductive. Each step will have its own semantics for what it does with an
+unproductive 'by', but typically there is a form of filtering operation that occurs
+akin to what we've seen in the prior example. We will see more examples of 'by' 
+introducing these kinds of behaviors as we learn new steps in future sections.
 
 [[multias]]
 Using multiple 'as' steps with the same label
@@ -4384,6 +4494,51 @@ g.V().hasLabel('airport').limit(20).values('code').order().by(shuffle).fold()
 [MCO,LGA,BWI,IAD,ATL,BOS,DCA,BNA,IAH,DFW,MIA,MSP,ANC,AUS,JFK,ORD,PBI,FLL,LAX,PHX]
 ----
 
+It is important to call attention to the use of 'by' modulators with 'order' as they
+introduce some special semantics when they are unproductive, a topic we learned about
+in the "<<bymodulators>>" section. Let's modify an earlier example to make the 'by'
+unproductive by introducing a spelling mistake to the property key we want to order
+on:
+
+[source,groovy]
+----
+g.V().has('code','AUS').out().
+  order().by('cde').
+  values('code','icao').fold()
+  
+[]  
+----
+
+As you can see, an unproductive 'by' makes 'order' behave like a filter for those 
+traversers that can't make use of '"cde"' (which in this case is all of them). This
+filtering semantic is often quite helpful when working with heterogenous elements by
+providing some flexibilty in the face of what could otherwise just been an exception.
+These semantics could lead to a temptation to use them to explicitly filter in the
+'by' as follows:
+
+[source,groovy]
+----
+g.V().has('code','AUS').out().
+  order().by(__.as('v').values('runways').is(gt(4)).select('v').values('code')).
+  values('code','icao').fold()
+  
+[ATL,KATL,BOS,KBOS,DEN,KDEN,DFW,KDFW,DTW,KDTW,IAH,KIAH,MDW,KMDW,ORD,KORD,YYZ,CYYZ]  
+----
+
+While the prior example works, it is not an advisable approach because it reduces the
+readability of the query. It would far more idiomatic to write the above query with
+an explicit 'has' fitler as shown next:
+
+[source,groovy]
+----
+g.V().has('code','AUS').
+  out().has('runways',gt(4)).
+  order().by('code').
+  values('code','icao').fold()
+  
+[ATL,KATL,BOS,KBOS,DEN,KDEN,DFW,KDFW,DTW,KDTW,IAH,KIAH,MDW,KMDW,ORD,KORD,YYZ,CYYZ]  
+----
+
 Below is an example where we combine the field we want to sort by 'longest'
 and the direction we want the sort to take, 'desc' into a single 'by' instruction.
 
@@ -6569,8 +6724,6 @@ g.V(3).bothE().otherV().dedup().order().by(id()).fold()
 
 As you can see, when we use 'otherV' we do not get 'v[3]' returned as we are only
 looking at the other vertices relative to where we started from, which was 'v[3]'.
-
-
 
 [[sp]]
 Shortest paths (between airports) - introducing 'repeat'

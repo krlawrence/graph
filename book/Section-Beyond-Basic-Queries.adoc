@@ -2683,6 +2683,49 @@ g.V().has('airport','country','IE').
 [2,2,2,5,1,1,1]
 ----
 
+In the "<<bymodulators>>" section we learned about the concept of an unproductive 
+'by'. As a reminder, an unproductive 'by' is one that does not produce a result for
+the step that it is tied to. When 'store' or 'aggregate' encounter an unproductive
+'by' it has a filtering effect for that current traverser. For example, if in the 
+prior example we'd made a mistake and mistyped '"runways"' as '"rnways"' we would
+have no results:
+
+[source,groovy]
+----
+g.V().has('airport','country','IE').
+      aggregate('ireland').by('rnways').cap('ireland')
+
+[]
+---- 
+
+This behavior is meant as a convenience when using 'store' or 'aggregate' with 
+heterogenous or incomplete elements where a value may not exist, thereby sparing an
+error. It may be tempting to exploit this mechanic as a direct means of filtering as
+demonstrated in the following example:
+
+[source,groovy]
+----
+g.V().has('airport','country','IE').
+      aggregate('ireland').by(values('runways').is(gt(3))).
+      cap('ireland')
+
+[5]
+----
+
+While the previous example is syntactically correct, it is a bit of an indirection
+from a readaiblity perspective. It would be more idiomatic to write an explicit 
+filter instead:
+
+[source,groovy]
+----
+g.V().has('airport','country','IE').
+      has('runways', gt(3)).
+      aggregate('ireland').by('runways').
+      cap('ireland')
+
+[5]
+----
+
 If we are ever unsure what type of object has been created a call to 'getClass' can
 be used to find out.
 
@@ -5403,7 +5446,6 @@ load an entire graph as either GraphML or GraphSON and should you so desire to s
 the results of your queries as JSON. Remember that if you do save an entire graph as
 JSON, unless you specify otherwise, the default format is GraphSON 3.0 with
 embedded types.
-
 
 [[nulls]]
 Using null in Gremlin
