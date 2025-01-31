@@ -2416,6 +2416,21 @@ route
 contains
 ----
 
+You might also find it helpful to gather some statistical information about these
+labels. You can collect an label distribution using 'groupCount' for vertices or
+edges.
+
+[source,groovy]
+----
+g.V().groupCount().by(label)
+
+[continent:7,country:237,version:1,airport:3374]
+
+g.E().groupCount().by(label)
+
+[contains:6748,route:43400]
+----
+
 Now that we know the label names it is very easy to get the names of the property
 keys for a vertex with a given label. The query below will display the names of the
 property keys found in an 'airport' vertex.
@@ -2483,6 +2498,19 @@ When run, we get back a nicely formatted table showing the key names and their t
    runways : class java.lang.Integer
        lat : class java.lang.Double
       desc : class java.lang.String
+----
+
+We mentioned the use of 'groupCount' for doing label distributions to get some basic
+statistics on the graph schema. You can also use 'groupCount' to try to understand 
+the graph structure by examining its paths and counting unique ones:
+
+[source,groovy]
+----
+g.V().outE().otherV().groupCount().by(path().by(label)).unfold()
+
+path[country, contains, airport]=3374
+path[continent, contains, airport]=3374
+path[airport, route, airport]=43400
 ----
 
 Later, in the "<<janusmgmt>>" section, we will look at how JanusGraph allows us to
