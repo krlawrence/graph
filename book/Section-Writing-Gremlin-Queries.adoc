@@ -1682,9 +1682,105 @@ g.V().has('region','US-TX').fold().skip(local,3)
 There are many other ways to specify a range of values using Gremlin. You will find
 several additional examples in the "<<tranges>>" section.
 
+Working with the end of a stream
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When we want to take items from the end of the stream, we typicaly use the 'tail' 
+step. With 'tail' you specify the number of elements to take from the end of the 
+stream.
+
+[source,groovy]
+----
+g.V().has('airport','code', within('IAD','DAL','JFK','DCA','DFW')).
+  order().by('code').
+  tail(1).
+  values('code').fold()
+
+[JFK]
+
+g.V().has('airport','code', within('IAD','DAL','JFK','DCA','DFW')).
+  order().by('code').
+  tail(2).
+  values('code').fold()
+
+[IAD,JFK]
+----
+
+In the prior examples, we use 'order' to ensure consistent results for purpose of 
+demonstration and you often must use 'order' in your own query writing to achieve the
+same, but note that if you are using 'order', it might be better to rewrite the first 
+as follows:
+
+[source,groovy]
+----
+g.V().has('airport','code', within('IAD','DAL','JFK','DCA','DFW')).
+  order().by('code',desc).
+  limit(1).
+  values('code').fold()
+  
+[JFK]
+----
+
+By using a 'desc' order, we can move JFK to the front of our stream and simply take
+the first item it encounters, which likely speeds up the query considerably as most
+graph databases should optimize the 'order' and we likely spare Gremlin from having
+to iterate the entire stream to get to the last item with 'tail'. Depending upon your
+requirements, you might find that you could use the same tactic for the second query
+but note that the results have a slight difference.
+
+[source,groovy]
+----
+g.V().has('airport','code', within('IAD','DAL','JFK','DCA','DFW')).
+  order().by('code',desc).
+  limit(2).
+  values('code').fold()
+
+[JFK,IAD]
+----
+
+In the prior example you can see that we get the same two results, but they are in
+reversed order. You would have to reverse the 'order' to get the same result as the
+first query. In these examples, we are dealing with a small dataset with a small set
+of five results so the performance implications are not big for either approach, but
+for larger scales you may find yourself making choices with these patterns that can 
+have significant impact.
+
+Sometimes you may find that you want to take the second to last item in the stream.
+Finding the penultimate element of the stream just means taking the first item found
+in the list of the last two:
+
+[source,groovy]
+----
+g.V().has('airport','code', within('IAD','DAL','JFK','DCA','DFW')).
+  order().by('code').
+  tail(2).limit(1).
+  values('code').fold()
+  
+[IAD]
+----
+
+Gremlin does not have a step for getting all elements of the stream except for the
+last one. The following pattern allows you to do this by using 'store' to hold the
+'tail' of the stream, which you can then use later to filter it away.
+
+[source,groovy]
+----
+g.V().has('airport','code', within('IAD','DAL','JFK','DCA','DFW')).
+  order().by('code').
+  fold().
+  sideEffect(tail(local).store('t')).unfold().where(neq('t')).by().by(unfold()).
+  values('code').fold()
+  
+[DAL,DCA,DFW,IAD]
+----
+
+The pattern demonstrated in the prior examples shows how flexible Gremlin can be. 
+With a solid command of the steps Gremlin offers and a clever application of them you
+can accomplish a great many things. 
+
 [[dedup]]
 Removing duplicates - introducing 'dedup'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 It is often desirable to remove duplicate values from query results. The 'dedup' step
 allows us to do this. If you are already familiar with Groovy collections, the
