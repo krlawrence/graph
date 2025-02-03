@@ -1087,6 +1087,54 @@ a powerful way in which to encapsulate upsert logics for vertices and edges. As 
 continue through the following sections you will find more advanced features with 
 these steps.
 
+Using 'inject' with 'mergeV'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In the "<<addinject>>" section, we saw how data could be injected to a traversal 
+stream to create multiple vertices at a time with 'addV'. A similar tactic could be
+used with 'addE' to create multiple edges at a time. The pattern with 'inject' also
+extends to 'mergeV' and 'mergeE'. In the most simple form, 'mergeV' will simply 
+accept an incoming 'Map' traverser as its argument.
+
+[source,groovy]
+----
+m = [[code: 'IAD',country: 'US',desc: 'Washington Dulles International Airport', (T.label): 'airport'],
+     [code: 'LTA',country: 'US',desc: 'Little Tiny Airport', (T.label): 'airport'],
+     [code: 'DCA',country: 'US',desc: 'Ronald Reagan Washington National Airport', (T.label): 'airport']]
+
+g.inject(m).unfold().mergeV().elementMap('code','country','desc')
+
+[id:10,label:airport,country:US,code:IAD,desc:Washington Dulles International Airport]
+[id:41223,label:airport,country:US,code:LTA,desc:Little Tiny Airport]
+[id:7,label:airport,country:US,code:DCA,desc:Ronald Reagan Washington National Airport]
+----
+
+The prior example flattens the list of maps in "m", feeding them one at a time to 
+'mergeV' where it does a match on each of the keys returning those vertices it finds
+and creating those it doesn't. You could take a more advanced approach and perform
+different operations for the 'onCreate" and 'onMatch' options driven fully on the 
+data supplied to 'inject'. In the next example, we form a list of maps, where each
+key refers to the search, create, or match 'Map' options that 'mergeV' expects. We
+can then use 'select' to grab the appropriate one and supply it as an argument to
+the step.
+
+[source,groovy]
+----
+m = [[search: [code: 'IAD', (T.label): 'airport'], create: [desc: 'Washington Dulles International Airport', country: 'US'], match: [elev: 313]],
+     [search: [code: 'LTA',(T.label): 'airport'], create: [country: 'US',desc: 'Little Tiny Airport'], match: [elev: 555]],
+     [search: [code: 'DCA', (T.label): 'airport'], create: [country: 'US',desc: 'Ronald Reagan Washington National Airport'], match: [elev: 14]]]
+
+g.inject(m).unfold().
+  mergeV(select('search')).
+    option(onCreate, select('create')).
+    option(onMatch, select('match')).
+  elementMap('code','country','desc','elev')
+  
+[id:10,label:airport,country:US,code:IAD,elev:313,desc:Washington Dulles International Airport]
+id:82454,label:airport,country:US,code:LTA,desc:Little Tiny Airport]
+id:7,label:airport,country:US,code:DCA,elev:14,desc:Ronald Reagan Washington National Airport]  
+----
+
 Incorporating 'fail' with 'mergeV' or 'mergeE'
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
