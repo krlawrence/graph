@@ -65,7 +65,7 @@ for k,v in routes.items():
 
 # Create a ReadOnlyStrategy - any attempt to add or change an element 
 # using this traversal source should cause an exception to be thrown.
-heading('ReadOnlyStrateggy')
+heading('ReadOnlyStrategy')
 g3 = g.withStrategies(ReadOnlyStrategy())
 try:
     g3.addV('should_fail').property('p1',1).iterate()
@@ -77,7 +77,7 @@ except:
 
 # Create a PartitionStrategy that adds a property called "partition"
 # to all new elements that are created. 
-heading('PartitionStrateggy')
+heading('PartitionStrategy')
 g4 = g.withStrategies(PartitionStrategy(
          partition_key="partition",
          write_partition="a", 
