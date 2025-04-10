@@ -1175,9 +1175,9 @@ descriptive variable names.
 
 [source,groovy]
 ----
- g.V().has('type','airport').limit(10).
-       project('IATA','Region','Routes').
-         by('code').by('region').by(out().count())
+g.V().has('type','airport').limit(10).
+      project('IATA','Region','Routes').
+        by('code').by('region').by(out().count())
 ----
 
 When we run the modified query, here is the output we get.
@@ -1195,6 +1195,21 @@ When we run the modified query, here is the output we get.
 [IATA:FLL,Region:US-FL,Routes:141]
 [IATA:IAD,Region:US-VA,Routes:136]
 ----
+
+The 'project' step can be applied to inputs other than graph elements. It can 
+actually operate on any incoming traverser. For example, when 'project' follows 
+'valueMap' the incoming traverser is a 'Map' object. 
+
+[source,groovy]
+----
+g.V().has('code','IAD').valueMap().
+  project('r','ct').by('runways').by(count(local))
+
+[r:[4],ct:12]
+----
+
+The prior example shows how 'project' can access the "runways" key and count the 
+number of entries in the 'Map'.
 
 [[bymodulators]]
 Traits of 'by' modulators
