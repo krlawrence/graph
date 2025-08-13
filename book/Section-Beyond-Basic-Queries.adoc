@@ -5278,7 +5278,7 @@ Using TinkerPop you can save a graph either in GraphML or GraphSON format. Graph
 is an industry standard XML format for describing a graph and is recognized by many
 other applications such as Gephi. GraphSON was defined as part of the TinkerPop
 project and is less broadly supported outside of TinkerPop enabled tools and graphs.
-However, whereas GraphML is considered lossee for some graphs (it does not support
+However, whereas GraphML is considered lossy for some graphs (it does not support
 all of the data types and structures used by TinkerPop), GraphSON is not
 considered so when configured to include embedded types.
 
