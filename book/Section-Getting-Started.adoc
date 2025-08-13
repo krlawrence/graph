@@ -99,8 +99,7 @@ http://tinkerpop.apache.org/
 
 It only takes a few minutes to get the Gremlin Console installed and running. You
 just download the ZIP, 'unzip' it, and you are all set. TinkerPop also
-requires Java to be at version 8 or higher.The Gremlin Console will not work with
-versions of Java 8 prior to 1.8.0_45. 
+requires Java to be at version 11 or higher.
 
 NOTE: For more information on the compatability of Gremlin with versions of Java and
 other languages, please see the https://tinkerpop.apache.org/docs/current/upgrade/[official documentation].

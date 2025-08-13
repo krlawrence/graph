@@ -565,7 +565,7 @@ graph theory to get productive quickly.
 A third, and equally important, factor in the growth we are seeing in graph database
 adoption is the low barrier of entry for programmers. As you will see from the
 examples in this book, someone wanting to experiment with graph technology can
-download the Apache TinkerPop package and as long as Java 8 is installed, be up and
+download the Apache TinkerPop package and as long as Java 11+ is installed, be up and
 running with zero configuration (other than doing an unzip of the files), in as
 little as five minutes. Graph databases do not force you to define schemas or
 specify the layout of tables and columns before you can get going and start building
