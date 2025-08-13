@@ -1287,7 +1287,7 @@ g.V().has('airport','code','AUS').
   path().by('cde').
   limit(10)
 
-  
+// no results  
 ----
 
 The prior example returns no results. The unproductive 'by' to 'path' forces it to 
@@ -1321,6 +1321,51 @@ unproductive. Each step will have its own semantics for what it does with an
 unproductive 'by', but typically there is a form of filtering operation that occurs
 akin to what we've seen in the prior example. We will see more examples of 'by' 
 introducing these kinds of behaviors as we learn new steps in future sections.
+
+Let's look an another example with 'path' where the 'by' modulator is not productive.
+
+[source,groovy]
+----
+g.V().has('airport','code','AUS').
+  outE().inV().outE().inV().
+  path().by('dist').
+  limit(10).
+  sum(local)
+
+// no results  
+----
+
+The above example is similar to the earlier one but expands the path Gremlin travels
+to include 'Edge' objects. In this case, the query seeks to sum the value of dist 
+properties on edges in the path. The 'Vertex' objects will not have a dist property
+key and therefore be unproductive. One way to change that is to ensure that vertices
+produce a value with their 'by' modulator, by supplying a 'constant(0)' for those 
+cases.
+
+[source,groovy]
+----
+g.V().has('airport','code','AUS').
+  outE().inV().outE().inV().
+  path().
+    by(constant(0)).
+    by('dist').
+  limit(10).
+  sum(local)
+
+2436
+1750
+1830
+2251
+1505
+1963
+1951
+1400
+1431
+2043
+----
+
+With that small adjustment, vertices in the path can produce a '0' integer value
+which can be summed with the dist property value from the edges.
 
 [[multias]]
 Using multiple 'as' steps with the same label
