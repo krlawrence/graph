@@ -390,17 +390,16 @@ major features as well, such as TinkerGraph gaining some simple transactional
 features and the ability for properties to be returned on elements from Gremlin 
 Server, rather than only getting references. Notable improvements include:
 
-* New Gremlin steps for working with strings: 'asString()', 'concat()', 'length()', 
-'toLower()', 'toUpper()', 'trim()', 'lTrim()', 'rTrim()', 'reverse()', 'replace()', 
-'split()', 'substring()', and 'format()'.
-* New Gremlin steps for working with collections: 'any()', 'all()', 'product()', 
-'merge()', 'intersect()', 'combine()', 'conjoin()', 'difference()', 'disjunct()' 
-and 'reverse()'.
-* A new Gremlin steps for working with dates: 'asDate()', 'dateAdd()' and 
-'dateDiff()'.
-* The 'union()' step became available as a start step.
+* New Gremlin steps for working with strings: 'asString', 'concat', 'length', 
+'toLower', 'toUpper', 'trim', 'lTrim', 'rTrim', 'reverse', 'replace', 'split', 
+'substring', and 'format'.
+* New Gremlin steps for working with collections: 'any', 'all', 'product', 'merge', 
+'intersect', 'combine', 'conjoin', 'difference', 'disjunct' and 'reverse'.
+* A new Gremlin steps for working with dates: 'asDate', 'dateAdd' and 
+'dateDiff'.
+* The 'union' step became available as a start step.
 * Improved syntax for specifying cardinality directly within a 'Map' for use with 
-'mergeV()'.
+'mergeV'.
 * TinkerGraph gained support for simple transactions.
 * Graph elements like 'Vertex' and 'Edge' can now be returned from Gremlin Server 
 with their properties attached using the 'materializeProperties' option.
@@ -408,6 +407,45 @@ with their properties attached using the 'materializeProperties' option.
 NOTE: Full details of all the new features added in the TinkerPop 3.7.x releases can 
 be found at the following link:
 https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc#tinkerpop-370-gremfir-master-of-the-pan-flute
+
+[[tp38intro]]
+TinkerPop 3.8
+^^^^^^^^^^^^^
+
+TinkerPop 3.8.0 was released August 2025 and established a wide mix of features and
+improvements to Gremlin semantics designed to enhance language consistency. Some of 
+these changes do lead to behaviors that break from previous versions of TinkerPop, 
+but are expected to stay consistent with TinkerPop 4.0, which should help ease the 
+migration there when 4.0 eventually releases. Here are some of the important 
+highlights to consider from this release:
+
+* New Gremlin steps for type conversions: 'asBool' and 'asNumber'.
+* The 'none' step was renamed to 'discard' and 'none' has been modified to take 'P'
+as an argument who's behavior is now a complement to 'any' and 'all' steps.
+* The minimum Java version supported is JDK11.
+* The default implementation for the 'date' data type for Java is 'OffsetDateTime'
+rather than 'java.util.Date', which means that steps like 'asDate' and helpers like
+the 'datetime()' function will return 'OffsetDateTime' whose string representation is
+an ISO 8601 format.
+* Creation of 'g' has been simplified slightly by replacing more verbose 
+construction options of 'traversal().withEmbedded(...)' and 
+'traversal().withRemote(...)' with a single 'traversal().with(...)'.
+* The 'split' method splits a string to characters if given an empty string as a 
+separator argument.
+* The Gremlin language removed syntax for 'Vertex', made use of 'new' optional, 
+included support for 'withoutStrategies' and removed 'Map' key restrictions related
+to reserved words.
+* The semantics for the 'choose' step changed to match the first option only, pass
+through traversers when the choice is unproductive or the determined choice 
+unmatched, and introduces a new 'Pick.unproductive' option.
+* Gremlin no longer follows Groovy by defaulting float values to 'BigDecimal' - they
+go to 'double' instead.
+* The 'valueMap', 'propertyMap', 'groupCount', 'dedup', 'sack', 'sample', 'aggregate'
+steps can no longer take 'by' modulators beyond the number each step expects.
+
+NOTE: Full details of all the new features added in the TinkerPop 3.8.x releases can 
+be found at the following link:
+https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc#tinkerpop-380-not-officially-named-yet
 
 [[tp40intro]]
 TinkerPop 4.0
