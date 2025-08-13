@@ -425,7 +425,7 @@ as an argument who's behavior is now a complement to 'any' and 'all' steps.
 * The minimum Java version supported is JDK11.
 * The default implementation for the 'date' data type for Java is 'OffsetDateTime'
 rather than 'java.util.Date', which means that steps like 'asDate' and helpers like
-the 'datetime()' function will return 'OffsetDateTime' whose string representation is
+the 'datetime' function will return 'OffsetDateTime' whose string representation is
 an ISO 8601 format.
 * Creation of 'g' has been simplified slightly by replacing more verbose 
 construction options of 'traversal().withEmbedded(...)' and 

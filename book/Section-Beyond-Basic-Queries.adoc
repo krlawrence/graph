@@ -1187,7 +1187,7 @@ g.mergeV([(T.id): 999999]).
 v[999999]
 ----
 
-By wrapping the '"XYZ"' in the 'set()', which is statically imported from 
+By wrapping the '"XYZ"' in the 'set', which is statically imported from 
 'Cardinality.set', you mark that value in a way that 'mergeV' knows to tell the graph
 to use that specific cardinality for that property. You could also do set this value
 globally for the step by providing it as an argument after the 'Map':
@@ -5694,8 +5694,8 @@ g.V().map(both().count())
 ----
 
 This Gremlin will get you the count you seek, but it is a bit inefficient because it
-chooses to count the adjacent vertices using 'both()' when it could simply count 
-incident edges with 'bothE()' and achieve the same answer without requiring an extra
+chooses to count the adjacent vertices using 'both' when it could simply count 
+incident edges with 'bothE' and achieve the same answer without requiring an extra
 traversal to the vertex on the other side. It would have been better to write:
 
 [source,groovy]
@@ -5732,7 +5732,7 @@ throws an exception rather than executing. The following strategies that TinkerP
 provides tend to be useful:
 
 * 'EdgeLabelVerificationStrategy' - ensures that labels are always used when using
-'out()', 'in()' or 'both()' steps
+'out', 'in' or 'both' steps
 * 'ReadOnlyStrategy' - ensures that the traversal contains no mutation steps that 
 could modify the graph
 * 'ReservedKeysVerificationStrategy' - ensures that certain strings are not use for
@@ -5875,7 +5875,7 @@ SeedStrategy
 
 'SeedStrategy' is mostly helpful when writing tests. Certain Gremlin features aren't 
 determinisitic in what they do, which can make it hard to write good assertions for 
-tests. By using 'SeedStrategy', you can ensure that 'coin()', 'sample()' and 
+tests. By using 'SeedStrategy', you can ensure that 'coin', 'sample' and 
 'Order.shuffle' will all behave in a deterministic fashion.
 
 [source,groovy]
