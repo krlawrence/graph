@@ -3411,6 +3411,7 @@ helpful in many situations:
 |disjunct    | Calculates the disjunct set between the incoming 'List' and the provided 'List' argument
 |intersect   | Calculates the intersection between the incoming 'List' and the provided 'List' argument
 |merge       | Merges the incoming collection with the one provided as an argument
+|none        | Determines if no objects in a 'List' matches a specific predicate
 |product     | Calculates the cartesian product of the incoming 'List' and the provided 'List'
 |reverse     | Reverses the order of the incoming 'List'
 |==============================================================================
@@ -3423,10 +3424,10 @@ used to deconstruct collections. These are some obvious examples, but as you lea
 more about Gremlin you will find many more.
 
 Let's take a deeper look at these steps and how you might use them. We will start
-with the two filtering steps of 'any' and 'all'. Oftentimes you will find yourself in
-a situation where you have written some Gremlin that collects your results into a 
-'List' like the following example where we have the number of runways for all 
-airports in the "US-TX" region collected:
+with the three filtering steps of 'any' 'all' and 'none'. Oftentimes you will find 
+yourself in a situation where you have written some Gremlin that collects your 
+results into a 'List' like the following example where we have the number of runways 
+for all airports in the "US-TX" region collected:
 
 [source,groovy]
 ----
@@ -3451,6 +3452,16 @@ you could use 'all':
 [source,groovy]
 ----
 g.V().has('airport','region','US-TX').values('runways').fold().any(gt(5))
+
+// no results
+----
+
+As the final complement to the 'all' and 'any' steps, 'none' can be used in cases 
+where you only wanted the 'List' if none of its values were greater than 5:
+
+[source,groovy]
+----
+g.V().has('airport','region','US-TX').values('runways').fold().none(gt(5))
 
 // no results
 ----
@@ -3550,7 +3561,7 @@ g.V().has('airport','region','US-VA').values('code').fold().
  [ROA,SHD],[ROA,MIA],[CHO,SHD],[CHO,MIA],[PHF,SHD],[PHF,MIA],[LYH,SHD],[LYH,MIA]]
 ----
 
-we should not overlook the fact that these steps can also take a traversal as an 
+We should not overlook the fact that these steps can also take a traversal as an 
 argument as shown in the following example that uses 'aggregate' to collect all the 
 airport codes in "US-VA" into a list side-effect of "x" and then  does an 'intersect'
 on that value against a list of codes for outgoing routes:
@@ -3615,6 +3626,111 @@ g.V().has('airport','region','US-VA').aggregate('x').by('code').
 In the prior example, we gather the airport codes in "x" and then traverse 'out' 
 along route edges and fold 5 of them to a list which we then 'merge' to "x" providing
 a single list output of both lists without duplicates.
+
+In many Gremlin examples we've seen so far, the 'select' step has been used to 
+reference traverser data at a particular step label or, in the example just prior, to
+get data designated as a side-effect. The 'select' step is also capable of accessing
+'Map' data and can do so in multiple ways. You can use it to get all the 'keys' or 
+'values' of a 'Map' with the 'Columns' enum:
+
+[source,groovy]
+----
+g.V().has('airport','region','US-VA').valueMap('code','country').select(keys)
+
+[country,code]
+[country,code]
+[country,code]
+[country,code]
+[country,code]
+[country,code]
+[country,code]
+[country,code]
+
+g.V().has('airport','region','US-VA').valueMap('code','country').select(values)
+
+[[US],[SHD]]
+[[US],[ORF]]
+[[US],[RIC]]
+[[US],[IAD]]
+[[US],[ROA]]
+[[US],[CHO]]
+[[US],[PHF]]
+[[US],[LYH]]
+----
+
+You can also use it to select individual values by their key:
+
+[source,groovy]
+----
+g.V().has('airport','region','US-VA').valueMap('code','country').select('code')
+
+[SHD]
+[ORF]
+[RIC]
+[IAD]
+[ROA]
+[CHO]
+[PHF]
+[LYH]
+----
+
+The 'select' step supports more complex use cases as well. Let's envision a case 
+where you had some external data that you wanted to integrate into your traversal
+results. For example, here's a 'Map' of average temperature data keyed by a city
+name.
+
+[source,groovy]
+----
+temps = [Atlanta:66.2,Austin:70.9,Anchorage:42.6,Seattle:54.1]
+
+Atlanta=66.2
+Austin=70.9
+Anchorage=42.6
+Seattle=54.1
+----
+
+We can include that 'Map' as a side-effect to the traversal and access it via 
+'select'. In the following example, the first select gets the 'Map' from the 
+side-effect and injects it into the traversal stream. The second 'select' gets the
+value in the Atlanta key of that 'Map'.
+
+[source,groovy]
+----
+g.withSideEffect('t',temps).V().limit(1).
+  select('t').select('Atlanta')
+  
+66.2
+----
+
+The ability to use 'select' in this fashion sets up the case for the data integration
+case we initially wanted to showcase. The following query uses 'project' to transform
+each city to a 'Map' with the city name going to the Location key and the AvgTemp
+key getting set with a combined group of 'select' steps.
+
+[source,groovy]
+----
+g.withSideEffect('t',temps).V().
+  has('city',within('Austin','Atlanta','Anchorage','Seattle')).
+  values('city').as('c').
+  project('Location','AvgTemp').
+    by().
+    by(select('t').select(select('c'))) 
+    
+[Location:Atlanta,AvgTemp:66.2]
+[Location:Anchorage,AvgTemp:42.6]
+[Location:Austin,AvgTemp:70.9]
+[Location:Seattle,AvgTemp:54.1]    
+----
+
+Let's break down that group of 'select' steps in the second 'by' modulator. We've 
+already seen what 'select("t").select("Atlanta")' does in getting the temp map and 
+grabbing the Atlanta key. When we replace Atlanta with 'select("c")', we're 
+referencing the 'values("city")' step labelled with 'as("c")' and dynamically 
+inserting its value as the key to extract from the 'Map', which ultimately allows us
+to supply that value to 'project'. In short, chaining and nesting 'select' steps in 
+this way provides a powerful pattern for dynamically pulling values from side-effect 
+maps, enabling flexible data retrieval and transformation directly within the 
+traversal.
 
 The collection steps provide important utility functions for Gremlin. They allow you
 to do helpful transformations to your data that can get your final result into the 
