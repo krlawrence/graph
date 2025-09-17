@@ -412,9 +412,9 @@ https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc#tinkerpop-370
 TinkerPop 3.8
 ^^^^^^^^^^^^^
 
-TinkerPop 3.8.0 was released August 2025 and established a wide mix of features and
-improvements to Gremlin semantics designed to enhance language consistency. Some of 
-these changes do lead to behaviors that break from previous versions of TinkerPop, 
+TinkerPop 3.8.0 was released September 2025 and established a wide mix of features 
+and improvements to Gremlin semantics designed to enhance language consistency. Some 
+of these changes do lead to behaviors that break from previous versions of TinkerPop, 
 but are expected to stay consistent with TinkerPop 4.0, which should help ease the 
 migration there when 4.0 eventually releases. Here are some of the important 
 highlights to consider from this release:
@@ -442,6 +442,10 @@ unmatched, and introduces a new 'Pick.unproductive' option.
 go to 'double' instead.
 * The 'valueMap', 'propertyMap', 'groupCount', 'dedup', 'sack', 'sample', 'aggregate'
 steps can no longer take 'by' modulators beyond the number each step expects.
+* Added the new 'typeOf' predicate to make it possible to filter traverser objects
+given their data type.
+* Included the Air Routes dataset, as is used in this book, as official sample data
+in the distribution.
 
 NOTE: Full details of all the new features added in the TinkerPop 3.8.x releases can 
 be found at the following link:

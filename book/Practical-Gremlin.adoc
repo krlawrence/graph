@@ -4,7 +4,7 @@
 :title-logo-image: CoverArt.png
 :toc:
 :toclevels: 4
-:revision: v2-001-preview
+:revision: v2-002-preview
 :doctype: book
 :icons: font
 //:pdf-page-size: Letter
@@ -13,7 +13,7 @@
 
 PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 ===============================================
-Kelvin R. Lawrence <gfxman@yahoo.com>
+Kelvin R. Lawrence <gfxman@yahoo.com>; Stephen P. Mallette
 {revision}, {draftdate}
 
 
