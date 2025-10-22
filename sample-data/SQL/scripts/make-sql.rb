@@ -15,7 +15,7 @@ endx = 46
 startx = ARGV[1].to_i unless ARGV[1] == nil
 endx   = ARGV[2].to_i unless ARGV[2] == nil
 
-if File.exists?(file)
+if File.exist?(file)
   f = File.open(file,"r")
 
   f.each do |r|

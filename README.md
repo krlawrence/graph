@@ -14,10 +14,11 @@ Preview releases for the second edition are published as HTML automatically as t
 The first edition is still available. To view it in a browser (HTML format) click [here](http://kelvinlawrence.net/book/PracticalGremlin.html) or for a PDF version click [here](http://kelvinlawrence.net/book/PracticalGremlin.pdf). These versions are not typically updated anymore. You will find other formats including MOBI, EPUB and XML (Docbook) in the [releases](https://github.com/krlawrence/graph/releases)  section. The PDF version is currently the "official" version. It has a better table of contents, page numbers, and some better formatting.
 
 ### LATEST NEWS
+
+- [Oct-22-2025] Generated 1.0 of the Air Routes dataset. 
 - [Jul-17-2024] Auto-published the book via GitHub Actions as changes arrive to the 'main' branch. 
 - [Sep-23-2023] Work has started on a second edition of the book! See the note below for more details.
-- [Sep-22-2023] Added a script to the sample-data folder for producing Cypher versions of the air-routes data.  
-- [Aug-29-2022] Updated versions of the sample data and corresponding demo apps have been uploaded. 
+- [Sep-22-2023] Added a script to the sample-data folder for producing Cypher versions of the air-routes data.
 
 ### Work has begun on the second edition!
 
@@ -90,7 +91,7 @@ may be added and the layout further refined.
   It's time to start writing Gremlin queries. We
   briefly explore how we could have built the 'air-routes' graph using a
   relational database, and then look at how SQL and Gremlin are both similar in some
-  way,s and very different in others. We then introduce several of the key Gremlin
+  ways, and very different in others. We then introduce several of the key Gremlin
   query language '"steps"'. We focus on exploring the graph rather than changing it
   in this chapter.
 
@@ -135,10 +136,11 @@ may be added and the layout further refined.
                                                            
 ---
 
-**NEWS ARCHIVE**  
-- [May-04-2022] The latest preview draft of revision 283 (TP 3.5.1) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
-- [Jun-28-2020] I have started creating a series of [issues](https://github.com/krlawrence/graph/issues) to capture changes and updates I hope to make soon. The issues contain some interesting examples of both new Gremlin features and some additional queries, some of which are quite advanced, that I intend to add to the manuscript as time allows. The issues have been sorted into a Kanban board which can be found in the Projects area. 
-- [Oct-26-2019] Revision 282 (TP 3.4.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
+**NEWS ARCHIVE**
+[Aug-29-2022] Updated versions of the sample data and corresponding demo apps have been uploaded.
+[May-04-2022] The latest preview draft of revision 283 (TP 3.5.1) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
+[Jun-28-2020] I have started creating a series of [issues](https://github.com/krlawrence/graph/issues) to capture changes and updates I hope to make soon. The issues contain some interesting examples of both new Gremlin features and some additional queries, some of which are quite advanced, that I intend to add to the manuscript as time allows. The issues have been sorted into a Kanban board which can be found in the Projects area. 
+[Oct-26-2019] Revision 282 (TP 3.4.4) was just published in all formats. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
 [Aug-31-2021] Updated versions of the sample data and corresponding demo apps have been uploaded.  
 [Aug-02-2021] The latest preview draft of revision 283 (TP 3.5.1) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.    
 [Jul-31-2021] Updated versions of the sample data and corresponding demo apps have been uploaded.  

@@ -2,7 +2,7 @@
 # make-readme.sh
 #
 # This script will produce a README text file that has information in it about the
-# airports and routes contained in the graph.  If running on a Mac speficy 'mac' as the
+# airports and routes contained in the graph.  If running on a Mac specify 'mac' as the
 # first (and only) command line option. This script is used whenever the air-route data is
 # updated in the sample-data folder to produce a new 'README-air-routes-latest.txt' file.
 # I usually remove sections 3 and 4 when doing that to keep the file size down.
@@ -12,7 +12,7 @@
 mrg='ruby ../mrg/mrg.rb'
 fn='README-temp.txt'
 
-# Airport and route counts from the original book version so we can calculte the deltas.
+# Airport and route counts from the original book version so we can calculate the deltas.
 orga=3374 
 orgr=43400
 

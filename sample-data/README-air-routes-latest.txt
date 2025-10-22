@@ -1,6 +1,6 @@
 Information about the Air Routes graph.  
 
-Timestamp: Mon Aug 29 14:10:48 UTC 2022
+Timestamp: Wed, 22 Oct 2025 09:56:44 -0400
 
 This file contains the following sections
   1. Introduction
@@ -62,7 +62,7 @@ Kelvin R. Lawrence
 
 2. SOME STATISTICS ABOUT THE GRAPH
 
-Air Routes Graph (v0.89, 2022-Aug-29) contains:
+Air Routes Graph (v1.0, 2025-Oct-22) contains:
   3,504 airports
   50,637 routes
   237 countries (and dependent areas)
@@ -128,8 +128,8 @@ Here are the top 50 airports with the most routes
     27	  11   IAH  (398)  out:199 in:199
     28	  16   MIA  (392)  out:196 in:196
     29	  47   YYZ  (390)  out:195 in:195
-    30	 177   CPH  (388)  out:194 in:194
-    31	  79   BRU  (388)  out:194 in:194
+    30	  79   BRU  (388)  out:194 in:194
+    31	 177   CPH  (388)  out:194 in:194
     32	 106   DOH  (374)  out:187 in:187
     33	  60   DUB  (370)  out:185 in:185
     34	 178   CLT  (368)  out:184 in:184

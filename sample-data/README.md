@@ -4,7 +4,7 @@ This folder contains several files of sample data in various formats including t
 ## About the data referenced in the book
 
 Two versions (sizes) of the air-routes data set files are provided. The file `air-routes.graphml` contains the full graph containing over 40,000 routes and over 3,300 airports. The file `air-routes-small.graphml` just has routes between 46 airports all located in the US.
-All of the examples in the book are based on `air-routes.graphml`. These are the versions used by examples in the book. This way, even as the data is updated (see "Latest data" below), the examples in the book can always be verified against these original versions.
+All the examples in the book are based on `air-routes.graphml`. These are the versions used by examples in the book. This way, even as the data is updated (see "Latest data" below), the examples in the book can always be verified against these original versions.
 
 The small script called *'load-air-routes-graph.groovy'* can be used to load the graph into a TinkerGraph from within the Gremlin Console. Edit the script before using it to adjust the location of where you put the GraphML file on your system.
 
@@ -24,7 +24,7 @@ This folder also contains two CSV files to go along withe the GraphML files. The
 
 It is also possible to turn the CSV files into batches of Gremlin `addV` and `addE` commands using the [csv-gremlin tool](https://github.com/awslabs/amazon-neptune-tools/blob/master/csv-gremlin/README.md). This provides yet another way that the `air-routes` data set can be loaded into a TinkerPop compatible graph store.
 
-To allow for some interesting comparisons in diferent ways of modeling the data, this folder also contains sub-folders containing RDF and SQL versions of the `air-routes` dataset.
+To allow for some interesting comparisons in different ways of modeling the data, this folder also contains sub-folders containing RDF and SQL versions of the `air-routes` dataset.
 The RDF data was created using the Ruby script that can be found in the `sample-data/RDF` folder. You may also be interested in the [AWS CSV2RDF](https://github.com/aws/amazon-neptune-csv-to-rdf-converter) tool which can turn CSV files into NQuad format RDF files.
 
 Please check back periodically to find any additional updates.

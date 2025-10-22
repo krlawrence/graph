@@ -10,7 +10,7 @@
 file = ARGV[0]
  
  
-if File.exists?(file)
+if File.exist?(file)
   f = File.open(file,"r")
  
   f.each do |r|

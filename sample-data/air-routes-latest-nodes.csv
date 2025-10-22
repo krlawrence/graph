@@ -1,5 +1,5 @@
 ~id,~label,type:string,code:string,icao:string,desc:string,region:string,runways:int,longest:int,elev:int,country:string,city:string,lat:double,lon:double,author:string,date:string
-0,version,version,0.89,,Air Routes Data - Version: 0.89 Generated: 2022-08-29 14:10:18 UTC; Graph created by Kelvin R. Lawrence; Please let me know of any errors you find in the graph or routes that should be added.,,,,,,,,,Kelvin R. Lawrence,2022-08-29 14:10:18 UTC
+0,version,version,1.0,,Air Routes Data - Version: 1.0 Generated: 2025-10-22 13:56:29 UTC; Graph created by Kelvin R. Lawrence; Please let me know of any errors you find in the graph or routes that should be added.,,,,,,,,,Kelvin R. Lawrence,2025-10-22 13:56:29 UTC
 1,airport,airport,ATL,KATL,Hartsfield - Jackson Atlanta International Airport,US-GA,5,12390,1026,US,Atlanta,33.6366996765137,-84.4281005859375,,
 2,airport,airport,ANC,PANC,Anchorage Ted Stevens,US-AK,3,12400,151,US,Anchorage,61.1744003295898,-149.996002197266,,
 3,airport,airport,AUS,KAUS,Austin Bergstrom International Airport,US-TX,2,12250,542,US,Austin,30.1944999694824,-97.6698989868164,,
