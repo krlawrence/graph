@@ -5489,7 +5489,7 @@ that shows how to perform the query shown above in a Java program.
 There are several things about this query that are interesting. Firstly because we
 are comparing the results of two 'values' steps we do not provide a parameter to the
 'by' step as we do not need to provide a property key. Secondly, we use a second
-'V' step in the query to find all the airports that have the same airport code as
+'V' step in the query to find all the airports that have the same region code as
 Nice. Note that this also means that Nice is included in the results. Lastly we wrap
 the part of the query that prepares the output in a form we want in a 'local' step so
 that a separate list is created for each airport.
