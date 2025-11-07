@@ -2552,8 +2552,7 @@ g = TinkerGraph.open().traversal()
 While you can take this approach, it does preclude you from having reference to the
 'Graph' object. While this is typically not a problem for TinkerGraph, it can be
 an issue for other TinkerPop-enabled graphs that might require that reference to
-release resources or access provider specific APIs. You will find this the case later
-in this book when you read the "<<janusmgmt>>" section.
+release resources or access provider specific APIs.
 
 Another tempting shorthand is to skip the creation of "g" like
 
@@ -4370,9 +4369,8 @@ from that list.
 
 It is likely that this apparent lack of randomness is more specific to TinkerGraph
 and the fact that it will respect user provided ID values whereas other graph systems
-will probably store vertices in a more random order to begin with. Indeed when we ran
-these queries on JanusGraph the 'sample' step did yield a better selection of
-airports from across the graph.
+will probably store vertices in a more random order to begin with and therefore yield
+a better selection of airports from across the graph.
 
 If the airport IDs were not all known to be in a sequential order one after the
 other, we could create a list of all the airport IDs and then select one at random by

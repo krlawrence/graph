@@ -1879,10 +1879,9 @@ NOTE: The version of 'addV' that allowed you to specify something like
 
 By creating the 'code' property in this way, its cardinality type is now effectively
 'LIST' rather than 'SINGLE'. While working with TinkerGraph we do not need to setup
-explicit schemas for our property types. However, once we start working with a more
-sophisticated graph system such as JanusGraph, that is something that we will both
-want and need to be able to do. We cover the topic of cardinality in detail in the
-"<<janusmgmt>>" section later in the book.
+explicit schemas for our property types. However, more sophisticated graph systems 
+such as JanusGraph, will require you to do make some decisions in this area. Those 
+discussions are beyond the scope of this book however.
 
 Now that we have created the 'code' property to have a list of values we can query
 either one of the values in the list. If we look at the value map we get back from
@@ -2561,9 +2560,10 @@ path[continent, contains, airport]=3374
 path[airport, route, airport]=43400
 ----
 
-Later, in the "<<janusmgmt>>" section, we will look at how JanusGraph allows us to
+Various graph databases may provide their own APIs for accessing the schema of a 
+graph that don't involve surveying the graph. For example, JanusGraph allows us to
 define an explicit schema and also to query the schema using its Graph Management
-API.
+API and Amazon Neptune provides a Graph Summary API that can yield these details.
 
 [[collrev]]
 Collections revisited
@@ -4532,12 +4532,10 @@ but if at all possible using just Gremlin steps is still the recommended path to
 take. Lambda functions in general are discouraged.
 
 Gremlin currently does not have any regular expression support built in to the
-language. However, as we will explore later in the "<<janpred>>" section, JanusGraph
-does provide some support. When working with a graph, such as TinkerGraph, that has
-no built in regular expression support you can use a 'filter' step combined with a
-Lambda as shown in the following two examples. The examples take advantage of methods
-provided by the Java String class. Support for additional text search predicates is
-likely to appear in future Apache TinkerPop releases.
+language. You can use a 'filter' step combined with a Lambda as shown in the 
+following two examples. The examples take advantage of methods  by the Java String
+class. Support for additional text search predicates is likely to appear in future 
+Apache TinkerPop releases.
 
 [source,groovy]
 ----
@@ -6301,10 +6299,6 @@ clockWithResult(100) {g.E().has('dist',gt(1000)).count().next()}
 11.980037119999999
 16430
 ----
-
-Later on we will take a look at using an index with JanusGraph and look at external
-indexing technologies such as Apache Solr and Elasticsearch that do support
-more complex types of comparison predicates.
 
 [[graphvars]]
 Using graph variables to associate metadata with TinkerGraph

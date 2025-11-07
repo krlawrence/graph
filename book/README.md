@@ -85,24 +85,19 @@ may be added and the layout further refined.
 - The next step in our journey is to move beyond the Gremlin console and take a look
   at interacting with a TinkerGraph using Java and Groovy applications.
 
-**Chapter 7 - INTRODUCING JANUSGRAPH**
-- As we continue the journey beyond the Gremlin Console, we now also move beyond
-  TinkerGraph. This chapter introduces JanusGraph and includes a discussion of
-  defining schema, managing transactions, and different storage and indexing options.
-
-**Chapter 8 - INTRODUCING GREMLIN SERVER**
+**Chapter 7 - INTRODUCING GREMLIN SERVER**
 - Our journey so far has focussed on working with graphs in a "directly attached"
   fashion. We now introduce Gremlin Server as a way to deploy and interact with
   remotely hosted graphs.
 
-**Chapter 9 - COMMON GRAPH SERIALIZATION FORMATS**
+**Chapter 8 - COMMON GRAPH SERIALIZATION FORMATS**
 - Having introduced Gremlin Server we take a look at some common Graph serialization
   file formats along with coverage of how to use them in the context of TinkerPop
   enabled graphs. We take a close look at the TinkerPop GraphSON (JSON) format which
   is  used extensively when using Gremlin queries in conjunction with a Gremlin
   Server.
 
-**Chapter 10 - FURTHER READING**
+**Chapter 9 - FURTHER READING**
 - Our journey to explore Apache TinkerPop and Gremlin concludes with a look at
   useful sources of further reading. We present l links to useful web sites where you
   can find tools and documentation for many of the topics and technologies covered in

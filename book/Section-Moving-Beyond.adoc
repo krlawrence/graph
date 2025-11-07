@@ -158,9 +158,7 @@ here, simple use of the 'classpath' will suffice.
 
 The following lines of Bash shell script will setup what you need to both build and
 run our small test program. Note that the 'GREMLIN' variable should be set to point
-to the root directory of wherever your TinkerPop JAR files are. Later when we start
-using JanusGraph you will see that rather than TinkerGraph we will need to adjust
-these settings to point to the JanusGraph JAR files.
+to the root directory of wherever your TinkerPop JAR files are. 
 
 ----
 # Root directory for Gremlin Console install

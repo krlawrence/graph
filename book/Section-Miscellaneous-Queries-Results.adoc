@@ -2719,9 +2719,10 @@ g.V().hasLabel('airport').has('lat',between(-0.1,0.1)).valueMap('code','lat')
 ----
 
 The code below will find all the airports in the geographic area defined by a one
-degree box around London Heathrow. This type of thing can be done using the Geo shape
-classes provided by JanusGraph but given we are not at that part of the book yet
-this is the next best way!
+degree box around London Heathrow. Various graph database may offer functionality to
+better support this type of query. It's important to be familiar with all of the 
+underlying features of your graph database in addition to what TinkerPop offers 
+generally so that you can make the best design choice.
 
 [source,groovy]
 ----
@@ -3118,9 +3119,6 @@ g.withSideEffect("rdeg", 0.017453293).
 
 5108.80166113392
 ----
-
-We will revisit the topic of performing geospatial queries in the "<<janusgeo>>"
-section where some additional capabilities that JanusGraph offers are discussed.
 
 
 [[via]]

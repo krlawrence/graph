@@ -48,13 +48,11 @@ http://tinkerpop.apache.org/docs/current/tutorials/
 
 The tutorials include the following
 
-Getting started::
+Getting Started::
 * http://tinkerpop.apache.org/docs/current/tutorials/getting-started/
-Gremlin language variants::
-* http://tinkerpop.apache.org/docs/current/tutorials/gremlin-language-variants/
-Gremlin's anatomy::
+Gremlin's Anatomy::
 * http://tinkerpop.apache.org/docs/current/tutorials/gremlins-anatomy/
-The Gremlin console::
+The Gremlin Console::
 * http://tinkerpop.apache.org/docs/current/tutorials/the-gremlin-console/
 
 
@@ -72,20 +70,5 @@ https://lists.apache.org/
 .Stack Overflow posts tagged with "gremlin"
 https://stackoverflow.com/questions/tagged/gremlin
 
-[[janusgraphlinks]]
-JanusGraph links
-~~~~~~~~~~~~~~~~
-.JanusGraph home page
-http://janusgraph.org/
-
-.JanusGraph overview documentation
-http://docs.janusgraph.org/latest/
-
-.JanusGraph API documentation
-http://docs.janusgraph.org/latest/javadoc.html
-
-.Public mailing list for JanusGraph users
-https://groups.google.com/forum/#!forum/janusgraph-users
-
-.Stack Overflow posts tagged with "janusgraph"
-https://stackoverflow.com/questions/tagged/janusgraph
+.Apache Tinkerpop Discord Server
+https://discord.gg/tinkerpop
