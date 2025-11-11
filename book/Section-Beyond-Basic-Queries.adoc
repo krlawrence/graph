@@ -130,7 +130,8 @@ You will find an example of 'not' being used with the '"__."' prefix in the
 
 
 [[dmodel]]
-Thinking about your data model
+=== Thinking about your data model
+
 As important as it is to become good at writing effective Gremlin queries, it
 is equally important, if not more so, to put careful consideration into how
 you model your data as a graph. Ideally you want to arrange your graph so that
@@ -167,7 +168,7 @@ g.V().hasLabel('continent').has('code','AF').out().as('a').
 ----
 
 We could also have started our query by looking at each airport and looking to
-see if it is in Africa but that would involve looking at a lot more vertices. The
+see if it is in Africa, but that would involve looking at a lot more vertices. The
 point to be made here is that even if our data model is good we still need to
 always be thinking about the most efficient way to write our queries.
 
@@ -175,7 +176,7 @@ always be thinking about the most efficient way to write our queries.
 ----
 // Gives same results but not as efficient
 g.V().hasLabel('airport').as('a').in('contains').has('code','AF').
-     .select('a').out().has('country','US').as('b').select('a','b').by('code')
+      select('a').out().has('country','US').as('b').select('a','b').by('code')
 ----
 
 Now for a fairly simple graph, like 'air-routes', this discussion of efficiency is
@@ -200,7 +201,8 @@ g.V().has('country','code','PT').out("contains").values('city')
 
 g.V().has('airport','country','PT').values('city')
 ----
-The first query finds the country vertex for Portugal and then, finds all of the
+
+The first query finds the country vertex for Portugal and then finds all the
 countries connected to it. The second query looks at all airport vertices and
 looks to see if they contain 'PT' as the country property.
 
@@ -252,19 +254,19 @@ have just over 530 total edges. So in the case of the 'air-routes' graph we do n
 have to worry too much.
 
 If we were building a graph of a social network that included famous people we might
-have to worry. Consider some of the people on Twitter with millions of followers.
-Without taking some precautions, such a social network, modelled as a graph, could
+have to worry. Consider that some people on Twitter with millions of followers.
+Without taking some precautions, such a social network, modeled as a graph, could
 face issues.
 
 As you design your graph model it is worth considering that some things are perhaps
-better modelled as a vertex property than as a vertex with lots of edges needing to
+better modeled as a vertex property than as a vertex with lots of edges needing to
 connect to it. For example in the air routes graph there are country vertices and 
 each airport is connected to one of the country vertices. In the air routes graph 
-this is not a problem as even if all of the airports in the graph were in the same 
-country that would still give us fewer than 3,500 edges connected to that vertex. 
+this is not a problem as even if all the airports in the graph were in the same
+ country, that would still give us fewer than 3,500 edges connected to that vertex.
 However, imagine if we were building a graph of containing a very large number of 
 people. If we had several million people in the graph all living in same the country 
-that would be a guaranteed way to get a 'supernode' if we modelled that relationship 
+that would be a guaranteed way to get a 'supernode' if we modeled that relationship
 by connecting every person vertex to a country vertex using a 'lives in' edge. In 
 such situations, it would be far more sensible to make the country where a person 
 lives a property of their own vertex.
@@ -278,7 +280,7 @@ you.
 === Making Gremlin even Groovier
 
 As we have already discussed, the Gremlin console builds upon the Groovy console, and
-Groovy itself is coded in Java. This means that all of the classes and methods that
+Groovy itself is coded in Java. This means that all the classes and methods that
 you would expect to have available while writing Groovy or Java programs are also
 available to you as you work with the Gremlin Console. You can intermix additional
 features from Groovy and Java classes along with the features provided by the
@@ -310,7 +312,7 @@ dist(g,'AUS','MEX')
 ----
 
 This next example shows how to define a slightly longer method that prints out
-information about the degree of a vertex in a nice, human readable, form.
+information about the degree of a vertex in a nice, human-readable, form.
 
 [source,groovy]
 ----
@@ -377,11 +379,11 @@ println(a["airport"][2])
 
 Here is another example. This time we define a method that takes as input a traversal
 object and the code for an airport. It then uses those parameters to run a simple
-Gremlin query to retrieve all of the places that you can fly to from that airport.
+Gremlin query to retrieve all the places that you can fly to from that airport.
 It then uses a simple 'for' loop to print the results in a table. Note the use of
-'next' as part of the 'println'. This is needed in order to get the actual values
-that we are looking for. If we did not include the calls to 'next' we would actually
-get back the iterator object itself and not the actual values.
+'next' as part of the 'println'. This is needed to get the actual values that we are
+looking for. If we did not include the calls to 'next' we would actually get back the
+iterator object itself and not the actual values.
 
 [source,groovy]
 ----
@@ -422,7 +424,7 @@ g.V().has('airport','country','DE').fill(german)
 ----
 
 We can then use our list as you would expect. Remember that as we are running inside
-the Gremlin console we do not have to explicitly iterate through the list as you
+the Gremlin Console we do not have to explicitly iterate through the list as you
 would if you were writing a standalone Groovy application.
 
 [source,groovy]
