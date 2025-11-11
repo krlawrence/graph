@@ -4531,38 +4531,6 @@ closure to do what you want is easier than figuring out the pure Gremlin way to 
 but if at all possible using just Gremlin steps is still the recommended path to
 take. Lambda functions in general are discouraged.
 
-Gremlin currently does not have any regular expression support built in to the
-language. You can use a 'filter' step combined with a Lambda as shown in the 
-following two examples. The examples take advantage of methods  by the Java String
-class. Support for additional text search predicates is likely to appear in future 
-Apache TinkerPop releases.
-
-[source,groovy]
-----
-g.V().hasLabel('airport').
-      filter{ it.get().value('city').startsWith('Dal')}.
-      values('city')
-----
-
-When the query is run, all the airport city names matching the pattern are found.
-
-[source,groovy]
-----
-Dallas
-Dallas
-Dalaman
-Dalian
-Dalcahue
-Dalat
-Dalanzadgad
-----
-
-The next example uses a 'filter' step combined with a closure to find any airport 
-vertex that has a description containing the letter '"F"' followed by a period, as in
-'"F."'. While this makes an interesting example, there are other ways to achieve this
-result. One such way would be to used a mixed index and special text searching 
-predicates. That, however, is a topic for quite a bit later on.
-
 [source,groovy]
 ----
 g.V().hasLabel('airport').as('a').values('desc').
