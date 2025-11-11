@@ -1,7 +1,6 @@
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
 [[gq]]
-WRITING GREMLIN QUERIES
------------------------
+== WRITING GREMLIN QUERIES
 
 Now that you hopefully have the 'air-routes' graph loaded it's time to start writing
 some queries!
@@ -18,8 +17,7 @@ advanced concepts. Hopefully each set of examples presented, building upon thing
 previously discussed, will be easy to understand.
 
 [[gremlinintro]]
-Introducing Gremlin
-~~~~~~~~~~~~~~~~~~~
+=== Introducing Gremlin
 
 Gremlin is the name of the graph traversal and query language that TinkerPop provides
 for working with property graphs. Gremlin can be used with any graph store that is
@@ -29,8 +27,7 @@ for values, patterns and relationships, we can add or delete vertices and edges,
 can create sub-graphs, and lots more.
 
 [[gremlinandsql]]
-A quick look at Gremlin and SQL
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== A quick look at Gremlin and SQL
 
 While it is not required to know SQL in order to be productive with Gremlin, if you
 do have some experience with SQL you will notice many of the same keywords and
@@ -54,7 +51,6 @@ ID   CODE  ICAO  CITY             COUNTRY
 51   CDG   LFPG  Paris            FR
 52   FRA   EDDF  Frankfurt        DE
 55   SYD   YSSY  Sydney           AU
-----
 
 We could then use a SQL query to count the
 distribution of airports in each country as follows.
@@ -114,7 +110,6 @@ LHR  BOM   4479
 LHR  FRA   406
 YYZ  FRA   3938
 YYZ  LHR   3544
-----
 
 If we wanted to write a SQL query to calculate the ways of travelling from Austin
 (AUS) to Agra (AGR) with two stops, we would end up writing a query that looked
@@ -176,8 +171,7 @@ greatly speeds up the process of finding things as you would expect. We look mor
 closely at IDs in the "<<wid>>" section.
 
 [[bq]]
-Some fairly basic Gremlin queries
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Some fairly basic Gremlin queries
 
 A graph 'query' is often referred to as a 'traversal' as that is what we are in fact
 doing. We are traversing the graph from a starting point to an ending point.
@@ -290,8 +284,7 @@ class. If you'd like to jump ahead to learn more about terminal steps you can se
 more examples in the "<<var>>" section.
 
 [[values]]
-Retrieving property values from a vertex
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Retrieving property values from a vertex
 
 There are several different ways of working with vertex properties. We can add,
 delete and query properties for any vertex or edge in the graph. We will explore each
@@ -343,8 +336,7 @@ KDFW
 ----
 
 [[exist]]
-Does a specific property exist on a given vertex or edge?
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Does a specific property exist on a given vertex or edge?
 
 You can simply test to see if a property exists as well as testing for it containing
 a specific value. To do this we can just provide 'has' with the name of the property
@@ -366,8 +358,7 @@ g.V().not(has('region'))
 ----
 
 [[count]]
-Counting things
-^^^^^^^^^^^^^^^
+==== Counting things
 
 A common need when working with graphs is to be able to count how "many of something"
 there are in the graph. We will look in the next section at other ways to count
@@ -424,8 +415,7 @@ We have not yet looked at the 'outE' step used above. We will look at it very so
 however in the "<<walk>>" section.
 
 [[countgroup]]
-Counting groups of things
-^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Counting groups of things
 
 Sometimes it is useful to count how many of each type (or group) of things there are
 in the graph. This can be done using the 'group' and 'groupCount' steps. While for a
@@ -544,8 +534,7 @@ will find a lot more examples of grouping and counting things in the section cal
 "<<countmore>>".
 
 [[walk]]
-Starting to walk the graph
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Starting to walk the graph
 
 So far we have mostly just explored queries that look at properties on a vertex or
 count how many things we can find of a certain type. Where the power of a graph
@@ -589,8 +578,7 @@ connected to each other.
 Note that the steps labelled with an '*' can optionally take the name of one or more
 edge labels as a parameter. If omitted, all relevant edges will be traversed.
 
-Some simple graph traversal examples
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Some simple graph traversal examples
 
 To get us started, in this section we will look at some simple graph traversal
 examples that use some of the steps that were just introduced. The 'out' step is
@@ -677,8 +665,7 @@ g.V().has('code','LHR').out('route').has('country','US').values('code')
 ----
 
 [[pathintro]]
-What vertices and edges did I visit? - Introducing 'path'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== What vertices and edges did I visit? - Introducing 'path'
 
 A Gremlin method (often called a step) that you will see used a lot in this book is
 'path'. After you have done some graph walking using a query you can use 'path' to
@@ -833,8 +820,7 @@ g.V(3).out().limit(5).path().by(outE().count())
 ----
 
 [[pathfromto]]
-Modifying a 'path' using 'from' and 'to' modulators
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Modifying a 'path' using 'from' and 'to' modulators
 
 The 'from' and 'to' modulators for the 'path' step enables us to not return the
 entire path of a traversal but instead to be more selective.
@@ -1016,7 +1002,6 @@ later.
 
 [[edgeexist]]
 Does an edge exist between two vertices?
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 You can use the 'hasNext' step to check if an edge exists between two vertices and
 get a Boolean (true or false) value back. The first query below will return
 *true* because there is an edge (a route) between AUS and DFW. The second
@@ -1035,8 +1020,7 @@ false
 
 
 [[aselproj]]
-Using 'as', 'select' and 'project' to refer to traversal steps
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Using 'as', 'select' and 'project' to refer to traversal steps
 
 Sometimes it is useful to be able to remember a point of a traversal by giving it a
 name (label) and refer to it later on in the same query. The query below uses an
@@ -1212,8 +1196,7 @@ The prior example shows how 'project' can access the "runways" key and count the
 number of entries in the 'Map'.
 
 [[bymodulators]]
-Traits of 'by' modulators
-^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Traits of 'by' modulators
 
 We've seen enough use of the 'by' modulator now to dive deeper on their general 
 behavior. As we learned earlier, a 'by' modulator is a form of step that influences
@@ -1368,8 +1351,7 @@ With that small adjustment, vertices in the path can produce a '0' integer value
 which can be summed with the dist property value from the edges.
 
 [[multias]]
-Using multiple 'as' steps with the same label
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Using multiple 'as' steps with the same label
 
 It is actually possible using an 'as' step to give more than one part of a traversal
 the same label (name). In the example below, the label '+++'+++a+++'+++' is used
@@ -1447,8 +1429,7 @@ Keywords such as 'all', 'first' and 'last' are discussed further in the
 "<<javastatics>>" section later on in the book.
 
 [[pathselect]]
-Returning selected parts of a path
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Returning selected parts of a path
 
 Sometimes, even using the 'from' and 'to' modulating steps along with a 'path' step
 will not give you the results you are interested in. Using a 'select' step and some
@@ -1490,8 +1471,7 @@ g.V().has('code','LAX').
 ----
 
 [[exedge]]
-Examining the edge between two vertices
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Examining the edge between two vertices
 
 Sometimes, it is the edge between two vertices that we are interested in examining
 and not the vertices themselves. Typically this is because we want to look at one or
@@ -1553,8 +1533,7 @@ Throughout the remainder of the book you will find lots of examples that use ste
 such as 'outE', 'inE', 'outV' and 'inV'.
 
 [[limit]]
-Limiting the amount of data returned
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Limiting the amount of data returned
 
 It is sometimes useful, especially when dealing with large graphs, to limit
 the amount of data that is returned from a query. As shown in the examples
@@ -1634,8 +1613,7 @@ g.V().has('airport','code','AUS').
 ----
 
 [[retrrange]]
-Retrieving a range of vertices
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Retrieving a range of vertices
 
 Gremlin provides various ways to return a sequence of vertices. We have already seen
 the 'limit' and 'range' steps used in the previous section to return the first 20
@@ -1742,8 +1720,7 @@ g.V().has('region','US-TX').fold().skip(local,3)
 There are many other ways to specify a range of values using Gremlin. You will find
 several additional examples in the "<<tranges>>" section.
 
-Working with the end of a stream
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Working with the end of a stream
 
 When we want to take items from the end of the stream, we typicaly use the 'tail' 
 step. With 'tail' you specify the number of elements to take from the end of the 
@@ -1839,8 +1816,7 @@ With a solid command of the steps Gremlin offers and a clever application of the
 can accomplish a great many things. 
 
 [[dedup]]
-Removing duplicates - introducing 'dedup'
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Removing duplicates - introducing 'dedup'
 
 It is often desirable to remove duplicate values from query results. The 'dedup' step
 allows us to do this. If you are already familiar with Groovy collections, the
@@ -1923,8 +1899,7 @@ of the following sections such as the "<<setsandlists>>" section that is coming 
 soon.
 
 [[vm]]
-Using 'valueMap' to explore the properties of a vertex or edge
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Using 'valueMap' to explore the properties of a vertex or edge
 
 A call to 'valueMap' will return all of the properties of a vertex or edge as an
 array of key:value pairs. Basically what in Java terms is called a HashMap. You can
@@ -2177,8 +2152,7 @@ properties with meta properties are returned by 'valueMap' This is covered later
 part of the "<<tp34vmmetaprop>>" section.
 
 [[element-map]]
-An alternative to 'valueMap' - introducing 'elementMap'
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== An alternative to 'valueMap' - introducing 'elementMap'
 
 The 'elementMap' step is similar in many ways to the 'valueMap' step but makes
 some things a little easier. When using 'valueMap' you need to explicitly request
@@ -2270,8 +2244,7 @@ OUT={id=3, label=airport}
 ----
 
 [[var]]
-Assigning query results to a variable with a terminal step
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Assigning query results to a variable with a terminal step
 
 It is extremely useful to be able to assign the results of a query to a variable. The
 example below stores the results of the 'valueMap' call shown above into a variable
@@ -2345,8 +2318,7 @@ TIP: When using the Gremlin Console, you can check to see what variables you hav
 defined using the command ':show variables'.
 
 [[setsandlists]]
-Introducing 'toList', 'toSet', 'bulkSet' and 'fill'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Introducing 'toList', 'toSet', 'bulkSet' and 'fill'
 
 It is often useful to return the results of a query as a list or as a set. One way to
 do this is to use 'toList' or 'toSet' methods. Below you will find an example of
@@ -2488,8 +2460,7 @@ println s
 ----
 
 [[ignoringresults]]
-Ignoring query results with 'iterate'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Ignoring query results with 'iterate'
 
 There are a number of cases where the results of a query are not of interest to you.
 A common situation where this happens is when you have a graph mutation query and are
@@ -2515,8 +2486,7 @@ the graph that you are not interested in the results which could save some proce
 costs (e.g. serialization, network). 
 
 [[deepdivetraversals]]
-Deep dive on traversal terminology
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Deep dive on traversal terminology
 
 In Gremlin, we use the word "traversal" often and there is a fair bit of terminology
 associated with it. Understanding that terminology will greatly help with your
@@ -2674,8 +2644,7 @@ Now that you've learned all of this important Gremlin terminology you are well
 prepared for the more advanced topics to come.
 
 [[wid]]
-Working with IDs
-~~~~~~~~~~~~~~~~
+=== Working with IDs
 
 Every vertex, every edge and even every property in a graph has a unique ID that can
 be used to reference it individually or as part of a group. These IDs are immutable
@@ -2786,8 +2755,7 @@ section a bit later on.
 
 
 [[lab]]
-Working with labels
-~~~~~~~~~~~~~~~~~~~
+=== Working with labels
 
 It's a good idea when designing a graph to give the vertices and edges meaningful
 labels. As with IDs, labels are immutable and therefore cannot be changed once
@@ -2879,8 +2847,7 @@ g.E().hasLabel('route','contains')
 ----
 
 [[local]]
-Using the 'local' step to make sure we get the result we intended
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Using the 'local' step to make sure we get the result we intended
 
 Sometimes it is important to be able to do calculations based on the current state of
 a traversal rather than waiting until near the end. A common place where this is
@@ -3007,8 +2974,7 @@ section.
 
 
 [[st]]
-Basic statistical and numerical operations
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Basic statistical and numerical operations
 
 The following queries demonstrate concepts such as calculating the amount of a
 particular item that is present in the graph, calculating the average (mean) of a set
@@ -3103,8 +3069,7 @@ South America
 ----
 
 [[textsteps]]
-Working with text
-~~~~~~~~~~~~~~~~~
+=== Working with text
 
 Gremlin has a wide variety of steps for manipulating text. String values in Gremlin 
 often derive directly from property values, but you may encounter them by other means
@@ -3370,8 +3335,7 @@ g.V().has('airport','code',within('IAD','MIA','LAX')).
 ----
 
 [[collectionsteps]]
-Working with collections
-~~~~~~~~~~~~~~~~~~~~~~~~
+=== Working with collections
 
 Collections are containers for other values and refer to things like 'List', 'Set'
 and 'Map'. Gremlin offers a variety of steps that help construct and manipulate these
@@ -3738,8 +3702,7 @@ concisely where they often replace patterns of other Gremlin steps that do the s
 job making queries much more readable.  
 
 [[datesteps]]
-Working with dates
-~~~~~~~~~~~~~~~~~~
+=== Working with dates
 
 From birthdays to auditing values like the "createdDate", applications often call you 
 to store dates and times. There are several ways you might store dates in your graph: 
@@ -3810,8 +3773,7 @@ g.inject("2023-08-02T00:00:00Z").asDate().
 ----
 
 [[tranges]]
-Testing values and ranges of values with P
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Testing values and ranges of values with P
 
 We have already seen some ways of testing whether a value is within a certain range.
 Gremlin provides a number of different predicates that we can use to do range
@@ -4036,8 +3998,7 @@ g.V().hasId(within([1,2,3]))
 ----
 
 [[winout]]
-Refining flight routes analysis using 'not', 'neq', 'within' and 'without'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Refining flight routes analysis using 'not', 'neq', 'within' and 'without'
 
 As we saw in the previous section, it is often useful to be able to specifically
 include or exclude values from a query. We have already seen a few examples of
@@ -4218,8 +4179,7 @@ not present at all or a false where the 'eq' is not satisfied. The predicate for
 'not' on the other hand does not bother evaluating the predicate at all if the city
 property isn't present.
 
-Using 'coin' and 'sample' to sample a dataset
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Using 'coin' and 'sample' to sample a dataset
 
 In any sort of analysis work it is often useful to be able to take a sample, perhaps
 a pseudo random sample, of the data set contained within your graph. The 'coin' step
@@ -4271,8 +4231,7 @@ step instead.
 g.V().hasLabel('airport').sample(20).values('code')
 ----
 
-Using 'Math.random' to more randomly select a single vertex
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Using 'Math.random' to more randomly select a single vertex
 
 While the 'sample' step allows you to select one or more vertices at random, in our
 testing, at least when using a TinkerGraph, it tends to favor vertices with lower
@@ -4398,8 +4357,7 @@ OSR
 ----
 
 [[textpredicates]]
-Text search predicates
-~~~~~~~~~~~~~~~~~~~~~~
+=== Text search predicates
 
 Among the '"predicates"' Gremlin has available are the ones used in performing more
 focused text searches. There are three predicates that search for the existence of
@@ -4438,8 +4396,7 @@ These predicates add to the existing Gremlin predicates that we looked at in the
 "<<tranges>>" section.
 
 [[startingwith]]
-startingWith
-^^^^^^^^^^^^
+==== startingWith
 
 The text that you search for can be one or more characters. Here is a
 simple example that looks for unique city names that begin with an uppercase "X".
@@ -4520,8 +4477,7 @@ g.V().hasLabel('airport').
 ----
 
 [[endingwith]]
-endingWith
-^^^^^^^^^^
+==== endingWith
 
 The example below looks for any city names ending with that characters "zhi".
 
@@ -4535,8 +4491,7 @@ Changzhi
 ----
 
 [[containing]]
-containing
-^^^^^^^^^^
+==== containing
 
 We can also look for cities whose names contain a certain string of one or more
 characters. The example below looks for any cities with the string "gzh" in their
@@ -4563,8 +4518,7 @@ Yangzho
 ----
 
 [[regex]]
-regex
-^^^^^
+==== regex
 
 For more advanced text matching scenarios you can use regular expressions as part of
 a query. Note that the first example below could also be achieved using a Gremlin 
@@ -4591,8 +4545,7 @@ The Java regular expression syntax may be different than the one you are used to
 it is worth taking a few minutes to study the documentation at that URL.
 
 [[notStartingWith]]
-notStartingWith
-^^^^^^^^^^^^^^^
+==== notStartingWith
 
 Each of the text predicates has an inverse step. We can use the 'notStartingWith'
 predicate to look for city names that do not start with "Dal".
@@ -4619,8 +4572,7 @@ g.V().hasLabel('airport').
 ----
 
 [[notEndingWith]]
-notEndingWith
-^^^^^^^^^^^^^
+==== notEndingWith
 
 Using 'notEndingWith' we can easily find cities whose names do not end with "zhi".
 
@@ -4634,8 +4586,7 @@ g.V().hasLabel('airport').
 ----
 
 [[notContaining]]
-notContaining
-^^^^^^^^^^^^^
+==== notContaining
 
 The query below counts the number of cities that do not contain the string "berg" in
 their name.
@@ -4678,8 +4629,7 @@ Kyzyl
 ----
 
 [[notRegex]]
-notRegex
-^^^^^^^^
+==== notRegex
 
 The 'notRegex' predicate is mostly present for Gremlin language symmetry as regular 
 expressions can naturally express negations itself. 
@@ -4865,8 +4815,7 @@ above sea level. Aircraft need a lot more runway to operate safely at that altit
 ----
 
 [[sortkeyvalue]]
-Sorting by key or value
-^^^^^^^^^^^^^^^^^^^^^^^
+==== Sorting by key or value
 
 Sometimes, when the results of a query are a set of one or more key:value pairs, we
 need to sort by either the key or the value in either ascending or descending order.
@@ -4912,8 +4861,7 @@ g.V().hasLabel('airport').limit(10).
 ----
 
 [[bool]]
-Boolean operations
-~~~~~~~~~~~~~~~~~~
+=== Boolean operations
 
 Gremlin provides a set of logical operators such as 'and', 'or' and 'not' that can be
 used to form Boolean (true/false) type queries. In a lot of cases we find that 'or'
@@ -5088,8 +5036,7 @@ the next section.
 
 
 [[where]]
-Using 'where' to filter things out of a result
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Using 'where' to filter things out of a result
 
 We have already seen the 'where' step used in some of the prior examples. In this
 section we will take a slightly more focussed look at the 'where' step. The 'where'
@@ -5287,8 +5234,7 @@ of this book. In the next section we will look at some additional ways that 'whe
 can be used.
 
 [[whereby]]
-Using 'where' and 'by' to filter results
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Using 'where' and 'by' to filter results
 
 A 'where' step can be followed with a 'by' modulator. The query below starts at the
 Austin airport and finds all the airports that you can fly to from there. A 'where'
@@ -5493,8 +5439,7 @@ the part of the query that prepares the output in a form we want in a 'local' st
 that a separate list is created for each airport.
 
 [[choose]]
-Using 'choose' to write if...then...else type queries
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Using 'choose' to write if...then...else type queries
 
 The 'choose' step allows the creation of queries that are a lot like the "if then
 else" constructs found in most programming languages. If we were programming in Java
@@ -5576,8 +5521,7 @@ g.V().hasLabel('airport').
 
 
 [[chooseconstant]]
-Including a constant value - introducing 'constant'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Including a constant value - introducing 'constant'
 
 Sometimes it is very useful, as the example below demonstrates, to return constant
 rather than derived values as part of a query. This query will return the string
@@ -5657,8 +5601,7 @@ wherever needed. You will find many examples of its use throughout this book
 including in the "<<union>>" section.
 
 [[option]]
-Using 'option' to write case/switch type queries
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Using 'option' to write case/switch type queries
 
 When 'option' is combined with 'choose' the result is similar to the 'case' or
 'switch' style construct found in most programming languages. In Java for example, we
@@ -5728,8 +5671,7 @@ g.V().hasLabel('airport').
 ----
 
 [[patmatch]]
-Using 'match' to do pattern matching
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Using 'match' to do pattern matching
 
 The 'match' step allows a more declarative style of pattern based query to be
 expressed using Gremlin. 'Match' can be a bit hard to master but once you figure it
@@ -5888,8 +5830,7 @@ because the syntax of the 'match' step can be tricky to get right without a fair
 of trial and error in our experience.
 
 [[patternwhere]]
-Pattern matching using a 'where' step
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Pattern matching using a 'where' step
 
 As the Gremlin language has evolved, many queries that might seem a perfect candidate
 for a 'match' step can actually also be written using a 'where' step but still in a
@@ -5960,8 +5901,7 @@ When run the query returns the following results.
 ----
 
 [[union]]
-Using 'union' to combine query results
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Using 'union' to combine query results
 
 The 'union' step works just as you would expect from its name. It allows us to
 combine parts of a query into a single result. Just as with the boolean 'and' and
@@ -6039,8 +5979,7 @@ g.V().has('airport','code',within('DFW','IAD')).values('code').fold()
 ----
 
 [[unionidentity]]
-Introducing the 'identity' step
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Introducing the 'identity' step
 
 Gremlin has an 'identity' step that we have not seen used so far in this book. The
 'identity' step simply returns the entity that was passed in to the current step of a
@@ -6071,8 +6010,7 @@ g.V().has('airport','code','DFW').
 
 
 [[unionconstant]]
-Using 'constant' values as part of a 'union'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Using 'constant' values as part of a 'union'
 
 We have already seen the 'constant' step used in the "<<chooseconstant>>" section.
 As you might expect, you can also use 'constant' steps within a 'union' step as the
@@ -6114,8 +6052,7 @@ g.V(3).union(constant("Hello"),
 ----
 
 [[unionmore]]
-More examples of the 'union' step
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== More examples of the 'union' step
 
 The following query uses a 'sample' step to select 10 airports at random from the
 graph. For each selected airport, a 'union' step is then used to combine the 'id' of
@@ -6256,8 +6193,7 @@ Running the amended query shows us the results in perhaps a more useful form.
 
 
 [[unionthree]]
-Using 'union' to combine more complex traversal results
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Using 'union' to combine more complex traversal results
 
 So far the examples we have looked at mostly show fairly simple traversals being used
 inside of a 'union' step. This next query is a bit more interesting. We again start
@@ -6364,8 +6300,7 @@ DFW
 ----
 
 [[sideeffect]]
-Using 'sideEffect' to do things on the side
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Using 'sideEffect' to do things on the side
 
 The 'sideEffect' step allows you to do some additional processing as part of a query
 without changing what gets passed on to the next stage of the query. The example
@@ -6401,8 +6336,7 @@ Later in the book we will look at other ways that side effects can be used to
 solve more interesting problems.
 
 [[aggregate]]
-Using 'aggregate' to create a temporary collection
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Using 'aggregate' to create a temporary collection
 
 At the time of writing this book, there were 59 places you could fly to directly
 (non stop) from Austin. We can verify this fact using the following query.
@@ -6456,8 +6390,7 @@ We will take a more in depth look at the various types of collections that you c
 use as part of a Gremlin query in the "<<collrev>>" section a bit later.
 
 [[inject]]
-Using 'inject' to insert values into a query
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Using 'inject' to insert values into a query
 
 Sometimes you may want to add something additional to be returned along with the
 results of your query. This can be done using the 'inject' step. To start off, here
@@ -6501,8 +6434,7 @@ Austin Bergstrom International Airport
 ----
 
 [[injecttrick]]
-A useful trick using 'inject'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== A useful trick using 'inject'
 
 There is also a useful trick that can be achieved using 'inject'. Take a look at the
 query below.
@@ -6552,8 +6484,7 @@ hopefully the usefulness of 'inject' as a way to avoid using a 'V' when not want
 clear.
 
 [[coalesce]]
-Using 'coalesce' to see which traversal returns a result
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Using 'coalesce' to see which traversal returns a result
 
 Sometimes, when you are uncertain as to which traversal of a set you are interested
 in will return a result you can have them evaluated in order by the 'coalesce' step.
@@ -6604,8 +6535,7 @@ As we can see the results returned are still the same.
 ----
 
 [[coalconst]]
-Combining 'coalesce' with a 'constant' value
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Combining 'coalesce' with a 'constant' value
 
 The 'coalesce' step can also be very useful when combined with a 'constant' value. In
 the example below if the airport is in Texas then its description is returned. If it
@@ -6623,8 +6553,7 @@ Austin Bergstrom International Airport
 ----
 
 [[coalfail]]
-Combining 'coalesce' with 'fail' step
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Combining 'coalesce' with 'fail' step
 
 We've not looked at 'fail' step before but it is a very straightforward step. If it
 is encountered in the traversal, it will throw an exception.
@@ -6685,7 +6614,6 @@ Austin Bergstrom International Airport
 
 [[bycoal]]
 Using 'coalesce' inside of 'by'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In the "<<coalconst>>" and "<<coalfail>>" sections we saw patterns that have a clear
 applicability to 'by' modulators. Let's look at an example query that uses 
@@ -6727,8 +6655,7 @@ A bit later in the "<<coaladdv>>" section we will again use 'coalesce' to check 
 see if a vertex already exists before we try to add it.
 
 [[optional]]
-Returning one of two possible results - introducing 'optional'
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Returning one of two possible results - introducing 'optional'
 
 Sometimes it may be useful to return one of two results depending upon the outcome of
 an attempted traversal. The 'optional' step will return either the results of the
@@ -6773,8 +6700,7 @@ Dallas
 ----
 
 [[midtraversalve]]
-Using 'V' and 'E' mid-traversal
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Using 'V' and 'E' mid-traversal
 
 All of our queries so far have used the 'V' and 'E' step to help start a traversal.
 We've seen them at the start of a traversal spawned from 'g' and as a spawn of 
@@ -6846,8 +6772,7 @@ g.V().has('code','IAD').outE('route').
 ----
 
 [[otherv]]
-Other ways to explore vertices and edges using 'both', 'bothE', 'bothV' and 'otherV'
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Other ways to explore vertices and edges using 'both', 'bothE', 'bothV' and 'otherV'
 
 We have already looked at examples of how you can walk a graph and examine vertices 
 and edges using steps such as 'out', 'in', 'outE' and 'inE'. In this section we 
@@ -6996,8 +6921,7 @@ As you can see, when we use 'otherV' we do not get 'v[3]' returned as we are onl
 looking at the other vertices relative to where we started from, which was 'v[3]'.
 
 [[sp]]
-Shortest paths (between airports) - introducing 'repeat'
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Shortest paths (between airports) - introducing 'repeat'
 
 Gremlin provides a 'repeat...until' looping construct similar to those found in many
 programming languages. This gives us a nice way to perform simple shortest path type
@@ -7118,8 +7042,7 @@ adjust the behavior of a 'repeat...times' loop.
 
 
 [[emit]]
-Using 'emit' to return results during a 'repeat' loop
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Using 'emit' to return results during a 'repeat' loop
 
 Sometimes it is useful to be able to return the results of a traversal as it
 executes. The example below starts at the Santa Fe airport (SAF) and uses a 'repeat'
@@ -7340,8 +7263,7 @@ You will see more examples of 'emit' being used in the "<<btree>>" section a bit
 later.
 
 [[nestedrepeat]]
-Nested and named 'repeat' steps
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Nested and named 'repeat' steps
 
 The 'repeat' step can be nested inside another 'repeat' step as well as inside 'emit'
 and 'until' steps.
@@ -7419,8 +7341,7 @@ the other two times.
 
 
 [[depthlimit]]
-Limiting the results at each depth
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Limiting the results at each depth
 
 Sometimes, while exploring a graph using 'repeat' steps, it is desirable to limit the
 amount of results returned at any given depth of a traversal. Achieving this result 
@@ -7604,8 +7525,7 @@ understanding of how this very useful Gremlin query works.
 
 
 [[cyclicpath]]
-Haven't I been here before? - Introducing 'cyclicPath'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Haven't I been here before? - Introducing 'cyclicPath'
 
 You can use the 'cyclicPath' step to find paths through the graph that revisit a
 vertex seen earlier in the traversal. This does not necessarily mean revisiting the
@@ -7733,8 +7653,7 @@ shown below.
 ----
 
 [[pathwarn]]
-A warning that path finding can be memory and CPU intensive
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== A warning that path finding can be memory and CPU intensive
 
 Take a look at the query below. It returns the first 10 routes found that will get
 you from Papa Stour (PSV), a small airport in the Shetland Islands, to Austin (AUS).
@@ -7790,8 +7709,7 @@ the narrow end and AUS is at the other. This is also sometimes referred to as ha
 a high or low "fan out" of possible routes depending on the query direction.
 
 [[pathstepwarn]]
-A warning that the 'path' and 'as' steps can also be memory intensive
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== A warning that the 'path' and 'as' steps can also be memory intensive
 
 The Gremlin 'path' step is incredibly useful and we find ourselves using it a lot.
 However, there are some downsides to the use of 'path', especially when searching
@@ -7823,8 +7741,7 @@ circumvent the problem using different approaches to writing the query. You will
 an example of such a case in the "<<sackpredicate>>" section.
 
 [[nd]]
-Calculating vertex degree
-~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Calculating vertex degree
 
 While working with graphs, the word 'degree' is used when discussing the number of
 edges coming into a vertex (in degree), going out from a vertex (out degree) or
@@ -7953,8 +7870,7 @@ The results below were generated by running the query.
 ----
 
 [[mathstep]]
-Gremlin's scientific calculator - introducing 'math'
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Gremlin's scientific calculator - introducing 'math'
 
 As we have seen in some of the prior sections, there are some Gremlin steps such as
 'sum', 'count' and 'mean' that can be used to perform some fairly basic mathematical
@@ -8005,8 +7921,7 @@ examples provided should provide all of the basic building blocks you will need 
 incorporate mathematical operators into your own Gremlin queries.
 
 [[arithmentic]]
-Performing simple arithmetic
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Performing simple arithmetic
 
 Let's start by looking at a few basic examples. First of all the query below shows
 that we can perform mathematical operations on literal values as part of a
@@ -8098,8 +8013,7 @@ g.V(3).out().count().as('a').math('a / 2')
 ----
 
 [[mathby]]
-Using a 'by' modulator with a 'math' step
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Using a 'by' modulator with a 'math' step
 
 As with many Gremlin steps, a 'math' step can also be combined with one or more 'by'
 modulators. First of all let's write a simple query to inspect the number of runways
@@ -8151,8 +8065,7 @@ g.V().has('code','SAF').as('a').
 ----
 
 [[mathconvert]]
-Converting feet to meters
-^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Converting feet to meters
 
 
 The length of the longest runway at each airport in the graph is stored as units of
@@ -8181,8 +8094,7 @@ g.V().has('code','DFW').
 
 
 [[mathtrig]]
-Using the trigonometric functions
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Using the trigonometric functions
 
 The trigonometric operators work as you would expect. All angles need to be specified
 as radians and not degrees. You can do the conversion to radians yourself or use the
@@ -8257,8 +8169,7 @@ g.inject(Math.toRadians(45)).math('tan(_)').math('ceil(_)')
 
 
 [[mathsignum]]
-Using signum to make a choice
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Using signum to make a choice
 
 The 'signum' operator allows us to make a decision depending upon whether a numeric
 value is positive, negative or zero as shown below.
@@ -8313,8 +8224,7 @@ Here is an example of the output from running the query.
 
 
 [[stddev]]
-Calculating a standard deviation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Calculating a standard deviation
 
 We could use the new 'math' step to implement a query that calculates the standard
 deviation for the number of runways each airport in the graph has. This allows us to
@@ -8417,8 +8327,7 @@ at runways. This reflects the differing distribution of routes between major and
 minor airports.
 
 [[stddevone]]
-Calculating a standard deviation in one query
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Calculating a standard deviation in one query
 
 In the previous section the steps to calculate the standard deviation were broken up
 into three graph queries. It is possible to perform the entire task in a single
@@ -8443,8 +8352,7 @@ query we think makes sense as it does not add much additional complexity to the 
 involved.
 
 [[mathproject]]
-Using 'project' to feed values to 'math'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Using 'project' to feed values to 'math'
 
 The 'project' step can be used to create a map of key/value pairs that can in turn be
 passed to a 'math' step. First of all let's create a query that generates a simple
@@ -8480,8 +8388,7 @@ hopefully the ones we have provided give you a feel for ways that the 'math' ste
 be used to create interesting queries.
 
 [[withindex]]
-Including an index with results - introducing 'withIndex' and 'indexed'
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Including an index with results - introducing 'withIndex' and 'indexed'
 
 If for any reason you wanted an index value included as part of the results from a
 query you can use the Groovy 'withIndex' or 'indexed' methods as shown below.
@@ -8532,8 +8439,7 @@ g.V().has('region','US-OK').values('code').indexed(1)
 ----
 
 [[tp34index]]
-The 'index' step
-^^^^^^^^^^^^^^^^
+==== The 'index' step
 
 The  'index' step adds a counter value to a 'list' or 'map' object and usage only
 really makes sense in that context. As shown below, without a 'fold' step in the
@@ -8628,8 +8534,7 @@ g.V().has('code','LHR').
 
 
 [[index-reverse]]
-Using 'index' to reverse a list
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Using 'index' to reverse a list
 
 The Gremlin query language does not have a built in step or function that can be used
 to reverse the contents of a list or other collection. However, this can be achieved
@@ -8701,8 +8606,7 @@ g.V().
 ----
 
 [[sx]]
-More examples using concepts we have covered so far
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== More examples using concepts we have covered so far
 
 The examples in this section build upon the topics that we have covered so far. The
 query below finds cities that can be flown to from any airport in the Hawaiian

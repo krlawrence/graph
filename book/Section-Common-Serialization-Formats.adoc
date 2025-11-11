@@ -1,8 +1,7 @@
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
 
 [[serialize]]
-COMMON GRAPH SERIALIZATION FORMATS
-----------------------------------
+== COMMON GRAPH SERIALIZATION FORMATS
 
 There are a number of ways that graph data can be stored in a file. In this section
 we have provided a brief overview of a few of them. As you will see there are a
@@ -13,8 +12,7 @@ by Apache TinkerPop can be expressed using GraphML however. So let's take a look
 some of the more commonly used formats.
 
 [[csv]]
-Comma Separated Values (CSV)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Comma Separated Values (CSV)
 
 There are a number of ways that a graph can be stored using CSV files. There is no
 single preferred format that we are aware of. However, a common and convenient way,
@@ -22,15 +20,14 @@ especially when vertices contain lots of properties is to use two CSV files. One
 contain all of the vertex data and the other will contain all of the edge data.
 
 [[csvair]]
-Using two CSV files to represent the air-routes data
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Using two CSV files to represent the air-routes data
 If we were to store the airport data from the 'air-routes' graph in CSV format we 
 might do something like the example below. Note that to improve readability we have 
 not included every property (or indeed every airport) in this example. Notice how 
 each vertex has a unique ID assigned. This is important as when we define the edges 
 we will need the vertex IDs to build the connections.
 
-
+[source,text]
 ----
 "ID","LABEL","CODE","IATA","CITY","REGION","RUNWAYS","LONGEST","ELEV","COUNTRY"
 "1","airport","ATL","KATL","Atlanta","US-GA","5","12390","1026","US"
@@ -53,6 +50,7 @@ optional for vertices. This is equally true for the airport data. However, in ca
 where vertices and edges within the same CSV file are of different types then clearly
 for those cases it is best to always include the label for each entry.
 
+[source,text]
 ----
 "LABEL","FROM","TO","DIST"
 "route",1,3,811
@@ -79,8 +77,7 @@ TinkerPop API or the Gremlin Server REST API to insert vertices and edges into a
 graph. If you work with graph systems for a while you will probably find yourself 
 also doing similar things.
 
-Adjacency matrix format
-^^^^^^^^^^^^^^^^^^^^^^^
+==== Adjacency matrix format
 
 The examples shown above of how a CSV file can be used to store data about vertices 
 and edges presents a convenient way to do it. However, this is by no means the only 
@@ -91,6 +88,7 @@ edge. This format can be useful if your vertices and edges do not have propertie
 if the graph is small but in general is not a great way to try and represent large 
 graphs.
 
+[source,text]
 ----
 A,B,C,D,E,F,G
 A,0,1,1,0,1,0,1
@@ -102,13 +100,13 @@ F,1,1,0,1,0,0,1
 G,1,1,1,0,1,1,0
 ----
 
-Adjacency List format
-^^^^^^^^^^^^^^^^^^^^^
+==== Adjacency List format
 
 The adjacency matrix shown above could also be represented as an 'adjacency list'. In
 this case, the first column of each row represents a vertex. The remaining parts of
 each row represent all of the other vertices that this vertex is connected to.
 
+[source,text]
 ----
 A,C,D,F,G
 B,A,D,F
@@ -129,12 +127,12 @@ this format. JanusGraph in fact uses a system a lot like this when storing verte
 edge data to its persistent store.
 
 
-Edge List format
-^^^^^^^^^^^^^^^^
+==== Edge List format
 
 When using an 'edge list' format, each line represents an edge. So our simple example
 could be represented as follows. Only a few edges are shown.
 
+[source,text]
 ----
 A,C
 A,D
@@ -152,6 +150,7 @@ example we could represent routes in the 'air-routes' graph in a format similar 
 that shown below. In this case we also include the label of the edge between each of 
 the vertices. The vertices are represented by their ID value.
 
+[source,text]
 ----
 [1,route,623]
 [1,route,624]
@@ -190,7 +189,7 @@ that shows how to read a CSV file like the one above and create a graph from it.
 
 If you wanted to print the list without the containing square brackets you could take
 advantage of the Java 'forEachRemaining' method from the Iterator interface to add a
-bit of post processing to the end of the query. Once again only the first 10 results
+bit of post-processing to the end of the query. Once again only the first 10 results
 are shown.
 
 [source,groovy]
@@ -210,15 +209,13 @@ ATL,route,TRI
 ATL,route,TTN
 ----
 
-GraphML
-~~~~~~~
+=== GraphML
 
 GraphML is an XML based format designed to serialize an entire graph. This format is
 best used for interoperabiilty with other graph tools and frameworks as it has wide
 support. The format specification can be found at http://graphml.graphdrawing.org/.
 
 The following sample file illustrates what the format looks like. 
-
 
 [source,xml]
 ----
@@ -274,8 +271,7 @@ The following sample file illustrates what the format looks like.
 NOTE: You can learn more about the specifics of the format itself in TinkerPop's IO 
 Documentation https://tinkerpop.apache.org/docs/current/dev/io/#graphml
 
-GraphSON
-~~~~~~~~
+=== GraphSON
 
 As discussed in the "<<graphmlandjsonintro>>" section, there are multiple versions of
 the GraphSON format. There are currently three versions of GraphSON and each has an
@@ -308,8 +304,7 @@ g.addV('airport').property('code','AUS').as('aus').
   addE('route').from('lax').to('dfw')
 ----
 
-Adjacency list format GraphSON
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Adjacency list format GraphSON
 
 To be written
 
@@ -356,9 +351,7 @@ To be written
 {"id":197,"label":"airport","inE":{"contains":[{"id":46566,"outV":3378},{"id":49931,"outV":3608}],"route":[{"id":9524,"outV":55,"properties":{"dist":520}},{"id":9753,"outV":57,"properties":{"dist":903}},{"id":22158,"outV":231,"properties":{"dist":1036}}]},"outE":{"route":[{"id":20448,"inV":231,"properties":{"dist":1036}},{"id":20446,"inV":55,"properties":{"dist":520}},{"id":20447,"inV":57,"properties":{"dist":903}}]},"properties":{"country":[{"id":2356,"value":"AU"}],"code":[{"id":2357,"value":"MCY"}],"longest":[{"id":2358,"value":5896}],"city":[{"id":2359,"value":"Maroochydore"}],"elev":[{"id":2360,"value":15}],"icao":[{"id":2361,"value":"YBSU"}],"lon":[{"id":2362,"value":153.091003418}],"type":[{"id":2363,"value":"airport"}],"region":[{"id":2364,"value":"AU-QLD"}],"runways":[{"id":2365,"value":2}],"lat":[{"id":2366,"value":-26.6033000946}],"desc":[{"id":2367,"value":"Sunshine Coast Airport"}]}}
 ----
 
-
-Wrapped adjacency list format GraphSON
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Wrapped adjacency list format GraphSON
 
 To be written
 
@@ -498,9 +491,7 @@ To be written
 NOTE: You can learn more about the specifics of the format itself in TinkerPop's IO 
 Documentation. https://tinkerpop.apache.org/docs/current/dev/io/#graphson
 
-
-GraphBinary
-~~~~~~~~~~~
+=== GraphBinary
 
 We mention GraphBinary here mostly for informational purposes as GraphBinary is not 
 meant to be used for persisting graphs to file. It is primarily a network transport

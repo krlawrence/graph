@@ -1,8 +1,7 @@
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
 
 [[gremlinserver]]
-INTRODUCING GREMLIN SERVER
---------------------------
+== INTRODUCING GREMLIN SERVER
 
 We have now explored a few ways to setup a TinkerPop enabled graph
 store. Initially we focussed on running TinkerGraph locally. Next we looked at
@@ -44,8 +43,7 @@ evolved, it has become a lot more common to connect to a graph remotely via a Gr
 Server.
 
 [[serverconfig]]
-Configuring Gremlin Server
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Configuring Gremlin Server
 
 The Gremlin Server runtime is a separate download available from the Apache TinkerPop
 Web site. However, if you are going to be using Gremlin Server in conjunction with
@@ -119,7 +117,7 @@ want to disable the timeout feature you can do that by specifying a timeout valu
 0 (zero).
 
 .gremlin-server.yaml
-[source,groovy]
+[source,yaml]
 ----
 host: 0.0.0.0
 port: 8182
@@ -187,9 +185,9 @@ Server by typing the following command into a terminal window. The
 'gremlin-server.sh' file is located in the 'bin' directory of your Gremlin Server or
 JanusGraph installation.
 
-[source,console]
+[source,shell]
 ----
-sh> gremlin-server.sh conf/gremlin-server/gremlin-server.yaml
+$ gremlin-server.sh conf/gremlin-server/gremlin-server.yaml
 ----
 
 If all goes well you should see output from the Gremlin Server displayed. The server
@@ -206,9 +204,9 @@ command as shown below. The examples below assume that you are starting the serv
 from the place where you installed the Gremlin Server zip file.
 
 
-[source,console]
+[source,shell]
 ----
-sh> bin/gremlin-server.sh start
+$$sh>$$ bin/gremlin-server.sh start
 
 Server started 25897
 ----
@@ -218,10 +216,10 @@ for in the file `conf/gremlin-server.yaml`. If you want to override this value y
 need to provide an environment variable called 'GREMLIN_YAML' before starting the
 server as shown below.
 
-[source,console]
+[source,shell]
 ----
-sh> export GREMLIN_YAML='conf/mysettings.yaml'
-sh> bin/gremlin-server.sh start
+$ export GREMLIN_YAML='conf/mysettings.yaml'
+$ bin/gremlin-server.sh start
 
 Server started 25897
 ----
@@ -230,7 +228,7 @@ As an alternative to defining an environment variable, you can instead create a 
 called `bin/gremlin-server.conf` and put the name of your YAML file in it. An example
 is shown below.
 
-[source,console]
+[source,shell]
 ----
 GREMLIN_YAML='conf/mysettings.yaml'
 ----
@@ -238,26 +236,24 @@ GREMLIN_YAML='conf/mysettings.yaml'
 If you want to check whether or not the Gremlin Server is currently running you can
 use the 'status' keyword.
 
-[source,console]
+[source,shell]
 ----
-sh> bin/gremlin-server.sh status
+$ bin/gremlin-server.sh status
 
 Server running with PID 25897
 ----
 
 To stop the server you can use the 'stop' keyword as follows.
 
-[source,console]
+[source,shell]
 ----
-sh> bin/gremlin-server.sh stop
+$ bin/gremlin-server.sh stop
 
 Server stopped [25897]
 ----
 
-
 [[serverconsole]]
-Connecting to a Gremlin Server from the Gremlin Console
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Connecting to a Gremlin Server from the Gremlin Console
 
 It is fairly straightforward to connect to a running Gremlin Server from a Gremlin
 Console. In this case it should not matter whether you are using the Gremlin Console
@@ -289,8 +285,8 @@ the Gremlin Server is running. Also we can use the default port of 8182. By defa
 a Gremlin Server listens on port 8182. The only reason you would need to change this
 value is if you are connecting to a Gremlin Server using a different port.
 
-[source,groovy]
 .remote.yaml
+[source,yaml]
 ----
 hosts: [localhost]
 port: 8182
@@ -298,13 +294,13 @@ serializer: { className: org.apache.tinkerpop.gremlin.util.ser.GraphBinaryMessag
 ----
 
 [[remoteconn]]
-Making the remote connection
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Making the remote connection
+
 Now that we have our YAML file ready, all that we have to do to establish a
 connection between our Gremlin Console and the Gremlin Server is to issue the
 following command once the console is running.
 
-[source,console]
+[source,text]
 ----
 gremlin> :remote connect tinkerpop.server conf/remote.yaml
 ----
@@ -314,7 +310,7 @@ Given that the 'air-routes' graph is already loaded into our remote graph we can
 immediately start to issue some queries. In order to make sure the query goes to the
 remote graph, the query needs to be prefixed with '":>"'.
 
-[source,groovy]
+[source,text]
 ----
 gremlin> :> g.V().count()
 
@@ -322,8 +318,8 @@ gremlin> :> g.V().count()
 ----
 
 [[resultvar]]
-The Gremlin Console's 'result' variable
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== The Gremlin Console's 'result' variable
+
 When working within the Gremlin console, one other useful thing to be aware of is
 that the results of queries sent to a server, when the console is in '"local mode"',
 as well as being displayed are stored in a variable called 'result'. Take a look at
@@ -366,14 +362,13 @@ Oceania=287
 ----
 
 [[remotemode]]
-Working in remote mode
-^^^^^^^^^^^^^^^^^^^^^^
+==== Working in remote mode
 
 As useful as keeping the console in '"local mode"' can be, if you are going to be
 issuing a lot of queries to the remote graph, We find it more convenient to put the
 console into '"remote mode"'. This can be done as follows.
 
-[source,console]
+[source,text]
 ----
 gremlin> :remote console
 
@@ -383,7 +378,7 @@ All scripts will now be sent to Gremlin Server - [localhost/127.0.0.1:8182] - ty
 The console is now in '"remote mode"'. All queries that you enter will be sent to the
 Gremlin Server and there is no need to use the '":>"' prefix.
 
-[source,groovy]
+[source,text]
 ----
 gremlin> g.V().count()
 
@@ -395,7 +390,7 @@ little different at times from when you use the commands using the Gremlin Conso
 attached to a local TinkerGraph. This is because Gremlin Console essentially does a
 'toString()' on the output before it is shown to the user in these cases.
 
-[source,groovy]
+[source,text]
 ----
 gremlin> g.V().has('code','AUS').valueMap()
 
@@ -406,7 +401,7 @@ As an example of the slight differences in the output format, below you will fin
 results from the same query when the graph was running as a local, in memory,
 TinkerGraph.
 
-[source,groovy]
+[source,text]
 ----
 [country:[US],code:[AUS],longest:[12250],city:[Austin],elev:[542],icao:[KAUS],lon:[-97.6698989868164],type:[airport],region:[US-TX],runways:[2],lat:[30.1944999694824],desc:[Austin Bergstrom International Airport]]
 ----
@@ -417,7 +412,7 @@ that you can work with a local and remote graph at the same time. The ':remote
 console' command is therefore a toggle. Each time you use the command the console
 will switch between local mode and remote mode or vice versa.
 
-[source,console]
+[source,text]
 ----
 gremlin> :remote console
 
@@ -429,7 +424,7 @@ If you are completely done with the remote connection for this console session y
 truly close it as follows. Having done this you will need to reestablish the
 connection before the ':remote console' will work again.
 
-[source,console]
+[source,text]
 ----
 gremlin> :remote close
 
@@ -438,17 +433,16 @@ gremlin> :remote close
 ----
 
 [[servercli]]
-Connecting to a Gremlin Server from the command line
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Connecting to a Gremlin Server from the command line
 
 Now that we have a Gremlin Server up and running that supports both HTTP and Web
 Sockets connections, we can, if we wish, communicate with it using nothing more than
 a 'curl' command. The 'curl' command below uses an HTTP GET to send a query to our
 Gremlin Server.
 
-[source,console]
+[source,text]
 ----
-sh> curl "http://localhost:8182?gremlin=g.V().has('code','AUS').valueMap()"
+$ curl "http://localhost:8182?gremlin=g.V().has('code','AUS').valueMap()"
 ----
 
 In response to the HTTP GET request the server sends back the result packaged as JSON
@@ -456,7 +450,7 @@ as follows. We have formatted the output in a way that makes it easier to read. 
 was actually returned did not have any line breaks in it at all and was quite hard to
 read..
 
-[source,groovy]
+[source,javascript]
 ----
 {"requestId":"a8ad654a-a5a3-4bb9-8474-69aca3c3db1e",
  "status":{"message":"","code":200,"attributes":{}},
@@ -482,9 +476,9 @@ POST is the recommended way to send queries over HTTP to a Gremlin Server. Note 
 in this case we are sending the query packaged as JSON and that we have to escape the
 quote characters.
 
-[source,console]
+[source,shell]
 ----
-sh> curl -X POST -d "{\"gremlin\":\"g.V().has('code','AUS')\"}" \
+$ curl -X POST -d "{\"gremlin\":\"g.V().has('code','AUS')\"}" \
             "http://localhost:8182"
 ----
 
@@ -495,9 +489,7 @@ vertex and its properties. This is because the result represents a vertex this t
 rather than a map. We have again formatted the output in a way that is easier
 to read.
 
-
-//[source,json]]
-[source,groovy]
+[source,javascript]
 ----
 {"requestId":"64c757b8-27a6-4509-a54c-ea35ba517667",
  "status":{"message":"","code":200,"attributes":{}},
@@ -528,8 +520,7 @@ We have included examples of the different types of JSON result that you are lik
 to have to process in the "<<serverjson>>" section that is coming up soon.
 
 [[javagsclient]]
-Connecting to a Gremlin Server from Java using 'with'
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Connecting to a Gremlin Server from Java using 'with'
 
 While it is perfectly possible to work directly with the JSON returned from a Gremlin
 Server it is often more desirable to have the results placed directly into variables
@@ -586,7 +577,7 @@ Once the 'Cluster.Builder' instance has been setup we can use it to create our
 
 [source,groovy]
 ----
-    Cluster cluster = builder.create();
+Cluster cluster = builder.create();
 ----
 
 Lastly, we need to setup a 'GraphTraversalSource' object for the Gremlin Server
@@ -636,7 +627,7 @@ first 10 airports with a region code of 'GB-ENG' which is short for Great Britai
 When the Java application is compiled and run the output should look similar to that
 shown below.
 
-[source,groovy]
+[source,text]
 ----
 LEQ , Land's End Airport
 LGW , London Gatwick
@@ -651,8 +642,7 @@ NCL , Newcastle Airport
 ----
 
 [[rubyclient]]
-Connecting to a Gremlin Server from Ruby
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Connecting to a Gremlin Server from Ruby
 
 As far as we know, at time of writing, there is currently no formal Gremlin language
 binding support available for Ruby programmers. This is therefore a perfect use case
@@ -669,6 +659,7 @@ machine. It packages up an HTTP POST request and sends it to the Gremlin Server.
 body of the HTTP request is encoded as JSON.
 
 .gremlin-client-http.rb
+
 [source,ruby,linenums]
 ----
 # Simple example of how you can connect to a Gremlin Server and
@@ -694,8 +685,8 @@ puts "Response code from the server was #{response.code}"
 puts response.body
 ----
 
-Here is the output that was returned when we ran the program using Ruby version 2.3.1
-.
+Here is the output returned when we ran the program using Ruby version 2.3.1.
+
 As you can see the result body contains a JSON object just as when we issued requests
 using the 'curl' command earlier.
 
@@ -709,8 +700,7 @@ Response code from the server was 200
 ----
 
 [[servertinkergraph]]
-Configuring a Gremlin Server to use a TinkerGraph
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Configuring a Gremlin Server to use a TinkerGraph
 
 We have already seen how a Gremlin Server can be configured as a way to provide
 remote access to a JanusGraph and Cassandra deployment. Sometimes it can be useful to
@@ -729,8 +719,7 @@ NOTE: You will find the configuration files discussed in this section in the
 https://github.com/krlawrence/graph/tree/main/sample-data.
 
 [[TGConfig]]
-Creating the configuration files
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Creating the configuration files
 
 To get our remote TinkerGraph up and running, all we have to do is to configure a few
 settings files and start the Gremlin Server. The first file we need to create is the
@@ -820,8 +809,7 @@ globals << [g : traversal().with(graph)]
 ----
 
 [[TGStart]]
-Starting the Server
-^^^^^^^^^^^^^^^^^^^
+==== Starting the Server
 
 As discussed in the "<<serverconfig>>" section, you can start the Gremlin Server in 
 the foreground or in the background. For our initial test let's just start the server
@@ -833,8 +821,7 @@ $ bin/gremlin-server.sh conf/gremlin-server-air-routes.yaml
 ----
 
 [[TGTest]]
-Testing the Server
-^^^^^^^^^^^^^^^^^^
+==== Testing the Server
 
 Now that the Gremlin Server is up and running you can access it using 'localhost' as
 the host name and a port of 8182 just as we did earlier while setting up a Gremlin
@@ -892,8 +879,7 @@ In the next section we will look at ways to make the JSON returned easier to wor
 with and also add to our Ruby program to work with the JSON.
 
 [[servertweaks]]
-Tweaking queries to make the JSON returned easier to work with
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Tweaking queries to make the JSON returned easier to work with
 
 Below is a query that we have seen used earlier in this book. It finds all
 routes longer than 8,000 miles and returns the airport pairs and the distance
@@ -990,9 +976,7 @@ is a list containing  a single string with all of our routes in it.
 
 [source,groovy]
 //[source,json]
-----
 {"requestId":"63c660d0-28cf-41fc-86cf-5560a4e2fac0","status":{"message":"","code":200,"attributes":{}},"result":{"data":["[[AKL, 9025, DOH], [AKL, 8818, DXB], [LAX, 8756, SIN], [CAN, 8754, MEX], [IAH, 8591, SYD], [DFW, 8574, SYD], [ATL, 8434, JNB], [SFO, 8433, SIN], [AUH, 8372, LAX], [DXB, 8321, LAX], [JED, 8314, LAX], [DOH, 8287, LAX], [LAX, 8246, RUH], [MEL, 8197, YVR], [DXB, 8150, IAH], [AUH, 8139, SFO], [DFW, 8105, HKG], [DXB, 8085, SFO], [HKG, 8054, JFK], [AUH, 8053, DFW], [EWR, 8047, HKG], [DOH, 8030, IAH], [DFW, 8022, DXB]]"],"meta":{}}}
-----
 
 We can add a little more post processing to split up our single string into an
 array of strings where each string is a single route of the form
@@ -1102,8 +1086,7 @@ returned.
 
 
 [[serverjson]]
-More examples of the JSON returned from a Gremlin Server
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== More examples of the JSON returned from a Gremlin Server
 
 The JSON returned by the Gremlin Server depends on query that is used and more
 specifically, what that query returns. Everything that is returned in the 'data' part
@@ -1121,8 +1104,7 @@ Please note that some of the queries that follow  may not represent the best way
 achieve the specific result. We have deliberately picked queries that show different
 Gremlin steps to give you a feel for the type of JSON result each generates.
 
-No result
-^^^^^^^^^
+==== No result
 
 The following query does not return any results. The JSON reflects this in the form
 of the 'data' returned being an empty list '"[]"'.
@@ -1136,8 +1118,7 @@ g.V().has('code','AUS').out('route').has('code','SYD')
  "result":{"data":[],"meta":{}}}
 ----
 
-Integer result
-^^^^^^^^^^^^^^
+==== Integer result
 
 A simple query that just returns a single integer result will generate JSON as shown
 below. The 'result' section of the JSON will contain a 'data' section with the single
@@ -1152,8 +1133,7 @@ g.V().count()
  "result":{"data":[3624],"meta":{}}}
 ----
 
-String result
-^^^^^^^^^^^^^
+==== String result
 
 As with integer results, a query that just returns a single string  result will
 generate JSON as shown below. The 'result' section of the JSON will contain a 'data'
@@ -1168,8 +1148,7 @@ g.V().has('code','DFW').values('city')
  "result":{"data":["Dallas"],"meta":{}}}
 ----
 
-List of strings
-^^^^^^^^^^^^^^^
+==== List of strings
 
 The query below generates a 'data' array containing a list of strings representing
 airport codes.
@@ -1183,8 +1162,7 @@ g.V().has('code','SAF').out().values('code')
 "result":{"data":["PHX","DFW","LAX","DEN"],"meta":{}}}
 ----
 
-List of integers
-^^^^^^^^^^^^^^^^
+==== List of integers
 
 The query below generates a 'data' array containing a list of integers representing
 runway counts. Note that in reality you would not use a 'sack' for this, a simple
@@ -1200,8 +1178,7 @@ g.withSack(0).V().has('code','SAF').out().sack(sum).by('runways').sack()
  "result":{"data":[3,7,4,6],"meta":{}}}
 ----
 
-List of mixed types
-^^^^^^^^^^^^^^^^^^^
+==== List of mixed types
 
 It is common for a query result to contain a variety of different data types. The
 example below generates a list containing a string, and integer and a double. Note,
@@ -1217,8 +1194,7 @@ g.V().has('code','LGW').values('city','lat','runways')
  "result":{"data":["London",2,51.1481018066406],"meta":{}}}
 ----
 
-Value map
-^^^^^^^^^
+==== Value map
 
 As you might expect, when a 'valueMap' is used to generate the result from a query,
 the JSON generated also contains a map. Note how each property value is encoded in a
@@ -1246,8 +1222,7 @@ g.V().has('code','CDG').valueMap()
 ----
 
 
-Single vertex
-^^^^^^^^^^^^^
+==== Single vertex
 
 When your query returns a vertex, unlike in the Gremlin Console where you would get
 back something like "'v[51]'" when talking to the Gremlin Server what you get back is
@@ -1283,8 +1258,7 @@ g.V().has('code','CDG')
     "meta":{}}}
 ----
 
-Selected vertex information
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Selected vertex information
 
 One way to limit the amount of JSON we get back is shown below. Let's assume for a
 selection of airport vertices, all we are interested in is the ID, airport code and
@@ -1303,8 +1277,7 @@ g.V().hasLabel('airport').sample(3).
                   163880,"CAK","Akron"],"meta":{}}}
 ----
 
-Single edge
-^^^^^^^^^^^
+==== Single edge
 
 Just as when we queried a single vertex, when we query a single edge, we get back a
 lot of information including its label and ID and information about the vertices the
@@ -1326,8 +1299,7 @@ g.V().has('code','SAF').outE().limit(1)
                  "properties":{"dist":369}}],"meta":{}}}
 ----
 
-New vertex
-^^^^^^^^^^
+==== New vertex
 
 When a new vertex and some properties are added the returned JSON will contain all of
 the information about the vertex including its ID, label and type as well as its
@@ -1346,8 +1318,7 @@ g.addV('test').property('fruit','apple')
                           "value":"apple"}]}}],"meta":{}}}
 ----
 
-New vertex only returning the ID
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== New vertex only returning the ID
 
 When adding a new vertex, if you are not really interested in getting back the entire
 new vertex and its properties, you can write the query to only return the ID of the
@@ -1362,8 +1333,7 @@ g.addV('test').as('a').property('fruit','apple').select('a').id()
  "result":{"data":[8344],"meta":{}}}
 ----
 
-Path by value (list of strings)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Path by value (list of strings)
 
 The query below returns a path between two airports as a list of airport codes.
 Note the new 'objects' key that is used when the returned JSON represents a path.
@@ -1378,8 +1348,7 @@ g.V().has('code','SAF').out().path().by('code').limit(1)
                    "objects":["SAF","PHX"]}],"meta":{}}}
 ----
 
-Path by values (list of strings and integers)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Path by values (list of strings and integers)
 
 Similar to the previous query but this time the path also includes the distance
 between the airports.
@@ -1395,8 +1364,7 @@ g.V().has('code','SAF').outE().inV().path().by('code').by('dist').limit(1)
                       "objects":["SAF",369,"PHX"]}],"meta":{}}}
 ----
 
-Two vertex path
-^^^^^^^^^^^^^^^
+==== Two vertex path
 
 The query below returns a path but does not include a 'by' modulator so what is
 returned is the two vertices along with their IDs, labels and properties.
@@ -1447,8 +1415,7 @@ g.V().has('code','SAF').out().path().limit(1)
 ----
 
 
-Path with two vertices and an edge
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Path with two vertices and an edge
 
 The following query is similar to the previous one but also includes an edge. You can
 hopefully see here how the JSON can rapidly get large if we are not more specific in
@@ -1504,8 +1471,7 @@ g.V().has('code','SAF').outE().inV().path().limit(1)
       "meta":{}}}
 ----
 
-Selection map
-^^^^^^^^^^^^^
+==== Selection map
 
 If a query ends with a 'select' step that references labels defined earlier in the
 query, what is returned is a map where the labels are the keys and the values are the
@@ -1521,8 +1487,7 @@ g.V().has('code','SAF').as('a').out().has('code','DFW').as('b').
  "result":{"data":[{"a":"SAF","b":"DFW"}],"meta":{}}}
 ----
 
-Projected map
-^^^^^^^^^^^^^
+==== Projected map
 
 The 'project' step also generates a map just as the 'select' step did in the previous
 example.
@@ -1537,8 +1502,7 @@ g.V().has('code','LGW').project('a','b').by('code').by(out().count())
  "result":{"data":[{"a":"LGW","b":204}],"meta":{}}}
 ----
 
-Strings and a map
-^^^^^^^^^^^^^^^^^
+==== Strings and a map
 
 The following path query returns a list containing two strings representing airport
 codes and the full JSON object representing an edge.
@@ -1562,8 +1526,7 @@ g.V().has('code','SAF').outE().inV().limit(1).path().by('code').by()
                       "PHX"]}],"meta":{}}}
 ----
 
-Nested lists
-^^^^^^^^^^^^
+==== Nested lists
 
 When using the console or issuing Gremlin commands via the TinkerPop API from an
 application program, ending a query with a 'fold' step can be a nice way to put all

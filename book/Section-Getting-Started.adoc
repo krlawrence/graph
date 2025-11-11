@@ -1,8 +1,7 @@
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
 
 [[gs]]
-GETTING STARTED
----------------
+== GETTING STARTED
 
 Let's take a look at what you will need to have installed and what tools you will
 need available to make best use of the examples contained in this tutorial. The key
@@ -12,8 +11,7 @@ download and how to set it up.
 
 
 [[tpintro]]
-What is Apache TinkerPop?
-~~~~~~~~~~~~~~~~~~~~~~~~~
+=== What is Apache TinkerPop?
 
 Apache TinkerPop is a graph computing framework and top level project hosted by the
 Apache Software Foundation. The homepage for the project is located at this URL:
@@ -72,8 +70,7 @@ performed using the TinkerGraph in memory graph and the Gremlin console, as well
 other TinkerPop enabled graph stores.
 
 [[gconsole]]
-The Gremlin Console
-~~~~~~~~~~~~~~~~~~~
+=== The Gremlin Console
 
 The Gremlin Console is a fairly standard REPL (Read Eval Print Loop) shell. It is
 based on the Groovy console and if you have used any of the other console
@@ -91,8 +88,7 @@ Regardless of the environment you use, if you work with Apache TinkerPop enabled
 graphs, the Gremlin console should always be installed on your machine!
 
 [[gremlininstall]]
-Downloading, installing and launching the console
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Downloading, installing and launching the console
 
 You can download the Gremlin console from the official Apache TinkerPop website at 
 http://tinkerpop.apache.org/
@@ -122,7 +118,6 @@ plugin activated: tinkerpop.server
 plugin activated: tinkerpop.utilities
 plugin activated: tinkerpop.tinkergraph
 gremlin>
-----
 
 You can get a list of the available commands by typing ':help'. Note that all
 commands to the console itself are prefixed by a colon '":"'. This enables the
@@ -213,7 +208,6 @@ terminal window as follows:
 
 ----
 $ ./gremlin.sh -e mycode.groovy
-----
 
 If you wanted to have the console run your script and not exit afterwards, you can
 use the '-i' option instead of '-e'.
@@ -262,8 +256,7 @@ Reading through that section will help familiarize you with the classes you need
 import to your application code.
 
 [[gremlinsave]]
-Saving output from the console to a file
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Saving output from the console to a file
 
 Sometimes it is useful to save part or all of a console session to a file. You can
 turn recording to a file on and off using the ':record' command.
@@ -308,8 +301,7 @@ TinkerPop documentation and, even better, have a play with the console and the b
 in help.
 
 [[consolepreferences]]
-Setting up console preferences
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Setting up console preferences
 
 There are a number of preferences that can be established within the console to make 
 it more suitable for your needs. The ':set' command is used to establish various 
@@ -343,8 +335,7 @@ TIP: The full list of available preferences can be found in the Apache TinkerPop
 reference documentation https://tinkerpop.apache.org/docs/current/reference/#console-preferences
 
 [[tgintro]]
-Introducing TinkerGraph
-~~~~~~~~~~~~~~~~~~~~~~~
+=== Introducing TinkerGraph
 
 As well as the Gremlin Console, the TinkerPop download includes an implementation
 of an in-memory graph store called TinkerGraph. This book was mostly developed
@@ -473,8 +464,7 @@ NOTE: Throughout the remainder of this book the variable name 'g' will be used f
 any object that represents an instance of a graph traversal source object.
 
 [[air]]
-Introducing the air-routes graph
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Introducing the air-routes graph
 
 Along with this book we have provided what is, in big data terms, a very small, but
 nonetheless real-world graph that is stored in GraphML, a standard XML format for
@@ -646,8 +636,7 @@ NOTE: The source code in this section comes from the 'graph-stats.groovy' sample
 located in: https://github.com/krlawrence/graph/tree/main/sample-code/groovy.
 
 [[airrouteupdates]]
-Updated versions of the air-route data
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Updated versions of the air-route data
 
 To keep things consistent, all of the examples presented in this book were produced
 using the same version of the air-routes data set. That data set was generated in
@@ -664,8 +653,7 @@ called `air-routes-latest.graphml`. There is also a README file to go along with
 updated data set called `README-air-routes-latest.txt` in the same folder.
 
 [[ld]]
-Loading the air-routes graph using the Gremlin Console
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Loading the air-routes graph using the Gremlin Console
 
 Here is some code you can load the air routes graph using the Gremlin Console by
 putting it into a file and using ':load' to load and run it or by entering each line
@@ -744,8 +732,7 @@ tinkergraph[vertices:3610 edges:49490]
 ----
 
 [[off]]
-Turning off some of the Gremlin console's output
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Turning off some of the Gremlin console's output
 
 Sometimes, especially when assigning a result to a variable and you are not
 interested in seeing all the steps that Gremlin took to get there, the Gremlin
@@ -758,8 +745,7 @@ a=g.V().has('code','AUS').out().toList();[]
 ----
 
 [[indexschema]]
-A word about indexes and schemas
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== A word about indexes and schemas
 
 Some graph implementations have strict requirements on the use of an 'index'. This
 means that a schema and an index must be in place before you can work with a graph

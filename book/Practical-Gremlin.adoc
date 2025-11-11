@@ -11,11 +11,9 @@
 :draftdate: {localdatetime}
 :tpvercheck: 4.0.0
 
-PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
-===============================================
+= PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 Kelvin R. Lawrence <gfxman@yahoo.com>; Stephen P. Mallette
 {revision}, {draftdate}
-
 
 //
 // Some notes about the Asciidoc files and processor

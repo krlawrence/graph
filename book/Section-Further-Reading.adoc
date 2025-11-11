@@ -1,8 +1,7 @@
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
 
 [[fr]]
-FURTHER READING
----------------
+== FURTHER READING
 
 Below you will find a selection of links to additional material related to the topics
 covered in this book. The links include additional web sites maintained by the Apache
@@ -11,7 +10,6 @@ are discussed daily.
 
 [[tplinks]]
 Additional Apache TinkerPop community links
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .Official Apache TinkerPop home page and Gremlin downloads
 http://tinkerpop.apache.org/
 
@@ -40,7 +38,6 @@ http://tinkerpop.apache.org/docs/current/dev/provider/
 
 [[tutorials]]
 Tutorials
-^^^^^^^^^
 There are a series of tutorials that can be found at the link below.
 
 .Apache TinkerPop Tutorials
@@ -57,8 +54,7 @@ The Gremlin Console::
 
 
 [[gremlindiscussionlists]]
-Gremlin related mailing lists and discussion groups
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Gremlin related mailing lists and discussion groups
 
 .Public mailing list for Gremlin users
 https://groups.google.com/forum/#!forum/gremlin-users

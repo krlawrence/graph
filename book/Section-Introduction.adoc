@@ -1,6 +1,5 @@
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-INTRODUCTION
-------------
+== INTRODUCTION
 
 You are reading an early preview release of _Practical Gremlin - An Apache TinkerPop
 Tutorial, Second Edition_. A lot of work remains, to add coverage of many new Gremlin
@@ -15,8 +14,7 @@ CAUTION: This book is a work in progress. Feedback is very much encouraged and
 welcomed!  Please open https://github.com/krlawrence/graph/issues[GitHub issues] as
 appropriate .
 
-Welcome to the second edition
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Welcome to the second edition
 
 Practical Gremlin was first published in 2017. In the years that followed, the Apache
 TinkerPop graph computing framework has continued to evolve.  While it was possible
@@ -55,8 +53,7 @@ versions, along with sample code and data, can be found at the
 https://github.com/krlawrence/graph[project's home on GitHub]. You will find a
 summary of everything that is available in the "<<samplesintro>>" section.
 
-How this book came to be
-~~~~~~~~~~~~~~~~~~~~~~~~
+=== How this book came to be
 
 I forget exactly when, but sometime early in 2016 I started compiling a list of
 notes, hints and tips, initially for my own benefit. My notes were full of things I
@@ -82,8 +79,7 @@ Kelvin R. Lawrence +
 First draft (first edition): October 5th, 2017 +
 Current draft (second edition): {draftdate} +
 
-Providing feedback
-~~~~~~~~~~~~~~~~~~
+=== Providing feedback
 
 Please let me know about any mistakes you find in this material, and also please feel
 free to provide feedback of any sort. Suggested improvements are especially welcome.
@@ -99,8 +95,7 @@ I am grateful to those who have already taken the time to review the manuscript 
 open issues or submit pull requests.
 
 [[thanks]]
-Some words of thanks
-~~~~~~~~~~~~~~~~~~~~
+=== Some words of thanks
 
 No open source project can succeed without dedicated contributors, and equally
 dedicated users. Apache TinkerPop continues to be not just a technology, but a
@@ -131,8 +126,7 @@ being a 'living book' we can continue to improve and evolve it just as the techn
 it is about continues to evolve. Your help and support is very much appreciated.
 
 [[about]]
-What is this book about?
-~~~~~~~~~~~~~~~~~~~~~~~~
+=== What is this book about?
 
 This book introduces the Apache TinkerPop 'Gremlin' graph query and traversal
 language via real examples featuring real-world graph data. That data along with
@@ -207,8 +201,7 @@ Chapter 9 - FURTHER READING::
   this book.
 
 [[samplesintro]]
-Introducing the book sources, sample programs and data
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Introducing the book sources, sample programs and data
 
 All work related to this project is being done in the open at GitHub. A list of where
 to find the key components is provided below. The examples in this book make use of a
@@ -270,8 +263,7 @@ on.
 - https://github.com/krlawrence/graph/blob/main/ChangeHistory.md
 
 [[tpevolution]]
-Apache TinkerPop Evolution
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Apache TinkerPop Evolution
 
 Over the last 15 years, TinkerPop, and especially Gremlin, have evolved substantially
 from their earliest versions. What we now know as Apache TinkerPop is the result of
@@ -301,8 +293,7 @@ that show other ways to perform tasks that new features may make simpler. In som
 cases, notes have been added to point out when more recent features first appeared. 
 
 [[tp34intro]]
-TinkerPop 3.4
-^^^^^^^^^^^^^
+==== TinkerPop 3.4
 
 A major update to Apache TinkerPop, version 3.4.0, was released in January 2019 and a
 number of point releases followed. 
@@ -312,8 +303,7 @@ be found at the following link:
 https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc#tinkerpop-340-avant-gremlin-construction-3-for-theremin-and-flowers
 
 [[tp35intro]]
-TinkerPop 3.5
-^^^^^^^^^^^^^
+==== TinkerPop 3.5
 
 Apache TinkerPop 3.5.0 was released in May 2021. This update introduced a number of
 improvements in areas such as Gremlin client drivers, the Gremlin Server and overall
@@ -338,8 +328,7 @@ be found at the following link:
 https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc#tinkerpop-350-the-sleeping-gremlin-no-18-entracte-symphonique
 
 [[tp36intro]]
-TinkerPop 3.6
-^^^^^^^^^^^^^
+==== TinkerPop 3.6
 
 Apache TinkerPop 3.6.0 was released in April 2022. Coming almost exactly a year after
 the initial 3.5.0 release, this is one of the most significant TinkerPop releases
@@ -373,8 +362,7 @@ be found at the following link:
 https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc#tinkerpop-360-tinkerheart
 
 [[tp37intro]]
-TinkerPop 3.7
-^^^^^^^^^^^^^
+==== TinkerPop 3.7
 
 TinkerPop 3.7.0 was released July 2023 and with the follow-on release of 3.7.1 a few
 months later, introduced a large expansion of the Gremlin language, providing long
@@ -402,8 +390,7 @@ be found at the following link:
 https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc#tinkerpop-370-gremfir-master-of-the-pan-flute
 
 [[tp38intro]]
-TinkerPop 3.8
-^^^^^^^^^^^^^
+==== TinkerPop 3.8
 
 TinkerPop 3.8.0 was released September 2025 and established a wide mix of features 
 and improvements to Gremlin semantics designed to enhance language consistency. Some 
@@ -445,15 +432,13 @@ be found at the following link:
 https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc#tinkerpop-380-not-officially-named-yet
 
 [[tp40intro]]
-TinkerPop 4.0
-^^^^^^^^^^^^^
+==== TinkerPop 4.0
 
 TinkerPop 4.0.0 has released a beta version for early evaluation of specific features
 and remains under active development. 
 
 [[whygraph]]
-So what is a graph database and why should I care?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== So what is a graph database and why should I care?
 
 This book is mainly intended to be a tutorial in working with graph databases and
 related technology using the Gremlin query language. However, it is worth spending
@@ -575,8 +560,7 @@ common use case is for the graph to be used as a form of smart index into other 
 stores. This is sometimes called having a polyglot data architecture.
 
 [[nodevert]]
-A word about terminology
-~~~~~~~~~~~~~~~~~~~~~~~~
+=== A word about terminology
 
 The words 'node' and 'vertex' are synonymous when discussing a graph. Throughout this
 book you may find both words used. However, as the Apache TinkerPop documentation

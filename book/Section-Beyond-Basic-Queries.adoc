@@ -1,7 +1,6 @@
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
 [[beq]]
-BEYOND BASIC QUERIES
---------------------
+== BEYOND BASIC QUERIES
 
 So far we have looked mostly at querying an existing graph. In the following sections
 we will look at many other topics that it is also important to be familiar with when
@@ -12,8 +11,7 @@ graph to an XML or JSON file and a lot more. Let's start off with a short discus
 of query layout, reserved words and data modelling.
 
 [[indents]]
-A word about layout and indentation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== A word about layout and indentation
 
 As you begin to write more complex Gremlin queries they can get quite lengthy. In
 order to make them easier for others to read it is recommended to spread them over
@@ -82,8 +80,7 @@ appropriately indented steps easier to read and understand.
 
 
 [[rword]]
-A warning about reserved word conflicts and collisions
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== A warning about reserved word conflicts and collisions
 
 Most of the time the issue we are about to describe will not be a problem. However,
 there are cases where names of Gremlin steps conflict with reserved words and method
@@ -134,7 +131,6 @@ You will find an example of 'not' being used with the '"__."' prefix in the
 
 [[dmodel]]
 Thinking about your data model
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 As important as it is to become good at writing effective Gremlin queries, it
 is equally important, if not more so, to put careful consideration into how
 you model your data as a graph. Ideally you want to arrange your graph so that
@@ -188,8 +184,7 @@ getting the data model right can be the difference between good and bad query
 response times. If the data model is bad you won't always be able to work
 around that deficiency simply by writing clever queries!
 
-Keeping information in two places within the same graph
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Keeping information in two places within the same graph
 
 Sometimes, to improve query efficiency we find it is actually worth having the
 data available more than one place within the same graph. An example of this
@@ -221,8 +216,7 @@ just look at the 'country' property of that vertex.
 So there is no golden rule here but it is something to think about while
 designing your data model.
 
-Using a graph as an index into other data sources
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Using a graph as an index into other data sources
 
 While on the topic of what to keep in the graph, something to resist being
 drawn into in many cases is the desire to keep absolutely everything in the
@@ -238,8 +232,7 @@ common and useful pattern when working with graphs. This model of having
 multiple data sources working together is sometimes referred to as 'Polyglot
 storage'.
 
-A few words about 'supernodes'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== A few words about 'supernodes'
 
 When a vertex in a graph has a large number of edges and is disproportionately
 connected to many of the other vertices in the graph it is likely that many, if not
@@ -282,8 +275,7 @@ graph and also be thinking about how you can prevent them becoming a big issue f
 you.
 
 [[grv]]
-Making Gremlin even Groovier
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Making Gremlin even Groovier
 
 As we have already discussed, the Gremlin console builds upon the Groovy console, and
 Groovy itself is coded in Java. This means that all of the classes and methods that
@@ -461,8 +453,7 @@ writing some standalone Groovy code that can use the TinkerPop API and issue Gre
 queries while running outside of the Gremlin Console as a standalone application.
 
 [[varaus]]
-Using a variable to feed a traversal
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Using a variable to feed a traversal
 
 Sometimes it is very useful to store the result of a query in a variable and then, 
 later on, use that variable to start a new traversal. You may have noticed we did 
@@ -552,8 +543,7 @@ Here is the output from running the code.
 
 
 [[addnodes]]
-Adding vertices, edges and properties
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Adding vertices, edges and properties
 
 So far in this book we have largely focussed on loading a graph from a file and
 running queries against it. As you start to build your own graphs you will not always
@@ -563,8 +553,7 @@ Just as likely you may start with a graph like the air routes graph, read from a
 file, but want to add vertices, edges and properties to it over time. In this section
 we will explore various ways of doing just that.
 
-Adding an airport (vertex) and a route (edge)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Adding an airport (vertex) and a route (edge)
 
 The following code creates a new airport vertex (node) and then adds a route (edge)
 from it to the existing DFW vertex. We can specify the label name ('airport') and as
@@ -640,8 +629,7 @@ You will see a bigger example that uses 'as' steps while creating vertices and e
 in the "<<testgraph>>" section that is coming up soon.
 
 [[addlabeldynamic]]
-Using a traversal to determine a new label name
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Using a traversal to determine a new label name
 
 When using the  'addV' and 'addE' steps we can  use a traversal to determine what
 the label used by a new vertex or edge should be. Take a look at the query below.
@@ -700,8 +688,7 @@ g.E(53770).valueMap(true)
 ----
 
 [[proptraversal]]
-Using a traversal to seed a property with a list
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Using a traversal to seed a property with a list
 
 You can use the results of a traversal to create or update properties. The example
 below creates a new property called 'places' for the Austin airport vertex. The
@@ -751,8 +738,7 @@ PIT
 ----
 
 [[injectid]]
-Using 'inject' to specify new vertex ID values
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Using 'inject' to specify new vertex ID values
 
 If the graph database you are using supports user provided ID values, you can use an
 'inject' step as one way to specify what you want the ID value of a new vertex to be.
@@ -820,8 +806,7 @@ Vertex with id already exists: 99999
 ----
 
 [[testgraph]]
-Quickly building a graph for testing
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Quickly building a graph for testing
 
 Sometimes for testing and for when you want to report a problem or ask for help on a
 mailing list it is handy to have a small standalone graph that you can use. The code
@@ -854,8 +839,7 @@ something like 'g.addV(label,"airport","code","AUS")' is now deprecated and shou
 not be used.
 
 [[addloop]]
-Adding vertices and edges using a loop
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Adding vertices and edges using a loop
 
 Sometimes it is more efficient to define the details of the vertices or edges that
 you plan to add to the graph in an array and then add each vertex or edge using a
@@ -889,8 +873,7 @@ vertices.each {
 ----
 
 [[addinject]]
-Adding vertices and edges using 'inject'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Adding vertices and edges using 'inject'
 
 The previous section on "<<addloop>>" used the loop semantics of programming 
 languages to add multiple vertices by iterating over an array of data. In tihs 
@@ -918,8 +901,7 @@ graph mutation in a single query, where as the former approach will execute one
 query per item in the "vertices" array. 
 
 [[addrepeat]]
-Adding vertices using 'repeat'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Adding vertices using 'repeat'
 
 The previous section on "<<addinject>>" demonstrated how to use add multiple vertices
 given an array of data using only Gremlin steps. Another approach worth knowing about
@@ -937,8 +919,7 @@ for creating vertices is often helpful when there is a need to generate some ver
 for testing.
 
 [[upsert]]
-Using 'mergeV' and 'mergeE' for upserting
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Using 'mergeV' and 'mergeE' for upserting
 
 Checking to see if a vertex or edge already exists and then either inserting that 
 element if it does not or updating the element that is found, is a common database
@@ -1087,8 +1068,7 @@ a powerful way in which to encapsulate upsert logics for vertices and edges. As 
 continue through the following sections you will find more advanced features with 
 these steps.
 
-Using 'inject' with 'mergeV'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Using 'inject' with 'mergeV'
 
 In the "<<addinject>>" section, we saw how data could be injected to a traversal 
 stream to create multiple vertices at a time with 'addV'. A similar tactic could be
@@ -1135,8 +1115,7 @@ id:82454,label:airport,country:US,code:LTA,desc:Little Tiny Airport]
 id:7,label:airport,country:US,code:DCA,elev:14,desc:Ronald Reagan Washington National Airport]  
 ----
 
-Incorporating 'fail' with 'mergeV' or 'mergeE'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Incorporating 'fail' with 'mergeV' or 'mergeE'
 
 We learned about 'fail' step in "<<coalfail>>" where it will throw an exception when it
 is encountered. You can incorporate this step into 'mergeV' and 'mergeE' to stop a
@@ -1168,8 +1147,7 @@ Metadata > {}
 Note that the output above is the string representation of a 'FailException' as 
 printed in Gremlin Console.
 
-Specifying cardinality with 'mergeV'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Specifying cardinality with 'mergeV'
 
 Most of the time, vertex properties tend to be modelled with 'single' cardinality.
 However, you may have situations where other cardinalities are used or are using a 
@@ -1205,9 +1183,7 @@ cardinality. If there is an explicit cardinality specified, it will override the
 global setting.
 
 [[coaladdv]]
-[[upsert]]
-When you need more flexibility than 'mergeV' and 'mergeE'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== When you need more flexibility than 'mergeV' and 'mergeE'
 
 The 'mergeV' and 'mergeE' steps offer a wide breath of options to encapsulate 
 upsert-like logic with varying mechanisms for matching, creating and updating. While
@@ -1341,8 +1317,7 @@ This technique is currently the recommended way of doing '"upsert"' operations w
 Gremlin.
 
 [[vertexcopy]]
-Creating one vertex based on another
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Creating one vertex based on another
 
 It is sometimes useful to be able to create a new vertex using the label and
 properties from an existing vertex. We have already looked, in the
@@ -1354,16 +1329,14 @@ section have not yet been fully covered so you may want to also take a look at s
 other sections along the way.
 
 [[deleting]]
-Deleting vertices, edges and properties
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Deleting vertices, edges and properties
 
 So far in this book we have looked at several examples where we created new
 vertices, edges and properties but we have not yet looked at how we can delete them.
 Gremlin provides the 'drop' step that we can use to remove things from a graph.
 
 
-Deleting a vertex
-^^^^^^^^^^^^^^^^^
+==== Deleting a vertex
 
 In some of our earlier examples we created a fictitious airport vertex with a code of
 'XYZ' and added it to the air routes graph. If we now wanted to delete it we could
@@ -1377,8 +1350,7 @@ g.V().has('code','XYZ').drop()
 ----
 
 [[deledge]]
-Deleting an edge
-^^^^^^^^^^^^^^^^
+==== Deleting an edge
 
 We can also use 'drop' to remove specific edges. The following code
 will remove the flights, in both directions between AUS and LHR.
@@ -1391,8 +1363,7 @@ g.V().has('code','LHR').outE().as('e').inV().has('code','AUS').select('e').drop(
 ----
 
 [[delprop]]
-Deleting a property
-^^^^^^^^^^^^^^^^^^^
+==== Deleting a property
 
 Lastly, we can use 'drop' to delete a specific property value from a specific vertex.
 Let's start by querying the properties defined by the 'air-routes' graph for the San
@@ -1467,8 +1438,7 @@ g.V().has('code','SFO').valueMap()
 [country:[US],code:[SFO],longest:[11870],newProperty:[test],city:[San Francisco],lon:[-122.375],type:[airport],elev:[13],icao:[KSFO],region:[US-CA],runways:[4],lat:[37.6189994812012]]
 ----
 
-Removing all the edges or vertices in the graph
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Removing all the edges or vertices in the graph
 
 This may not be something you want to do very often, but should you wish to remove
 every edge in the graph you could do it, using the traversal object, 'g', as follows.
@@ -1491,8 +1461,7 @@ g.V().drop()
 ----
 
 [[pkvrevisited]]
-Property keys and values revisited
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Property keys and values revisited
 
 We have already looked, earlier in the book, at numerous queries that retrieve,
 create or manipulate in some way the value of a given property. There are still
@@ -1503,8 +1472,7 @@ explain how they can in fact be used to store lists and sets of values. We will 
 introduce in this section the concept of a property ID.
 
 [[vertexprop]]
-The 'Property' and 'VertexProperty' interfaces
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== The 'Property' and 'VertexProperty' interfaces
 
 In a TinkerPop enabled graph, all properties are implementations of the 'Property'
 interface. Vertex properties implement the 'VertexProperty' interface which itself
@@ -1641,8 +1609,7 @@ g.V().hasLabel("airport").
 ----
 
 [[elementstep]]
-The 'element' traversal step
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== The 'element' traversal step
 
 When you use the 'properties' step to navigate to a property object, you may find
 that you want to return to the parent element that it is related to. The 'element'
@@ -1665,8 +1632,7 @@ In the example shown above, we can see that "v[10]" is returned twice because
 property and both belong to the "v[10]" vertex.
 
 [[propmap]]
-The 'propertyMap' traversal step
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== The 'propertyMap' traversal step
 
 We have previously used the 'valueMap' step to produce a map of key/value pairs for
 all of the properties associated with a vertex or edge. There is also a 'propertyMap'
@@ -1686,8 +1652,7 @@ Here are the properties returned.
 ----
 
 [[propid]]
-Properties have IDs too
-^^^^^^^^^^^^^^^^^^^^^^^
+==== Properties have IDs too
 
 We have seen many examples already that show how both vertices and edges have a 
 unique ID. What may not have been obvious however is that properties also have an ID. 
@@ -1852,8 +1817,7 @@ The fact that every property in a graph has an ID can improve performance of
 accessing properties, especially in large graphs.
 
 [[listprop]]
-Attaching multiple values (lists or sets) to a single property
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Attaching multiple values (lists or sets) to a single property
 
 A vertex property value can be a basic type such as a String or an Integer but it can
 also be something more sophisticated such as a Set or a List containing multiple
@@ -1931,7 +1895,6 @@ vp[code->AUS]
 
 [[propertycaution]]
 A word of caution - behavior differences with 'property'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .Be aware!
 
@@ -1977,8 +1940,7 @@ confusion more than once and it is something to be aware of! In the next section
 will ask Gremlin to explain this behavior to us!
 
 [[explainstep]]
-What did Gremlin do? - introducing 'explain'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== What did Gremlin do? - introducing 'explain'
 
 If you ever want to know how Gremlin compiles your query into a form that it is able
 to execute you can ask it to tell you by adding an 'explain' step to the end of your
@@ -2033,8 +1995,7 @@ created, you need to explicitly add the 'list' keyword as part of the 'property'
 as we shall see in the next section.
 
 [[updatelist]]
-Updating properties stored in a list
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Updating properties stored in a list
 
 So now we know how to create a vertex with property values in a list we need a way to
 update those properties. We can do this using a special form of the 'property' step
@@ -2127,8 +2088,7 @@ g.V().hasLabel('test').valueMap()
 ----
 
 [[propsets]]
-Creating properties that store sets
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Creating properties that store sets
 
 So far we have just created values in a list that have 'LIST' cardinality which means
 that duplicate values are allowed. If we wanted to prevent that from happening we can
@@ -2164,8 +2124,7 @@ g.V(3).valueMap('hw')
 ----
 
 [[setlistnote]]
-One more note about sets and lists
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== One more note about sets and lists
 
 Note that the other examples we have shown in this section are not the same as just
 adding a list directly as a property value. In the example below the entire list is
@@ -2181,8 +2140,7 @@ g.V().has('code','AUS').valueMap('x')
 ----
 
 [[metaprop]]
-Adding properties to other properties (meta properties)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Adding properties to other properties (meta properties)
 
 TinkerPop has the ability to add a property to another property. Think of this in
 a way as being able to add a bit of metadata about a property to the property
@@ -2288,8 +2246,7 @@ property. This enables a number of important use cases including being able to a
 a date or ACL information to individual properties.
 
 [[tp34vmmetaprop]]
-Using 'unfold' and 'WithOptions' with Meta Properties
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Using 'unfold' and 'WithOptions' with Meta Properties
 
 There is an easy way to include both properties and their meta properties in the
 result from a 'valueMap' step that follows a 'properties' step. Using this capability
@@ -2432,8 +2389,7 @@ Note that in this case, the ID for each property is also shown.
 ----
 
 [[deduce]]
-Deducing the schema of a graph using queries
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Deducing the schema of a graph using queries
 
 Sometimes, you may find yourself working with a graph while being unsure of its data
 model or schema. Using some simple Gremlin queries we can quite easily figure out the
@@ -2566,8 +2522,7 @@ define an explicit schema and also to query the schema using its Graph Managemen
 API and Amazon Neptune provides a Graph Summary API that can yield these details.
 
 [[collrev]]
-Collections revisited
-~~~~~~~~~~~~~~~~~~~~~
+=== Collections revisited
 
 As we have seen in many of the prior examples, very often, either in the middle or at
 the end of a traversal, or both, we generate some kind of collection. In this section
@@ -2576,8 +2531,7 @@ them. In the following section we will look at collections and how they can be u
 effectively in conjunction with so called 'reducing barrier' traversal steps.
 
 [[collsteps]]
-Steps that generate collections
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Steps that generate collections
 
 Let's start this discussion by first reviewing a few ways that a collection can be
 generated. A simple example of a collection is the map that is generated by the
@@ -2821,8 +2775,7 @@ during a traversal, it is important to understand how the contents of a collecti
 can be accessed and manipulated.
 
 [[collaccess]]
-Accessing the contents of a collection
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Accessing the contents of a collection
 
 The keywords 'keys' and 'values' can be used to access the respective
 parts of a collection that is a map. Take a look at the query below which returns a
@@ -2919,8 +2872,7 @@ necessary to use 'local' scope.
 
 
 [[unbundle]]
-Using 'unfold' to unbundle a collection
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Using 'unfold' to unbundle a collection
 
 Sometimes it is desirable to unbundle a collection so that we can work on it further.
 This is what the 'unfold' step does. If we apply 'unfold' to the previous query you
@@ -3031,8 +2983,7 @@ g.V(3).valueMap().select(values)
 ----
 
 [[mergecollections]]
-Ways to merge collections
-^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Ways to merge collections
 
 We've seen how 'fold' can be used to to collect objects in a stream into a List. If
 the objects themselves are Lists and you wish to merge them together to a new List
@@ -3104,8 +3055,7 @@ The previous example uses 'unfold' incoming Maps to entries and then groups on t
 keys of those entries thereby building a list of each of the values in the final Map.
 
 [[localcollect]]
-Using 'local' scope with collections
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Using 'local' scope with collections
 
 Sometimes if you want to work on the contents of a collection, whether to sort it or
 perhaps select some subset of it it is often necessary to use 'local' scope. There
@@ -3298,8 +3248,7 @@ result. We will also see other cases where 'unfold' is needed to access the part
 a collection that we care about.
 
 [[rbarriers]]
-Collections and reducing barrier steps
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Collections and reducing barrier steps
 
 If you look at commonly asked questions about writing Gremlin queries on the Gremlin
 Users discussion list, one area that repeatedly seems to cause people confusion is
@@ -3436,8 +3385,7 @@ steps are 'reducing barrier' steps and be able to work with them in a way that a
 you to write queries that do what you need.
 
 [[sumcollection]]
-Calculating the 'sum' of a collection
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Calculating the 'sum' of a collection
 
 The query below returns a map where the keys are airport IATA codes and the values
 are the number of runways at the airport. The results are ordered to aid readability.
@@ -3481,8 +3429,7 @@ g.V().hasLabel('airport').limit(10).
 ----
 
 [[mathcollection]]
-Using the 'math' step with collections
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Using the 'math' step with collections
 
 Building on the examples from the previous section, let's now take these experiments
 one step further and look at ways to apply the 'math' step to values from one or more
@@ -3580,8 +3527,7 @@ gremlin> 27/26
 
 
 [[sackintro]]
-Introducing 'sack' as a way to store values
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Introducing 'sack' as a way to store values
 
 As is hopefully now becoming apparent, to efficiently write certain types of queries
 you need a way to build up a collection of items as the traversal takes place. We
@@ -3593,8 +3539,7 @@ store the minimum or maximum value of a pair of values. These and other sack
 operators will be used in different parts of this book.
 
 [[sackbasics]]
-Basic 'sack' operations
-^^^^^^^^^^^^^^^^^^^^^^^
+==== Basic 'sack' operations
 
 The 'sack' step, as shown in the examples below, is a side effect step, meaning it
 can store values during a traversal but has no effect on what is passed on to the
@@ -3728,8 +3673,7 @@ g.V().sack(assign).by(constant(-1)).has('code','SAF').
 ----
 
 [[sackminmax]]
-Using 'min' and 'max' with a 'sack'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Using 'min' and 'max' with a 'sack'
 
 There are many different operators that can be used with sacks. They are defined as
 part of the TinkerPop Java Enum called 'Operator'. Two such operators that we can use
@@ -3757,8 +3701,7 @@ g.V().sack(assign).by(constant(400)).has('code','SAF').
 
 
 [[sackcalc]]
-Doing calculations using a 'sack'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Doing calculations using a 'sack'
 
 Now let's look at a more complex, and hopefully more interesting, example. The
 challenge is to write a query that shows 10 routes that start at Santa Fe (SAF) and
@@ -3818,8 +3761,7 @@ will find an example of 'sack' being used to generate a map in the "<<anothersac
 section.
 
 [[nonsackcalc]]
-Doing calculations without using a 'sack'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Doing calculations without using a 'sack'
 
 A similar result to those from the queries in the previous section can actually be
 achieved without using a 'sack'. we find the 'sack' form to be quite concise but you
@@ -3991,8 +3933,7 @@ So in summary, as is almost always the case, there is more than one way to get t
 results you need using a Gremlin query.
 
 [[sackpathlength]]
-Computing hop counts using a 'sack'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Computing hop counts using a 'sack'
 
 The next query we are going to look at uses a 'sack' to keep track of how many flight
 segments (or hops) a 'path' consists of. This means that along with the 'path' result
@@ -4093,8 +4034,7 @@ airport is included in the overall count.
 ----
 
 [[sackbooleans]]
-Using boolean operators with a 'sack'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Using boolean operators with a 'sack'
 
 You can also use the boolean operators 'or' and 'and' when working with a 'sack'. The
 examples below just test the basic functionality using constants of 'true' and
@@ -4163,8 +4103,7 @@ g.V(3).sack(assign).by(constant(true)).sack(and).
 ----
 
 [[sackaddall]]
-Using 'addAll' and lists with a 'sack'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Using 'addAll' and lists with a 'sack'
 
 So far we have looked at using numbers and boolean values with a sack. However, sacks
 can also contain lists and, as we shall see later, maps.
@@ -4280,8 +4219,7 @@ Later in the "<<lambdasack>>" section we  will revisit the topic of 'sacks' and
 lambda expressions and see other ways that we could have written the previous query.
 
 [[sackpredicate]]
-Comparing properties and constants to the value of a sack
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Comparing properties and constants to the value of a sack
 
 During a traversal you may want to incrementally modify a sack and then compare a
 vertex or edge property against the current contents of a sack. The examples below
@@ -4412,8 +4350,7 @@ The results from running the modified query are shown below.
 ----
 
 [[lambdas]]
-Using Lambda functions
-~~~~~~~~~~~~~~~~~~~~~~
+=== Using Lambda functions
 
 Gremlin allows you to include a code fragment (sometimes called a Lambda function or
 a closure) as part of a query. This is typically done as part of a 'filter', 'map' or
@@ -4544,8 +4481,7 @@ g.V().hasLabel('airport').as('a').values('desc').
 ----
 
 [[mapstep]]
-Introducing the 'Map' step
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Introducing the 'Map' step
 
 The 'map' step will be familiar to users of programming languages such as Ruby,
 Python or indeed Groovy. It is often useful to be able to take a set of results, or
@@ -4723,8 +4659,7 @@ are very useful as well as a few more examples of the 'map' step being used.
 
 
 [[lambdasack]]
-Using lambdas with 'sack' steps
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Using lambdas with 'sack' steps
 
 In the "<<sackaddall>>" section we introduced ways in which 'sack' steps could
 operate on lists. Now that we know a bit more about the 'map' step and how Gremlin
@@ -4847,8 +4782,7 @@ that closures can be combined with 'sack' steps.
 
 
 [[flatmap]]
-Introducing the 'flatMap' step
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Introducing the 'flatMap' step
 
 There are a set of fundamental steps that the other Gremlin query language steps
 build upon. One of those is 'map'. Another, that we have not looked at so far in
@@ -4994,8 +4928,7 @@ When run, this time the results do indeed include the edges as well as the verti
 ----
 
 [[tre]]
-Turning graphs into trees
-~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Turning graphs into trees
 
 TinkerPop defines a Tree API but it is not that well fleshed out and has not been
 updated in a long time. The 'tree' step allows you to create a tree from part of a
@@ -5032,8 +4965,7 @@ tree.getObjectsAtDepth(2)
 We will see the  Tree API used again in the "<<btree>>" section later on.
 
 [[subgraph]]
-Creating a subgraph
-~~~~~~~~~~~~~~~~~~~
+=== Creating a subgraph
 
 Using Gremlin, you can create a subgraph which is a subset of the vertices and edges
 in a larger graph you are working with. Once created, to work with a subgraph, you
@@ -5209,8 +5141,7 @@ of it it is nice to be able to create a subgraph from it and perhaps even work w
 that subgraph locally in memory while running some queries.
 
 [[graphmlandjsonintro]]
-Working with GraphML and GraphSON
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Working with GraphML and GraphSON
 
 Apache TinkerPop supports the loading and saving of entire graphs using GraphML and
 GraphSON. GraphML is a broadly supported XML standard that can be used to represent
@@ -5237,8 +5168,7 @@ more compact and easier to parse and 3.0 added a few additional types to the for
 The default format unless explicitly specified is currently GraphSON 3.0.
 
 [[sav]]
-Saving (serializing) a graph as GraphML (XML) or GraphSON (JSON)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Saving (serializing) a graph as GraphML (XML) or GraphSON (JSON)
 
 Using TinkerPop you can save a graph either in GraphML or GraphSON format. GraphML
 is an industry standard XML format for describing a graph and is recognized by many
@@ -5324,8 +5254,7 @@ they are covered in detail near the end of this book in the "<<serialize>>"
 section.
 
 [[reload]]
-Loading a graph stored as GraphML (XML) or GraphSON (JSON)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Loading a graph stored as GraphML (XML) or GraphSON (JSON)
 
 In section 2 we saw how to load the `air-routes.graphml` file. In case you skipped
 that part let's do a quick recap on loading GraphML files and also look at loading
@@ -5344,8 +5273,7 @@ g.io("my-graph.json").write()
 ----
 
 [[graphsonmapper]]
-Turning the results of a query into JSON
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Turning the results of a query into JSON
 
 In the sections above we explored how to save and load an entire graph using GraphSON
 (JSON) or GraphML (XML). However what we have not looked at so far are any ways to
@@ -5490,8 +5418,7 @@ JSON, unless you specify otherwise, the default format is GraphSON 3.0 with
 embedded types.
 
 [[nulls]]
-Using null in Gremlin
-~~~~~~~~~~~~~~~~~~~~~
+=== Using null in Gremlin
 
 Gremlin does allow null values to move through a traversal. Whether or not nulls are
 meaningful to you with Gremlin tends to depend on the graph database that you are 
@@ -5622,8 +5549,7 @@ then keep in mind that this syntax will behave quite differently if you switch t
 graph that suddenly supports storing nulls!
 
 [[traversal-strategies]]
-Understanding TraversalStrategies
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Understanding TraversalStrategies
 
 When you write a Gremlin query and iterate it to get a result, the Gremlin execution
 engine will take a moment to examine the query itself to determine if any registered
@@ -5689,8 +5615,7 @@ NOTE: Some strategies cannot work in remote contexts. 'EventStrategy' and
 'ElementIdStrategy' are two such strategies that will not work this way.
 
 [[traversal-strategies-verification]]
-Verification strategies
-^^^^^^^^^^^^^^^^^^^^^^^
+==== Verification strategies
 
 As a quick reminder, verification strategies validate the contents of a traversal to
 ensure that it conforms with the strategies guidelines. If it does not, then it 
@@ -5724,8 +5649,7 @@ g.withStrategies(verificationStrategy).addV('airport').property("id",123).iterat
 ----
 
 [[traversal-strategies-partition]]
-PartitionStrategy
-^^^^^^^^^^^^^^^^^
+==== PartitionStrategy
 
 As its name suggests, 'PartitionStrategy' can be used to partition the graph into 
 named groups that allow it to blind traversals from traveling to particular parts of
@@ -5836,8 +5760,7 @@ database will really just be filtering those edges using the partition key, so y
 query will still be limited to the speed with which it can do that.
 
 [[traversal-strategies-seed]]
-SeedStrategy
-^^^^^^^^^^^^
+==== SeedStrategy
 
 'SeedStrategy' is mostly helpful when writing tests. Certain Gremlin features aren't 
 determinisitic in what they do, which can make it hard to write good assertions for 
@@ -5898,8 +5821,7 @@ g.withStrategies(strategy).V().out().count()
 ----    
 
 [[performance]]
-Analyzing the performance of your queries
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Analyzing the performance of your queries
 
 Apache TinkerPop includes a class called 'TimeUtil' that provides methods that you 
 can use to time how long your queries are taking to run. A second class called
@@ -5910,8 +5832,7 @@ queries. We ran the tests on a laptop using the Gremlin Console with the 'air-ro
 data loaded into an in-memory TinkerGraph.
 
 [[clock]]
-Timing a query - introducing 'clock' and 'clockWithResult'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Timing a query - introducing 'clock' and 'clockWithResult'
 
 The 'TimeUtil' class provides several methods that can be used when working with
 time. We are just going to focus on two of them, namely, 'clock' and
@@ -6112,8 +6033,7 @@ you can end the query with 'iterate'. In our testing, we found things did not al
 work correctly when using 'iterate' so we tend to avoid it.
 
 [[profile]]
-Analyzing where time is spent - introducing 'profile'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Analyzing where time is spent - introducing 'profile'
 
 You can use the 'profile' step to ask Gremlin to give you a more fine grained summary
 of where the time is spent processing your query. Take a look at the example below.
@@ -6170,8 +6090,7 @@ PathStep([value(code)])              10          10           0.126     0.00
 ----
 
 [[tinkerindex]]
-Introducing TinkerGraph indexes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Introducing TinkerGraph indexes
 
 TinkerGraph provides a rudimentary indexing capability but using it can still improve
 overall performance of your queries. Two methods 'createIndex' and 'dropIndex' are
@@ -6269,8 +6188,7 @@ clockWithResult(100) {g.E().has('dist',gt(1000)).count().next()}
 ----
 
 [[graphvars]]
-Using graph variables to associate metadata with TinkerGraph
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Using graph variables to associate metadata with TinkerGraph
 
 A graph variable is a key/value pair that can be associated with a TinkerGraph.
 Graph variables are not considered part of the graph that you would process with
@@ -6332,8 +6250,7 @@ updated=July 18th 2017
 ----
 
 [[olapoltp]]
-OLTP vs OLAP
-~~~~~~~~~~~~
+=== OLTP vs OLAP
 
 When discussing graph processing two terms regularly come up. These terms are Online
 Transaction Processing (OLTP) and Online Analytical Processing (OLAP). Most of the
@@ -6371,8 +6288,7 @@ of how to perform OLAP operations on a TinkerPop enabled graph and we recommend
 reading it if you plan to perform OLAP style graph processing.
 
 [[graphcomputer]]
-Introducing the TinkerPop Graph Computer
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Introducing the TinkerPop Graph Computer
 
 A lot of new capability was added to the TinkerPop framework as part of the version 3
 release. One such new capability is the concept of a 'Graph Computer'. In concrete
@@ -6388,8 +6304,7 @@ One of the pre configured Vertex Programs is Page Rank. Let's take a look next a
 way it can be used.
 
 [[pagerank]]
-Experiments with Page Rank
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Experiments with Page Rank
 
 Probably one of, if not the, most famous algorithms in the big data world is 'Page
 Rank'. Originally developed at Google, the Page Rank algorithm was created as a way
@@ -6551,8 +6466,7 @@ capabilities. If this is an area that you are interested in we strongly recommen
 reading the official TinkerPop reference documentation.
 
 [[translators]]
-Translating Gremlin to different programming languages
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Translating Gremlin to different programming languages
 
 This book mostly focuses on writing Gremln in its Groovy syntax where it is easy to 
 run inside of the Gremlin Console, which is a great convenience when learning or just

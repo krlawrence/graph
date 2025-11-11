@@ -1,7 +1,6 @@
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
 [[beyond]]
-MOVING BEYOND THE GREMLIN CONSOLE
----------------------------------
+== MOVING BEYOND THE GREMLIN CONSOLE
 
 The focus of this book so far has been to teach the Gremlin query language, using the
 Gremlin Console and TinkerGraph as our learning environment. This is indeed a great
@@ -25,8 +24,7 @@ languages, and others, to connect to a Gremlin Server and other remotely hosted 
 databases. First, let's take a look at the Apache TinkerPop Java API. 
 
 [[javatinker]]
-Working with TinkerGraph from a Java Application
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Working with TinkerGraph from a Java Application
 
 So far in this book we have looked at many ways of working with a TinkerGraph from
 within the Gremlin Console. As you start to create more sophisticated applications,
@@ -50,8 +48,7 @@ graph database implementations, lets look at a few examples of how you can creat
 Java application that uses Gremlin and TinkerGraph.
 
 [[tpinterfaces]]
-The Apache TinkerPop interfaces and classes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== The Apache TinkerPop interfaces and classes
 
 There are a number of Java interfaces and classes, defined by the Apache TinkerPop
 project, that you will want to become familiar with. The most recent JavaDoc format
@@ -101,8 +98,7 @@ import java.util.Set;
 ----
 
 [[javatp1]]
-Writing our first TinkerPop Java program
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Writing our first TinkerPop Java program
 
 Now that we have some imports in place, we can start to craft the basic outline of a
 Java application. The code below defines a class called 'TinkerGraphTest', and 
@@ -147,8 +143,7 @@ public class TinkerGraphTest
 ----
 
 [[javacompile]]
-Compiling our code
-^^^^^^^^^^^^^^^^^^
+==== Compiling our code
 
 Before we can test our program we of course need to compile it. The easiest way to do
 this while experimenting is to setup the Java 'classpath' to include the TinkerPop 
@@ -158,8 +153,9 @@ here, simple use of the 'classpath' will suffice.
 
 The following lines of Bash shell script will setup what you need to both build and
 run our small test program. Note that the 'GREMLIN' variable should be set to point
-to the root directory of wherever your TinkerPop JAR files are. 
+to the root directory of wherever your TinkerPop JAR files are.
 
+[source,shell]
 ----
 # Root directory for Gremlin Console install
 GREMLIN=...
@@ -176,7 +172,6 @@ ADDL=$GREMLIN/ext/tinkergraph-gremlin/lib/*
 # Classpath
 export CP=$CLASSPATH:$LIBPATH:$EXTPATH:$ADDL
 
-
 # Compile
 javac -cp $CP TinkerGraphTest.java
 ----
@@ -184,6 +179,7 @@ javac -cp $CP TinkerGraphTest.java
 Assuming everything we have coded so far compiled OK, then we can run it using the
 same 'classpath' that we created previously.
 
+[source,shell]
 ----
 # Run
 java -cp $CP TinkerGraphTest
@@ -199,8 +195,7 @@ aware Java app!
 ----
 
 [[javaadd]]
-Adding to our Java program
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Adding to our Java program
 
 Now that we have a basic skeleton application that compiles and runs, we can start to
 add more experiments to it. If we add the two lines below we can extract the city
@@ -341,8 +336,7 @@ Birmingham Bristol London Manchester Leeds Newcastle
 ----
 
 [[javastatics]]
-Important Classes and Enums to be aware of
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Important Classes and Enums to be aware of
 
 When you are using the Gremlin Console, as we have already mentioned, a few things
 are done for you that you need to take care of yourself when writing standalone Java
@@ -575,8 +569,7 @@ also see that 'keys' and 'values' are indeed defined in the 'Column' Enum. Lastl
 can see that 'local' is, as we expected, defined in the 'Scope' Enum.
 
 [[javapredicates]]
-Using Gremlin predicates in a Java application
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Using Gremlin predicates in a Java application
 
 As discussed in the previous section, when you use a Gremlin predicate such as 'eq'
 or 'neq' from a Java program you need to prefix it with a '"P."' which is a reference
@@ -637,8 +630,7 @@ Region code lookup for DEN
 
 
 [[javacheck]]
-Checking to see if a query returned a result
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Checking to see if a query returned a result
 
 It is often important to know if a query returned a result before trying to reference
 it to avoid those pesky Java 'NoSuchElementException' errors. Without worrying about
@@ -723,8 +715,7 @@ There are of course many other ways that you might come up with to solve this pr
 but using lists often provides a fairly easy to use solution.
 
 [[javacreate]]
-Creating a new graph from a Java application
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Creating a new graph from a Java application
 
 The code below creates a new (empty) TinkerGraph instance, creates a graph traversal
 source object and then uses a traversal to create a small graph.
@@ -839,8 +830,7 @@ Once again, if everything has worked as expected, here is what we should get bac
 ----
 
 [[javasave]]
-Saving a graph from a Java application
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Saving a graph from a Java application
 
 Having created our new graph, we may want to save it. The code below shows how to
 save the graph as either GraphSON (TinkerPop's JSON format) or as GraphML (XML). This
@@ -901,8 +891,7 @@ try {
 NOTE: 'Configuration' refers to the Apache Configuration library.
 
 [[groovyapp]]
-Working with TinkerGraph from a Groovy application
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Working with TinkerGraph from a Groovy application
 
 Earlier in this book, in the "<<grv>>" section we explored the ways that you can
 use Groovy code within the Gremlin Console. However, we have not yet looked at how
@@ -991,8 +980,7 @@ it. The key thing we need to do is make sure we pickup the TinkerPop specific JA
 files as shown in the next section.
 
 [[groovyc]]
-Compiling our Groovy application
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Compiling our Groovy application
 
 In the Java example, we included the CLASSPATH on the 'javac' invocation using the
 '-cp' flag. That can also be done when using Groovy, however, if you are using
@@ -1004,6 +992,7 @@ The commands below work in a Bash shell but could be easily ported to other
 environments. The GREMLIN variable should point to wherever you have installed and
 unzipped the Gremlin Console download
 
+[source,text]
 ----
 # Root directory for Gremlin Console install
 GREMLIN=...
@@ -1024,8 +1013,7 @@ export CLASSPATH=$CLASSPATH:$LIBPATH:$EXTPATH:$ADDL
 groovyc TinkerGraphTest.groovy
 ----
 
-Running our Groovy application
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Running our Groovy application
 
 Assuming everything compiled cleanly we can now run our Groovy application.
 
@@ -1047,9 +1035,7 @@ Loading the air-routes graph...
 Now that we have a small skeleton of a test program running, we can start to add a
 few more interesting features to it.
 
-
-Adding to our Groovy application
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Adding to our Groovy application
 
 The code below demonstrates how to work with the 'valueMap' for the Austin vertex
 that we created a few lines back in our program.
@@ -1180,8 +1166,7 @@ section.
 
 
 [[groovypredicates]]
-Using Gremlin predicates in a Groovy application
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Using Gremlin predicates in a Groovy application
 
 Just as we had to do when writing a standalone Java application, when you use a
 Gremlin predicate such as 'eq' or 'neq' from a Groovy program you need to prefix it
