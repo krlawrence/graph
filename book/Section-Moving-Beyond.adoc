@@ -274,9 +274,21 @@ System.out.println(fromDfw);
 
 The new output that we get back should look like this.
 
-[source,java]
+[source,text]
 ----
-[ABI, ABQ, ACT, AEX, AGU, AMA, AMS, ANC, ASE, ATL, AUH, AUS, BDL, BHM, BIL, BIS, BJX, BKG, BMI, BNA, BOG, BOI, BOS, BPT, BRO, BTR, BWI, BZE, BZN, CAE, CCS, CDG, CHA, CHS, CID, CLE, CLL, CLT, CMH, CMI, CNM, COS, COU, CRP, CUN, CUU, CVG, CVN, CZM, DAY, DCA, DEN, DOH, DRO, DSM, DTW, DUS, DXB, EGE, ELP, EVV, EWR, EZE, FAR, FAT, FCO, FLL, FRA, FSD, FSM, FWA, GCK, GCM, GDL, GEG, GGG, GIG, GJT, GLH, GPT, GRI, GRK, GRR, GRU, GSO, GSP, GUA, GUC, HDN, HKG, HNL, HOU, HSV, IAD, IAH, ICN, ICT, IND, JAC, JAN, JAX, JFK, JLN, KOA, LAS, LAW, LAX, LBB, LCH, LEX, LFT, LGA, LHR, LIM, LIR, LIT, LRD, MAD, MAF, MBJ, MCI, MCO, MEI, MEM, MEX, MFE, MGA, MGM, MHK, MIA, MID, MKE, MLI, MLM, MLU, MOB, MSN, MSP, MSY, MTJ, MTY, MYR, MZT, NAS, NRT, OAK, OGG, OKC, OMA, ONT, ORD, ORF, PBC, PBI, PDX, PEK, PHL, PHX, PIA, PIB, PIT, PLS, PNS, PSP, PTY, PUJ, PVG, PVR, QRO, RAP, RDU, RIC, RNO, ROW, RSW, RTB, SAF, SAL, SAN, SAT, SAV, SBA, SCL, SDF, SEA, SFO, SGF, SHV, SJC, SJD, SJO, SJT, SJU, SLC, SLP, SMF, SNA, SPI, SPS, STL, SUX, SWO, SYD, TLH, TPA, TRC, TUL, TUS, TVC, TXK, TYR, TYS, UIO, VPS, XNA, YEG, YUL, YVR, YYC, YYZ, ZCL]
+[ABI,ABQ,ACA,ACT,AEX,AGS,AGU,AMA,AMS,ANC,ASE,ATL,AUA,AUG,AUH,AUS,AVL,BDL,BFL,BHM,BIL,
+ BIS,BJX,BKG,BMI,BNA,BOG,BOI,BOS,BPT,BRO,BTR,BUF,BUR,BWI,BZE,BZN,CAE,CCS,CDG,CHA,CHS,
+ CID,CLE,CLL,CLT,CMH,CMI,CNM,COS,COU,CRP,CUN,CUU,CVG,CVN,CYS,CZM,DAY,DCA,DEN,DGO,DOH,
+ DRO,DRT,DSM,DTW,DUB,DUS,DXB,ECP,EGE,ELP,EVV,EWR,EYW,EZE,FAR,FAT,FCO,FLG,FLL,FRA,FSD,
+ FSM,FWA,GCK,GCM,GDL,GEG,GGG,GIG,GJT,GLH,GNV,GPT,GRI,GRK,GRR,GRU,GSO,GSP,GUA,GUC,HDN,
+ HEL,HKG,HNL,HOU,HRL,HSV,IAD,IAH,ICN,ICT,ILM,IND,IST,JAC,JAN,JAX,JFK,JLN,KEF,KOA,LAS,
+ LAW,LAX,LBB,LCH,LEX,LFT,LGA,LHR,LIM,LIR,LIT,LRD,MAD,MAF,MBJ,MCI,MCO,MEI,MEM,MEX,MFE,
+ MGA,MGM,MHK,MIA,MID,MKE,MLI,MLM,MLU,MOB,MRY,MSN,MSO,MSP,MSY,MTJ,MTY,MUC,MYR,MZT,NAS,
+ NRT,OAK,OAX,OGG,OKC,OMA,ONT,ORD,ORF,PBC,PBI,PDX,PEK,PHL,PHX,PIA,PIB,PIT,PLS,PNS,PSP,
+ PTY,PUJ,PVG,PVR,QRO,RAP,RDU,RIC,RNO,ROW,RSW,RTB,SAF,SAL,SAN,SAP,SAT,SAV,SBA,SBN,SCL,
+ SDF,SDQ,SEA,SFO,SGF,SHV,SJC,SJD,SJO,SJT,SJU,SKB,SLC,SLP,SMF,SNA,SPI,SPS,SRQ,STL,SUX,
+ SWO,SYD,TGU,TLH,TPA,TRC,TUL,TUS,TVC,TXK,TYR,TYS,UIO,VPS,XNA,YEG,YUL,YUM,YVR,YYC,YYZ,
+ ZCL]
 ----
 
 The next lines will find all routes from London Heathrow to any airport in the United
@@ -295,17 +307,38 @@ lhrToUsa.forEach((k) -> System.out.println(k));
 The output should look like this. We arranged the results in columns to aid
 readability.
 
-[source,java]
+[source,text]
 ----
-[LHR, 4896, PDX]     [LHR, 4820, IAH]    [LHR, 3665, IAD]
-[LHR, 3980, CLT]     [LHR, 4414, MIA]    [LHR, 3860, RDU]
-[LHR, 3254, BOS]     [LHR, 4001, MSP]    [LHR, 4783, SEA]
-[LHR, 3622, BWI]     [LHR, 3440, JFK]    [LHR, 3939, ORD]
-[LHR, 4198, ATL]     [LHR, 5439, LAX]    [LHR, 5255, PHX]
-[LHR, 4901, AUS]     [LHR, 5469, SAN]    [LHR, 5350, SFO]
-[LHR, 4736, DFW]     [LHR, 4850, SLC]    [LHR, 3753, DTW]
-[LHR, 5352, SJC]     [LHR, 3453, EWR]    [LHR, 4655, DEN]
-[LHR, 4616, MSY]     [LHR, 5213, LAS]    [LHR, 3533, PHL]
+[LHR,3707,PIT]
+[LHR,4896,PDX]
+[LHR,3980,CLT]
+[LHR,4053,CHS]
+[LHR,4198,ATL]
+[LHR,4901,AUS]
+[LHR,4168,BNA]
+[LHR,3254,BOS]
+[LHR,3622,BWI]
+[LHR,4736,DFW]
+[LHR,3665,IAD]
+[LHR,4820,IAH]
+[LHR,3440,JFK]
+[LHR,5439,LAX]
+[LHR,4414,MIA]
+[LHR,4001,MSP]
+[LHR,3939,ORD]
+[LHR,5255,PHX]
+[LHR,3860,RDU]
+[LHR,4783,SEA]
+[LHR,5350,SFO]
+[LHR,5352,SJC]
+[LHR,5469,SAN]
+[LHR,4850,SLC]
+[LHR,5213,LAS]
+[LHR,4655,DEN]
+[LHR,4616,MSY]
+[LHR,3453,EWR]
+[LHR,3533,PHL]
+[LHR,3753,DTW]
 ----
 
 The final part of our first Java program shows how to perform a simple 'repeat'
@@ -505,13 +538,15 @@ can help make Gremlin read more fluidly at times.
 |==============================================================================
 
 The 'Pick' Enum defines constants that are used in association with the 'branch',
-`choose` and `option` steps.
+`choose` and `option` steps. The 'unproductive' option refers to the case where the
+incoming traverser does not produce an output.
 
 .Pick
 [cols="1,1,3"]
 |==============================================================================
-|none    | Pick.none      | option(none,constant('no match'))
-|any     | Pick.any       | option(any,constant('any picked'))
+|none         | Pick.none         | option(none,constant('no match'))
+|any          | Pick.any          | option(any,constant('any picked'))
+|unproductive | Pick.unproductive | option(unproductive,constant('traversal unproductive'))
 |==============================================================================
 
 The 'Merge' Enum has constants that are associated to the `mergeV` and `mergeE`
@@ -589,8 +624,7 @@ the Gremlin console, we have to more precisely specify things.
 [source,java]
 ----
 // Find all airports in the region of the specified airport
-public void findByRegion(String iata)
-{
+public void findByRegion(String iata) {
   System.out.println("\nRegion code lookup for " + iata );
 
   List<List<Object>> list =
@@ -599,8 +633,7 @@ public void findByRegion(String iata)
         where(P.eq("r")).by().
         local(__.select("a").values("city","code","region").fold()).toList();
 
-  for(List t : list)
-  {
+  for(List t : list) {
     System.out.println(t);
   }
 }
@@ -612,22 +645,21 @@ representing the airport in Denver Colorado, the following output should be retu
 [source,console]
 ----
 Region code lookup for DEN
-[COS, Colorado Springs, US-CO]
-[DEN, Denver, US-CO]
-[DRO, Durango, US-CO]
-[GJT, Grand Junction, US-CO]
-[EGE, Eagle, US-CO]
-[HDN, Hayden, US-CO]
-[APA, Denver, US-CO]
-[TEX, Telluride, US-CO]
-[ASE, Aspen, US-CO]
-[ALS, Alamosa, US-CO]
-[CEZ, Cortez, US-CO]
-[GUC, Gunnison, US-CO]
-[MTJ, Montrose, US-CO]
-[PUB, Pueblo, US-CO]
+[DEN,Denver,US-CO]
+[COS,Colorado Springs,US-CO]
+[DRO,Durango,US-CO]
+[GJT,Grand Junction,US-CO]
+[EGE,Eagle,US-CO]
+[HDN,Hayden,US-CO]
+[ASE,Aspen,US-CO]
+[ALS,Alamosa,US-CO]
+[CEZ,Cortez,US-CO]
+[GUC,Gunnison,US-CO]
+[MTJ,Montrose,US-CO]
+[PUB,Pueblo,US-CO]
+[APA,Denver,US-CO]
+[TEX,Telluride,US-CO]
 ----
-
 
 [[javacheck]]
 ==== Checking to see if a query returned a result
@@ -649,7 +681,6 @@ therefore no edge to retrieve the distance from. In other words, this query retu
 no result. Now, within the Gremlin Console this is not a problem as we just get 
 nothing back and life goes on. However, take a look at the code below which is a 
 first attempt at moving the query into Java code.
-
 
 [source,java]
 ----
@@ -680,16 +711,12 @@ Now that the result is in a list we can safely check to see if we got any result
 
 [source,java]
 ----
-if (result.isEmpty())
-{
+if (result.isEmpty()) {
   System.out.println("No results were found");
-}
-else
-{
+} else {
   System.out.println("The distance is " + result.get(0));
 }
 ----
-
 
 If we wanted a "pure Gremlin" solution, without using a List and without doing some
 post processing, one way we could do it is to use the 'coalesce' step and return a
@@ -778,8 +805,7 @@ cases where when using the Gremlin Console we would not have to.
 [source,java]
 ----
 // Display the code property as well as the label and id.
-for( Map m : vm)
-{
+for( Map m : vm) {
   System.out.println(((List)(m.get("code"))).get(0) + " " +
                              m.get(T.id) + " " + m.get(T.label));
 }
@@ -808,8 +834,7 @@ List<Path> paths = new ArrayList<Path>();
 
 paths = g.V().out().path().by("code").toList();
 
-for (Path p : paths)
-{
+for (Path p : paths) {
   System.out.println(p.toString());
 }
 ----
@@ -950,12 +975,9 @@ still do so when you need to take some specific action if an exception does happ
 println "Loading the air-routes graph...\n"
 
 // Load the air-routes graph
-try
-{
+try {
   g.io("air-routes.graphml").read().iterate()
-}
-catch (IOException e)
-{
+} catch (IOException e) {
   println "Could not load the graph file"
   System.exit(0)
 }
@@ -1077,9 +1099,9 @@ there are that originate at the DFW airport.
 [source,groovy]
 ----
 def n = g.V().has("code","DFW").out().count().next()
-println "\nThere are  ${n} routes from Dallas"
+println "\nThere are ${n} routes from Dallas"
 
-There are  221 routes from Dallas
+There are 253 routes from Dallas
 ----
 
 Next we can add some code to find the IATA codes representing the places that we can
@@ -1099,7 +1121,21 @@ When we run the code we should get back some results that look like this.
 ----
 Here are the places you can fly to from DFW
 
-[CID, HNL, HOU, SAN, SNA, SLC, LAS, DEN, SAT, MSY, EWR, DTW, ELP, SJU, CLE, OAK, TUS, SAF, PHL, GEG, BZN, JAC, GCM, MEI, PIB, KOA, SUX, SBA, ASE, CVN, BKG, BIS, GUC, MTJ, TVC, CNM, GLH, SWO, BIL, MAF, BDL, RAP, SDF, SHV, BOI, LBB, RNO, CMH, ICT, ACT, CLL, ABI, SGF, RIC, CCS, TXK, PIA, LEX, GUA, CRP, MTY, AMA, BJX, BMI, BOG, BPT, DSM, MYR, AEX, CZM, AGU, COU, DAY, CUU, DRO, BRO, BTR, BZE, CAE, CHA, CHS, CMI, GCK, GDL, GGG, GJT, GPT, EVV, FAR, FAT, FSD, FSM, FWA, JAN, JLN, YYZ, LAW, YVR, LCH, LHR, LFT, CDG, LIR, GRI, GRK, GRR, GSO, GSP, MLI, PEK, MLM, PVG, MLU, FCO, MOB, AMS, MSN, MAD, MZT, RSW, PBC, FRA, LRD, NRT, MFE, SYD, MGM, DXB, MHK, HKG, QRO, ICN, ROW, GIG, SAL, GRU, SAV, EZE, SJD, LIM, SJT, SCL, SLP, MEX, SPI, YUL, PLS, YEG, PNS, YYC, PTY, DOH, OKC, TYS, ONT, VPS, AUH, XNA, CLT, ZCL, CUN, EGE, PSP, HDN, MEM, UIO, CVG, MID, TYR, ATL, ANC, TLH, SPS, PIT, TRC, PDX, ABQ, MKE, OMA, TUL, PVR, OGG, DUS, LGA, NAS, STL, JFK, LAX, AUS, IND, MGA, BNA, MCI, BOS, BWI, DCA, FLL, IAD, IAH, JAX, PUJ, SJO, SMF, RTB, COS, SJC, HSV, TPA, BHM, LIT, ORF, SFO, MCO, MBJ, MIA, MSP, ORD, PBI, PHX, RDU, SEA]
+[YYZ, YVR, LHR, CDG, FRA, HEL, NRT, SYD, DXB, DUB, HKG, PEK, PVG, FCO, AMS, MAD, MUC,
+ RSW, YUL, YEG, YYC, DOH, ICN, GIG, GRU, EZE, LIM, SCL, MEX, TLH, PIT, PDX, OKC, ONT,
+ IST, AUH, CLT, CUN, PSP, MEM, CVG, IND, MCI, STL, ABQ, MKE, OMA, TUL, PVR, OGG, DUS,
+ NAS, EYW, KEF, MBJ, LIT, AUA, ORF, JAX, PUJ, SJO, SMF, RTB, TGU, COS, HSV, BHM, RAP,
+ SDF, BUF, SHV, BOI, LBB, ECP, HRL, RNO, CMH, ICT, MAF, BDL, BIL, SGF, RIC, CCS, TXK,
+ PIA, LEX, GUA, CRP, ABI, ACT, CLL, BMI, BOG, BPT, DSM, MYR, AEX, CZM, AGU, MTY, AMA,
+ BJX, BRO, BTR, BZE, CAE, CHA, CHS, CMI, COU, DAY, CUU, DRO, EVV, FAR, FAT, FSD, FSM,
+ FWA, GCK, GDL, GGG, GJT, GPT, GRI, GRK, GRR, GSO, GSP, JAN, JLN, LAW, LCH, LFT, LIR,
+ LRD, MFE, MGM, MHK, MLI, MLM, MLU, MOB, MSN, MZT, PBC, PLS, PNS, PTY, QRO, ROW, SAL,
+ SAV, SJD, SJT, SLP, SPI, SPS, TRC, TYR, TYS, VPS, XNA, ZCL, AVL, EGE, HDN, SRQ, AGS,
+ ILM, UIO, GNV, SDQ, SAP, MID, MGA, GCM, SKB, BUR, MEI, PIB, SBN, KOA, SUX, BFL, MRY,
+ SBA, ASE, GEG, YUM, DGO, BZN, JAC, MSO, BKG, BIS, CYS, GUC, MTJ, TVC, AUG, ACA, OAX,
+ FLG, CNM, GLH, SWO, CVN, DRT, ATL, ANC, AUS, BNA, BOS, BWI, DCA, FLL, IAD, IAH, JFK,
+ LAX, LGA, MCO, MIA, MSP, ORD, PBI, PHX, RDU, SEA, SFO, SJC, TPA, SAN, SNA, SLC, LAS,
+ DEN, SAT, MSY, EWR, CID, HNL, HOU, ELP, SJU, CLE, OAK, TUS, SAF, PHL, DTW]
 ----
 
 The code below will discover all of the airports in the United States that you can
@@ -1126,16 +1162,16 @@ query.
 ----
 From LHR to airports in the USA (only 10 shown)
 
-[LHR, 4896, PDX]
-[LHR, 3980, CLT]
-[LHR, 4198, ATL]
-[LHR, 4901, AUS]
-[LHR, 3254, BOS]
-[LHR, 3622, BWI]
-[LHR, 4736, DFW]
-[LHR, 3665, IAD]
-[LHR, 4820, IAH]
-[LHR, 3440, JFK]
+[LHR,3707,PIT]
+[LHR,4896,PDX]
+[LHR,3980,CLT]
+[LHR,4053,CHS]
+[LHR,4198,ATL]
+[LHR,4901,AUS]
+[LHR,4168,BNA]
+[LHR,3254,BOS]
+[LHR,3622,BWI]
+[LHR,4736,DFW]
 ----
 
 Finally, lets write the code to find the airports in England that you can get to from
@@ -1157,13 +1193,13 @@ we make no more than one stop on the way.
 ----
 Airports in England reachable with no more than one stop from AUS
 
-[LHR, BRS, LGW, STN, MAN, BHX, LBA, NCL, LCY]
+[LHR, LGW, MAN, STN, BRS, BHX, DSA, LCY, LBA, NCL,
+ NQY, EMA, LPL, LTN, SOU, SEN, HUY, MME, NWI, EXT]
 ----
 
 Now that we have a somewhat interesting Groovy application up and running, should you
 so choose, you can build upon this foundation just as we did in the "<<javatinker>>"
 section.
-
 
 [[groovypredicates]]
 ==== Using Gremlin predicates in a Groovy application

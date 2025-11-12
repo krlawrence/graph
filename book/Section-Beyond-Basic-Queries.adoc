@@ -36,7 +36,6 @@ g.V().hasLabel('airport') \
      .has('region',within('US-TX','US-LA','US-AZ','US-OK')) \
      .order().by('region',asc)   \
      .valueMap().select('code','region')
-
 ----
 
 We can avoid the use of backslash characters if we lay the query out as follows. Each
@@ -48,7 +47,6 @@ g.V().hasLabel('airport').
   has('region',within('US-TX','US-LA','US-AZ','US-OK')).
   order().by('region',asc).
   valueMap().select('code','region')
-
 ----
 
 If we do not give the parser one of these clues that there is more to come, the
@@ -58,7 +56,6 @@ Some people find it easier to read queries when each step or modulator is given 
 own line and indented appropriately. So we could layout the query as shown below and
 it will still work just fine.
 
-
 [source,groovy]
 ----
 g.V().hasLabel('airport').
@@ -67,7 +64,6 @@ g.V().hasLabel('airport').
         by('region',asc).
       valueMap().
       select('code','region')
-
 ----
 
 Whether you decide to use the backslash as a continuation character or leave the
@@ -77,7 +73,6 @@ console. There is no golden rule as to how many lines and how much indenting you
 should use when laying out your more complex queries. However, whatever you decide to
 do, it is worth remembering that others reading your work may find well laid out and
 appropriately indented steps easier to read and understand.
-
 
 [[rword]]
 === A warning about reserved word conflicts and collisions
@@ -127,7 +122,6 @@ notation when it is not clear what the reserved word, like 'in', applies to.
 
 You will find an example of 'not' being used with the '"__."' prefix in the
 "<<btree>>" section a bit later on.
-
 
 [[dmodel]]
 === Thinking about your data model
@@ -292,7 +286,7 @@ are not supported.
 
 Every Gremlin query we have demonstrated so far is also, in reality, valid Groovy. We
 have already shown examples of storing values into variables and looping using Groovy
-constructs as part of a single or multi part Gremlin query.
+constructs as part of a single or multipart Gremlin query.
 
 In this section we are going to go one step further and actually define some
 methods, using Groovy syntax, that can be run while still inside the Gremlin Console.
@@ -432,7 +426,7 @@ would if you were writing a standalone Groovy application.
 // How many results did we get back?
 german.size
 
-32
+34
 
 // Query some values from one of the airports in the list
 german[0].values('city','code')
@@ -447,7 +441,7 @@ Munich
 
 g.V(german[1]).out().count()
 
-237
+270
 ----
 
 Towards the end of the book, in the "<<groovyapp>>" section, we will explore
@@ -467,8 +461,8 @@ containing the Austin vertex into the 'V' step.
 
 [source,groovy]
 ----
- austin=g.V().has('code','AUS').next()
- g.V(austin).out()
+austin=g.V().has('code','AUS').next()
+g.V(austin).out()
 ----
 
 You can take this technique one step further and pass an entire saved list of
@@ -543,7 +537,6 @@ Here is the output from running the code.
 [JFK, 1390, DFW]
 ----
 
-
 [[addnodes]]
 === Adding vertices, edges and properties
 
@@ -585,7 +578,7 @@ normal course of development.
 ----
 // Add an imaginary airport with a code of 'XYZ' and connect it to DFW
 xyz = g.addV('airport').
-        property([code: 'XYZ', icao: 'KXYZ', desc, 'This is not a real airport']).next()
+        property([code: 'XYZ', icao: 'KXYZ', desc: 'This is not a real airport']).next()
 ----
 
 We can now add a route from DFW to XYZ. We are able to use our 'xyz' variable to 
@@ -652,7 +645,7 @@ string result returned by the provided traversal will be used as the label name.
 ----
 g.addV(V().has('code','AUS').label()).property('code','XYZ')
 
-v[53768]
+v[61394]
 ----
 
 We can inspect the new vertex using 'valueMap' to make sure that our label was
@@ -660,9 +653,9 @@ correctly assigned.
 
 [source,groovy]
 ----
-g.V(53768).valueMap(true)
+g.V(61394).valueMap(true)
 
-[id:53768,code:[XYZ],label:airport]
+[id:61394,code:[XYZ],label:airport]
 ----
 
 We can now do something similar to dynamically work out what the label should be for
@@ -670,10 +663,10 @@ an edge between our new airport and Austin.
 
 [source,groovy]
 ----
-g.V(53768).addE(V().has('code','AUS').outE().limit(1).label()).
+g.V(61394).addE(V().has('code','AUS').outE().limit(1).label()).
            to(V().has('code','AUS'))
 
-e[53770][53768-route->3]
+e[61396][61394-route->3]
 ----
 
 NOTE: Later in the book we will build upon these concepts to show how the property
@@ -684,9 +677,9 @@ Once again, we can use a 'valueMap' step to make sure our new edge label looks O
 
 [source,groovy]
 ----
-g.E(53770).valueMap(true)
+g.E(61396).valueMap(true)
 
-[id:53770,label:route]
+[id:61396,label:route]
 ----
 
 [[proptraversal]]
@@ -711,7 +704,7 @@ its value a list of codes.
 ----
 g.V().has('code','AUS').valueMap('places')
 
-[places:[[YYZ, LHR, FRA, MEX, PIT, PDX, CLT, CUN, MEM, CVG, IND, MCI, DAL, STL, ABQ, MDW, LBB, HRL, GDL, PNS, VPS, SFB, BKG, PIE, ATL, BNA, BOS, BWI, DCA, DFW, FLL, IAD, IAH, JFK, LAX, MCO, MIA, MSP, ORD, PHX, RDU, SEA, SFO, SJC, TPA, SAN, LGB, SNA, SLC, LAS, DEN, MSY, EWR, HOU, ELP, CLE, OAK, PHL, DTW]]]
+[places:[[PHL,PDX,DTW,OKC,ONT,CLT,CUN,MEM,CVG,IND,MCI,DAL,STL,ABQ,MKE,MDW,OMA,TUL,PVR,NAS,LIT,JAX,PVD,SMF,BHM,SDF,BUF,BOI,LBB,ECP,HRL,RNO,CMH,DSM,CZM,AMA,BTR,CHS,GDL,GRR,LIR,PNS,SJD,TYS,VPS,XNA,HDN,SFB,BUR,ASE,BZN,BKG,PIE,ATL,BNA,BOS,BWI,DCA,DFW,FLL,IAD,IAH,JFK,LAX,MCO,MIA,MSP,ORD,PHX,RDU,SEA,SFO,SJC,TPA,SAN,LGB,SNA,SLC,LAS,DEN,SAT,YYZ,HNL,YVR,MSY,LHR,EWR,LGW,HOU,FRA,ELP,AMS,CLE,YYC,OAK,MEX,TUS,PIT]]]
 ----
 
 To gain access to these values from your code or Gremlin console queries, we can use
@@ -723,7 +716,7 @@ there are in the list.
 ----
 g.V().has('code','AUS').values('places').next().size()
 
-59
+98
 ----
 
 Once we have access to the list of values we can access them using the normal Groovy
@@ -734,9 +727,9 @@ array syntax. The example below returns the three values with an index between 2
 ----
 g.V().has('code','AUS').values('places').next()[2..4]
 
-FRA
-MEX
-PIT
+DTW
+OKC
+ONT
 ----
 
 [[injectid]]
@@ -774,7 +767,7 @@ g.addV().property(id,99999L)
 v[99999]
 ----
 
-Alternatively we could pass in a variable.
+Alternatively, we could pass in a variable.
 
 [source,groovy]
 ----
@@ -864,16 +857,6 @@ This technique of creating vertices and/or edges using a 'for' loop can also be 
 when working with graphs remotely over HTTP connections. It is a very convenient way
 to combine a set of creation steps into a single REST API call.
 
-If you prefer a more Groovy like syntax you can also do this.
-
-[source,groovy]
-----
-vertices = [["WYZ","KWYZ"],["XYZ","KXYZ"]]
-vertices.each {
-  g.addV("airport").property("code",it[0]).property("iata",it[1]).iterate()
-}
-----
-
 [[addinject]]
 ==== Adding vertices and edges using 'inject'
 
@@ -915,10 +898,10 @@ g.inject(0).repeat(addV('test').property(T.id, loops())).times(5)
 ----
 
 Note the call to 'loops' when setting the identifier for the vertex. The 'loops' step
-tracks the number of times that the 'repeat' has been called, essentially incremeting
-by 1 for each call to 'addV' creating an auto-incremeting identifier. This technique
-for creating vertices is often helpful when there is a need to generate some vertices
-for testing.
+tracks the number of times that the 'repeat' has been called, essentially
+incrementing by 1 for each call to 'addV' creating an auto-incrementing identifier.
+This technique for creating vertices is often helpful when there is a need to
+generate some vertices for testing.
 
 [[upsert]]
 ==== Using 'mergeV' and 'mergeE' for upserting
@@ -937,7 +920,7 @@ using the most basic form of 'mergeV':
 ----
 g.mergeV([code:'XYZ'])
 
-v[53865]
+v[61394]
 ----
 
 As you can see, 'mergeV' takes a 'Map' as an argument where the keys and values
@@ -946,15 +929,13 @@ writing `has("code","XYZ")' to find a vertex. If 'mergeV' finds a vertex with th
 code and value, it return it. However, 'mergeV' has a dual purpose. Should the vertex
 not be found, then 'mergeV' will automatically create a new vertex with a "code" of 
 "XYZ" and return that. Evaluating that same query again will result in returning the
-existing 'v[53865]'.
+existing 'v[61394]'.
 
-You may match on as many properties as necessary including 'T.id' and 'T.label':
+You may match on as many properties as necessary, including 'T.id' and 'T.label':
 
 [source,groovy]
 ----
 g.mergeV([(T.label): 'airport', (T.id): 999999, code:'XYZ'])
-
-v[999999]
 ----
 
 Note that the match must be complete in that all keys designated in the 'Map' must 
@@ -973,8 +954,6 @@ and the 'Merge' enum.
 ----
 g.mergeV([(T.id): 999999]).
     option(Merge.onCreate, [(T.label): 'airport', code:'XYZ'])
-
-v[999999]
 ----
 
 In this prior example, 'mergeV' will match on the vertex identifier of '999999' and
@@ -992,10 +971,8 @@ following:
 [source,groovy]
 ----
 g.mergeV([(T.id): 999999]).
-    option(Merge.onCreate, [(T.label): 'airport', code:'XYZ'])
+    option(Merge.onCreate, [(T.label): 'airport', code:'XYZ']).
     option(Merge.onMatch, [code:'xyz'])
-
-v[999999]
 ----
 
 At this point we've demonstrated the general form of 'mergeV' where you give it a
@@ -1012,8 +989,6 @@ g.withSideEffect('search', [(T.id): 999998]).
   mergeV(select('search')).
     option(Merge.onCreate, select('create')).
     option(Merge.onMatch, select('match'))
-    
-v[999998]
 ----
 
 The prior example shows how you can use a step like 'select' to dynamically provide
@@ -1034,35 +1009,34 @@ g.V().has('code','DFW').id()
 
 8
 
-g.V().has('code','XYZ').id()
+g.V().has('code','xyz').id()
 
 999999
 
 g.mergeE([(T.label): 'route', (Direction.from): 8, (Direction.to): 999999]).
     option(Merge.onCreate, [dist: 0])
 
-e[41224][8-route->999999]
+e[61394][8-route->999999]
     
-g.E(41224L).elementMap()
+g.E(61394L).elementMap()
 
-[id:41224,label:route,IN:[id:999999,label:airport],OUT:[id:8,label:airport],dist:0]
+[id:61394,label:route,IN:[id:999999,label:airport],OUT:[id:8,label:airport],dist:0]
 ----
 
 It is not possible to create new vertices from 'mergeE' automatically. They must 
 already exist for the edge to be created. In addition to 'onMatch' and 'onCreate', 
 'mergeE' also allows for two other 'option' modulators: 'outV' and 'inV', which lets
 you specify search criteria as a 'Map' for the 'from' and the 'to' of the edge. Using
-that capability we could rewrite the previous example as follows:
+that capability, we could rewrite the previous example as follows:
 
 [source,groovy]
 ----
 g.mergeE([(T.label): 'route', (Direction.from): Merge.outV, (Direction.to): Merge.inV]).
     option(Merge.outV, [code: 'DFW']).
-    option(Merge.inV, [code: 'XYZ']).
+    option(Merge.inV, [code: 'xyz']).
     option(Merge.onCreate, [dist: 0])
-    
 
-e[41224][8-route->999999]    
+e[61394][8-route->999999]
 ----
 
 This section introduced the basics of the 'mergeV' and 'mergeE' steps, which provide
@@ -1087,7 +1061,7 @@ m = [[code: 'IAD',country: 'US',desc: 'Washington Dulles International Airport',
 g.inject(m).unfold().mergeV().elementMap('code','country','desc')
 
 [id:10,label:airport,country:US,code:IAD,desc:Washington Dulles International Airport]
-[id:41223,label:airport,country:US,code:LTA,desc:Little Tiny Airport]
+[id:61395,label:airport,country:US,code:LTA,desc:Little Tiny Airport]
 [id:7,label:airport,country:US,code:DCA,desc:Ronald Reagan Washington National Airport]
 ----
 
@@ -1106,15 +1080,15 @@ m = [[search: [code: 'IAD', (T.label): 'airport'], create: [desc: 'Washington Du
      [search: [code: 'LTA',(T.label): 'airport'], create: [country: 'US',desc: 'Little Tiny Airport'], match: [elev: 555]],
      [search: [code: 'DCA', (T.label): 'airport'], create: [country: 'US',desc: 'Ronald Reagan Washington National Airport'], match: [elev: 14]]]
 
-g.inject(m).unfold().
-  mergeV(select('search')).
-    option(onCreate, select('create')).
-    option(onMatch, select('match')).
+g.inject(m).unfold().as('m').
+  mergeV(select('m').select('search')).
+    option(onCreate, select('m').select('create')).
+    option(onMatch, select('m').select('match')).
   elementMap('code','country','desc','elev')
   
 [id:10,label:airport,country:US,code:IAD,elev:313,desc:Washington Dulles International Airport]
-id:82454,label:airport,country:US,code:LTA,desc:Little Tiny Airport]
-id:7,label:airport,country:US,code:DCA,elev:14,desc:Ronald Reagan Washington National Airport]  
+[id:61394,label:airport,country:US,code:LTA,desc:Little Tiny Airport]
+[id:7,label:airport,country:US,code:DCA,elev:14,desc:Ronald Reagan Washington National Airport]
 ----
 
 ==== Incorporating 'fail' with 'mergeV' or 'mergeE'
@@ -1131,17 +1105,17 @@ give it a fail step for its 'onMatch'.
 
 [source,groovy]
 ----
-g.mergeV([code: 'XYZ']).
-    option(Merge.onCreate, [(T.label): 'airport', code:'XYZ']).
-    option(Merge.onMatch, fail('XYZ airport already exists'))
+g.mergeV([code: 'xyz']).
+    option(Merge.onCreate, [(T.label): 'airport']).
+    option(Merge.onMatch, fail('xyz airport already exists'))
 
 fail() Step Triggered
 =========================================================================================================================================================================
-Message  > XYZ airport already exists
+Message  > xyz airport already exists
 Traverser> v[999999]
   Bulk   > 1
-Traversal> fail("XYZ airport already exists")
-Parent   > MergeVertexStep [mergeV(["code":"XYZ"]).option(Merge.onCreate,[(T.label):"airport","code":"XYZ"]).option(Merge.onMatch,__.fail("XYZ airport already exists"))]
+Traversal> fail("xyz airport already exists")
+Parent   > MergeVertexStep [mergeV(["code":"xyz"]).option(Merge.onCreate,[(T.label):"airport","code":"xyz"]).option(Merge.onMatch,__.fail("xyz airport already exists"))]
 Metadata > {}
 =========================================================================================================================================================================
 ----
@@ -1163,8 +1137,6 @@ cardinality for the code property.
 ----
 g.mergeV([(T.id): 999999]).
     option(Merge.onCreate, [(T.label): 'airport', code: set('XYZ')])
-
-v[999999]
 ----
 
 By wrapping the '"XYZ"' in the 'set', which is statically imported from 
@@ -1175,9 +1147,7 @@ globally for the step by providing it as an argument after the 'Map':
 [source,groovy]
 ----
 g.mergeV([(T.id): 999999]).
-    option(Merge.onCreate, [(T.label): 'airport', code: 'XYZ'], Cardinality.set)
-
-v[999999]
+    option(Merge.onCreate, [(T.label): 'airport', code: 'XYZ'], VertexProperty.Cardinality.set)
 ----
 
 When you offer 'set' this way, 'mergeV' will assume all property keys to use this 
@@ -1222,7 +1192,7 @@ g.V().has('code','XYZ').fold()
 []
 ----
 
-Now that we have a query that can return an empty list if a vertex does not exist we
+Now that we have a query that can return an empty list if a vertex does not exist, we
 can take advantage of this in a 'coalesce' step. The query below looks to see if the
 airport already exists and passes the result of that into a 'coalesce' step.
 Remember, 'coalesce' will return the result of the first traversal it looks at that
@@ -1235,10 +1205,10 @@ second step creates a vertex for the airport '"XYZ"'.
 ----
 g.V().has('code','XYZ').fold().coalesce(unfold(),addV().property('code','XYZ'))
 
-v[53865]
+v[61394]
 ----
 
-As you can see the query above created a new vertex with an ID of '53865' as the
+As you can see the query above created a new vertex with an ID of '61394' as the
 'XYZ' airport did not already exist. However, if we run the same query again, notice
 that we get the same vertex back that we just created and not a new one. This is
 because this time, the 'coalesce' step *does* find a result from the 'unfold' step
@@ -1248,7 +1218,7 @@ and so completed before attempting the 'addV' step.
 ----
 g.V().has('code','XYZ').fold().coalesce(unfold(),addV().property('code','XYZ'))
 
-v[53865]
+v[61394]
 ----
 
 Using 'coalesce' in this way provides us with a nice pattern for a commonly performed
@@ -1257,10 +1227,10 @@ otherwise create it. This is often called an '"upsert"' pattern as the operation
 potentially updates or inserts a vertex based on its existence or not.
 
 The query below is perhaps a better example of an '"upsert"'. The query looks to
-see if the vertex with an ID of 3 already exists. If it does it updates the 'runways'
-property of that vertex be the value 3. If it does not exist it creates a new vertex 
-and the property. As vertex v[3] already exists that is what the query returns, 
-having first updated the 'runways' property.
+see if the vertex with an ID of 3 already exists. If it does, it updates the
+'runways' property of that vertex be the value 3. If it does not exist, it creates a
+new vertex and the property. As vertex v[3] already exists that is what the query
+returns, having first updated the 'runways' property.
 
 [source,groovy]
 ----
@@ -1301,22 +1271,38 @@ g.V(9999999).fold().
              coalesce(unfold().property('runways','3'),
              addV('airport').property('runways',3))
 
-v[57343]
+v[61397]
 ----
 
 If we look at the 'valueMap' for the new vertex we can see that it was created as we
 would have expected.
 
-
 [source,groovy]
 ----
-g.V(57343).valueMap().unfold()
+g.V(61397).valueMap().unfold()
 
 runways=[3]
 ----
 
-This technique is currently the recommended way of doing '"upsert"' operations with
-Gremlin.
+At the start of this section, we mentioned that this pattern with the 'coalesce' step
+was useful when you needed more flexibility that what 'mergeV' and 'mergeE' provided.
+The power in this pattern lies in the fact that the logic executed by `coalesce` is
+only limited by what you can do in Gremlin. For example, the following example shows
+how you might try to find a vertex, but if not found, you could not only add that
+missing vertex, but other structure as well, in this case another vertex and an edge
+between them.
+
+[source,groovy]
+----
+g.V(9999999).fold().
+  coalesce(unfold(), addV().property(id, 9999999).as('a').
+                     addV().property(id, 9999998).as('b').
+                     addE('knows').from('a'))
+----
+
+This is a powerful aspect of the pattern, but can complicate performance for
+different graph databases. Always be sure to understand the capabilities of your
+graph so that you understand the implications of the Gremlin that you are writing.
 
 [[vertexcopy]]
 ==== Creating one vertex based on another
@@ -1336,7 +1322,6 @@ other sections along the way.
 So far in this book we have looked at several examples where we created new
 vertices, edges and properties but we have not yet looked at how we can delete them.
 Gremlin provides the 'drop' step that we can use to remove things from a graph.
-
 
 ==== Deleting a vertex
 
@@ -1607,7 +1592,7 @@ g.V().hasLabel("airport").
       properties("runways","longest").
       group().by(key).by(value().sum())
 
-[longest:25497644, runways:4816]
+[longest:26436124,runways:4980]
 ----
 
 [[elementstep]]
@@ -1650,7 +1635,7 @@ Here are the properties returned.
 
 [source,groovy]
 ----
-[country:[vp[country->US]], code:[vp[code->AUS]], longest:[vp[longest->12250]], city:[vp[city->Austin]], lon:[vp[lon->-97.6698989868164]], type:[vp[type->airport]], places:[vp[places->[YYZ, LHR, FRA, MEX,]], elev:[vp[elev->542]], icao:[vp[icao->KAUS]], region:[vp[region->US-TX]], runways:[vp[runways->2]], lat:[vp[lat->30.1944999694824]], desc:[vp[desc->Austin Bergstrom Int]]]
+[country:[vp[country->US]],longest:[vp[longest->12250]],code:[vp[code->AUS]],city:[vp[city->Austin]],lon:[vp[lon->-97.6698989868164]],type:[vp[type->airport]],elev:[vp[elev->542]],icao:[vp[icao->KAUS]],region:[vp[region->US-TX]],runways:[vp[runways->2]],lat:[vp[lat->30.1944999694824]],desc:[vp[desc->Austin Bergstrom ...]]]
 ----
 
 [[propid]]
@@ -1695,12 +1680,12 @@ As you can see each property has a different, and unique, ID.
 
 [source,groovy]
 ----
-583
-595
-1051
-1123
-2467
-7783
+584
+596
+1052
+1124
+2468
+7784
 ----
 
 We can use these ID values in other queries in the same way as we have for vertices
@@ -1709,7 +1694,7 @@ and edges in some of our earlier examples.
 
 [source,groovy]
 ----
-g.V().properties().hasId(583)
+g.V().properties().hasId(584)
 
 vp[city->London]
 ----
@@ -1718,7 +1703,7 @@ We can query the value of this property as you would expect.
 
 [source,groovy]
 ----
-g.V().properties().hasId(583).value()
+g.V().properties().hasId(584).value()
 
 London
 ----
@@ -1727,7 +1712,7 @@ We can retrieve the name of the property key as follows.
 
 [source,groovy]
 ----
-g.V().properties().hasId(583).key()
+g.V().properties().hasId(584).key()
 
 city
 ----
@@ -1736,7 +1721,7 @@ We could also have used 'label' instead of 'key'
 
 [source,groovy]
 ----
-g.V().properties().hasId(583).label()
+g.V().properties().hasId(584).label()
 
 city
 ----
@@ -1745,17 +1730,17 @@ We can also find out which element (vertex or edge) that this property belongs t
 
 [source,groovy]
 ----
-g.V().properties().hasId(583).next().element()
+g.V().properties().hasId(584).element()
 
 v[49]
 ----
 
 We can also look at other property values of the element containing our property with
-an ID of 583.
+an ID of 584.
 
 [source,groovy]
 ----
-g.V().properties().hasId(583).next().element().values('desc')
+g.V().properties().hasId(584).next().element().values('desc')
 
 London Heathrow
 ----
@@ -1767,7 +1752,7 @@ this case it is part of a TinkerGraph.
 ----
 g.V().has('airport','code','DFW').properties('city').next().graph()
 
-tinkergraph[vertices:3619 edges:50148]
+tinkergraph[vertices:3749 edges:57645]
 ----
 
 To further show that each property has an ID the following code retrieves a list of
@@ -1779,40 +1764,40 @@ key along with its corresponding ID.
 p = g.V(3).properties().toList()
 p.each {println it.key + "\t:" + it.id}
 
-country :28
-code    :29
-longest :30
-city    :31
-elev    :32
-icao    :33
-lon     :34
-type    :35
-region  :36
-runways :37
-lat     :38
-desc    :39
+country :29
+longest :31
+code    :30
+city    :32
+lon     :35
+type    :36
+elev    :33
+icao    :34
+region  :37
+runways :38
+lat     :39
+desc    :40
 ----
 
 NOTE: If you update a property, its ID value will also be changed as you have in
 reality replaced the property with a new one which is allocated a new ID.
 
-Take a look at the example below. First of all we query the ID of the 'city' property
-from vertex 'V(4)'. Next we change its value to be 'newname' and then query the
-property ID again. Note that the ID has changed. As mentioned above, vertex
-properties are immutable. When you update a property value using the 'property' step,
-a new property object is created that replaces the prior one.
+Take a look at the example below. First, we query the ID of the 'city'  property from
+vertex 'V(4)'. Next we change its value to be 'newname' and then query the property
+ID again. Note that the ID has changed. As mentioned above, vertex properties are
+immutable. When you update a property value using the 'property' step, a new property
+object is created that replaces the prior one.
 
 [source,groovy]
 ----
 g.V(4).properties('city').id()
 
-43
+44
 
 g.V(4).property('city','newname')
 
 g.V(4).properties('city').id()
 
-53361
+42784
 ----
 
 The fact that every property in a graph has an ID can improve performance of
@@ -1918,7 +1903,7 @@ g.addV().property('one','hi').
 [one:[hi,hello,hello again],two:[goodbye]]
 ----
 
-So our first query create a property with a key called 'one' followed by a list
+So our first query creates a property with a key called 'one' followed by a list
 containing '[hi,hello,hello again]'. Let's do the same test again but this time
 create the vertex first and use an already created vertex to add properties to.
 
@@ -1984,7 +1969,7 @@ g.V(v).property('one','hi').
        property('one','hello again').
        explain()
 
-Final Traversal  [TinkerGraphStep(vertex,[v[54800]]),
+Final Traversal  [TinkerGraphStep(vertex,[v[61394]]),
                     AddPropertyStep({value=[hi], key=[one]}),
                     AddPropertyStep({value=[hello], key=[one]}),
                     AddPropertyStep({value=[goodbye], key=[two]}
@@ -2151,12 +2136,13 @@ property to a property"'. There are a number of use cases where this capability 
 be extremely useful. Common ones might be adding a date that a property was last
 updated or perhaps adding access control information to a property.
 
-The example below adds a meta property with a key of 'date' and a value of '6/6/2017'
-to the property with a key of 'code' and a value of 'AUS'.
+The example below adds a meta-property with a key of 'date' and a date value of
+'2025-06-21T00:00:00Z' to the property with a key of 'code' and a value of 'AUS'.
 
 [source,groovy]
 ----
-g.V().has('code','AUS').properties().hasValue('AUS').property('date','6/6/2017')
+g.V().has('code','AUS').properties().hasValue('AUS').
+  property('date', datetime('2025-06-21T00:00:00Z'))
 ----
 
 If you wanted to add the date to the 'code' property regardless of its current value,
@@ -2164,26 +2150,26 @@ then you could just do this.
 
 [source,groovy]
 ----
-g.V().has('code','AUS').properties('code').property('date','6/6/2017')
+g.V().has('code','AUS').properties('code').
+  property('date', datetime('2025-06-21T00:00:00Z'))
 ----
 
-
-We can retrieve all of the meta properties on a specific property, such as the 'code'
+We can retrieve all of the meta-properties on a specific property, such as the 'code'
 property as follows.
 
 [source,groovy]
 ----
 g.V().has('code','AUS').properties('code').properties()
 
-p[date->6/6/2017]
+p[date->2025-06-21T00:00Z]
 ----
 
 If you want to find all the properties associated with the AUS vertex that have a
-meta property with a date of '6/6/2017' you can do that as follows.
+meta property with a date of '2025-06-21T00:00:00Z' you can do that as follows.
 
 [source,groovy]
 ----
-g.V().has('code','AUS').properties().has('date','6/6/2017')
+g.V().has('code','AUS').properties().has('date',datetime('2025-06-21T00:00:00Z'))
 
 vp[code->AUS]
 ----
@@ -2195,7 +2181,7 @@ properties that have a key of 'date'.
 ----
 g.V().has('code','AUS').properties().hasValue('AUS').properties('date')
 
-p[date->6/6/2017]
+p[date->2023-06-21T00:00Z]
 ----
 
 You can add multiple meta properties to a property while creating it. The following
@@ -2204,7 +2190,7 @@ properties to it representing the date the comment was made and who made it.
 
 [source,groovy]
 ----
-g.V(3).property('comment','I like this airport','date','6/6/2017','user','Kelvin')
+g.V(3).property('comment','I like this airport','date',datetime('2025-06-21T00:00:00Z'),'user','Kelvin')
 ----
 
 We can query the graph to make sure everything worked as expected.
@@ -2217,8 +2203,8 @@ vp[Comment->I like this airport]
 
 g.V(3).properties('comment').properties()
 
-p[date->6/6/2017]
-p[user->Kelvin]
+==>p[date->2025-06-21T00:00Z]
+==>p[user->Kelvin]
 ----
 
 You can use 'drop' to remove meta properties but take care when doing so.
@@ -2228,18 +2214,18 @@ drop the meta property 'date', but will in fact drop the whole vertex.
 [source,groovy]
 ----
 g.V().has('code','AUS').
-  properties().hasValue('AUS').property('date','6/6/2017').drop()
+  properties().hasValue('AUS').property('date',datetime('2025-06-21T00:00:00Z')).drop()
 ----
 
-To remove a single meta property we need to use drop in this way
+To remove a single meta-property we need to use drop in this way
 
 [source,groovy]
 ----
  g.V().has('code','AUS').properties('code').properties('date').drop()
 ----
 
-Note that you cannot chain meta properties together endlessly. The main properties on
-a vertex are 'VertexProperty' types. The meta property is a 'Property' type and you
+Note that you cannot chain meta-properties together endlessly. The main properties on
+a vertex are 'VertexProperty' types. The meta-property is a 'Property' type and you
 cannot add another property to those. You can however add more than one meta
 property to the same vertex property.
 
@@ -2281,7 +2267,7 @@ vp[lat->30.1944999694824]
 vp[desc->Austin Bergstrom ...]
 ----
 
-We also know how to look at the meta properties by following the 'properties' step
+We also know how to look at the meta-properties by following the 'properties' step
 with a 'valueMap' step or a second 'properties' step. However, a value is returned
 only when a property has a meta property. For all other properties the result is
 simply an empty list.
@@ -2291,7 +2277,7 @@ simply an empty list.
 g.V().has('code','AUS').properties().valueMap()
 
 []
-[date:6/6/2017]
+[date:2025-06-21T00:00:00Z]
 []
 []
 []
@@ -2305,8 +2291,8 @@ g.V().has('code','AUS').properties().valueMap()
 ----
 
 Using the new 'with' step and specifying options using 'WithOptions' we can generate
-a result from 'valueMap' that includes the property values and their respective meta
-properties. The example below generates a map containing the values for all
+a result from 'valueMap' that includes the property values and their respective
+meta-properties. The example below generates a map containing the values for all
 properties plus the key and value for any meta properties present.
 
 [source,groovy]
@@ -2322,7 +2308,7 @@ meta property, that is also shown.
 [source,groovy]
 ----
 [value:US]
-[value:AUS,date:6/6/2017]
+[value:AUS,date:2025-06-21T00:00Z]
 [value:12250]
 [value:Austin]
 [value:542]
@@ -2349,7 +2335,7 @@ Once again the key and value are shown for the 'date' meta property.
 [source,groovy]
 ----
 [key:country]
-[key:code,date:6/6/2017]
+[key:code,date:2025-06-21T00:00Z]
 [key:longest]
 [key:city]
 [key:elev]
@@ -2377,7 +2363,7 @@ Note that in this case, the ID for each property is also shown.
 [source,groovy]
 ----
 [id:28,key:country,value:US]
-[id:29,key:code,value:AUS,date:6/6/2017]
+[id:29,key:code,value:AUS,date:2025-06-21T00:00Z]
 [id:30,key:longest,value:12250]
 [id:31,key:city,value:Austin]
 [id:32,key:elev,value:542]
@@ -2429,11 +2415,11 @@ edges.
 ----
 g.V().groupCount().by(label)
 
-[continent:7,country:237,version:1,airport:3374]
+[continent:7,country:237,version:1,airport:3504]
 
 g.E().groupCount().by(label)
 
-[contains:6748,route:43400]
+[contains:7008,route:50637]
 ----
 
 Now that we know the label names it is very easy to get the names of the property
@@ -2513,9 +2499,9 @@ the graph structure by examining its paths and counting unique ones:
 ----
 g.V().outE().otherV().groupCount().by(path().by(label)).unfold()
 
-path[country, contains, airport]=3374
-path[continent, contains, airport]=3374
-path[airport, route, airport]=43400
+==>path[country, contains, airport]=3504
+==>path[continent, contains, airport]=3504
+==>path[airport, route, airport]=50637
 ----
 
 Various graph databases may provide their own APIs for accessing the schema of a 
@@ -2563,7 +2549,7 @@ with a 'local' scope to order the contents of the list.
 g.V().hasLabel('airport').limit(20).values('runways').
       fold().order(local)
 
-[2,2,2,3,3,3,3,3,4,4,4,4,4,4,4,5,5,6,7,8]
+[2,2,2,3,3,3,3,3,4,4,4,4,4,4,4,5,5,6,7,7]
 ----
 
 Here is an example of a 'union' step followed by a 'fold' step that generates a list
@@ -2576,7 +2562,7 @@ generate a list.
 ----
 g.V().has('airport','code','DFW').union(identity(),out().count()).fold()
 
-[v[8],221]
+[v[8],253]
 ----
 
 Note that the above syntax, is a shorthand form of the following.
@@ -2585,7 +2571,7 @@ Note that the above syntax, is a shorthand form of the following.
 ----
 g.V().has('airport','code','DFW').as('a').union(select('a'),out().count()).fold()
 
-[v[8],221]
+[v[8],253]
 ----
 
 If we wanted to generate a map with keys and values rather than a list, we could use
@@ -2596,7 +2582,7 @@ routes is the value.
 ----
 g.V().has('airport','code','DFW').group().by().by(out().count())
 
-[v[8]:221]
+[v[8]:253]
 ----
 
 Another way that a map can be created is when the 'project' step is used.
@@ -2625,87 +2611,37 @@ DFW. Notice how the first 'by' step has no parameters so it returns the actual v
  g.V().has('code','DFW').project('dfw','route_count').
        by().by(outE().count())
 
-[dfw:v[8],route_count:221]
+[dfw:v[8],route_count:253]
 ----
 
-As well as generating maps, we can also generate a set using a 'store' step so that
-duplicate values are not stored. The 'withSideEffect' step can be used to initialize
-the set. The 'cap' step emits the collection resulting from the side effect that we
-created using the 'store' step. Among other things this allows us to return this
-collection as the final result of a query.
+As well as generating maps, we can also generate a set using a 'aggregate' step so
+that duplicate values are not stored. The 'withSideEffect' step can be used to
+initialize the set. The 'cap' step emits the collection resulting from the side
+effect that we created using the 'store' step. Among other things this allows us to
+return this collection as the final result of a query.
 
 [source,groovy]
 ----
 g.withSideEffect('s', [] as Set).
   V().hasLabel('airport').limit(20).values('runways').
-      store('s').cap('s').order(local)
+      aggregate('s').cap('s').order(local)
 
-[2,3,4,5,6,7,8]
+[2,3,4,5,6,7]
 ----
 
-The 'store' step can also be used in conjunction with a 'by' modulator to specify
-exactly what is 'stored'. The query below uses a 'store' step to create a collection
-of runways but avoids the need to use a 'values' step.
+The 'aggregate' step can also be used in conjunction with a 'by' modulator to specify
+exactly what is aggregated. The query below uses a 'aggregate' step to create a
+collection of runways but avoids the need to use a 'values' step.
 
 [source,groovy]
 ----
-g.V().has('region','US-TX').store('r').by('runways').cap('r')
+g.V().has('region','US-TX').aggregate('r').by('runways').cap('r')
 
-[2,2,2,2,2,2,2,2,7,5,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,1]
+[2,2,2,2,2,2,2,2,7,5,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,1,1]
 ----
 
-The 'aggregate' step also generates a collection as shown below. The collection is
-actually a 'BulkSet' as we shall confirm shortly. The 'store' step also generates a
-BulkSet.
-
-[source,groovy]
-----
-g.V().has('airport','country','IE').aggregate('ireland').cap('ireland')
-
-[v[60],v[91],v[311],v[477],v[635],v[785],v[1269]]
-----
-
-The query below uses an 'aggregate' step to find all the countries that you can fly
-to from airports in Ireland but excludes routes that are between airports within
-Ireland.
-
-[source,groovy]
-----
-g.V().has('airport','country','IE').aggregate('ireland').
-      out().where(without('ireland')).
-      values('country').
-      dedup().fold().order(local)
-----
-
-As you can see by looking at the results, the country code for Ireland, 'IE', is not
-present in the list.
-
-[source,groovy]
-----
-[AE,AT,BE,BG,CA,CH,CY,CZ,DE,DK,ES,ET,FI,FR,GR,HR,HU,IM,IS,IT,JE,LT,LU,LV,MA,MD,MT,NL,NO,PL,PT,QA,RO,SE,SK,TR,UK,US]
-----
-
-While 'aggregate' and 'store' on the surface appear identical, they actually behave
-differently. The 'aggregate' step will block and immediately gather up everything 
-from the prior traversal, whereas the 'store' step will only add things to its 
-collection as they are seen. This is sometimes referred to as 'lazy aggregation'. 
-Note also that even though we specified a 'limit' of 2, the 'store' step collected 
-three elements as the third has already been seen before the limit step is applied.
-
-[source,groovy]
-----
-g.V().has('airport','country','IE').store('a').limit(2).cap('a')
-
-[v[60],v[91],v[311]]
-
-g.V().has('airport','country','IE').aggregate('a').limit(2).cap('a')
-
-[v[60],v[91],v[311],v[477],v[635],v[785],v[1269]]
-----
-
-Both 'aggregate' and 'store' can be followed by a 'by' modulator to specify more
-precisely what should be collected. For example, if we wanted to store the number of
-runways that each airport in Ireland has we could do so as follows.
+As another example, if we wanted to store the number of runways that each airport in
+Ireland has we could do so as follows.
 
 [source,groovy]
 ----
@@ -2717,10 +2653,9 @@ g.V().has('airport','country','IE').
 
 In the "<<bymodulators>>" section we learned about the concept of an unproductive 
 'by'. As a reminder, an unproductive 'by' is one that does not produce a result for
-the step that it is tied to. When 'store' or 'aggregate' encounter an unproductive
-'by' it has a filtering effect for that current traverser. For example, if in the 
-prior example we'd made a mistake and mistyped '"runways"' as '"rnways"' we would
-have no results:
+the step that it is tied to. When 'aggregate' encounters an unproductive 'by' it has
+a filtering effect for that current traverser. For example, if in the prior example
+we'd made a mistake and mistyped '"runways"' as '"rnways"' we would have no results:
 
 [source,groovy]
 ----
@@ -2730,10 +2665,10 @@ g.V().has('airport','country','IE').
 []
 ---- 
 
-This behavior is meant as a convenience when using 'store' or 'aggregate' with 
-heterogenous or incomplete elements where a value may not exist, thereby sparing an
-error. It may be tempting to exploit this mechanic as a direct means of filtering as
-demonstrated in the following example:
+This behavior is meant as a convenience when using 'aggregate' with heterogenous or
+incomplete elements where a value may not exist, thereby sparing an error. It may be
+tempting to exploit this mechanic as a direct means of filtering as demonstrated in
+the following example:
 
 [source,groovy]
 ----
@@ -2822,7 +2757,7 @@ the number of routes from DFW.
 g.V().has('code','DFW').project('dfw','route_count').
       by().by(outE().count()).select(values)
 
-[v[8],221]
+[v[8],253]
 ----
 
 Likewise the keys come back in a list.
@@ -2842,7 +2777,7 @@ We could also be even more specific and select which values we are interested in
 g.V().has('code','DFW').project('dfw','route_count').
        by().by(outE().count()).select('route_count')
 
-221
+253
 ----
 
 We can also access the DFW vertex directly from the map.
@@ -2871,7 +2806,6 @@ Dallas/Fort Worth International Airport
 As we shall see in the next two sections, sometimes it is necessary to use the
 'unfold' step to access the contents of a collection and it is also sometimes
 necessary to use 'local' scope.
-
 
 [[unbundle]]
 ==== Using 'unfold' to unbundle a collection
@@ -2994,17 +2928,17 @@ List objects with 'unfold'.
 
 [source,groovy]
 ----
-g.V().limit(5).map(out().values('code').fold())
+g.V(3,4,5,6,7).map(out().values('code').limit(3).fold())
 
-[SKZ,KHI]
-[ISB]
-[KHI,MCT,TUK]
-[DXB,KHI,DOH]
-[PEW,PZH]
+[PHL,PDX,DTW]
+[ATL,AUS,BOS]
+[ATL,AUS,BNA]
+[YYZ,LHR,RSW]
+[DEN,YOW,HPN]
 
-g.V().limit(5).map(out().values('code').fold()).unfold().fold()
+g.V(3,4,5,6,7).map(out().values('code').limit(3).fold()).unfold().fold()
  
-[SKZ,KHI,ISB,KHI,MCT,TUK,DXB,KHI,DOH,PEW,PZH]
+[PHL,PDX,DTW,ATL,AUS,BOS,ATL,AUS,BNA,YYZ,LHR,RSW,DEN,YOW,HPN]
 ----
 
 Merging maps together is slightly more complex than just a simple 'fold' because 
@@ -3014,15 +2948,15 @@ you could just use a specific form of 'fold' that include the 'addAll' operator:
 
 [source,groovy]
 ----
-g.V().limit(3).valueMap("code","desc")
+g.V(2304,2305,2306).valueMap("code","desc")
 
 [code:[MJD],desc:[Moenjodaro Airport]]
 [code:[GIL],desc:[Gilgit Airport]]
 [code:[GWD],desc:[Gwadar International Airport]]
 
-g.V().limit(3).valueMap("code","desc").fold([:], addAll)
+g.V(2304,2305,2306).valueMap("code","desc").fold([:], addAll)
 
-[code:[GWD],desc:[Gwadar International Airport]]
+[code:[MJD],desc:[Moenjodaro Airport]]
 ----
 
 You also have the option to use the 'merge' step with collections:
@@ -3149,7 +3083,7 @@ query creates a list containing the IATA codes for all airports in Texas.
 ----
 g.V().has('region','US-TX').values('code').fold()
 
-[AUS,DFW,IAH,SAT,HOU,ELP,DAL,LBB,HRL,MAF,CRP,ABI,ACT,CLL,BPT,AMA,BRO,GGG,GRK,LRD,MFE,SJT,SPS,TYR,VCT,AFW]
+[AUS,DFW,IAH,SAT,HOU,ELP,DAL,LBB,HRL,MAF,CRP,ABI,ACT,CLL,BPT,AMA,BRO,GGG,GRK,LRD,MFE,SJT,SPS,TYR,VCT,AFW,DRT]
 ----
 
 Using 'local' scope with a 'limit' step we can extract just the first two entries
@@ -3169,7 +3103,7 @@ entries from the list.
 ----
 g.V().has('region','US-TX').values('code').fold().tail(local,2)
 
-[VCT,AFW]
+[AFW,DRT]
 ----
 
 It is worth noting that 'local' scope can also be used with a 'dedup' step. The
@@ -3191,7 +3125,6 @@ applied to them using 'local' scope.
 [source,groovy]
 ----
 g.V().has('country','US').values('region').order().fold().dedup(local)
-
 ----
 
 When either query is run, here are the results that are returned.
@@ -3221,7 +3154,7 @@ When run it returns the following results.
 
 [source,groovy]
 ----
-[continent:[NA],country:[US],airport:[ABQ,ATL,BKG,BNA,BOS,BWI,CLE,CLT,CUN,CVG,DAL,DCA,DEN,DFW,DTW,ELP,EWR,FLL,FRA,GDL,HOU,HRL,IAD,IAH,IND,JFK,LAS,LAX,LBB,LGB,LHR,MCI,MCO,MDW,MEM,MEX,MIA,MSP,MSY,OAK,ORD,PDX,PHL,PHX,PIE,PIT,PNS,RDU,SAN,SEA,SFB,SFO,SJC,SLC,SNA,STL,TPA,VPS,YYZ]]
+[continent:[NA],country:[US],airport:[ABQ,AMA,AMS,ASE,ATL,BHM,BKG,BNA,BOI,BOS,BTR,BUF,BUR,BWI,BZN,CHS,CLE,CLT,CMH,CUN,CVG,CZM,DAL,DCA,DEN,DFW,DSM,DTW,ECP,ELP,EWR,FLL,FRA,GDL,GRR,HDN,HNL,HOU,HRL,IAD,IAH,IND,JAX,JFK,LAS,LAX,LBB,LGB,LGW,LHR,LIR,LIT,MCI,MCO,MDW,MEM,MEX,MIA,MKE,MSP,MSY,NAS,OAK,OKC,OMA,ONT,ORD,PDX,PHL,PHX,PIE,PIT,PNS,PVD,PVR,RDU,RNO,SAN,SAT,SDF,SEA,SFB,SFO,SJC,SJD,SLC,SMF,SNA,STL,TPA,TUL,TUS,TYS,VPS,XNA,YVR,YYC,YYZ]]
 ----
 
 However, let's assume we wanted to limit the query to a maximum of ten results for
@@ -3241,7 +3174,7 @@ This time when run, the amount of results returned is restricted.
 
 [source,groovy]
 ----
-[continent:[NA],country:[US],airport:[ABQ,ATL,BKG,BNA,BOS,BWI,CLE,CLT,CUN,CVG]]
+[continent:[NA],country:[US],airport:[ABQ,AMA,AMS,ASE,ATL,BHM,BKG,BNA,BOI,BOS]]
 ----
 
 In the next section we will continue our look at Gremlin's collections and how they
@@ -3288,7 +3221,7 @@ We can still access '"b"' if we reference it by itself  as it is defined after t
 ----
 g.V().has('code','DFW').as('a').outE().count().as('b').select('b')
 
-221
+253
 ----
 
 In cases such as this, it is almost always possible to achieve the results that you
@@ -3301,7 +3234,7 @@ rewritten query below achieves our original goal.
 ----
 g.V().has('code','DFW').group().by().by(outE().count())
 
-[v[8]:221]
+[v[8]:253]
 ----
 
 If this was all we needed then our job is done. We have a map containing the vertex
@@ -3346,7 +3279,7 @@ as follows.
 g.V().has('code','DFW').group().by().by(outE().count()).
                         unfold().select(values)
 
-221
+253
 ----
 
 To prove we could carry on adding to the query from here let's get back the airport
@@ -3370,16 +3303,16 @@ g.V().has('code','DFW').group().by().by(outE().count()).as('ct').
       addV('dfwcount').
       property('current_count',select('ct').unfold().select(values))
 
-v[54931]
+v[61394]
 ----
 
 We can inspect the new vertex to double check that our query worked as intended.
 
 [source,groovy]
 ----
-g.V(54931).valueMap(true)
+g.V(61394).valueMap(true)
 
-[id:54931,current_count:[221],label:dfwcount]
+[id:61394,label:dfwcount,current_count:[253]]
 ----
 
 Hopefully you are starting to see a pattern here. It is important to understand which
@@ -3394,7 +3327,6 @@ are the number of runways at the airport. The results are ordered to aid readabi
 
 [source,groovy]
 ----
-
 g.V().hasLabel('airport').limit(10).
       group().by('code').by(values('runways')).
       order(local).by(values)
@@ -3502,13 +3434,13 @@ g.V().has('region','US-NM').
       select(values).
       unfold().
       sum().
-      store('a').
+      aggregate('a').
       V().has('region','US-AZ').
       group().by('code').by(values('runways')).
       select(values).
       unfold().
       sum().
-      store('b').
+      aggregate('b').
       project('first','second').
         by(select('a').unfold()).
         by(select('b').unfold()).
@@ -3526,7 +3458,6 @@ gremlin> 27/26
 
 ==>1.0384615385
 ----
-
 
 [[sackintro]]
 === Introducing 'sack' as a way to store values
@@ -3701,7 +3632,6 @@ g.V().sack(assign).by(constant(400)).has('code','SAF').
 [549,708,400,400]
 ----
 
-
 [[sackcalc]]
 ==== Doing calculations using a 'sack'
 
@@ -3728,16 +3658,16 @@ distance from SAF to ATL with a stop in DFW is 1278 miles.
 
 [source,groovy]
 ----
-[SAF,549,DFW,190,AUS,739]
-[SAF,549,DFW,225,IAH,774]
-[SAF,549,DFW,630,BNA,1179]
-[SAF,549,DFW,729,ATL,1278]
-[SAF,549,DFW,1120,FLL,1669]
-[SAF,549,DFW,1170,IAD,1719]
-[SAF,549,DFW,1190,DCA,1739]
-[SAF,549,DFW,1210,BWI,1759]
-[SAF,549,DFW,1560,BOS,2109]
-[SAF,549,DFW,3030,ANC,3579]
+[SAF,549,DFW,1197,YYZ,1746]
+[SAF,549,DFW,1751,YVR,2300]
+[SAF,549,DFW,4458,DUB,5007]
+[SAF,549,DFW,4736,LHR,5285]
+[SAF,549,DFW,4933,CDG,5482]
+[SAF,549,DFW,5127,FRA,5676]
+[SAF,549,DFW,5208,HEL,5757]
+[SAF,549,DFW,6410,NRT,6959]
+[SAF,549,DFW,8022,DXB,8571]
+[SAF,549,DFW,8574,SYD,9123]
 ----
 
 What may not be obvious from the query above is that we are in fact using multiple
@@ -3790,16 +3720,16 @@ another list.
 
 [source,groovy]
 ----
-[path:[SAF,549,DFW,190,AUS],total:739]
-[path:[SAF,549,DFW,225,IAH],total:774]
-[path:[SAF,549,DFW,630,BNA],total:1179]
-[path:[SAF,549,DFW,729,ATL],total:1278]
-[path:[SAF,549,DFW,1120,FLL],total:1669]
-[path:[SAF,549,DFW,1170,IAD],total:1719]
-[path:[SAF,549,DFW,1190,DCA],total:1739]
-[path:[SAF,549,DFW,1210,BWI],total:1759]
-[path:[SAF,549,DFW,1560,BOS],total:2109]
-[path:[SAF,549,DFW,3030,ANC],total:3579]
+[path:[SAF,549,DFW,1197,YYZ],total:1746]
+[path:[SAF,549,DFW,1751,YVR],total:2300]
+[path:[SAF,549,DFW,4458,DUB],total:5007]
+[path:[SAF,549,DFW,4736,LHR],total:5285]
+[path:[SAF,549,DFW,4933,CDG],total:5482]
+[path:[SAF,549,DFW,5127,FRA],total:5676]
+[path:[SAF,549,DFW,5208,HEL],total:5757]
+[path:[SAF,549,DFW,6410,NRT],total:6959]
+[path:[SAF,549,DFW,8022,DXB],total:8571]
+[path:[SAF,549,DFW,8574,SYD],total:9123]
 ----
 
 The query can be refined a bit more to remove the 'path' and 'total' key names from
@@ -3823,16 +3753,16 @@ until the second half of the query.
 
 [source,groovy]
 ----
-[[SAF,549,DFW,190,AUS],739]
-[[SAF,549,DFW,225,IAH],774]
-[[SAF,549,DFW,630,BNA],1179]
-[[SAF,549,DFW,729,ATL],1278]
-[[SAF,549,DFW,1120,FLL],1669]
-[[SAF,549,DFW,1170,IAD],1719]
-[[SAF,549,DFW,1190,DCA],1739]
-[[SAF,549,DFW,1210,BWI],1759]
-[[SAF,549,DFW,1560,BOS],2109]
-[[SAF,549,DFW,3030,ANC],3579]
+[[SAF,549,DFW,1197,YYZ],1746]
+[[SAF,549,DFW,1751,YVR],2300]
+[[SAF,549,DFW,4458,DUB],5007]
+[[SAF,549,DFW,4736,LHR],5285]
+[[SAF,549,DFW,4933,CDG],5482]
+[[SAF,549,DFW,5127,FRA],5676]
+[[SAF,549,DFW,5208,HEL],5757]
+[[SAF,549,DFW,6410,NRT],6959]
+[[SAF,549,DFW,8022,DXB],8571]
+[[SAF,549,DFW,8574,SYD],9123]
 ----
 
 We can add one more refinement to make the results exactly the same as those from the
@@ -3854,16 +3784,16 @@ Now the results look just the same was those we got using 'sack'.
 
 [source,groovy]
 ----
-[SAF,549,DFW,190,AUS,739]
-[SAF,549,DFW,225,IAH,774]
-[SAF,549,DFW,630,BNA,1179]
-[SAF,549,DFW,729,ATL,1278]
-[SAF,549,DFW,1120,FLL,1669]
-[SAF,549,DFW,1170,IAD,1719]
-[SAF,549,DFW,1190,DCA,1739]
-[SAF,549,DFW,1210,BWI,1759]
-[SAF,549,DFW,1560,BOS,2109]
-[SAF,549,DFW,3030,ANC,3579]
+[SAF,549,DFW,1197,YYZ,1746]
+[SAF,549,DFW,1751,YVR,2300]
+[SAF,549,DFW,4458,DUB,5007]
+[SAF,549,DFW,4736,LHR,5285]
+[SAF,549,DFW,4933,CDG,5482]
+[SAF,549,DFW,5127,FRA,5676]
+[SAF,549,DFW,5208,HEL,5757]
+[SAF,549,DFW,6410,NRT,6959]
+[SAF,549,DFW,8022,DXB,8571]
+[SAF,549,DFW,8574,SYD,9123]
 ----
 
 The query can also be written using the same 'path' and 'coalesce' approach but this
@@ -3884,16 +3814,16 @@ Once again we have the same results as we had when using 'sack' or 'project'.
 
 [source,groovy]
 ----
-[SAF,549,DFW,190,AUS,739]
-[SAF,549,DFW,225,IAH,774]
-[SAF,549,DFW,630,BNA,1179]
-[SAF,549,DFW,729,ATL,1278]
-[SAF,549,DFW,1120,FLL,1669]
-[SAF,549,DFW,1170,IAD,1719]
-[SAF,549,DFW,1190,DCA,1739]
-[SAF,549,DFW,1210,BWI,1759]
-[SAF,549,DFW,1560,BOS,2109]
-[SAF,549,DFW,3030,ANC,3579]
+[SAF,549,DFW,1197,YYZ,1746]
+[SAF,549,DFW,1751,YVR,2300]
+[SAF,549,DFW,4458,DUB,5007]
+[SAF,549,DFW,4736,LHR,5285]
+[SAF,549,DFW,4933,CDG,5482]
+[SAF,549,DFW,5127,FRA,5676]
+[SAF,549,DFW,5208,HEL,5757]
+[SAF,549,DFW,6410,NRT,6959]
+[SAF,549,DFW,8022,DXB,8571]
+[SAF,549,DFW,8574,SYD,9123]
 ----
 
 As we have seen, the 'sack' form is quite concise however, the 'project' and 'union'
@@ -3919,16 +3849,16 @@ Again we have the same results.
 
 [source,groovy]
 ----
-[SAF,549,DFW,190,AUS,739]
-[SAF,549,DFW,225,IAH,774]
-[SAF,549,DFW,630,BNA,1179]
-[SAF,549,DFW,729,ATL,1278]
-[SAF,549,DFW,1120,FLL,1669]
-[SAF,549,DFW,1170,IAD,1719]
-[SAF,549,DFW,1190,DCA,1739]
-[SAF,549,DFW,1210,BWI,1759]
-[SAF,549,DFW,1560,BOS,2109]
-[SAF,549,DFW,3030,ANC,3579]
+[SAF,549,DFW,1197,YYZ,1746]
+[SAF,549,DFW,1751,YVR,2300]
+[SAF,549,DFW,4458,DUB,5007]
+[SAF,549,DFW,4736,LHR,5285]
+[SAF,549,DFW,4933,CDG,5482]
+[SAF,549,DFW,5127,FRA,5676]
+[SAF,549,DFW,5208,HEL,5757]
+[SAF,549,DFW,6410,NRT,6959]
+[SAF,549,DFW,8022,DXB,8571]
+[SAF,549,DFW,8574,SYD,9123]
 ----
 
 So in summary, as is almost always the case, there is more than one way to get the
@@ -3941,38 +3871,38 @@ The next query we are going to look at uses a 'sack' to keep track of how many f
 segments (or hops) a 'path' consists of. This means that along with the 'path' result
 we can also return the path's 'hop count'.
 
-The query below looks for routes between Austin and Wellington and returns the first
-10 results found along with the number of flights that would need to be taken between
-the source and destination airports. As part of the 'repeat' step, each time an 'out'
-step is taken a 'constant' value of one is added to the sack for that individual
-path. Finally a 'union' step is used to combine the individual path with its hop
-count.
+The query below looks for routes between San Francisco and Wellington and returns the
+first 10 results found along with the number of flights that would need to be taken
+between the source and destination airports. As part of the 'repeat' step, each time
+an 'out' step is taken a 'constant' value of one is added to the sack for that
+individual path. Finally a 'union' step is used to combine the individual path with
+its hop count.
 
 [source,groovy]
 ----
 g.withSack(0).V().
-  has('code','AUS').
+  has('code','SFO').
   repeat(out().simplePath().sack(sum).by(constant(1))).
     until(has('code','WLG')).
   limit(10).
   local(union(path().by('code'),sack()).fold())
 ----
 
-When run the query returns ten lists containing the airports visited and the number of
-hops in each individual list.
+When run the query returns ten lists containing the airports visited and the number
+of hops in each individual list.
 
 [source,groovy]
 ----
-[[AUS,DFW,SYD,WLG],3]
-[[AUS,IAH,AKL,WLG],3]
-[[AUS,LAX,SYD,WLG],3]
-[[AUS,LAX,MEL,WLG],3]
-[[AUS,LAX,AKL,WLG],3]
-[[AUS,LAX,BNE,WLG],3]
-[[AUS,SFO,SYD,WLG],3]
-[[AUS,SFO,AKL,WLG],3]
-[[AUS,YYZ,HND,SYD,WLG],4]
-[[AUS,YYZ,HND,AKL,WLG],4]
+[[SFO,SYD,WLG],2]
+[[SFO,MEL,WLG],2]
+[[SFO,AKL,WLG],2]
+[[SFO,BNE,WLG],2]
+[[SFO,YVR,SYD,WLG],3]
+[[SFO,YVR,MEL,WLG],3]
+[[SFO,YVR,AKL,WLG],3]
+[[SFO,YVR,BNE,WLG],3]
+[[SFO,NRT,SYD,WLG],3]
+[[SFO,NRT,MEL,WLG],3]
 ----
 
 To return the results with the longer routes coming first we could use the values in
@@ -3981,7 +3911,7 @@ the sack along with an 'order' step.
 [source,groovy]
 ----
 g.withSack(0).V().
-  has('code','AUS').
+  has('code','SFO').
   repeat(out().simplePath().sack(sum).by(constant(1))).
     until(has('code','WLG')).
   limit(10).
@@ -3989,20 +3919,20 @@ g.withSack(0).V().
   local(union(path().by('code'),sack()).fold())
 ----
 
-This time the four hop routes appear first in the results.
+This time the three hop routes appear first in the results.
 
 [source,groovy]
 ----
-[[AUS,YYZ,HND,SYD,WLG],4]
-[[AUS,YYZ,HND,AKL,WLG],4]
-[[AUS,DFW,SYD,WLG],3]
-[[AUS,IAH,AKL,WLG],3]
-[[AUS,LAX,SYD,WLG],3]
-[[AUS,LAX,MEL,WLG],3]
-[[AUS,LAX,AKL,WLG],3]
-[[AUS,LAX,BNE,WLG],3]
-[[AUS,SFO,SYD,WLG],3]
-[[AUS,SFO,AKL,WLG],3]
+[[SFO,YVR,SYD,WLG],3]
+[[SFO,YVR,MEL,WLG],3]
+[[SFO,YVR,AKL,WLG],3]
+[[SFO,YVR,BNE,WLG],3]
+[[SFO,NRT,SYD,WLG],3]
+[[SFO,NRT,MEL,WLG],3]
+[[SFO,SYD,WLG],2]
+[[SFO,MEL,WLG],2]
+[[SFO,AKL,WLG],2]
+[[SFO,BNE,WLG],2]
 ----
 
 As a side note, if we wanted to include the path's length rather than the hop count 
@@ -4011,7 +3941,7 @@ we can just count the length of each path.
 
 [source,groovy]
 ----
-g.V().has('code','AUS').
+g.V().has('code','SFO').
       repeat(out().simplePath()).
         until(has('code','WLG')).
       limit(10).
@@ -4023,16 +3953,16 @@ airport is included in the overall count.
 
 [source,groovy]
 ----
-[[AUS,DFW,SYD,WLG],4]
-[[AUS,IAH,AKL,WLG],4]
-[[AUS,LAX,SYD,WLG],4]
-[[AUS,LAX,MEL,WLG],4]
-[[AUS,LAX,AKL,WLG],4]
-[[AUS,LAX,BNE,WLG],4]
-[[AUS,SFO,SYD,WLG],4]
-[[AUS,SFO,AKL,WLG],4]
-[[AUS,YYZ,HND,SYD,WLG],5]
-[[AUS,YYZ,HND,AKL,WLG],5]
+[[SFO,SYD,WLG],3]
+[[SFO,MEL,WLG],3]
+[[SFO,AKL,WLG],3]
+[[SFO,BNE,WLG],3]
+[[SFO,YVR,SYD,WLG],4]
+[[SFO,YVR,MEL,WLG],4]
+[[SFO,YVR,AKL,WLG],4]
+[[SFO,YVR,BNE,WLG],4]
+[[SFO,NRT,SYD,WLG],4]
+[[SFO,NRT,MEL,WLG],4]
 ----
 
 [[sackbooleans]]
@@ -4070,11 +4000,11 @@ of vertices that each have a boolean property.
 ----
 g.addV('happy').property('happy',true)
 
-v[54852]
+v[61394]
 
 g.addV('sad').property('happy',false)
 
-v[54854]
+v[61396]
 ----
 
 We can now write a query that uses a boolean operator to generate a result in our
@@ -4151,7 +4081,7 @@ g.withSack([]).V().has('code','SAF').out().
                V().has('code','AUS').out().values('runways').fold().
                sack(addAll).sack()
 
-[7,4,3,6,3,4,6,5,2,4,2,4,3,2,4,2,4,4,3,3,3,4,4,5,3,3,2,2,2,1,4,1,4,5,4,6,3,3,7,2,4,5,4,4,4,4,4,8,3,3,3,4,3,3,1,3,2,4,4,6,2,3,4,3,3,4]
+[7,4,3,6,4,3,6,4,2,4,2,4,4,3,3,3,4,4,5,5,3,3,1,2,3,2,2,2,2,3,2,3,3,1,3,3,2,2,2,2,3,2,2,3,1,2,1,2,2,1,1,4,2,1,3,1,4,5,4,6,3,3,7,2,4,5,4,4,4,4,4,7,3,3,3,4,3,3,1,3,2,4,4,6,3,5,4,3,2,2,3,2,4,4,3,6,3,3,4,2,3,4]
 ----
 
 Finally, here is the previous query again but this time the 'sack' is initialized
@@ -4167,7 +4097,7 @@ g.withSack([1,1,1,1]).
      V().has('code','AUS').out().values('runways').fold().
      sack(addAll).sack()
 
-[1,1,1,1,7,4,3,6,3,4,6,5,2,4,2,4,3,2,4,2,4,4,3,3,3,4,4,5,3,3,2,2,2,1,4,1,4,5,4,6,3,3,7,2,4,5,4,4,4,4,4,8,3,3,3,4,3,3,1,3,2,4,4,6,2,3,4,3,3,4]
+[1,1,1,1,7,4,3,6,4,3,6,4,2,4,2,4,4,3,3,3,4,4,5,5,3,3,1,2,3,2,2,2,2,3,2,3,3,1,3,3,2,2,2,2,3,2,2,3,1,2,1,2,2,1,1,4,2,1,3,1,4,5,4,6,3,3,7,2,4,5,4,4,4,4,4,7,3,3,3,4,3,3,1,3,2,4,4,6,3,5,4,3,2,2,3,2,4,4,3,6,3,3,4,2,3,4]
 ----
 
 So far, all of the examples have used a 'fold' step before the 'sack' step. While
@@ -4231,7 +4161,6 @@ each airport's runway count against the value stored in the sack.
 
 [source,groovy]
 ----
-
 g.withSack(6).V().
   hasLabel('airport').as('a').
   where(gt('a')).
@@ -4299,11 +4228,11 @@ travelled more than 10,000 miles.
 
 [source,groovy]
 ----
-[SAF,549,DFW,1560,BOS,7952,HKG]
-[SAF,549,DFW,1230,LAX,8287,DOH]
-[SAF,549,DFW,1230,LAX,8372,AUH]
-[SAF,549,DFW,1230,LAX,8314,JED]
-[SAF,549,DFW,1230,LAX,8246,RUH]
+[SAF,549,DFW,1751,YVR,7762,SYD]
+[SAF,549,DFW,1751,YVR,8197,MEL]
+[SAF,549,DFW,4736,LHR,6686,MNL]
+[SAF,549,DFW,4736,LHR,5947,BKK]
+[SAF,549,DFW,4736,LHR,5956,HND]
 ----
 
 Finally, let's modify the query again to keep following routes starting at SAF, but
@@ -4344,11 +4273,11 @@ The results from running the modified query are shown below.
 
 [source,groovy]
 ----
-[SAF,708,LAX,2481,OGG,2401,SMF,2492,EWR,8082]
-[SAF,708,LAX,2481,OGG,2401,SMF,2459,HNL,8049]
-[SAF,708,LAX,2481,OGG,2352,SJC,2462,LIH,8003]
-[SAF,708,LAX,2500,KOA,2375,OAK,2440,BWI,8023]
-[SAF,708,LAX,2500,KOA,2375,OAK,2453,LIH,8036]
+[SAF,708,LAX,2470,JFK,2410,SEA,2490,BOS,8078]
+[SAF,708,LAX,2470,JFK,2440,SAN,2425,EWR,8043]
+[SAF,708,LAX,2470,JFK,2440,SAN,2454,YUL,8072]
+[SAF,708,LAX,2470,JFK,2460,LGB,2460,ATL,8098]
+[SAF,708,LAX,2470,JFK,2447,SNA,2482,ISP,8107]
 ----
 
 [[lambdas]]
@@ -4442,7 +4371,6 @@ Here is the same query just using the 'has' step. This is a case where we
 should not be using a lambda function as Gremlin can handle this just fine all
 by itself.
 
-
 [source,groovy]
 ----
 // What airports are located in London?
@@ -4465,10 +4393,10 @@ g.V().has('runways',6).sideEffect{print it.get().values('code').next()+" "}.coun
 ----
 
 TIP: The moral here is, avoid closures unless you can genuinely find no other way to
-achieve what you need. It is fair we think to observe that sometimes coming up with a
-closure to do what you want is easier than figuring out the pure Gremlin way to do it
-but if at all possible using just Gremlin steps is still the recommended path to
-take. Lambda functions in general are discouraged.
+achieve what you need. It is fair to observe that sometimes coming up with a closure
+to do what you want is easier than figuring out the pure Gremlin way of doing it.
+However, using just Gremlin steps is still the recommended path to take. Lambda
+functions in general are discouraged.
 
 [source,groovy]
 ----
@@ -4523,8 +4451,8 @@ us.
 
 [source,groovy]
 ----
- g.V().hasLabel('airport').limit(10).
-       map(properties('city').group().by(key()).by(value()))
+g.V().hasLabel('airport').limit(10).
+      map(properties('city').group().by(key()).by(value()))
 
 [city:Atlanta]
 [city:Anchorage]
@@ -4659,7 +4587,6 @@ g.V().has('code','SAF').out().values('runways').map{it.get() + 1}.fold()
 In the next section we will take a look at some other cases where lambda expressions
 are very useful as well as a few more examples of the 'map' step being used.
 
-
 [[lambdasack]]
 ==== Using lambdas with 'sack' steps
 
@@ -4759,7 +4686,7 @@ it is to use a 'map' and not use a 'sack' step at all as shown below.
 ----
 g.V().has('code','SAF').out().
       map{m=[:];m[it.get().values('code').next()]=
-      it.get().values('runways').next();m}.unfold().fold().next().getClass()
+      it.get().values('runways').next();m}.unfold().fold()
 
 [DFW=7,LAX=4,PHX=3,DEN=6]
 ----
@@ -4772,8 +4699,9 @@ to add a 'fold' step between the 'sack' steps.
 
 [source,groovy]
 ----
- g.withSack([:]).V().has('code','SAF').out().
-      sack{m,v -> m[v.value('code')]=v.values('runways').next()}.fold().sack()
+g.withSack([:]).V().has('code','SAF').out().
+                    sack{m,v -> m[v.value('code')]=v.values('runways').next()}.
+                    fold().sack()
 
 [DFW:7,LAX:4,PHX:3,DEN:6]
 ----
@@ -4781,7 +4709,6 @@ to add a 'fold' step between the 'sack' steps.
 There are other ways that you might choose to write queries like these, that avoid the
 use of closures altogether, but hopefully these examples show some interesting ways
 that closures can be combined with 'sack' steps.
-
 
 [[flatmap]]
 ==== Introducing the 'flatMap' step
@@ -4831,9 +4758,9 @@ edge are included in the results.
 g.V().has('code','AUS').outE().inV().
       path().by('city').by().limit(3)
 
-[Austin,e[3712][3-route->43],Tucson]
-[Austin,e[3713][3-route->45],Philadelphia]
-[Austin,e[3714][3-route->46],Detroit]
+[Austin,e[3840][3-route->45],Philadelphia]
+[Austin,e[5376][3-route->149],Portland]
+[Austin,e[3841][3-route->46],Detroit]
 ----
 
 Let's imagine we have a good reason for needing to look at the edge but that we don't
@@ -4851,8 +4778,8 @@ can come in handy in some cases.
 g.V().has('code','AUS').flatMap(outE().inV()).
       path().by('city').limit(3)
 
-[Austin,Tucson]
 [Austin,Philadelphia]
+[Austin,Portland]
 [Austin,Detroit]
 ----
 
@@ -4864,7 +4791,7 @@ path as shown below.
 g.V().has('code','AUS').map(outE().inV()).
       path().by('city').limit(3)
 
-[Austin,Tucson]
+[Austin,Philadelphia]
 ----
 
 Of course, if all we really wanted was the result from the prior query we could just
@@ -4874,8 +4801,8 @@ do this.
 ----
 g.V().has('code','AUS').out().path().by('city').limit(3)
 
-[Austin,Tucson]
 [Austin,Philadelphia]
+[Austin,Portland]
 [Austin,Detroit]
 ----
 
@@ -4900,11 +4827,11 @@ step, to pass to the next step in the traversal.
 
 [source,groovy]
 ----
-[v[3],v[49],v[61]]
-[v[3],v[49],v[64]]
-[v[3],v[49],v[67]]
-[v[3],v[49],v[69]]
-[v[3],v[49],v[71]]
+[v[3],v[37],v[66]]
+[v[3],v[37],v[67]]
+[v[3],v[37],v[71]]
+[v[3],v[37],v[105]]
+[v[3],v[37],v[122]]
 ----
 
 The query below has the  'flatMap' step removed.
@@ -4922,11 +4849,11 @@ When run, this time the results do indeed include the edges as well as the verti
 
 [source,groovy]
 ----
-[v[3],e[5162][3-route->49],v[49],e[8448][49-route->61],v[61]]
-[v[3],e[5162][3-route->49],v[49],e[8449][49-route->64],v[64]]
-[v[3],e[5162][3-route->49],v[49],e[8450][49-route->67],v[67]]
-[v[3],e[5162][3-route->49],v[49],e[8452][49-route->69],v[69]]
-[v[3],e[5162][3-route->49],v[49],e[8454][49-route->71],v[71]]
+[v[3],e[3832][3-route->37],v[37],e[8448][37-route->66],v[66]]
+[v[3],e[3832][3-route->37],v[37],e[8449][37-route->67],v[67]]
+[v[3],e[3832][3-route->37],v[37],e[8450][37-route->71],v[71]]
+[v[3],e[3832][3-route->37],v[37],e[8451][37-route->105],v[105]]
+[v[3],e[3832][3-route->37],v[37],e[8452][37-route->122],v[122]]
 ----
 
 [[tre]]
@@ -5007,7 +4934,7 @@ containing 46 vertices and 1326 edges.
 
 [source,groovy]
 ----
-tinkergraph[vertices:46 edges:1326]
+tinkergraph[vertices:46 edges:1391]
 ----
 
 Now that the subgraph is created, we need to create a traversal source object for it
@@ -5018,7 +4945,7 @@ traversal source object once it has been created.
 ----
 sgt = subg.traversal()
 
-graphtraversalsource[tinkergraph[vertices:46 edges:1326], standard]
+graphtraversalsource[tinkergraph[vertices:46 edges:1391], standard]
 ----
 
 Now that we have a traversal source object for our newly created subgraph we can run
@@ -5067,7 +4994,7 @@ subg = g.V().has('code','AUS').
        repeat(bothE().subgraph('subGraph').outV()).times(2).
        cap('subGraph').next()
 
-[tinkergraph[vertices:1294 edges:11336]
+[tinkergraph[vertices:1429 edges:14345]
 ----
 
 As before we can now work with the newly created subgraph.
@@ -5081,7 +5008,7 @@ sgt = subg.traversal()
 // What sort of vertices ended up in the subgraph?
 sgt.V().groupCount().by(label)
 
-[continent:2,country:5,airport:1287]
+[continent:2,country:8,airport:1419]
 ----
 
 Here is a more complicated example. The query will create a subgraph just of airports
@@ -5096,7 +5023,6 @@ multiple 'subgraph' steps.
 [source,groovy]
 ----
 // Create a subgraph only of airports in Europe and routes between those airports
-
 subg = g.V().hasLabel('continent').has('code','EU').
              outE('contains').subgraph('eu-air-routes').inV().as('a').
              inE('contains').subgraph('eu-air-routes').
@@ -5106,7 +5032,7 @@ subg = g.V().hasLabel('continent').has('code','EU').
              has('code','EU').select('r').subgraph('eu-air-routes').
              cap('eu-air-routes').next()
 
-tinkergraph[vertices:630 edges:13665]
+tinkergraph[vertices:652 edges:16150]
 ----
 
 As before we can now work with the newly created subgraph.
@@ -5119,12 +5045,12 @@ sgt = subg.traversal()
 // How many routes are there in the subgraph?
 sgt.E().hasLabel('route').count()
 
-12499
+14940
 
 // What sort of vertices ended up in the subgraph?
 sgt.V().groupCount().by(label)
 
-[continent:1,country:46,airport:583]
+[continent:1,country:46,airport:605]
 ----
 
 The following query uses the new Europe only subgraph to find out where we can
@@ -5134,7 +5060,7 @@ get to from London Heathrow (LHR) within Europe.
 ----
 sgt.V().has('code','LHR').out().values('code').fold()
 
-[FAO,JMK,FCO,JTR,KBP,AMS,RJK,TLS,PRG,BCN,LED,MAD,OPO,VIE,ZRH,GVA,LCG,BRU,MUC,MAN,INN,CGN,INV,GOT,BLL,VCE,KRK,SNN,MJV,OSL,MPL,ARN,EDI,PUY,GLA,BDS,DME,SVO,ORY,NCE,MXP,ATH,ZAG,BUD,BIO,IBZ,WAW,MLA,SOF,BEG,IST,HAM,STR,PSA,BLQ,NTE,CPH,LUX,DUS,TXL,LIS,GIB,KEF,PMI,AGP,LBA,ABZ,NCL,BSL,SVG,BGO,TLL,ORK,VKO,SPU,BHD,HAJ,LIN,LYS,MRS,OTP,CDG,RTM,FRA,HEL,DUB]
+[CGN,GOT,VCE,SNN,OSL,ARN,EDI,GLA,DME,SVO,ORY,NCE,MXP,ATH,ZAG,BUD,BIO,IBZ,WAW,MLA,SOF,BEG,IST,HAM,STR,PSA,TRN,BLQ,NTE,CPH,LUX,DUS,LIS,GIB,KEF,PMI,AGP,LBA,ABZ,NCL,GCI,BSL,SVG,BGO,TLL,ORK,VKO,SPU,BHD,HAJ,LIN,LYS,MRS,OTP,RTM,FAO,JMK,JTR,KBP,RJK,TLS,LED,OPO,LCG,INN,INV,SZG,BLL,IOM,NQY,KRK,TFS,LEI,MJV,VLC,BIA,MPL,EFL,PVK,LJU,PUY,BDS,FSC,BER,CDG,FRA,HEL,DUB,FCO,AMS,PRG,BCN,MAD,VIE,ZRH,GVA,BRU,MUC,MAN]
 ----
 
 The ability to create a subgraph from a larger graph is a very powerful feature that
@@ -5437,9 +5363,9 @@ g.inject(null)
 
 null
 
-g.V().limit(10).coalesce(has('elev',gt(3000)), constant(null)).fold()
+g.V().limit(10).coalesce(has('elev',gt(500)), constant(null)).fold()
 
-[null,v[2305],null,null,null,null,v[2300],null,v[2308],v[2307]]
+[null,v[1],null,v[3],v[4],null,null,null,v[8],null]
 ----
 
 The prior examples don't showcase any particular common use case and unless the graph
@@ -5459,7 +5385,7 @@ we should look at the 'property' step.
 ----
 g.addV('airport').property('code',null)
 
-v[41223]
+v[61394]
 
 g.V().has('code',null)
 
@@ -5467,7 +5393,7 @@ g.V().has('code',null)
 
 g.V().hasNot('code')
 
-v[41223]
+v[61394]
 ----
 
 NOTE: For better portability, prefer 'drop' when removing properties.
@@ -5480,15 +5406,15 @@ or removed if it does. The following demonstrates the latter:
 ----
 g.addV('airport').property('code','XYZ')
 
-v[41224]
+v[61394]
 
-g.V(41224).property('code',null)
+g.V(61394).property('code',null)
 
-v[41224]
+v[61394]
 
 g.V().hasNot('code')
 
-v[41224]
+v[61394]
 ----
 
 Now that we've looked at graphs that don't support null, let's look at how Gremlin
@@ -5498,11 +5424,11 @@ behaves for those that do:
 ----
 g.addV('airport').property('code',null)
 
-v[41228]
+v[61394]
 
 g.V().has('code',null)
 
-v[41228]
+v[61394]
 
 g.V().has('code',within('IAD',null)).values('code')
 
@@ -5675,14 +5601,16 @@ graph = TinkerGraph.open()
 // the "writePartition" is the value to assign to the "partitionKey" when writing
 // to the graph and the "readPartition" is the set of values that the partition is
 // allowed to see when reading from the graph. 
-tenantA = new PartitionStrategy(partitionKey: "_partition", 
-                                writePartition: "a", readPartitions: ["a"])
-tenantB = new PartitionStrategy(partitionKey: "_partition", 
-                                writePartition: "b", readPartitions: ["b"])
+tenantA = PartitionStrategy.build().partitionKey("_partition").
+                                    writePartition("a").
+                                    readPartitions("a").create()
+tenantB = PartitionStrategy.build().partitionKey("_partition").
+                                    writePartition("b").
+                                    readPartitions("b").create()
 
 // create two instances of "g" each using a different strategy                                
-gA = traversal().with(graph).withStrategies(strategyA)
-gB = traversal().with(graph).withStrategies(strategyB)
+gA = traversal().with(graph).withStrategies(tenantA)
+gB = traversal().with(graph).withStrategies(tenantB)
 
 gA.addV() // this vertex has a property of {_partition:"a"}
 gB.addV() // this vertex has a property of {_partition:"b"}
@@ -5740,17 +5668,17 @@ g.V().out('route')
 // but if you didn't have PartitionStrategy you'd have to write all the partitioning
 // logic yourself in every query. you can see how much harder it is to read, requires
 // more repetitive typing and might be error prone to write  
-g.V().has('_partiition', 'a').
-  out('route').has('_partiition', 'a')
-  filter(bothE('route').has('_partiition', 'a').count().is(lt(3))).
+g.V().has('_partition', 'a').
+  out('route').has('_partition', 'a')
+  filter(bothE('route').has('_partition', 'a').count().is(lt(3))).
   union(both('route').
-          has('_partiition', 'a').
+          has('_partition', 'a').
           has('code',within('AUS','TUS','YYZ')),
         bothE('route').
-          has('_partiition', 'a').
+          has('_partition', 'a').
           has('dist', eq(100).
           otherV().
-          has('_partiition', 'a'))).
+          has('_partition', 'a'))).
   valueMap()
 ----
 
@@ -5771,13 +5699,13 @@ tests. By using 'SeedStrategy', you can ensure that 'coin', 'sample' and
 
 [source,groovy]
 ----
-seedStrategy = new SeedStrategy(999998L) // specify the seed to reuse
+seedStrategy = SeedStrategy.build().seed(999998L).create() // specify the seed to reuse
 g.withStrategies(seedStrategy).V().limit(10).values('code').
   fold().
   order(local).by(shuffle)
   
 // repeated executions will always shuffle the same way to return the same result
-[UET,DEA,GWD,LYP,PJG,MJD,RYK,DSK,CJL,GIL]
+[DFW,BOS,ANC,AUS,FLL,1.0,DCA,BNA,BWI,ATL]
 ----  
 
 [[traversal-strategies-subgraph]]
@@ -5801,22 +5729,22 @@ define the filters with Gremlin.
 ----
 // define a subgraph that describes "short flights" where you only traverse
 // routes with distances of less than 40 miles
-strategy = new SubgraphStrategy(edges: __.has('dist',lt(40)))
+strategy = SubgraphStrategy.build().edges(__.has('dist',lt(40))).create()
 g.withStrategies(strategy).V().out().count()
 
-362
+379
 
 // extend the previous subgraph to include a subset of vertices, which now will limit
 // queries to traverse edges under 40 miles and also among vertices in the specified
 // set
-strategy = new SubgraphStrategy(
-                 vertices: __.has('code', within(['ADQ','OBU','SHG','AUK','KOT',
+strategy = SubgraphStrategy.build().
+                 vertices(__.has('code', within(['ADQ','OBU','SHG','AUK','KOT',
                                                   'KWK','RSH','RSH','PQS','PQS',
                                                   'KPN','IRC','AET','KWN','ORV',
                                                   'KGX','VAK','SGY','ANV','HNS',
                                                   'HNH','SVA','WMO','ELI','KSM',
-                                                  'MNT','WBB','ANI','KYK','SKK'])),
-                 edges: __.has('dist',lt(40)))
+                                                  'MNT','WBB','ANI','KYK','SKK']))).
+                 edges(__.has('dist',lt(40))).create()
 g.withStrategies(strategy).V().out().count()
 
 7
@@ -5967,7 +5895,7 @@ clockWithResult(1){
 
 4266.584279
 
-[[AUS,YYZ,BOM,AGR],[AUS,LHR,BOM,AGR],[AUS,FRA,BOM,AGR],[AUS,EWR,BOM,AGR],[AUS,CLE,YYZ,BOM,AGR],[AUS,CLE,EWR,BOM,AGR],[AUS,OAK,EWR,BOM,AGR],[AUS,PHL,EWR,BOM,AGR],[AUS,PHL,YYZ,BOM,AGR],[AUS,PHL,LHR,BOM,AGR]]
+[[AUS,JFK,BOM,AGR],[AUS,YYZ,BOM,AGR],[AUS,LHR,BOM,AGR],[AUS,EWR,BOM,AGR],[AUS,FRA,BOM,AGR],[AUS,AMS,BOM,AGR],[AUS,PHL,YYZ,BOM,AGR],[AUS,PHL,LHR,BOM,AGR],[AUS,PHL,CDG,BOM,AGR],[AUS,PHL,FRA,BOM,AGR]]
 ----
 
 Just for fun, the next four queries look for all the ways you can fly between Austin
@@ -5997,7 +5925,7 @@ clockWithResult(1) {
           has('code','LAX').path().by('code').count().next()}
 
 7.988092999999999
-51
+73
 ----
 
 Looking for routes with exactly two stops takes quite a bit longer but is still
@@ -6011,7 +5939,7 @@ clockWithResult(1) {
           has('code','LAX').path().by('code').count().next()}
 
 435.423921
-3389
+4717
 ----
 
 As you can see by the time we get to the last query, that looks for exactly three 
@@ -6025,8 +5953,8 @@ clockWithResult(1) {
           repeat(out().where(neq('a'))).times(4).simplePath().
           has('code','LAX').path().by('code').count().next()}
 
-35295.633811
-203359
+34306.386952
+325165
 ----
 
 Notice that for the 'clock' and 'clockWithResult' methods to work correctly you need
@@ -6051,15 +5979,16 @@ where the time was spent processing the components of the query.
 
 [source,console]
 ----
-Step                                       Count  Traversers  Time (ms)    % Dur
-===============================================================================
-TinkerGraphStep(vertex,[region.eq(US-TX)])   26          26      1.810     9.71
-VertexStep(OUT,vertex)                      701         701      0.877     4.70
-HasStep([region.eq(US-CA)])                  47          47      0.561     3.01
-VertexStep(OUT,vertex)                     3464        3464     12.035    64.54
-NoOpBarrierStep(2500)                      3464         224      3.157    16.93
-HasStep([country.eq(DE)])                    59           4      0.206     1.11
-   >TOTAL                                     -           -     18.650        -
+Traversal Metrics
+Step                                                               Count  Traversers       Time (ms)    % Dur
+=============================================================================================================
+TinkerGraphStep(vertex,[region.eq(US-TX)])                            27          27           1.651    36.23
+VertexStep(OUT,vertex)                                               816         816           0.274     6.01
+HasStep([region.eq(US-CA)])                                           58          58           0.270     5.94
+VertexStep(OUT,vertex)                                              4248        4248           0.900    19.76
+NoOpBarrierStep(2500)                                               4248         237           1.348    29.58
+HasStep([country.eq(DE)])                                             61           4           0.112     2.47
+                                            >TOTAL                     -           -           4.557        -
 ----
 
 If we profile the 'Austin to Agra' query from the previous section you can see that
@@ -6079,16 +6008,17 @@ will fit on a single page.
 
 [source,console]
 ----
-Step                              Count  Traversers       Time (ms)    % Dur
-============================================================================
-TinkerGraphStep(vertex,[~l...         1           1           2.125     0.02
-RepeatStep([VertexStep(OUT,..        11          11        9357.962    99.97
-  HasStep([code.eq(AGR)])                                  2627.621
-  VertexStep(OUT,vertex)        1799981     1799981         509.392
-  RepeatEndStep                      11          11        8848.030
-RangeGlobalStep(0,10)                10          10           0.278     0.00
-PathStep([value(code)])              10          10           0.126     0.00
-   >TOTAL                             -           -        9360.493        -
+Traversal Metrics
+Step                                                               Count  Traversers       Time (ms)    % Dur
+=============================================================================================================
+TinkerGraphStep(vertex,[~label.eq(airport), cod...                     1           1           2.178     0.13
+RepeatStep([VertexStep(OUT,vertex), RepeatEndSt...                    11          11        1665.667    99.85
+  HasStep([code.eq(AGR)])                                                                    497.169
+  VertexStep(OUT,vertex)                                          958787      958787         176.579
+  RepeatEndStep                                                       11          11        1488.996
+RangeGlobalStep(0,10)                                                 10          10           0.231     0.01
+PathStep([value(code)])                                               10          10           0.143     0.01
+                                            >TOTAL                     -           -        1668.220        -
 ----
 
 [[tinkerindex]]
@@ -6150,7 +6080,7 @@ looks for all edges that have a 'dist' property of 1000.
 clockWithResult(100) {g.E().has('dist',1000).count().next()}
 
 9.80906926
-24
+28
 ----
 
 Let's now create an index for the edge property called 'dist' and run the query
@@ -6172,7 +6102,7 @@ This time you can see that our index has made a big difference.
 clockWithResult(100) {g.E().has('dist',1000).count().next()}
 
 0.046712609999999995
-24
+28
 ----
 
 The timing difference between the two queries can be attributed to the index. In the
@@ -6186,7 +6116,7 @@ comparisons. A query such as the one below will not benefit from the index.
 clockWithResult(100) {g.E().has('dist',gt(1000)).count().next()}
 
 11.980037119999999
-16430
+20422
 ----
 
 [[graphvars]]
@@ -6337,8 +6267,11 @@ results. In this case we want to look at outgoing 'route' edges and label all re
 // Page rank based on outgoing routes
 g3 = traversal().with(graph).withComputer()
 
-g3.V().hasLabel('airport').pageRank().by(outE('route')).by('r').
-      order().by('r',desc).valueMap('code','r').limit(10)
+g3.V().hasLabel('airport').
+   pageRank().
+     with(PageRank.edges, outE('route')).
+     with(PageRank.propertyName, 'r').
+   order().by('r',desc).valueMap('code','r').limit(10)
 ----
 
 Here is the output from running the page rank algorithm. The results show the airport
@@ -6346,18 +6279,17 @@ code along with the page rank value that was calculated.
 
 [source,groovy]
 ----
-[r:[15.527963207609702],code:[IST]]
-[r:[15.005583346944613],code:[DFW]]
-[r:[14.673184454287105],code:[ORD]]
-[r:[14.365370693500969],code:[ATL]]
-[r:[14.099719956639161],code:[PEK]]
-[r:[14.061408826784106],code:[DXB]]
-[r:[13.729782985109942],code:[DEN]]
-[r:[13.552238441619048],code:[DME]]
-[r:[13.502681833743711],code:[FRA]]
-[r:[13.189393240835944],code:[CDG]]
+[code:[IST],r:[16.40226392763168]]
+[code:[DFW],r:[15.80681490439588]]
+[code:[ORD],r:[14.944606331063445]]
+[code:[DEN],r:[14.339886917974134]]
+[code:[PEK],r:[13.587167366449114]]
+[code:[ATL],r:[13.491138568380745]]
+[code:[FRA],r:[13.44314539118739]]
+[code:[DXB],r:[13.440370180633318]]
+[code:[CDG],r:[13.327429760219651]]
+[code:[DME],r:[12.845152955480042]]
 ----
-
 
 Just as a point of reference, the query below finds the top 10 airports with the most
 incoming routes.
@@ -6376,16 +6308,16 @@ degree test did not come up with.
 
 [source,groovy]
 ----
-[a:FRA,b:282]
-[a:AMS,b:275]
-[a:IST,b:271]
-[a:CDG,b:267]
-[a:MUC,b:240]
-[a:PEK,b:239]
-[a:ORD,b:237]
-[a:DXB,b:237]
-[a:ATL,b:235]
-[a:DFW,b:221]
+[a:FRA,b:310]
+[a:IST,b:309]
+[a:CDG,b:294]
+[a:AMS,b:285]
+[a:MUC,b:271]
+[a:ORD,b:264]
+[a:DFW,b:253]
+[a:PEK,b:249]
+[a:DXB,b:248]
+[a:ATL,b:242]
 ----
 
 The 'pageRank' step used in the prior query is a nice and convenient way for us to
@@ -6404,7 +6336,7 @@ dcr = graph.compute().
       edges(hasLabel('airport').outE('route')).
       create()).submit().get()
 
-result[tinkergraph[vertices:3624 edges:0],memory[size:0]]
+result[tinkergraph[vertices:3749 edges:0],memory[size:0]]
 ----
 
 In case you are curious, we can check the precise type of the result object that is
@@ -6429,7 +6361,7 @@ g2 = dcr.graph().traversal()
 
 g2.V().has('code','IST').valueMap(true)
 
-[id:161,country:[TR],code:[IST],longest:[9843],gremlin.pageRankVertexProgram.pageRank:[0.0047038762655771775],city:[Istanbul],lon:[28.8145999908],type:[airport],label:airport,elev:[163],icao:[LTBA],region:[TR-34],runways:[3],lat:[40.9768981934],desc:[Ataturk International Airport]]
+[id:161,label:airport,country:[TR],longest:[13451],code:[IST],gremlin.pageRankVertexProgram.pageRank:[0.004679970391715955],city:[Istanbul],lon:[28.751944],type:[airport],elev:[325],icao:[LTFM],region:[TR-34],runways:[4],lat:[41.275278],desc:[Istanbul International Airport]]
 ----
 
 Just to prove the original graph was untouched, let's check the IST vertex in that
@@ -6439,7 +6371,7 @@ graph. As you can see there are no new properties present.
 ----
 g.V().has('code','IST').valueMap(true)
 
-[id:161,country:[TR],code:[IST],longest:[9843],city:[Istanbul],lon:[28.8145999908],type:[airport],label:airport,elev:[163],icao:[LTBA],region:[TR-34],runways:[3],lat:[40.9768981934],desc:[Ataturk International Airport]]
+[id:161,label:airport,country:[TR],longest:[13451],code:[IST],city:[Istanbul],lon:[28.751944],type:[airport],elev:[325],icao:[LTFM],region:[TR-34],runways:[4],lat:[41.275278],desc:[Istanbul International Airport]]
 ----
 
 Finally let's look at the 10 airports sorted by page rank score in descending order.
@@ -6451,16 +6383,16 @@ the same as the ones returned by the in-line 'pageRank' step.
 g2.V().order().by('gremlin.pageRankVertexProgram.pageRank',desc).limit(10).
        valueMap('code','gremlin.pageRankVertexProgram.pageRank')
 
-[code:[IST],gremlin.pageRankVertexProgram.pageRank:[0.004594389373424941]]
-[code:[DFW],gremlin.pageRankVertexProgram.pageRank:[0.004440623428637068]]
-[code:[ORD],gremlin.pageRankVertexProgram.pageRank:[0.004342068075230758]]
-[code:[ATL],gremlin.pageRankVertexProgram.pageRank:[0.004251005124367605]]
-[code:[PEK],gremlin.pageRankVertexProgram.pageRank:[0.004172537469821617]]
-[code:[DXB],gremlin.pageRankVertexProgram.pageRank:[0.004161183557641767]]
-[code:[DEN],gremlin.pageRankVertexProgram.pageRank:[0.004063035588247088]]
-[code:[DME],gremlin.pageRankVertexProgram.pageRank:[0.004009614722586433]]
-[code:[FRA],gremlin.pageRankVertexProgram.pageRank:[0.003994862262812258]]
-[code:[CDG],gremlin.pageRankVertexProgram.pageRank:[0.0039023184469861244]]
+[code:[IST],gremlin.pageRankVertexProgram.pageRank:[0.004679970391715955]]
+[code:[DFW],gremlin.pageRankVertexProgram.pageRank:[0.004510826102525679]]
+[code:[ORD],gremlin.pageRankVertexProgram.pageRank:[0.004264610652820994]]
+[code:[DEN],gremlin.pageRankVertexProgram.pageRank:[0.004092171650514847]]
+[code:[PEK],gremlin.pageRankVertexProgram.pageRank:[0.0038775424335118053]]
+[code:[ATL],gremlin.pageRankVertexProgram.pageRank:[0.0038498832986377]]
+[code:[DXB],gremlin.pageRankVertexProgram.pageRank:[0.003835478921358197]]
+[code:[FRA],gremlin.pageRankVertexProgram.pageRank:[0.0038353030232550645]]
+[code:[CDG],gremlin.pageRankVertexProgram.pageRank:[0.0038025032480673913]]
+[code:[DME],gremlin.pageRankVertexProgram.pageRank:[0.003664747703389101]]
 ----
 
 We have barely scratched the surface in this section on these new TinkerPop OLAP

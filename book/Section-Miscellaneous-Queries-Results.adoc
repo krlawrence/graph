@@ -34,14 +34,13 @@ indicates that there are no airports in the graph for those countries.
 g.V().hasLabel('country').not(out()).values('desc')
 ----
 
-So it seems there are six countries for which no airports were found.
+So it seems there are five countries for which no airports were found.
 
 [source,groovy]
 ----
 Andorra
 Liechtenstein
 Monaco
-Montserrat
 Pitcairn
 San Marino
 ----
@@ -79,7 +78,6 @@ do now have commercial airline service.
 
 [source,groovy]
 ----
-
 g.V().hasLabel('airport').not(bothE('route')).values('code').fold()
 ----
 
@@ -88,7 +86,7 @@ no outgoing or incoming routes.
 
 [source,groovy]
 ----
-[ILG,TWB,TUA,BVS,KGG,RIG,INT,APA,BWU,BID,NBW,SFH,CVT,AFW,PSY,HLE]
+[TXL,SXF,ILG,TWB,TUA,BVS,KGG,RIG,INT,APA,BWU,BID,NBW,SFH,CVT,AFW,PSY,EKA,ISL,APK,CRC,GYZ,HFN,HZK,NFO,SFD,VCV,YEI]
 ----
 
 [[runwaydist]]
@@ -103,7 +101,7 @@ either one or two runways.
 // What is the distribution of runways in the graph
 g.V().hasLabel('airport').groupCount().by('runways')
 
-[1:2316,2:762,3:225,4:51,5:14,6:4,7:1,8:1]
+[1:2429,2:775,3:227,4:53,5:14,6:4,7:2]
 ----
 
 [[mostroutes]]
@@ -118,7 +116,7 @@ returns their IATA codes.
 g.V().hasLabel('airport').
       where(out('route').count().is(gt(180))).values('code').fold()
 
-[ATL,DFW,IAH,JFK,LAX,ORD,DEN,EWR,YYZ,LHR,LGW,CDG,FRA,DXB,PEK,PVG,FCO,AMS,BCN,MAD,MUC,MAN,STN,DME,IST]
+[ATL,DFW,IAH,JFK,LAX,MIA,ORD,DEN,EWR,YYZ,LHR,LGW,CDG,FRA,DXB,DUB,PEK,PVG,FCO,AMS,BCN,MAD,VIE,BRU,MUC,MAN,STN,DME,SVO,DOH,IST,CPH,CLT,DUS,BER]
 ----
 
 We could improve our query a bit to include the IATA code and the exact number of
@@ -137,13 +135,15 @@ We have laid the results out in a grid to make them easier to read.
 
 [source,groovy]
 ----
-[ORD:232,PVG:201,LAX:195,CDG:262,
- STN:186,JFK:187,DFW:221,LHR:191,
- MUC:237,DME:214,EWR:182,AMS:269,
- IST:270,DEN:188,BCN:190,DXB:229,
- IAH:192,MAD:192,FCO:189,FRA:272,
- PEK:234,ATL:232,YYZ:181,MAN:182,
- LGW:200]
+[ORD:265,PVG:213,LAX:214,BRU:194,
+ CDG:293,CLT:184,STN:211,SVO:181,
+ JFK:204,DUB:185,DFW:253,LHR:221,
+ MUC:270,DOH:187,DME:232,EWR:203,
+ DUS:199,MIA:196,AMS:283,IST:309,
+ DEN:217,BCN:203,BER:202,DXB:248,
+ IAH:199,MAD:206,FCO:201,VIE:206,
+ FRA:310,PEK:248,ATL:242,CPH:194,
+ YYZ:195,MAN:216,LGW:232]
 ----
 
 We can add one further refinement to the query. This time the results are ordered by
@@ -164,13 +164,15 @@ We have again laid the results out in a grid.
 
 [source,groovy]
 ----
-[FRA:272,IST:270,AMS:269,CDG:262,
- MUC:237,PEK:234,ORD:232,ATL:232,
- DXB:229,DFW:221,DME:214,PVG:201,
- LGW:200,LAX:195,IAH:192,MAD:192,
- LHR:191,BCN:190,FCO:189,DEN:188,
- JFK:187,STN:186,EWR:182,MAN:182,
- YYZ:181]
+[FRA:310, IST:309, CDG:293, AMS:283,
+ MUC:270, ORD:265, DFW:253, DXB:248,
+ PEK:248, ATL:242, DME:232, LGW:232,
+ LHR:221, DEN:217, MAN:216, LAX:214,
+ PVG:213, STN:211, MAD:206, VIE:206,
+ JFK:204, EWR:203, BCN:203, BER:202,
+ FCO:201, DUS:199, IAH:199, MIA:196,
+ YYZ:195, BRU:194, CPH:194, DOH:187,
+ DUB:185, CLT:184, SVO:181]
 ----
 
 As we mentioned earlier in the book, the number of incoming and outgoing routes for
@@ -185,7 +187,7 @@ g.V().hasLabel('airport').
       where(both('route').count().is(gt(400))).
       values('code').fold()
 
-[ATL,DFW,ORD,CDG,FRA,DXB,PEK,PVG,AMS,MUC,DME,IST]
+[ATL,DFW,JFK,LAX,ORD,DEN,EWR,LHR,LGW,CDG,FRA,DXB,PEK,PVG,FCO,AMS,BCN,MAD,VIE,MUC,MAN,STN,DME,IST,BER]
 ----
 
 [[oneroute]]
@@ -200,7 +202,7 @@ The query below will figure out just how many fall into that category.
 g.V().hasLabel('airport').
   where(out().count().is(eq(1))).count()
 
-770
+777
 ----
 
 [[onerunway]]
@@ -227,16 +229,16 @@ is that three of the top five busiest single runway airports are in England.
 
 [source,groovy]
 ----
-[apt:LGW,city:London,routes:200]
-[apt:STN,city:London,routes:186]
-[apt:CTU,city:Chengdu,routes:124]
-[apt:LIS,city:Lisbon,routes:116]
-[apt:BHX,city:Birmingham,routes:109]
-[apt:SAW,city:Istanbul,routes:109]
-[apt:KMG,city:Kunming,routes:107]
-[apt:ALC,city:Alicante,routes:106]
-[apt:CKG,city:Chongqing,routes:106]
-[apt:XIY,city:Xianyang,routes:105]
+[apt:LGW,city:London,routes:232]
+[apt:STN,city:London,routes:211]
+[apt:LIS,city:Lisbon,routes:139]
+[apt:CTU,city:Chengdu,routes:139]
+[apt:LTN,city:London,routes:130]
+[apt:BHX,city:Birmingham,routes:130]
+[apt:SZX,city:Shenzhen,routes:129]
+[apt:CKG,city:Chongqing,routes:122]
+[apt:STR,city:Stuttgart,routes:121]
+[apt:CRL,city:Brussels,routes:117]
 ----
 
 [[runwaycountproject]]
@@ -264,14 +266,13 @@ respectively.
 
 [source,groovy]
 ----
-[runways:1,count:2316]
-[runways:2,count:762]
-[runways:3,count:225]
-[runways:4,count:51]
+[runways:1,count:2429]
+[runways:2,count:775]
+[runways:3,count:227]
+[runways:4,count:53]
 [runways:5,count:14]
 [runways:6,count:4]
-[runways:7,count:1]
-[runways:8,count:1]
+[runways:7,count:2]
 ----
 
 Notice that if the unfold step had not been used, a very different result would have
@@ -283,7 +284,7 @@ g.V().hasLabel('airport').
       groupCount().by('runways').
       project('runways','count').by(keys).by(values)
 
-[runways:[1,2,3,4,5,6,7,8],count:[2316,762,225,51,14,4,1,1]]
+[runways:[1,2,3,4,5,6,7],count:[2429,775,227,53,14,4,2]]
 ----
 [[canadamost]]
 ==== Airports with the most routes in Canada
@@ -304,16 +305,16 @@ Here are the results of running the query along with the index that we added.
 
 [source,groovy]
 ----
-[1,[apt:YYZ,city:Toronto,routes:181]]
-[2,[apt:YUL,city:Montreal,routes:101]]
-[3,[apt:YVR,city:Vancouver,routes:94]]
-[4,[apt:YYC,city:Calgary,routes:68]]
-[5,[apt:YEG,city:Edmonton,routes:41]]
-[6,[apt:YHZ,city:Halifax,routes:40]]
-[7,[apt:YWG,city:Winnipeg,routes:32]]
-[8,[apt:YOW,city:Ottawa,routes:31]]
-[9,[apt:YZF,city:Yellowknife,routes:20]]
-[10,[apt:YQB,city:Quebec City,routes:19]]
+[1,[apt:YYZ,city:Toronto,routes:195]]
+[2,[apt:YUL,city:Montreal,routes:123]]
+[3,[apt:YVR,city:Vancouver,routes:106]]
+[4,[apt:YYC,city:Calgary,routes:75]]
+[5,[apt:YEG,city:Edmonton,routes:48]]
+[6,[apt:YHZ,city:Halifax,routes:45]]
+[7,[apt:YWG,city:Winnipeg,routes:38]]
+[8,[apt:YOW,city:Ottawa,routes:36]]
+[9,[apt:YZF,city:Yellowknife,routes:21]]
+[10,[apt:YQB,city:Quebec City,routes:20]]
 ----
 
 [[ukdist]]
@@ -350,7 +351,7 @@ the country was skipped.
 
 [source,groovy]
 ----
-[PR:6,PT:14,PW:1,PY:2,QA:1,AE:10,AF:4,AG:1,AI:1,AL:1,AM:2,AO:14,AR:36,AS:1,AT:6,RE:2,AU:124,AW:1,AZ:5,RO:14,BA:4,BB:1,RS:2,BD:7,BE:5,RU:120,BF:2,BG:4,RW:2,BH:1,BI:1,BJ:1,BL:1,BM:1,BN:1,BO:15,SA:26,BQ:3,SB:17,BR:115,SC:2,BS:18,SD:5,SE:39,BT:1,SG:1,BW:4,SH:2,SI:1,BY:2,BZ:13,SK:2,SL:1,SN:3,SO:5,CA:203,SR:1,SS:1,CC:1,CD:11,ST:1,SV:1,CF:1,CG:3,CH:5,SX:1,CI:1,SY:2,SZ:1,CK:6,CL:17,CM:5,CN:209,CO:50,CR:13,TC:4,TD:1,CU:12,CV:7,TG:1,TH:32,CW:1,CX:1,CY:3,TJ:4,CZ:5,TL:1,TM:1,TN:8,TO:1,TR:48,TT:2,DE:33,TV:1,TW:9,TZ:8,DJ:1,DK:8,DM:1,DO:7,UA:15,UG:4,UK:58,DZ:29,US:579,EC:15,EE:3,EG:10,EH:2,UY:2,UZ:11,ER:1,VC:1,ES:42,ET:14,VE:24,VG:2,VI:2,VN:21,VU:26,FI:20,FJ:10,FK:2,FM:4,FO:1,FR:58,WF:2,GA:2,WS:1,GD:1,GE:3,GF:1,GG:2,GH:5,GI:1,GL:14,GM:1,GN:1,GP:1,GQ:2,GR:39,GT:2,GU:1,GW:1,GY:2,HK:1,HN:6,HR:8,HT:2,YE:9,HU:2,ID:67,YT:1,IE:7,IL:5,IM:1,IN:73,ZA:20,IQ:6,IR:44,IS:5,IT:36,ZM:8,JE:1,ZW:3,JM:2,JO:2,JP:63,KE:14,KG:2,KH:3,KI:2,KM:1,KN:2,KP:1,KR:15,KS:1,KW:1,KY:3,KZ:20,LA:8,LB:1,LC:2,LK:6,LR:2,LS:1,LT:3,LU:1,LV:1,LY:10,MA:14,MD:1,ME:2,MF:1,MG:13,MH:2,MK:1,ML:1,MM:14,MN:10,MO:1,MP:2,MQ:1,MR:3,MS:1,MT:1,MU:2,MV:8,MW:2,MX:59,MY:34,MZ:10,NA:4,NC:1,NE:1,NF:1,NG:18,NI:1,NL:5,NO:49,NP:10,NR:1,NZ:25,OM:4,PA:5,PE:20,PF:30,PG:26,PH:38,PK:21,PL:13,PM:1]
+[PR:7,PT:19,PW:1,PY:2,QA:1,AE:10,AF:5,AG:1,AI:1,AL:1,AM:2,AO:14,AR:38,AS:1,AT:6,RE:2,AU:132,AW:1,AZ:5,RO:14,BA:4,BB:1,RS:3,BD:7,BE:5,RU:129,BF:2,BG:4,RW:2,BH:1,BI:1,BJ:1,BL:1,BM:1,BN:1,BO:15,SA:26,BQ:3,SB:17,BR:117,SC:2,BS:18,SD:5,SE:39,BT:1,SG:2,BW:4,SH:2,SI:2,BY:3,BZ:13,SK:2,SL:1,SN:4,SO:6,CA:205,SR:1,SS:1,CC:1,CD:11,ST:1,SV:1,CF:1,CG:3,CH:6,SX:1,CI:2,SY:2,SZ:1,CK:6,CL:17,CM:5,CN:217,CO:51,CR:13,TC:4,TD:5,CU:12,CV:7,TG:1,TH:33,CW:1,CX:1,CY:3,TJ:4,CZ:5,TL:1,TM:1,TN:8,TO:5,TR:52,TT:2,DE:34,TV:1,TW:9,TZ:11,DJ:1,DK:8,DM:1,DO:7,UA:15,UG:4,UK:58,DZ:30,US:586,EC:15,EE:3,EG:11,EH:2,UY:2,UZ:11,ER:1,VC:1,ES:43,ET:16,VE:27,VG:2,VI:2,VN:22,VU:26,FI:20,FJ:10,FK:2,FM:4,FO:1,FR:59,WF:2,GA:2,WS:1,GD:1,GE:3,GF:1,GG:2,GH:6,GI:1,GL:14,GM:1,GN:1,GP:1,GQ:2,GR:39,GT:2,GU:1,GW:1,GY:2,HK:1,HN:6,HR:8,HT:2,YE:9,HU:2,ID:70,YT:1,IE:7,IL:6,IM:1,IN:77,ZA:20,IQ:6,IR:45,IS:7,IT:38,ZM:9,JE:1,ZW:3,JM:2,JO:2,JP:65,KE:14,KG:2,KH:3,KI:2,KM:1,KN:2,KP:1,KR:15,KS:1,KW:1,KY:3,KZ:21,LA:8,LB:1,LC:2,LK:6,LR:2,LS:1,LT:3,LU:1,LV:1,LY:11,MA:16,MD:1,ME:2,MF:1,MG:13,MH:2,MK:2,ML:1,MM:17,MN:10,MO:1,MP:2,MQ:1,MR:3,MS:1,MT:1,MU:2,MV:8,MW:7,MX:60,MY:35,MZ:11,NA:5,NC:1,NE:1,NF:1,NG:19,NI:1,NL:5,NO:49,NP:11,NR:1,NZ:25,OM:4,PA:5,PE:22,PF:39,PG:26,PH:40,PK:21,PL:13,PM:1]
 ----
 
 
@@ -369,7 +370,7 @@ This time it is much easier to see which countries have the most airports.
 
 [source,groovy]
 ----
-[US:579,CN:209,CA:203,AU:124,RU:120,BR:115,IN:73,ID:67,JP:63,MX:59,UK:58,FR:58,CO:50,NO:49,TR:48,IR:44,ES:42,SE:39,GR:39,PH:38,AR:36,IT:36,MY:34,DE:33,TH:32,PF:30,DZ:29,SA:26,VU:26,PG:26,NZ:25,VE:24,VN:21,PK:21,FI:20,ZA:20,KZ:20,PE:20,BS:18,NG:18,SB:17,CL:17,BO:15,UA:15,EC:15,KR:15,PT:14,AO:14,RO:14,ET:14,GL:14,KE:14,MA:14,MM:14,BZ:13,CR:13,MG:13,PL:13,CU:12,CD:11,UZ:11,AE:10,EG:10,FJ:10,LY:10,MN:10,MZ:10,NP:10,TW:9,YE:9,TN:8,TZ:8,DK:8,HR:8,ZM:8,LA:8,MV:8,BD:7,CV:7,DO:7,IE:7,PR:6,AT:6,CK:6,HN:6,IQ:6,LK:6,AZ:5,BE:5,SD:5,SO:5,CH:5,CM:5,CZ:5,GH:5,IL:5,IS:5,NL:5,PA:5,AF:4,BA:4,BG:4,BW:4,TC:4,TJ:4,UG:4,FM:4,NA:4,OM:4,BQ:3,SN:3,CG:3,CY:3,EE:3,GE:3,ZW:3,KH:3,KY:3,LT:3,MR:3,PY:2,AM:2,RE:2,RS:2,BF:2,RW:2,SC:2,SH:2,BY:2,SK:2,SY:2,TT:2,EH:2,UY:2,VG:2,VI:2,FK:2,WF:2,GA:2,GG:2,GQ:2,GT:2,GY:2,HT:2,HU:2,JM:2,JO:2,KG:2,KI:2,KN:2,LC:2,LR:2,ME:2,MH:2,MP:2,MU:2,MW:2,PW:1,QA:1,AG:1,AI:1,AL:1,AS:1,AW:1,BB:1,BH:1,BI:1,BJ:1,BL:1,BM:1,BN:1,BT:1,SG:1,SI:1,SL:1,SR:1,SS:1,CC:1,ST:1,SV:1,CF:1,SX:1,CI:1,SZ:1,TD:1,TG:1,CW:1,CX:1,TL:1,TM:1,TO:1,TV:1,DJ:1,DM:1,ER:1,VC:1,FO:1,WS:1,GD:1,GF:1,GI:1,GM:1,GN:1,GP:1,GU:1,GW:1,HK:1,YT:1,IM:1,JE:1,KM:1,KP:1,KS:1,KW:1,LB:1,LS:1,LU:1,LV:1,MD:1,MF:1,MK:1,ML:1,MO:1,MQ:1,MS:1,MT:1,NC:1,NE:1,NF:1,NI:1,NR:1,PM:1]
+[US:586,CN:217,CA:205,AU:132,RU:129,BR:117,IN:77,ID:70,JP:65,MX:60,FR:59,UK:58,TR:52,CO:51,NO:49,IR:45,ES:43,PH:40,SE:39,GR:39,PF:39,AR:38,IT:38,MY:35,DE:34,TH:33,DZ:30,VE:27,SA:26,VU:26,PG:26,NZ:25,VN:22,PE:22,KZ:21,PK:21,FI:20,ZA:20,PT:19,NG:19,BS:18,SB:17,CL:17,MM:17,ET:16,MA:16,BO:15,UA:15,EC:15,KR:15,AO:14,RO:14,GL:14,KE:14,BZ:13,CR:13,MG:13,PL:13,CU:12,CD:11,TZ:11,EG:11,UZ:11,LY:11,MZ:11,NP:11,AE:10,FJ:10,MN:10,TW:9,YE:9,ZM:9,TN:8,DK:8,HR:8,LA:8,MV:8,PR:7,BD:7,CV:7,DO:7,IE:7,IS:7,MW:7,AT:6,SO:6,CH:6,CK:6,GH:6,HN:6,IL:6,IQ:6,LK:6,AF:5,AZ:5,BE:5,SD:5,CM:5,TD:5,CZ:5,TO:5,NA:5,NL:5,PA:5,BA:4,BG:4,BW:4,SN:4,TC:4,TJ:4,UG:4,FM:4,OM:4,RS:3,BQ:3,BY:3,CG:3,CY:3,EE:3,GE:3,ZW:3,KH:3,KY:3,LT:3,MR:3,PY:2,AM:2,RE:2,BF:2,RW:2,SC:2,SG:2,SH:2,SI:2,SK:2,CI:2,SY:2,TT:2,EH:2,UY:2,VG:2,VI:2,FK:2,WF:2,GA:2,GG:2,GQ:2,GT:2,GY:2,HT:2,HU:2,JM:2,JO:2,KG:2,KI:2,KN:2,LC:2,LR:2,ME:2,MH:2,MK:2,MP:2,MU:2,PW:1,QA:1,AG:1,AI:1,AL:1,AS:1,AW:1,BB:1,BH:1,BI:1,BJ:1,BL:1,BM:1,BN:1,BT:1,SL:1,SR:1,SS:1,CC:1,ST:1,SV:1,CF:1,SX:1,SZ:1,TG:1,CW:1,CX:1,TL:1,TM:1,TV:1,DJ:1,DM:1,ER:1,VC:1,FO:1,WS:1,GD:1,GF:1,GI:1,GM:1,GN:1,GP:1,GU:1,GW:1,HK:1,YT:1,IM:1,JE:1,KM:1,KP:1,KS:1,KW:1,LB:1,LS:1,LU:1,LV:1,MD:1,MF:1,ML:1,MO:1,MQ:1,MS:1,MT:1,NC:1,NE:1,NF:1,NI:1,NR:1,PM:1]
 ----
 
 If we wanted to sort by the country code, the 'key' in other words, we could change
@@ -389,7 +390,7 @@ alphabetical order.
 
 [source,groovy]
 ----
-[AE:10,AF:4,AG:1,AI:1,AL:1,AM:2,AO:14,AR:36,AS:1,AT:6,AU:124,AW:1,AZ:5,BA:4,BB:1,BD:7,BE:5,BF:2,BG:4,BH:1,BI:1,BJ:1,BL:1,BM:1,BN:1,BO:15,BQ:3,BR:115,BS:18,BT:1,BW:4,BY:2,BZ:13,CA:203,CC:1,CD:11,CF:1,CG:3,CH:5,CI:1,CK:6,CL:17,CM:5,CN:209,CO:50,CR:13,CU:12,CV:7,CW:1,CX:1,CY:3,CZ:5,DE:33,DJ:1,DK:8,DM:1,DO:7,DZ:29,EC:15,EE:3,EG:10,EH:2,ER:1,ES:42,ET:14,FI:20,FJ:10,FK:2,FM:4,FO:1,FR:58,GA:2,GD:1,GE:3,GF:1,GG:2,GH:5,GI:1,GL:14,GM:1,GN:1,GP:1,GQ:2,GR:39,GT:2,GU:1,GW:1,GY:2,HK:1,HN:6,HR:8,HT:2,HU:2,ID:67,IE:7,IL:5,IM:1,IN:73,IQ:6,IR:44,IS:5,IT:36,JE:1,JM:2,JO:2,JP:63,KE:14,KG:2,KH:3,KI:2,KM:1,KN:2,KP:1,KR:15,KS:1,KW:1,KY:3,KZ:20,LA:8,LB:1,LC:2,LK:6,LR:2,LS:1,LT:3,LU:1,LV:1,LY:10,MA:14,MD:1,ME:2,MF:1,MG:13,MH:2,MK:1,ML:1,MM:14,MN:10,MO:1,MP:2,MQ:1,MR:3,MS:1,MT:1,MU:2,MV:8,MW:2,MX:59,MY:34,MZ:10,NA:4,NC:1,NE:1,NF:1,NG:18,NI:1,NL:5,NO:49,NP:10,NR:1,NZ:25,OM:4,PA:5,PE:20,PF:30,PG:26,PH:38,PK:21,PL:13,PM:1,PR:6,PT:14,PW:1,PY:2,QA:1,RE:2,RO:14,RS:2,RU:120,RW:2,SA:26,SB:17,SC:2,SD:5,SE:39,SG:1,SH:2,SI:1,SK:2,SL:1,SN:3,SO:5,SR:1,SS:1,ST:1,SV:1,SX:1,SY:2,SZ:1,TC:4,TD:1,TG:1,TH:32,TJ:4,TL:1,TM:1,TN:8,TO:1,TR:48,TT:2,TV:1,TW:9,TZ:8,UA:15,UG:4,UK:58,US:579,UY:2,UZ:11,VC:1,VE:24,VG:2,VI:2,VN:21,VU:26,WF:2,WS:1,YE:9,YT:1,ZA:20,ZM:8,ZW:3]
+[AE:10,AF:5,AG:1,AI:1,AL:1,AM:2,AO:14,AR:38,AS:1,AT:6,AU:132,AW:1,AZ:5,BA:4,BB:1,BD:7,BE:5,BF:2,BG:4,BH:1,BI:1,BJ:1,BL:1,BM:1,BN:1,BO:15,BQ:3,BR:117,BS:18,BT:1,BW:4,BY:3,BZ:13,CA:205,CC:1,CD:11,CF:1,CG:3,CH:6,CI:2,CK:6,CL:17,CM:5,CN:217,CO:51,CR:13,CU:12,CV:7,CW:1,CX:1,CY:3,CZ:5,DE:34,DJ:1,DK:8,DM:1,DO:7,DZ:30,EC:15,EE:3,EG:11,EH:2,ER:1,ES:43,ET:16,FI:20,FJ:10,FK:2,FM:4,FO:1,FR:59,GA:2,GD:1,GE:3,GF:1,GG:2,GH:6,GI:1,GL:14,GM:1,GN:1,GP:1,GQ:2,GR:39,GT:2,GU:1,GW:1,GY:2,HK:1,HN:6,HR:8,HT:2,HU:2,ID:70,IE:7,IL:6,IM:1,IN:77,IQ:6,IR:45,IS:7,IT:38,JE:1,JM:2,JO:2,JP:65,KE:14,KG:2,KH:3,KI:2,KM:1,KN:2,KP:1,KR:15,KS:1,KW:1,KY:3,KZ:21,LA:8,LB:1,LC:2,LK:6,LR:2,LS:1,LT:3,LU:1,LV:1,LY:11,MA:16,MD:1,ME:2,MF:1,MG:13,MH:2,MK:2,ML:1,MM:17,MN:10,MO:1,MP:2,MQ:1,MR:3,MS:1,MT:1,MU:2,MV:8,MW:7,MX:60,MY:35,MZ:11,NA:5,NC:1,NE:1,NF:1,NG:19,NI:1,NL:5,NO:49,NP:11,NR:1,NZ:25,OM:4,PA:5,PE:22,PF:39,PG:26,PH:40,PK:21,PL:13,PM:1,PR:7,PT:19,PW:1,PY:2,QA:1,RE:2,RO:14,RS:3,RU:129,RW:2,SA:26,SB:17,SC:2,SD:5,SE:39,SG:2,SH:2,SI:2,SK:2,SL:1,SN:4,SO:6,SR:1,SS:1,ST:1,SV:1,SX:1,SY:2,SZ:1,TC:4,TD:5,TG:1,TH:33,TJ:4,TL:1,TM:1,TN:8,TO:5,TR:52,TT:2,TV:1,TW:9,TZ:11,UA:15,UG:4,UK:58,US:586,UY:2,UZ:11,VC:1,VE:27,VG:2,VI:2,VN:22,VU:26,WF:2,WS:1,YE:9,YT:1,ZA:20,ZM:9,ZW:3]
 ----
 
 Note that we can use 'select' to only return one or more of the full set of key/value
@@ -402,7 +403,7 @@ g.V().hasLabel('airport').
       groupCount().by('country').
       select('DE','CN','NL','US')
 
-[DE:32, CN:179, NL:5, US:566]
+[DE:34,CN:217,NL:5,US:586]
 ----
 
 Because the 'air-routes' graph also has country specific vertices, we could chose to
@@ -425,7 +426,7 @@ This time the countries with no airports *are* included in the results.
 
 [source,groovy]
 ----
-[US:579,CN:209,CA:204,AU:125,RU:122,BR:115,IN:74,ID:67,JP:63,MX:59,UK:58,FR:58,CO:50,NO:49,TR:48,IR:45,ES:42,SE:39,GR:39,PH:39,AR:37,IT:36,MY:34,DE:33,TH:32,PF:30,DZ:29,SA:26,VU:26,PG:26,NZ:25,VE:24,VN:21,PK:21,FI:20,ZA:20,KZ:20,PE:20,BS:18,NG:18,SB:17,CL:17,BO:15,UA:15,EC:15,KR:15,PT:14,AO:14,RO:14,ET:14,GL:14,KE:14,MA:14,MM:14,BZ:13,CR:13,MG:13,PL:13,CU:12,CD:11,UZ:11,AE:10,EG:10,FJ:10,LY:10,MN:10,MZ:10,NP:10,TW:9,YE:9,TN:8,TZ:8,DK:8,HR:8,ZM:8,LA:8,MV:8,BD:7,CV:7,DO:7,IE:7,PR:6,AT:6,CK:6,HN:6,IQ:6,LK:6,AZ:5,BE:5,SD:5,SO:5,CH:5,CM:5,CZ:5,GH:5,IL:5,IS:5,NA:5,NL:5,PA:5,AF:4,BA:4,BG:4,BW:4,TC:4,TJ:4,UG:4,FM:4,OM:4,BQ:3,SN:3,CG:3,CY:3,EE:3,GE:3,ZW:3,KH:3,KY:3,LT:3,MR:3,PY:2,AM:2,RE:2,RS:2,BF:2,RW:2,SC:2,SH:2,SI:2,BY:2,SK:2,SY:2,TT:2,EH:2,UY:2,VG:2,VI:2,FK:2,WF:2,GA:2,GG:2,GQ:2,GT:2,GY:2,HT:2,HU:2,JM:2,JO:2,KG:2,KI:2,KN:2,LC:2,LR:2,ME:2,MH:2,MP:2,MU:2,MW:2,PW:1,QA:1,AG:1,AI:1,AL:1,AS:1,AW:1,BB:1,BH:1,BI:1,BJ:1,BL:1,BM:1,BN:1,BT:1,SG:1,SL:1,SR:1,CC:1,SS:1,ST:1,CF:1,SV:1,SX:1,CI:1,SZ:1,TD:1,TG:1,CW:1,CX:1,TL:1,TM:1,TO:1,TV:1,DJ:1,DM:1,ER:1,VC:1,FO:1,WS:1,GD:1,GF:1,GI:1,GM:1,GN:1,GP:1,GU:1,GW:1,HK:1,YT:1,IM:1,JE:1,KM:1,KP:1,KS:1,KW:1,LB:1,LS:1,LU:1,LV:1,MD:1,MF:1,MK:1,ML:1,MO:1,MQ:1,MS:1,MT:1,NC:1,NE:1,NF:1,NI:1,NR:1,PM:1,AD:0,SM:0,LI:0,MC:0,PN:0]
+[US:586,CN:217,CA:205,AU:132,RU:129,BR:117,IN:77,ID:70,JP:65,MX:60,FR:59,UK:58,TR:52,CO:51,NO:49,IR:45,ES:43,PH:40,SE:39,GR:39,PF:39,AR:38,IT:38,MY:35,DE:34,TH:33,DZ:30,VE:27,SA:26,VU:26,PG:26,NZ:25,VN:22,PE:22,KZ:21,PK:21,FI:20,ZA:20,PT:19,NG:19,BS:18,SB:17,CL:17,MM:17,ET:16,MA:16,BO:15,UA:15,EC:15,KR:15,AO:14,RO:14,GL:14,KE:14,BZ:13,CR:13,MG:13,PL:13,CU:12,CD:11,TZ:11,EG:11,UZ:11,LY:11,MZ:11,NP:11,AE:10,FJ:10,MN:10,TW:9,YE:9,ZM:9,TN:8,DK:8,HR:8,LA:8,MV:8,PR:7,BD:7,CV:7,DO:7,IE:7,IS:7,MW:7,AT:6,SO:6,CH:6,CK:6,GH:6,HN:6,IL:6,IQ:6,LK:6,AF:5,AZ:5,BE:5,SD:5,CM:5,TD:5,CZ:5,TO:5,NA:5,NL:5,PA:5,BA:4,BG:4,BW:4,SN:4,TC:4,TJ:4,UG:4,FM:4,OM:4,RS:3,BQ:3,BY:3,CG:3,CY:3,EE:3,GE:3,ZW:3,KH:3,KY:3,LT:3,MR:3,PY:2,AM:2,RE:2,BF:2,RW:2,SC:2,SG:2,SH:2,SI:2,SK:2,CI:2,SY:2,TT:2,EH:2,UY:2,VG:2,VI:2,FK:2,WF:2,GA:2,GG:2,GQ:2,GT:2,GY:2,HT:2,HU:2,JM:2,JO:2,KG:2,KI:2,KN:2,LC:2,LR:2,ME:2,MH:2,MK:2,MP:2,MU:2,PW:1,QA:1,AG:1,AI:1,AL:1,AS:1,AW:1,BB:1,BH:1,BI:1,BJ:1,BL:1,BM:1,BN:1,BT:1,SL:1,SR:1,CC:1,SS:1,ST:1,CF:1,SV:1,SX:1,SZ:1,TG:1,CW:1,CX:1,TL:1,TM:1,TV:1,DJ:1,DM:1,ER:1,VC:1,FO:1,WS:1,GD:1,GF:1,GI:1,GM:1,GN:1,GP:1,GU:1,GW:1,HK:1,YT:1,IM:1,JE:1,KM:1,KP:1,KS:1,KW:1,LB:1,LS:1,LU:1,LV:1,MD:1,MF:1,ML:1,MO:1,MQ:1,MS:1,MT:1,NC:1,NE:1,NF:1,NI:1,NR:1,PM:1,AD:0,SM:0,LI:0,MC:0,PN:0]
 ----
 
 If we only wanted to see the last few of the sorted results we could add a 'tail'
@@ -438,8 +439,7 @@ g.V().hasLabel('country').
       order(local).by(values,desc).
       tail(local,20)
 
-[LV:1,MD:1,MF:1,MK:1,ML:1,MO:1,MQ:1,MS:1,MT:1,NC:1,NE:1,NF:1,NI:1,NR:1,PM:1,AD:0,SM:0,LI:0,MC:0,PN:0]
-
+[LU:1,LV:1,MD:1,MF:1,ML:1,MO:1,MQ:1,MS:1,MT:1,NC:1,NE:1,NF:1,NI:1,NR:1,PM:1,AD:0,SM:0,LI:0,MC:0,PN:0]
 ----
 
 [[continentdist]]
@@ -455,7 +455,7 @@ scheduled service in Antarctica!
 // How many airports are there in each continent?
 g.V().hasLabel('continent').group().by('code').by(out().count())
 
-[EU:583,AS:932,NA:978,OC:284,AF:294,AN:0,SA:303]
+[EU:605,AS:971,NA:989,OC:305,AF:321,AN:0,SA:313]
 ----
 
 ==== Distribution of routes per airport
@@ -476,7 +476,7 @@ g.V().hasLabel('airport').out().groupCount().by('code')
 g.V().hasLabel('airport').out().groupCount().by('code').
       select('AUS','AMS','JFK','DUB','MEX')
 
-[AUS:59,AMS:272,JFK:186,DUB:165,MEX:105]
+[AUS:98,AMS:285,JFK:203,DUB:185,MEX:116]
 ----
 
 This next query essentially asks the same question about how many outgoing routes
@@ -491,42 +491,36 @@ the query.
 g.V().hasLabel('airport').
       group().by(out().count()).by('code').
       order(local).by(keys)
-
 ----
+
 As can be seen this time the count value is the key and the airport codes are the
 values.
 
 [source,groovy]
 ----
-76:[TPA,BNE,PDX],77:[RIX,WUH],78:[IBZ,PTY],79:[ADD,AYT],80:[MNL,BOG,XMN,CSX],81:[SFB],82:[GLA,HND],83:[CAI,MDW,OTP],84:[VCE,BRS,HGH],85:[JNB,MLA,NAP,RUH],86:[BOM,SHJ],89:[BWI],90:[CMN],91:[LPA,VKO],92:[SXF],93:[DCA,GRU,LYS],94:[SLC,YVR,SYD,MRS,TFS],95:[STR,CRL],97:[NCE,AUH],98:[BUD,WAW],101:[YUL],102:[BGY],104:[LTN,JED,SZX],105:[PHX,MEX,TLV,HAM,XIY],106:[ALC,CUN,CKG],107:[HEL,EDI,KMG],108:[DEL],109:[BHX,SAW],110:[TPE],112:[NRT],113:[GVA],114:[SEA],115:[PRG],116:[CGN,LIS],118:[ATH,TXL],119:[OSL],122:[KUL],123:[MCO],124:[MXP,CTU],126:[AGP],127:[ORY],129:[PHL],130:[BOS],132:[BKK],133:[LED],136:[IAD],137:[DTW],141:[SFO],142:[FLL],143:[ARN,PMI],144:[MSP,ICN],145:[LAS,CPH],146:[SIN],151:[HKG],152:[ZRH],156:[SVO],162:[VIE],163:[DOH],164:[CAN],165:[DUB],166:[DUS],168:[CLT],171:[MIA],180:[BRU],181:[YYZ],182:[EWR,MAN],186:[STN],187:[JFK],188:[DEN],189:[FCO],190:[BCN],191:[LHR],192:[IAH,MAD],195:[LAX],200:[LGW],201:[PVG],214:[DME],221:[DFW],229:[DXB],232:[ATL,ORD],234:[PEK],237:[MUC],262:[CDG],269:[AMS],270:[IST],272:[FRA]]
-
+[..., 73:[ALG],74:[MEL,KWI,SVQ,SVX],75:[BNA,CLE,LPL,YYC,SOF,EIN],76:[AMM,CTA],77:[CGK],78:[STL,RHO,HAJ,TLS],79:[NTE],80:[LCA,PDX,PSA,KIX,OVB],81:[LGA,SAN,HER],82:[BNE,BSL],83:[FAO,RAK],84:[HND,BOG,XMN,WUH],85:[MDW,KEF],86:[DMK],87:[MNL],88:[PTY,SKG],89:[IBZ,JNB],90:[TPA,VLC],91:[BWI,CAI,HGH,CSX],92:[GLA,BOD],94:[BOM,ADD,BLQ,LPA,RUH],95:[OPO,SFB],96:[DCA,RIX],97:[GRU],98:[AUS],99:[VCE],100:[AYT,BRS,KBP],102:[SYD,OTP,SHJ],103:[AUH,CMN],104:[SLC,KRK],106:[YVR,TFS],110:[NAP],111:[CUN],112:[JED],113:[LYS],115:[NCE,SAW],116:[ALC,MEX,WAW,KMG],117:[MRS,CRL,XIY],118:[PHX,DEL],119:[MLA],121:[STR],122:[CKG],123:[YUL,VKO],125:[HAM],126:[SEA],127:[BUD,TPE],128:[HEL,GVA,OSL],129:[SZX,BGY],130:[LTN,BHX],136:[EDI],138:[CGN],139:[ORY,LIS,CTU],140:[AGP],141:[NRT,PRG],143:[BOS,TLV],145:[DTW,KUL],147:[PHL],151:[MXP],153:[BKK,PMI],155:[ATH],156:[MSP],157:[SFO],158:[FLL,IAD],159:[LED],161:[LAS],165:[MCO],168:[ARN],169:[SIN],173:[ICN],174:[HKG],175:[CAN],180:[ZRH],181:[SVO],184:[CLT],185:[DUB],187:[DOH],194:[BRU,CPH],195:[YYZ],196:[MIA],199:[IAH,DUS],201:[FCO],202:[BER],203:[EWR,BCN],204:[JFK],206:[MAD,VIE],211:[STN],213:[PVG],214:[LAX],216:[MAN],217:[DEN],221:[LHR],232:[LGW,DME],242:[ATL],248:[DXB,PEK],253:[DFW],265:[ORD],270:[MUC],283:[AMS],293:[CDG],309:[IST],310:[FRA]]
 ----
 
 As the above query returns a lot of data, we can also extract specific values we are
-interested in as follows. Only airports with 105 outgoing routes are selected.
+interested in as follows. Only airports with 62 outgoing routes are selected.
 
 [source,groovy]
 ----
 // Which of these airports have 105 outgoing routes?
 g.V().hasLabel('airport').
-      group().by(out().count()).by('code').next().get(105L)
+      group().by(out().count()).by('code').
+      select(constant(62L))
 ----
 
-NOTE: Currently 'select' can only take a string value as the key so we have to
-use the slightly awkward 'next().get()' syntax to get a numeric key from a
-result.
+NOTE: The 'select' step does not allow direct selection of non-string keys. To work
+around this you use its 'Traversal' form to access a numeric key from a result.
 
-This time the results only include the airports with 105 outgoing routes.
+This time the results only include the airports with 62 outgoing routes.
 
 [source,groovy]
 ----
-PHX
-MEX
-TLV
-HAM
-XIY
+[OAK,BEG,CVG,CAG]
 ----
-
 
 [[groupvar]]
 ==== Using groupCount with a traversal variable
@@ -551,7 +545,7 @@ to return our two variables as the results of the query.
 g.V(3).out().groupCount('a').by('runways').
        out().count().as('b').select('a','b')
 
-[a:[1:2,2:9,3:17,4:22,5:4,6:3,7:1,8:1],b:5942]
+[a:[1:9,2:24,3:30,4:24,5:5,6:4,7:2],b:8354]
 ----
 
 In the next section we will see another example of a 'groupCount' step that uses a
@@ -615,13 +609,13 @@ g.V().hasLabel('airport').
       groupCount('a').by(constant('total')).cap('a')
 ----
 
-If we run the query this is what we might get back. We counted 3375 total airports,
-found six airports that have six or more runways, 3079 that have two or fewer and
-found 58 airports in France.
+If we run the query this is what we might get back. We counted 3504 total airports,
+found six airports that have six or more runways, 53 that had exactly four runways,
+3204 that have two or fewer and found 59 airports in France.
 
 [source,groovy]
 ----
-[total:3374,high:6,low:3078,four:51,France:58]
+[high:6,total:3504,low:3204,four:53,France:59]
 ----
 
 Using 'choose' and 'groupCount' in this way provides a very nice pattern for counting
@@ -662,11 +656,11 @@ values. We pretty printed the output a bit to make it easier to read.
 
 [source,groovy]
 ----
-[BNA:[DCA:93,DFW:221,BWI:89,FLL:142,IAD:136],
- ANC:[IAH:192,LAX:195,DFW:221,PDX:76,FAI:19],
- BOS:[YVR:94,LHR:191,CDG:262,YYZ:181,LGW:200],
- ATL:[MEI:4,MLB:6,MSL:2,MCN:2,MBS:4],
- AUS:[MEX:105,FRA:272,LHR:191,PIT:54,YYZ:181]]
+[BNA:[DCA:96,BWI:91,BOS:143,ATL:242,AUS:98],
+ ANC:[ORD:265,IAH:199,LAX:214,DFW:253,MSP:156],
+ BOS:[DCA:96,BNA:75,BWI:91,ATL:242,AUS:98],
+ ATL:[NRT:141,FRA:310,LHR:221,CDG:293,YYZ:195],
+ AUS:[ONT:23,PHL:147,PDX:80,DTW:145,OKC:33]]
 ----
 
 So what we have created is a group, essentially a map, that has airport codes as the
@@ -689,8 +683,8 @@ This time only the selected results are returned
 
 [source,groovy]
 ----
-[ANC:[IAH:192,LAX:195,DFW:221,PDX:76,FAI:19],
- ATL:[MEI:4,MLB:6,MSL:2,MCN:2,MBS:4]]
+[ANC:[ORD:265,IAH:199,LAX:214,DFW:253,MSP:156],
+ ATL:[NRT:141,FRA:310,LHR:221,CDG:293,YYZ:195]]
 ----
 
 If you want to select results from one of the inner groups you can do that as well
@@ -714,7 +708,7 @@ the results for the keys of 'IAH' and 'LAX' only.
 
 [source,groovy]
 ----
-[IAH:192,LAX:195]
+[IAH:199,LAX:214]
 ----
 
 [[eu-usa]]
@@ -729,39 +723,36 @@ are between airports anywhere in Europe and airports in the USA.
 [source,groovy]
 ----
 // How many routes from anywhere in Europe to the USA?
-
 g.V().has('continent','code','EU').
       out().out().has('country','US').
       count()
 
-351
+435
 ----
 
-So we now know that there are 345 different routes. Remember though that the
+So we now know that there are 435 different routes. Remember though that the
 'air-routes' graph does not track the number of airlines that operate any of these
 routes. The graph just stores the data that at least one airline operates each of
-these unique route pairs. Let's dig a bit deeper into the 345 and find out how many
+these unique route pairs. Let's dig a bit deeper into the 435 and find out how many
 US airports have flights that arrive from Europe.
 
 [source,groovy]
 ----
 // How many different US airports have routes from Europe?
-
 g.V().has('continent','code','EU').
       out().out().has('country','US').
       dedup().count()
 
-38
+45
 ----
 
-So we can now see that the 345 routes from European airports arrive at one of 38
+So we can now see that the 435 routes from European airports arrive at one of 45
 airports in the United States. We can dig a bit deeper and look at the distribution
-of these routes across the 38 airports.
+of these routes across the 45 airports.
 
 [source,groovy]
 ----
 //What is the distribution of the routes amongst those US airports?
-
 g.V().has('continent','code','EU').
       out().out().has('country','US').
       groupCount().by('code').
@@ -773,7 +764,10 @@ with Newark (EWR) having the second most.
 
 [source,groovy]
 ----
-[PHX:1,CVG:1,RSW:1,BDL:2,SJC:2,BWI:2,AUS:2,RDU:2,MSY:2,SAN:3,SLC:3,PDX:3,PIT:3,TPA:4,SFB:4,OAK:4,DTW:5,SWF:5,MSP:5,DEN:5,FLL:6,CLT:7,DFW:7,PVD:7,SEA:8,IAH:8,MCO:10,LAS:10,ATL:14,SFO:15,PHL:17,IAD:19,ORD:21,BOS:22,LAX:23,MIA:25,EWR:33,JFK:40]
+[CHS:1,MCI:1,BNA:1,ANC:1,CLE:1,IND:1,STL:2,BDL:2,SJC:2,BWI:2,PHX:2,
+ MSY:2,CVG:2,SAN:3,RDU:3,PDX:3,SLC:4,AUS:4,RSW:4,PIT:4,TPA:5,SFB:5,SWF:5,
+ DTW:6,MSP:6,OAK:6,FLL:7,DEN:7,PVD:7,CLT:8,IAH:8,LAS:11,DFW:12,SEA:12,MCO:14,
+ ATL:15,SFO:20,PHL:22,IAD:22,LAX:26,BOS:26,ORD:27,MIA:28,JFK:42,EWR:43]
 ----
 
 Now let's repeat the process but looking at the European end of the routes. First of
@@ -782,13 +776,12 @@ all, we can calculate how many European airports have flights to the United Stat
 [source,groovy]
 ----
 // How many European airports have service to the USA?
-
 g.V().has('continent','code','EU').
       out().as('a').
       out().has('country','US').
       select('a').dedup().count()
 
-53
+62
 ----
 
 Just as we did for the airports in the US we can figure out the distribution of
@@ -798,7 +791,6 @@ routes for the European airports.
 ----
 // What is the distribution of US routes amongst
 // the European airports?
-
 g.V().has('continent','code','EU').
       out().as('a').
       out().has('country','US').
@@ -811,39 +803,37 @@ most US destinations and Frankfurt (FRA) the second most.
 
 [source,groovy]
 ----
-[RIX:1,TER:1,BRS:1,STN:1,NCE:1,KRK:1,ORK:1,KBP:1,PDL:1,DME:1,BEG:1,AGP:1,HAM:1,OPO:2,STR:2,VCE:2,BHX:2,ORY:2,ATH:2,MXP:3,BFS:3,BGO:3,GVA:3,VKO:3,HEL:3,WAW:4,SVO:4,GLA:4,EDI:5,SNN:5,CGN:5,TXL:6,VIE:6,LIS:6,BRU:7,ARN:7,OSL:8,IST:9,BCN:10,MAD:11,LGW:11,DUS:11,CPH:11,FCO:12,ZRH:13,MAN:13,DUB:15,MUC:16,AMS:18,KEF:18,CDG:22,FRA:24,LHR:27]
+[TER:1,RIX:1,BRS:1,DSA:1,DBV:1,TFS:1,KRK:1,BLQ:1,ORK:1,KBP:1,DME:1,BEG:1,AGP:1,
+ PMI:1,HAM:1,RZE:1,NAP:1,PRG:2,OPO:2,STR:2,NCE:2,BHX:2,BFS:3,GVA:3,VCE:3,VKO:3,
+ BUD:3,PDL:3,STN:4,BGO:4,SVO:4,ORY:4,GLA:4,WAW:5,SNN:5,ATH:5,MXP:6,CGN:6,HEL:6,
+ VIE:6,BER:7,BRU:8,OSL:8,EDI:9,ARN:9,LIS:9,DUS:11,IST:11,CPH:11,BCN:12,MAD:13,
+ FCO:13,MAN:14,LGW:14,ZRH:15,MUC:18,DUB:18,AMS:22,CDG:25,KEF:26,FRA:28,LHR:30]
 ----
 
 Lastly, we can find out what the list of routes flown is. For this example we decided
-to just return 10 of the 345 routes. Note how the 'path' step returns all parts of
+to just return 10 of the 435 routes. Note how the 'path' step returns all parts of
 the traversal including the continent code 'EU'. We could remove that part of the
 result by adding a 'from' modulator as shown earlier in the "<<pathintro>>" section.
 
 [source,groovy]
 ----
 // Selected routes from Europe to the USA.
-
 g.V().has('continent','code','EU').
       out().out().
       has('country','US').
       path().by('code').
       limit(10)
-----
 
-The first 10 results returned feature routes from Warsaw, Belgrade and Istanbul.
-
-[source,groovy]
-----
-[EU,WAW,JFK]
-[EU,WAW,LAX]
-[EU,WAW,ORD]
-[EU,WAW,EWR]
-[EU,BEG,JFK]
-[EU,IST,ATL]
-[EU,IST,BOS]
-[EU,IST,IAD]
-[EU,IST,IAH]
-[EU,IST,JFK]
+[EU,KRK,ORD]
+[EU,TFS,EWR]
+[EU,PDL,BOS]
+[EU,PDL,JFK]
+[EU,PDL,EWR]
+[EU,DSA,SFB]
+[EU,TER,BOS]
+[EU,RZE,EWR]
+[EU,LHR,PIT]
+[EU,LHR,PDX]
 ----
 
 [[mapreduce]]
@@ -869,7 +859,19 @@ collected into a single list.
 
 [source,groovy]
 ----
-[Toronto,London,Frankfurt,Mexico City,Pittsburgh,Portland,Charlotte,Cancun,Memphis,Cincinnati,Indianapolis,Kansas City,Dallas,St Louis,Albuquerque,Chicago,Lubbock,Harlingen,Guadalajara,Pensacola,Valparaiso,Orlando,Branson,St Petersburg-Clearwater,Atlanta,Nashville,Boston,Baltimore,Washington D.C.,Dallas,Fort Lauderdale,Washington D.C.,Houston,New York,Los Angeles,Orlando,Miami,Minneapolis,Chicago,Phoenix,Raleigh,Seattle,San Francisco,San Jose,Tampa,San Diego,Long Beach,Santa Ana,Salt Lake City,Las Vegas,Denver,New Orleans,Newark,Houston,El Paso,Cleveland,Oakland,Philadelphia,Detroit]
+[Philadelphia,Portland,Detroit,Oaklahoma City,Ontario,Charlotte,Cancun,Memphis,
+ Cincinnati,Indianapolis,Kansas City,Dallas,St Louis,Albuquerque,Milwaukee,Chicago,
+ Omaha,Tulsa,Puerto Vallarta,Nassau,Little Rock,Jacksonville,Providence,Sacramento,
+ Birmingham,Louisville,Buffalo,Boise,Lubbock,Panama City Beach,Harlingen,Reno,
+ Columbus,Des Moines,Cozumel,Amarillo,Baton Rouge,Charleston,Guadalajara,
+ Grand Rapids,Liberia,Pensacola,San José del Cabo,Knoxville,Valparaiso,
+ Fayetteville/Springdale/,Hayden,Orlando,Burbank,Aspen,Bozeman,Branson,St
+ Petersburg-Clearwater,Atlanta,Nashville,Boston,Baltimore,Washington D.C.,Dallas,
+ Fort Lauderdale,Washington D.C.,Houston,New York,Los Angeles,Orlando,Miami,
+ Minneapolis,Chicago,Phoenix,Raleigh,Seattle,San Francisco,San Jose,Tampa,San Diego,
+ Long Beach,Santa Ana,Salt Lake City,Las Vegas,Denver,San Antonio,Toronto,Honolulu,
+ Vancouver,New Orleans,London,Newark,London,Houston,Frankfurt,El Paso,Amsterdam,
+ Cleveland,Calgary,Oakland,Mexico City,Tucson,Pittsburgh]
 ----
 
 However, what if we wanted to reduce our results further? Take a look at the modified
@@ -887,7 +889,7 @@ of each name effectively producing a running total.
 g.V().has('code','AUS').out('route').values('city').
       fold(0) {a,b -> a + b.length()}
 
-530
+891
 ----
 
 NOTE: While this query will work as-is on TinkerGraph within the Gremlin Console,
@@ -901,6 +903,15 @@ g.V().has('code','AUS').out('route').values('city').
                        fold(0) {a,b -> (int)a + ((String)b).length()}
 ----
 
+The point of the previous example with 'fold' using a closure was to demonstrate a
+subtle feature of it in the context of reducing results. The more direct way to get
+the same result is with standard Gremlin steps:
+
+[source,groovy]
+----
+g.V().has('code','AUS').out('route').values('city').
+      length().sum()
+----
 
 [[meanmode]]
 ==== Distribution of routes in the graph (mode and mean)
@@ -932,7 +943,18 @@ also see at the other end of the scale that one airport has 237 outgoing routes.
 
 [source,groovy]
 ----
-[1:770,2:654,3:369,4:234,5:148,6:116,7:93,8:81,9:68,10:61,12:43,11:39,13:39,15:31,16:27,19:25,20:25,22:25,14:19,18:18,0:16,17:15,33:15,23:14,30:13,31:13,21:12,32:12,35:11,37:11,24:9,25:9,39:9,26:8,27:8,36:8,41:8,42:8,47:8,59:8,29:7,34:7,40:7,44:7,55:7,63:7,43:6,48:6,50:6,67:6,28:5,45:5,61:5,62:5,64:5,94:5,105:5,52:4,54:4,68:4,70:4,80:4,85:4,38:3,51:3,53:3,56:3,60:3,74:3,76:3,83:3,84:3,93:3,104:3,106:3,107:3,46:2,57:2,58:2,65:2,73:2,77:2,78:2,79:2,82:2,86:2,91:2,95:2,97:2,98:2,109:2,116:2,118:2,124:2,143:2,144:2,145:2,182:2,192:2,232:2,262:1,269:1,270:1,272:1,49:1,66:1,69:1,71:1,72:1,75:1,81:1,89:1,90:1,92:1,101:1,102:1,108:1,110:1,112:1,113:1,114:1,115:1,119:1,122:1,123:1,126:1,127:1,129:1,130:1,132:1,133:1,136:1,137:1,141:1,142:1,146:1,151:1,152:1,156:1,162:1,163:1,164:1,165:1,166:1,168:1,171:1,180:1,181:1,186:1,187:1,188:1,189:1,190:1,191:1,195:1,200:1,201:1,214:1,221:1,229:1,234:1,237:1]
+[1:777,2:649,3:357,4:234,5:149,6:140,7:100,8:73,9:64,10:59,11:55,12:49,13:43,16:36,
+15:31,0:29,20:27,18:24,14:21,17:19,19:18,21:18,22:18,24:15,25:15,23:14,27:14,41:13,
+34:12,36:12,26:11,35:11,33:10,38:10,45:10,28:9,32:9,57:9,67:9,42:8,44:8,46:8,49:8,
+29:7,37:7,51:7,30:6,52:6,53:6,56:6,75:6,39:5,40:5,43:5,48:5,58:5,61:5,66:5,71:5,80:5,
+94:5,31:4,47:4,54:4,55:4,60:4,62:4,63:4,68:4,74:4,78:4,84:4,91:4,116:4,59:3,69:3,
+81:3,100:3,102:3,117:3,128:3,139:3,64:2,65:2,76:2,82:2,83:2,85:2,88:2,89:2,90:2,
+92:2,95:2,96:2,103:2,104:2,106:2,115:2,118:2,123:2,127:2,129:2,130:2,141:2,143:2,
+145:2,153:2,158:2,194:2,199:2,203:2,206:2,232:2,248:2,265:1,270:1,283:1,293:1,309:1,
+310:1,72:1,73:1,77:1,79:1,86:1,87:1,97:1,98:1,99:1,110:1,111:1,112:1,113:1,119:1,
+121:1,122:1,125:1,126:1,136:1,138:1,140:1,147:1,151:1,155:1,156:1,157:1,159:1,161:1,
+165:1,168:1,169:1,173:1,174:1,175:1,180:1,181:1,184:1,185:1,187:1,195:1,196:1,201:1,
+202:1,204:1,211:1,213:1,214:1,216:1,217:1,221:1,242:1,253:1]
 ----
 
 We could change our query above, replacing 'out()' with '__.in()' and we could find
@@ -957,8 +979,18 @@ outgoing routes at all!
 
 [source,groovy]
 ----
-
-[0:16,1:770,2:654,3:369,4:234,5:148,6:116,7:93,8:81,9:68,10:61,11:39,12:43,13:39,14:19,15:31,16:27,17:15,18:18,19:25,20:25,21:12,22:25,23:14,24:9,25:9,26:8,27:8,28:5,29:7,30:13,31:13,32:12,33:15,34:7,35:11,36:8,37:11,38:3,39:9,40:7,41:8,42:8,43:6,44:7,45:5,46:2,47:8,48:6,49:1,50:6,51:3,52:4,53:3,54:4,55:7,56:3,57:2,58:2,59:8,60:3,61:5,62:5,63:7,64:5,65:2,66:1,67:6,68:4,69:1,70:4,71:1,72:1,73:2,74:3,75:1,76:3,77:2,78:2,79:2,80:4,81:1,82:2,83:3,84:3,85:4,86:2,89:1,90:1,91:2,92:1,93:3,94:5,95:2,97:2,98:2,101:1,102:1,104:3,105:5,106:3,107:3,108:1,109:2,110:1,112:1,113:1,114:1,115:1,116:2,118:2,119:1,122:1,123:1,124:2,126:1,127:1,129:1,130:1,132:1,133:1,136:1,137:1,141:1,142:1,143:2,144:2,145:2,146:1,151:1,152:1,156:1,162:1,163:1,164:1,165:1,166:1,168:1,171:1,180:1,181:1,182:2,186:1,187:1,188:1,189:1,190:1,191:1,192:2,195:1,200:1,201:1,214:1,221:1,229:1,232:2,234:1,237:1,262:1,269:1,270:1,272:1]
+[0:29,1:777,2:649,3:357,4:234,5:149,6:140,7:100,8:73,9:64,10:59,11:55,12:49,13:43,
+14:21,15:31,16:36,17:19,18:24,19:18,20:27,21:18,22:18,23:14,24:15,25:15,26:11,27:14,
+28:9,29:7,30:6,31:4,32:9,33:10,34:12,35:11,36:12,37:7,38:10,39:5,40:5,41:13,42:8,
+43:5,44:8,45:10,46:8,47:4,48:5,49:8,51:7,52:6,53:6,54:4,55:4,56:6,57:9,58:5,59:3,
+60:4,61:5,62:4,63:4,64:2,65:2,66:5,67:9,68:4,69:3,71:5,72:1,73:1,74:4,75:6,76:2,
+77:1,78:4,79:1,80:5,81:3,82:2,83:2,84:4,85:2,86:1,87:1,88:2,89:2,90:2,91:4,92:2,
+94:5,95:2,96:2,97:1,98:1,99:1,100:3,102:3,103:2,104:2,106:2,110:1,111:1,112:1,113:1,
+115:2,116:4,117:3,118:2,119:1,121:1,122:1,123:2,125:1,126:1,127:2,128:3,129:2,130:2,
+136:1,138:1,139:3,140:1,141:2,143:2,145:2,147:1,151:1,153:2,155:1,156:1,157:1,158:2,
+159:1,161:1,165:1,168:1,169:1,173:1,174:1,175:1,180:1,181:1,184:1,185:1,187:1,194:2,
+195:1,196:1,199:2,201:1,202:1,203:2,204:1,206:2,211:1,213:1,214:1,216:1,217:1,221:1,
+232:2,242:1,248:2,253:1,265:1,270:1,283:1,293:1,309:1,310:1]
 ----
 
 If we wanted to find the statistical mean number of routes in the graph we could
@@ -969,16 +1001,16 @@ outgoing routes in total there are in the graph.
 ----
 g.V().hasLabel('airport').union(count(),out('route').count()).fold()
 
-[3374,43400]
+[3504,50637]
 ----
 
 We could then use the Gremlin Console do the division for us to calculate the mean.
 
 [source,groovy]
 ----
-gremlin> 43400/3374
+gremlin> 50637/3504
 
-==>12.8630705394
+14.4511986301
 ----
 
 However, Gremlin also has a 'mean' step that we can take advantage of if we can
@@ -986,7 +1018,7 @@ figure out a way to use it in this case that will do the work for us. Take a loo
 the next query. The key thing to note here is the way 'local' has been used. This
 will cause Gremlin to essentially do what we did a bit more manually above. If we did
 not include 'local' the answer would just be the total number of outgoing routes as
-Gremlin would essentially calculate 43400/1. By using local we force Gremlin to in
+Gremlin would essentially calculate 50637/1. By using local we force Gremlin to in
 essence create an array containing the number of routes for each airport, add those
 values up and divide by the number of elements in the array (the number of airports).
 We hope that makes sense. If it is confusing try the query yourself on the gremlin
@@ -997,7 +1029,7 @@ of the interim values instead!
 ----
 g.V().hasLabel('airport').local(out('route').count()).mean()
 
-12.863070539419088
+14.4511986301
 ----
 
 So it seems there is an average of just over 12 outgoing routes per airport in
@@ -1012,12 +1044,12 @@ routes and combined, incoming and outgoing, routes.
 // Average number of incoming routes
 g.V().has('type','airport').local(__.in('route').count()).mean()
 
-12.863070539419088
+14.4511986301
 
 // Average number of outgoing and incoming routes
 g.V().has('type','airport').local(both('route').count()).mean()
 
-25.726141078838175
+28.902397260273972
 ----
 
 ==== How many routes are there from airports in London (UK)?
@@ -1033,7 +1065,7 @@ London, Ontario, in Canada.
 g.V().has('region','GB-ENG').has('city','London').
       group().by('code').by(out().count())
 
-[LCY:42,LHR:191,LTN:104,STN:186,LGW:200]
+[LCY:51,LHR:221,LTN:130,STN:211,LGW:232]
 ----
 
 Here is a twist on the above theme. How many places can we get to from London in two
@@ -1048,7 +1080,7 @@ ruling out any flights that would end up back in London.
 g.V().has('region','GB-ENG').has('city','London').aggregate('lon').
       out().out().dedup().where(without('lon')).count()
 
-2236
+2353
 ----
 
 We could have written the previous query like this and avoided using 'aggregate' but
@@ -1059,7 +1091,7 @@ to me, this feels more clumsy and somewhat repetitive.
 g.V().has('region','GB-ENG').has('city','London').out().out().dedup().
       not(and(has('city','London'),has('region','GB-ENG'))).count()
 
-2236
+2353
 ----
 
 [[englandroutes]]
@@ -1084,17 +1116,20 @@ to save space.
 
 [source,groovy]
 ----
-[BHX,NCL]   [LBA,SOU]   [MAN,NQY]   [NQY,ISC]
-[BRS,NCL]   [LBA,NQY]   [MAN,NWI]   [NQY,LGW]
-[EMA,SOU]   [LCY,MAN]   [MAN,EXT]   [NQY,MAN]
-[EXT,MAN]   [LEQ,ISC]   [MAN,LHR]   [NQY,LPL]
-[EXT,NQY]   [LGW,NQY]   [MAN,LCY]   [NQY,LBA]
-[EXT,ISC]   [LGW,NCL]   [NCL,SOU]   [NWI,MAN]
-[HUY,NWI]   [LHR,MAN]   [NCL,BRS]   [NWI,HUY]
-[ISC,NQY]   [LHR,LBA]   [NCL,BHX]   [SOU,MAN]
-[ISC,EXT]   [LHR,NCL]   [NCL,LHR]   [SOU,EMA]
-[ISC,LEQ]   [LPL,NQY]   [NCL,LGW]   [SOU,LBA]
-[LBA,LHR]   [MAN,SOU]   [NQY,EXT]   [SOU,NCL]
+[BHX,NCL]  [BRS,NCL]  [EMA,SOU]  [EXT,MAN]
+[EXT,NQY]  [EXT,ISC]  [HUY,NWI]  [ISC,NQY]
+[ISC,EXT]  [ISC,LEQ]  [LBA,LHR]  [LBA,SOU]
+[LBA,NQY]  [LCY,MAN]  [LCY,NCL]  [LEQ,ISC]
+[LGW,NCL]  [LGW,NQY]  [LHR,LBA]  [LHR,NCL]
+[LHR,NQY]  [LHR,MAN]  [LPL,NQY]  [MAN,LHR]
+[MAN,LCY]  [MAN,SOU]  [MAN,NQY]  [MAN,SEN]
+[MAN,NWI]  [MAN,EXT]  [MME,NWI]  [NCL,SOU]
+[NCL,BRS]  [NCL,BHX]  [NCL,LHR]  [NCL,LGW]
+[NCL,LCY]  [NQY,SEN]  [NQY,EXT]  [NQY,ISC]
+[NQY,LHR]  [NQY,LGW]  [NQY,MAN]  [NQY,LPL]
+[NQY,LBA]  [NWI,MAN]  [NWI,HUY]  [NWI,MME]
+[SEN,NQY]  [SEN,MAN]  [SOU,NCL]  [SOU,MAN]
+[SOU,EMA]  [SOU,LBA]
 ----
 
 Here is a different way the query can be written. This time a 'where' step is used to
@@ -1113,17 +1148,33 @@ direction.
 
 [source,groovy]
 ----
-[BHX,NCL]   [LBA,NQY]
-[BRS,NCL]   [LCY,MAN]
-[EMA,SOU]   [LGW,NQY]
-[EXT,MAN]   [LGW,NCL]
-[EXT,NQY]   [LHR,MAN]
-[EXT,ISC]   [LHR,NCL]
-[HUY,NWI]   [LPL,NQY]
-[ISC,NQY]   [MAN,SOU]
-[ISC,LEQ]   [MAN,NQY]
-[LBA,LHR]   [MAN,NWI]
-[LBA,SOU]   [NCL,SOU]
+[BHX,NCL]
+[BRS,NCL]
+[EMA,SOU]
+[EXT,MAN]
+[EXT,NQY]
+[EXT,ISC]
+[HUY,NWI]
+[ISC,NQY]
+[ISC,LEQ]
+[LBA,LHR]
+[LBA,SOU]
+[LBA,NQY]
+[LCY,MAN]
+[LCY,NCL]
+[LGW,NCL]
+[LGW,NQY]
+[LHR,NCL]
+[LHR,NQY]
+[LHR,MAN]
+[LPL,NQY]
+[MAN,SOU]
+[MAN,NQY]
+[MAN,SEN]
+[MAN,NWI]
+[MME,NWI]
+[NCL,SOU]
+[NQY,SEN]
 ----
 
 [[topten]]
@@ -1158,16 +1209,16 @@ airlines regularly add, and in some cases drop, routes.
 
 [source,groovy]
 ----
-[ap:FRA,routes:272]
-[ap:AMS,routes:272]
-[ap:IST,routes:270]
-[ap:CDG,routes:262]
-[ap:MUC,routes:237]
-[ap:PEK,routes:235]
-[ap:ATL,routes:232]
-[ap:ORD,routes:232]
-[ap:DXB,routes:229]
-[ap:DFW,routes:221]
+[ap:FRA,routes:310]
+[ap:IST,routes:309]
+[ap:CDG,routes:294]
+[ap:AMS,routes:285]
+[ap:MUC,routes:271]
+[ap:ORD,routes:264]
+[ap:DFW,routes:253]
+[ap:PEK,routes:249]
+[ap:DXB,routes:248]
+[ap:ATL,routes:242]
 ----
 
 Now let's do the same thing but for outgoing routes.
@@ -1189,16 +1240,16 @@ something that we find frustrating!
 
 [source,groovy]
 ----
-[ap:FRA,routes:272]
-[ap:IST,routes:270]
-[ap:AMS,routes:269]
-[ap:CDG,routes:262]
-[ap:MUC,routes:237]
-[ap:PEK,routes:234]
-[ap:ATL,routes:232]
-[ap:ORD,routes:232]
-[ap:DXB,routes:229]
-[ap:DFW,routes:221]
+[ap:FRA,routes:310]
+[ap:IST,routes:309]
+[ap:CDG,routes:293]
+[ap:AMS,routes:283]
+[ap:MUC,routes:270]
+[ap:ORD,routes:265]
+[ap:DFW,routes:253]
+[ap:DXB,routes:248]
+[ap:PEK,routes:248]
+[ap:ATL,routes:242]
 ----
 
 Lastly, let's find the top ten airports ordered by the total number of incoming and
@@ -1221,16 +1272,16 @@ as it changes too often for me to keep up with.
 
 [source,groovy]
 ----
-[ap:FRA,routes:544]
-[ap:AMS,routes:541]
-[ap:IST,routes:540]
-[ap:CDG,routes:524]
-[ap:MUC,routes:474]
-[ap:PEK,routes:469]
-[ap:ATL,routes:464]
-[ap:ORD,routes:464]
-[ap:DXB,routes:458]
-[ap:DFW,routes:442]
+[ap:FRA,routes:620]
+[ap:IST,routes:618]
+[ap:CDG,routes:587]
+[ap:AMS,routes:568]
+[ap:MUC,routes:541]
+[ap:ORD,routes:529]
+[ap:DFW,routes:506]
+[ap:PEK,routes:497]
+[ap:DXB,routes:496]
+[ap:ATL,routes:484]
 ----
 
 [[localfold]]
@@ -1253,7 +1304,7 @@ of airport codes with each followed by its runway count.
 
 [source,groovy]
 ----
-[BOS,6,DFW,7,ORD,8,DEN,6,DTW,6,AMS,6]
+[BOS,6,DFW,7,ORD,7,DEN,6,DTW,6,AMS,6]
 ----
 
 While the output returned by the previous query is not bad, it might be nice to have
@@ -1276,7 +1327,7 @@ runway value pair is now in its own individual list.
 ----
 [BOS,6]
 [DFW,7]
-[ORD,8]
+[ORD,7]
 [DEN,6]
 [DTW,6]
 [AMS,6]
@@ -1295,7 +1346,7 @@ queries to count how many of each type exist.
 // Vertices with no outgoing edges.
 g.V().not(outE()).count()
 
-23
+36
 
 // Vertices with no incoming edges.
 g.V().not(inE()).count()
@@ -1315,7 +1366,7 @@ write using 'where' steps. As shown below.
 ----
 g.V().where(outE().count().is(0)).count()
 
-23
+36
 ----
 
 [[wherefly]]
@@ -1376,7 +1427,7 @@ g.V().has('code','AUS').
         until(has('code','YPO')).
       path().by('code')
 
-[AUS,BOS,YTZ,YTS,YMO,YFA,ZKE,YAT,YPO]
+[AUS,MDW,YTZ,YTS,YMO,YFA,ZKE,YAT,YPO]
 ----
 
 Keep in mind that this trick is only useful when trying to figure out if any route
@@ -1408,6 +1459,7 @@ the country code for India "IN" is included in the output.
 [IN,DEL,EWR]
 [IN,DEL,YYZ]
 [IN,DEL,YVR]
+[IN,BOM,JFK]
 [IN,BOM,EWR]
 [IN,BOM,YYZ]
 ----
@@ -1430,6 +1482,8 @@ Here are the results of running the query.
 ----
 London
 Paris
+Barcelona
+Madrid
 Oslo
 Stockholm
 Copenhagen
@@ -1452,10 +1506,15 @@ Here are the results of running the query.
 
 [source,groovy]
 ----
-LHR     FCO
-CDG     MAD
-FRA     MUC
-GIG     DUB
+LHR
+CDG
+FRA
+DUB
+FCO
+BCN
+MAD
+MUC
+GIG
 GRU
 ----
 
@@ -1477,16 +1536,22 @@ Here are the results of running the query.
 
 [source,groovy]
 ----
-[LHR,AUS]      [LHR,SEA]      [LHR,EWR]
-[LHR,ATL]      [LHR,RDU]      [LHR,DEN]
-[LHR,BWI]      [LHR,SJC]      [LHR,DTW]
-[LHR,BOS]      [LHR,SFO]      [LHR,PHL]
-[LHR,IAD]      [LHR,LAX]      [LGW,SFO]
-[LHR,DFW]      [LHR,JFK]      [LGW,LAS]
-[LHR,MSP]      [LHR,IAH]      [LGW,TPA]
-[LHR,MIA]      [LHR,LAS]      [LGW,FLL]
-[LHR,PHX]      [LHR,CLT]      [LGW,MCO]
-[LHR,ORD]      [LHR,SAN]      [LGW,JFK]
+[LHR,PIT]  [LHR,PDX]  [LHR,CLT]
+[LHR,CHS]  [LHR,ATL]  [LHR,AUS]
+[LHR,BNA]  [LHR,BOS]  [LHR,BWI]
+[LHR,DFW]  [LHR,IAD]  [LHR,IAH]
+[LHR,JFK]  [LHR,LAX]  [LHR,MIA]
+[LHR,MSP]  [LHR,ORD]  [LHR,PHX]
+[LHR,RDU]  [LHR,SEA]  [LHR,SFO]
+[LHR,SJC]  [LHR,SAN]  [LHR,SLC]
+[LHR,LAS]  [LHR,DEN]  [LHR,MSY]
+[LHR,EWR]  [LHR,PHL]  [LHR,DTW]
+[LGW,AUS]  [LGW,BOS]  [LGW,FLL]
+[LGW,JFK]  [LGW,LAX]  [LGW,MCO]
+[LGW,MIA]  [LGW,ORD]  [LGW,SEA]
+[LGW,SFO]  [LGW,TPA]  [LGW,LAS]
+[LGW,DEN]  [LGW,OAK]  [STN,BOS]
+[STN,IAD]  [STN,EWR]  [STN,SFB]
 ----
 
 [[txny]]
@@ -1505,13 +1570,22 @@ Here are the results of running the query.
 
 [source,groovy]
 ----
-[AUS,JFK]      [IAH,EWR]
-[AUS,EWR]      [SAT,EWR]
-[DFW,EWR]      [SAT,JFK]
-[DFW,JFK]      [HOU,JFK]
-[DFW,LGA]      [HOU,LGA]
-[IAH,JFK]      [HOU,EWR]
+[AUS,BUF]
+[AUS,JFK]
+[AUS,EWR]
+[DFW,BUF]
+[DFW,JFK]
+[DFW,LGA]
+[DFW,EWR]
+[IAH,JFK]
 [IAH,LGA]
+[IAH,EWR]
+[SAT,JFK]
+[SAT,EWR]
+[HOU,JFK]
+[HOU,LGA]
+[HOU,EWR]
+[DAL,LGA]
 ----
 
 [[denmex]]
@@ -1529,11 +1603,13 @@ Here are the results of running the query.
 
 [source,groovy]
 ----
-Puerto Vallarta
-San Josa del Cabo
-Cozumel
 Mexico City
 Cancun
+Puerto Vallarta
+Cozumel
+Monterrey
+Guadalajara
+San José del Cabo
 ----
 
 [[deleu]]
@@ -1568,6 +1644,8 @@ Moscow
 Milan
 Istanbul
 Copenhagen
+Reykjavik
+Kiev
 Birmingham
 ----
 
@@ -1590,12 +1668,13 @@ columns to save space.
 
 [source,groovy]
 ----
-[LHR,MUC]   [CDG,LHR]   [MUC,STN]   [STN,MUC]
-[LHR,ORY]   [CDG,LGW]   [MUC,LHR]   [ORY,LCY]
-[LHR,CDG]   [CDG,MUC]   [MUC,LGW]   [ORY,MUC]
-[LGW,MUC]   [CDG,LCY]   [MUC,CDG]   [ORY,LHR]
-[LGW,CDG]   [MUC,LTN]   [LCY,CDG]   [LTN,CDG]
-[CDG,LTN]   [MUC,ORY]   [LCY,ORY]   [LTN,MUC]
+[LHR,ORY] [LHR,CDG] [LHR,MUC] [LGW,CDG]
+[LGW,MUC] [CDG,LTN] [CDG,LHR] [CDG,LGW]
+[CDG,MUC] [CDG,LCY] [MUC,LTN] [MUC,LHR]
+[MUC,LGW] [MUC,CDG] [MUC,LCY] [MUC,STN]
+[MUC,ORY] [LCY,CDG] [LCY,MUC] [LCY,ORY]
+[STN,MUC] [ORY,LHR] [ORY,MUC] [ORY,LCY]
+[LTN,CDG] [LTN,MUC] [LTN,ORY]
 ----
 
 [[moredist]]
@@ -1617,18 +1696,26 @@ results into four columns.
 
 [source,groovy]
 ----
-[AUS,142,IAH]      [AUS,755,GDL]       [AUS,1080,LAS]       [AUS,1430,PHL]
-[AUS,152,HOU]      [AUS,755,BNA]       [AUS,1080,SLC]       [AUS,1476,SJC]
-[AUS,183,DFW]      [AUS,768,DEN]       [AUS,1110,FLL]       [AUS,1493,OAK]
-[AUS,189,DAL]      [AUS,809,ATL]       [AUS,1140,DTW]       [AUS,1500,SFO]
-[AUS,274,HRL]      [AUS,866,PHX]       [AUS,1160,SAN]       [AUS,1500,EWR]
-[AUS,341,LBB]      [AUS,922,CUN]       [AUS,1173,CLE]       [AUS,1520,JFK]
-[AUS,444,MSY]      [AUS,925,TPA]       [AUS,1220,LGB]       [AUS,1690,BOS]
-[AUS,527,ELP]      [AUS,972,MDW]       [AUS,1230,LAX]       [AUS,1712,PDX]
-[AUS,558,MEM]      [AUS,973,ORD]       [AUS,1294,IAD]       [AUS,1768,SEA]
-[AUS,618,ABQ]      [AUS,994,MCO]       [AUS,1313,DCA]       [AUS,4901,LHR]
-[AUS,722,STL]      [AUS,1030,CLT]      [AUS,1339,BWI]       [AUS,5294,FRA]
-[AUS,748,MEX]      [AUS,1040,MSP]      [AUS,1357,YYZ]
+[AUS,66,SAT]   [AUS,142,IAH]  [AUS,152,HOU]  [AUS,189,DAL]  [AUS,190,DFW]
+[AUS,274,HRL]  [AUS,341,LBB]  [AUS,359,OKC]  [AUS,389,BTR]  [AUS,419,AMA]
+[AUS,427,TUL]  [AUS,444,MSY]  [AUS,446,LIT]  [AUS,463,XNA]  [AUS,508,BKG]
+[AUS,527,ELP]  [AUS,558,MEM]  [AUS,618,ABQ]  [AUS,625,PNS]  [AUS,650,MCI]
+[AUS,664,VPS]  [AUS,681,BHM]  [AUS,708,ECP]  [AUS,722,STL]  [AUS,748,MEX]
+[AUS,755,GDL]  [AUS,755,BNA]  [AUS,768,DEN]  [AUS,773,OMA]  [AUS,795,TUS]
+[AUS,809,PVR]  [AUS,809,ATL]  [AUS,812,ASE]  [AUS,814,DSM]  [AUS,866,PHX]
+[AUS,875,SDF]  [AUS,881,TYS]  [AUS,887,SJD]  [AUS,890,HDN]  [AUS,917,PIE]
+[AUS,919,IND]  [AUS,922,CUN]  [AUS,925,TPA]  [AUS,945,CZM]  [AUS,952,JAX]
+[AUS,957,CVG]  [AUS,972,MDW]  [AUS,973,ORD]  [AUS,992,SFB]  [AUS,994,MCO]
+[AUS,1030,CLT] [AUS,1032,MKE] [AUS,1040,MSP] [AUS,1053,CHS] [AUS,1072,CMH]
+[AUS,1080,SLC] [AUS,1080,LAS] [AUS,1101,MIA] [AUS,1103,GRR] [AUS,1110,FLL]
+[AUS,1140,DTW] [AUS,1159,RDU] [AUS,1160,SAN] [AUS,1173,CLE] [AUS,1193,ONT]
+[AUS,1206,SNA] [AUS,1209,PIT] [AUS,1220,LGB] [AUS,1230,LAX] [AUS,1238,BUR]
+[AUS,1284,NAS] [AUS,1294,IAD] [AUS,1298,BZN] [AUS,1313,DCA] [AUS,1339,BWI]
+[AUS,1357,YYZ] [AUS,1364,BUF] [AUS,1373,BOI] [AUS,1402,RNO] [AUS,1430,PHL]
+[AUS,1476,SJC] [AUS,1477,SMF] [AUS,1493,OAK] [AUS,1500,SFO] [AUS,1500,EWR]
+[AUS,1520,JFK] [AUS,1562,LIR] [AUS,1660,PVD] [AUS,1671,YYC] [AUS,1690,BOS]
+[AUS,1712,PDX] [AUS,1768,SEA] [AUS,1869,YVR] [AUS,3755,HNL] [AUS,4901,LHR]
+[AUS,4921,LGW] [AUS,5074,AMS] [AUS,5294,FRA]
 ----
 
 This query finds all routes from DFW that are longer than 4,000 miles and returns the
@@ -1649,16 +1736,30 @@ Here are the results of running the query.
 
 [source,groovy]
 ----
-[DFW,8105,HKG]   [DFW,8022,DXB]
-[DFW,6951,PEK]   [DFW,6822,ICN]
-[DFW,7332,PVG]   [DFW,5228,GIG]
-[DFW,4905,AMS]   [DFW,5119,GRU]
-[DFW,4950,MAD]   [DFW,5299,EZE]
-[DFW,4736,LHR]   [DFW,4884,SCL]
-[DFW,4933,CDG]   [DFW,7914,DOH]
-[DFW,5127,FRA]   [DFW,8053,AUH]
-[DFW,6410,NRT]   [DFW,5015,DUS]
-[DFW,8574,SYD]   [DFW,5597,FCO]
+[DFW,4736,LHR]
+[DFW,4933,CDG]
+[DFW,5127,FRA]
+[DFW,5208,HEL]
+[DFW,6410,NRT]
+[DFW,8574,SYD]
+[DFW,8022,DXB]
+[DFW,4458,DUB]
+[DFW,8105,HKG]
+[DFW,6951,PEK]
+[DFW,7332,PVG]
+[DFW,5597,FCO]
+[DFW,4905,AMS]
+[DFW,4950,MAD]
+[DFW,5313,MUC]
+[DFW,7914,DOH]
+[DFW,6822,ICN]
+[DFW,5228,GIG]
+[DFW,5119,GRU]
+[DFW,5299,EZE]
+[DFW,4884,SCL]
+[DFW,6257,IST]
+[DFW,8053,AUH]
+[DFW,5015,DUS]
 ----
 
 The previous results are not sorted in any way. We could modify the query to include
@@ -1675,16 +1776,30 @@ Here are the, now sorted, results.
 
 [source,groovy]
 ----
-[DFW,8574,SYD]    [DFW,5299,EZE]
-[DFW,8105,HKG]    [DFW,5228,GIG]
-[DFW,8053,AUH]    [DFW,5127,FRA]
-[DFW,8022,DXB]    [DFW,5119,GRU]
-[DFW,7914,DOH]    [DFW,5015,DUS]
-[DFW,7332,PVG]    [DFW,4950,MAD]
-[DFW,6951,PEK]    [DFW,4933,CDG]
-[DFW,6822,ICN]    [DFW,4905,AMS]
-[DFW,6410,NRT]    [DFW,4884,SCL]
-[DFW,5597,FCO]    [DFW,4736,LHR]
+[DFW,8574,SYD]
+[DFW,8105,HKG]
+[DFW,8053,AUH]
+[DFW,8022,DXB]
+[DFW,7914,DOH]
+[DFW,7332,PVG]
+[DFW,6951,PEK]
+[DFW,6822,ICN]
+[DFW,6410,NRT]
+[DFW,6257,IST]
+[DFW,5597,FCO]
+[DFW,5313,MUC]
+[DFW,5299,EZE]
+[DFW,5228,GIG]
+[DFW,5208,HEL]
+[DFW,5127,FRA]
+[DFW,5119,GRU]
+[DFW,5015,DUS]
+[DFW,4950,MAD]
+[DFW,4933,CDG]
+[DFW,4905,AMS]
+[DFW,4884,SCL]
+[DFW,4736,LHR]
+[DFW,4458,DUB]
 ----
 
 This next query also finds all routes longer than 4,000 miles but this time
@@ -1705,20 +1820,27 @@ Here are the results from running the query.
 
 [source,groovy]
 ----
-[LGW, 5287, MalT]              [LGW, 4380, Calgary]
-[LGW, 4618, Varadero]          [LGW, 5987, Cape Town]
-[LGW, 5147, Tianjin]           [LGW, 4680, Kingston]
-[LGW, 5303, Chongqing]         [LGW, 4953, Cancun]
-[LGW, 4410, Ft. Lauderdale]    [LGW, 5399, Colombo]
-[LGW, 5463, Los Angeles]       [LGW, 4197, Bridgetown]
-[LGW, 4341, Orlando]           [LGW, 4076, St. George]
-[LGW, 5374, San Francisco]     [LGW, 4408, Port of Spain]
-[LGW, 4416, Tampa]             [LGW, 4699, Montego Bay]
-[LGW, 5236, Las Vegas]         [LGW, 4283, Punta Cana]
-[LGW, 5364, Oakland]           [LGW, 5419, San Jose]
-[LGW, 4731, Vancouver]         [LGW, 4662, Havana]
-[LGW, 5982, Hong Kong]         [LGW, 6053, Port Louis]
-[LGW, 5070, Beijing]           [LGW, 4222, Vieux Fort]
+[LGW,4921,Austin]                [LGW,4410,Fort Lauderdale]
+[LGW,5463,Los Angeles]           [LGW,4341,Orlando]
+[LGW,4429,Miami]                 [LGW,4807,Seattle]
+[LGW,5374,San Francisco]         [LGW,4416,Tampa]
+[LGW,5236,Las Vegas]             [LGW,4678,Denver]
+[LGW,5364,Oakland]               [LGW,4731,Vancouver]
+[LGW,6751,Singapore]             [LGW,5982,Hong Kong]
+[LGW,5070,Beijing]               [LGW,5745,Shanghai]
+[LGW,4380,Calgary]               [LGW,5987,Cape Town]
+[LGW,5736,Rio de Janeiro]        [LGW,6908,Buenos Aires]
+[LGW,4680,Kingston]              [LGW,4953,Cancun]
+[LGW,5399,Colombo]               [LGW,6080,Taipei]
+[LGW,4197,Bridgetown]            [LGW,4076,St. George]
+[LGW,4408,Port of Spain]         [LGW,4699,Montego Bay]
+[LGW,4283,Punta Cana]            [LGW,5419,San Jose]
+[LGW,4662,Havana]                [LGW,5156,Chengdu]
+[LGW,6053,Port Louis]            [LGW,4222,Vieux Fort]
+[LGW,5287,Malé]                  [LGW,4077,Kigali]
+[LGW,4618,Varadero]              [LGW,5147,Tianjin]
+[LGW,5303,Chongqing]             [LGW,6299,Langkawi]
+[LGW,6008,Rayong]                [LGW,6264,Duong Dong]
 ----
 
 This next query is similar to the previous ones. We look for any routes from DFW that
@@ -1742,7 +1864,6 @@ possible staying with the pure Gremlin syntax and avoiding closures is recommend
 ----
 // Routes from DFW that are over 4,500 miles in length.
 // Sorted into ascending order
-
 g.V().hasLabel('airport').has('code','DFW').outE().has('dist',gt(4500)).as('e').
       inV().as('c').select('e','c').by('dist').by('code').sort(){it.e}
 ----
@@ -1755,16 +1876,29 @@ the output produced by this query.
 
 [source,groovy]
 ----
-[e:4736, c:LHR]     [e:5597, c:FCO]
-[e:4884, c:SCL]     [e:6410, c:NRT]
-[e:4905, c:AMS]     [e:6822, c:ICN]
-[e:4933, c:CDG]     [e:6951, c:PEK]
-[e:4950, c:MAD]     [e:7332, c:PVG]
-[e:5015, c:DUS]     [e:7914, c:DOH]
-[e:5119, c:GRU]     [e:8022, c:DXB]
-[e:5127, c:FRA]     [e:8053, c:AUH]
-[e:5228, c:GIG]     [e:8105, c:HKG]
-[e:5299, c:EZE]     [e:8574, c:SYD]
+[e:4736,c:LHR]
+[e:4884,c:SCL]
+[e:4905,c:AMS]
+[e:4933,c:CDG]
+[e:4950,c:MAD]
+[e:5015,c:DUS]
+[e:5119,c:GRU]
+[e:5127,c:FRA]
+[e:5208,c:HEL]
+[e:5228,c:GIG]
+[e:5299,c:EZE]
+[e:5313,c:MUC]
+[e:5597,c:FCO]
+[e:6257,c:IST]
+[e:6410,c:NRT]
+[e:6822,c:ICN]
+[e:6951,c:PEK]
+[e:7332,c:PVG]
+[e:7914,c:DOH]
+[e:8022,c:DXB]
+[e:8053,c:AUH]
+[e:8105,c:HKG]
+[e:8574,c:SYD]
 ----
 
 For the sake of completeness, here is the query re-written to use an 'order' step
@@ -1783,16 +1917,29 @@ Here is the output from running the modified query
 
 [source,groovy]
 ----
-[e:4736,c:LHR]     [e:5597,c:FCO]
-[e:4884,c:SCL]     [e:6410,c:NRT]
-[e:4905,c:AMS]     [e:6822,c:ICN]
-[e:4933,c:CDG]     [e:6951,c:PEK]
-[e:4950,c:MAD]     [e:7332,c:PVG]
-[e:5015,c:DUS]     [e:7914,c:DOH]
-[e:5119,c:GRU]     [e:8022,c:DXB]
-[e:5127,c:FRA]     [e:8053,c:AUH]
-[e:5228,c:GIG]     [e:8105,c:HKG]
-[e:5299,c:EZE]     [e:8574,c:SYD]
+[e:4736,c:LHR]
+[e:4884,c:SCL]
+[e:4905,c:AMS]
+[e:4933,c:CDG]
+[e:4950,c:MAD]
+[e:5015,c:DUS]
+[e:5119,c:GRU]
+[e:5127,c:FRA]
+[e:5208,c:HEL]
+[e:5228,c:GIG]
+[e:5299,c:EZE]
+[e:5313,c:MUC]
+[e:5597,c:FCO]
+[e:6257,c:IST]
+[e:6410,c:NRT]
+[e:6822,c:ICN]
+[e:6951,c:PEK]
+[e:7332,c:PVG]
+[e:7914,c:DOH]
+[e:8022,c:DXB]
+[e:8053,c:AUH]
+[e:8105,c:HKG]
+[e:8574,c:SYD]
 ----
 
 The query can also be written with the 'order' step coming after the 'select' step.
@@ -1801,7 +1948,7 @@ As follows:
 [source,groovy]
 ----
 g.V().hasLabel('airport').has('code','DFW').outE().has('dist',gt(4500)).as('e').
-inV().as('c').select('e','c').by('dist').by('code').order().by(select('e')
+  inV().as('c').select('e','c').by('dist').by('code').order().by(select('e'))
 ----
 
 [[gt8k]]
@@ -1826,26 +1973,28 @@ aid readability.
 
 [source,groovy]
 ----
-[src:ATL,dest:JNB]    [src:DXB,dest:IAH]
-[src:DFW,dest:SYD]    [src:DXB,dest:LAX]
-[src:DFW,dest:DXB]    [src:DXB,dest:SFO]
-[src:DFW,dest:HKG]    [src:DXB,dest:AKL]
-[src:DFW,dest:AUH]    [src:HKG,dest:DFW]
-[src:IAH,dest:DXB]    [src:HKG,dest:JFK]
-[src:IAH,dest:DOH]    [src:HKG,dest:EWR]
-[src:JFK,dest:HKG]    [src:AKL,dest:DXB]
-[src:LAX,dest:DOH]    [src:AKL,dest:DOH]
-[src:LAX,dest:AUH]    [src:DOH,dest:IAH]
-[src:LAX,dest:JED]    [src:DOH,dest:LAX]
-[src:LAX,dest:RUH]    [src:DOH,dest:AKL]
-[src:LAX,dest:DXB]    [src:JNB,dest:ATL]
-[src:SFO,dest:SIN]    [src:MEX,dest:CAN]
-[src:SFO,dest:DXB]    [src:AUH,dest:DFW]
-[src:SFO,dest:AUH]    [src:AUH,dest:LAX]
-[src:EWR,dest:HKG]    [src:AUH,dest:SFO]
-[src:SYD,dest:DFW]    [src:JED,dest:LAX]
-[src:SIN,dest:SFO]    [src:RUH,dest:LAX]
-[src:DXB,dest:DFW]    [src:CAN,dest:MEX]
+[src:ATL,dest:JNB]    [src:DFW,dest:SYD]    [src:DFW,dest:DXB]
+[src:DFW,dest:HKG]    [src:DFW,dest:AUH]    [src:IAD,dest:HKG]
+[src:IAH,dest:SYD]    [src:IAH,dest:DXB]    [src:IAH,dest:DOH]
+[src:JFK,dest:SIN]    [src:JFK,dest:HKG]    [src:JFK,dest:MNL]
+[src:LAX,dest:SIN]    [src:LAX,dest:DXB]    [src:LAX,dest:DOH]
+[src:LAX,dest:AUH]    [src:LAX,dest:JED]    [src:LAX,dest:RUH]
+[src:ORD,dest:AKL]    [src:SEA,dest:SIN]    [src:SFO,dest:SIN]
+[src:SFO,dest:DXB]    [src:SFO,dest:AUH]    [src:EWR,dest:SIN]
+[src:EWR,dest:HKG]    [src:YVR,dest:MEL]    [src:LHR,dest:PER]
+[src:SYD,dest:DFW]    [src:SYD,dest:IAH]    [src:SIN,dest:JFK]
+[src:SIN,dest:LAX]    [src:SIN,dest:SEA]    [src:SIN,dest:SFO]
+[src:SIN,dest:EWR]    [src:MEL,dest:YVR]    [src:DXB,dest:DFW]
+[src:DXB,dest:IAH]    [src:DXB,dest:LAX]    [src:DXB,dest:SFO]
+[src:DXB,dest:AKL]    [src:HKG,dest:DFW]    [src:HKG,dest:IAD]
+[src:HKG,dest:JFK]    [src:HKG,dest:EWR]    [src:PER,dest:LHR]
+[src:AKL,dest:ORD]    [src:AKL,dest:DXB]    [src:AKL,dest:DOH]
+[src:PEK,dest:PTY]    [src:MNL,dest:JFK]    [src:DOH,dest:IAH]
+[src:DOH,dest:LAX]    [src:DOH,dest:AKL]    [src:JNB,dest:ATL]
+[src:SCL,dest:TLV]    [src:MEX,dest:CAN]    [src:TLV,dest:SCL]
+[src:AUH,dest:DFW]    [src:AUH,dest:LAX]    [src:AUH,dest:SFO]
+[src:JED,dest:LAX]    [src:RUH,dest:LAX]    [src:CAN,dest:MEX]
+[src:PTY,dest:PEK]
 ----
 
 Now let's improve the query by including the distance of each route in the query
@@ -1865,26 +2014,28 @@ Here is the modified output showing the distance between the airports.
 
 [source,groovy]
 ----
-[src:ATL,e:8434,dest:JNB]     [src:DXB,e:8150,dest:IAH]
-[src:DFW,e:8574,dest:SYD]     [src:DXB,e:8321,dest:LAX]
-[src:DFW,e:8022,dest:DXB]     [src:DXB,e:8085,dest:SFO]
-[src:DFW,e:8105,dest:HKG]     [src:DXB,e:8818,dest:AKL]
-[src:DFW,e:8053,dest:AUH]     [src:HKG,e:8105,dest:DFW]
-[src:IAH,e:8150,dest:DXB]     [src:HKG,e:8054,dest:JFK]
-[src:IAH,e:8030,dest:DOH]     [src:HKG,e:8047,dest:EWR]
-[src:JFK,e:8054,dest:HKG]     [src:AKL,e:8818,dest:DXB]
-[src:LAX,e:8287,dest:DOH]     [src:AKL,e:9025,dest:DOH]
-[src:LAX,e:8372,dest:AUH]     [src:DOH,e:8030,dest:IAH]
-[src:LAX,e:8314,dest:JED]     [src:DOH,e:8287,dest:LAX]
-[src:LAX,e:8246,dest:RUH]     [src:DOH,e:9025,dest:AKL]
-[src:LAX,e:8321,dest:DXB]     [src:JNB,e:8434,dest:ATL]
-[src:SFO,e:8433,dest:SIN]     [src:MEX,e:8754,dest:CAN]
-[src:SFO,e:8085,dest:DXB]     [src:AUH,e:8053,dest:DFW]
-[src:SFO,e:8139,dest:AUH]     [src:AUH,e:8372,dest:LAX]
-[src:EWR,e:8047,dest:HKG]     [src:AUH,e:8139,dest:SFO]
-[src:SYD,e:8574,dest:DFW]     [src:JED,e:8314,dest:LAX]
-[src:SIN,e:8433,dest:SFO]     [src:RUH,e:8246,dest:LAX]
-[src:DXB,e:8022,dest:DFW]     [src:CAN,e:8754,dest:MEX]
+[src:ATL,e:8434,dest:JNB]         [src:DFW,e:8574,dest:SYD]         [src:DFW,e:8022,dest:DXB]
+[src:DFW,e:8105,dest:HKG]         [src:DFW,e:8053,dest:AUH]         [src:IAD,e:8135,dest:HKG]
+[src:IAH,e:8591,dest:SYD]         [src:IAH,e:8150,dest:DXB]         [src:IAH,e:8030,dest:DOH]
+[src:JFK,e:9526,dest:SIN]         [src:JFK,e:8054,dest:HKG]         [src:JFK,e:8504,dest:MNL]
+[src:LAX,e:8756,dest:SIN]         [src:LAX,e:8321,dest:DXB]         [src:LAX,e:8287,dest:DOH]
+[src:LAX,e:8372,dest:AUH]         [src:LAX,e:8314,dest:JED]         [src:LAX,e:8246,dest:RUH]
+[src:ORD,e:8186,dest:AKL]         [src:SEA,e:8059,dest:SIN]         [src:SFO,e:8433,dest:SIN]
+[src:SFO,e:8085,dest:DXB]         [src:SFO,e:8139,dest:AUH]         [src:EWR,e:9523,dest:SIN]
+[src:EWR,e:8047,dest:HKG]         [src:YVR,e:8197,dest:MEL]         [src:LHR,e:9009,dest:PER]
+[src:SYD,e:8574,dest:DFW]         [src:SYD,e:8591,dest:IAH]         [src:SIN,e:9526,dest:JFK]
+[src:SIN,e:8756,dest:LAX]         [src:SIN,e:8059,dest:SEA]         [src:SIN,e:8433,dest:SFO]
+[src:SIN,e:9523,dest:EWR]         [src:MEL,e:8197,dest:YVR]         [src:DXB,e:8022,dest:DFW]
+[src:DXB,e:8150,dest:IAH]         [src:DXB,e:8321,dest:LAX]         [src:DXB,e:8085,dest:SFO]
+[src:DXB,e:8818,dest:AKL]         [src:HKG,e:8105,dest:DFW]         [src:HKG,e:8135,dest:IAD]
+[src:HKG,e:8054,dest:JFK]         [src:HKG,e:8047,dest:EWR]         [src:PER,e:9009,dest:LHR]
+[src:AKL,e:8186,dest:ORD]         [src:AKL,e:8818,dest:DXB]         [src:AKL,e:9025,dest:DOH]
+[src:PEK,e:8884,dest:PTY]         [src:MNL,e:8504,dest:JFK]         [src:DOH,e:8030,dest:IAH]
+[src:DOH,e:8287,dest:LAX]         [src:DOH,e:9025,dest:AKL]         [src:JNB,e:8434,dest:ATL]
+[src:SCL,e:8208,dest:TLV]         [src:MEX,e:8754,dest:CAN]         [src:TLV,e:8208,dest:SCL]
+[src:AUH,e:8053,dest:DFW]         [src:AUH,e:8372,dest:LAX]         [src:AUH,e:8139,dest:SFO]
+[src:JED,e:8314,dest:LAX]         [src:RUH,e:8246,dest:LAX]         [src:CAN,e:8754,dest:MEX]
+[src:PTY,e:8884,dest:PEK]
 ----
 
 Next let's simplify things a bit. While using 'as' and 'select' gets the job done,
@@ -1904,17 +2055,28 @@ The output indeed now looks more readable.
 
 [source,groovy]
 ----
-[ATL,8434,JNB]   [LAX,8314,JED]   [DXB,8150,IAH]   [DOH,8287,LAX]
-[DFW,8574,SYD]   [LAX,8246,RUH]   [DXB,8321,LAX]   [DOH,9025,AKL]
-[DFW,8022,DXB]   [LAX,8321,DXB]   [DXB,8085,SFO]   [JNB,8434,ATL]
-[DFW,8105,HKG]   [SFO,8433,SIN]   [DXB,8818,AKL]   [MEX,8754,CAN]
-[DFW,8053,AUH]   [SFO,8085,DXB]   [HKG,8105,DFW]   [AUH,8053,DFW]
-[IAH,8150,DXB]   [SFO,8139,AUH]   [HKG,8054,JFK]   [AUH,8372,LAX]
-[IAH,8030,DOH]   [EWR,8047,HKG]   [HKG,8047,EWR]   [AUH,8139,SFO]
-[JFK,8054,HKG]   [SYD,8574,DFW]   [AKL,8818,DXB]   [JED,8314,LAX]
-[LAX,8287,DOH]   [SIN,8433,SFO]   [AKL,9025,DOH]   [RUH,8246,LAX]
-[LAX,8372,AUH]   [DXB,8022,DFW]   [DOH,8030,IAH]   [CAN,8754,MEX]
-
+[ATL,8434,JNB]  [DFW,8574,SYD]  [DFW,8022,DXB]
+[DFW,8105,HKG]  [DFW,8053,AUH]  [IAD,8135,HKG]
+[IAH,8591,SYD]  [IAH,8150,DXB]  [IAH,8030,DOH]
+[JFK,9526,SIN]  [JFK,8054,HKG]  [JFK,8504,MNL]
+[LAX,8756,SIN]  [LAX,8321,DXB]  [LAX,8287,DOH]
+[LAX,8372,AUH]  [LAX,8314,JED]  [LAX,8246,RUH]
+[ORD,8186,AKL]  [SEA,8059,SIN]  [SFO,8433,SIN]
+[SFO,8085,DXB]  [SFO,8139,AUH]  [EWR,9523,SIN]
+[EWR,8047,HKG]  [YVR,8197,MEL]  [LHR,9009,PER]
+[SYD,8574,DFW]  [SYD,8591,IAH]  [SIN,9526,JFK]
+[SIN,8756,LAX]  [SIN,8059,SEA]  [SIN,8433,SFO]
+[SIN,9523,EWR]  [MEL,8197,YVR]  [DXB,8022,DFW]
+[DXB,8150,IAH]  [DXB,8321,LAX]  [DXB,8085,SFO]
+[DXB,8818,AKL]  [HKG,8105,DFW]  [HKG,8135,IAD]
+[HKG,8054,JFK]  [HKG,8047,EWR]  [PER,9009,LHR]
+[AKL,8186,ORD]  [AKL,8818,DXB]  [AKL,9025,DOH]
+[PEK,8884,PTY]  [MNL,8504,JFK]  [DOH,8030,IAH]
+[DOH,8287,LAX]  [DOH,9025,AKL]  [JNB,8434,ATL]
+[SCL,8208,TLV]  [MEX,8754,CAN]  [TLV,8208,SCL]
+[AUH,8053,DFW]  [AUH,8372,LAX]  [AUH,8139,SFO]
+[JED,8314,LAX]  [RUH,8246,LAX]  [CAN,8754,MEX]
+[PTY,8884,PEK]
 ----
 
 Our query is looking pretty good but it would be nice to not report the same route
@@ -1946,16 +2108,38 @@ true for all the other 'return journey' routes.
 
 [source,groovy]
 ----
-[ATL,8434,JNB]     [HKG,8054,JFK]
-[DFW,8574,SYD]     [AKL,8818,DXB]
-[DFW,8022,DXB]     [AKL,9025,DOH]
-[DFW,8105,HKG]     [DOH,8030,IAH]
-[LAX,8246,RUH]     [DOH,8287,LAX]
-[SFO,8433,SIN]     [AUH,8053,DFW]
-[EWR,8047,HKG]     [AUH,8372,LAX]
-[DXB,8150,IAH]     [AUH,8139,SFO]
-[DXB,8321,LAX]     [JED,8314,LAX]
-[DXB,8085,SFO]     [CAN,8754,MEX]
+[ATL,8434,JNB]
+[DFW,8574,SYD]
+[DFW,8022,DXB]
+[DFW,8105,HKG]
+[IAH,8591,SYD]
+[JFK,9526,SIN]
+[JFK,8504,MNL]
+[LAX,8756,SIN]
+[LAX,8246,RUH]
+[SEA,8059,SIN]
+[SFO,8433,SIN]
+[EWR,9523,SIN]
+[EWR,8047,HKG]
+[LHR,9009,PER]
+[MEL,8197,YVR]
+[DXB,8150,IAH]
+[DXB,8321,LAX]
+[DXB,8085,SFO]
+[HKG,8135,IAD]
+[HKG,8054,JFK]
+[AKL,8186,ORD]
+[AKL,8818,DXB]
+[AKL,9025,DOH]
+[PEK,8884,PTY]
+[DOH,8030,IAH]
+[DOH,8287,LAX]
+[SCL,8208,TLV]
+[AUH,8053,DFW]
+[AUH,8372,LAX]
+[AUH,8139,SFO]
+[JED,8314,LAX]
+[CAN,8754,MEX]
 ----
 
 Lastly, now that we have the routes we want, let's tweak the query so that the routes
@@ -1976,16 +2160,38 @@ Here are the results again, this time sorted by route distance in descending ord
 
 [source,groovy]
 ----
-[AKL,9025,DOH]     [LAX,8246,RUH]
-[AKL,8818,DXB]     [DXB,8150,IAH]
-[CAN,8754,MEX]     [AUH,8139,SFO]
-[DFW,8574,SYD]     [DFW,8105,HKG]
-[ATL,8434,JNB]     [DXB,8085,SFO]
-[SFO,8433,SIN]     [HKG,8054,JFK]
-[AUH,8372,LAX]     [AUH,8053,DFW]
-[DXB,8321,LAX]     [EWR,8047,HKG]
-[JED,8314,LAX]     [DOH,8030,IAH]
-[DOH,8287,LAX]     [DFW,8022,DXB]
+[JFK,9526,SIN]
+[EWR,9523,SIN]
+[AKL,9025,DOH]
+[LHR,9009,PER]
+[PEK,8884,PTY]
+[AKL,8818,DXB]
+[LAX,8756,SIN]
+[CAN,8754,MEX]
+[IAH,8591,SYD]
+[DFW,8574,SYD]
+[JFK,8504,MNL]
+[ATL,8434,JNB]
+[SFO,8433,SIN]
+[AUH,8372,LAX]
+[DXB,8321,LAX]
+[JED,8314,LAX]
+[DOH,8287,LAX]
+[LAX,8246,RUH]
+[SCL,8208,TLV]
+[MEL,8197,YVR]
+[AKL,8186,ORD]
+[DXB,8150,IAH]
+[AUH,8139,SFO]
+[HKG,8135,IAD]
+[DFW,8105,HKG]
+[DXB,8085,SFO]
+[SEA,8059,SIN]
+[HKG,8054,JFK]
+[AUH,8053,DFW]
+[EWR,8047,HKG]
+[DOH,8030,IAH]
+[DFW,8022,DXB]
 ----
 
 The 'where' step can be followed by a 'by' modulator. This allows us, should we so
@@ -2009,16 +2215,38 @@ order!
 
 [source,groovy]
 ----
-[DOH,9025,AKL]     [RUH,8246,LAX]
-[DXB,8818,AKL]     [IAH,8150,DXB]
-[MEX,8754,CAN]     [SFO,8139,AUH]
-[SYD,8574,DFW]     [HKG,8105,DFW]
-[JNB,8434,ATL]     [SFO,8085,DXB]
-[SIN,8433,SFO]     [JFK,8054,HKG]
-[LAX,8372,AUH]     [DFW,8053,AUH]
-[LAX,8321,DXB]     [HKG,8047,EWR]
-[LAX,8314,JED]     [IAH,8030,DOH]
-[LAX,8287,DOH]     [DXB,8022,DFW]
+[SIN,9526,JFK]
+[SIN,9523,EWR]
+[DOH,9025,AKL]
+[PER,9009,LHR]
+[PTY,8884,PEK]
+[DXB,8818,AKL]
+[SIN,8756,LAX]
+[MEX,8754,CAN]
+[SYD,8591,IAH]
+[SYD,8574,DFW]
+[MNL,8504,JFK]
+[JNB,8434,ATL]
+[SIN,8433,SFO]
+[LAX,8372,AUH]
+[LAX,8321,DXB]
+[LAX,8314,JED]
+[LAX,8287,DOH]
+[RUH,8246,LAX]
+[TLV,8208,SCL]
+[YVR,8197,MEL]
+[ORD,8186,AKL]
+[IAH,8150,DXB]
+[SFO,8139,AUH]
+[IAD,8135,HKG]
+[HKG,8105,DFW]
+[SFO,8085,DXB]
+[SIN,8059,SEA]
+[JFK,8054,HKG]
+[DFW,8053,AUH]
+[HKG,8047,EWR]
+[IAH,8030,DOH]
+[DXB,8022,DFW]
 ----
 
 As an interesting side note, and this would be true for the queries above as well, if
@@ -2039,16 +2267,38 @@ see below, our first result is now '[AKL,9025,DOH]'.
 
 [source,groovy]
 ----
-[AKL,9025,DOH]     [LAX,8246,RUH]
-[AKL,8818,DXB]     [DXB,8150,IAH]
-[CAN,8754,MEX]     [AUH,8139,SFO]
-[DFW,8574,SYD]     [DFW,8105,HKG]
-[ATL,8434,JNB]     [DXB,8085,SFO]
-[SFO,8433,SIN]     [HKG,8054,JFK]
-[AUH,8372,LAX]     [AUH,8053,DFW]
-[DXB,8321,LAX]     [EWR,8047,HKG]
-[JED,8314,LAX]     [DOH,8030,IAH]
-[DOH,8287,LAX]     [DFW,8022,DXB]
+[JFK,9526,SIN]
+[EWR,9523,SIN]
+[AKL,9025,DOH]
+[LHR,9009,PER]
+[PEK,8884,PTY]
+[AKL,8818,DXB]
+[LAX,8756,SIN]
+[CAN,8754,MEX]
+[IAH,8591,SYD]
+[DFW,8574,SYD]
+[JFK,8504,MNL]
+[ATL,8434,JNB]
+[SFO,8433,SIN]
+[AUH,8372,LAX]
+[DXB,8321,LAX]
+[JED,8314,LAX]
+[DOH,8287,LAX]
+[LAX,8246,RUH]
+[SCL,8208,TLV]
+[MEL,8197,YVR]
+[AKL,8186,ORD]
+[DXB,8150,IAH]
+[AUH,8139,SFO]
+[HKG,8135,IAD]
+[DFW,8105,HKG]
+[DXB,8085,SFO]
+[SEA,8059,SIN]
+[HKG,8054,JFK]
+[AUH,8053,DFW]
+[EWR,8047,HKG]
+[DOH,8030,IAH]
+[DFW,8022,DXB]
 ----
 
 ==== Finding the 20 longest routes in the graph
@@ -2078,16 +2328,26 @@ Here are the results from running the query.
 
 [source,groovy]
 ----
-[a:AKL,b:9025,c:DOH]    [a:LAX,b:8246,c:RUH]
-[a:AKL,b:8818,c:DXB]    [a:DXB,b:8150,c:IAH]
-[a:CAN,b:8754,c:MEX]    [a:AUH,b:8139,c:SFO]
-[a:DFW,b:8574,c:SYD]    [a:DFW,b:8105,c:HKG]
-[a:ATL,b:8434,c:JNB]    [a:DXB,b:8085,c:SFO]
-[a:SFO,b:8433,c:SIN]    [a:HKG,b:8054,c:JFK]
-[a:AUH,b:8372,c:LAX]    [a:AUH,b:8053,c:DFW]
-[a:DXB,b:8321,c:LAX]    [a:EWR,b:8047,c:HKG]
-[a:JED,b:8314,c:LAX]    [a:DOH,b:8030,c:IAH]
-[a:DOH,b:8287,c:LAX]    [a:DFW,b:8022,c:DXB]
+[a:JFK,b:9526,c:SIN]
+[a:EWR,b:9523,c:SIN]
+[a:AKL,b:9025,c:DOH]
+[a:LHR,b:9009,c:PER]
+[a:PEK,b:8884,c:PTY]
+[a:AKL,b:8818,c:DXB]
+[a:LAX,b:8756,c:SIN]
+[a:CAN,b:8754,c:MEX]
+[a:IAH,b:8591,c:SYD]
+[a:DFW,b:8574,c:SYD]
+[a:JFK,b:8504,c:MNL]
+[a:ATL,b:8434,c:JNB]
+[a:SFO,b:8433,c:SIN]
+[a:AUH,b:8372,c:LAX]
+[a:DXB,b:8321,c:LAX]
+[a:JED,b:8314,c:LAX]
+[a:DOH,b:8287,c:LAX]
+[a:LAX,b:8246,c:RUH]
+[a:SCL,b:8208,c:TLV]
+[a:MEL,b:8197,c:YVR]
 ----
 
 For completeness, here is the query rewritten slightly to again start with airport
@@ -2112,16 +2372,26 @@ When the query is run the results look like the ones from the prior query.
 
 [source,groovy]
 ----
-[a:AKL,b:9025,c:DOH]    [a:LAX,b:8246,c:RUH]
-[a:AKL,b:8818,c:DXB]    [a:DXB,b:8150,c:IAH]
-[a:CAN,b:8754,c:MEX]    [a:AUH,b:8139,c:SFO]
-[a:DFW,b:8574,c:SYD]    [a:DFW,b:8105,c:HKG]
-[a:ATL,b:8434,c:JNB]    [a:DXB,b:8085,c:SFO]
-[a:SFO,b:8433,c:SIN]    [a:HKG,b:8054,c:JFK]
-[a:AUH,b:8372,c:LAX]    [a:AUH,b:8053,c:DFW]
-[a:DXB,b:8321,c:LAX]    [a:EWR,b:8047,c:HKG]
-[a:JED,b:8314,c:LAX]    [a:DOH,b:8030,c:IAH]
-[a:DOH,b:8287,c:LAX]    [a:DFW,b:8022,c:DXB]
+[a:JFK,b:9526,c:SIN]
+[a:EWR,b:9523,c:SIN]
+[a:AKL,b:9025,c:DOH]
+[a:LHR,b:9009,c:PER]
+[a:PEK,b:8884,c:PTY]
+[a:AKL,b:8818,c:DXB]
+[a:LAX,b:8756,c:SIN]
+[a:CAN,b:8754,c:MEX]
+[a:IAH,b:8591,c:SYD]
+[a:DFW,b:8574,c:SYD]
+[a:JFK,b:8504,c:MNL]
+[a:ATL,b:8434,c:JNB]
+[a:SFO,b:8433,c:SIN]
+[a:AUH,b:8372,c:LAX]
+[a:DXB,b:8321,c:LAX]
+[a:JED,b:8314,c:LAX]
+[a:DOH,b:8287,c:LAX]
+[a:LAX,b:8246,c:RUH]
+[a:SCL,b:8208,c:TLV]
+[a:MEL,b:8197,c:YVR]
 ----
 
 [[longesteach]]
@@ -2151,17 +2421,16 @@ When run the query produces the following results.
 [source,groovy]
 ----
 [ATL,8434,JNB]
-[ANC,3260,IAH]
+[ANC,3368,KEF]
 [AUS,5294,FRA]
-[BNA,1972,SEA]
+[BNA,4168,LHR]
 [BOS,7952,HKG]
 [BWI,3622,LHR]
 [DCA,2434,SFO]
 [DFW,8574,SYD]
 [FLL,7808,DXB]
-[IAD,7487,DEL]
+[IAD,8135,HKG]
 ----
-
 
 [[aggrunion]]
 ==== Combining 'aggregate', 'union' and 'filter' to compute distances
@@ -2190,8 +2459,8 @@ distance of all routes between those airports.
 
 [source,groovy]
 ----
-2276209
-8906
+2739039
+10282
 ----
 
 ==== More queries that analyze distances
@@ -2237,7 +2506,7 @@ g.V().outE().has('dist',within(100..200)).
       path().by('code').by('dist').
       count()
 
-3029
+3237
 ----
 
 The next query is similar to the previous one but only counts routes that are between
@@ -2253,7 +2522,7 @@ g.V().has('airport','country','US').
       path().by('code').by('dist').
       count()
 
-583
+597
 ----
 
 Lastly, this query returns a list of all the routes from San Antonio along with their
@@ -2263,28 +2532,36 @@ distances. Some of the results are shown.
 ----
 // Return a list of routes and their distances,
 // starting from San Antonio (SAT)
-
 g.V().has('code','SAT').
   outE('route').inV().
   path().by('code').by('dist')
 ----
 
-Here are just a few of the results that this query returned.
+The results of this query are as follows:
 
 [source,groovy]
 ----
-[SAT,872,ATL]      [SAT,1140,MIA]
-[SAT,820,BNA]      [SAT,698,MEX]
-[SAT,1410,BWI]     [SAT,1097,MSP]
-[SAT,248,DFW]      [SAT,1093,CLT]
-[SAT,1360,IAD]     [SAT,1040,ORD]
-[SAT,190,IAH]      [SAT,931,CUN]
-[SAT,1580,JFK]     [SAT,841,PHX]
-[SAT,1210,LAX]     [SAT,624,MEM]
-[SAT,1038,MCO]     [SAT,1772,SEA]
-[SAT,1423,YYZ]     [SAT,707,MCI]
+[SAT,1423,YYZ]  [SAT,698,MEX]   [SAT,1712,PDX]
+[SAT,408,OKC]   [SAT,1163,ONT]  [SAT,1093,CLT]
+[SAT,931,CUN]   [SAT,624,MEM]   [SAT,1023,CVG]
+[SAT,707,MCI]   [SAT,248,DAL]   [SAT,786,STL]
+[SAT,608,ABQ]   [SAT,1036,MDW]  [SAT,825,OMA]
+[SAT,484,TUL]   [SAT,1005,JAX]  [SAT,732,COS]
+[SAT,234,HRL]   [SAT,1138,CMH]  [SAT,135,CRP]
+[SAT,278,MTY]   [SAT,692,GDL]   [SAT,1039,SFB]
+[SAT,707,TLC]   [SAT,872,ATL]   [SAT,66,AUS]
+[SAT,820,BNA]   [SAT,1410,BWI]  [SAT,248,DFW]
+[SAT,1143,FLL]  [SAT,1360,IAD]  [SAT,190,IAH]
+[SAT,1580,JFK]  [SAT,1210,LAX]  [SAT,1038,MCO]
+[SAT,1140,MIA]  [SAT,1097,MSP]  [SAT,1040,ORD]
+[SAT,841,PHX]   [SAT,1222,RDU]  [SAT,1772,SEA]
+[SAT,1480,SFO]  [SAT,1451,SJC]  [SAT,970,TPA]
+[SAT,1129,SAN]  [SAT,1174,SNA]  [SAT,1086,SLC]
+[SAT,1069,LAS]  [SAT,795,DEN]   [SAT,493,MSY]
+[SAT,1569,EWR]  [SAT,192,HOU]   [SAT,495,ELP]
+[SAT,1239,CLE]  [SAT,1473,OAK]  [SAT,1490,PHL]
+[SAT,1210,DTW]
 ----
-
 
 [[AUSLHR-OS]]
 ==== How far is it from AUS to LHR with one stop?
@@ -2299,7 +2576,6 @@ the respective route distances.
 // Return all ways of getting from AUS to LHR with one stop.
 // Include the distances between each of the airports in the
 // query result.
-
 g.V().has('airport','code','AUS').
       outE().inV().outE().inV().
       has('code','LHR').
@@ -2313,18 +2589,24 @@ have to travel in each case. That is the topic of the next section!
 
 [source,groovy]
 ----
-[AUS,1476,SJC,5352,LHR]       [AUS,183,DFW,4736,LHR]
-[AUS,1500,SFO,5350,LHR]       [AUS,1339,BWI,3622,LHR]
-[AUS,1768,SEA,4783,LHR]       [AUS,1500,EWR,3453,LHR]
-[AUS,866,PHX,5255,LHR]        [AUS,1690,BOS,3254,LHR]
-[AUS,973,ORD,3939,LHR]        [AUS,768,DEN,4655,LHR]
-[AUS,1040,MSP,4001,LHR]       [AUS,1080,LAS,5213,LHR]
-[AUS,1230,LAX,5439,LHR]       [AUS,809,ATL,4198,LHR]
-[AUS,1520,JFK,3440,LHR]       [AUS,1160,SAN,5469,LHR]
-[AUS,1140,DTW,3753,LHR]       [AUS,1357,YYZ,3544,LHR]
-[AUS,142,IAH,4820,LHR]        [AUS,5294,FRA,406,LHR]
-[AUS,1430,PHL,3533,LHR]       [AUS,748,MEX,5529,LHR]
-[AUS,1294,IAD,3665,LHR]       [AUS,1030,CLT,3980,LHR]
+[AUS,1430,PHL,3533,LHR]         [AUS,1712,PDX,4896,LHR]
+[AUS,1140,DTW,3753,LHR]         [AUS,1030,CLT,3980,LHR]
+[AUS,1284,NAS,4332,LHR]         [AUS,1053,CHS,4053,LHR]
+[AUS,809,ATL,4198,LHR]          [AUS,755,BNA,4168,LHR]
+[AUS,1690,BOS,3254,LHR]         [AUS,1339,BWI,3622,LHR]
+[AUS,190,DFW,4736,LHR]          [AUS,1294,IAD,3665,LHR]
+[AUS,142,IAH,4820,LHR]          [AUS,1520,JFK,3440,LHR]
+[AUS,1230,LAX,5439,LHR]         [AUS,1101,MIA,4414,LHR]
+[AUS,1040,MSP,4001,LHR]         [AUS,973,ORD,3939,LHR]
+[AUS,866,PHX,5255,LHR]          [AUS,1159,RDU,3860,LHR]
+[AUS,1768,SEA,4783,LHR]         [AUS,1500,SFO,5350,LHR]
+[AUS,1476,SJC,5352,LHR]         [AUS,1160,SAN,5469,LHR]
+[AUS,1080,SLC,4850,LHR]         [AUS,1080,LAS,5213,LHR]
+[AUS,768,DEN,4655,LHR]          [AUS,1357,YYZ,3544,LHR]
+[AUS,1869,YVR,4706,LHR]         [AUS,444,MSY,4616,LHR]
+[AUS,1500,EWR,3453,LHR]         [AUS,5294,FRA,406,LHR]
+[AUS,5074,AMS,230,LHR]          [AUS,1671,YYC,4356,LHR]
+[AUS,748,MEX,5529,LHR]          [AUS,1209,PIT,3707,LHR]
 ----
 
 [[sackauslhr]]
@@ -2378,16 +2660,16 @@ parameter. Running the query will produce the following results:
 
 [source,groovy]
 ----
-[AUS, 1140, DTW, 3753, LHR, 4893]
-[AUS, 1357, YYZ, 3544, LHR, 4901]
-[AUS, 973,  ORD, 3939, LHR, 4912]
-[AUS, 183,  DFW, 4736, LHR, 4919]
-[AUS, 1690, BOS, 3254, LHR, 4944]
-[AUS, 1500, EWR, 3453, LHR, 4953]
-[AUS, 1294, IAD, 3665, LHR, 4959]
-[AUS, 1520, JFK, 3440, LHR, 4960]
-[AUS, 1339, BWI, 3622, LHR, 4961]
-[AUS, 142,  IAH, 4820, LHR, 4962]
+[AUS,1140,DTW,3753,LHR,4893]
+[AUS,1357,YYZ,3544,LHR,4901]
+[AUS,973,ORD,3939,LHR,4912]
+[AUS,1209,PIT,3707,LHR,4916]
+[AUS,755,BNA,4168,LHR,4923]
+[AUS,190,DFW,4736,LHR,4926]
+[AUS,1690,BOS,3254,LHR,4944]
+[AUS,1500,EWR,3453,LHR,4953]
+[AUS,1294,IAD,3665,LHR,4959]
+[AUS,1520,JFK,3440,LHR,4960]
 ----
 
 We could add a little post processing to our query to only output the airport codes
@@ -2424,13 +2706,13 @@ Here is what our modified query, with the Groovy post processing added, produces
 AUS --> DTW --> LHR 4893 miles
 AUS --> YYZ --> LHR 4901 miles
 AUS --> ORD --> LHR 4912 miles
-AUS --> DFW --> LHR 4919 miles
+AUS --> PIT --> LHR 4916 miles
+AUS --> BNA --> LHR 4923 miles
+AUS --> DFW --> LHR 4926 miles
 AUS --> BOS --> LHR 4944 miles
 AUS --> EWR --> LHR 4953 miles
 AUS --> IAD --> LHR 4959 miles
 AUS --> JFK --> LHR 4960 miles
-AUS --> BWI --> LHR 4961 miles
-AUS --> IAH --> LHR 4962 miles
 ----
 
 [[anothersack]]
@@ -2453,7 +2735,9 @@ Here are the results that the query generates.
 
 [source,groovy]
 ----
-[ORD:226, DFW:216, FRA:254, CDG:253, PEK:232, AMS:257, ATL:232, MUC:219, IST:259, DME:206, DXB:225]
+[ORD:265,PVG:213,LAX:214,CDG:293,STN:211,JFK:204,DFW:253,LHR:221,MUC:270,DME:232,
+ EWR:203,AMS:283,IST:309,DEN:217,BCN:203,BER:202,DXB:248,MAD:206,FCO:201,VIE:206,
+ FRA:310,PEK:248,ATL:242,MAN:216,LGW:232]
 ----
 
 The previous query is a perfectly good way to achieve the desired result. Just for 
@@ -2473,7 +2757,6 @@ query iterates.
 ----
 // The same query but done using the sack() step in TinkerPop shown as an
 // example only. The prior query works just fine for this.
-
 g.withSack([:]).
   V().hasLabel('airport').
   where(out().count().is(gt(200))).
@@ -2486,7 +2769,9 @@ results came back in a different order they are the same.
 
 [source,groovy]
 ----
-[ATL:232, DFW:216, ORD:226, CDG:253, FRA:254, DXB:225, PEK:232, AMS:257, MUC:219, DME:206, IST:259]
+[ATL:242,DFW:253,JFK:204,LAX:214,ORD:265,DEN:217,EWR:203,LHR:221,LGW:232,CDG:293,
+ FRA:310,DXB:248,PEK:248,PVG:213,FCO:201,AMS:283,BCN:203,MAD:206,VIE:206,MUC:270,
+ MAN:216,STN:211,DME:232,IST:309,BER:202]
 ----
 
 The 'fold' step is needed in the query above to make sure that the result we get back
@@ -2507,7 +2792,9 @@ g.V().hasLabel('airport').
       group().by('code').by(outE().count()).
       order(local).by(values)
 
-[DME:213,DFW:221,DXB:229,ORD:232,PEK:232,ATL:232,MUC:237,CDG:260,FRA:266,AMS:269,IST:270]
+[FCO:201,BER:202,EWR:203,BCN:203,JFK:204,MAD:206,VIE:206,STN:211,PVG:213,LAX:214,
+ MAN:216,DEN:217,LHR:221,DME:232,LGW:232,ATL:242,DXB:248,PEK:248,DFW:253,ORD:265,
+ MUC:270,AMS:283,CDG:293,IST:309,FRA:310]
 ----
 
 If you wanted to sort using the airport codes you could do it as follows. This time
@@ -2522,7 +2809,9 @@ g.withSack([:]).
   sack().
   order(local).by(keys)
 
-[AMS:269,ATL:232,CDG:260,DFW:221,DME:213,DXB:229,FRA:266,IST:270,MUC:237,ORD:232,PEK:232]
+[AMS:283,ATL:242,BCN:203,BER:202,CDG:293,DEN:217,DFW:253,DME:232,DXB:248,EWR:203,
+ FCO:201,FRA:310,IST:309,JFK:204,LAX:214,LGW:232,LHR:221,MAD:206,MAN:216,MUC:270,
+ ORD:265,PEK:248,PVG:213,STN:211,VIE:206]
 ----
 
 As well as using 'withSack' to initialize a 'sack' you can also use the 'assign'
@@ -2532,7 +2821,6 @@ to from Austin have. At the end of the query we perform a 'sum' step against the
 which will contain a list holding number of runways for each individual airport so we
 need to add all of those to get a single grand total.
 
-
 [source,groovy]
 ----
 g.V().has('code','AUS').
@@ -2541,7 +2829,7 @@ g.V().has('code','AUS').
       sack(sum).by('runways').
       sack().sum()
 
-212
+306
 ----
 
 [[latlonmanual]]
@@ -2621,7 +2909,6 @@ This next query just returns the coordinates for London Heathrow.
 
 [source,groovy]
 ----
-
 // Query latitude and longitude for LHR
 g.V().has('airport','code','LHR').valueMap('lat','lon')
 
@@ -2636,6 +2923,7 @@ such as London, Ontario in Canada, we have to take advantage of the region code
 [source,groovy]
 ----
 g.V().has('airport','city','London').has('region','GB-ENG').valueMap('code','lat','lon')
+
 [code:[LHR], lon:[-0.461941003799], lat:[51.4706001282]]
 [code:[LGW], lon:[-0.190277993679047], lat:[51.1481018066406]]
 [code:[LCY], lon:[0.055278], lat:[51.505278]]
@@ -2744,7 +3032,6 @@ planes.
 ----
 // AUS to LAS with one stop but the stop has to be in the US or Canada
 // and West of Austin while avoiding PHX and LAX.
-
 g.V().has('airport','code','AUS').as('aus').out().
       has('country',within('US','CA')).
       where(lt('aus')).by('lon').
@@ -2763,8 +3050,15 @@ that Dallas is also included!.
 [source,groovy]
 ----
 [AUS,PDX,LAS]
+[AUS,ONT,LAS]
 [AUS,ABQ,LAS]
+[AUS,SMF,LAS]
+[AUS,BOI,LAS]
 [AUS,LBB,LAS]
+[AUS,RNO,LAS]
+[AUS,AMA,LAS]
+[AUS,BUR,LAS]
+[AUS,BZN,LAS]
 [AUS,SEA,LAS]
 [AUS,SFO,LAS]
 [AUS,SJC,LAS]
@@ -2773,8 +3067,13 @@ that Dallas is also included!.
 [AUS,SNA,LAS]
 [AUS,SLC,LAS]
 [AUS,DEN,LAS]
+[AUS,SAT,LAS]
+[AUS,HNL,LAS]
+[AUS,YVR,LAS]
 [AUS,ELP,LAS]
+[AUS,YYC,LAS]
 [AUS,OAK,LAS]
+[AUS,TUS,LAS]
 ----
 
 Here is one more example that is similar to the previous one. First of all we store
@@ -2800,13 +3099,19 @@ g.V().has('airport','code','AUS').as('aus').out().
 Here is what we get back when we run the query. Still lots of choices even if we
 avoid LAX and PHX it seems.
 
-
 [source,groovy]
 ----
 [AUS,PDX,LAS]
+[AUS,OKC,LAS]
 [AUS,ONT,LAS]
 [AUS,ABQ,LAS]
+[AUS,SMF,LAS]
+[AUS,BOI,LAS]
 [AUS,LBB,LAS]
+[AUS,RNO,LAS]
+[AUS,AMA,LAS]
+[AUS,BUR,LAS]
+[AUS,BZN,LAS]
 [AUS,DFW,LAS]
 [AUS,SEA,LAS]
 [AUS,SFO,LAS]
@@ -2816,8 +3121,13 @@ avoid LAX and PHX it seems.
 [AUS,SNA,LAS]
 [AUS,SLC,LAS]
 [AUS,DEN,LAS]
+[AUS,SAT,LAS]
+[AUS,HNL,LAS]
+[AUS,YVR,LAS]
 [AUS,ELP,LAS]
+[AUS,YYC,LAS]
 [AUS,OAK,LAS]
+[AUS,TUS,LAS]
 ----
 
 Let's look at one last query that uses the 'region' property, present on all
@@ -2833,7 +3143,6 @@ to make the results a bit more readable.
 g.V().has('airport','code','DFW').out().has('country','US').
       group().by('region').by('code').
       select('US-CA','US-TX','US-FL','US-CO','US-IL').unfold()
-
 ----
 
 Below you can see the query results. Each of the selected states is listed along with
@@ -2841,12 +3150,11 @@ a list of airports reachable from DFW.
 
 [source,groovy]
 ----
-US-CA=[LAX, SFO, SJC, SAN, SNA, OAK, ONT, PSP, SMF, FAT, SBA]
-US-TX=[AUS, IAH, SAT, HOU, ELP, LBB, MAF, CRP, ABI, ACT, CLL,
-       BPT, AMA, BRO, GGG, GRK, LRD, MFE, SJT, SPS, TYR]
-US-FL=[FLL, MCO, MIA, PBI, TPA, RSW, TLH, JAX, PNS, VPS]
-US-CO=[DEN, COS, DRO, GJT, EGE, HDN, ASE, GUC, MTJ]
-US-IL=[ORD, PIA, BMI, CMI, MLI, SPI]
+US-CA=[ONT, PSP, SMF, FAT, BUR, BFL, MRY, SBA, LAX, SFO, SJC, SAN, SNA, OAK]
+US-TX=[LBB, HRL, MAF, CRP, ABI, ACT, CLL, BPT, AMA, BRO, GGG, GRK, LRD, MFE, SJT, SPS, TYR, DRT, AUS, IAH, SAT, HOU, ELP]
+US-FL=[RSW, TLH, EYW, JAX, ECP, PNS, VPS, SRQ, GNV, FLL, MCO, MIA, PBI, TPA]
+US-CO=[COS, DRO, GJT, EGE, HDN, ASE, GUC, MTJ, DEN]
+US-IL=[PIA, BMI, CMI, MLI, SPI, ORD]
 ----
 
 In the next section we will look at a more complicated query that builds upon the
@@ -3073,7 +3381,6 @@ g.withSideEffect("rdeg", 0.017453293).
 5108.80166113392
 ----
 
-
 [[via]]
 === Finding routes that go via a specific airport
 
@@ -3094,11 +3401,11 @@ DFW on the way.
 
 [source,groovy]
 ----
-[AUS,DFW,ATL]
-[AUS,DFW,ANC]
-[AUS,DFW,AUS]
-[AUS,DFW,BNA]
-[AUS,DFW,BOS]
+[AUS,DFW,YYZ]
+[AUS,DFW,YVR]
+[AUS,DFW,LHR]
+[AUS,DFW,CDG]
+[AUS,DFW,FRA]
 ----
 
 This technique works well if we know which stop we want to be in DFW. However, we
@@ -3121,16 +3428,16 @@ When run we get the following results.
 
 [source,groovy]
 ----
-[AUS,LHR,EDI]
+[AUS,PHL,EDI]
+[AUS,PVD,EDI]
+[AUS,BOS,EDI]
+[AUS,IAD,EDI]
 [AUS,JFK,EDI]
+[AUS,MCO,EDI]
+[AUS,LHR,EDI]
 [AUS,EWR,EDI]
-[AUS,LHR,MAN,EDI]
-[AUS,LHR,BHD,EDI]
-[AUS,LHR,INV,EDI]
-[AUS,LHR,JFK,EDI]
-[AUS,LHR,EWR,EDI]
-[AUS,PIT,JFK,EDI]
-[AUS,PIT,EWR,EDI]
+[AUS,LGW,EDI]
+[AUS,PHL,SWF,EDI]
 ----
 
 However, for the sake of making the example more interesting, let's assume that we
@@ -3156,7 +3463,7 @@ When the modified query is run, each result includes MAN in the path.
 
 [source,groovy]
 ----
-[AUS,LHR,MAN,EDI]
+[AUS,PHL,MAN,EDI]
 [AUS,ATL,MAN,EDI]
 [AUS,BOS,MAN,EDI]
 [AUS,IAD,MAN,EDI]
@@ -3194,9 +3501,32 @@ g.V().hasId(between(1,201)).values('city').order().fold()
 And here are the names that get returned. If you look closely at the list you
 will see that city names like 'Dallas' and 'London' appear more than once.
 
-[source,groovy]
+[source,text]
 ----
-[Abu Dhabi, Addis Ababa, Albuquerque, Alicante, Alice Springs, Amsterdam, Anchorage, Athens, Atlanta, Auckland, Austin, Ayers Rock, Baltimore, Bankok, Barcelona, Beijing, Belgrade, Bengaluru, Berlin, Bilbao, Bologna, Boston, Brisbane, Brussels, Budapest, Buenos Aires, Cairns, Cairo, Calgary, Calicut, Canberra, Cancun, Cape Town, Cedar Rapids, Charlotte, Chennai, Chicago, Chicago, Christchurch, Cincinnati, Cleveland, Cologne, Copenhagen, Dallas, Dallas, Denver, Detroit, Doha, Dubai, Dublin, Durban, Dusseldorf, Edinburgh, Edmonton, El Paso, Fairbanks, Fort Lauderdale, Fort Myers, Frankfurt, Geneva, Genoa, Glasgow, Gold Coast, Gothenburg, Hagta, Halifax, Hamburg, Harrison, Helsinki, Ho Chi Minh City, Hong Kong, Honolulu, Houston, Houston, Hyderabad, Ibiza, Indianapolis, Istanbul, Johannesburg, Kahului, Kansas City, Kingston, Kolkata, Kuala Lumpur, Kuwait, Larnaca, Las Vegas, Lima, Liverpool, London, London, London, London, Long Beach, Los Angeles, Luqa, Luxembourg, Madrid, Manama, Manchester, Manila, Maroochydore, Melbourne, Memphis, Menorca, Mexico City, Miami, Milan, Milwaukee, Minneapolis, Mombasa, Montevideo, Montreal, Moscow, Moscow, Mumbai, Munich, Nairobi, Nantes, Naples, Nashville, New Delhi, New Orleans, New York, New York, Newark, Nice, Nottingham, Oaklahoma City, Oakland, Omaha, Ontario, Orlando, Osaka, Oslo, Ottawa, Palm Springs, Paris, Paris, Perth, Philadelphia, Phnom Penh, Phoenix, Pisa, Pittsburgh, Portland, Portland, Prague, Puerto Vallarta, Raleigh, Rio de Janeiro, Rochester, Rochester, Rome, Salina, Salt Lake City, San Antonio, San Diego, San Francisco, San Jose, San Juan, Santa Ana, Santa Fe, Santiago, Sao Paulo, Seattle, Seoul, Shanghai, Shannon, Singapore, Sofia, St Louis, St. Johns, Stockholm, Stuttgart, Sydney, Tallahassee, Tampa, Tel Aviv, Tenerife, Tokyo, Tokyo, Toronto, Tucson, Tulsa, Turin, Vancouver, Venice, Venice, Verona, Vienna, Warsaw, Washington D.C., Washington D.C., Wellington, West Palm Beach, White Plains, Winnipeg, Zagreb, Zurich]
+[Abu Dhabi,Addis Ababa,Albuquerque,Alicante,Alice Springs,Amsterdam,Anchorage,Athens,
+ Atlanta,Auckland,Austin,Ayers Rock,Baltimore,Bangkok,Barcelona,Beijing,Belgrade,
+ Bengaluru,Berlin,Bilbao,Bologna,Boston,Brisbane,Brussels,Budapest,Buenos Aires,
+ Cairns,Cairo,Calgary,Calicut,Canberra,Cancun,Cape Town,Cedar Rapids,Charlotte,
+ Chennai,Chicago,Chicago,Christchurch,Cincinnati,Cleveland,Cologne,Copenhagen,
+ Dallas,Dallas,Denver,Detroit,Doha,Dubai,Dublin,Durban,Dusseldorf,Edinburgh,
+ Edmonton,El Paso,Fairbanks,Fort Lauderdale,Fort Myers,Frankfurt,Geneva,Genoa,
+ Glasgow,Gold Coast,Gothenburg,Hagta,Halifax,Hamburg,Harrison,Helsinki,
+ Ho Chi Minh City,Hong Kong,Honolulu,Houston,Houston,Hyderabad,Ibiza,
+ Indianapolis,Istanbul,Johannesburg,Kahului,Kansas City,Kingston,Kolkata,
+ Kuala Lumpur,Kuwait,Larnaca,Las Vegas,Lima,Liverpool,London,London,London,London,
+ Long Beach,Los Angeles,Luqa,Luxembourg,Madrid,Manama,Manchester,Manila,Maroochydore,
+ Melbourne,Memphis,Menorca,Mexico City,Miami,Milan,Milwaukee,Minneapolis,Mombasa,
+ Montevideo,Montreal,Moscow,Moscow,Mumbai,Munich,Nairobi,Nantes,Naples,Nashville,
+ New Delhi,New Orleans,New York,New York,Newark,Nice,Nottingham,Oaklahoma City,
+ Oakland,Omaha,Ontario,Orlando,Osaka,Oslo,Ottawa,Palm Springs,Paris,Paris,Perth,
+ Philadelphia,Phnom Penh,Phoenix,Pisa,Pittsburgh,Portland,Portland,Prague,
+ Puerto Vallarta,Raleigh,Rio de Janeiro,Rochester,Rochester,Rome,Salina,
+ Salt Lake City,San Antonio,San Diego,San Francisco,San Jose,San Juan,Santa Ana,
+ Santa Fe,Santiago,Sao Paulo,Seattle,Seoul,Shanghai,Shannon,Singapore,Sofia,St Louis,
+ St. John's,Stockholm,Stuttgart,Sydney,Tallahassee,Tampa,Tel Aviv,Tenerife,Tokyo,
+ Tokyo,Toronto,Tucson,Tulsa,Turin,Vancouver,Venice,Venice,Verona,Vienna,Warsaw,
+ Washington D.C.,Washington D.C.,Wellington,West Palm Beach,White Plains,Winnipeg,
+ Zagreb,Zurich]
 ----
 
 Just to be sure, we can count how many city names we got back.
@@ -3222,17 +3552,37 @@ only see the names Dallas and London appearing once.
 
 [source,groovy]
 ----
-
 g.withSideEffect("x", [] as Set).V().hasId(between(1,201)).
-  values('city').store('x').cap('x').unfold().order().fold()
+  values('city').aggregate('x').cap('x').unfold().order().fold()
 ----
 
 Here are the city names that we get back after running our modified query. You will 
 notice that all of the duplicate names are now gone.
 
-[source,groovy]
+[source,text]
 ----
-[Abu Dhabi, Addis Ababa, Albuquerque, Alicante, Alice Springs, Amsterdam, Anchorage, Athens, Atlanta, Auckland, Austin, Ayers Rock, Baltimore, Bankok, Barcelona, Beijing, Belgrade, Bengaluru, Berlin, Bilbao, Bologna, Boston, Brisbane, Brussels, Budapest, Buenos Aires, Cairns, Cairo, Calgary, Calicut, Canberra, Cancun, Cape Town, Cedar Rapids, Charlotte, Chennai, Chicago, Christchurch, Cincinnati, Cleveland, Cologne, Copenhagen, Dallas, Denver, Detroit, Doha, Dubai, Dublin, Durban, Dusseldorf, Edinburgh, Edmonton, El Paso, Fairbanks, Fort Lauderdale, Fort Myers, Frankfurt, Geneva, Genoa, Glasgow, Gold Coast, Gothenburg, Hagta, Halifax, Hamburg, Harrison, Helsinki, Ho Chi Minh City, Hong Kong, Honolulu, Houston, Hyderabad, Ibiza, Indianapolis, Istanbul, Johannesburg, Kahului, Kansas City, Kingston, Kolkata, Kuala Lumpur, Kuwait, Larnaca, Las Vegas, Lima, Liverpool, London, Long Beach, Los Angeles, Luqa, Luxembourg, Madrid, Manama, Manchester, Manila, Maroochydore, Melbourne, Memphis, Menorca, Mexico City, Miami, Milan, Milwaukee, Minneapolis, Mombasa, Montevideo, Montreal, Moscow, Mumbai, Munich, Nairobi, Nantes, Naples, Nashville, New Delhi, New Orleans, New York, Newark, Nice, Nottingham, Oaklahoma City, Oakland, Omaha, Ontario, Orlando, Osaka, Oslo, Ottawa, Palm Springs, Paris, Perth, Philadelphia, Phnom Penh, Phoenix, Pisa, Pittsburgh, Portland, Prague, Puerto Vallarta, Raleigh, Rio de Janeiro, Rochester, Rome, Salina, Salt Lake City, San Antonio, San Diego, San Francisco, San Jose, San Juan, Santa Ana, Santa Fe, Santiago, Sao Paulo, Seattle, Seoul, Shanghai, Shannon, Singapore, Sofia, St Louis, St. Johns, Stockholm, Stuttgart, Sydney, Tallahassee, Tampa, Tel Aviv, Tenerife, Tokyo, Toronto, Tucson, Tulsa, Turin, Vancouver, Venice, Verona, Vienna, Warsaw, Washington D.C., Wellington, West Palm Beach, White Plains, Winnipeg, Zagreb, Zurich]
+[Abu Dhabi,Addis Ababa,Albuquerque,Alicante,Alice Springs,Amsterdam,Anchorage,
+ Athens,Atlanta,Auckland,Austin,Ayers Rock,Baltimore,Bangkok,Barcelona,Beijing,
+ Belgrade,Bengaluru,Berlin,Bilbao,Bologna,Boston,Brisbane,Brussels,Budapest,
+ Buenos Aires,Cairns,Cairo,Calgary,Calicut,Canberra,Cancun,Cape Town,Cedar Rapids,
+ Charlotte,Chennai,Chicago,Christchurch,Cincinnati,Cleveland,Cologne,Copenhagen,
+ Dallas,Denver,Detroit,Doha,Dubai,Dublin,Durban,Dusseldorf,Edinburgh,Edmonton,
+ El Paso,Fairbanks,Fort Lauderdale,Fort Myers,Frankfurt,Geneva,Genoa,Glasgow,
+ Gold Coast,Gothenburg,Hagta,Halifax,Hamburg,Harrison,Helsinki,Ho Chi Minh City,
+ Hong Kong,Honolulu,Houston,Hyderabad,Ibiza,Indianapolis,Istanbul,Johannesburg,
+ Kahului,Kansas City,Kingston,Kolkata,Kuala Lumpur,Kuwait,Larnaca,Las Vegas,Lima,
+ Liverpool,London,Long Beach,Los Angeles,Luqa,Luxembourg,Madrid,Manama,Manchester,
+ Manila,Maroochydore,Melbourne,Memphis,Menorca,Mexico City,Miami,Milan,Milwaukee,
+ Minneapolis,Mombasa,Montevideo,Montreal,Moscow,Mumbai,Munich,Nairobi,Nantes,Naples,
+ Nashville,New Delhi,New Orleans,New York,Newark,Nice,Nottingham,Oaklahoma City,
+ Oakland,Omaha,Ontario,Orlando,Osaka,Oslo,Ottawa,Palm Springs,Paris,Perth,
+ Philadelphia,Phnom Penh,Phoenix,Pisa,Pittsburgh,Portland,Prague,Puerto Vallarta,
+ Raleigh,Rio de Janeiro,Rochester,Rome,Salina,Salt Lake City,San Antonio,San Diego,
+ San Francisco,San Jose,San Juan,Santa Ana,Santa Fe,Santiago,Sao Paulo,Seattle,
+ Seoul,Shanghai,Shannon,Singapore,Sofia,St Louis,St. John's,Stockholm,Stuttgart,
+ Sydney,Tallahassee,Tampa,Tel Aviv,Tenerife,Tokyo,Toronto,Tucson,Tulsa,Turin,
+ Vancouver,Venice,Verona,Vienna,Warsaw,Washington D.C.,Wellington,West Palm Beach,
+ White Plains,Winnipeg,Zagreb,Zurich]
 ----
 
 And just to make sure we got fewer names back this time let's count them again.
@@ -3240,7 +3590,7 @@ And just to make sure we got fewer names back this time let's count them again.
 [source,groovy]
 ----
 g.withSideEffect("x", [] as Set).V().hasId(between(1,201)).
-  values('city').store('x').cap('x').unfold().count()
+  values('city').aggregate('x').cap('x').unfold().count()
 
 186
 ----
@@ -3264,11 +3614,11 @@ across multiple hops from a starting airport.
 
 [source,groovy]
 ----
-g.withSideEffect("x", [] as Set).V().hasId(3).as('a').values('city').store('x').
-   select('a').out().as('b').values('city').store('x').
-   select('b').out().values('city').store('x').cap('x').unfold().count()
+g.withSideEffect("x", [] as Set).V().hasId(3).as('a').values('city').aggregate('x').
+   select('a').out().as('b').values('city').aggregate('x').
+   select('b').out().values('city').aggregate('x').cap('x').unfold().count()
 
-804
+977
 ----
 
 Lastly on this topic, let's look at one more interesting use case. It is quite common
@@ -3282,7 +3632,6 @@ small graph that has the following relationships.
 (C->D),
 (C->E),
 (D->F)
-
 
 The code below can be used to create this graph using the Gremlin console and
 TinkerGraph.
@@ -3417,16 +3766,16 @@ as follows and ran it.
 g.V().has('code','DFW').as('dfw').
       addV().property(label, select('dfw').label())
 
-v[57525]
+v[61395]
 ----
 
 If we examine the new vertex we can see that it does indeed have the correct label.
 
 [source,groovy]
 ----
-g.V(57525).valueMap(true)
+g.V(61395).valueMap(true)
 
-[label:airport,id:57525]
+[label:airport,id:61395]
 ----
 
 Now we need to expand the query to also copy the property key names and their values
@@ -3483,7 +3832,7 @@ clearly been created.
 
 [source,groovy]
 ----
-v[53767]
+v[61396]
 ----
 
 However, when we inspected our new vertex we saw we had only managed to copy one of
@@ -3492,13 +3841,13 @@ rethink.
 
 [source,groovy]
 ----
-g.V(53767).valueMap(true).unfold()
+g.V(61396).valueMap(true).unfold()
 
 country=[US]
 label=airport
-id=53767
+id=61396
 
-g.V(53767).drop()
+g.V(61396).drop()
 ----
 
 What we realized was that our first attempt at copying the properties was only ever
@@ -3524,18 +3873,18 @@ we got one result per property it would appear.
 
 [source,groovy]
 ----
-[53768]
-[53768]
-[53768]
-[53768]
-[53768]
-[53768]
-[53768]
-[53768]
-[53768]
-[53768]
-[53768]
-[53768]
+v[61398]
+v[61398]
+v[61398]
+v[61398]
+v[61398]
+v[61398]
+v[61398]
+v[61398]
+v[61398]
+v[61398]
+v[61398]
+v[61398]
 ----
 
 In a moment we will explore a way to get rid of the unwanted output but first let's
@@ -3543,7 +3892,7 @@ examine the contents of the new vertex.
 
 [source,groovy]
 ----
-g.V(53768).valueMap(true).unfold()
+g.V(61398).valueMap(true).unfold()
 
 country=[US]
 code=[DFW]
@@ -3554,7 +3903,7 @@ type=[airport]
 elev=[607]
 label=airport
 icao=[KDFW]
-id=53768
+id=61398
 region=[US-TX]
 runways=[7]
 lat=[32.896800994873]
@@ -3571,7 +3920,7 @@ query so it did not pick up both the old and new DFW vertices.
 
 [source,groovy]
 ----
-g.V(53768).drop()
+g.V(61398).drop()
 
 g.V().has('code','DFW').as('dfw').
       addV().property(label, select('dfw').label()).as('new').
@@ -3630,10 +3979,10 @@ Before running the new query we need to clean up the work done by the prior one.
 ----
 g.V().has('code','DFW')
 
-[8]
-[53767]
+v[8]
+v[61411]
 
-g.V(53767).drop()
+g.V(61411).drop()
 ----
 
 So now let's wrap the creation of the properties into a 'sideEffect' step that should
@@ -3653,16 +4002,15 @@ When we run the modified version of the query this is what we get back.
 
 [source,groovy]
 ----
-[53780]
+[61424]
 ----
 
 This is a lot better as we now just got back the new vertex one time as the result.
 Let's double check that the query has worked as intended.
 
-
 [source,groovy]
 ----
-g.V(53780).valueMap(true).unfold()
+g.V(61424).valueMap(true).unfold()
 
 country=[US]
 code=[DFW]
@@ -3673,7 +4021,7 @@ type=[airport]
 elev=[607]
 label=airport
 icao=[KDFW]
-id=53780
+id=61424
 region=[US-TX]
 runways=[7]
 lat=[32.896800994873]
@@ -3684,7 +4032,6 @@ In this small case study we have tried to show how we were able to evolve a quer
 stages and also to adapt to unexpected outcomes along the way. You could use
 essentially the same technique shown in this section to also copy one or more edges
 if you needed to.
-
 
 [[btree]]
 === Modelling an ordered binary tree as a graph
@@ -3754,7 +4101,6 @@ g.V().hasLabel('root').repeat(out('left')).
 If we wanted to see the values that the 'repeat' is encountering as it traverses the
 tree we could add an 'emit' step and get the values of each node the 'repeat' visits.
 Note that this does not include the value from the root node.
-
 
 [source,groovy]
 ----
@@ -3879,15 +4225,15 @@ names of the other airports and the distances between them.
 
 [source,groovy]
 ----
-[AUS,992,SFB,828,MDT,592,ORD,234,DTW,500,LGA]
+[AUS,4921,LGW,2338,AQJ,1915,BER,992,SVO,6059,LAX]
 
-[AUS,957,CVG,374,ATL,1890,SAN,2276,DCA,204,PIT]
+[AUS,5294,FRA,1859,ACE,2078,HAM,1365,DJE,1001,MUC]
 
-[AUS,1209,PIT,1399,CUN,941,BJX,729,IAH,1384,BZN]
+[AUS,1869,YVR,5698,HGH,4156,DOH,8030,IAH,2067,STT]
 
-[AUS,748,MEX,1252,PHX,5255,LHR,2487,LXR,492,JED]
+[AUS,5074,AMS,4507,SFB,1335,AUA,2019,IAH,304,MSY]
 
-[AUS,722,STL,717,DCA,893,RSW,1103,HPN,563,CLT]
+[AUS,5074,AMS,4905,DFW,1056,CZM,1653,YYZ,7725,CAN]
 ----
 
 In the previous example, every random walk began at the same place. However, if we
@@ -3905,19 +4251,19 @@ g.V().hasLabel('airport').sample(1).
       path().by('code').by('dist')
 ----
 
-When run five times , as shown below, each walk begins at a different airport.
+When run five times, as shown below, each walk begins at a different airport.
 
 [source,groovy]
 ----
-[OMA,1144,LGA,584,CVG,750,BOS,6682,NRT,5951,VCE]
+[CRP,355,DFW,5119,GRU,1675,MAO,1768,GIG,5746,LHR]
 
-[CLE,244,ROC,263,JFK,8054,HKG,7952,BOS,7288,PVG]
+[ACA,190,MEX,2333,SEA,4807,LGW,4921,AUS,1072,CMH]
 
-[EMA,1126,AGP,969,PMO,708,VIE,5684,NRT,5152,DOH]
+[YFC,443,YOW,751,CLT,4564,MUC,862,VLC,2064,DME]
 
-[SNN,387,LGW,1349,KBP,264,KHE,434,IST,2831,DEL]
+[AUQ,891,PPT,4200,SFO,7688,DEL,6480,SYD,723,ADL]
 
-[ARN,1814,LEI,1232,PRG,433,BRU,1384,SVO,3598,PEK]
+[RMA,273,BNE,3999,KUL,6810,HNL,3755,AUS,919,IND]
 ----
 
 Another way to write the query involves the introduction of a 'local' step. In this
@@ -3940,11 +4286,11 @@ When run, five results such as those shown below are returned.
 
 [source,groovy]
 ----
-[ATL,1301,ASE,845,SFO,2580,MIA,596,ATL,546,PBI]
-[ANC,2547,PHX,1999,BWI,368,BOS,3576,CGN,4745,MIA]
-[AUS,922,CUN,931,SAT,248,DAL,1378,LGA,736,MKE]
-[BNA,630,DFW,1430,SJC,2110,ATL,2180,SEA,4868,AMS]
-[BOS,3838,MUC,4024,JFK,8054,HKG,858,YNZ,901,HRB]
+[ATL,2364,UIO,1619,HAV,6183,IST,1483,JED,1421,TBS]
+[ANC,763,SNP,763,ANC,722,BRW,151,NUI,151,BRW]
+[AUS,919,IND,816,BOS,1610,HOU,998,SJD,1967,YWG]
+[BNA,490,MCI,1343,CUN,1437,CLE,692,MCI,1045,PIE]
+[BOS,2580,SAN,2253,IAD,960,NAS,4332,LHR,250,IOM]
 ----
 
 [[sevendegrees]]
@@ -3973,7 +4319,7 @@ First of all we double checked how many airports are in the graph.
 ----
 g.V().hasLabel('airport').count()
 
-3374
+3504
 ----
 
 Next we remembered there are some orphan airports that have no routes so we have to
@@ -3984,13 +4330,13 @@ discussed in the "<<noroutes>>" section.
 ----
 g.V().hasLabel('airport').not(outE('route')).count()
 
-16
+29
 ----
 
 So we know that there are 16 airports we need to ignore for this experiment. Leaving
-us with 3358 airports we care about but one of those will be LHR so we also need to
+us with 3475 airports we care about but one of those will be LHR so we also need to
 discount that one as we are not looking for cyclic paths. So, we need a query that
-proves there is a route between all of these 3357 remaining airports and London
+proves there is a route between all of these 3475 remaining airports and London
 Heathrow but ignores the orphan airports and Heathrow itself as starting points.
 
 The core part of the query is shown below. We started out using just one hop for
@@ -4014,7 +4360,6 @@ g.V().has('airport','code',neq('LHR')).
               path().by('code')).
               fold()).
         limit(10)
-
 ----
 
 As you can see, the query we have so far seems to be working. We either get back a
@@ -4028,14 +4373,13 @@ airport to be in a separate list.
 [ATL,[ATL,LHR]]
 [ANC]
 [AUS,[AUS,LHR]]
-[BNA]
+[BNA,[BNA,LHR]]
 [BOS,[BOS,LHR]]
 [BWI,[BWI,LHR]]
 [DCA]
 [DFW,[DFW,LHR]]
 [FLL]
 [IAD,[IAD,LHR]]
-
 ----
 
 The final piece missing from the query is a way to decide if we reached LHR and count
@@ -4062,12 +4406,11 @@ g.V().has('airport','code',neq('LHR')).
              where(count(local).is(gt(1)))).
       count()
 
-3345
+3452
 ----
 
 As you can see, with five hops were were able to reach LHR from 3345 of the 3357
 airports we are testing. Next we ran the query again but using six hops.
-
 
 [source,groovy]
 ----
@@ -4084,7 +4427,7 @@ g.V().has('airport','code',neq('LHR')).
              where(count(local).is(gt(1)))).
       count()
 
-3354
+3461
 ----
 
 So with six hops 3354 of our 3357 airports were able to get to LHR. We then tried
@@ -4105,7 +4448,7 @@ g.V().has('airport','code',neq('LHR')).
              where(count(local).is(gt(1)))).
       count()
 
-3355
+3462
 ----
 
 This made me curious. We were fairly convinced that there are no airports in the
@@ -4128,7 +4471,7 @@ g.V().has('airport','code',neq('LHR')).
              where(count(local).is(gt(1)))).
       count()
 
-3355
+3462
 ----
 
 This left me with an interesting conclusion. There must be two airports in the graph
@@ -4248,7 +4591,7 @@ that on a typical laptop or desktop. Here are the results of running the query.
 [source,groovy]
 ----
 [YPO,YAT,ZKE,YFA,YMO,YTS,YYZ,AUS]
-[YZG,YIK,AKV,YPX,YGL,YUL,ATL,AUS]
+[YZG,YIK,AKV,YPX,YGL,YUL,PHL,AUS]
 [THU,NAQ,JUV,JAV,GOH,KEF,PIT,AUS]
 ----
 
@@ -4270,7 +4613,7 @@ As before, the same three paths are found.
 [source,groovy]
 ----
 [YPO,YAT,ZKE,YFA,YMO,YTS,YYZ,AUS]
-[YZG,YIK,AKV,YPX,YGL,YUL,ATL,AUS]
+[YZG,YIK,AKV,YPX,YGL,YUL,PHL,AUS]
 [THU,NAQ,JUV,JAV,GOH,KEF,PIT,AUS]
 ----
 
@@ -4301,7 +4644,7 @@ continues on to places it has not seen before until seven hops have completed.
 [source,groovy]
 ----
 g.V().has('code','AUS').
-      repeat(out().where(without('a')).store('a')).
+      repeat(out().where(without('a')).aggregate('a')).
         times(7).
       path().
         by('code')
@@ -4334,8 +4677,8 @@ Once again the same results are generated.
 
 [source,groovy]
 ----
-[AUS,YYZ,YUL,YGL,YPX,AKV,YIK,YZG]
-[AUS,YYZ,CPH,SFJ,JAV,JUV,NAQ,THU]
+[AUS,PHL,YUL,YGL,YPX,AKV,YIK,YZG]
+[AUS,PHL,KEF,GOH,JAV,JUV,NAQ,THU]
 [AUS,YYZ,YTS,YMO,YFA,ZKE,YAT,YPO]
 ----
 
@@ -4425,6 +4768,7 @@ a stream of values that could be filtered.
 g.V().as("a").out().as("b").groupCount().by(select("a","b")).unfold().
                             filter(select(values).is(gt(1)))
 ----
+
 Next we added one more step to tell me which routes contained the error.
 
 [source,groovy]
@@ -4548,7 +4892,6 @@ Note that this technique does not replace the full query shown in the prior sect
 It is more intended to show that you can place a 'path' step inside of a 'groupCount'
 step and achieve some useful results.
 
-
 [[flr]]
 === Finding the longest flight route between two adjacent airports in the graph
 
@@ -4571,16 +4914,14 @@ two airports don't count as different routes for this example).
 While using a 'max' step, as shown below, might seem like the obvious and easy to do
 what we need, because of the way that 'max' is implemented it will not work.
 Currently the 'max' and 'min' steps cause the prior paths that have been taken in a
-traversal to be lost. There is an issue open against TinkerPop for this but until
-that issue gets resolved, we need to explore other ways of achieving our desired
-result.
+traversal to be lost. We need to explore other ways of achieving our desired result.
 
 [source,groovy]
 ----
 g.E().hasLabel('route').as('e').values('dist').max().select('e')
 ----
 
-First of all we could do this (below) The down side of this approach is that both
+First of all we could do this (below) The downside of this approach is that both
 queries have to look at a lot of edges which is likely to use additional memory and
 CPU to process.
 
@@ -4598,7 +4939,7 @@ once, but this approach would miss the case where more than one route was of the
 ----
 r=g.E().hasLabel('route').as('e').order().by('dist', desc).
     limit(1).select('e').id().next()
-g.E(r).dist
+g.E(r).values('dist')
 g.E(r).bothV().values('code')
 ----
 
@@ -4659,9 +5000,12 @@ Clearly you would normally just enter 250 but this shows the capability.
 ----
 g.V().hasLabel('airport').where(out().count().is(gt(500/2))).values('code')
 
+DFW
+ORD
 CDG
 FRA
 AMS
+MUC
 IST
 ----
 
@@ -4673,9 +5017,12 @@ a = 500
 
 g.V().hasLabel('airport').where(out().count().is(gt(a/2))).values('code')
 
+DFW
+ORD
 CDG
 FRA
 AMS
+MUC
 IST
 ----
 
@@ -4691,13 +5038,10 @@ a = g.V().local(out('route').count()).max().next()
 g.V().hasLabel('airport').where(out().count().is(gt(a-50))).
       project('apt','routes').by('code').by(out().count())
 
-[apt:ATL,routes:232]
-[apt:ORD,routes:232]
-[apt:CDG,routes:262]
-[apt:FRA,routes:272]
-[apt:DXB,routes:230]
-[apt:PEK,routes:234]
-[apt:AMS,routes:269]
-[apt:MUC,routes:237]
-[apt:IST,routes:270]
+[apt:ORD,routes:265]
+[apt:CDG,routes:293]
+[apt:FRA,routes:310]
+[apt:AMS,routes:283]
+[apt:MUC,routes:270]
+[apt:IST,routes:309]
 ----

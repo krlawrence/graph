@@ -274,7 +274,7 @@ gremlin> :record start mylog.txt
 Recording session to: "mylog.txt"
 
 gremlin> g.V().count().next()
-==>3618
+==>3749
 gremlin> :record stop
 Recording stopped; session saved as: "mylog.txt" (157 bytes)
 ----
@@ -424,7 +424,7 @@ vertices and edges then TinkerGraph will honor those IDs and use them. As we sha
 see later this is not the case with some other graph database systems.
 
 When running in the Gremlin Console, support for TinkerGraph should be on by default.
-If for any reason you find it to be off you, can enable it by issuing the following
+If for any reason you find it to be off, you can enable it by issuing the following
 command.
 
 [source,groovy]
@@ -499,7 +499,7 @@ as a way to test which version of the graph you are using.
 
 Routes between airports are modeled as edges. These edges carry the 'route' label and
 include the distance between the two connected airport vertices as a property called
-'dist'. Connections between countries and airports are modelled using an edge with a
+'dist'. Connections between countries and airports are modeled using an edge with a
 'contains' label.
 
 Each airport vertex has many properties associated with it giving various details
@@ -575,21 +575,23 @@ Lastly, here are some statistics and facts about the 'air-routes' graph. If you
 want to see a lot more statistics check the `README.txt` file that is included with
 the 'air-routes' graph.
 
+[source,text]
 ----
-Air Routes Graph (v0.77, 2017-Oct-06) contains:
-  3,374 airports
-  43,400 routes
+Air Routes Graph (v1.0, 2025-Oct-22) contains:
+  3,504 airports
+  50,637 routes
   237 countries (and dependent areas)
   7 continents
-  3,619 total nodes
-  50,148 total edges
+  3,749 total nodes
+  57,645 total edges
 
 Additional observations:
-  Longest route is between DOH and AKL (9,025 miles)
+  Longest route is between SIN and JFK (9,526 miles)
   Shortest route is between WRY and PPW (2 miles)
-  Average route distance is 1,164.747 miles.
+  Average route distance is 1,212.918 miles.
   Longest runway is 18,045ft (BPX)
   Shortest runway is 1,300ft (SAB)
+  Average number of runways is 1.42123
   Furthest North is LYR (latitude: 78.2461013793945)
   Furthest South is USH (latitude: -54.8433)
   Furthest East is SVU (longitude: 179.341003418)
@@ -598,11 +600,12 @@ Additional observations:
   Closest to the Greenwich meridian is LDE (longitude: -0.006438999902457)
   Highest elevation is DCY (14,472 feet)
   Lowest elevation is GUW (-72 feet)
-  Maximum airport node degree (routes in and out) is 544 (FRA)
-  Country with the most airports: United States (579)
-  Continent with the most airports: North America (978)
-  Average degree (airport nodes) is 25.726
-  Average degree (all nodes) is 25.856
+  Maximum airport node degree (routes in and out) is 620 (FRA)
+  Region with the most airports: US-AK (150)
+  Country with the most airports: United States (586)
+  Continent with the most airports: North America (989)
+  Average degree (airport nodes) is 28.902
+  Average degree (all nodes) is 28.891
 ----
 
 Here are the Top 15 airports sorted by overall number of routes (in and out). In
@@ -610,23 +613,23 @@ graph terminology this is often called the degree of the vertex or just
 'vertex degree'.
 
 ----
-    POS   ID  CODE  TOTAL     DETAILS
+    POS  ID   CODE  TOTAL     DETAILS
 
-     1    52   FRA  (544)  out:272 in:272
-     2    70   AMS  (541)  out:269 in:272
-     3   161   IST  (540)  out:270 in:270
-     4    51   CDG  (524)  out:262 in:262
-     5    80   MUC  (474)  out:237 in:237
-     6    64   PEK  (469)  out:234 in:235
-     7    18   ORD  (464)  out:232 in:232
-     8     1   ATL  (464)  out:232 in:232
-     9    58   DXB  (458)  out:229 in:229
-    10     8   DFW  (442)  out:221 in:221
-    11   102   DME  (428)  out:214 in:214
-    12    67   PVG  (402)  out:201 in:201
-    13    50   LGW  (400)  out:200 in:200
-    14    13   LAX  (390)  out:195 in:195
-    15    74   MAD  (384)  out:192 in:192
+     1	  52   FRA  (620)  out:310 in:310
+     2	 161   IST  (618)  out:309 in:309
+     3	  51   CDG  (587)  out:293 in:294
+     4	  70   AMS  (568)  out:283 in:285
+     5	  80   MUC  (541)  out:270 in:271
+     6	  18   ORD  (529)  out:265 in:264
+     7	   8   DFW  (506)  out:253 in:253
+     8	  64   PEK  (497)  out:248 in:249
+     9	  58   DXB  (496)  out:248 in:248
+    10	   1   ATL  (484)  out:242 in:242
+    11	 102   DME  (465)  out:232 in:233
+    12	  50   LGW  (464)  out:232 in:232
+    13	  49   LHR  (442)  out:221 in:221
+    14	  31   DEN  (434)  out:217 in:217
+    15	  84   MAN  (431)  out:216 in:215
 ----
 
 Throughout this book you will find Gremlin queries that can be used to generate many
@@ -728,7 +731,7 @@ When using TinkerGraph, the message you get back will look something like this.
 
 [source,groovy]
 ----
-tinkergraph[vertices:3610 edges:49490]
+tinkergraph[vertices:3749 edges:57645]
 ----
 
 [[off]]

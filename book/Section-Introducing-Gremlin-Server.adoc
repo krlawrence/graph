@@ -310,11 +310,11 @@ Given that the 'air-routes' graph is already loaded into our remote graph we can
 immediately start to issue some queries. In order to make sure the query goes to the
 remote graph, the query needs to be prefixed with '":>"'.
 
-[source,text]
+[source,groovy]
 ----
 gremlin> :> g.V().count()
 
-==>3624
+3624
 ----
 
 [[resultvar]]
@@ -329,7 +329,7 @@ the query below.
 ----
 gremlin> :>  g.V().hasLabel('continent').group().by('desc').by(out().count())
 
-==>{South America=305, Asia=941, Europe=596, Africa=298, Antarctica=0, North America=981, Oceania=287}
+==>{South America=313, Asia=971, Europe=605, Africa=321, Antarctica=0, North America=989, Oceania=305}
 ----
 
 If we were to print the contents of the 'result' variable we would find it contains
@@ -339,7 +339,7 @@ the results from the query.
 ----
 gremlin> println result
 
-[result{object={South America=305, Asia=941, Europe=596, Africa=298, Antarctica=0, North America=981, Oceania=287} class=java.lang.String}]
+[result{object={South America=313, Asia=971, Europe=605, Africa=321, Antarctica=0, North America=989, Oceania=305} class=java.lang.String}]
 ----
 
 As the console is still in local mode we can use some inline Groovy code to post
@@ -352,13 +352,13 @@ remote server.
 ----
 gremlin> for (x in result['object'][0][1..-2].split(', ')) println x
 
-South America=305
-Asia=941
-Europe=596
-Africa=298
+South America=313
+Asia=971
+Europe=605
+Africa=321
 Antarctica=0
-North America=981
-Oceania=287
+North America=989
+Oceania=305
 ----
 
 [[remotemode]]
@@ -368,7 +368,7 @@ As useful as keeping the console in '"local mode"' can be, if you are going to b
 issuing a lot of queries to the remote graph, We find it more convenient to put the
 console into '"remote mode"'. This can be done as follows.
 
-[source,text]
+[source,groovy]
 ----
 gremlin> :remote console
 
@@ -378,11 +378,11 @@ All scripts will now be sent to Gremlin Server - [localhost/127.0.0.1:8182] - ty
 The console is now in '"remote mode"'. All queries that you enter will be sent to the
 Gremlin Server and there is no need to use the '":>"' prefix.
 
-[source,text]
+[source,groovy]
 ----
 gremlin> g.V().count()
 
-==>3624
+3749
 ----
 
 One thing to notice is that the output that comes back from a Gremlin Server looks a
@@ -390,11 +390,11 @@ little different at times from when you use the commands using the Gremlin Conso
 attached to a local TinkerGraph. This is because Gremlin Console essentially does a
 'toString()' on the output before it is shown to the user in these cases.
 
-[source,text]
+[source,groovy]
 ----
 gremlin> g.V().has('code','AUS').valueMap()
 
-==>{country=[US], code=[AUS], longest=[12250], city=[Austin], elev=[542], icao=[KAUS], lon=[-97.6698989868164], type=[airport], region=[US-TX], runways=[2], lat=[30.1944999694824], desc=[Austin Bergstrom International Airport]}
+{country=[US], code=[AUS], longest=[12250], city=[Austin], elev=[542], icao=[KAUS], lon=[-97.6698989868164], type=[airport], region=[US-TX], runways=[2], lat=[30.1944999694824], desc=[Austin Bergstrom International Airport]}
 ----
 
 As an example of the slight differences in the output format, below you will find the
@@ -450,7 +450,7 @@ as follows. We have formatted the output in a way that makes it easier to read. 
 was actually returned did not have any line breaks in it at all and was quite hard to
 read..
 
-[source,javascript]
+[source,json]
 ----
 {"requestId":"a8ad654a-a5a3-4bb9-8474-69aca3c3db1e",
  "status":{"message":"","code":200,"attributes":{}},
@@ -489,7 +489,7 @@ vertex and its properties. This is because the result represents a vertex this t
 rather than a map. We have again formatted the output in a way that is easier
 to read.
 
-[source,javascript]
+[source,json]
 ----
 {"requestId":"64c757b8-27a6-4509-a54c-ea35ba517667",
  "status":{"message":"","code":200,"attributes":{}},
@@ -536,7 +536,7 @@ Let's look at the small application in sections. First of all it is necessary to
 import the required classes that we will need to make the connection to the server
 and retrieve the query results.
 
-[source,groovy]
+[source,java]
 ----
 import org.apache.tinkerpop.gremlin.driver.Cluster;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
@@ -560,7 +560,7 @@ the 'GraphBinaryMessageSerializerV1' serialization format is selected. Again, th
 needs to match both the protocol and the version of the protocol that your Gremlin 
 Server is supporting.
 
-[source,groovy]
+[source,java]
 ----
 public class RemoteClient
 {
@@ -575,7 +575,7 @@ public class RemoteClient
 Once the 'Cluster.Builder' instance has been setup we can use it to create our
 'Cluster' instance.
 
-[source,groovy]
+[source,java]
 ----
 Cluster cluster = builder.create();
 ----
@@ -595,9 +595,9 @@ variables for us. This makes our code a lot easier to write and essentially is t
 same code from this point onwards that would also work with a local graph that we are
 directly connected to.
 
-[source,groovy]
+[source,java]
 ----
-    GraphTraversalSource g = traversal().
+GraphTraversalSource g = traversal().
         with(DriverRemoteConnection.using(cluster));
 ----
 
@@ -606,7 +606,7 @@ results will be placed directly into the 'List' called 'vmaps'. The query finds 
 first 10 airports with a region code of 'GB-ENG' which is short for Great Britain
 - England.
 
-[source,groovy]
+[source,java]
 ----
     List <Map<String,Object>> vmaps =
       g.V().has("airport","region","GB-ENG").limit(10).valueMap().toList();
@@ -690,10 +690,8 @@ Here is the output returned when we ran the program using Ruby version 2.3.1.
 As you can see the result body contains a JSON object just as when we issued requests
 using the 'curl' command earlier.
 
-[source,groovy]
+[source,json]
 ----
-Response code from the server was 200
-
 {"requestId":"0129e905-6903-4658-9cfb-23404842ba12",
  "status":{"message":"","code":200,"attributes":{}},
  "result":{"data":[62],"meta":{}}}
@@ -737,7 +735,7 @@ relative to the location where the Gremlin Server is installed.
 The `gremlin-server-air-routes.yaml` file should be placed in the `/conf` folder.
 
 .gremlin-server-air-routes.yaml
-[source,groovy]
+[source,yaml]
 ----
 host: localhost
 port: 8182
@@ -782,7 +780,7 @@ one that comes with Gremlin Server. It creates an empty in-memory TinkerGraph.
 The `tinkergraph-empty.properties` file should also be placed in the `/conf` folder.
 
 .tinkergraph-empty.properties
-[source,groovy]
+[source,properties]
 ----
 gremlin.graph=org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph
 gremlin.tinkergraph.vertexIdManager=LONG
@@ -836,7 +834,7 @@ $ curl "localhost:8182/gremlin?gremlin=g.V().has('code','SFO').valueMap()"
 Here is the output returned. Note that it is in the GraphSON V1 format that
 we configured for earlier.
 
-[source,groovy]
+[source,json]
 ----
 {"requestId":"fbcab664-7538-402f-85b4-1b14db88c968","status":{"message":"","code":200,"attributes":{}},"result":{"data":[{"country":["US"],"code":["SFO"],"longest":[11870],"city":["San Francisco"],"elev":[13],"icao":["KSFO"],"lon":[-122.375],"type":["airport"],"region":["US-CA"],"runways":[4],"lat":[37.6189994812012],"desc":["San Francisco International Airport"]}],"meta":{}}}
 ----
@@ -899,18 +897,38 @@ shown below.
 
 [source,groovy]
 ----
-[AKL,9025,DOH]    [LAX,8246,RUH]
-[AKL,8818,DXB]    [MEL,8197,YVR]
-[LAX,8756,SIN]    [DXB,8150,IAH]
-[CAN,8754,MEX]    [AUH,8139,SFO]
-[IAH,8591,SYD]    [DFW,8105,HKG]
-[DFW,8574,SYD]    [DXB,8085,SFO]
-[ATL,8434,JNB]    [HKG,8054,JFK]
-[SFO,8433,SIN]    [AUH,8053,DFW]
-[AUH,8372,LAX]    [EWR,8047,HKG]
-[DXB,8321,LAX]    [DOH,8030,IAH]
-[JED,8314,LAX]    [DFW,8022,DXB]
+[JFK,9526,SIN]
+[EWR,9523,SIN]
+[AKL,9025,DOH]
+[LHR,9009,PER]
+[PEK,8884,PTY]
+[AKL,8818,DXB]
+[LAX,8756,SIN]
+[CAN,8754,MEX]
+[IAH,8591,SYD]
+[DFW,8574,SYD]
+[JFK,8504,MNL]
+[ATL,8434,JNB]
+[SFO,8433,SIN]
+[AUH,8372,LAX]
+[DXB,8321,LAX]
+[JED,8314,LAX]
 [DOH,8287,LAX]
+[LAX,8246,RUH]
+[SCL,8208,TLV]
+[MEL,8197,YVR]
+[AKL,8186,ORD]
+[DXB,8150,IAH]
+[AUH,8139,SFO]
+[HKG,8135,IAD]
+[DFW,8105,HKG]
+[DXB,8085,SFO]
+[SEA,8059,SIN]
+[HKG,8054,JFK]
+[AUH,8053,DFW]
+[EWR,8047,HKG]
+[DOH,8030,IAH]
+[DFW,8022,DXB]
 ----
 
 However, if you were to use a system that returns the full JSON response, as is the
@@ -919,8 +937,7 @@ benefit '"pretty printing"' that the Gremlin Console does
 for you. Instead, you will get back something that looks a lot like this from the
 exact same query as the one we used above.
 
-//[source,json]
-[source,groovy]
+[source,json]
 ----
 {"requestId":"5acca62c-7351-4b3d-bb20-3660f6feb3cc",
  "status":{"message":"","code":200,"attributes":{}},
@@ -974,9 +991,10 @@ with the Gremlin Console. As shown below, it is certainly a bit easier to proces
 your application now. However, this is still not an ideal result as what we now have
 is a list containing  a single string with all of our routes in it.
 
-[source,groovy]
-//[source,json]
+[source,json]
+----
 {"requestId":"63c660d0-28cf-41fc-86cf-5560a4e2fac0","status":{"message":"","code":200,"attributes":{}},"result":{"data":["[[AKL, 9025, DOH], [AKL, 8818, DXB], [LAX, 8756, SIN], [CAN, 8754, MEX], [IAH, 8591, SYD], [DFW, 8574, SYD], [ATL, 8434, JNB], [SFO, 8433, SIN], [AUH, 8372, LAX], [DXB, 8321, LAX], [JED, 8314, LAX], [DOH, 8287, LAX], [LAX, 8246, RUH], [MEL, 8197, YVR], [DXB, 8150, IAH], [AUH, 8139, SFO], [DFW, 8105, HKG], [DXB, 8085, SFO], [HKG, 8054, JFK], [AUH, 8053, DFW], [EWR, 8047, HKG], [DOH, 8030, IAH], [DFW, 8022, DXB]]"],"meta":{}}}
+----
 
 We can add a little more post processing to split up our single string into an
 array of strings where each string is a single route of the form
@@ -1000,7 +1018,7 @@ Here is what we now get back in the returned JSON. Each route is now a string
 in an array of strings. From here it is a simple task to extract the airport
 names and distances for each route.
 
-[source,groovy]
+[source,json]
 ----
 {"requestId":"9d8324a8-89e4-4c1e-be59-ff433784a3da",
  "status":{"message":"","code":200,"attributes":{}},
@@ -1082,8 +1100,6 @@ further.
 In the next section you will find more examples of the JSON that can be returned by
 Gremlin Server and also some examples of how to reduce the amount of data that is
 returned.
-
-
 
 [[serverjson]]
 === More examples of the JSON returned from a Gremlin Server
@@ -1496,7 +1512,6 @@ example.
 ----
 g.V().has('code','LGW').project('a','b').by('code').by(out().count())
 
-
 {"requestId":"57819d0b-c27e-40d7-a89a-e69a6b4872a1",
  "status":{"message":"","code":200,"attributes":{}},
  "result":{"data":[{"a":"LGW","b":204}],"meta":{}}}
@@ -1538,7 +1553,6 @@ be nested inside the one that was generated while the JSON was being assembled.
 [source,groovy]
 ----
 g.V().has('region','US-OK').values('code').fold()
-
 
 {"requestId":"edcea305-086d-4f8d-b79a-ff72c5a26847",
  "status":{"message":"","code":200,"attributes":{}},

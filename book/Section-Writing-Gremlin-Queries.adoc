@@ -63,7 +63,6 @@ select country,count(country) from airports group by country;
 We can do this in Gremlin using the 'air-routes' graph with a query like the one 
 below (We will explain what all of this means later on in the book).
 
-
 [source,groovy]
 ----
 g.V().hasLabel('airport').groupCount().by('country')
@@ -371,7 +370,7 @@ of all lets find out how many vertices in the graph represent airports.
 // How many airports are there in the graph?
 g.V().hasLabel('airport').count()
 
-3374
+3504
 ----
 
 Now, looking at edges that have a 'route' label, let's find out how many flight
@@ -385,7 +384,7 @@ is coming up soon.
 // How many routes are there?
 g.V().hasLabel('airport').outE('route').count()
 
-43400
+50637
 ----
 
 You could shorten the above a little as follows but this would cause more edges to 
@@ -396,7 +395,7 @@ get looked at as we do not first filter out all vertices that are not airports.
 // How many routes are there?
 g.V().outE('route').count()
 
-43400
+50637
 ----
 
 You could also do it this way but generally starting by looking at all the Edges in
@@ -408,7 +407,7 @@ than vertices.
 // How many routes are there?
 g.E().hasLabel('route').count()
 
-43400
+50637
 ----
 
 We have not yet looked at the 'outE' step used above. We will look at it very soon
@@ -435,7 +434,7 @@ and the values are the counts for the occurrence of each label in the graph.
 
 [source,groovy]
 ----
-[continent:7,country:237,version:1,airport:3374]
+[continent:7,country:237,version:1,airport:3504]
 ----
 
 There are other ways we could write the query above that will yield the same result.
@@ -446,7 +445,7 @@ One such example is shown below.
 // How many of each type of vertex are there?
 g.V().label().groupCount()
 
-[continent:7,country:237,version:1,airport:3374]
+[continent:7,country:237,version:1,airport:3504]
 ----
 
 We can also run a similar query to find out the distribution of edge labels in the
@@ -457,7 +456,7 @@ graph. An example of the type of result we would get back is also shown.
 // How many of each type of edge are there?
 g.E().groupCount().by(label)
 
-[contains:6748,route:43400]
+[contains:7008,route:50637]
 ----
 
 As before we could rewrite the query as follows.
@@ -467,7 +466,7 @@ As before we could rewrite the query as follows.
 // How many of each type of edge are there?
 g.E().label().groupCount()
 
-[contains:6748,route:43400]
+[contains:7008,route:50637]
 ----
 
 By way of a side note, the examples above are shorthand ways of writing
@@ -478,7 +477,7 @@ something like this example which also counts vertices by label.
 // As above but using group()
 g.V().group().by(label).by(count())
 
-[continent:7,country:237,version:1,airport:3374]
+[continent:7,country:237,version:1,airport:3504]
 ----
 
 We can be more selective in how we specify the groups of things that we want to
@@ -509,7 +508,7 @@ output from running the query is shown below also.
 // How many airports are there in each continent?
 g.V().hasLabel('continent').group().by('code').by(out().count())
 
-[EU:583,AS:932,NA:978,OC:284,AF:294,AN:0,SA:303]
+[EU:605,AS:971,NA:989,OC:305,AF:321,AN:0,SA:313]
 ----
 
 These queries show how 'select' can be used to extract specific values from the map
@@ -520,12 +519,12 @@ that we have created. Again you can see the results we get from running the quer
 // How many airports are there in France (having first counted all countries)
 g.V().hasLabel('airport').groupCount().by('country').select('FR')
 
-58
+59
 
 // How many airports are there in France, Greece and Belgium respectively?
 g.V().hasLabel('airport').groupCount().by('country').select('FR','GR','BE')
 
-[FR:58,GR:39,BE:5]
+[FR:59,GR:39,BE:5]
 ----
 
 The 'group' and 'groupCount' steps are very useful when you want to count
@@ -610,7 +609,11 @@ Here is what you might get back if you were to run this query in your console.
 
 [source,groovy]
 ----
-[YYZ, LHR, FRA, MEX, PIT, PDX, CLT, CUN, MEM, CVG, IND, MCI, DAL, STL, ABQ, MDW, LBB, HRL, GDL, PNS, VPS, SFB, BKG, PIE, ATL, BNA, BOS, BWI, DCA, DFW, FLL, IAD, IAH, JFK, LAX, MCO, MIA, MSP, ORD, PHX, RDU, SEA, SFO, SJC, TPA, SAN, LGB, SNA, SLC, LAS, DEN, MSY, EWR, HOU, ELP, CLE, OAK, PHL, DTW]
+[PHL,PDX,DTW,OKC,ONT,CLT,CUN,MEM,CVG,IND,MCI,DAL,STL,ABQ,MKE,MDW,OMA,TUL,PVR,NAS,LIT,
+ JAX,PVD,SMF,BHM,SDF,BUF,BOI,LBB,ECP,HRL,RNO,CMH,DSM,CZM,AMA,BTR,CHS,GDL,GRR,LIR,PNS,
+ SJD,TYS,VPS,XNA,HDN,SFB,BUR,ASE,BZN,BKG,PIE,ATL,BNA,BOS,BWI,DCA,DFW,FLL,IAD,IAH,JFK,
+ LAX,MCO,MIA,MSP,ORD,PHX,RDU,SEA,SFO,SJC,TPA,SAN,LGB,SNA,SLC,LAS,DEN,SAT,YYZ,HNL,YVR,
+ MSY,LHR,EWR,LGW,HOU,FRA,ELP,AMS,CLE,YYC,OAK,MEX,TUS,PIT]
 ----
 
 All edges in a graph have a label. However, one thing we did not do in the previous
@@ -688,11 +691,11 @@ g.V().has('airport','code','LCY').outE().inV().path()
 
 If you run that query as-is you will get back a series of results that look
 like this. This shows that there is a route from vertex 88 to vertex 77 via an
-edge with an ID of 13698.
+edge with an ID of 15142.
 
 [source,groovy]
 ----
-[v[88],e[13698][88-route->77],v[77]]
+[v[88],e[15142][88-route->77],v[77]]
 ----
 
 While this result is useful, we might want to return something more human readable
@@ -756,7 +759,6 @@ airport 'code'. As you can see from the sample output, this time the city name
 g.V().has('airport','code','LCY').outE().inV().
       path().by('code').by('dist').by('city')
 
-
 [LCY,456,Geneva]
 ----
 
@@ -776,11 +778,11 @@ representing the number of runways the second airport has.
 
 [source,groovy]
 ----
-[LCY,AGP,2]
-[LCY,ABZ,4]
-[LCY,JER,1]
-[LCY,BSL,2]
-[LCY,BHD,1]
+[LCY,CDG,4]
+[LCY,FRA,4]
+[LCY,DUB,2]
+[LCY,FCO,3]
+[LCY,AMS,6]
 ----
 
 It is also possible to use a traversal inside of a 'by' modulator. Such traversals
@@ -797,11 +799,11 @@ contained within the 'by' modulator is applied to each element in the path.
 ----
 g.V(3).out().limit(5).path().by(values('code','city').fold())
 
-[[AUS,Austin],[YYZ,Toronto]]
-[[AUS,Austin],[LHR,London]]
-[[AUS,Austin],[FRA,Frankfurt]]
-[[AUS,Austin],[MEX,Mexico City]]
-[[AUS,Austin],[PIT,Pittsburgh]]
+[[AUS,Austin],[PHL,Philadelphia]]
+[[AUS,Austin],[PDX,Portland]]
+[[AUS,Austin],[DTW,Detroit]]
+[[AUS,Austin],[OKC,Oaklahoma City]]
+[[AUS,Austin],[ONT,Ontario]]
 ----
 
 To demonstrate that just about any arbitrary traversal can be placed inside the 'by'
@@ -812,11 +814,11 @@ source and destination airports as part of generating the 'path' result.
 ----
 g.V(3).out().limit(5).path().by(outE().count())
 
-[59,181]
-[59,191]
-[59,272]
-[59,105]
-[59,54]
+[98,147]
+[98,80]
+[98,145]
+[98,33]
+[98,23]
 ----
 
 [[pathfromto]]
@@ -838,16 +840,16 @@ As expected the results show each airport that was visited.
 
 [source,groovy]
 ----
-[AUS,EWR,YYZ]
-[AUS,EWR,YVR]
-[AUS,EWR,LHR]
-[AUS,EWR,CDG]
-[AUS,EWR,FRA]
-[AUS,EWR,NRT]
-[AUS,EWR,DEL]
-[AUS,EWR,DUB]
-[AUS,EWR,HKG]
-[AUS,EWR,PEK]
+[AUS,PHL,SXM]
+[AUS,PHL,RIC]
+[AUS,PHL,LEX]
+[AUS,PHL,ISP]
+[AUS,PHL,SWF]
+[AUS,PHL,DSM]
+[AUS,PHL,MYR]
+[AUS,PHL,CAE]
+[AUS,PHL,CHA]
+[AUS,PHL,CHS]
 ----
 
 Given that every journey starts in Austin, we might not actually want the AUS airport
@@ -867,16 +869,16 @@ This time AUS is not included in the 'path' results.
 
 [source,groovy]
 ----
-[EWR,YYZ]
-[EWR,YVR]
-[EWR,LHR]
-[EWR,CDG]
-[EWR,FRA]
-[EWR,NRT]
-[EWR,DEL]
-[EWR,DUB]
-[EWR,HKG]
-[EWR,PEK]
+[PHL,SXM]
+[PHL,RIC]
+[PHL,LEX]
+[PHL,ISP]
+[PHL,SWF]
+[PHL,DSM]
+[PHL,MYR]
+[PHL,CAE]
+[PHL,CHA]
+[PHL,CHS]
 ----
 Because after skipping the AUS part of the path we did in fact want the rest of the
 results we could have left off the 'to' modulator and written the query as follows.
@@ -891,16 +893,16 @@ As you can see the results are the same as before.
 
 [source,groovy]
 ----
-[EWR,YYZ]
-[EWR,YVR]
-[EWR,LHR]
-[EWR,CDG]
-[EWR,FRA]
-[EWR,NRT]
-[EWR,DEL]
-[EWR,DUB]
-[EWR,HKG]
-[EWR,PEK]
+[PHL,SXM]
+[PHL,RIC]
+[PHL,LEX]
+[PHL,ISP]
+[PHL,SWF]
+[PHL,DSM]
+[PHL,MYR]
+[PHL,CAE]
+[PHL,CHA]
+[PHL,CHS]
 ----
 
 Obviously there are a lot of ways that 'from' and 'to' can be used. By way of one
@@ -918,20 +920,19 @@ As expected we now have an additional stop added to each of the journeys.
 
 [source,groovy]
 ----
-[AUS,EWR,YYZ,ATL]
-[AUS,EWR,YYZ,AUS]
-[AUS,EWR,YYZ,BNA]
-[AUS,EWR,YYZ,BOS]
-[AUS,EWR,YYZ,BWI]
-[AUS,EWR,YYZ,DCA]
-[AUS,EWR,YYZ,DFW]
-[AUS,EWR,YYZ,FLL]
-[AUS,EWR,YYZ,IAD]
-[AUS,EWR,YYZ,IAH]
+[AUS,PHL,SXM,NEV]
+[AUS,PHL,SXM,AXA]
+[AUS,PHL,SXM,EIS]
+[AUS,PHL,SXM,EUX]
+[AUS,PHL,SXM,SAB]
+[AUS,PHL,SXM,ATL]
+[AUS,PHL,SXM,BOS]
+[AUS,PHL,SXM,FLL]
+[AUS,PHL,SXM,IAD]
+[AUS,PHL,SXM,JFK]
 ----
 
 Let's now modify the query to limit which parts of the path are returned.
-
 
 [source,groovy]
 ----
@@ -943,16 +944,16 @@ As you can see, only the parts of the journey that we selected have been returne
 
 [source,groovy]
 ----
-[EWR,YYZ]
-[EWR,YYZ]
-[EWR,YYZ]
-[EWR,YYZ]
-[EWR,YYZ]
-[EWR,YYZ]
-[EWR,YYZ]
-[EWR,YYZ]
-[EWR,YYZ]
-[EWR,YYZ]
+[PHL,SXM]
+[PHL,SXM]
+[PHL,SXM]
+[PHL,SXM]
+[PHL,SXM]
+[PHL,SXM]
+[PHL,SXM]
+[PHL,SXM]
+[PHL,SXM]
+[PHL,SXM]
 ----
 
 We could also have written the query as shown below to only show the results of each
@@ -968,16 +969,16 @@ This time only the first three airports visited are included in each result.
 
 [source,groovy]
 ----
-[AUS,EWR,YYZ]
-[AUS,EWR,YYZ]
-[AUS,EWR,YYZ]
-[AUS,EWR,YYZ]
-[AUS,EWR,YYZ]
-[AUS,EWR,YYZ]
-[AUS,EWR,YYZ]
-[AUS,EWR,YYZ]
-[AUS,EWR,YYZ]
-[AUS,EWR,YYZ]
+[AUS,PHL,SXM]
+[AUS,PHL,SXM]
+[AUS,PHL,SXM]
+[AUS,PHL,SXM]
+[AUS,PHL,SXM]
+[AUS,PHL,SXM]
+[AUS,PHL,SXM]
+[AUS,PHL,SXM]
+[AUS,PHL,SXM]
+[AUS,PHL,SXM]
 ----
 
 By way of a side note, in cases like this where more than one of the results is
@@ -991,7 +992,7 @@ what happens.
 g.V().has('airport','code','AUS').out().out().as('b').out().
       path().by('code').to('b').limit(10).dedup()
 
-[AUS,EWR,YYZ]
+[AUS,PHL,SXM]
 ----
 
 As you can see all of the duplicate results have now been removed. Hopefully this
@@ -1018,7 +1019,6 @@ g.V().has('code','AUS').out('route').has('code','SYD').hasNext()
 false
 ----
 
-
 [[aselproj]]
 ==== Using 'as', 'select' and 'project' to refer to traversal steps
 
@@ -1040,17 +1040,20 @@ using 'path', returns the following results.
 
 [source,groovy]
 ----
+[from:v[8],to:v[151]]
+[from:v[8],to:v[181]]
+[from:v[8],to:v[244]]
+[from:v[8],to:v[384]]
+[from:v[8],to:v[605]]
+[from:v[8],to:v[865]]
+[from:v[8],to:v[872]]
+[from:v[8],to:v[877]]
 [from:v[8],to:v[13]]
 [from:v[8],to:v[23]]
 [from:v[8],to:v[24]]
 [from:v[8],to:v[26]]
 [from:v[8],to:v[28]]
 [from:v[8],to:v[42]]
-[from:v[8],to:v[151]]
-[from:v[8],to:v[181]]
-[from:v[8],to:v[244]]
-[from:v[8],to:v[384]]
-[from:v[8],to:v[877]]
 ----
 
 In the example above only the vertices themselves were selected. We can also use a
@@ -1068,17 +1071,20 @@ This time the results contain the airport codes.
 
 [source,groovy]
 ----
+[from:DFW,to:ONT]
+[from:DFW,to:PSP]
+[from:DFW,to:SMF]
+[from:DFW,to:FAT]
+[from:DFW,to:BUR]
+[from:DFW,to:BFL]
+[from:DFW,to:MRY]
+[from:DFW,to:SBA]
 [from:DFW,to:LAX]
 [from:DFW,to:SFO]
 [from:DFW,to:SJC]
 [from:DFW,to:SAN]
 [from:DFW,to:SNA]
 [from:DFW,to:OAK]
-[from:DFW,to:ONT]
-[from:DFW,to:PSP]
-[from:DFW,to:SMF]
-[from:DFW,to:FAT]
-[from:DFW,to:SBA]
 ----
 
 While the prior example was perhaps not ideal, it does show how 'as' and 'select'
@@ -1097,17 +1103,20 @@ have labels associated with them but are otherwise the same.
 
 [source,groovy]
 ----
-[DFW,LAX]
 [DFW,ONT]
 [DFW,PSP]
+[DFW,SMF]
+[DFW,FAT]
+[DFW,BUR]
+[DFW,BFL]
+[DFW,MRY]
+[DFW,SBA]
+[DFW,LAX]
 [DFW,SFO]
 [DFW,SJC]
 [DFW,SAN]
 [DFW,SNA]
 [DFW,OAK]
-[DFW,SMF]
-[DFW,FAT]
-[DFW,SBA]
 ----
 
 While the 'path' step is a lot more convenient, in some cases it can be very
@@ -1140,16 +1149,16 @@ This query, and the prior query, would return the following results.
 
 [source,groovy]
 ----
-[a:ATL,b:US-GA,c:232]
-[a:ANC,b:US-AK,c:39]
-[a:AUS,b:US-TX,c:59]
-[a:BNA,b:US-TN,c:55]
-[a:BOS,b:US-MA,c:129]
-[a:BWI,b:US-MD,c:89]
-[a:DCA,b:US-DC,c:93]
-[a:DFW,b:US-TX,c:221]
-[a:FLL,b:US-FL,c:141]
-[a:IAD,b:US-VA,c:136]
+[a:ATL,b:US-GA,c:242]
+[a:ANC,b:US-AK,c:41]
+[a:AUS,b:US-TX,c:98]
+[a:BNA,b:US-TN,c:75]
+[a:BOS,b:US-MA,c:143]
+[a:BWI,b:US-MD,c:91]
+[a:DCA,b:US-DC,c:96]
+[a:DFW,b:US-TX,c:253]
+[a:FLL,b:US-FL,c:158]
+[a:IAD,b:US-VA,c:158]
 ----
 
 In the prior example we gave our variables simple names like 'a' and 'b'. However, it
@@ -1168,16 +1177,16 @@ When we run the modified query, here is the output we get.
 
 [source,groovy]
 ----
-[IATA:ATL,Region:US-GA,Routes:232]
-[IATA:ANC,Region:US-AK,Routes:39]
-[IATA:AUS,Region:US-TX,Routes:59]
-[IATA:BNA,Region:US-TN,Routes:55]
-[IATA:BOS,Region:US-MA,Routes:129]
-[IATA:BWI,Region:US-MD,Routes:89]
-[IATA:DCA,Region:US-DC,Routes:93]
-[IATA:DFW,Region:US-TX,Routes:221]
-[IATA:FLL,Region:US-FL,Routes:141]
-[IATA:IAD,Region:US-VA,Routes:136]
+[IATA:ATL,Region:US-GA,Routes:242]
+[IATA:ANC,Region:US-AK,Routes:41]
+[IATA:AUS,Region:US-TX,Routes:98]
+[IATA:BNA,Region:US-TN,Routes:75]
+[IATA:BOS,Region:US-MA,Routes:143]
+[IATA:BWI,Region:US-MD,Routes:91]
+[IATA:DCA,Region:US-DC,Routes:96]
+[IATA:DFW,Region:US-TX,Routes:253]
+[IATA:FLL,Region:US-FL,Routes:158]
+[IATA:IAD,Region:US-VA,Routes:158]
 ----
 
 The 'project' step can be applied to inputs other than graph elements. It can 
@@ -1227,16 +1236,16 @@ g.V().has('airport','code','AUS').
   path().by('code').
   limit(10)
   
-[AUS,EWR,YYZ]
-[AUS,EWR,YVR]
-[AUS,EWR,LHR]
-[AUS,EWR,CDG]
-[AUS,EWR,FRA]
-[AUS,EWR,NRT]
-[AUS,EWR,DEL]
-[AUS,EWR,DUB]
-[AUS,EWR,HKG]
-[AUS,EWR,PEK]  
+[AUS,PHL,SXM]
+[AUS,PHL,RIC]
+[AUS,PHL,LEX]
+[AUS,PHL,ISP]
+[AUS,PHL,SWF]
+[AUS,PHL,DSM]
+[AUS,PHL,MYR]
+[AUS,PHL,CAE]
+[AUS,PHL,CHA]
+[AUS,PHL,CHS]
 
 g.V().has('type','airport').limit(10).
       project('a','b','c').
@@ -1244,16 +1253,16 @@ g.V().has('type','airport').limit(10).
         by('region').
         by(outE().count())
         
-[a:ATL,b:US-GA,c:232]
-[a:ANC,b:US-AK,c:39]
-[a:AUS,b:US-TX,c:59]
-[a:BNA,b:US-TN,c:55]
-[a:BOS,b:US-MA,c:129]
-[a:BWI,b:US-MD,c:89]
-[a:DCA,b:US-DC,c:93]
-[a:DFW,b:US-TX,c:221]
-[a:FLL,b:US-FL,c:141]
-[a:IAD,b:US-VA,c:136]              
+[a:ATL,b:US-GA,c:242]
+[a:ANC,b:US-AK,c:41]
+[a:AUS,b:US-TX,c:98]
+[a:BNA,b:US-TN,c:75]
+[a:BOS,b:US-MA,c:143]
+[a:BWI,b:US-MD,c:91]
+[a:DCA,b:US-DC,c:96]
+[a:DFW,b:US-TX,c:253]
+[a:FLL,b:US-FL,c:158]
+[a:IAD,b:US-VA,c:158]
 ----
 
 In both of the prior examples, the 'by' modulators were 'productive' which means that
@@ -1287,16 +1296,16 @@ g.V().has('type','airport').limit(10).
         by('region').
         by(outE().count().is(gt(100)))
 
-[a:ATL,b:US-GA,c:232]
+[a:ATL,b:US-GA,c:101]
 [a:ANC,b:US-AK]
 [a:AUS,b:US-TX]
 [a:BNA,b:US-TN]
-[a:BOS,b:US-MA,c:129]
+[a:BOS,b:US-MA,c:101]
 [a:BWI,b:US-MD]
 [a:DCA,b:US-DC]
-[a:DFW,b:US-TX,c:221]
-[a:FLL,b:US-FL,c:141]
-[a:IAD,b:US-VA,c:136]         
+[a:DFW,b:US-TX,c:101]
+[a:FLL,b:US-FL,c:101]
+[a:IAD,b:US-VA,c:101]
 ----
 
 As you can see the 'project' step will not emit a key for '"c"' when a modulator is
@@ -1335,16 +1344,16 @@ g.V().has('airport','code','AUS').
   limit(10).
   sum(local)
 
-2436
-1750
-1830
-2251
-1505
-1963
-1951
-1400
-1431
-2043
+3102
+1628
+1948
+1559
+1557
+2399
+1904
+1952
+2069
+1980
 ----
 
 With that small adjustment, vertices in the path can produce a '0' integer value
@@ -1395,7 +1404,7 @@ g.V().has('code','AUS').as('a').
       out().as('a').limit(10).
       select(last,'a').by('code').fold()
 
-[YYZ,LHR,FRA,MEX,PIT,PDX,CLT,CUN,MEM,CVG]
+[PHL,PDX,DTW,OKC,ONT,CLT,CUN,MEM,CVG,IND]
 ----
 
 Here is the same query but using the 'first' keyword this time as part of the
@@ -1422,7 +1431,7 @@ g.V().has('code','AUS').as('a').
       select(all,'a').unfold().values('code').fold()
 
 [AUS,AUS,AUS,AUS,AUS,AUS,AUS,AUS,AUS,AUS,
- YYZ,LHR,FRA,MEX,PIT,PDX,CLT,CUN,MEM,CVG]
+ PHL,PDX,DTW,OKC,ONT,CLT,CUN,MEM,CVG,IND]
 ----
 
 Keywords such as 'all', 'first' and 'last' are discussed further in the
@@ -1448,7 +1457,7 @@ g.V().has('code','LAX').
       limit(1).
       path().by('code')
 
-[LAX,YYC,BNA,BWI,YYZ,ZRH]
+[LAX,BER,SVG,KSU,OSL,BOS]
 ----
 
 Now, imagine we want to just return every other stop as the result from our query.
@@ -1467,7 +1476,7 @@ g.V().has('code','LAX').
       unfold().
       values('code').fold()
 
-[YYC,BWI,ZRH]
+[BER,KSU,BOS]
 ----
 
 [[exedge]]
@@ -1494,7 +1503,7 @@ If we were to run the query, we would get back something similar to this
 
 [source,groovy]
 ----
-e[4127][16-route->8]
+e[4266][16-route->8]
 ----
 
 So we found the 'route' edge that connects the vertex with an ID of 16 (MIA) with the
@@ -1590,9 +1599,11 @@ Here is what the query above returned when run on our laptop.
 [source,groovy]
 ----
 [AUS,LHR]
-[AUS,YYZ,LHR]
-[AUS,FRA,LHR]
-[AUS,MEX,LHR]
+[AUS,PHL,LHR]
+[AUS,PDX,LHR]
+[AUS,DTW,LHR]
+[AUS,CLT,LHR]
+[AUS,NAS,LHR]
 ----
 
 If we give the query another 10 milliseconds to run, so 20 in total, you can see that
@@ -1605,11 +1616,17 @@ g.V().has('airport','code','AUS').
       repeat(timeLimit(20).out()).until(has('code','LHR')).path().by('code')
 
 [AUS,LHR]
-[AUS,YYZ,LHR]
-[AUS,FRA,LHR]
-[AUS,MEX,LHR]
+[AUS,PHL,LHR]
 [AUS,PDX,LHR]
+[AUS,DTW,LHR]
 [AUS,CLT,LHR]
+[AUS,NAS,LHR]
+[AUS,CHS,LHR]
+[AUS,ATL,LHR]
+[AUS,BNA,LHR]
+[AUS,BOS,LHR]
+[AUS,BWI,LHR]
+[AUS,DFW,LHR]
 ----
 
 [[retrrange]]
@@ -1664,8 +1681,8 @@ higher ID values.
 ----
 g.V().hasLabel('country').range(0,2)
 
-v[3376]
-v[3377]
+v[3505]
+v[3506]
 ----
 
 NOTE: There is no guarantee as to which airport vertices will be selected as this
@@ -1691,7 +1708,8 @@ Here is the output you might get from running either query.
 
 [source,groovy]
 ----
-[v[39],v[186],v[273],v[278],v[289],v[314],v[356],v[357],v[358],v[361],v[368],v[370],v[390],v[394],v[404],v[405],v[423],v[426],v[428],v[1118],v[3313]]
+[v[39],v[186],v[273],v[278],v[289],v[314],v[356],v[357],v[358],v[361],v[368],
+ v[370],v[390],v[394],v[404],v[405],v[423],v[426],v[428],v[1118],v[3313],v[3416]]
 ----
 
 To prove that the 'skip' and 'range' steps used above worked again, we can run the
@@ -1703,7 +1721,9 @@ queries.
 ----
 g.V().has('region','US-TX').fold()
 
-[v[3],v[8],v[11],v[33],v[38],v[39],v[186],v[273],v[278],v[289],v[314],v[356],v[357],v[358],v[361],v[368],v[370],v[390],v[394],v[404],v[405],v[423],v[426],v[428],v[1118],v[3313]]
+[v[3],v[8],v[11],v[33],v[38],v[39],v[186],v[273],v[278],v[289],v[314],v[356],v[357],
+ v[358],v[361],v[368],v[370],v[390],v[394],v[404],v[405],v[423],v[426],v[428],
+ v[1118],v[3313],v[3416]]
 ----
 
 You can also use the 'local' keyword to have 'skip' work on an incoming collection
@@ -1714,7 +1734,9 @@ generated by the 'fold' step.
 ----
 g.V().has('region','US-TX').fold().skip(local,3)
 
-[v[33],v[38],v[39],v[186],v[273],v[278],v[289],v[314],v[356],v[357],v[358],v[361],v[368],v[370],v[390],v[394],v[404],v[405],v[423],v[426],v[428],v[1118],v[3313]]
+[v[33],v[38],v[39],v[186],v[273],v[278],v[289],v[314],v[356],v[357],v[358],v[361],
+ v[368],v[370],v[390],v[394],v[404],v[405],v[423],v[426],v[428],v[1118],v[3313],
+ v[3416]]
 ----
 
 There are many other ways to specify a range of values using Gremlin. You will find
@@ -2041,7 +2063,7 @@ represents a route and has a distance ('dist') property with a value of 1357 mil
 ----
 g.E(5161).valueMap(true)
 
-[id:5161,dist:1357,label:route]
+[id:5161,label:route,dist:4663]
 ----
 
 There are other ways to control the results that a 'valueMap' step return using
@@ -2062,13 +2084,13 @@ g.V().has('code','SFO').valueMap().with(WithOptions.tokens).unfold()
 id=23
 label=airport
 country=[US]
-code=[SFO]
 longest=[11870]
+code=[SFO]
 city=[San Francisco]
-elev=[13]
-icao=[KSFO]
 lon=[-122.375]
 type=[airport]
+elev=[13]
+icao=[KSFO]
 region=[US-CA]
 runways=[4]
 lat=[37.6189994812012]
@@ -2201,7 +2223,7 @@ information about the incoming and outgoing vertices is also returned.
 ----
 g.V(3).outE().limit(1).elementMap()
 
-[id:5161,label:route,IN:[id:47,label:airport],OUT:[id:3,label:airport],dist:1357]
+[id:3840,label:route,IN:[id:45,label:airport],OUT:[id:3,label:airport],dist:1430]
 ----
 
 A similar result could be generated using 'valueMap' as shown below but it is
@@ -2214,7 +2236,7 @@ g.E(5161).project('v','IN','OUT').
             by(inV().union(id(),label()).fold()).
             by(outV().union(id(),label()).fold())
 
-[v:[id:5161,label:route,dist:1357],IN:[47,airport],OUT:[3,airport]]
+[v:[id:5161,label:route,dist:4663],IN:[132,airport],OUT:[1,airport]]
 ----
 
 To make the output look even closer to the results returned by 'elementMap'
@@ -2238,9 +2260,9 @@ query just to make the results a little easier to read.
 
 [source,groovy]
 ----
-v={id=5161, label=route, dist=1357}
-IN={id=47, label=airport}
-OUT={id=3, label=airport}
+v={id=5161, label=route, dist=4663}
+IN={id=132, label=airport}
+OUT={id=1, label=airport}
 ----
 
 [[var]]
@@ -2331,7 +2353,7 @@ line.
 listr = g.V().has('airport','region','US-TX').
               values('runways').toList().join(',')
 
-2,7,5,3,4,3,3,3,3,4,2,3,2,3,2,2,3,2,1,3,2,3,4,3,4,2
+2,7,5,3,4,3,3,3,3,4,2,3,2,3,2,2,3,2,1,3,2,3,4,3,4,2,1
 ----
 
 Now let's create a set and observe the different result we get back.
@@ -2393,7 +2415,8 @@ First of all we can check that the 'bulkSet' does indeed contain all the values.
 [source,groovy]
 ----
 setb= g.V().has('airport','region','US-TX').values('runways').toBulkSet().join(',')
-2,2,2,2,2,2,2,2,7,5,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,1
+
+2,2,2,2,2,2,2,2,7,5,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,1,1
 ----
 
 A 'bulkSet' offers some additional methods that we can call. One of these is
@@ -2409,7 +2432,7 @@ setb.uniqueSize()
 
 // How many total values are present?
 setb.size()
-26
+27
 ----
 
 The 'asBulk' method returns a map of key/value pairs where the key is the number and
@@ -2424,7 +2447,7 @@ setb.asBulk()
 5=1
 3=11
 4=4
-1=1
+1=2
 ----
 
 There is another way to store the results of a query into a collection. This is
@@ -2439,7 +2462,7 @@ a = []
 g.V().has('airport','region','US-TX').values('runways').fill(a)
 
 a.size()
-26
+27
 
 a[1,3]
 7
@@ -2592,11 +2615,11 @@ from airports.
 ----
 g.V(3).out().limit(5).path().by(outE().count())
 
-[59,181]
-[59,191]
-[59,272]
-[59,105]
-[59,54]
+[98,147]
+[98,80]
+[98,145]
+[98,33]
+[98,23]
 ----
 
 We often see anonymous traversals used with 'by' but they can actually be used as an
@@ -2753,7 +2776,6 @@ vertex at the time you create it. How that can be done is explained in the
 Every property in the graph also has an ID as we shall explore in the "<<propid>>"
 section a bit later on.
 
-
 [[lab]]
 === Working with labels
 
@@ -2865,7 +2887,7 @@ query that we would write might look like the one below.
 ----
 g.V().hasLabel('airport').out('route').count().mean()
 
-43400.0
+50637.0
 ----
 
 As you can see the answer we got back, '43400.0' looks wrong, and indeed it is. That
@@ -2886,7 +2908,7 @@ Take a look at the modified query below.
 // Average number of outgoing routes from an airport.
 g.V().hasLabel('airport').local(out('route').count()).mean()
 
-12.863070539419088
+14.451198630136986
 ----
 
 The result this time is a much more believable answer. Notice how this time we placed
@@ -2898,16 +2920,16 @@ query runs. We truncated the output to just show a few lines.
 ----
 g.V().hasLabel('airport').local(out('route').count()).limit(10)
 
-232
-38
-59
-55
-129
-87
-93
-220
-141
-135
+242
+41
+98
+75
+143
+91
+96
+253
+158
+158
 ----
 
 What this shows is that for the first ten airports the collection that we are
@@ -2932,7 +2954,9 @@ Here are the results from running the query.
 
 [source,groovy]
 ----
-[ABZ,Aberdeen,BEB,Balivanich,BRR,Eoligarry,CAL,Campbeltown,DND,Dundee,EDI,Edinburgh,EOI,Eday,FIE,Fair Isle,FOA,Foula,GLA,Glasgow,ILY,Port Ellen,INV,Inverness,KOI,Orkney Islands,LSI,Lerwick,LWK,Lerwick,NDY,Sanday,NRL,North Ronaldsay,PIK,Glasgow,PPW,Papa Westray,PSV,Papa Stour Island,SOY,Stronsay,SYY,Stornoway,TRE,Balemartine,WIC,Wick,WRY,Westray]
+[ABZ,Aberdeen,BEB,Balivanich,BRR,Eoligarry,CAL,Campbeltown,DND,Dundee,EDI,Edinburgh,EOI,Eday,FIE,Fair Isle,FOA,Foula,
+ GLA,Glasgow,ILY,Port Ellen,INV,Inverness,KOI,Orkney Islands,LSI,Lerwick,LWK,Lerwick,NDY,Sanday,NRL,North Ronaldsay,
+ PIK,Glasgow,PPW,Papa Westray,PSV,Papa Stour Island,SOY,Stronsay,SYY,Stornoway,TRE,Balemartine,WIC,Wick,WRY,Westray]
 ----
 
 However, it would be more convenient perhaps to have the results be returned as a
@@ -2944,7 +2968,6 @@ half of the query inside of a 'local' step as shown below.
 ----
 g.V().has('region','GB-SCT').order().by('code').
       local(values('code','city').fold())
-
 ----
 
 Here are the results of running the modified query. We have arranged the results in
@@ -2952,26 +2975,37 @@ two columns to aid readability.
 
 [source,groovy]
 ----
-[ABZ,Aberdeen]          [LSI,Lerwick]
-[BEB,Balivanich]        [LWK,Lerwick]
-[BRR,Eoligarry]         [NDY,Sanday]
-[CAL,Campbeltown]       [NRL,North Ronaldsay]
-[DND,Dundee]            [PIK,Glasgow]
-[EDI,Edinburgh]         [PPW,Papa Westray]
-[EOI,Eday]              [PSV,Papa Stour Island]
-[FIE,Fair Isle]         [SOY,Stronsay]
-[FOA,Foula]             [SYY,Stornoway]
-[GLA,Glasgow]           [TRE,Balemartine]
-[ILY,Port Ellen]        [WIC,Wick]
-[INV,Inverness]         [WRY,Westray]
+[ABZ,Aberdeen]
+[BEB,Balivanich]
+[BRR,Eoligarry]
+[CAL,Campbeltown]
+[DND,Dundee]
+[EDI,Edinburgh]
+[EOI,Eday]
+[FIE,Fair Isle]
+[FOA,Foula]
+[GLA,Glasgow]
+[ILY,Port Ellen]
+[INV,Inverness]
 [KOI,Orkney Islands]
+[LSI,Lerwick]
+[LWK,Lerwick]
+[NDY,Sanday]
+[NRL,North Ronaldsay]
+[PIK,Glasgow]
+[PPW,Papa Westray]
+[PSV,Papa Stour Island]
+[SOY,Stronsay]
+[SYY,Stornoway]
+[TRE,Balemartine]
+[WIC,Wick]
+[WRY,Westray]
 ----
 
 There are many other ways that 'local' can be used. You will find examples of those
 throughout the book. You will see some that show how local can be used as a parameter
 to the 'order' step when we dig deeper into route analysis in the "<<meanmode>>"
 section.
-
 
 [[st]]
 === Basic statistical and numerical operations
@@ -3002,12 +3036,12 @@ section. The results of running each query are also shown in the examples below.
 // How many routes are there from Austin?
 g.V().has("airport","code","AUS").out().count()
 
-59
+98
 
 // Sum of values - total runways of all airports
 g.V().hasLabel('airport').values('runways').sum()
 
-4828
+4980
 ----
 
 The 'mean' step allows us to find the mean (average) value in a data set.
@@ -3017,17 +3051,17 @@ The 'mean' step allows us to find the mean (average) value in a data set.
 // Statistical mean (average) value - average number of runways per airport
 g.V().hasLabel('airport').values('runways').mean()
 
-1.4309425014819206
+1.4212328767123288
 
 // Average length of the longest runway across all airports
 g.V().hasLabel('airport').values('longest').mean()
 
-7570.862477771191
+7544.5559360730595
 
 // Average number of routes to and from an airport
 g.V().hasLabel('airport').local(both('route').count()).mean()
 
-25.726141078838175
+28.902397260273972
 ----
 
 The following queries find maximum and minimum values using the 'max' and 'min'
@@ -3043,7 +3077,7 @@ g.V().hasLabel('airport').values('longest').max()
 // What is the biggest number of outgoing routes any airport has?
 g.V().hasLabel('airport').local(out('route').count()).max()
 
-272
+310
 
 //minimum value - shortest runway
 g.V().hasLabel('airport').values('longest').min()
@@ -3204,7 +3238,7 @@ MI0
 L0X
 ----
 
-We can use the 'replace' step to help demostrate the steps that remove whitespace.
+We can use the 'replace' step to help demonstrate the steps that remove whitespace.
 The following examples use 'inject' to start the traversal with some strings that 
 include whitespace before and after a character. We will use the various 'trim' steps
 to remove the whitespace and then 'replace' any that is left over to see which bit of
@@ -3396,7 +3430,7 @@ for all airports in the "US-TX" region collected:
 ----
 g.V().has('airport','region','US-TX').values('runways').fold()
 
-2,7,3,3,4,4,2,3,2,3,5,2,2,3,3,4,3,2,1,3,2,3,4,3,2,3]
+[2,7,5,3,4,3,3,3,3,4,2,3,2,3,2,2,3,2,1,3,2,3,4,3,4,2,1]
 ----
 
 If you were only interested in this result if the 'List' had a value of "4" in it, 
@@ -3406,25 +3440,25 @@ you could use 'any' and the 'P.eq' predicate:
 ----
 g.V().has('airport','region','US-TX').values('runways').fold().any(eq(4))
 
-2,7,3,3,4,4,2,3,2,3,5,2,2,3,3,4,3,2,1,3,2,3,4,3,2,3]
+[2,7,5,3,4,3,3,3,3,4,2,3,2,3,2,2,3,2,1,3,2,3,4,3,4,2,1]
 ----
 
-Similarly, if you only wanted the 'List' if all the values were greater than 5, then
+Similarly, if you only wanted the 'List' if all the values were greater than 7, then
 you could use 'all':
 
 [source,groovy]
 ----
-g.V().has('airport','region','US-TX').values('runways').fold().any(gt(5))
+g.V().has('airport','region','US-TX').values('runways').fold().any(gt(7))
 
 // no results
 ----
 
 As the final complement to the 'all' and 'any' steps, 'none' can be used in cases 
-where you only wanted the 'List' if none of its values were greater than 5:
+where you only wanted the 'List' if none of its values were greater than 6:
 
 [source,groovy]
 ----
-g.V().has('airport','region','US-TX').values('runways').fold().none(gt(5))
+g.V().has('airport','region','US-TX').values('runways').fold().none(gt(6))
 
 // no results
 ----
@@ -3437,7 +3471,7 @@ a simple example of this step demonstrated as follows where we combine the incom
 ----
 g.V().has('airport','region','US-TX').values('runways').fold().combine([100])
 
-2,7,3,3,4,4,2,3,2,3,5,2,2,3,3,4,3,2,1,3,2,3,4,3,2,3,100]
+[2,7,5,3,4,3,3,3,3,4,2,3,2,3,2,2,3,2,1,3,2,3,4,3,4,2,1,100]
 ----
 
 A more advanced and likely useful form of 'combine' though is to supply a traversal
@@ -3457,9 +3491,9 @@ g.V().has('airport','region',within('US-VA')).
   out('route').limit(3).
   map(values('runways').fold().combine(select('v')))
   
-[4,1,1,2,2,2,2,3,4]
-[4,1,1,2,2,2,2,3,4]
-[3,1,1,2,2,2,2,3,4]  
+[1,4,2,2,2,2,3,1,1]
+[3,4,2,2,2,2,3,1,1]
+[2,4,2,2,2,2,3,1,1]
 ----
 
 While we won't visit this form for all the 'List' steps we look at, you will notice 
@@ -3480,14 +3514,14 @@ g.V().has('airport','region','US-VA').
   valueMap('code','longest','city').by(unfold()).
   map(select(values).conjoin('\t'))
   
-SHD	6002	Staunton/Waynesboro/Harrisonburg
-ORF	9001	Norfolk
-RIC	9003	Richmond
-IAD	11500	Washington D.C.
-ROA	6800	Roanoke
-CHO	6001	Charlottesville
-PHF	8003	Newport News
-LYH	5799	Lynchburg
+11500   IAD     Washington D.C.
+9001    ORF     Norfolk
+9003    RIC     Richmond
+6800    ROA     Roanoke
+6001    CHO     Charlottesville
+8003    PHF     Newport News
+6002    SHD     Staunton/Waynesboro/Harrisonburg
+5799    LYH     Lynchburg
 ----
 
 Gremlin also allows you to perform basic operations on sets with 'difference', 
@@ -3500,17 +3534,17 @@ steps. The output will be a 'Set'.
 ----
 g.V().has('airport','region','US-VA').values('code').fold()
 
-[SHD,ORF,RIC,IAD,ROA,CHO,PHF,LYH]
+[IAD,ORF,RIC,ROA,CHO,PHF,SHD,LYH]
   
 g.V().has('airport','region','US-VA').values('code').fold().
   difference(['SHD', 'MIA'])
   
-[ORF,ROA,LYH,CHO,RIC,IAD,PHF] 
+[ORF,ROA,LYH,CHO,IAD,RIC,PHF]
 
 g.V().has('airport','region','US-VA').values('code').fold().
   disjunct(['SHD', 'MIA'])
   
-[ORF,MIA,ROA,LYH,CHO,RIC,IAD,PHF]
+[ORF,MIA,ROA,LYH,CHO,IAD,RIC,PHF]
 
 g.V().has('airport','region','US-VA').values('code').fold().
   intersect(['SHD', 'MIA']) 
@@ -3520,8 +3554,9 @@ g.V().has('airport','region','US-VA').values('code').fold().
 g.V().has('airport','region','US-VA').values('code').fold().
   product(['SHD', 'MIA'])   
 
-[[SHD,SHD],[SHD,MIA],[ORF,SHD],[ORF,MIA],[RIC,SHD],[RIC,MIA],[IAD,SHD],[IAD,MIA],
- [ROA,SHD],[ROA,MIA],[CHO,SHD],[CHO,MIA],[PHF,SHD],[PHF,MIA],[LYH,SHD],[LYH,MIA]]
+[[IAD,SHD],[IAD,MIA],[ORF,SHD],[ORF,MIA],[RIC,SHD],[RIC,MIA],[ROA,SHD],[ROA,MIA],
+ [CHO,SHD],[CHO,MIA],[PHF,SHD],[PHF,MIA],[SHD,SHD],[SHD,MIA],[LYH,SHD],[LYH,MIA]]
+
 ----
 
 We should not overlook the fact that these steps can also take a traversal as an 
@@ -3535,7 +3570,7 @@ g.V().has('airport','region','US-VA').aggregate('x').by('code').
   out('route').values('code').fold().
   intersect(select('x'))
   
-[ORF,ROA,CHO,RIC,IAD,SHD]
+[ORF,ROA,CHO,IAD,RIC,SHD]
 ----
 
 The 'reverse' step reverses the order of an incoming object. While its typical use
@@ -3545,11 +3580,11 @@ would be for a list, it could also be used on a string.
 ----
 g.V().has('airport','region','US-VA').values('code').fold()
 
-[SHD,ORF,RIC,IAD,ROA,CHO,PHF,LYH]
+[IAD,ORF,RIC,ROA,CHO,PHF,SHD,LYH]
 
 g.V().has('airport','region','US-VA').values('code').fold().reverse()
 
-[LYH,PHF,CHO,ROA,IAD,RIC,ORF,SHD]
+[LYH,SHD,PHF,CHO,ROA,RIC,ORF,IAD]
 ----
 
 When you need to merge two collections together you can use 'merge' step which works 
@@ -3560,17 +3595,17 @@ duplicates.
 ----
 g.V().has('airport','region','US-VA').values('code').fold().merge(['MIA','IAD'])
 
-[ORF,MIA,ROA,LYH,CHO,RIC,IAD,SHD,PHF]
+[ORF,MIA,ROA,LYH,CHO,IAD,RIC,SHD,PHF]
 
 g.V().has('airport','region','US-VA').valueMap('code').merge([x: 10])
 
-[x:10,code:[SHD]]
+[x:10,code:[IAD]]
 [x:10,code:[ORF]]
 [x:10,code:[RIC]]
-[x:10,code:[IAD]]
 [x:10,code:[ROA]]
 [x:10,code:[CHO]]
 [x:10,code:[PHF]]
+[x:10,code:[SHD]]
 [x:10,code:[LYH]]
 ----
 
@@ -3583,7 +3618,7 @@ g.V().has('airport','region','US-VA').aggregate('x').by('code').
   out('route').limit(5).values('code').fold().
   merge(select('x'))
   
-[ORF,DCA,DFW,PHL,ROA,CLT,LYH,CHO,IAD,RIC,SHD,PHF]  
+[AOO,ORF,ROA,BGM,CHO,IAD,RIC,SHD,BKW,PHF,PBG,LYH,YTZ]
 ----
 
 In the prior example, we gather the airport codes in "x" and then traverse 'out' 
@@ -3611,13 +3646,13 @@ g.V().has('airport','region','US-VA').valueMap('code','country').select(keys)
 
 g.V().has('airport','region','US-VA').valueMap('code','country').select(values)
 
-[[US],[SHD]]
+[[US],[IAD]]
 [[US],[ORF]]
 [[US],[RIC]]
-[[US],[IAD]]
 [[US],[ROA]]
 [[US],[CHO]]
 [[US],[PHF]]
+[[US],[SHD]]
 [[US],[LYH]]
 ----
 
@@ -3627,13 +3662,13 @@ You can also use it to select individual values by their key:
 ----
 g.V().has('airport','region','US-VA').valueMap('code','country').select('code')
 
-[SHD]
+[IAD]
 [ORF]
 [RIC]
-[IAD]
 [ROA]
 [CHO]
 [PHF]
+[SHD]
 [LYH]
 ----
 
@@ -3719,11 +3754,11 @@ two options you would need to use the 'asDate' step to convert them to date type
 ----
 g.inject(1690934400000).asDate()
 
-Tue Aug 01 20:00:00 EDT 2023
+2023-08-02T00:00Z
 
 g.inject("2023-08-02T00:00:00Z").asDate()
 
-Tue Aug 01 20:00:00 EDT 2023
+2023-08-02T00:00Z
 ----
 
 To construct a date in Gremlin, you can use the 'datetime' function, which takes an
@@ -3733,7 +3768,7 @@ IOS-8601 formatted string as an argument:
 ----
 g.inject(datetime("2023-08-02T00:00:00Z"))
 
-Tue Aug 01 20:00:00 EDT 2023
+2023-08-02T00:00Z
 ----
 
 There are two date manipulation steps in Gremlin, 'dateAdd' and 'dateDiff'. The 
@@ -3744,7 +3779,7 @@ following example we add 1 week to the given date.
 ----
 g.inject("2023-08-02T00:00:00Z").asDate().dateAdd(DT.day, 7)
 
-Wed Aug 23 20:00:00 EDT 2023
+2023-08-09T00:00Z
 ----
 
 By supplying a negative number of units, we can effect a subtraction operation as 
@@ -3754,7 +3789,7 @@ shown in the next example.
 ----
 g.inject("2023-08-02T00:00:00Z").asDate().dateAdd(DT.day, -7)
 
-Tue Jul 25 20:00:00 EDT 2023
+2023-07-26T00:00Z
 ----
 
 The 'DT' enum allows units of time for 'second', 'minute', 'hour', and 'day'.
@@ -3769,7 +3804,7 @@ dates in epoch time.
 g.inject("2023-08-02T00:00:00Z").asDate().
   dateDiff(constant("2023-08-03T00:00:00Z").asDate())
 
--86400
+-86400000
 ----
 
 [[tranges]]
@@ -3824,7 +3859,9 @@ Here is the output that we might get from running the query.
 
 [source,groovy]
 ----
-[ATL,5,BOS,6,DFW,7,IAH,5,ORD,8,DEN,6,DTW,6,YYZ,5,AMS,6,SNN,5,MKE,5,MDW,5,GIS,5,HLZ,5,NPE,5,NSN,5,PPQ,5,TRG,5,UFA,5,KRP,5]
+[ATL,5,BOS,6,DFW,7,IAH,5,ORD,7,DEN,6,DTW,6,YYZ,5,
+ AMS,6,SNN,5,MKE,5,MDW,5,GIS,5,HLZ,5,NPE,5,NSN,5,
+ PPQ,5,TRG,5,UFA,5,KRP,5]
 ----
 
 The next three queries show examples of 'lt', 'eq' and 'neq' being used.
@@ -3900,7 +3937,9 @@ Here is the result of running the query.
 
 [source,groovy]
 ----
-[ATL,5,BOS,6,DFW,7,IAH,5,DEN,6,DTW,6,YYZ,5,AMS,6,SNN,5,MKE,5,MDW,5,GIS,5,HLZ,5,NPE,5,NSN,5,PPQ,5,TRG,5,UFA,5,KRP,5]
+[ATL,5,BOS,6,DFW,7,IAH,5,ORD,7,DEN,6,DTW,6,YYZ,5,
+ AMS,6,SNN,5,MKE,5,MDW,5,GIS,5,HLZ,5,NPE,5,NSN,5,
+ PPQ,5,TRG,5,UFA,5,KRP,5]
 ----
 
 As with many queries we may build, there are several ways to get the same answer.
@@ -3953,9 +3992,10 @@ but nothing goes via San Antonio.
 
 [source,groovy]
 ----
+[AUS,DAL,LAS]
 [AUS,DFW,LAS]
 [AUS,IAH,LAS]
-[AUS,DAL,LAS]
+[AUS,SAT,LAS]
 [AUS,HOU,LAS]
 ----
 
@@ -4068,7 +4108,6 @@ but avoids any routes that pass through a list of specified airports.
 g.V().has('airport','code','SAT').
       out().has('code',without('DFW','LAX','PHX','JFK')).
       out().has('code','SLC').path().by('code')
-
 ----
 
 In a similar way, 'within' allows us to specifically give a list of things that we
@@ -4087,8 +4126,9 @@ Here is what the query returns.
 
 [source,groovy]
 ----
-[SAT,LAX,SLC]
 [SAT,DFW,SLC]
+[SAT,LAX,SLC]
+[SAT,PHX,SLC]
 ----
 
 Here are two more examples that use 'without' and 'within' to find routes based on
@@ -4104,11 +4144,18 @@ Here is the output from running the query.
 
 [source,groovy]
 ----
+Cancun
+Puerto Vallarta
+Nassau
+Cozumel
+Guadalajara
+Liberia
+San José del Cabo
+London
 London
 Frankfurt
+Amsterdam
 Mexico City
-Cancun
-Guadalajara
 ----
 
 Here is a twist on the previous query that looks for destinations in Mexico or Canada
@@ -4124,10 +4171,15 @@ This is what we get back from our new query.
 
 [source,groovy]
 ----
-Toronto
-Mexico City
 Cancun
+Puerto Vallarta
+Cozumel
 Guadalajara
+San José del Cabo
+Toronto
+Vancouver
+Calgary
+Mexico City
 ----
 
 Returning to the earlier use of 'neq', it is worth considering a subtlety of its
@@ -4139,11 +4191,11 @@ count and a count of the number of vertices that have a city property.
 ----
 g.V().count()
 
-3747
+3749
 
 g.V().has('city').count()
 
-3502
+3504
 ----
 
 Recall that 'not' is both a step and a predicate. When used as a predicate from 'P', 
@@ -4154,25 +4206,24 @@ simply becomes 'neq' as shown below.
 ----
 g.V().has('city',neq('I-do-not-exist')).count()
 
-3502
+3504
 
 g.V().has('city',P.not(neq('I-do-not-exist'))).count()
 
-3502
+0
 ----
 
-Note that there are 3502 results which means that with these forms, the city property
-must exist for the equality to be tested. We'll next see that this is not the case 
-if we try to negate with the 'not' step.
+The city property must exist for the equality to be tested. We'll next see that this
+is not the case if we try to negate with the 'not' step.
 
 [source,groovy]
 ----
 g.V().not(has('city',eq('I-do-not-exist'))).count()
 
-3747
+3749
 ----
 
-Using 'not' step in the fashion demonstrates all 3747 vertices do not have a city
+Using 'not' step in the fashion demonstrates all 3749 vertices do not have a city
 property with the name "i-do-not-exist". The difference here is that with 'not' step
 negates the entirety of what 'has' is doing, accounting for a false if the city is
 not present at all or a false where the 'eq' is not satisfied. The predicate for of
@@ -4285,17 +4336,17 @@ additional Groovy classes and methods with Gremlin are provided in the "<<grv>>"
 // How many airports are there?
 numAirports = g.V().hasLabel('airport').count().next()
 
-3374
+3504
 
 // Pick a random airport ID
 x=Math.round(numAirports*Math.random()) as Integer
 
-2359
+1968
 
 // Get the code for our randomly selected airport
 g.V(x).values('code')
 
-PHO
+BSG
 ----
 
 This simple experiment shows that the numbers being generated using the 'Math.random'
@@ -4306,16 +4357,16 @@ airports.
 ----
 (1..10).each { println Math.round(numAirports*Math.random()) as Integer}
 
-1514
-18
-3087
-1292
-3062
-2772
-2401
-400
-2084
-3028
+435
+285
+2189
+3459
+1355
+624
+3437
+1656
+1620
+1896
 ----
 
 Note that this approach only works unmodified with the 'air-routes' graph loaded into a
@@ -4339,21 +4390,21 @@ doing something like this if we wanted to use our 'Math.random' technique.
 ----
 airports = g.V().hasLabel('airport').id().toList()
 
-numAirports = airports.size
+numAirports = airports.size()
 
-3374
+3504
 
 x=Math.round(numAirports*Math.random()) as Integer
 
-859
+1754
 
 g.V(airports[x-1])
 
-v[859]
+v[1757]
 
 g.V(airports[x-1]).values('code')
 
-OSR
+JTY
 ----
 
 [[textpredicates]]
@@ -4426,6 +4477,7 @@ Xichang
 Xingyi
 Xinyuan
 Xigaze
+Xinyang
 ----
 
 The example below looks for any cities with names starting with "Dal". A 'dedup' step
@@ -4445,7 +4497,7 @@ characters "Dal" as expected.
 
 [source,groovy]
 ----
-[Dalat, Dallas, Dalcahue, Dalaman, Dalian, Dalanzadgad]
+[Dallas,Dalaman,Dalian,Dalcahue,Dalat,Dalanzadgad]
 ----
 
 As we mentioned, all of the text predicates are case sensitive. If we were
@@ -4556,7 +4608,7 @@ g.V().hasLabel('airport').
       has('city',notStartingWith('Dal')).
       count()
 
-3367
+3497
 ----
 
 The example above returns the same results we would get if we were to negate a
@@ -4568,7 +4620,7 @@ g.V().hasLabel('airport').
       not(has('city',startingWith('Dal'))).
       count()
 
-3367
+3497
 ----
 
 [[notEndingWith]]
@@ -4582,7 +4634,7 @@ g.V().hasLabel('airport').
       has('city',notEndingWith('zhi')).
       count()
 
-3373
+3503
 ----
 
 [[notContaining]]
@@ -4597,7 +4649,7 @@ g.V().hasLabel('airport').
       has('city',notContaining('berg')).
       count()
 
-3370
+3500
 ----
 
 Let's now do something a little more interesting. The query below chains together a
@@ -4624,6 +4676,7 @@ is an uppercase "O" and as such is allowed by the constraints that we specified.
 
 [source,groovy]
 ----
+Brønnøy
 Osh
 Kyzyl
 ----
@@ -4633,7 +4686,6 @@ Kyzyl
 
 The 'notRegex' predicate is mostly present for Gremlin language symmetry as regular 
 expressions can naturally express negations itself. 
-
 
 [source,groovy]
 ----
@@ -4671,7 +4723,7 @@ As above, but this time perform the 'limit' step after the 'order' step.
 // Sort all of the airports in the graph by their code and then return the first 20
 g.V().hasLabel('airport').order().by('code').limit(20).values('code').fold()
 
-[AAE,AAL,AAN,AAQ,AAR,AAT,AAX,AAY,ABA,ABB,ABD,ABE,ABI,ABJ,ABL,ABM,ABQ,ABR,ABS,ABT]
+[AAA,AAE,AAL,AAN,AAQ,AAR,AAT,AAX,AAY,ABA,ABB,ABD,ABE,ABI,ABJ,ABL,ABM,ABQ,ABR,ABS]
 ----
 
 Here is a similar example to the previous two. We find all of the places you can fly
@@ -4688,7 +4740,17 @@ Here are the results from running the query.
 
 [source,groovy]
 ----
-[ABQ,KABQ,ATL,KATL,BKG,KBBG,BNA,KBNA,BOS,KBOS,BWI,KBWI,CLE,KCLE,CLT,KCLT,CUN,MMUN,CVG,KCVG,DAL,KDAL,DCA,KDCA,DEN,KDEN,DFW,KDFW,DTW,KDTW,ELP,KELP,EWR,KEWR,FLL,KFLL,FRA,EDDF,GDL,MMGL,HOU,KHOU,HRL,KHRL,IAD,KIAD,IAH,KIAH,IND,KIND,JFK,KJFK,LAS,KLAS,LAX,KLAX,LBB,KLBB,LGB,KLGB,LHR,EGLL,MCI,KMCI,MCO,KMCO,MDW,KMDW,MEM,KMEM,MEX,MMMX,MIA,KMIA,MSP,KMSP,MSY,KMSY,OAK,KOAK,ORD,KORD,PDX,KPDX,PHL,KPHL,PHX,KPHX,PIE,KPIE,PIT,KPIT,PNS,KPNS,RDU,KRDU,SAN,KSAN,SEA,KSEA,SFB,KSFB,SFO,KSFO,SJC,KSJC,SLC,KSLC,SNA,KSNA,STL,KSTL,TPA,KTPA,VPS,KVPS,YYZ,CYYZ]
+[ABQ,KABQ,AMA,KAMA,AMS,EHAM,ASE,KASE,ATL,KATL,BHM,KBHM,BKG,KBBG,BNA,KBNA,BOI,KBOI,
+ BOS,KBOS,BTR,KBTR,BUF,KBUF,BUR,KBUR,BWI,KBWI,BZN,KBZN,CHS,KCHS,CLE,KCLE,CLT,KCLT,
+ CMH,KCMH,CUN,MMUN,CVG,KCVG,CZM,MMCZ,DAL,KDAL,DCA,KDCA,DEN,KDEN,DFW,KDFW,DSM,KDSM,
+ DTW,KDTW,ECP,KECP,ELP,KELP,EWR,KEWR,FLL,KFLL,FRA,EDDF,GDL,MMGL,GRR,KGRR,HDN,KHDN,
+ HNL,PHNL,HOU,KHOU,HRL,KHRL,IAD,KIAD,IAH,KIAH,IND,KIND,JAX,KJAX,JFK,KJFK,LAS,KLAS,
+ LAX,KLAX,LBB,KLBB,LGB,KLGB,LGW,EGKK,LHR,EGLL,LIR,MRLB,LIT,KLIT,MCI,KMCI,MCO,KMCO,
+ MDW,KMDW,MEM,KMEM,MEX,MMMX,MIA,KMIA,MKE,KMKE,MSP,KMSP,MSY,KMSY,NAS,MYNN,OAK,KOAK,
+ OKC,KOKC,OMA,KOMA,ONT,KONT,ORD,KORD,PDX,KPDX,PHL,KPHL,PHX,KPHX,PIE,KPIE,PIT,KPIT,
+ PNS,KPNS,PVD,KPVD,PVR,MMPR,RDU,KRDU,RNO,KRNO,SAN,KSAN,SAT,KSAT,SDF,KSDF,SEA,KSEA,
+ SFB,KSFB,SFO,KSFO,SJC,KSJC,SJD,MMSD,SLC,KSLC,SMF,KSMF,SNA,KSNA,STL,KSTL,TPA,KTPA,
+ TUL,KTUL,TUS,KTUS,TYS,KTYS,VPS,KVPS,XNA,KXNA,YVR,CYVR,YYC,CYYC,YYZ,CYYZ]
 ----
 
 By default a sort performed using 'order' returns results in ascending order. To
@@ -4711,7 +4773,7 @@ example below and the output it produces.
 ----
 g.V().hasLabel('airport').limit(20).values('code').order().by(shuffle).fold()
 
-[MCO,LGA,BWI,IAD,ATL,BOS,DCA,BNA,IAH,DFW,MIA,MSP,ANC,AUS,JFK,ORD,PBI,FLL,LAX,PHX]
+[BWI,MSP,PHX,DCA,IAH,LAX,DFW,BNA,BOS,MCO,ORD,LGA,AUS,PBI,MIA,FLL,ATL,JFK,IAD,ANC]
 ----
 
 It is important to call attention to the use of 'by' modulators with 'order' as they
@@ -4756,7 +4818,8 @@ g.V().has('code','AUS').
   order().by('code').
   values('code','icao').fold()
   
-[ATL,KATL,BOS,KBOS,DEN,KDEN,DFW,KDFW,DTW,KDTW,IAH,KIAH,MDW,KMDW,ORD,KORD,YYZ,CYYZ]  
+[AMS,EHAM,ATL,KATL,BOS,KBOS,DEN,KDEN,DFW,KDFW,DTW,
+ KDTW,IAH,KIAH,MDW,KMDW,MKE,KMKE,ORD,KORD,YYZ,CYYZ]
 ----
 
 Below is an example where we combine the field we want to sort by 'longest'
@@ -4774,11 +4837,16 @@ into two columns.
 
 [source,groovy]
 ----
-[code:[BPX],longest:[18045]]    [code:[DOH],longest:[15912]]
-[code:[RKZ],longest:[16404]]    [code:[GOQ],longest:[15748]]
-[code:[ULY],longest:[16404]]    [code:[HRE],longest:[15502]]
-[code:[UTN],longest:[16076]]    [code:[FIH],longest:[15420]]
-[code:[DEN],longest:[16000]]    [code:[ZIA],longest:[15092]]
+[code:[BPX],longest:[18045]]
+[code:[RKZ],longest:[16404]]
+[code:[ULY],longest:[16404]]
+[code:[UTN],longest:[16076]]
+[code:[DEN],longest:[16000]]
+[code:[DOH],longest:[15912]]
+[code:[GOQ],longest:[15748]]
+[code:[HRE],longest:[15502]]
+[code:[FIH],longest:[15420]]
+[code:[ZIA],longest:[15092]]
 ----
 
 Let's look at another way we could have coded the query we used earlier to find the 
@@ -4811,7 +4879,7 @@ above sea level. Aircraft need a lot more runway to operate safely at that altit
 
 [source,groovy]
 ----
-[country:[CN], code:[BPX], longest:[18045], city:[Bangda], elev:[14219], icao:[ZUBD], lon:[97.1082992553711], type:[airport], region:[CN-54], runways:[1], lat:[30.5536003112793], desc:[Qamdo Bangda Airport]]
+[country:[CN],longest:[18045],code:[BPX],city:[Bangda],lon:[97.1082992553711],type:[airport],elev:[14219],icao:[ZUBD],region:[CN-54],runways:[1],lat:[30.5536003112793],desc:[Qamdo Bangda Airport]]
 ----
 
 [[sortkeyvalue]]
@@ -4964,7 +5032,7 @@ g.V().hasLabel('airport').
       where(out().count().is(lt(100).and(gt(94)))).
       group().by('code').by(out().count())
 
-[BUD:98,STR:95,NCE:97,AUH:97,WAW:98,CRL:95]
+[RIX:96,DCA:96,VCE:99,GRU:97,SFB:95,AUS:98,OPO:95]
 ----
 
 The query we just looked at could also be written as follows but in this case using
@@ -4977,7 +5045,7 @@ g.V().hasLabel('airport').where(and(out().count().is(lt(100)),
                 out().count().is(gt(94)))).
                 group().by('code').by(out().count())
 
-[BUD:98,STR:95,NCE:97,AUH:97,WAW:98,CRL:95]
+[RIX:96,DCA:96,VCE:99,GRU:97,SFB:95,AUS:98,OPO:95]
 ----
 
 As we have pointed out several times already, there are often many ways to write a
@@ -4991,18 +5059,17 @@ as the lower bound.
 g.V().hasLabel('airport').where(out().count().is(between(95,101))).
                           group().by('code').by(out().count())
 
-[BUD:98,STR:95,NCE:97,AUH:97,WAW:98,CRL:95]
+[RIX:96,BRS:100,DCA:96,KBP:100,VCE:99,GRU:97,AYT:100,SFB:95,AUS:98,OPO:95]
 ----
 
 Just for fun, here is the same query but rewritten to use an 'inside' step.
-
 
 [source,groovy]
 ----
 g.V().hasLabel('airport').where(out().count().is(inside(94,100))).
                           group().by('code').by(out().count())
 
-[BUD:98,STR:95,NCE:97,AUH:97,WAW:98,CRL:95]]
+[RIX:96,DCA:96,VCE:99,GRU:97,SFB:95,AUS:98,OPO:95]
 ----
 
 As a side note, if we wanted to reverse the grouping so that the airports were
@@ -5014,7 +5081,7 @@ g.V().hasLabel('airport').
       where(out().count().is(lt(100).and(gt(94)))).
       group().by(out().count()).by('code')
 
-[97:[NCE,AUH],98:[BUD,WAW],95:[STR,CRL]]
+[96:[DCA,RIX],97:[GRU],98:[AUS],99:[VCE],95:[OPO,SFB]]
 ----
 
 You can also add additional inline 'and' steps to a query as shown below. Notice that
@@ -5027,13 +5094,12 @@ g.V().hasLabel('airport').
       where(out().count().is(lt(100).and(gt(94)).and(neq(97)))).
       group().by(out().count()).by('code')
 
-[98:[BUD,WAW],95:[STR,CRL]]
+[96:[DCA,RIX],98:[AUS],99:[VCE],95:[OPO,SFB]]
 ----
 
 The 'where' step was used lot in the examples above. Hopefully the effect of using it
 was clear. Nonetheless we will explain in more detail how the 'where' step works in
 the next section.
-
 
 [[where]]
 === Using 'where' to filter things out of a result
@@ -5074,7 +5140,7 @@ found.
 // Airports with more than 60 unique routes from them
 g.V().hasLabel('airport').where(out('route').count().is(gt(60))).count()
 
-179
+215
 ----
 
 In our next example, we want to find routes between airports that have an ID of less
@@ -5097,10 +5163,14 @@ Below is what we get back as a result of running the query.
 [source,groovy]
 ----
 [ATL,4502,HNL]
+[BOS,5083,HNL]
+[IAD,4806,HNL]
 [JFK,4970,HNL]
 [ORD,4230,HNL]
 [EWR,4950,HNL]
 [HNL,4502,ATL]
+[HNL,5083,BOS]
+[HNL,4806,IAD]
 [HNL,4970,JFK]
 [HNL,4230,ORD]
 [HNL,4950,EWR]
@@ -5137,12 +5207,21 @@ are returned.
 
 [source,groovy]
 ----
-[code:[YYZ],city:[Toronto]]
-[code:[LHR],city:[London]]
-[code:[FRA],city:[Frankfurt]]
-[code:[MEX],city:[Mexico City]]
 [code:[CUN],city:[Cancun]]
+[code:[PVR],city:[Puerto Vallarta]]
+[code:[NAS],city:[Nassau]]
+[code:[CZM],city:[Cozumel]]
 [code:[GDL],city:[Guadalajara]]
+[code:[LIR],city:[Liberia]]
+[code:[SJD],city:[San José del Cabo]]
+[code:[YYZ],city:[Toronto]]
+[code:[YVR],city:[Vancouver]]
+[code:[LHR],city:[London]]
+[code:[LGW],city:[London]]
+[code:[FRA],city:[Frankfurt]]
+[code:[AMS],city:[Amsterdam]]
+[code:[YYC],city:[Calgary]]
+[code:[MEX],city:[Mexico City]]
 ----
 
 This pattern comes in useful whenever you want to use a traversal inside of a 'where'
@@ -5178,12 +5257,13 @@ fly to from AUS that have 5,7 or 8 runways.
 
 [source,groovy]
 ----
-[code:[YYZ],runways:[5]]
+[code:[MKE],runways:[5]]
 [code:[MDW],runways:[5]]
 [code:[ATL],runways:[5]]
 [code:[DFW],runways:[7]]
 [code:[IAH],runways:[5]]
-[code:[ORD],runways:[8]]
+[code:[ORD],runways:[7]]
+[code:[YYZ],runways:[5]]
 ----
 
 The same is true for the 'or' step. We could rewrite our query to find airports we
@@ -5208,7 +5288,6 @@ g.V().has('airport','code','AUS').out().
       valueMap('code','runways')
 ----
 
-
 Our last example in this section uses a 'where' step to make sure we don't end up
 back where we started when looking at airline routes with one stop. We find routes
 that start in Austin, with one intermediate stop, that then continue to another
@@ -5222,7 +5301,6 @@ AUS->DFW->LHR will be as it does not end up back in Austin.
 ----
 // List 10 places you can fly to with one stop, starting at Austin but
 // never ending up back in Austin
-
 g.V().has('airport','code','AUS').as('a').
       out().out().where(neq('a')).
       path().by('code').limit(10)
@@ -5245,8 +5323,8 @@ handled for us by the query.
 
 [source,groovy]
 ----
- g.V().has('code','AUS').as('a').out().
-       where(eq('a')).by('runways').valueMap('code','runways')
+g.V().has('code','AUS').as('a').out().
+      where(eq('a')).by('runways').valueMap('code','runways')
 ----
 
 TIP: Combining the 'where' and 'by' steps allows you to write powerful queries in a
@@ -5258,15 +5336,30 @@ number of runways that the Austin airport has.
 
 [source,groovy]
 ----
-[code:[LHR],runways:[2]]
-[code:[MEX],runways:[2]]
+[code:[ONT],runways:[2]]
 [code:[CUN],runways:[2]]
+[code:[NAS],runways:[2]]
+[code:[JAX],runways:[2]]
+[code:[PVD],runways:[2]]
+[code:[SMF],runways:[2]]
+[code:[BHM],runways:[2]]
+[code:[BUF],runways:[2]]
+[code:[CMH],runways:[2]]
+[code:[DSM],runways:[2]]
+[code:[CZM],runways:[2]]
+[code:[AMA],runways:[2]]
+[code:[CHS],runways:[2]]
 [code:[GDL],runways:[2]]
 [code:[PNS],runways:[2]]
+[code:[TYS],runways:[2]]
 [code:[VPS],runways:[2]]
+[code:[BUR],runways:[2]]
 [code:[FLL],runways:[2]]
 [code:[SNA],runways:[2]]
 [code:[MSY],runways:[2]]
+[code:[LHR],runways:[2]]
+[code:[LGW],runways:[2]]
+[code:[MEX],runways:[2]]
 ----
 
 The ability to combine 'where' and 'by' steps together allows us to avoid having to
@@ -5278,7 +5371,6 @@ g.V().has('code','AUS').as('a').out().as('b').
       filter(select('a','b').by('runways').where('a',eq('b'))).
       valueMap('code','runways')
 ----
-
 
 There is also a two parameter form of the 'where' step that you may have noticed used
 above. In this case the first parameter refers to a label defined earlier in the
@@ -5299,6 +5391,13 @@ when run.
 
 [source,groovy]
 ----
+[code:[PVR],runways:[1]]
+[code:[ECP],runways:[1]]
+[code:[LIR],runways:[1]]
+[code:[SJD],runways:[1]]
+[code:[XNA],runways:[1]]
+[code:[HDN],runways:[1]]
+[code:[ASE],runways:[1]]
 [code:[BKG],runways:[1]]
 [code:[SAN],runways:[1]]
 ----
@@ -5389,7 +5488,7 @@ g.V().has('airport','code','IAD').values('runways').as('iadl','iadh').
   limit(5).
   values('code').fold()
   
-[ANC,BNA,BWI,DCA,KNS]  
+[ANC,BNA,BWI,DCA,IAD]
 ----
 
 In this prior example, we find IAD and then keep that value in two step labels. Those
@@ -5423,7 +5522,7 @@ g.V().has('code','NCE').values('region').as('r').
 
 [NCE,Nice,FR-U]
 [MRS,Marseille,FR-U]
-[TLN,Toulon/Le Palyvestre,FR-U]
+[TLN,Toulon/Hyères/Le Palyvestre,FR-U]
 [AVN,Avignon/Caumont,FR-U]
 ----
 
@@ -5445,22 +5544,18 @@ The 'choose' step allows the creation of queries that are a lot like the "if the
 else" constructs found in most programming languages. If we were programming in Java
 we might find ourselves writing something like the following.
 
-[source,groovy]
+[source,java]
 ----
-if (longest > 12000)
-{
-  return(code);
-}
-else
-{
-  return(desc);
+if (longest > 12000) {
+    return(code);
+} else {
+    return(desc);
 }
 ----
 
 Gremlin offers us a way to do the same thing. The query below finds all the airports
 in Texas and then will return the value of the 'code' property if an airport has a
 runway longer than 12,000 feet otherwise it will return the value of the 'desc'.
-
 
 [source,groovy]
 ----
@@ -5492,7 +5587,6 @@ g.V().has('region','US-TX').
       choose(values('longest').is(gt(12000)),
              values('code')).
              limit(5)
-
 ----
 
 The "else" in this case is implied and the incoming element that the 'choose'
@@ -5518,7 +5612,6 @@ g.V().hasLabel('airport').
              values('region')).
      limit(5)
 ----
-
 
 [[chooseconstant]]
 ==== Including a constant value - introducing 'constant'
@@ -5556,16 +5649,16 @@ Here is an example of what the output from running this query might look like.
 
 [source,groovy]
 ----
-[a:YYT,b:not so many]
-[a:YEG,b:not so many]
-[a:LGA,b:lots]
-[a:DXB,b:lots]
-[a:BLR,b:not so many]
-[a:CGN,b:lots]
-[a:BOM,b:lots]
-[a:SIN,b:lots]
-[a:TSF,b:not so many]
-[a:HKG,b:lots]
+[a:PKA,b:not so many]
+[a:ISL,b:not so many]
+[a:NDR,b:not so many]
+[a:PAZ,b:not so many]
+[a:NER,b:not so many]
+[a:KIX,b:lots]
+[a:THD,b:not so many]
+[a:YCD,b:not so many]
+[a:BTJ,b:not so many]
+[a:KBP,b:lots]
 ----
 
 We could go one step further if you don't want the 'a:' and 'b:' keys returned as
@@ -5584,16 +5677,16 @@ Here is what the output from the modified form of the query.
 
 [source,groovy]
 ----
-[YYT,not so many]
-[YEG,not so many]
-[LGA,lots]
-[DXB,lots]
-[BLR,not so many]
-[CGN,lots]
-[BOM,lots]
-[SIN,lots]
-[TSF,not so many]
-[HKG,lots]
+[IBZ,lots]
+[DOH,lots]
+[LRE,not so many]
+[TCT,not so many]
+[AMQ,not so many]
+[YYC,lots]
+[GUC,not so many]
+[CEZ,not so many]
+[PSC,not so many]
+[JCB,not so many]
 ----
 
 The 'constant' step is not limited to use within 'choose' steps. It can be used
@@ -5609,12 +5702,11 @@ might code a 'switch' statement as follows.
 
 [source,java]
 ----
-  switch(airport)
-  {
+switch(airport) {
     case "DFW": System.out.println(desc); break;
     case "AUS": System.out.println(region); break;
     case "LAX": System.out.println(runways);
-  }
+}
 ----
 
 We can write a Gremlin query that follows the same pattern as our Java 'switch'
@@ -5629,7 +5721,6 @@ g.V().hasLabel('airport').
         option('DFW',values('desc')).
         option('AUS',values('region')).
         option('LAX',values('runways'))
-
 ----
 
 The example below shows a 'choose' followed by four options. Note the default case
@@ -5645,7 +5736,6 @@ g.V().hasLabel('airport').limit(10).
         option(2,constant('a couple')).
         option(7,constant('lots')).
         option(none,constant('quite a few'))
-
 ----
 
 The 'option' step can also include a predicate, allowing more complex comparisons to
@@ -5667,7 +5757,7 @@ g.V().hasLabel('airport').
              option(gt(3000),constant('medium')).
              option(none,constant('low')))
 
-[high:157,low:3013,medium:204]
+[high:163,low:3127,medium:214]
 ----
 
 [[patmatch]]
@@ -5693,7 +5783,6 @@ not need to stop on the way back because of the trailing wind.
 // to a place you cannot get back from non stop. This query
 // should return LCY, as the return flight stops in Dublin
 // to refuel.
-
 g.V().has('code','JFK').
       match(__.as('s').out().as('d'),
             __.not(__.as('d').out().as('s'))).
@@ -5729,7 +5818,7 @@ g.V().hasLabel('airport').
             __.not(__.as('d').out().as('s'))).
       count()
 
-238
+339
 ----
 
 The next query looks for routes that follow the pattern A->B->C but where there is no
@@ -5747,7 +5836,6 @@ g.V().hasLabel('airport').
            ,__.as('b').out().where(neq('a')).as('c')
            ,__.not(__.as('a').out().as('c'))).
       select('a','b','c').by('code').limit(10)
-
 ----
 
 There are, of course a lot of places in the 'air-routes' graph where this pattern can
@@ -5756,16 +5844,16 @@ query.
 
 [source,groovy]
 ----
-[a:ATL,b:MLB,c:ISP]
-[a:ATL,b:MLB,c:BIM]
-[a:ATL,b:MLB,c:YTZ]
-[a:ATL,b:PHF,c:SFB]
-[a:ATL,b:SBN,c:SFB]
-[a:ATL,b:SBN,c:AZA]
-[a:ATL,b:SBN,c:PIE]
-[a:ATL,b:SBN,c:PGD]
-[a:ATL,b:TRI,c:SFB]
-[a:ATL,b:TRI,c:PIE]
+[a:ATL,b:YYZ,c:YVR]
+[a:ATL,b:YYZ,c:LGW]
+[a:ATL,b:YYZ,c:DEL]
+[a:ATL,b:YYZ,c:HKG]
+[a:ATL,b:YYZ,c:PEK]
+[a:ATL,b:YYZ,c:BOM]
+[a:ATL,b:YYZ,c:PRG]
+[a:ATL,b:YYZ,c:BCN]
+[a:ATL,b:YYZ,c:VIE]
+[a:ATL,b:YYZ,c:YOW]
 ----
 
 Here is another example of using 'match' along with a 'where'. This is actually a
@@ -5888,16 +5976,16 @@ When run the query returns the following results.
 
 [source,groovy]
 ----
-[s:AMS,d:HRE]
-[s:AMS,d:FNA]
-[s:AMS,d:UIO]
+[s:AMS,d:DSS]
 [s:BNE,d:BCI]
 [s:BNE,d:BKQ]
 [s:BOM,d:DIU]
+[s:CLE,d:SJC]
 [s:HEL,d:IVL]
-[s:HPN,d:HYA]
+[s:IAD,d:AMM]
 [s:JFK,d:LCY]
-[s:MAN,d:ANU]
+[s:ORD,d:ADD]
+[s:SIN,d:PBH]
 ----
 
 [[union]]
@@ -5924,7 +6012,7 @@ steps we have already looked at.
 g.V().has('airport','code','DFW').as('a').
       union(select('a'),out().count()).fold()
 
-[v[8],221]
+[v[8],253]
 ----
 
 Not that this is recommended, but the previous query could also be written as follows
@@ -5938,7 +6026,7 @@ g.V().union(has('airport','code','DFW'),
             has('airport','code','DFW').
                out().count()).fold()
 
-[v[8],221]
+[v[8],253]
 ----
 
 As a side note, instead of using a 'union' step and producing a list, we might decide
@@ -5951,7 +6039,7 @@ that best fit the problem you are solving.
 g.V().has('airport','code','DFW').
       group().by().by(out().count())
 
-[v[8]:221]]
+[v[8]:253]]
 ----
 
 Another aspect of 'union' to consider is that it can be used as a start step, which
@@ -5994,7 +6082,7 @@ in the result.
 g.V().has('airport','code','DFW').
       union(identity(),out().count()).fold()
 
-[v[8],221]
+[v[8],253]
 ----
 
 We could modify the query slightly to have the first part of the result returned be
@@ -6005,9 +6093,8 @@ the airport's IATA code rather than just a vertex.
 g.V().has('airport','code','DFW').
       union(identity().values('code'),out().count()).fold()
 
-[DFW,221]
+[DFW,253]
 ----
-
 
 [[unionconstant]]
 ==== Using 'constant' values as part of a 'union'
@@ -6069,16 +6156,16 @@ Here is the output we got back from running the query.
 
 [source,groovy]
 ----
-[83,RSW,Fort Myers]
-[97,GLA,Glasgow]
-[26,SAN,San Diego]
-[57,MEL,Melbourne]
-[136,MEX,Mexico City]
-[163,YHZ,Halifax]
-[44,SAF,Santa Fe]
-[42,OAK,Oakland]
+[1534,CUL,Culiacán]
+[2075,CKB,Clarksburg]
+[1828,PZI,Panzhihua]
+[2244,LOD,Longana]
+[1348,GET,Geraldton]
 [92,OSL,Oslo]
-[161,IST,Istanbul]
+[2107,UIN,Quincy]
+[2764,ODY,Oudomsay]
+[3288,MCW,Mason City]
+[3331,MPN,Mount Pleasant]
 ----
 
 If 'local' scope had not been used, the result would have been a single list
@@ -6089,7 +6176,9 @@ containing all of the results as shown below.
 g.V().hasLabel("airport").sample(10).
       union(id(),values("code","city")).fold()
 
-[84,MAN,Manchester,87,CGN,Cologne,35,EWR,Newark,37,HNL,Honolulu,54,NRT,Tokyo,86,YEG,Edmonton,45,PHL,Philadelphia,52,FRA,Frankfurt,85,YUL,Montreal,142,SOF,Sofia]
+[2410,FKS,Sukagawa,3159,YBX,Lourdes-De-Blanc-Sablon,918,HLN,Helena,
+ 465,DOL,Deauville,1258,YXY,Whitehorse,2000,VHC,Saurimo,2562,RCH,Riohacha,
+ 225,MBJ,Montego Bay,2535,LOH,La Toma (Catamayo),1385,REG,Reggio Calabria]
 ----
 
 By way of another simple example, the following query returns flights that arrive in
@@ -6104,16 +6193,20 @@ g.V().has('code','AUS').
             path().by('code')
 ----
 
-
 When we run that query, we get the following results showing that there are routes
-from LHR in the UK and to the three airports MEX, CUN and GDL in Mexico.
+from LHR and LGW in the UK and to the six airports PVR, CZM, SJD, MEX, CUN and GDL in
+Mexico.
 
 [source,groovy]
 ----
+[AUS,LGW]
 [AUS,LHR]
-[AUS,MEX]
 [AUS,CUN]
+[AUS,PVR]
+[AUS,CZM]
 [AUS,GDL]
+[AUS,SJD]
+[AUS,MEX]
 ----
 
 This query solves the problem "Find all routes that start in London, England and end
@@ -6133,17 +6226,17 @@ London airports were found.
 
 [source,groovy]
 ----
-[LHR,CDG]
 [LHR,ORY]
-[LHR,TXL]
+[LHR,CDG]
+[LHR,BER]
 [LGW,CDG]
-[LGW,SXF]
+[LGW,BER]
 [LCY,CDG]
 [LCY,ORY]
-[STN,TXL]
-[STN,SXF]
+[STN,BER]
 [LTN,CDG]
-[LTN,SXF]
+[LTN,ORY]
+[LTN,BER]
 ----
 
 As mentioned previously, sometimes, especially for fairly simple queries, there are
@@ -6184,13 +6277,12 @@ Running the amended query shows us the results in perhaps a more useful form.
 
 [source,groovy]
 ----
-[LHR,ORY,CDG,TXL]
-[LGW,CDG,SXF]
-[LCY,ORY,CDG]
-[STN,TXL,SXF]
-[LTN,CDG,SXF]
+[LHR,ORY,CDG,BER]
+[LGW,CDG,BER]
+[LCY,CDG,ORY]
+[STN,BER]
+[LTN,CDG,ORY,BER]
 ----
-
 
 [[unionthree]]
 ==== Using 'union' to combine more complex traversal results
@@ -6211,7 +6303,6 @@ three sets of traversals to get the desired results.
 [source,groovy]
 ----
 // Returns any paths found along with the distances between airport pairs.
-
 g.V().has('city','London').has('region','GB-ENG').
       union(outE().inV().has('city','Berlin').
                    outE('route').inV().has('city','Lisbon').
@@ -6228,14 +6319,17 @@ Here is what we get back when we run our query
 
 [source,groovy]
 ----
+[LHR,598,BER,1432,LIS]
 [LHR,227,ORY,513,BCN]
 [LHR,216,CDG,533,BCN]
-[LGW,591,SXF,1432,LIS]
+[LGW,592,BER,1432,LIS]
 [LGW,191,CDG,533,BCN]
-[LCY,227,ORY,513,BCN]
-[STN,563,SXF,1432,LIS]
-[LTN,589,SXF,1432,LIS]
+[LCY,204,CDG,533,BCN]
+[LCY,217,ORY,513,BCN]
+[STN,564,BER,1432,LIS]
+[LTN,589,BER,1432,LIS]
 [LTN,236,CDG,533,BCN]
+[LTN,248,ORY,513,BCN]
 ----
 
 The next query finds the total distance of all routes from any airport in Madrid to
@@ -6258,8 +6352,8 @@ filtered out from the calculation.
 
 [source,groovy]
 ----
-397708
-396410
+435724
+434426
 ----
 
 It is worth noting that it is not required that every traversal inside of a union
@@ -6305,17 +6399,17 @@ DFW
 The 'sideEffect' step allows you to do some additional processing as part of a query
 without changing what gets passed on to the next stage of the query. The example
 below finds the airport vertex V(3) and then uses a 'sideEffect' to count the number
-of places that you can fly to from there and stores it in a traversal variable named
-'a' before counting how many places you can get to with one stop and storing that
-value in 'b'. Note that there are other ways we could write this query but it
+of places that you can fly to from there and aggregates it in a traversal variable
+named 'a' before counting how many places you can get to with one stop and storing
+that value in 'b'. Note that there are other ways we could write this query but it
 demonstrates quite well how 'sideEffect' works.
 
 [source,groovy]
 ----
-g.V(3).sideEffect(out().count().store('a')).
+g.V(3).sideEffect(out().count().aggregate('a')).
        out().out().count().as('b').select('a','b')
 
-[a:[59],b:5911]
+[a:[98],b:8354]
 ----
 
 Later in the book we will discuss lambda functions, sometimes called closures and
@@ -6345,7 +6439,7 @@ At the time of writing this book, there were 59 places you could fly to directly
 ----
 g.V().has('code','AUS').out().count()
 
-59
+98
 ----
 
 If we wanted to count how many places we could go to from Austin with one stop, we
@@ -6357,7 +6451,7 @@ those places there are.
 ----
 g.V().has('code','AUS').out().out().dedup().count()
 
-871
+1044
 ----
 
 There is however a problem with this query. The 871 places is going to include (some
@@ -6372,7 +6466,7 @@ query below
 g.V().has('code','AUS').out().aggregate('nonstop').
      out().where(without('nonstop')).dedup().count()
 
-812
+946
 ----
 
 After the first 'out' step all of the vertices that were found are stored in a
@@ -6441,7 +6535,6 @@ query below.
 
 [source,groovy]
 ----
-
 g.V().choose(V().hasLabel('XYZ').count().is(0),constant("None found"))
 ----
 
@@ -6565,7 +6658,7 @@ g.V().fail()
 fail() Step Triggered
 ================================
 Message  > fail() step triggered
-Traverser> v[2306]
+Traverser> v[0]
   Bulk   > 1
 Traversal> V().fail()
 Metadata > {}
@@ -6582,7 +6675,7 @@ g.V().fail("failed!!")
 fail() Step Triggered
 ===============================
 Message  > failed!!
-Traverser> v[2306]
+Traverser> v[0]
   Bulk   > 1
 Traversal> V().fail("failed!!")
 Metadata > {}
@@ -6599,13 +6692,14 @@ If it is not in Texas, then the exception is thrown.
 g.V(1).coalesce(has('region','US-TX').values('desc'),fail())
 
 fail() Step Triggered
-================================
+================================================================================================
 Message  > fail() step triggered
 Traverser> v[1]
   Bulk   > 1
-Traversal> V().fail()
+Traversal> fail()
+Parent   > CoalesceStep [V((int) 1).coalesce(__.has("region","US-TX").values("desc"),__.fail())]
 Metadata > {}
-================================
+================================================================================================
 
 g.V(3).coalesce(has('region','US-TX').values('desc'),fail())
 
@@ -6713,7 +6807,6 @@ traversal, they can also be used in the middle of one.
 g.V().has('code','AUS').V().has('code', within('DFW','IAD')).
   values('code').fold()
 
-
 [DFW,IAD]
 ----
 
@@ -6725,9 +6818,8 @@ vertices, we will get some duplication and 4 results as follows:
 
 [source,groovy]
 ----
-g.V().has('code',,within('SFO','AUS')).V().has('code', within('DFW','IAD')).
+g.V().has('code', within('SFO','AUS')).V().has('code', within('DFW','IAD')).
   values('code').fold()
-
 
 [DFW,IAD,DFW,IAD]
 ----
@@ -6737,10 +6829,10 @@ same fashion.
 
 [source,groovy]
 ----
-g.V().has('code',within('SFO','AUS')).E(3640)
+g.V().has('code',within('SFO','AUS')).E(7612)
 
-e[3640][1-route->24]
-e[3640][1-route->24]
+e[7612][23-route->184]
+e[7612][23-route->184]
 ----
 
 You typically find use for these mid-traversal steps when you do a mutation or 
@@ -6753,12 +6845,11 @@ longest route is leaving '"IAD"':
 g.V().has('code','IAD').outE('route').
   values('dist').max()
 
-7487
+8135
 ----
 
 Now, let's extend on that query with mid-traversal 'V' to use that result to find 
 "all routes from DFW that are longer than the longest route from IAD":
-
 
 [source,groovy]
 ----
@@ -6768,7 +6859,7 @@ g.V().has('code','IAD').outE('route').
   where(values('dist').where(gt('iad'))).
   inV().values('code').fold()
 
-[SYD,DXB,HKG,DOH,AUH]
+[SYD]
 ----
 
 [[otherv]]
@@ -6785,7 +6876,7 @@ simply counts the number of outgoing edges from the vertex with an ID of 3.
 ----
 g.V(3).outE().count()
 
-59
+98
 ----
 
 Likewise, this query counts the number of incoming edges to that same vertex.
@@ -6794,7 +6885,7 @@ Likewise, this query counts the number of incoming edges to that same vertex.
 ----
 g.V(3).inE().count()
 
-61
+100
 ----
 
 The following query introduces the 'bothE' step. What this step does is return all of
@@ -6807,7 +6898,7 @@ example, to examine a property on each of them.
 ----
 g.V(3).bothE().count()
 
-120
+198
 ----
 
 If we wanted to return vertices instead of edges, we could use the 'both' step. This
@@ -6818,10 +6909,10 @@ whether they are connected by an outgoing or an incoming edge.
 ----
 g.V(3).both().count()
 
-120
+198
 ----
 
-This next query can be used to show us the 120 vertices that we just counted in the
+This next query can be used to show us the 198 vertices that we just counted in the
 previous query. We sorted the results and used 'fold' to build them into a list to
 make the results easier to read. Note how vertex 3 is *not* returned as part of the
 results. This is important, for as we shall see in a few examples time, this is not
@@ -6831,7 +6922,22 @@ always the case.
 ----
 g.V(3).both().order().by(id).fold()
 
-[v[1],v[1],v[4],v[4],v[5],v[5],v[6],v[6],v[7],v[7],v[8],v[8],v[9],v[9],v[10],v[10],v[11],v[11],v[12],v[12],v[13],v[13],v[15],v[15],v[16],v[16],v[17],v[17],v[18],v[18],v[20],v[20],v[21],v[21],v[22],v[22],v[23],v[23],v[24],v[24],v[25],v[25],v[26],v[26],v[27],v[27],v[28],v[28],v[29],v[29],v[30],v[30],v[31],v[31],v[34],v[34],v[35],v[35],v[38],v[38],v[39],v[39],v[41],v[41],v[42],v[42],v[45],v[45],v[46],v[46],v[47],v[47],v[49],v[49],v[52],v[52],v[136],v[136],v[147],v[147],v[149],v[149],v[178],v[178],v[180],v[180],v[182],v[182],v[183],v[183],v[184],v[184],v[185],v[185],v[186],v[186],v[187],v[187],v[188],v[188],v[190],v[190],v[273],v[273],v[278],v[278],v[389],v[389],v[416],v[416],v[430],v[430],v[549],v[549],v[929],v[929],v[1274],v[1274],v[3591],v[3605]]
+[v[1],v[1],v[4],v[4],v[5],v[5],v[6],v[6],v[7],v[7],v[8],v[8],v[9],v[9],v[10],
+ v[10],v[11],v[11],v[12],v[12],v[13],v[13],v[15],v[15],v[16],v[16],v[17],v[17],
+ v[18],v[18],v[20],v[20],v[21],v[21],v[22],v[22],v[23],v[23],v[24],v[24],v[25],
+ v[25],v[26],v[26],v[27],v[27],v[28],v[28],v[29],v[29],v[30],v[30],v[31],v[31],
+ v[33],v[33],v[34],v[34],v[35],v[35],v[37],v[37],v[38],v[38],v[39],v[39],v[41],
+ v[41],v[42],v[42],v[43],v[43],v[45],v[45],v[46],v[46],v[47],v[47],v[48],v[48],
+ v[49],v[49],v[50],v[50],v[52],v[52],v[70],v[70],v[99],v[99],v[136],v[136],v[147],
+ v[147],v[149],v[149],v[150],v[150],v[151],v[151],v[178],v[178],v[180],v[180],v[182],
+ v[182],v[183],v[183],v[184],v[184],v[185],v[185],v[186],v[186],v[187],v[187],v[188],
+ v[188],v[189],v[189],v[190],v[190],v[193],v[193],v[194],v[194],v[195],v[195],v[208],
+ v[208],v[227],v[227],v[239],v[239],v[240],v[240],v[244],v[244],v[265],v[265],v[268],
+ v[268],v[269],v[269],v[271],v[271],v[273],v[273],v[277],v[277],v[278],v[278],v[280],
+ v[280],v[281],v[281],v[362],v[362],v[365],v[365],v[368],v[368],v[371],v[371],v[375],
+ v[375],v[389],v[389],v[395],v[395],v[403],v[403],v[416],v[416],v[422],v[422],v[429],
+ v[429],v[430],v[430],v[431],v[431],v[444],v[444],v[549],v[549],v[605],v[605],v[883],
+ v[883],v[909],v[909],v[929],v[929],v[1274],v[1274],v[3730],v[3744]]
 ----
 
 You probably also noticed that most of the vertices appear twice. This is because
@@ -6842,7 +6948,15 @@ eliminate any duplicate results we can do that by adding a 'dedup' step to our q
 ----
 g.V(3).both().dedup().order().by(id).fold()
 
-[v[1],v[4],v[5],v[6],v[7],v[8],v[9],v[10],v[11],v[12],v[13],v[15],v[16],v[17],v[18],v[20],v[21],v[22],v[23],v[24],v[25],v[26],v[27],v[28],v[29],v[30],v[31],v[34],v[35],v[38],v[39],v[41],v[42],v[45],v[46],v[47],v[49],v[52],v[136],v[147],v[149],v[178],v[180],v[182],v[183],v[184],v[185],v[186],v[187],v[188],v[190],v[273],v[278],v[389],v[416],v[430],v[549],v[929],v[1274],v[3591],v[3605]]
+[v[1],v[4],v[5],v[6],v[7],v[8],v[9],v[10],v[11],v[12],v[13],v[15],v[16],v[17],
+ v[18],v[20],v[21],v[22],v[23],v[24],v[25],v[26],v[27],v[28],v[29],v[30],v[31],
+ v[33],v[34],v[35],v[37],v[38],v[39],v[41],v[42],v[43],v[45],v[46],v[47],v[48],
+ v[49],v[50],v[52],v[70],v[99],v[136],v[147],v[149],v[150],v[151],v[178],v[180],
+ v[182],v[183],v[184],v[185],v[186],v[187],v[188],v[189],v[190],v[193],v[194],
+ v[195],v[208],v[227],v[239],v[240],v[244],v[265],v[268],v[269],v[271],v[273],
+ v[277],v[278],v[280],v[281],v[362],v[365],v[368],v[371],v[375],v[389],v[395],
+ v[403],v[416],v[422],v[429],v[430],v[431],v[444],v[549],v[605],v[883],v[909],
+ v[929],v[1274],v[3730],v[3744]]
 ----
 
 We can do another count using our modified query to check we got the expected number
@@ -6852,7 +6966,7 @@ of results back.
 ----
 g.V(3).both().dedup().count()
 
-61
+100
 ----
 
 There are a similar set of things we can do when working with edges using the 'bothV'
@@ -6863,14 +6977,14 @@ to how we are looking at the edge.
 The query below starts with our same vertex with the ID of 3 and then looks at all the
 edges no matter whether they are incoming or outgoing and retrieves all of the
 vertices at each end of those edges using the 'bothV' step. Notice that this time our
-count is 240. This is because for every one of the 120 edges, we asked for the vertex
-at each end so we ended up with 240 of them.
+count is 396. This is because for every one of the 198 edges, we asked for the vertex
+at each end so we ended up with 396 of them.
 
 [source,groovy]
 ----
 g.V(3).bothE().bothV().count()
 
-240
+396
 ----
 
 We can again add a 'dedup' step to get rid of duplicate vertices as we did before and
@@ -6881,7 +6995,7 @@ So what is going on here?
 ----
 g.V(3).bothE().bothV().dedup().count()
 
-62
+101
 ----
 Let's run another query and take a look at all of the vertices that we got back this
 time.
@@ -6890,7 +7004,15 @@ time.
 ----
 g.V(3).bothE().bothV().dedup().order().by(id()).fold()
 
-[v[1],v[3],v[4],v[5],v[6],v[7],v[8],v[9],v[10],v[11],v[12],v[13],v[15],v[16],v[17],v[18],v[20],v[21],v[22],v[23],v[24],v[25],v[26],v[27],v[28],v[29],v[30],v[31],v[34],v[35],v[38],v[39],v[41],v[42],v[45],v[46],v[47],v[49],v[52],v[136],v[147],v[149],v[178],v[180],v[182],v[183],v[184],v[185],v[186],v[187],v[188],v[190],v[273],v[278],v[389],v[416],v[430],v[549],v[929],v[1274],v[3591],v[3605]]
+[v[1],v[3],v[4],v[5],v[6],v[7],v[8],v[9],v[10],v[11],v[12],v[13],v[15],v[16],
+ v[17],v[18],v[20],v[21],v[22],v[23],v[24],v[25],v[26],v[27],v[28],v[29],v[30],
+ v[31],v[33],v[34],v[35],v[37],v[38],v[39],v[41],v[42],v[43],v[45],v[46],v[47],
+ v[48],v[49],v[50],v[52],v[70],v[99],v[136],v[147],v[149],v[150],v[151],v[178],
+ v[180],v[182],v[183],v[184],v[185],v[186],v[187],v[188],v[189],v[190],v[193],
+ v[194],v[195],v[208],v[227],v[239],v[240],v[244],v[265],v[268],v[269],v[271],
+ v[273],v[277],v[278],v[280],v[281],v[362],v[365],v[368],v[371],v[375],v[389],
+ v[395],v[403],v[416],v[422],v[429],v[430],v[431],v[444],v[549],v[605],v[883],
+ v[909],v[929],v[1274],v[3730],v[3744]]
 ----
 
 Can you spot the difference? This time, vertex 3 (v[3]) *is* included in our results. 
@@ -6900,12 +7022,13 @@ computation. So beware of this subtle difference between using 'both' and the
 'bothE().bothV()' pattern.
 
 Let's rewrite the queries we just used again but replace 'bothV' with 'otherV'.
-Notice that when we count the number of results we are back to 61 again.
+Notice that when we count the number of results we are back to 100 again.
 
 [source,groovy]
 ----
 g.V(3).bothE().otherV().dedup().count()
-61
+
+100
 ----
 
 So let's again look at the returned vertices and see what the difference is.
@@ -6914,7 +7037,15 @@ So let's again look at the returned vertices and see what the difference is.
 ----
 g.V(3).bothE().otherV().dedup().order().by(id()).fold()
 
-[v[1],v[4],v[5],v[6],v[7],v[8],v[9],v[10],v[11],v[12],v[13],v[15],v[16],v[17],v[18],v[20],v[21],v[22],v[23],v[24],v[25],v[26],v[27],v[28],v[29],v[30],v[31],v[34],v[35],v[38],v[39],v[41],v[42],v[45],v[46],v[47],v[49],v[52],v[136],v[147],v[149],v[178],v[180],v[182],v[183],v[184],v[185],v[186],v[187],v[188],v[190],v[273],v[278],v[389],v[416],v[430],v[549],v[929],v[1274],v[3591],v[3605]]
+[v[1],v[4],v[5],v[6],v[7],v[8],v[9],v[10],v[11],v[12],v[13],v[15],v[16],v[17],
+ v[18],v[20],v[21],v[22],v[23],v[24],v[25],v[26],v[27],v[28],v[29],v[30],v[31],
+ v[33],v[34],v[35],v[37],v[38],v[39],v[41],v[42],v[43],v[45],v[46],v[47],v[48],
+ v[49],v[50],v[52],v[70],v[99],v[136],v[147],v[149],v[150],v[151],v[178],v[180],
+ v[182],v[183],v[184],v[185],v[186],v[187],v[188],v[189],v[190],v[193],v[194],
+ v[195],v[208],v[227],v[239],v[240],v[244],v[265],v[268],v[269],v[271],v[273],
+ v[277],v[278],v[280],v[281],v[362],v[365],v[368],v[371],v[375],v[389],v[395],
+ v[403],v[416],v[422],v[429],v[430],v[431],v[444],v[549],v[605],v[883],v[909],
+ v[929],v[1274],v[3730],v[3744]]
 ----
 
 As you can see, when we use 'otherV' we do not get 'v[3]' returned as we are only
@@ -6953,18 +7084,17 @@ construct we did not have to specify how many steps to try.
 
 [source,groovy]
 ----
+[AUS,JFK,BOM,AGR]
 [AUS,YYZ,BOM,AGR]
 [AUS,LHR,BOM,AGR]
-[AUS,FRA,BOM,AGR]
 [AUS,EWR,BOM,AGR]
-[AUS,YYZ,ZRH,BOM,AGR]
-[AUS,YYZ,BRU,BOM,AGR]
-[AUS,YYZ,MUC,BOM,AGR]
-[AUS,YYZ,ICN,BOM,AGR]
-[AUS,YYZ,CAI,BOM,AGR]
-[AUS,YYZ,ADD,BOM,AGR]
+[AUS,FRA,BOM,AGR]
+[AUS,AMS,BOM,AGR]
+[AUS,PHL,YYZ,BOM,AGR]
+[AUS,PHL,LHR,BOM,AGR]
+[AUS,PHL,CDG,BOM,AGR]
+[AUS,PHL,FRA,BOM,AGR]
 ----
-
 
 You can also place the 'until' before the 'repeat' as shown below.
 
@@ -6982,15 +7112,15 @@ Here are the results from running the query.
 [source,groovy]
 ----
 [AUS,DFW,SYD]
+[AUS,IAH,SYD]
 [AUS,LAX,SYD]
 [AUS,SFO,SYD]
-[AUS,YYZ,HND,SYD]
-[AUS,YYZ,ICN,SYD]
-[AUS,YYZ,SCL,SYD]
-[AUS,YYZ,AUH,SYD]
-[AUS,YYZ,TPE,SYD]
-[AUS,YYZ,CAN,SYD]
-[AUS,YYZ,DFW,SYD]
+[AUS,HNL,SYD]
+[AUS,YVR,SYD]
+[AUS,PHL,DFW,SYD]
+[AUS,PHL,IAH,SYD]
+[AUS,PHL,DOH,SYD]
+[AUS,PHL,LAX,SYD]
 ----
 
 We can also specify an explicit number of out steps to try using a 'repeat...times'
@@ -7003,8 +7133,11 @@ gives you more control over the behavior of what is returned from 'repeat' loops
 g.V().has('code','AUS').repeat(out()).times(2).has('code','SYD').path().by('code')
 
 [AUS,DFW,SYD]
+[AUS,IAH,SYD]
 [AUS,LAX,SYD]
 [AUS,SFO,SYD]
+[AUS,HNL,SYD]
+[AUS,YVR,SYD]
 ----
 
 The previous query is equivalent to this next one but doing it this way is less
@@ -7026,11 +7159,11 @@ below. Both achieve the same result. The first uses 'loops' while the second use
 ----
 g.V(3).repeat(out()).until(loops().is(2)).count()
 
-5894
+8354
 
 g.V(3).repeat(out()).times(2).count()
 
-5894
+8354
 ----
 
 NOTE: If you simply want to find out if any route exists between two airports, there
@@ -7039,7 +7172,6 @@ is a nice optimization that can be used. This is discussed in the
 
 In the next section, we will look at how 'emit' can be used to
 adjust the behavior of a 'repeat...times' loop.
-
 
 [[emit]]
 ==== Using 'emit' to return results during a 'repeat' loop
@@ -7051,7 +7183,6 @@ be able to see the paths that are taken by the traversal. If we did not put the
 'emit' here this query would run for a very long time as the 'repeat' has no other
 ending condition!
 
-
 [source,groovy]
 ----
 g.V().has('code','SAF').repeat(out()).emit().path().by('code').limit(10)
@@ -7060,12 +7191,12 @@ g.V().has('code','SAF').repeat(out()).emit().path().by('code').limit(10)
 [SAF,LAX]
 [SAF,PHX]
 [SAF,DEN]
-[SAF,DFW,ATL]
-[SAF,DFW,ANC]
-[SAF,DFW,AUS]
-[SAF,DFW,BNA]
-[SAF,DFW,BOS]
-[SAF,DFW,BWI]
+[SAF,DFW,YYZ]
+[SAF,DFW,YVR]
+[SAF,DFW,LHR]
+[SAF,DFW,CDG]
+[SAF,DFW,FRA]
+[SAF,DFW,HEL]
 ----
 
 Another place where 'emit' can be useful is when 'repeat' and 'times' are used
@@ -7087,16 +7218,15 @@ wanted?
 
 [source,groovy]
 ----
-[AUS,YYZ,MUC,MIA]
-[AUS,YYZ,MAN,MIA]
-[AUS,YYZ,YUL,MIA]
-[AUS,YYZ,SVO,MIA]
-[AUS,YYZ,GRU,MIA]
+[AUS,PHL,SXM,MIA]
+[AUS,PHL,RIC,MIA]
+[AUS,PHL,ISP,MIA]
+[AUS,PHL,CHS,MIA]
+[AUS,PHL,GRR,MIA]
 ----
 
 Now let's change the query to use an 'emit'. This time you can think of the query as
 saying "at most three hops" or in airline terms "at most two stops".
-
 
 [source,groovy]
 ----
@@ -7111,10 +7241,10 @@ This is a really useful and powerful capability. Being able to express ideas suc
 [source,groovy]
 ----
 [AUS,MIA]
-[AUS,YYZ,MIA]
-[AUS,LHR,MIA]
-[AUS,FRA,MIA]
-[AUS,MEX,MIA]
+[AUS,PHL,MIA]
+[AUS,DTW,MIA]
+[AUS,CLT,MIA]
+[AUS,CUN,MIA]
 ----
 
 Note that using the emit step in the previous query we were able to write a more
@@ -7134,10 +7264,10 @@ When run, as you can see, we get the same results back.
 [source,groovy]
 ----
 [AUS,MIA]
-[AUS,YYZ,MIA]
-[AUS,LHR,MIA]
-[AUS,FRA,MIA]
-[AUS,MEX,MIA]
+[AUS,PHL,MIA]
+[AUS,DTW,MIA]
+[AUS,CLT,MIA]
+[AUS,CUN,MIA]
 ----
 
 The 'emit' step can also take a parameter such as a 'has' step to filter out
@@ -7156,16 +7286,16 @@ Here are the results from running the query.
 
 [source,groovy]
 ----
+[AUS,PHL,PRG]
 [AUS,YYZ,PRG]
 [AUS,LHR,PRG]
+[AUS,EWR,PRG]
+[AUS,LGW,PRG]
 [AUS,FRA,PRG]
-[AUS,DTW,YYZ,PRG]
-[AUS,DTW,LHR,PRG]
-[AUS,DTW,CDG,PRG]
-[AUS,DTW,FRA,PRG]
-[AUS,DTW,PVG,PRG]
-[AUS,DTW,AMS,PRG]
-[AUS,DTW,MUC,PRG]
+[AUS,AMS,PRG]
+[AUS,PHL,BER,PRG]
+[AUS,PHL,YYZ,PRG]
+[AUS,PHL,LHR,PRG]
 ----
 
 Without the condition as part of the 'emit' step we get different results as we are
@@ -7175,16 +7305,16 @@ shown every path the graph traverser is taking.
 ----
 g.V(3).repeat(out().simplePath()).emit().path().by('code').limit(10)
 
-[AUS,DTW]
-[AUS,YYZ]
-[AUS,LHR]
-[AUS,FRA]
-[AUS,MEX]
-[AUS,PIT]
+[AUS,PHL]
 [AUS,PDX]
+[AUS,DTW]
+[AUS,OKC]
 [AUS,ONT]
 [AUS,CLT]
 [AUS,CUN]
+[AUS,MEM]
+[AUS,CVG]
+[AUS,IND]
 ----
 
 So far, while interesting, many of the results shown look at first glance as if they
@@ -7209,16 +7339,16 @@ airports as well as Austin as our final destinations.
 
 [source,groovy]
 ----
-LSI,EDI,JFK]
-LSI,EDI,EWR]
-LSI,EDI,SWF]
-LSI,GLA,JFK]
-LSI,GLA,EWR]
-LSI,EDI,JFK,AUS]
-LSI,EDI,JFK,ROC]
-LSI,EDI,JFK,BUF]
-LSI,EDI,JFK,SYR]
-LSI,EDI,EWR,ROC]
+[LSI,MAN,JFK]
+[LSI,MAN,EWR]
+[LSI,EDI,JFK]
+[LSI,EDI,EWR]
+[LSI,EDI,SWF]
+[LSI,GLA,JFK]
+[LSI,GLA,EWR]
+[LSI,MAN,ATL,ROC]
+[LSI,MAN,ATL,BUF]
+[LSI,MAN,ATL,ALB]
 ----
 
 The 'emit' can also be placed before the 'repeat' step. This will cause the
@@ -7234,7 +7364,7 @@ g.V().has('airport','code','AUS').
       emit().repeat(out().simplePath()).times(2).limit(10).
       values('code').fold()
 
-[AUS,YYZ,ZRH,YOW,BRU,MUC,RSW,MAN,YUL,YEG]
+[AUS,PHL,SXM,RIC,LEX,ISP,SWF,DSM,MYR,CAE]
 ----
 
 In some cases, an 'emit' placed after a 'repeat' step has the same effect as an
@@ -7255,8 +7385,8 @@ When either query is run, the following results are returned.
 [source,groovy]
 ----
 [JNB,SYD]
-[JNB,BKK,SYD]
-[JNB,DOH,SYD]
+[JNB,SIN,SYD]
+[JNB,DXB,SYD]
 ----
 
 You will see more examples of 'emit' being used in the "<<btree>>" section a bit
@@ -7291,16 +7421,17 @@ g.V().has('code','SAF').
 
 Running the query will generate results similar to those shown below. We start at
 Santa Fe (SAF) and take one outbound route and arrive at Dallas Fort Worth (DFW). We
-then look at three incoming routes which yields Corpus Christi (CRP), Lubbock (LBB)
-and Austin (AUS). We then take another outbound hop from DFW and find ourselves in
-Atlanta(ATL) we then look at three incoming routes from Atlanta and find Lagos (LOS),
-Addis Ababa (ADD) and one of Oslo (OSL), Bangkok (BKK) or Mumbai (BOM).
+then look at three incoming routes which yields Lake Charles (LCH), Houston (IAH)
+and Lomé (LFW). We then take another outbound hop from DFW and find ourselves in
+Los Angeles(LAX) we then look at three incoming routes from Los Angeles and find
+San Diego (SAN), Albuquerque (ABQ) and one of San Francisco (SFO), Portland (PDX) or
+Atlanta (ATL).
 
 [source,groovy]
 ----
-[SAF,DFW,CRP,LBB,AUS,ATL,LOS,ADD,OSL]
-[SAF,DFW,CRP,LBB,AUS,ATL,LOS,ADD,BKK]
-[SAF,DFW,CRP,LBB,AUS,ATL,LOS,ADD,BOM]
+[SAF,DFW,LCH,IAH,LFW,LAX,SAN,ABQ,SFO]
+[SAF,DFW,LCH,IAH,LFW,LAX,SAN,ABQ,PDX]
+[SAF,DFW,LCH,IAH,LFW,LAX,SAN,ABQ,ATL]
 ----
 
 As we mentioned, working with the air routes data set does not perhaps present an
@@ -7335,10 +7466,9 @@ the other two times.
 [source,groovy]
 ----
 [Santa Fe,Los Angeles,Manchester]
-[Santa Fe,Dallas,Buenos Aires,Atlanta]
-[Santa Fe,Dallas,Buenos Aires,Houston]
+[Santa Fe,Dallas,Toronto,Atlanta]
+[Santa Fe,Dallas,Toronto,Austin]
 ----
-
 
 [[depthlimit]]
 ==== Limiting the results at each depth
@@ -7347,7 +7477,6 @@ Sometimes, while exploring a graph using 'repeat' steps, it is desirable to limi
 amount of results returned at any given depth of a traversal. Achieving this result 
 is a little more complicated than you might expect. The 'limit' step has a global 
 scope, as shown below, and is therefore not quite what we need in this case.
-
 
 [source,groovy]
 ----
@@ -7522,8 +7651,6 @@ book.
 Hopefully, by decomposing the steps in this way you are able to gain a good
 understanding of how this very useful Gremlin query works.
 
-
-
 [[cyclicpath]]
 ==== Haven't I been here before? - Introducing 'cyclicPath'
 
@@ -7545,16 +7672,16 @@ Here are the results from running the query.
 
 [source,groovy]
 ----
-[AUS,TUS,AUS]
 [AUS,PHL,AUS]
-[AUS,DTW,AUS]
-[AUS,YYZ,AUS]
-[AUS,LHR,AUS]
-[AUS,FRA,AUS]
-[AUS,MEX,AUS]
-[AUS,PIT,AUS]
 [AUS,PDX,AUS]
+[AUS,DTW,AUS]
+[AUS,OKC,AUS]
 [AUS,ONT,AUS]
+[AUS,CLT,AUS]
+[AUS,CUN,AUS]
+[AUS,MEM,AUS]
+[AUS,CVG,AUS]
+[AUS,IND,AUS]
 ----
 
 You can also use 'cyclicPath' as a termination condition for a 'repeat' loop. The
@@ -7577,27 +7704,27 @@ That query could run for quite a while so we would not recommend trying it!
 
 [source,groovy]
 ----
-[AUS,TUS,AUS]
 [AUS,PHL,AUS]
-[AUS,DTW,AUS]
-[AUS,YYZ,AUS]
-[AUS,LHR,AUS]
-[AUS,FRA,AUS]
-[AUS,MEX,AUS]
-[AUS,PIT,AUS]
 [AUS,PDX,AUS]
+[AUS,DTW,AUS]
+[AUS,OKC,AUS]
 [AUS,ONT,AUS]
+[AUS,CLT,AUS]
+[AUS,CUN,AUS]
+[AUS,MEM,AUS]
+[AUS,CVG,AUS]
+[AUS,IND,AUS]
 ----
 
 If we let the previous query run a few hundred times you would start to see examples
 of where the cycle is not back to the starting vertex. The two results below were
 generated by letting the query find 500 cyclic paths. Note that in the second case
-the cycle is back to Miami (MIA) and not the starting vertex (AUS).
+the cycle is back to Philidelphia (PHL) and not the starting vertex (AUS).
 
 [source,groovy]
 ----
-[AUS,MIA,BUF,AUS]
-[AUS,MIA,BUF,MIA]
+[AUS,PHL,SXM,PHL]
+[AUS,PHL,RIC,PHL]
 ----
 
 You can also use 'cyclicPath' combined with a 'not' predicate to avoid returning
@@ -7630,7 +7757,7 @@ same vertex. Take a look at the code below that creates an edge with a label of
 ----
 g.V(3).as('a').addE('loop').to('a')
 
-e[56951][3-loop->3]
+e[61394][3-loop->3]
 ----
 
 We can then use the 'cyclicPath' step to find such loops in the graph.
@@ -7647,9 +7774,9 @@ shown below.
 
 [source,groovy]
 ----
- g.V().outE().inV().cyclicPath().path()
+g.V().outE().inV().cyclicPath().path()
 
-[v[3],e[56951][3-loop->3],v[3]]
+[v[3],e[61394][3-loop->3],v[3]]
 ----
 
 [[pathwarn]]
@@ -7674,16 +7801,16 @@ Here are some of the routes returned.
 
 [source,groovy]
 ----
-[PSV,LWK,FIE,KOI,EDI,JFK,AUS]
-[PSV,LWK,FIE,KOI,EDI,EWR,AUS]
-[PSV,LWK,FIE,KOI,EDI,LHR,AUS]
-[PSV,LWK,FIE,KOI,EDI,FRA,AUS]
-[PSV,LWK,FIE,KOI,GLA,JFK,AUS]
-[PSV,LWK,FIE,KOI,GLA,MCO,AUS]
-[PSV,LWK,FIE,KOI,GLA,EWR,AUS]
-[PSV,LWK,FIE,KOI,GLA,PHL,AUS]
-[PSV,LWK,FIE,KOI,GLA,YYZ,AUS]
-[PSV,LWK,FIE,KOI,GLA,LHR,AUS]
+[PSV,LWK,FIE,KOI,MAN,ATL,AUS]
+[PSV,LWK,FIE,KOI,MAN,BOS,AUS]
+[PSV,LWK,FIE,KOI,MAN,IAD,AUS]
+[PSV,LWK,FIE,KOI,MAN,IAH,AUS]
+[PSV,LWK,FIE,KOI,MAN,JFK,AUS]
+[PSV,LWK,FIE,KOI,MAN,LAX,AUS]
+[PSV,LWK,FIE,KOI,MAN,MCO,AUS]
+[PSV,LWK,FIE,KOI,MAN,MIA,AUS]
+[PSV,LWK,FIE,KOI,MAN,ORD,AUS]
+[PSV,LWK,FIE,KOI,MAN,SEA,AUS]
 ----
 
 If we reverse the query as shown below we can run into trouble. In fact, if you run 
@@ -7755,19 +7882,18 @@ The simplest way to calculate vertex degree is simply to count edges as shown be
 // Outgoing degree
 g.V().has('airport','code','LHR').out().count()
 
-191
+221
 
 // Incoming degree
 g.V().has('airport','code','LHR').in().count()
 
-193
+223
 
 // Overall degree
 g.V().has('airport','code','LHR').both().count()
 
-384
+444
 ----
-
 
 If you want to calculate the degree values for more than a single vertex, it can be
 done more easily using the 'group' step. The query below will calculate the number 
@@ -7793,7 +7919,7 @@ If we were to run the query the output should look like this.
 
 [source,groovy]
 ----
-[LHR:191,JFK:187,DFW:221]
+[LHR:221,JFK:204,DFW:253]
 ----
 
 We could change the query a little to calculate the in degree values. Note that we
@@ -7805,7 +7931,7 @@ g.V().hasLabel('airport').
       group().by('code').by(__.in('route').count()).
       select('LHR','JFK','DFW')
 
-[LHR:191,JFK:186,DFW:221]
+[LHR:221,JFK:203,DFW:253]
 ----
 
 The query below is a little more complex but can be used to find the 10 airports with
@@ -7825,7 +7951,7 @@ in detail in the "<<mostroutes>>" section.
 
 [source,groovy]
 ----
-[DFW=221,DXB=229,ORD=232,ATL=232,PEK=234,MUC=237,CDG=262,AMS=269,IST=270,FRA=272]
+[ATL=242,DXB=248,PEK=248,DFW=253,ORD=265,MUC=270,AMS=283,CDG=293,IST=309,FRA=310]
 ----
 
 The next query will calculate the route degree based on all, incoming and outgoing,
@@ -7842,16 +7968,16 @@ Here is the output that this query generates.
 
 [source,groovy]
 ----
-[v:ATL,degree:464]
-[v:ANC,degree:78]
-[v:AUS,degree:118]
-[v:BNA,degree:110]
-[v:BOS,degree:260]
-[v:BWI,degree:178]
-[v:DCA,degree:186]
-[v:DFW,degree:442]
-[v:FLL,degree:284]
-[v:IAD,degree:272]
+[v:ATL,degree:484]
+[v:ANC,degree:82]
+[v:AUS,degree:196]
+[v:BNA,degree:150]
+[v:BOS,degree:286]
+[v:BWI,degree:182]
+[v:DCA,degree:192]
+[v:DFW,degree:506]
+[v:FLL,degree:316]
+[v:IAD,degree:315]
 ----
 
 We could of course also write the same query using a 'group' step as shown below.
@@ -7866,7 +7992,7 @@ The results below were generated by running the query.
 
 [source,groovy]
 ----
-[DCA:186,BNA:110,DFW:442,BWI:178,ANC:78,BOS:260,FLL:284,ATL:464,IAD:272,AUS:118]
+[DCA:192,BNA:150,DFW:506,BWI:182,ANC:82,BOS:286,FLL:316,ATL:484,IAD:315,AUS:196]
 ----
 
 [[mathstep]]
@@ -7983,6 +8109,20 @@ g.V().has('airport','code','DFW').as('a').
 11.0
 ----
 
+The 'math' step returns a double. If you would prefer an integer value you can always
+convert it with 'asNumber'.
+
+[source,groovy]
+----
+// Use named steps to add some results together.
+g.V().has('airport','code','DFW').as('a').
+      out().has('code','SFO').as('b').
+      math('a + b').by('runways').
+      asNumber(GType.INT)
+
+11
+----
+
 The examples below show division and modulo operators being used on the results of a
 'count' step.
 
@@ -7990,15 +8130,15 @@ The examples below show division and modulo operators being used on the results 
 ----
 g.V(3).out().count()
 
-59
+98
 
 g.V(3).out().count().math('_ / 2')
 
-29.5
+49.0
 
 g.V(3).out().count().math('_ % 5')
 
-4.0
+3.0
 ----
 
 Note that the underscore character allowed us to avoid having to write the previous
@@ -8009,7 +8149,7 @@ queries using a pattern like the one used below where the count step is labelled
 ----
 g.V(3).out().count().as('a').math('a / 2')
 
-29.5
+49.0
 ----
 
 [[mathby]]
@@ -8039,18 +8179,18 @@ pair of airports has.
 ----
 g.V().has('code','SAF').as('a').
       out().as('b').
-      math('a + b').by('runways')
+      math('a + b').by('runways').
+      asNumber(INT)
 
-10.0
-7.0
-6.0
-9.0
+10
+7
+6
+9
 ----
 
 Of course, this is a simple example where 'math' is not really needed but hopefully
 it shows how a 'by' modulator can be used with a 'math' step. For completeness, here
-is the query rewritten to use a 'sum' step. Notice that in this case the results are
-integers whereas the 'math' step always returns floating point values.
+is the query rewritten to use a 'sum' step.
 
 [source,groovy]
 ----
@@ -8066,7 +8206,6 @@ g.V().has('code','SAF').as('a').
 
 [[mathconvert]]
 ==== Converting feet to meters
-
 
 The length of the longest runway at each airport in the graph is stored as units of
 feet. We can use a simple 'math' step to convert that value to meters.
@@ -8092,7 +8231,6 @@ g.V().has('code','DFW').
 [Longest runway at:DFW,feet:13401,meters:4084.6248]
 ----
 
-
 [[mathtrig]]
 ==== Using the trigonometric functions
 
@@ -8104,7 +8242,6 @@ step to calculate the sine of 60 degrees and stores the result in a variable cal
 
 [source,groovy]
 ----
-
 // Calculate the sine of 60 degrees
 x=g.inject(60*(Math.PI/180)).math('sin(_)').next()
 
@@ -8167,7 +8304,6 @@ g.inject(Math.toRadians(45)).math('tan(_)').math('ceil(_)')
 1.0
 ----
 
-
 [[mathsignum]]
 ==== Using signum to make a choice
 
@@ -8208,20 +8344,19 @@ Here is an example of the output from running the query.
 
 [source,groovy]
 ----
-[IATA:LGW,city:London,position:West]
-[IATA:STN,city:London,position:East]
-[IATA:LIM,city:Lima,position:West]
-[IATA:SYD,city:Sydney,position:East]
-[IATA:VCE,city:Venice,position:East]
-[IATA:FCO,city:Rome,position:East]
-[IATA:OAK,city:Oakland,position:West]
-[IATA:GVA,city:Geneva,position:East]
-[IATA:LAS,city:Las Vegas,position:West]
-[IATA:NRT,city:Tokyo,position:East]
-[IATA:DME,city:Moscow,position:East]
-[IATA:ALC,city:Alicante,position:West]
+[IATA:MJZ,city:Mirny,position:East]
+[IATA:ULN,city:Ulaanbaatar,position:East]
+[IATA:AHU,city:Al Hoceima,position:West]
+[IATA:AMA,city:Amarillo,position:West]
+[IATA:JTC,city:Bauru,position:West]
+[IATA:PIZ,city:Point Lay,position:West]
+[IATA:UZR,city:Urdzhar,position:East]
+[IATA:MNT,city:Minto,position:West]
+[IATA:MKE,city:Milwaukee,position:West]
+[IATA:PSA,city:Pisa,position:East]
+[IATA:FWA,city:Fort Wayne,position:West]
+[IATA:DBQ,city:Dubuque,position:West]
 ----
-
 
 [[stddev]]
 ==== Calculating a standard deviation
@@ -8233,7 +8368,6 @@ queries rather than try to force it all into one. Even now the final query of th
 three is complicated enough we think! Notice how multiple 'math' steps are used in
 the same query with the results from one being used as input to the next.
 
-
 First of all let's calculate the mean (or average) number of runways in the graph.
 Not surprisingly this number is close to 1.5 as as the majority of the airports only
 have one or two runways.
@@ -8243,7 +8377,7 @@ have one or two runways.
 // Average number of runways
 mean=g.V().hasLabel('airport').values('runways').mean().next()
 
-1.4309425014819206
+1.4212328767123288
 ----
 
 We also need to know how many airports there are in the graph so that we can
@@ -8254,7 +8388,7 @@ calculate the variance as part of the standard deviation calculation.
 // Total number of airports
 count = g.V().hasLabel('airport').count().next()
 
-3374
+3504
 ----
 
 Now we are ready to make use of the square root and power operators and calculate the
@@ -8272,7 +8406,7 @@ g.withSideEffect("m",mean).
   V().hasLabel('airport').values('runways').
   math('(_ - m)^2').sum().math('_ / c').math('sqrt(_)')
 
-0.7510927827902234
+0.7429770644987477
 ----
 
 We could use another query to check on the distribution of runways in the graph to
@@ -8282,7 +8416,7 @@ see if we believe our standard deviation result.
 ----
  g.V().hasLabel('airport').groupCount().by('runways')
 
-[1:2316,2:762,3:225,4:51,5:14,6:4,7:1,8:1]
+[1:2429,2:775,3:227,4:53,5:14,6:4,7:2]
 ----
 
 Looking at the distribution, where a large majority of the airports have either one
@@ -8302,11 +8436,11 @@ same of course.
 
 mean=g.V().hasLabel('airport').local(out().count()).mean().next()
 
-12.863070539419088
+14.451198630136986
 
 count = g.V().hasLabel('airport').count().next()
 
-3374
+3504
 ----
 
 Now we are ready to again calculate the standard deviation for the data set
@@ -8319,7 +8453,7 @@ g.withSideEffect("m",mean).
   V().hasLabel('airport').local(out().count()).
   math('(_ - m)^2').sum().math('_ / c').math('sqrt(_)')
 
-28.356862649682018
+32.00790808644156
 ----
 
 This time we got a much bigger number back as the result compared to when we looked
@@ -8341,7 +8475,7 @@ g.V().hasLabel('airport').
       select('runways').unfold().
       math('(_-mean)^2').mean().math('sqrt(_)')
 
-0.7510927827902234
+0.7429770644987477
 ----
 
 Using this approach means that we can avoid making multiple round trips to the graph
@@ -8366,7 +8500,7 @@ g.V().has('code','AUS').
         by(__.in('route').count()).
         by(out('route').count())
 
-[in:59,out:59]
+[in:98,out:98]
 ----
 
 We can now add a 'math' step that uses the key names from the map created by the
@@ -8380,7 +8514,7 @@ g.V().has('code','AUS').
         by(out('route').count()).
       math('in + out')
 
-118.0
+196.0
 ----
 
 There are obviously many other operators that we have not provided examples for but
@@ -8397,7 +8531,6 @@ The 'withIndex' method adds the index value at the end of a list whereas the
 'indexed' method adds it at the start. You can provide a starting index value as a
 parameter. If no value is provided the default value for the first index will be
 zero.
-
 
 [source,groovy]
 ----
@@ -8455,11 +8588,11 @@ g.V().has('code','LHR').
       out().limit(5).
       values('code').index()
 
-[[HKG,0]]
-[[PEK,0]]
-[[PVG,0]]
-[[FCO,0]]
-[[BOM,0]]
+[[YUL,0]]
+[[YEG,0]]
+[[CGN,0]]
+[[GOT,0]]
+[[VCE,0]]
 ----
 
 If we had a 'fold' step before calling 'index' however, the results will be indexed
@@ -8471,7 +8604,7 @@ g.V().has('code','LHR').
       out().limit(5).
       values('code').fold().index()
 
-[[HKG,0],[PEK,1],[PVG,2],[FCO,3],[BOM,4]]
+[[YUL,0],[YEG,1],[CGN,2],[GOT,3],[VCE,4]]
 ----
 
 Adding an 'unfold' step will yield a set of individual lists with each containing an
@@ -8484,11 +8617,11 @@ g.V().has('code','LHR').
       values('code').fold().index().
       unfold()
 
-[HKG,0]
-[PEK,1]
-[PVG,2]
-[FCO,3]
-[BOM,4]
+[YUL,0]
+[YEG,1]
+[CGN,2]
+[GOT,3]
+[VCE,4]
 ----
 
 The new 'with' modulator can be used to control the type of collection that 'index'
@@ -8502,7 +8635,7 @@ g.V().has('code','LHR').
       values('code').fold().
       index().with(WithOptions.indexer,WithOptions.map)
 
-[0:HKG,1:PEK,2:PVG,3:FCO,4:BOM]
+[0:YUL,1:YEG,2:CGN,3:GOT,4:VCE]
 ----
 
 Finally the example below shows a 'with' step being used to ask for results as a list
@@ -8525,13 +8658,12 @@ g.V().has('code','LHR').
       unfold().
       order().by(tail(local,1),desc)
 
-[BOM,4]
-[FCO,3]
-[PVG,2]
-[PEK,1]
-[HKG,0]
+[VCE,4]
+[GOT,3]
+[CGN,2]
+[YEG,1]
+[YUL,0]
 ----
-
 
 [[index-reverse]]
 ==== Using 'index' to reverse a list
@@ -8590,11 +8722,8 @@ Once again we can order the results using the index values.
 
 [source,groovy]
 ----
-g.V().
-  has('code','SAF').
-  out().
-  values('code').
-  fold().
+g.V().has('code','SAF').
+  out().values('code').fold().
   index().
   unfold().
   order().
@@ -8602,7 +8731,7 @@ g.V().
   limit(local,1).
   fold()
 
-  [DEN,PHX,LAX,DFW]
+[[DEN],[PHX],[LAX],[DFW]]
 ----
 
 [[sx]]
@@ -8623,20 +8752,16 @@ the full result set are shown.
 
 [source,groovy]
 ----
-[Honolulu,San Francisco]
-[Honolulu,Osaka]
-[Honolulu,San Diego]
-[Honolulu,Sapporo]
-[Honolulu,Las Vegas]
-[Honolulu,Sacramento]
-[Honolulu,Denver]
-[Kahului,Portland]
-[Kahului,Sacramento]
-[Kahului,Lahaina]
-[Lihue,Oakland]
-[Lihue,Vancouver]
-[Lihue,Seattle]
-[Lihue,San Francisco]
+[Honolulu,Brisbane]
+[Honolulu,Shanghai]
+[Honolulu,Kuala Lumpur]
+[Honolulu,Tokyo]
+[Honolulu,Seoul]
+[Honolulu,Portland]
+[Honolulu,Kahului]
+[Honolulu,Hagta]
+[Honolulu,Taipei]
+...
 ----
 
 The query below looks for airports in Europe using the continent vertex with a code 
@@ -8647,13 +8772,32 @@ into a list.
 ----
 // Find all the airports that are in Europe (The graph stores continent information
 // as "contains" edges connected from a "continent" vertex to each airport vertex.
-g.V().has('continent','code','EU').out('contains').values('code').order().fold()
+g.V().has('continent','code','EU').out('contains').values('code').order()
 ----
 
-Here is what we get back from running the query.
+Here are some of the results that you get back from running the query.
+
 [source,groovy]
 ----
-[AAL,AAQ,AAR,ABZ,ACE,ACH,ACI,AER,AES,AEY,AGB,AGF,AGH,AGP,AHO,AJA,AJR,ALC,ALF,AMS,ANE,ANG,ANR,ANX,AOI,AOK,ARH,ARN,ARW,ASF,ATH,AUR,AVN,AXD,BAY,BCM,BCN,BDS,BDU,BEB,BEG,BES,BFS,BGO,BGY,BHD,BHX,BIA,BIO,BIQ,BJF,BJZ,BLE,BLK,BLL,BLQ,BMA,BNN,BNX,BOD,BOH,BOJ,BOO,BRE,BRI,BRN,BRQ,BRR,BRS,BRU,BSL,BTS,BUD,BVA,BVE,BVG,BWK,BZG,BZK,BZO,BZR,BZZ,CAG,CAL,CCF,CDG,CDT,CEE,CEG,CFE,CFN,CFR,CFU,CGN,CHQ,CIA,CIY,CLJ,CLY,CMF,CND,CPH,CRA,CRL,CSH,CSY,CTA,CUF,CVT,CVU,CWC,CWL,DBV,DCM,DEB,DIJ,DLE,DME,DND,DNK,DNR,DOK,DOL,DRS,DSA,DTM,DUB,DUS,EAS,EBA,EBJ,EBU,EDI,EFL,EGC,EGO,EGS,EIN,EMA,ENF,EOI,ERF,ESL,ETZ,EVE,EVG,EXT,FAE,FAO,FCO,FDE,FDH,FIE,FKB,FLR,FLW,FMM,FMO,FNC,FNI,FOA,FRA,FRO,FSC,FUE,GCI,GDN,GDZ,GEV,GIB,GLA,GLO,GMZ,GNB,GOA,GOJ,GOT,GPA,GRO,GRQ,GRV,GRW,GRX,GRZ,GSE,GVA,GWT,HAA,HAD,HAJ,HAM,HAU,HDF,HEL,HER,HFS,HFT,HHN,HMV,HOR,HOV,HRK,HUY,IAR,IAS,IBZ,IEV,IFJ,IFO,IJK,ILD,ILY,INI,INN,INV,IOA,IOM,ISC,IST,IVL,JER,JIK,JKG,JKH,JKL,JMK,JNX,JOE,JSH,JSI,JSY,JTR,JTY,JYV,KAJ,KAO,KBP,KEF,KEM,KGD,KGS,KHE,KID,KIR,KIT,KIV,KKN,KLR,KLU,KLV,KLX,KOI,KOK,KRF,KRK,KRN,KRP,KRR,KRS,KSC,KSD,KSF,KSJ,KSO,KSU,KTT,KTW,KUF,KUN,KUO,KVA,KVK,KVX,KZI,KZN,KZR,KZS,LAI,LBA,LBC,LCG,LCJ,LCY,LDE,LDY,LED,LEH,LEI,LEJ,LEN,LEQ,LGG,LGW,LHR,LIG,LIL,LIN,LIS,LJU,LKL,LKN,LLA,LMP,LNZ,LPA,LPI,LPK,LPL,LPP,LPY,LRH,LRS,LRT,LSI,LTN,LUG,LUX,LUZ,LWK,LWO,LXS,LYC,LYR,LYS,MAD,MAH,MAN,MCX,MEH,MHG,MHQ,MJF,MJT,MJV,MLA,MLN,MLO,MME,MMK,MMX,MOL,MPL,MQF,MQN,MRS,MRV,MSQ,MST,MUC,MXP,MXX,NAL,NAP,NBC,NCE,NCL,NDY,NDZ,NNM,NOC,NQY,NRK,NRL,NRN,NTE,NUE,NVK,NWI,NYO,ODS,OER,OGZ,OLA,OLB,OMO,OMR,OPO,ORB,ORK,ORY,OSD,OSI,OSL,OSR,OST,OSW,OSY,OTP,OUL,OVD,OZH,PAD,PAS,PDL,PDV,PED,PEE,PEG,PES,PEZ,PGF,PGX,PIK,PIS,PIX,PJA,PLQ,PMF,PMI,PMO,PNA,PNL,POR,POZ,PPW,PRG,PRN,PSA,PSR,PSV,PUF,PUY,PVK,PXO,RDZ,REG,REN,RET,REU,RGS,RHO,RIX,RJK,RJL,RKV,RLG,RMI,RNB,RNN,RNS,ROV,RRS,RTM,RTW,RVK,RVN,RYG,RZE,SBZ,SCN,SCQ,SCV,SCW,SDL,SDN,SDR,SEN,SFT,SGD,SIP,SJJ,SJZ,SKE,SKG,SKN,SKP,SKU,SKX,SLM,SMA,SMI,SNN,SOF,SOG,SOJ,SOU,SOY,SPC,SPU,SRP,SSJ,STN,STR,STW,SUF,SUJ,SVG,SVJ,SVL,SVO,SVQ,SXB,SXF,SYY,SZG,SZY,SZZ,TAY,TBW,TEQ,TER,TFN,TFS,TGD,TGK,TGM,THN,TIA,TIV,TKU,TLL,TLN,TLS,TMP,TOS,TPS,TRD,TRE,TRF,TRN,TRS,TSF,TSR,TUF,TXL,TYF,TZL,UCT,UDJ,UFA,UIP,UKS,ULV,ULY,UME,URE,URO,URS,USK,UTS,UUA,VAA,VAR,VAW,VBY,VCE,VDB,VDE,VDS,VGO,VHM,VIE,VIN,VIT,VKO,VLC,VLL,VLY,VNO,VOG,VOL,VOZ,VRN,VST,VTB,VUS,VXO,WAT,WAW,WIC,WMI,WRO,WRY,XCR,XFW,XRY,ZAD,ZAG,ZAZ,ZIA,ZQW,ZRH,ZTH]
+AAL
+AAQ
+AAR
+ABZ
+ACE
+ACH
+ACI
+AER
+AES
+AEY
+AGB
+AGF
+AGH
+AGP
+AHO
+AJA
+AJR
+ALC
+...
 ----
 
 The next queries show two ways of finding airports with 6 or more runways.
@@ -8711,6 +8855,9 @@ only one stop, this query will do nicely!
 g.V().has('code','BNE').out().out().has('code','AUS').path().by('code')
 
 [BNE,LAX,AUS]
+[BNE,SFO,AUS]
+[BNE,HNL,AUS]
+[BNE,YVR,AUS]
 ----
 
 This is another way of doing the same thing but, once again, to me using 'path' feels
@@ -8723,6 +8870,9 @@ g.V().has('code','BNE').out().as('stop').
                         out().has('code','AUS').select('stop').values('code')
 
 LAX
+SFO
+HNL
+YVR
 ----
 
 A common thing you will find yourself doing when working with a graph is counting
@@ -8736,7 +8886,7 @@ number of airports that offer this small number of destinations.
 // Airports with fewer than 5 outgoing edges
 g.V().hasLabel('airport').where(out('route').count().is(lt(5))).count()
 
-2058
+2046
 ----
 
 In a similar vein this query finds the airports with more than 200 outgoing routes.
@@ -8825,7 +8975,7 @@ If we ran the query that uses the 'project' step here is what we should get back
 [city:Golog,elevation:12427]
 [city:Juliaca,elevation:12552]
 [city:Yushu,elevation:12816]
-[city:Potosi,elevation:12913]
+[city:Potosí,elevation:12913]
 [city:Quijarro,elevation:12972]
 [city:La Paz / El Alto,elevation:13355]
 [city:Shiquanhe,elevation:14022]
@@ -8867,20 +9017,37 @@ g.V().hasLabel('airport').where(__.in('contains').has('code','AF')).as('a').
       out().has('country','US').as('b').select('a','b').by('code')
 ----
 
-If we run the query we should get results that look like this. We have laid them out
-in two columns to save space.
+If we run the query we should get results that look like this.
 
 [source,groovy]
 ----
-[a:JNB, b:ATL]    [a:ACC, b:JFK]
-[a:JNB, b:JFK]    [a:CMN, b:IAD]
-[a:CAI, b:JFK]    [a:CMN, b:JFK]
-[a:ADD, b:IAD]    [a:GCK, b:DFW]
-[a:ADD, b:EWR]    [a:DKR, b:IAD]
-[a:LOS, b:ATL]    [a:DKR, b:JFK]
-[a:LOS, b:IAH]    [a:LFW, b:EWR]
-[a:LOS, b:JFK]    [a:RAI, b:BOS]
-[a:ACC, b:IAD]
+[a:CPT,b:EWR]
+[a:JNB,b:ATL]
+[a:JNB,b:JFK]
+[a:JNB,b:EWR]
+[a:NBO,b:JFK]
+[a:CAI,b:JFK]
+[a:ADD,b:IAD]
+[a:ADD,b:EWR]
+[a:LOS,b:ATL]
+[a:LOS,b:IAD]
+[a:LOS,b:IAH]
+[a:LOS,b:JFK]
+[a:ACC,b:IAD]
+[a:ACC,b:JFK]
+[a:CMN,b:IAD]
+[a:CMN,b:JFK]
+[a:CMN,b:MIA]
+[a:GCK,b:DFW]
+[a:SID,b:IAD]
+[a:DKR,b:IAD]
+[a:DKR,b:JFK]
+[a:ABJ,b:EWR]
+[a:LFW,b:IAH]
+[a:LFW,b:LAX]
+[a:LFW,b:EWR]
+[a:RAI,b:BOS]
+[a:DSS,b:IAD]
 ----
 
 The query below shows how to use the 'project' step that was introduced in TinkerPop
@@ -8899,14 +9066,14 @@ Here are the results we get from running the query.
 
 [source,groovy]
 ----
-[ap:ORD, rw:8]
-[ap:DFW, rw:7]
-[ap:BOS, rw:6]
-[ap:DEN, rw:6]
-[ap:DTW, rw:6]
-[ap:YYZ, rw:5]
-[ap:MDW, rw:5]
-[ap:ATL, rw:5]
-[ap:IAH, rw:5]
-[ap:FRA, rw:4]
+[ap:DFW,rw:7]
+[ap:ORD,rw:7]
+[ap:DTW,rw:6]
+[ap:BOS,rw:6]
+[ap:DEN,rw:6]
+[ap:AMS,rw:6]
+[ap:MKE,rw:5]
+[ap:MDW,rw:5]
+[ap:ATL,rw:5]
+[ap:IAH,rw:5]
 ----
