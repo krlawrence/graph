@@ -5,10 +5,10 @@
 In this chapter you will find more Gremlin queries that operate on the 'air-routes'
 graph. All of these queries build upon the topics  covered in the prior sections.
 In this section we have included lots of examples of the output returned by running
-queries. In cases where the output is rather lengthy we have either truncated it or
+queries. In cases where the output is rather lengthy, we have either truncated it or
 laid it out in columns to make it easier to read and to save space. It is our hope
-also that from reading the examples in this section that you will get a sense for how
-good data modelled as a graph can be when used for analysis. we also think that the
+also that from reading the examples in this section that you will get a sense of how
+good data modeled as a graph can be when used for analysis. we also think that the
 queries in this section show that you can achieve useful results from a graph using
 nothing more than some OLTP style queries and a TinkerGraph. This is actually a great
 example of an ideal use case for TinkerGraph. Even if you have your main data in a
@@ -63,7 +63,7 @@ g.V().hasLabel('country').where(__.not(out())).values('desc')
 ==== Which airports have no routes?
 
 There are a few airports in the graph that currently have no commercial routes. This
-is either because they used to have service and it was discontinued or they are new
+is either because they used to have service and it was discontinued, or they are new
 airports still awaiting service to start. We can write a query to easily find these
 "orphan" airports.
 

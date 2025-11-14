@@ -51,15 +51,15 @@ this book we will be working within the Gremlin console with a local graph. Howe
 in Chapters 7 and 8 we take a look at Gremlin Server and some other TinkerPop enabled
 environments. Most of Apache TinkerPop has been developed using Java but there are
 also bindings available for many other programming languages such as Groovy, Python,
-Go, Javascript, and C#. These bindings help make Gremlin feel comfortable to you as 
+Go, Javascript and C#. These bindings help make Gremlin feel comfortable to you as
 you can work with Gremlin in the idioms of the programming language that you are most
 familiar with.
 
 Even though this book focuses on Gremlin written with Groovy, you should remember 
 that whatever examples you see in Groovy can easily be converted to any other 
-supported programming language. You just need to understand the idioms of the the
+supported programming language. You just need to understand the idioms of the
 language you are using and converting should be straightforward. For example, Python
-prefers snake case compared to Groovy preferring camel-case. Therefore a Groovy query
+prefers snake case compared to Groovy preferring camel-case. Therefore, a Groovy query
 of 'g.addV("person")' just converts to 'g.add_v("person")' in Python. You will read
 more about Gremlin translation in the "<<translators>>" section.
 
@@ -93,7 +93,7 @@ You can download the Gremlin console from the official Apache TinkerPop website 
 http://tinkerpop.apache.org/
 
 It only takes a few minutes to get the Gremlin Console installed and running. You
-just download the ZIP, 'unzip' it, and you are all set. TinkerPop also
+just download the ZIP, 'unzip' it and you are all set. TinkerPop also
 requires Java to be at version 11 or higher.
 
 NOTE: For more information on the compatability of Gremlin with versions of Java and
@@ -648,7 +648,7 @@ excellent resource for learning Gremlin and graphs. Having a stable 1.0 version 
 that any educational resources adopting this version in different contexts will
 simply just work when taken to other ones.
 
-NOTE: Even though no further releases of the dataset are expected the GitHub
+NOTE: Even though no further releases of the dataset are expected, the GitHub
 repository still maintains a "latest" version. It is also 1.0. You can download it
 from
 https://github.com/krlawrence/graph/blob/main/sample-data/air-routes-latest.graphml
@@ -725,7 +725,7 @@ Once you have the Gremlin Console up and running and have the graph loaded, if
 you feel like it you can cut-and-paste queries from this book directly into
 the console to see them run.
 
-Once the 'air-routes' graph is loaded you can enter the following command and you 
+Once the 'air-routes' graph is loaded, you can enter the following command and you
 will get back information about the graph. In the case of a TinkerGraph you will get 
 back a useful message telling you how many vertices and edges the graph contains. 
 Note that the contents of this message will vary from one graph system to another and
@@ -774,7 +774,7 @@ very useful items to specify at the start of a query.
 
 As most of the examples in this book are intended to work just fine with only a basic
 TinkerGraph the subject of indexes is not covered in detail until Chapter 6
-"<<beyond>>" . However, as TinkerGraph does have some indexing capability we have
+"<<beyond>>" . However, as TinkerGraph does have some indexing capability, we have
 also included some discussion of it in the "<<tinkerindex>>" section. You should
 always refer to the specific documentation for the graph system you are using to 
 decide what you need to do about creating an index and schema for your graph. 

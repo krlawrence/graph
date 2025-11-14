@@ -22,7 +22,7 @@ contain all of the vertex data and the other will contain all of the edge data.
 [[csvair]]
 ==== Using two CSV files to represent the air-routes data
 If we were to store the airport data from the 'air-routes' graph in CSV format we 
-might do something like the example below. Note that to improve readability we have 
+might do something like the example below. Note that to improve readability, we have
 not included every property (or indeed every airport) in this example. Notice how 
 each vertex has a unique ID assigned. This is important as when we define the edges 
 we will need the vertex IDs to build the connections.
@@ -81,12 +81,12 @@ also doing similar things.
 
 The examples shown above of how a CSV file can be used to store data about vertices 
 and edges presents a convenient way to do it. However, this is by no means the only 
-way you could do it. For graphs that do not contain properties you could lay the 
+way you could do it. For graphs that do not contain properties, you could lay the
 graph out using an 'adjacency matrix' as shown below. The letters represent the 
-vertex labels and a 1 indicates there is an edge between them and a zero indicates no
-edge. This format can be useful if your vertices and edges do not have properties and
-if the graph is small but in general is not a great way to try and represent large 
-graphs.
+vertex labels, and a 1 indicates there is an edge between them and a zero indicates
+no edge. This format can be useful if your vertices and edges do not have properties
+and if the graph is small, but in general it is not a great way to try and represent
+large graphs.
 
 [source,text]
 ----
@@ -164,8 +164,8 @@ the vertices. The vertices are represented by their ID value.
 [1,route,632]
 ----
 
-If you wanted to export a very simple version of the 'air-routes' graph, using just the
-airport IATA codes and the edge labels you could write a Gremlin query to do it for
+If you wanted to export a basic version of the 'air-routes' graph, using just the
+airport IATA codes and the edge labels, you could write a Gremlin query to do it for
 you as follows. Only the first 10 results returned are shown.
 
 [source,groovy]
@@ -187,10 +187,10 @@ g.V().outE().inV().path().by('code').by(label)
 TIP: There is a sample program called GraphFromCSV.java in the sample programs folder
 that shows how to read a CSV file like the one above and create a graph from it.
 
-If you wanted to print the list without the containing square brackets you could take
-advantage of the Java 'forEachRemaining' method from the Iterator interface to add a
-bit of post-processing to the end of the query. Once again only the first 10 results
-are shown.
+If you wanted to print the list without the containing square brackets, you could
+take advantage of the Java 'forEachRemaining' method from the Iterator interface to
+add a bit of post-processing to the end of the query. Once again only the first 10
+results are shown.
 
 [source,groovy]
 ----
@@ -211,8 +211,8 @@ ATL,route,TTN
 
 === GraphML
 
-GraphML is an XML based format designed to serialize an entire graph. This format is
-best used for interoperabiilty with other graph tools and frameworks as it has wide
+GraphML is an XML-based format designed to serialize an entire graph. This format is
+best used for interoperability with other graph tools and frameworks as it has wide
 support. The format specification can be found at http://graphml.graphdrawing.org/.
 
 The following sample file illustrates what the format looks like. 
@@ -274,15 +274,12 @@ Documentation https://tinkerpop.apache.org/docs/current/dev/io/#graphml
 === GraphSON
 
 As discussed in the "<<graphmlandjsonintro>>" section, there are multiple versions of
-the GraphSON format. There are currently three versions of GraphSON and each has an
-option to include embedded type information or to rely on standard JSON types. The
-original 1.0 version has a complicated embedded type format that is difficult to
-parse and is typically not used anymore. Version 2.0 introduce a new embedded type
-format that is much more compact and easier to parse and 3.0 added a few additional
-types to the format. The default format unless explicitly specified is currently
-GraphSON 3.0.
-
-To be written
+the GraphSON format. There are currently three versions of GraphSON, and each can
+include embedded type information or to rely on standard JSON types. The original
+1.0 version has a complicated embedded type format that is difficult to parse and is
+typically not used anymore. Version 2.0 introduce a new embedded type format that is
+much more compact and easier to parse and 3.0 added a few additional types to the
+format. The default format unless explicitly specified is currently GraphSON 3.0.
 
 [source,groovy]
 ----

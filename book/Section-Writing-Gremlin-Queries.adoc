@@ -731,7 +731,7 @@ enough modulators specified for the total number of elements in the path, Gremli
 just loops back around to the first 'by' step and so on. So even though there were
 three elements in the path that we wanted to have formatted, we only needed to
 specify two 'by' modulators. This is because the first and third elements in the path
-are of the same type, namely airport vertices, and we wanted to use the same property
+are of the same type, namely airport vertices and we wanted to use the same property
 name, 'code', in each of those cases. If we instead wanted to reference a different
 property name for each element of the path result, we would need to specify three
 explicit 'by' modulator steps. This would be required if, for example, we wanted to
@@ -2534,7 +2534,7 @@ having a graph traversal source without a connection to a graph. Calling 'with' 
 this object binds it to a particular graph data source and then "g" is ready for you
 to write your queries.
 
-You may see examples in this book, blog posts, or other documentation that shorthand
+You may see examples in this book, blog posts or other documentation that shorthand
 the creation of 'g' like
 
 [source,groovy]
@@ -3416,7 +3416,7 @@ helpful in many situations:
 TIP: The steps noted in the prior table are meant specifically for working with 
 various collections types, but you should also note that many Gremlin steps 
 inherently work with collections. For example, the 'local' versions of 'range', 
-'limit', or 'tail' are good at taking parts of a collection or 'unfold' that can be 
+'limit or 'tail' are good at taking parts of a collection or 'unfold' that can be
 used to deconstruct collections. These are some obvious examples, but as you learn 
 more about Gremlin you will find many more.
 
@@ -3792,7 +3792,7 @@ g.inject("2023-08-02T00:00:00Z").asDate().dateAdd(DT.day, -7)
 2023-07-26T00:00Z
 ----
 
-The 'DT' enum allows units of time for 'second', 'minute', 'hour', and 'day'.
+The 'DT' enum allows units of time for 'second', 'minute', 'hour and 'day'.
 
 NOTE: Date conversion in the above examples assume a time zone offset of UTC(+00:00).
 

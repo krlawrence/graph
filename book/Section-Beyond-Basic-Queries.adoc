@@ -609,7 +609,7 @@ using the 'from' step in a similar way as we used the 'to' step above.
 g.V().has('code','DFW').addE('route').from(xyz)
 ----
 
-Another way that we could have chosen to create our edge involves labelling the "XYZ"
+Another way that we could have chosen to create our edge involves labeling the "XYZ"
 vertex using an `as` step. The example below demonstrates this. Notice also how a 'V'
 step is used to start a new traversal midway through the current one. The label
 created using the `as` step is used to instruct the `to` step about the target vertex
@@ -861,8 +861,8 @@ to combine a set of creation steps into a single REST API call.
 ==== Adding vertices and edges using 'inject'
 
 The previous section on "<<addloop>>" used the loop semantics of programming 
-languages to add multiple vertices by iterating over an array of data. In tihs 
-section we will learn how you can do this entirely with Gremlin steps. As before we 
+languages to add multiple vertices by iterating over an array of data. In this
+section we will learn how you can do this entirely with Gremlin steps. As before, we
 construct an array representing our graph data and give that to 'inject'. The 
 "looping" we saw previously is similarly produced here by the standard Gremlin 
 semantics which takes the array and uses 'unfold' to flatten the data such that each 
@@ -907,12 +907,12 @@ generate some vertices for testing.
 ==== Using 'mergeV' and 'mergeE' for upserting
 
 Checking to see if a vertex or edge already exists and then either inserting that 
-element if it does not or updating the element that is found, is a common database
+element if it does not or updating the element that is found is a common database
 access pattern often referred to as an 'upsert'. There are a variety of ways to 
 implement an upsert in Gremlin, but the 'mergeV' and 'mergeE' steps are designed 
-specifically for this purpose and offer a wide degree of flexiblity in this task.
+specifically for this purpose and offer a wide degree of flexibility in this task.
 
-Let's assume we wanted to add a new airport, with the code '"XYZ"' but we are not
+Let's assume we wanted to add a new airport, with the code '"XYZ,"' but we are not
 sure if the airport might have already been added. We can do all of those things 
 using the most basic form of 'mergeV':
 
@@ -944,7 +944,7 @@ present that has a code of '"XYZ"', but the one we created initially lacks a
 'T.label' of "airport" and has a different 'T.id' all together. 
 
 We do not always want to utilize the same criteria for searching as we do creating.
-Most commonly we tend to search by the element identifier, which is the fastest way
+Most commonly, we tend to search by the element identifier, which is the fastest way
 to check for existence. For these cases you will only want to provide that identifier
 to the 'Map' given to 'mergeV' and separately specify the properties you want to use
 to create the vertex if it is not found. You can do this with the 'option' modulator
@@ -999,7 +999,7 @@ edges. Edges have a bit more complexity in that addition to the property values 
 may have, they also have an 'IN' and an 'OUT' (or 'from' and 'to') vertex that 
 applies to them. Let's assume we want to look for an existing route edge between the 
 '"XYZ"' airport that we just added and '"DFW"'. If we find that edge with that search
-criteria we simply return it, but if it is not found then we will create it with a
+criteria, we simply return it, but if it is not found, then we will create it with a
 dist property of 0. To do this we need the vertex ids that this edge relates to. We
 can then use those ids to reference them in the search criteria:
 
@@ -1070,7 +1070,7 @@ The prior example flattens the list of maps in "m", feeding them one at a time t
 and creating those it doesn't. You could take a more advanced approach and perform
 different operations for the 'onCreate" and 'onMatch' options driven fully on the 
 data supplied to 'inject'. In the next example, we form a list of maps, where each
-key refers to the search, create, or match 'Map' options that 'mergeV' expects. We
+key refers to the search, create or match 'Map' options that 'mergeV' expects. We
 can then use 'select' to grab the appropriate one and supply it as an argument to
 the step.
 
@@ -1125,11 +1125,11 @@ printed in Gremlin Console.
 
 ==== Specifying cardinality with 'mergeV'
 
-Most of the time, vertex properties tend to be modelled with 'single' cardinality.
+Most of the time, vertex properties tend to be modeled with 'single' cardinality.
 However, you may have situations where other cardinalities are used or are using a 
 graph that defaults to a cardinality other than 'single'. The 'mergeV' step provides
 two ways to explicitly set the cardinality for the properties given to it and both
-make use of the 'Cardinality' enum. The first way to do this is to explcitly set the
+make use of the 'Cardinality' enum. The first way to do this is to explicitly set the
 cardinality per property value. For example, let's imagine that you want to use 'set'
 cardinality for the code property.
 
@@ -1171,7 +1171,7 @@ constant value if the other entities that we were looking for did not exist. We 
 reuse that pattern to produce a traversal that will only add a vertex to the graph if
 that vertex has not already been created.
 
-Let's assume we wanted to add a new airport, with the code '"XYZ"' but we are not
+Let's assume we wanted to add a new airport, with the code '"XYZ,"' but we are not
 sure if the airport might have already been added.
 
 We can check to see if the airport exists, using a basic 'has' step.
@@ -5721,7 +5721,7 @@ restricts those places by way of a single property key, i.e. the "partitionKey",
 strategy allows you to define complex filtering rules using Gremlin itself to help 
 define the subgraph that is available.
 
-The basic idea for using `SubgraphStrategy` is to define filters for vertices, edges,
+The basic idea for using `SubgraphStrategy` is to define filters for vertices, edges
 or vertex properties to constrain the traversal paths. As previously mentioned, you 
 define the filters with Gremlin.
 
@@ -6420,7 +6420,7 @@ translating the Gremlin you write in your programming language to the form expec
 by the grammar. If you are not using the drivers and are instead using raw HTTP 
 requests, then you must write gremlin-lang yourself as a string to send to the 
 server. When sending direct HTTP requests, it would be possible to use the drivers to
-write Gremlin in your favorite programming langugage, get the gremlin-lang form and 
+write Gremlin in your favorite programming language, get the gremlin-lang form and
 then manually submit that as a direct HTTP request, but it's hard to say what the 
 benefit of that approach would be since the drivers are designed to hide that 
 complexity from the application.

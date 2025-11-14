@@ -145,12 +145,12 @@ automatically. It is included as part of the Apache TinkerPop download. The goal
 this tutorial is to allow someone with little to no prior knowledge, to get up and
 going quickly using the Gremlin Console and the 'air-routes' graph. Later in the book
 we discuss writing standalone applications in other programming languages such as 
-Java, Groovy, and Python.
+Java, Groovy and Python.
 
 NOTE: The first few sections of the book focus on showing some basic Gremlin queries
 that are both useful and yet easy to understand. By the end of Chapter 3 you should
 have a basic understanding of how to explore the air routes graph using commonly used
-Gremlin steps. Chapters 4, 5, and 6 explore Gremlin in more depth.
+Gremlin steps. Chapters 4, 5 and 6 explore Gremlin in more depth.
 
 
 .How this book is organized
@@ -173,7 +173,7 @@ Chapter 3 - WRITING GREMLIN QUERIES::
   in this chapter.
 Chapter 4 - BEYOND BASIC QUERIES::
 - Having now introduced Gremlin in some detail, we introduce the Gremlin steps that
-  can be used to create, modify, and delete, data. We present a selection of best
+  can be used to create, modify and delete, data. We present a selection of best
   practices and start to explore some more advanced query writing.
 Chapter 5 - MISCELLANEOUS QUERIES AND THE RESULTS THEY GENERATE::
 - Using the Gremlin steps introduced in Chapters 3 and 4, we are now ready to use
@@ -373,7 +373,7 @@ Server, rather than only getting references. Notable improvements include:
 
 * New Gremlin steps for working with strings: 'asString', 'concat', 'length', 
 'toLower', 'toUpper', 'trim', 'lTrim', 'rTrim', 'reverse', 'replace', 'split', 
-'substring', and 'format'.
+'substring and 'format'.
 * New Gremlin steps for working with collections: 'any', 'all', 'product', 'merge', 
 'intersect', 'combine', 'conjoin', 'difference', 'disjunct' and 'reverse'.
 * A new Gremlin steps for working with dates: 'asDate', 'dateAdd' and 
