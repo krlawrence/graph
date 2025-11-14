@@ -27,7 +27,7 @@ module MRGGraphMLBuilder
     puts xmlComment("PLEASE NOTE")
     puts xmlComment("The data in this graph is all available in the public domain but assembling it")
     puts xmlComment("all took considerable work. While I have tried to make the data as accurate")
-    puts xmlComment("as possiblle I am sure errors remain. This data is intended as a learning aid ")
+    puts xmlComment("as possible I am sure errors remain. This data is intended as a learning aid ")
     puts xmlComment("only and not for any commercial use.")
     puts xmlComment(" ")
     puts xmlComment("Significant amounts of my own research has gone into into the creation of this")

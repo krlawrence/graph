@@ -9,11 +9,10 @@ thing that you will need is the Apache TinkerPop project's Gremlin Console downl
 In the sections below we will walk you through a discussion of what you need to
 download and how to set it up.
 
-
 [[tpintro]]
 === What is Apache TinkerPop?
 
-Apache TinkerPop is a graph computing framework and top level project hosted by the
+Apache TinkerPop is a graph computing framework and top-level project hosted by the
 Apache Software Foundation. The homepage for the project is located at this URL:
 http://tinkerpop.apache.org/
 
@@ -639,34 +638,45 @@ NOTE: The source code in this section comes from the 'graph-stats.groovy' sample
 located in: https://github.com/krlawrence/graph/tree/main/sample-code/groovy.
 
 [[airrouteupdates]]
-==== Updated versions of the air-route data
+==== Updated versions of the air route data
 
-To keep things consistent, all of the examples presented in this book were produced
-using the same version of the air-routes data set. That data set was generated in
-October 2017. While we felt it was important that the examples remained consistent
-that does also mean that some of the examples shown in the book, such as the longest
-airline route currently being flown, are out of date.
+To keep things consistent, all the examples presented in this book were produced
+using the 1.0 version of the air routes data set generated October 2025. The 1.0
+version is likely the last version of this data set to be produced. The form it is
+in for this version is rich enough for demonstration purposes and serves as an
+excellent resource for learning Gremlin and graphs. Having a stable 1.0 version means
+that any educational resources adopting this version in different contexts will
+simply just work when taken to other ones.
 
-TIP: You can download the very latest air-routes data set from
+NOTE: Even though no further releases of the dataset are expected the GitHub
+repository still maintains a "latest" version. It is also 1.0. You can download it
+from
 https://github.com/krlawrence/graph/blob/main/sample-data/air-routes-latest.graphml
-
-If you want to get the most up to date results there is a newer version of the data
-set available. That file can be found in the 'sample-data' folder. Look for a file
-called `air-routes-latest.graphml`. There is also a README file to go along with the
-updated data set called `README-air-routes-latest.txt` in the same folder.
 
 [[ld]]
 === Loading the air-routes graph using the Gremlin Console
 
-Here is some code you can load the air routes graph using the Gremlin Console by
-putting it into a file and using ':load' to load and run it or by entering each line
-into the console manually. These commands will setup the console environment, create
-a TinkerGraph graph and load the `air-routes.graphml` file into it. Some extra
-console features are also enabled.
+The easiest way to load the air routes graph is to use the prepackaged version of the
+dataset that comes with TinkerGraph. We can demonstrate this in the Gremlin Console
+as follows.
 
-NOTE: There is a file called `load-air-routes-graph34.groovy`, that contains the
-commands shown below, available in the `/sample-data` directory.
-https://github.com/krlawrence/graph/tree/main/sample-data
+[source,groovy]
+----
+graph = TinkerFactory.createAirRoutes()
+g = traversal().with(graph)
+----
+
+NOTE: You must be using TinkerPop 3.8.0 or later to make use of this shortcut.
+
+That's it! The graph is now loaded with the 1.0 version of the dataset. These two
+lines simplify a longer set of manual steps which we will go through as an
+explanatory next step so that you can understand the details.
+
+The following code loads the air routes graph using the Gremlin Console by putting it
+into a file and using ':load' to load and run it or by entering each line into the
+console manually. These commands will setup the console environment, create a
+TinkerGraph graph and load the `air-routes.graphml` file into it. Some extra console
+features are also enabled.
 
 These commands create an in-memory TinkerGraph which will use LONG values for the
 vertex, edge and vertex property IDs. As part of loading a graph we need to setup
@@ -679,15 +689,22 @@ can still load the `air-routes.graphml` file by following the instructions speci
 to that system. Once loaded, the queries below should still work either unchanged or
 with minor modifications.
 
-.load-air-routes-graph34.groovy
+NOTE: There is a file called `load-air-routes.groovy`, that contains the commands
+shown below, available in the `/sample-data` directory.
+https://github.com/krlawrence/graph/tree/main/sample-data
+
+.load-air-routes.groovy
 [source,groovy]
 ----
 conf = new BaseConfiguration()
 conf.setProperty("gremlin.tinkergraph.vertexIdManager","LONG")
 conf.setProperty("gremlin.tinkergraph.edgeIdManager","LONG")
-conf.setProperty("gremlin.tinkergraph.vertexPropertyIdManager","LONG");[]
-g = TinkerGraph.open(conf).traversal()
-g.io("/mydata/air-routes.graphml").read().iterate()
+conf.setProperty("gremlin.tinkergraph.vertexPropertyIdManager","LONG")
+graph = TinkerGraph.open(conf)
+g = traversal().with(graph)
+
+// Change the path below to point to wherever you put the graphml file
+g.io('/mydata/air-routes.graphml').read()
 :set max-iteration 1000
 ----
 
@@ -695,23 +712,17 @@ NOTE: Setting the ID manager as shown above is important. If you do not do this,
 default, when using TinkerGraph, ID values will have to be specified as strings such
 as '"3"' rather than just the numeral '3'.
 
-If you download the `load-air-routes-graph34.groovy` file, once the console is up and
-running you can load that file by entering the command below. Doing this will save
-you a fair bit of time as each time you restart the console you can just reload your
-configuration file and the environment will be configured and the graph loaded and
-you can get straight to writing queries.
-
 [source,groovy]
 ----
-:load load-air-routes-graph34.groovy
+:load load-air-routes.groovy
 ----
 
-TIP: As a best practice you should use the full path to the location where the
+TIP: As a best practice, you should use the full path to the location where the
 GraphML file resides if at all possible to make sure that the GraphML reading code
 can find it.
 
 Once you have the Gremlin Console up and running and have the graph loaded, if
-you feel like it you can cut and paste queries from this book directly into
+you feel like it you can cut-and-paste queries from this book directly into
 the console to see them run.
 
 Once the 'air-routes' graph is loaded you can enter the following command and you 

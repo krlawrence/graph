@@ -65,12 +65,7 @@ g.V().hasLabel('country').where(__.not(out())).values('desc')
 There are a few airports in the graph that currently have no commercial routes. This
 is either because they used to have service and it was discontinued or they are new
 airports still awaiting service to start. We can write a query to easily find these
-"orphan" airports. Note that this is query based on the version 0.77 release of
-`air-routes.graphml`.
-
-TIP: You can always find the version of the `air-routes.graphml` file used for the
-examples in the book and also the most recent data set in the `sample-data` folder
-located at https://github.com/krlawrence/graph/tree/main/sample-data .
+"orphan" airports.
 
 In more recent updates of the data set, some of these airports
 do now have commercial airline service.
@@ -4494,6 +4489,10 @@ either one of them. After more analysis we realized that this was actually due t
 error in our data set which we have fixed in subsequent updates but if you are using
 the version 0.77 level of `air-routes` then the following query will yield the
 results shown.
+
+NOTE: The 0.77 dataset was used in the first edition of this book. It can be found in
+https://github.com/krlawrence/graph/blob/main/sample-data/air-routes-edition-1.graphml
+as a reference.
 
 To solve the puzzle of the missing airports, we only had to slightly modify the seven
 degrees of separation query. Note that if you use the most recent version of the
