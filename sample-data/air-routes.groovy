@@ -25,9 +25,9 @@ def globals = [:]
 globals << [hook : [
   onStartUp: { ctx ->
     ctx.logger.info("Loading 'air-routes' graph data.")
-    graph.io(graphml()).readGraph('data/air-routes.graphml')
+    org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory.generateAirRoutes(graph)
   }
 ] as LifeCycleHook]
 
 // define the default TraversalSource to bind queries to - this one will be named "g".
-globals << [g : graph.traversal()]
+globals << [g : traversal().with(graph)]

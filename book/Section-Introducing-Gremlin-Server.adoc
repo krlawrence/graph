@@ -3,78 +3,77 @@
 [[gremlinserver]]
 == INTRODUCING GREMLIN SERVER
 
-We have now explored a few ways to setup a TinkerPop enabled graph
-store. Initially we focussed on running TinkerGraph locally. Next we looked at
-JanusGraph, both as an in memory store, and connected to Cassandra, running locally
-or remotely. In each case, successfully making the connection to Cassandra, required
-knowledge of specific configuration details; such as IP addresses, ports and the
-protocols being used.
+We have now explored a few ways to set up a TinkerPop enabled graph store. We've
+focused on running TinkerGraph locally as an in-memory graph. It's the easiest place
+to start because it's packaged with Gremlin Console, but also because it requires
+minimal configuration and environmental dependencies to begin use.
 
-While this may be acceptable in scenarios where it is OK for the user of the graph to
-have this level of insight and access into the back end, there are many scenarios
-where it is desirable to keep most of the implementation detail hidden and access
-secured. This is where Gremlin Server comes in.
+Not all graphs are this simple. Many graphs have underlying data stores with separate
+indexing components. Others are backed by extensive cloud infrastructure and run as
+a managed service. In these cases, it is desirable, or even required, that most of
+the implementation details be hidden and access secured. This is where Gremlin Server
+comes in.
 
 Gremlin Server, as its name suggests, offers a way of setting up access to a graph
-that goes via a front end web server. In this way the user of the graph only has to
-know the name or IP address of the Gremlin Server in order to communicate with a
-graph. You can set Gremlin Server up on your local machine, which is useful for
-testing but you can also use it to setup a graph on a remote server and allow users
-to access it. Gremlin Server supports a number of different connection protocols and
-methods. You can connect to it from a Gremlin console, from a command line using
-'curl' commands or from an application. Gremlin Server has a second advantage over
-allowing us to hide the graph implementation details. It allows people using
-programming languages that do not yet have Apache TinkerPop language bindings to work
-with a graph using simple HTTP protocols.
+that via a front end web server. In this way the user of the graph only has to
+know the host name or IP address of Gremlin Server to communicate with a graph. You
+can set Gremlin Server up on your local machine, which is useful for testing, but you
+can also use it to set up a graph on a remote server and allow users to access it. A
+graph may even just expose Gremlin Server interfaces for you to connect to as the
+only way to have access.
 
-NOTE: The official Apache TinkerPop documentation includes in depth coverage of
+Gremlin Server supports a number of different connection protocols and methods. You
+can connect to it from a Gremlin Console, from a command line using 'curl' commands
+or from an application. Gremlin Server has a second advantage over allowing us to
+hide the graph implementation details. It allows people using programming languages
+that do not yet have Apache TinkerPop language bindings to work with a graph using
+simple HTTP protocols.
+
+NOTE: The official Apache TinkerPop documentation includes in-depth coverage of
 configuring and using Gremlin Server.
 http://tinkerpop.apache.org/docs/current/reference/#gremlin-server
 
 Gremlin Server offers a lot of valuable capabilities. In this section we are going to
-explain how to take the JanusGraph backed by Cassandra that we built earlier and
-expose it via Gremlin Server. There are many other useful ways that Gremlin Server
-can be configured, deployed and used. If you plan to experiment further with Gremlin
-Server we very much encourage you to read the official documentation.
+explain how to customize a local Gremlin Server setup with TinkerGraph. There are
+many other useful ways that Gremlin Server can be configured, deployed and used. If
+you plan to experiment further with Gremlin Server, we very much encourage you to
+read the official documentation.
 
-NOTE: When this book was first released, the majority of "real world" use cases
-focussed on directly attached or even in memory graphs. As Apache TinkerPop has
-evolved, it has become a lot more common to connect to a graph remotely via a Gremlin
-Server.
+NOTE: For managed graph services that expose a Gremlin Server interface, there
+typically isn't any access to the low-level configuration options mentioned here.
+While some options may be exposed, most are hidden and maintained internally.
 
 [[serverconfig]]
 === Configuring Gremlin Server
 
-The Gremlin Server runtime is a separate download available from the Apache TinkerPop
-Web site. However, if you are going to be using Gremlin Server in conjunction with
-JanusGraph you should use the version of Gremlin Server that comes bundled as part of
-the JanusGraph download. The JanusGraph version comes preconfigured to work more
-easily with the JanusGraph runtimes and connect more easily to JanusGraph managed
-back end stores like Cassandra. The simplest way to configure Gremlin Server is to
-use the YAML and properties files that are delivered as part of the Gremlin Server or
-JanusGraph downloads. Depending on your configuration, you may need to edit these
-files.
+We've mentioned that Gremlin Server interfaces are often exposed by various graph
+databases that have complicated underlying configurations and environments. While a
+helpful advantage for production workloads, it is less helpful when doing
+development, particularly when writing tests. Gremlin Server therefore presents a
+helpful way for programmers to do local development without requiring the associated
+infrastructure of their production graph. TinkerGraph can be configured within
+Gremlin Server to try to closely mimic the behavior of the that production graph.
 
-The Apache TinkerPop documentation has detailed instructions and examples showing
-different ways of configuring a Gremlin Server. In this section we are going to focus
-on setting up a Gremlin Server that can front end the JanusGraph and Dockerized
-Cassandra instance that we configured earlier.
+You can download Gremlin Server from the official Apache TinkerPop website at
+http://tinkerpop.apache.org/
 
-If you look at the files that were installed on your machine when you unzipped the
-JanusGraph download, you will find a path of 'conf/gremlin-server'. Inside this
-directory you will find a set of YAML and properties files that can be used to start
-a Gremlin Server working with JanusGraph and a variety of different back end stores.
+It only takes a few minutes to get Gremlin Server installed and running. You
+download the ZIP, 'unzip' it and you are all set. As with Gremlin Console,
+Gremlin Server also requires Java to be at version 11 or higher.
 
-For the rest of this discussion we are going to use the 'gremlin-server.yaml' file as
-our starting point and make minor modifications to it.
+If you look at the files that were unzipped on your machine, you will find a path of
+'conf/gremlin-server'. Inside this directory you will find a set of YAML and
+properties files that can be used to start a Gremlin Server working with TinkerGraph
+in and a variety of different ways.
 
-The Gremlin Server by default is configured for a WebSockets connection and that is
-how the Gremlin Console connects to it. Using WebSockets is the recommended approach
-when possible as it allows for a long running full duplex connection. However, there
-are still many use cases where supporting an HTTP connection is desirable. There is
-also a third option that allows both WebSockets and HTTP connections. In the YAML
-file that is used when starting a Gremlin Server you need to specify one of the
-following.
+For the rest of this discussion, we are going to use the 'gremlin-server.yaml' file
+as our starting point and make minor modifications to it. Gremlin Server by default
+is configured for a WebSockets connection, and that is how Gremlin Console connects
+to it. Using WebSockets is the recommended approach when possible as it allows for a
+long-running full duplex connection. However, there are still many use cases where
+supporting an HTTP connection is desirable. There is also a third option that allows
+both WebSockets and HTTP connections. In the YAML file used when starting Gremlin
+Server, you need to specify one of the following.
 
 org.apache.tinkerpop.gremlin.server.channel.WebSocketChannelizer::
 - The server will expect a WebSockets connection (this is the default).
@@ -83,38 +82,33 @@ org.apache.tinkerpop.gremlin.server.channel.HttpChannelizer::
 org.apache.tinkerpop.gremlin.server.channel.WsAndHttpChannelizer::
 - The server will accept both WebSockets and HTTP connections.
 
-The first part of the 'gremlin-server.yaml' file, modified to meet our needs is shown
-below. We did not modify the parts of the file that are not shown but we encourage
-you to look at the whole file and study the settings. For our current needs the
-defaults are fine. However, in your environment the defaults may not meet your needs.
-The TinkerPop documentation has detailed coverage of the settings and what they do.
+The first part of the 'gremlin-server.yaml' file, modified to meet our needs, is
+shown below. We did not modify the parts of the file that are not shown, but we
+encourage you to look at the whole file and study the settings. For our current needs
+the defaults are fine, but this may not be true for your environment. The TinkerPop
+documentation has detailed coverage of the settings and what they do.
 
-OK so let's look at the parts of the YAML file that are relevant to this experiment.
+OK, so let's look at the parts of the YAML file that are relevant to this experiment.
 Note that we have chosen to use the 'WsAndHttpChannelizer'. This is because we want
-to allow both the Gremlin Console over WebSockets and other applications such as
-'curl' and 'Ruby' over HTTP to connect to our new Gremlin Server.
+our development environment to connect with both TinkerPop's drivers in our Java
+application over WebSockets and other applications such as 'curl' and 'Ruby' over
+HTTP to connect to our new Gremlin Server.
 
-Notice also that the 'janusgraph-cassandra-es.server.properties' file is specified in
-the 'graphs' section. This is a file that is provided as part of the JanusGraph
-download. This is the file that Gremlin Server will use to connect to our JanusGraph
-backed by Cassandra. Note that the '"-es"' in the properties file name refers to
-Elasticsearch. As we did not configure an external index when we setup our
-JanusGraph the lines referring to Elasticsearch inside the properties file should be
-commented out.
+Notice also that the 'tinkergraph-empty.properties' file is specified in the 'graphs'
+section. This is a file provided as part of the Gremlin Server download. This is the
+file that Gremlin Server will use to configure the TinkerGraph to use for our
+unit testing. We will examine that more closely a bit later.
 
-The 'evaluationTimeout' setting is important. It tells the Gremlin Server how long to
-let a query run before terminating it. This essentially establishes the maximum 
-amount of time any query will be allowed to run, regardless of whether it has
-completed or not. For this experiment the default setting of 30000 should be more
-than adequate. The value represents the number of milliseconds allowed. If you want
-to allow queries sent to the server to run for longer you can increase this value.
-Just keep in mind that if you have multiple users using the same Gremlin Server you
-may not want to allow someone to run a really complex query that might take a long
-time to complete. As a side note, we have seen people increase this value to allow
-queries to complete when in fact what they should have been doing is creating an
-index in the graph to allow the query to run faster and hence take less time! If you
-want to disable the timeout feature you can do that by specifying a timeout value of
-0 (zero).
+The 'evaluationTimeout' setting is important. It tells Gremlin Server how long to let
+a query run before terminating it. This essentially establishes the maximum amount of
+time any query will be allowed to run, regardless of whether it has completed or not.
+For this experiment the default setting of '30000' should be more than adequate. The
+value represents the number of milliseconds allowed. If you want to allow queries
+sent to the server to run for longer, you can increase this value. Keep in mind for a
+production environment that if you have multiple users using the same Gremlin Server,
+you may not want to allow someone to run a really complex query that might take a
+long time to complete. If you want to disable the timeout feature, you can do that by
+specifying a timeout value of '0'.
 
 .gremlin-server.yaml
 [source,yaml]
@@ -124,16 +118,14 @@ port: 8182
 evaluationTimeout: 30000
 channelizer: org.apache.tinkerpop.gremlin.server.channel.WsAndHttpChannelizer
 graphs: {
-  graph: conf/gremlin-server/janusgraph-cassandra-es-server.properties
-}
-plugins:
-  - janusgraph.imports
+  graph: conf/tinkergraph-empty.properties }
 scriptEngines: {
   gremlin-groovy: {
-    imports: [java.lang.Math],
-    staticImports: [java.lang.Math.PI],
-    scripts: [scripts/empty-sample.groovy]}}
-
+    plugins: { org.apache.tinkerpop.gremlin.server.jsr223.GremlinServerGremlinPlugin: {},
+               org.apache.tinkerpop.gremlin.tinkergraph.jsr223.TinkerGraphGremlinPlugin: {},
+               org.apache.tinkerpop.gremlin.groovy.jsr223.GroovyCompilerGremlinPlugin: {enableThreadInterrupt: true},
+               org.apache.tinkerpop.gremlin.jsr223.ImportGremlinPlugin: {classImports: [java.lang.Math], methodImports: [java.lang.Math#*]},
+               org.apache.tinkerpop.gremlin.jsr223.ScriptFileGremlinPlugin: {files: [scripts/empty-sample.groovy]}}}}
 # The rest of the file is not shown
 ----
 
@@ -141,23 +133,22 @@ As well as the YAML file and the properties file, there is a third file that we 
 to provide when starting a Gremlin Server. This file can contain Groovy code that
 will be run when the server starts. For our purposes the default file is all we need.
 These files should be placed in the 'scripts' directory that is part of the standard
-Gremlin Server or JanusGraph install. We will take a look at the default script in a
-moment.
+Gremlin Server. We will take a look at the default script in a moment.
 
-By default both Gremlin Server and JanusGraph include a Groovy script called
-`empty-sample.groovy`. That name is a bit misleading as the file actually does some
-interesting things. For our purposes the most useful thing that the script does is to
-configure and make available to us in the Gremlin Console, the graph traversal
-source, 'g' object that hopefully by now you are very familiar with. This provides
-you with a template for any other 'global' variables that you may want to make
-available to the user of the console connected to your Gremlin Server. The file also
-configures some default log messages  that will be generated when the server starts
-and stops. Note that you can add your own code to this script or replace it with your
-own script entirely. You will find additional example scripts included as part of the
-Gremlin Server download. These scripts do things such as create a TinkerGraph
-instance and load some graph data as part of the server startup process. Using this
-technique, we could easily add a line to the script so that when the server starts an
-empty TinkerGraph is created and the 'air-routes' data loaded.
+By default, Gremlin Server includes a Groovy script called 'empty-sample.groovy'.
+That name is a bit misleading as the file actually does some interesting things. For
+our purposes the most useful thing that the script does is to configure and make
+available to us in Gremlin Console, the graph traversal source, 'g' object that
+hopefully by now you are very familiar with. This provides you with a template for
+any other 'global' variables that you may want to make available to the user of the
+console connected to your Gremlin Server. The file also configures some default
+log messages that will be generated when the server starts and stops. Note that you
+can add your own code to this script or replace it with your own script entirely. You
+will find additional example scripts included as part of Gremlin Server download.
+These scripts do things such as create a TinkerGraph instance and load some graph
+data as part of the server startup process. Using this technique, we could easily add
+a line to the script so that when the server starts, an empty TinkerGraph is created
+and the 'air-routes' data loaded.
 
 .empty-sample.groovy
 [source,groovy]
@@ -165,7 +156,7 @@ empty TinkerGraph is created and the 'air-routes' data loaded.
 // an init script that returns a Map allows explicit setting of global bindings.
 def globals = [:]
 
-// defines a sample LifeCycleHook that prints some output to the Gremlin Server console.
+// defines a sample LifeCycleHook that prints some output to Gremlin Server console.
 // note that the name of the key in the "global" map is unimportant.
 globals << [hook : [
         onStartUp: { ctx ->
@@ -180,41 +171,39 @@ globals << [hook : [
 globals << [g : traversal().with(graph)]
 ----
 
-Now that we have all of our configuration files in place we can start the Gremlin
+Now that we have all of our configuration files in place, we can start the Gremlin
 Server by typing the following command into a terminal window. The
-'gremlin-server.sh' file is located in the 'bin' directory of your Gremlin Server or
-JanusGraph installation.
+'gremlin-server.sh' file is located in the 'bin' directory of your Gremlin Server
+installation.
 
 [source,shell]
 ----
 $ gremlin-server.sh conf/gremlin-server/gremlin-server.yaml
 ----
 
-If all goes well you should see output from the Gremlin Server displayed. The server
+If all goes well, you should see output from Gremlin Server displayed. The server
 will keep running until you kill it. In this case a simple CTRL-C is all you need to
 do to kill the server. After you press CTRL-C the server will do a bit of cleaning
 up.
 
-TIP: You can use the 'start' keyword to start the Gremlin Server as a background
-task.
+TIP: You can use the 'start' keyword to start Gremlin Server as a background task.
 
-You can also start the Gremlin Server in the background rather than have it take over
+You can also start Gremlin Server in the background rather than have it take over
 your current terminal window by adding the 'start' keyword as part of the invocation
 command as shown below. The examples below assume that you are starting the server
 from the place where you installed the Gremlin Server zip file.
 
-
 [source,shell]
 ----
-$$sh>$$ bin/gremlin-server.sh start
+$ bin/gremlin-server.sh start
 
 Server started 25897
 ----
 
-By default the configuration information for the server being started will be looked
-for in the file `conf/gremlin-server.yaml`. If you want to override this value you
-need to provide an environment variable called 'GREMLIN_YAML' before starting the
-server as shown below.
+By default, the configuration information for the server being started will look for
+`conf/gremlin-server.yaml`. If you want to override the default, you need to provide
+an environment variable called 'GREMLIN_YAML' before starting the server as shown
+below.
 
 [source,shell]
 ----
@@ -233,8 +222,8 @@ is shown below.
 GREMLIN_YAML='conf/mysettings.yaml'
 ----
 
-If you want to check whether or not the Gremlin Server is currently running you can
-use the 'status' keyword.
+If you want to check whether Gremlin Server is currently running, you can use the
+'status' keyword.
 
 [source,shell]
 ----
@@ -243,7 +232,7 @@ $ bin/gremlin-server.sh status
 Server running with PID 25897
 ----
 
-To stop the server you can use the 'stop' keyword as follows.
+To stop the server, you can use the 'stop' keyword as follows.
 
 [source,shell]
 ----
@@ -252,37 +241,70 @@ $ bin/gremlin-server.sh stop
 Server stopped [25897]
 ----
 
+=== Loading Air Routes In Gremlin Server
+
+We've now started and stopped Gremlin Server with an empty TinkerGraph, but we also
+alluded to being able to load data at the server startup by making changes to Gremlin
+Server's configuration files. Let's load the air routes dataset so that our
+TinkerGraph has some data ready for querying when Gremlin Server starts. To load the
+data, we need to edit 'empty-sample.groovy', which is the initializer for the server.
+Since TinkerPop packages the air routes dataset starting at TinkerPop 3.8.0, we will
+also use the 'TinkerFactory' as a convenient way to load this data.
+
+[source,groovy]
+----
+// an init script that returns a Map allows explicit setting of global bindings.
+def globals = [:]
+
+// defines a sample LifeCycleHook that prints some output to the Gremlin Server console.
+// note that the name of the key in the "global" map is unimportant.
+globals << [hook : [
+        onStartUp: { ctx ->
+            ctx.logger.info("Executed once at startup of Gremlin Server.")
+            org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory.generateAirRoutes(graph)
+        },
+        onShutDown: { ctx ->
+            ctx.logger.info("Executed once at shutdown of Gremlin Server.")
+        }
+] as LifeCycleHook]
+
+// define the default TraversalSource to bind queries to - this one will be named "g".
+globals << [g : traversal().with(graph)]
+----
+
+We can see in the above script that we added a line to 'onStartUp' that will load the
+air routes data into the 'graph'. While this example made use of 'TinkerFactory' for
+an easy way to load the data, we could have equally chosen to use any other means
+we'd like to set up the graph.
+
 [[serverconsole]]
 === Connecting to a Gremlin Server from the Gremlin Console
 
 It is fairly straightforward to connect to a running Gremlin Server from a Gremlin
-Console. In this case it should not matter whether you are using the Gremlin Console
-that is part of the Apache TinkerPop download or the one that comes as part of the
-JanusGraph download. This is because the Gremlin Server very nicely hides the back
-end implementation details from us. As far as we are concerned it is just an HTTP or
-WebSockets endpoint that can handle Gremlin queries.
+Console. Gremlin Server very nicely hides the back end implementation details from
+us. As far as we are concerned, it is just an HTTP or WebSockets endpoint that can
+handle Gremlin queries.
 
-There is one exception, that we are currently aware of, to our statement about not
-needing to worry about server side implementation details. This exception is a result
-of potential version mismatches. Typically, the TinkerPop download, assuming you have
-the very latest, will be at least a few minor point releases ahead of any given graph
-store release. This is purely because whenever TinkerPop has a release, it takes a
-bit of time for the GraphDB maintainers to catch up. we will give a concrete example
+There is perhaps one exception to our statement about not needing to worry about
+server side implementation details. This exception is a result of potential version
+mismatches. Typically, the TinkerPop download, assuming you have the very latest,
+will be at least a few minor point releases ahead of any given graph store release.
+This is purely the case because whenever TinkerPop has a release, it takes a bit of
+time for the graph database maintainers to catch up. We will give a concrete example
 of this in a moment.
 
 As with Gremlin Server, YAML files can be used to configure a remote connection from
-the Gremlin Console. The Gremlin Console as well as the version that comes bundled
-with JanusGraph includes a set of YAML files that can be used as-is or edited as
-needed. In order to connect the Gremlin Console to the Gremlin Server that we just
-configured, the file 'remote.yaml' can be used. It is essential that the console
-and the server be using the same version. If they are not, the Gremlin Console and
-the Gremlin Server would not be able to correctly communicate. Note that in 'remote
-.yaml' file we also specify the name and port of the Gremlin Server host that we will
-be connecting to. As we are running everything locally the default host name of
-'localhost' is fine. If you are connecting to a remote Gremlin Server the 'hosts'
+the Gremlin Console. The Gremlin Console includes a set of YAML files that can be
+used as-is or edited as needed. To connect the Gremlin Console to the Gremlin Server
+that we just configured, the file 'remote.yaml' can be used. It is essential that the
+console and the server be using the same version. If they are not, Gremlin  Console
+and Gremlin Server may not be able to correctly communicate. Note that in the
+'remote.yaml' file we also specify the name and port of the Gremlin Server host that
+we will be connecting to. As we are running everything locally, the default host name
+of 'localhost' is fine. If you are connecting to a remote Gremlin Server, the 'hosts'
 value needs to be edited to correctly identify name or IP address of the server where
-the Gremlin Server is running. Also we can use the default port of 8182. By default
-a Gremlin Server listens on port 8182. The only reason you would need to change this
+Gremlin Server is running. Also we can use the default port of 8182. By default, a
+Gremlin Server listens on port 8182. The only reason you would need to change this
 value is if you are connecting to a Gremlin Server using a different port.
 
 .remote.yaml
@@ -293,37 +315,42 @@ port: 8182
 serializer: { className: org.apache.tinkerpop.gremlin.util.ser.GraphBinaryMessageSerializerV1, config: { serializeResultToString: true }}
 ----
 
+NOTE: Be sure that you align the version of TinkerPop you are using with the one
+supported for the version of the graph database you have chosen. Consult the provider
+documentation for these details.
+
 [[remoteconn]]
 ==== Making the remote connection
 
 Now that we have our YAML file ready, all that we have to do to establish a
-connection between our Gremlin Console and the Gremlin Server is to issue the
-following command once the console is running.
+connection between our Gremlin Console and Gremlin Server is to issue the following
+command once the console is running. Be sure that Gremlin Server is running before
+issuing this command.
 
 [source,text]
 ----
 gremlin> :remote connect tinkerpop.server conf/remote.yaml
 ----
 
-Now that we are connected to the Gremlin Server we can issue some Gremlin commands.
-Given that the 'air-routes' graph is already loaded into our remote graph we can
-immediately start to issue some queries. In order to make sure the query goes to the
-remote graph, the query needs to be prefixed with '":>"'.
+Now that we are connected to Gremlin Server, we can send some Gremlin commands.
+Given that the 'air-routes' graph is already loaded into our remote graph, we can
+immediately start to issue some queries. To make sure the query goes to the remote
+graph, the query needs to be prefixed with '":>"'.
 
 [source,groovy]
 ----
 gremlin> :> g.V().count()
 
-3624
+3749
 ----
 
 [[resultvar]]
-==== The Gremlin Console's 'result' variable
+==== Gremlin Console's 'result' variable
 
-When working within the Gremlin console, one other useful thing to be aware of is
-that the results of queries sent to a server, when the console is in '"local mode"',
-as well as being displayed are stored in a variable called 'result'. Take a look at
-the query below.
+When working within Gremlin Console, it is useful to be aware of the fact that
+results of queries sent to a server when the console is in '"local mode"', are made
+available in two ways. They are displayed as a result but are also stored in a
+variable called 'result'. Take a look at the query below.
 
 [source,groovy]
 ----
@@ -342,11 +369,11 @@ gremlin> println result
 [result{object={South America=313, Asia=971, Europe=605, Africa=321, Antarctica=0, North America=989, Oceania=305} class=java.lang.String}]
 ----
 
-As the console is still in local mode we can use some inline Groovy code to post
-process, in this case  pretty print, the contents of 'result'. This capability is
-worth keeping in mind. There are some interesting things it allows you to do such as
-easily post processing results and saving them to a file locally when working with a
-remote server.
+As the console is still in local mode, we can use some inline Groovy code to
+post-process, in this case pretty print, the contents of 'result'. This capability is
+worth keeping in mind. There are some interesting things it allows you to do, such as
+doing local analysis on the results and saving them to a file locally when working
+with a remote server.
 
 [source,groovy]
 ----
@@ -375,8 +402,8 @@ gremlin> :remote console
 All scripts will now be sent to Gremlin Server - [localhost/127.0.0.1:8182] - type ':remote console' to return to local mode
 ----
 
-The console is now in '"remote mode"'. All queries that you enter will be sent to the
-Gremlin Server and there is no need to use the '":>"' prefix.
+The console is now in '"remote mode"'. All queries that you enter will be sent to
+Gremlin Server, and there is no need to use the '":>"' prefix.
 
 [source,groovy]
 ----
@@ -385,7 +412,7 @@ gremlin> g.V().count()
 3749
 ----
 
-One thing to notice is that the output that comes back from a Gremlin Server looks a
+One thing to notice is that the output that comes back from Gremlin Server looks a
 little different at times from when you use the commands using the Gremlin Console
 attached to a local TinkerGraph. This is because Gremlin Console essentially does a
 'toString()' on the output before it is shown to the user in these cases.
@@ -406,11 +433,11 @@ TinkerGraph.
 [country:[US],code:[AUS],longest:[12250],city:[Austin],elev:[542],icao:[KAUS],lon:[-97.6698989868164],type:[airport],region:[US-TX],runways:[2],lat:[30.1944999694824],desc:[Austin Bergstrom International Airport]]
 ----
 
-Once you are done sending all commands to the Gremlin Server you can switch out of
-that mode as follows. Commands will now be sent to your local console. This means
-that you can work with a local and remote graph at the same time. The ':remote
-console' command is therefore a toggle. Each time you use the command the console
-will switch between local mode and remote mode or vice versa.
+Once you are done sending all commands to Gremlin Server you can switch out of that
+mode as follows. Commands will now be sent to your local console. This means that you
+can work with a local and remote graph at the same time. The ':remote console'
+command is therefore a toggle. Each time you use the command the console will switch
+between local mode and remote mode or vice versa.
 
 [source,text]
 ----
@@ -445,10 +472,10 @@ Gremlin Server.
 $ curl "http://localhost:8182?gremlin=g.V().has('code','AUS').valueMap()"
 ----
 
-In response to the HTTP GET request the server sends back the result packaged as JSON
-as follows. We have formatted the output in a way that makes it easier to read. What
-was actually returned did not have any line breaks in it at all and was quite hard to
-read..
+In response to the HTTP GET request, the server sends back the result packaged as
+JSON as follows. We have formatted the output in a way that makes it easier to read.
+What was actually returned did not have any line breaks in it at all and was quite
+hard to read.
 
 [source,json]
 ----
@@ -516,25 +543,25 @@ to read.
 
 ----
 
-We have included examples of the different types of JSON result that you are likely
+We have included examples of the different types of JSON results that you are likely
 to have to process in the "<<serverjson>>" section that is coming up soon.
 
 [[javagsclient]]
 === Connecting to a Gremlin Server from Java using 'with'
 
-While it is perfectly possible to work directly with the JSON returned from a Gremlin
-Server it is often more desirable to have the results placed directly into variables
-of the appropriate type. If the appropriate Gremlin language driver exists for the
-programming language that you are using, this is quite easy to setup. In this section
-we will look at connecting to a Gremlin Server from a Java application and taking
-advantage of the remote connection capability that TinkerPop provides.
+While it is perfectly possible to work directly with the JSON returned from Gremlin
+Server, it is often more desirable to have the results placed directly into
+variables of the appropriate type. If the appropriate Gremlin language driver exists
+for the programming language that you are using, this is quite easy to set up. In
+this section we will look at connecting to a Gremlin Server from a Java application
+and taking advantage of the remote connection capability that TinkerPop provides.
 
 NOTE: The source code in this section comes from the 'RemoteClient.java' sample
 located at https://github.com/krlawrence/graph/tree/main/sample-code/java.
 
-Let's look at the small application in sections. First of all it is necessary to
-import the required classes that we will need to make the connection to the server
-and retrieve the query results.
+Let's look at the small application in sections. First, it is necessary to import the
+required classes that we will need to make the connection to the server and retrieve
+the query results.
 
 [source,java]
 ----
@@ -549,16 +576,16 @@ import java.util.ArrayList;
 import static org.apache.tinkerpop.gremlin.process.traversal.AnonymousTraversalSource.traversal;
 ----
 
-We can now define a small Java class that we will call 'RemoteClient' and setup the
-connection to the Gremlin Server. This is done by first of all creating a
-'Cluster.Builder' instance that will be used to describe the server we are connecting
-to and the protocol we want to use. It is important that these settings match what
-the Gremlin Server is configured to use. For this simple example we are just using
-'localhost' as the host name but the name of any Gremlin Server that you have access
-to can be used instead. The default Gremlin Server port of '8182' is specified and 
-the 'GraphBinaryMessageSerializerV1' serialization format is selected. Again, this 
-needs to match both the protocol and the version of the protocol that your Gremlin 
-Server is supporting.
+We can now define a small Java class that we will call 'RemoteClient' and set up the
+connection to Gremlin Server. This is done by first creating a 'Cluster.Builder'
+instance that will be used to describe the server we are connecting to and the
+protocol we want to use. It is important that these settings match what Gremlin
+Server is configured to use. For this basic example we are just using 'localhost' as
+the host name, but the name of any Gremlin Server that you have access to can be used
+instead. The default Gremlin Server port of '8182' is specified, and the
+'GraphBinaryMessageSerializerV1' serialization format is selected. Again, this needs
+to match both the protocol and the version of the protocol that your Gremlin Server
+is supporting.
 
 [source,java]
 ----
@@ -572,7 +599,7 @@ public class RemoteClient
     builder.serializer(new GraphBinaryMessageSerializerV1());
 ----
 
-Once the 'Cluster.Builder' instance has been setup we can use it to create our
+Once the 'Cluster.Builder' instance has been set up we can use it to create our
 'Cluster' instance.
 
 [source,java]
@@ -580,20 +607,20 @@ Once the 'Cluster.Builder' instance has been setup we can use it to create our
 Cluster cluster = builder.create();
 ----
 
-Lastly, we need to setup a 'GraphTraversalSource' object for the Gremlin Server
-hosted graph that we will be working with. This object is often named "g" by
-convention and is typically created using the statically imported 'traversal()'
-method which in turn allows the call to 'with' to bind the traversal source to a
-graph. We've seen 'with' take a graph instance before, but this time we will use it
-with a reference to a remote connection to a graph in Gremlin Server. Note that the
-cluster instance that we just created is passed in as a parameter. While this looks a
-little complicated it is really not a lot different than when we connect to a local
-graph using the Gremlin Console. The only difference is that by setting up the remote
-connection this way, when we start to issue queries against the graph, rather than
-getting JSON objects back, the results will automatically be serialized into Java
-variables for us. This makes our code a lot easier to write and essentially is the
-same code from this point onwards that would also work with a local graph that we are
-directly connected to.
+Lastly, we need to set up a 'GraphTraversalSource' object for Gremlin Server hosted
+graph that we will be working with. This object is often named "g" by convention and
+is typically created using the statically imported 'traversal()' method which in turn
+allows the call to 'with' to bind the traversal source to a graph. We've seen 'with'
+take a graph instance before, but this time we will use it with a reference to a
+remote connection to a graph in Gremlin Server. Note that the cluster instance that
+we just created is passed in as a parameter. While this looks a little complicated,
+it is really not a lot different from when we connect to a local graph using the
+Gremlin Console. The only difference is that by setting up the remote connection this
+way, when we start to issue queries against the graph, rather than getting JSON
+objects back, the results will automatically be serialized into Java variables for
+us. This makes our code a lot easier to write and essentially is the same code from
+this point onwards that would also work with a local graph that we are directly
+connected to.
 
 [source,java]
 ----
@@ -612,8 +639,7 @@ first 10 airports with a region code of 'GB-ENG' which is short for Great Britai
       g.V().has("airport","region","GB-ENG").limit(10).valueMap().toList();
 
     System.out.println("\n\nThe following airports were found\n");
-    for (Map <String,Object> m : vmaps)
-    {
+    for (Map <String,Object> m : vmaps) {
       ArrayList code = (ArrayList) m.get("code");
       ArrayList desc = (ArrayList) m.get("desc");
       System.out.println(code.get(0) + " , " + desc.get(0));
@@ -644,10 +670,10 @@ NCL , Newcastle Airport
 [[rubyclient]]
 === Connecting to a Gremlin Server from Ruby
 
-As far as we know, at time of writing, there is currently no formal Gremlin language
-binding support available for Ruby programmers. This is therefore a perfect use case
-to show how, using a small amount of code, a Ruby programmer can connect to a Gremlin
-Server and issue Gremlin Queries.
+As far as we know, at the time of writing, there is currently no formal Gremlin
+language binding support available for Ruby programmers. This is therefore a perfect
+use case to show how, using a small amount of code, a Ruby programmer can connect to
+a Gremlin Server and issue Gremlin Queries.
 
 NOTE: The source code in this section comes from the 'gremlin-client-http.rb' sample
 located at https://github.com/krlawrence/graph/tree/main/sample-code/ruby.
@@ -655,11 +681,10 @@ located at https://github.com/krlawrence/graph/tree/main/sample-code/ruby.
 The code below represents a complete, standalone Ruby application. It uses the
 standard Ruby libraries. No additional Ruby Gems or third party libraries should be
 required. The example as shown connects to a Gremlin Server running on your local
-machine. It packages up an HTTP POST request and sends it to the Gremlin Server. The
+machine. It packages up an HTTP POST request and sends it to Gremlin Server. The
 body of the HTTP request is encoded as JSON.
 
 .gremlin-client-http.rb
-
 [source,ruby,linenums]
 ----
 # Simple example of how you can connect to a Gremlin Server and
@@ -687,8 +712,8 @@ puts response.body
 
 Here is the output returned when we ran the program using Ruby version 2.3.1.
 
-As you can see the result body contains a JSON object just as when we issued requests
-using the 'curl' command earlier.
+As you can see, the result body contains a JSON object just as when we issued
+requests using the 'curl' command earlier.
 
 [source,json]
 ----
@@ -697,191 +722,11 @@ using the 'curl' command earlier.
  "result":{"data":[62],"meta":{}}}
 ----
 
-[[servertinkergraph]]
-=== Configuring a Gremlin Server to use a TinkerGraph
-
-We have already seen how a Gremlin Server can be configured as a way to provide
-remote access to a JanusGraph and Cassandra deployment. Sometimes it can be useful to
-setup a Gremlin Server with just a basic TinkerGraph, in-memory graph, as the
-backend. This is often a handy way to work if you are developing code that will
-ultimately work with a remote TinkerPop enabled graph database but want to do some
-testing and development locally. A Gremlin Server can of course be configured as a
-genuinely remote endpoint, perhaps running on a cloud hosted machine, but it can also
-be configured to run on your local computer. We often set it up this way on our
-laptop while experimenting. In this section we are going to walk through the steps
-required to configure a Gremlin Server running locally that hosts the air-routes
-dataset in a TinkerGraph.
-
-NOTE: You will find the configuration files discussed in this section in the
-`sample-data` folder at this location
-https://github.com/krlawrence/graph/tree/main/sample-data.
-
-[[TGConfig]]
-==== Creating the configuration files
-
-To get our remote TinkerGraph up and running, all we have to do is to configure a few
-settings files and start the Gremlin Server. The first file we need to create is the
-YAML file that will be read by the Gremlin Server as it starts. We created a file
-called `gremlin-server-air-routes.yaml` for this purpose. The file actually only
-contains minor changes from the default `gremlin-server.yaml` file that comes
-included as part of the Gremlin Server download. The key change is that the file
-includes a reference to a script in the `/scripts` folder called `air-routes.groovy`.
-The script will load the air-routes data set into a TinkerGraph instance once it has
-been created.
-
-NOTE: All folders referenced in this section, such as `/data` and `/script` are
-relative to the location where the Gremlin Server is installed.
-
-The `gremlin-server-air-routes.yaml` file should be placed in the `/conf` folder.
-
-.gremlin-server-air-routes.yaml
-[source,yaml]
-----
-host: localhost
-port: 8182
-evaluationTimeout: 30000
-channelizer: org.apache.tinkerpop.gremlin.server.channel.WsAndHttpChannelizer
-graphs: {
-  graph: conf/tinkergraph-empty.properties}
-scriptEngines: {
-  gremlin-groovy: {
-    plugins: { org.apache.tinkerpop.gremlin.server.jsr223.GremlinServerGremlinPlugin: {},
-               org.apache.tinkerpop.gremlin.tinkergraph.jsr223.TinkerGraphGremlinPlugin: {},
-               org.apache.tinkerpop.gremlin.jsr223.ImportGremlinPlugin: {classImports: [java.lang.Math], methodImports: [java.lang.Math#*]},
-               org.apache.tinkerpop.gremlin.jsr223.ScriptFileGremlinPlugin: {files: [scripts/air-routes.groovy]}}}}
-serializers:
-  - { className: org.apache.tinkerpop.gremlin.util.ser.GraphSONUntypedMessageSerializerV3, config: { ioRegistries: [org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerIoRegistryV3] }}     # application/json
-  - { className: org.apache.tinkerpop.gremlin.util.ser.GraphBinaryMessageSerializerV1 }                                                                                                           # application/vnd.graphbinary-v1.0
-  - { className: org.apache.tinkerpop.gremlin.util.ser.GraphBinaryMessageSerializerV1, config: { serializeResultToString: true }}                                                                 # application/vnd.graphbinary-v1.0-stringd
-metrics: {
-  slf4jReporter: {enabled: true, interval: 180000}}
-strictTransactionManagement: false
-idleConnectionTimeout: 0
-keepAliveInterval: 0
-maxInitialLineLength: 4096
-maxHeaderSize: 8192
-maxChunkSize: 8192
-maxContentLength: 65536
-maxAccumulationBufferComponents: 1024
-resultIterationBatchSize: 64
-----
-
-Note that we configured the YAML file so that when JSON is returned it is in the
-original V3 GraphSON format. This is done by specifying that the
-'GraphSONUntypedMessageSerializerV3' message serializer be used. Using an untyped
-form of GraphSON removes embedded types in the response and relies on standard JSON
-data types. We find that users find this format much easier to read while learning
-Gremlin and might be more suitable for use case that do not use TinkerPop serializers
-to process the embedded type information.
-
-The properties file that is referenced in the YAML file is unchanged from the default
-one that comes with Gremlin Server. It creates an empty in-memory TinkerGraph.
-
-The `tinkergraph-empty.properties` file should also be placed in the `/conf` folder.
-
-.tinkergraph-empty.properties
-[source,properties]
-----
-gremlin.graph=org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph
-gremlin.tinkergraph.vertexIdManager=LONG
-----
-
-The file `air-routes.groovy` invokes the necessary method to load the
-`air-routes.graphml` file from the `/data` folder. The file should be placed in the
-`/scripts` folder.
-
-.air-routes.groovy
-[source,groovy]
-----
-def globals = [:]
-
-globals << [hook : [
-  onStartUp: { ctx ->
-    ctx.logger.info("Loading 'air-routes' graph data.")
-    g = traversal().with(graph)
-    g.io('data/air-routes.graphml').read().iterate()
-  }
-] as LifeCycleHook]
-
-globals << [g : traversal().with(graph)]
-----
-
-[[TGStart]]
-==== Starting the Server
-
-As discussed in the "<<serverconfig>>" section, you can start the Gremlin Server in 
-the foreground or in the background. For our initial test let's just start the server
-running in the foreground.
-
-[source,console]
-----
-$ bin/gremlin-server.sh conf/gremlin-server-air-routes.yaml
-----
-
-[[TGTest]]
-==== Testing the Server
-
-Now that the Gremlin Server is up and running you can access it using 'localhost' as
-the host name and a port of 8182 just as we did earlier while setting up a Gremlin
-Server and JanusGraph. It's always a good idea to try a simple 'curl' command to make
-sure that things are working.
-
-[source,console]
-----
-$ curl "localhost:8182/gremlin?gremlin=g.V().has('code','SFO').valueMap()"
-----
-
-Here is the output returned. Note that it is in the GraphSON V1 format that
-we configured for earlier.
-
-[source,json]
-----
-{"requestId":"fbcab664-7538-402f-85b4-1b14db88c968","status":{"message":"","code":200,"attributes":{}},"result":{"data":[{"country":["US"],"code":["SFO"],"longest":[11870],"city":["San Francisco"],"elev":[13],"icao":["KSFO"],"lon":[-122.375],"type":["airport"],"region":["US-CA"],"runways":[4],"lat":[37.6189994812012],"desc":["San Francisco International Airport"]}],"meta":{}}}
-----
-
-The same Gremlin Console remote connections configuration we looked at earlier can
-also be reused. Likewise, you can connect to your Gremlin Server using the host name
-'localhost' and port 8182. The example below assumes that you have already started
-the Gremlin Console.
-
-[source,groovy]
-----
-gremlin> :remote connect tinkerpop.server conf/remote.yaml
-==>Configured localhost/127.0.0.1:8182
-
-gremlin> :remote console
-==>All scripts will now be sent to Gremlin Server - [localhost/127.0.0.1:8182] - type ':remote console' to return to local mode
-
-gremlin> g.V().has('code','SFO').valueMap().unfold()
-==>country=[US]
-==>code=[SFO]
-==>longest=[11870]
-==>city=[San Francisco]
-==>elev=[13]
-==>icao=[KSFO]
-==>lon=[-122.375]
-==>type=[airport]
-==>region=[US-CA]
-==>runways=[4]
-==>lat=[37.6189994812012]
-==>desc=[San Francisco International Airport]
-----
-
-Hopefully having read this section you now have an understanding of how to setup a
-Gremlin Server that hosts an in-memory TinkerGraph containing the 'air-routes' data
-set. This can be a useful environment when you want to test queries and code locally
-that will ultimately need to work with a remote TinkerPop enabled graph
-database.
-
-In the next section we will look at ways to make the JSON returned easier to work
-with and also add to our Ruby program to work with the JSON.
-
 [[servertweaks]]
 === Tweaking queries to make the JSON returned easier to work with
 
-Below is a query that we have seen used earlier in this book. It finds all
-routes longer than 8,000 miles and returns the airport pairs and the distance
-between them.
+Below is a query that we have seen used earlier in this book. It finds all routes
+longer than 8,000 miles and returns the airport pairs and the distance between them.
 
 [source,groovy]
 ----
@@ -891,7 +736,7 @@ g.V().as('a').outE().has('dist',gt(8000)).
       path().by('code').by('dist')
 ----
 
-When we run this query using the Gremlin console with TinkerGraph we get
+When we run this query using the Gremlin Console with TinkerGraph, we get
 back results that have been to a degree 'pretty printed' by the Console as
 shown below.
 
@@ -933,9 +778,8 @@ shown below.
 
 However, if you were to use a system that returns the full JSON response, as is the
 case when using a Gremlin Server over an HTTP connection, you will not get the
-benefit '"pretty printing"' that the Gremlin Console does
-for you. Instead, you will get back something that looks a lot like this from the
-exact same query as the one we used above.
+benefit of Gremlin Console '"pretty printing"'. Instead, you will get back something
+that looks a lot like this from the exact same query as the one we used above.
 
 [source,json]
 ----
@@ -968,14 +812,13 @@ exact same query as the one we used above.
     "meta":{}}}
 ----
 
-What is being returned is useful in some cases, for example we can see the
-'a' and 'b' labels that we used in our query but in this case all we really
-wanted was the last part with the airport codes and the distances. We could
-decide to write code to process this JSON as-is (probably using a JSON helper
-class) and that is a valid choice you could make. However by tweaking the
-query slightly, we can enable Gremlin to give us back what we really wanted.
-Let's start by looking at what happens if we add '.toList().toString()' to the
-end of the query. Take a look at the modified form of the query below.
+What is being returned is useful in some cases. For example, we can see the 'a' and
+'b' labels that we used in our query, but in this case all we really wanted was the
+last part with the airport codes and the distances. We could decide to write code to
+process this JSON as-is, and that is a valid choice you could make. However, by
+tweaking the query slightly, we can enable Gremlin to give us back what we really
+wanted. Let's start by looking at what happens if we add '.toList().toString()' to
+the end of the query. Take a look at the modified form of the query below.
 
 [source,groovy]
 ----
@@ -996,11 +839,11 @@ is a list containing  a single string with all of our routes in it.
 {"requestId":"63c660d0-28cf-41fc-86cf-5560a4e2fac0","status":{"message":"","code":200,"attributes":{}},"result":{"data":["[[AKL, 9025, DOH], [AKL, 8818, DXB], [LAX, 8756, SIN], [CAN, 8754, MEX], [IAH, 8591, SYD], [DFW, 8574, SYD], [ATL, 8434, JNB], [SFO, 8433, SIN], [AUH, 8372, LAX], [DXB, 8321, LAX], [JED, 8314, LAX], [DOH, 8287, LAX], [LAX, 8246, RUH], [MEL, 8197, YVR], [DXB, 8150, IAH], [AUH, 8139, SFO], [DFW, 8105, HKG], [DXB, 8085, SFO], [HKG, 8054, JFK], [AUH, 8053, DFW], [EWR, 8047, HKG], [DOH, 8030, IAH], [DFW, 8022, DXB]]"],"meta":{}}}
 ----
 
-We can add a little more post processing to split up our single string into an
+We can add a little more post-processing to split up our single string into an
 array of strings where each string is a single route of the form
 '[AKL,9025,DOH]'. One way to do this is to trim off the unwanted characters at
 each end of the string and then use split to divide it up. As there are a lot
-of commas in the string we could not just do a simple 'split(",")' as that
+of commas in the string, we could not just do a simple 'split(",")' as that
 would not have returned what we wanted. To make the split work, we replaced
 every occurrence of '],' in the string with ']x' and then did the split using
 'split("x")'. Here is the modified query.
@@ -1051,14 +894,14 @@ It's really a matter of personal preference whether you decide to have the query
 return less data or just return the full set of data that we got back from the
 initial query. One advantage to having the query limit what is returned is that less
 data, potentially a lot less data, will need to be sent back to your application and
-stored in memory or on disk. However, as, most programming languages have built in
-support that makes it easy de serialize JSON objects into native data structures such
-as maps, you may prefer to just have all the JSON be returned and do the rest of the
+stored in memory or on disk. However, as most programming languages have built-in
+support that makes it easy to deserialize JSON objects into native data structures,
+you may prefer to just have all the JSON be returned and do the rest of the
 processing yourself.
 
-By way of a simple example, if we added the following lines to our Ruby application
-that we created in the previous section, and used the original query from before we
-added any post processing, we could easily get at the parts of the JSON that we are
+Here is a basic example. If we added the following lines to our Ruby application that
+we created in the previous section and used the original query from before we
+added any post-processing, we could easily get at the parts of the JSON that we are
 interested in.
 
 [source,ruby]
@@ -1074,7 +917,7 @@ The code uses Ruby's 'JSON' class to convert the JSON response from the Gremlin
 Server into a map data structure. We can then access each part of the map by the
 names contained in the JSON. Note that the code as written expects a specific set of
 keywords to be present in the JSON. Not all query results contain these keywords.
-Therefore, it would take a little more work to turn this into a more general purpose
+Therefore, it would take a little more work to turn this into a more general-purpose
 piece of code that could handle any of the possible JSON return formats the server
 could send to us. Here is the output from running the updated Ruby code. Notice that
 what we have now is a nice collection of lists, each one containing two strings and
@@ -1104,14 +947,14 @@ returned.
 [[serverjson]]
 === More examples of the JSON returned from a Gremlin Server
 
-The JSON returned by the Gremlin Server depends on query that is used and more
-specifically, what that query returns. Everything that is returned in the 'data' part
-of the 'result'  will, at the outermost level be an array. What is inside that array
-could be a simple number or a string. It could also be a list of strings or other
-objects including maps. If you plan to write some general purpose code that can
-handle the different possible formats it is important to know what they look like. In
-the examples that follow we have attempted to show several of the possible response
-formats that you may encounter. We are mainly going to focus of the parts of the JSON
+The JSON returned by Gremlin Server depends on the query that is used and more
+specifically, what that query returns. Everything returned in the 'data' part of the
+'result'  will, at the outermost level, be an array. What is inside that array could
+be a simple number or a string. It could also be a list of strings or other objects
+including maps. If you plan to write some general-purpose code that can handle the
+different possible formats, it is important to know what they look like. In the
+examples that follow, we have attempted to show several of the possible response
+formats that you may encounter. We are mainly going to focus on the parts of the JSON
 that follow the 'data' key. Each example assumes that the query shown was sent to a
 Gremlin Server using the HTTP protocol. As always, if you are unsure what JSON a
 particular query may generate, you should always run some experiments to find out.
@@ -1237,16 +1080,15 @@ g.V().has('code','CDG').valueMap()
           "desc":["Paris Charles de Gaulle"]}],"meta":{}}}
 ----
 
-
 ==== Single vertex
 
-When your query returns a vertex, unlike in the Gremlin Console where you would get
-back something like "'v[51]'" when talking to the Gremlin Server what you get back is
-a JSON object representing everything that is known about the vertex including its ID
-, label, properties and the ID of each property. If you do not need the entire vertex
-returned it might be worth writing your query in a way such that you only get back
-the properties that you are interested in. This is especially pertinent if your
-query could potentially return a lot of vertices in the result.
+In Gremlin Console you get back something like "'v[51]'" when your query returns a
+vertex. Wit Gremlin Server what you get back is a JSON object representing everything
+that is known about the vertex including its ID, label, properties and the ID of each
+property. If you do not need the entire vertex  returned, it might be worth writing
+your query in a way such that you only get back the properties that you are
+interested in. This is especially pertinent if your query could potentially return a
+lot of vertices in the result.
 
 [source,groovy]
 ----
@@ -1429,7 +1271,6 @@ g.V().has('code','SAF').out().path().limit(1)
               "value":"Phoenix Sky Harbor International Airport"}]}}]}],
       "meta":{}}}
 ----
-
 
 ==== Path with two vertices and an edge
 
