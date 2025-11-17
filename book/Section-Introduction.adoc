@@ -12,7 +12,7 @@ seen by visiting the https://github.com/krlawrence/graph/projects/2[planning boa
 
 CAUTION: This book is a work in progress. Feedback is very much encouraged and
 welcomed!  Please open https://github.com/krlawrence/graph/issues[GitHub issues] as
-appropriate .
+appropriate.
 
 === Welcome to the second edition
 
@@ -39,7 +39,7 @@ As with the first edition, I have resisted the urge to cover every single featur
 TinkerPop one after the other in a reference manual fashion. Instead, what I have
 tried to do is capture the learning process that I myself have gone through using
 what I hope is a sensible flow from getting started to more advanced topics. To get
-the most from this book I recommend having the Gremlin console open, with the air
+the most from this book, I recommend having the Gremlin console open, with the air
 route sample data loaded, as you follow along. I have not assumed that anyone reading
 this book has any prior knowledge of Apache TinkerPop, the Gremlin query language or
 related tools.  Everything you need to get started is introduced in Chapter 2.

@@ -77,7 +77,7 @@ may be added and the layout further refined.
 **Chapter 5 - MISCELLANEOUS QUERIES AND THE RESULTS THEY GENERATE**
 - Using the Gremlin steps introduced in Chapters 3 and 4, we are now ready to use
   what we have learned so far and write queries that analyze the air-routes graph in
-  more depth, and answer more complicated questions. The material presented includes
+  more depth and answer more complicated questions. The material presented includes
   a discussion of analyzing distances, route distribution, and writing geospatial
   queries.
 
@@ -94,7 +94,7 @@ may be added and the layout further refined.
 - Having introduced Gremlin Server we take a look at some common Graph serialization
   file formats along with coverage of how to use them in the context of TinkerPop
   enabled graphs. We take a close look at the TinkerPop GraphSON (JSON) format which
-  is  used extensively when using Gremlin queries in conjunction with a Gremlin
+  is used extensively when using Gremlin queries in conjunction with a Gremlin
   Server.
 
 **Chapter 9 - FURTHER READING**

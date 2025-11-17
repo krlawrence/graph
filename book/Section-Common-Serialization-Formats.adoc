@@ -4,11 +4,11 @@
 == COMMON GRAPH SERIALIZATION FORMATS
 
 There are a number of ways that graph data can be stored in a file. In this section
-we have provided a brief overview of a few of them. As you will see there are a
+we have provided a brief overview of a few of them. As you will see, there are a
 number of ways you can represent graph data using simple CSV files. There are also
-XML format, JSON formats and many more. Of these, the one that still seems to be
-supported across most tools and platforms is GraphML. Not all of the features offered
-by Apache TinkerPop can be expressed using GraphML however. So let's take a look at
+XML formats, JSON formats and many more. Of these, the one that still seems to be
+supported across most tools and platforms is GraphML. Not all the features offered
+by Apache TinkerPop can be expressed using GraphML, however. So let's take a look at
 some of the more commonly used formats.
 
 [[csv]]
@@ -16,15 +16,16 @@ some of the more commonly used formats.
 
 There are a number of ways that a graph can be stored using CSV files. There is no
 single preferred format that we are aware of. However, a common and convenient way,
-especially when vertices contain lots of properties is to use two CSV files. One will
-contain all of the vertex data and the other will contain all of the edge data.
+especially when vertices contain lots of properties, is to use two CSV files. One
+will contain all the vertex data and the other will contain all the edge data.
 
 [[csvair]]
 ==== Using two CSV files to represent the air-routes data
-If we were to store the airport data from the 'air-routes' graph in CSV format we 
+
+If we were to store the airport data from the 'air-routes' graph in CSV format, we
 might do something like the example below. Note that to improve readability, we have
 not included every property (or indeed every airport) in this example. Notice how 
-each vertex has a unique ID assigned. This is important as when we define the edges 
+each vertex has a unique ID assigned. This is important as when we define the edges,
 we will need the vertex IDs to build the connections.
 
 [source,text]
@@ -43,12 +44,12 @@ we will need the vertex IDs to build the connections.
 
 For the route data, the edges in our graph, we might use a format like the one below.
 We did not include an edge ID as we typically let the graph system assign those. For
-completeness we did include a label however when every edge is of the same type you
-could choose to leave this out so long as the program ingesting the data knew what
+completeness, we did include a label. However, when every edge is of the same type,
+you could choose to leave this out so long as the program ingesting the data knew what
 label to assign. Most graph systems require edges to have a label even if it is
 optional for vertices. This is equally true for the airport data. However, in cases
-where vertices and edges within the same CSV file are of different types then clearly
-for those cases it is best to always include the label for each entry.
+where vertices and edges within the same CSV file are of different types, then for
+those cases it is best to always include the label for each entry.
 
 [source,text]
 ----
@@ -62,25 +63,25 @@ for those cases it is best to always include the label for each entry.
 ----
 
 Some graph systems provide ingestion tools that, when presented with a CSV file like
-the ones we have shown here can figure out how to process them and build a graph.
+the ones we have shown here, can figure out how to process them and build a graph.
 However, in many other situations you may also find yourself writing your own scripts
 or small programs to do it.
 
-We often find ourself writing Ruby or Groovy scripts that can generate CSV or GraphML
-files so that a graph system can ingest them. In some cases we have used scripts to
-take CSV or GraphML data and generate the Gremlin statements that would create the
-graph. This is very similar to another common practice, namely, using a  script to
-generate 'INSERT' statements when working with SQL databases.
+We often find ourselves writing Ruby or Groovy scripts that can generate CSV or
+GraphML files so that a graph system can ingest them. In some cases we have used
+scripts to take CSV or GraphML data and generate the Gremlin statements that would
+create the graph. This is very similar to another common practice, namely, using a
+script to generate 'INSERT' statements when working with SQL databases.
 
 We have also written Java and Groovy programs that will read the CSV file and use the
 TinkerPop API or the Gremlin Server REST API to insert vertices and edges into a 
-graph. If you work with graph systems for a while you will probably find yourself 
+graph. If you work with graph systems for a while, you will probably find yourself
 also doing similar things.
 
 ==== Adjacency matrix format
 
 The examples shown above of how a CSV file can be used to store data about vertices 
-and edges presents a convenient way to do it. However, this is by no means the only 
+and edges present a convenient way to do it. However, this is by no means the only
 way you could do it. For graphs that do not contain properties, you could lay the
 graph out using an 'adjacency matrix' as shown below. The letters represent the 
 vertex labels, and a 1 indicates there is an edge between them and a zero indicates
@@ -104,7 +105,7 @@ G,1,1,1,0,1,1,0
 
 The adjacency matrix shown above could also be represented as an 'adjacency list'. In
 this case, the first column of each row represents a vertex. The remaining parts of
-each row represent all of the other vertices that this vertex is connected to.
+each row represent all the other vertices that this vertex is connected to.
 
 [source,text]
 ----
@@ -119,13 +120,8 @@ G,A,B,C,E,F
 
 While this is a simple example, it is possible to represent a more complex graph such
 as the 'air-routes' graph in this way. We could build a more complex CSV file where 
-the vertex and its properties are listed first, followed by all of the other vertices
-it connects to and the properties for those edges.
-
-Some graph database systems actually store their graphs to disk using a variation of
-this format. JanusGraph in fact uses a system a lot like this when storing vertex and
-edge data to its persistent store.
-
+the vertex and its properties are listed first, followed by all the other vertices it
+connects to and the properties for those edges.
 
 ==== Edge List format
 
@@ -146,7 +142,7 @@ C,B
 ----
 
 There are many ways you could construct an edge list. By way of another simple
-example we could represent routes in the 'air-routes' graph in a format similar to 
+ example, we could represent routes in the 'air-routes' graph in a format similar to
 that shown below. In this case we also include the label of the edge between each of 
 the vertices. The vertices are represented by their ID value.
 
@@ -275,11 +271,12 @@ Documentation https://tinkerpop.apache.org/docs/current/dev/io/#graphml
 
 As discussed in the "<<graphmlandjsonintro>>" section, there are multiple versions of
 the GraphSON format. There are currently three versions of GraphSON, and each can
-include embedded type information or to rely on standard JSON types. The original
-1.0 version has a complicated embedded type format that is difficult to parse and is
-typically not used anymore. Version 2.0 introduce a new embedded type format that is
-much more compact and easier to parse and 3.0 added a few additional types to the
-format. The default format unless explicitly specified is currently GraphSON 3.0.
+include embedded type information or rely on standard JSON types. The original 1.0
+version has a complicated embedded type format that is tied heavily to the Java type
+system and is typically not used anymore. Version 2.0 introduced a new embedded type
+format that is much more compact and easier to parse, and 3.0 added a few additional
+types to the format. The default format, unless explicitly specified, is currently
+GraphSON 3.0.
 
 [source,groovy]
 ----
@@ -303,7 +300,10 @@ g.addV('airport').property('code','AUS').as('aus').
 
 ==== Adjacency list format GraphSON
 
-To be written
+In an earlier section, we introduce the structure of an adjacency list for CSV. We
+can have a similar format with GraphSON where each line is a GraphSON serialized
+vertex and its incident edges. Note that in this case, the document as a whole is not
+well-formed JSON, but each individual line is.
 
 [source,json]
 ----
@@ -348,9 +348,17 @@ To be written
 {"id":197,"label":"airport","inE":{"contains":[{"id":46566,"outV":3378},{"id":49931,"outV":3608}],"route":[{"id":9524,"outV":55,"properties":{"dist":520}},{"id":9753,"outV":57,"properties":{"dist":903}},{"id":22158,"outV":231,"properties":{"dist":1036}}]},"outE":{"route":[{"id":20448,"inV":231,"properties":{"dist":1036}},{"id":20446,"inV":55,"properties":{"dist":520}},{"id":20447,"inV":57,"properties":{"dist":903}}]},"properties":{"country":[{"id":2356,"value":"AU"}],"code":[{"id":2357,"value":"MCY"}],"longest":[{"id":2358,"value":5896}],"city":[{"id":2359,"value":"Maroochydore"}],"elev":[{"id":2360,"value":15}],"icao":[{"id":2361,"value":"YBSU"}],"lon":[{"id":2362,"value":153.091003418}],"type":[{"id":2363,"value":"airport"}],"region":[{"id":2364,"value":"AU-QLD"}],"runways":[{"id":2365,"value":2}],"lat":[{"id":2366,"value":-26.6033000946}],"desc":[{"id":2367,"value":"Sunshine Coast Airport"}]}}
 ----
 
+NOTE: This newline-delimited format is known as JSON Lines (https://jsonlines.org/).
+
+This format is particularly useful when you have a large graph and need to split the
+adjacency list into multiple files.
+
 ==== Wrapped adjacency list format GraphSON
 
-To be written
+The prior section showed a GraphSON format for an adjacency list that did not have
+well-formed JSON and instead followed JSON Lines format. While that format has its
+use cases, GraphSON can also be produced as well-formed JSON, where the JSON Line
+format is essentially just wrapped in an array as part of a JSON object.
 
 [source,json]
 ----
