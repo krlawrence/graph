@@ -9,7 +9,7 @@
 :icons: font
 //:pdf-page-size: Letter
 :draftdate: {localdatetime}
-:tpvercheck: 4.0.0
+:tpvercheck: 3.8.0
 
 = PRACTICAL GREMLIN: An Apache TinkerPop Tutorial
 Kelvin R. Lawrence <gfxman@yahoo.com>; Stephen P. Mallette

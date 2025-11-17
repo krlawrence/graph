@@ -97,12 +97,12 @@ open issues or submit pull requests.
 [[thanks]]
 === Some words of thanks
 
-No open source project can succeed without dedicated contributors, and equally
+No open source project can succeed without dedicated contributors and equally
 dedicated users. Apache TinkerPop continues to be not just a technology, but a
 vibrant community as well. This book would have no audience but for the continued
 hard work, and interest, of that community.
 
-As always, Special thanks should go to , Marko Rodriguez, Daniel Kuppitz, Stephen
+As always, Special thanks should go to, Marko Rodriguez, Daniel Kuppitz, Stephen
 Mallette and others, who created TinkerPop and Gremlin, and drove its evolution for
 many years. I'm also grateful to Stephen for his help in putting this second edition
 of the book together.
@@ -129,10 +129,10 @@ it is about continues to evolve. Your help and support is very much appreciated.
 === What is this book about?
 
 This book introduces the Apache TinkerPop 'Gremlin' graph query and traversal
-language via real examples featuring real-world graph data. That data along with
-sample code and example applications is available for download from the GitHub
+language via real examples featuring real-world graph data. That data, along with
+sample code and example applications, is available for download from the GitHub
 project as well as many other items. The graph, 'air-routes', is a model of
-the world airline route network between 3,373 airports including 43,400 routes. The
+the world airline route network between 3,504 airports including 50,637 routes. The
 examples presented will work unmodified with the `air-routes.graphml` file loaded 
 into the Gremlin console running with a TinkerGraph. How to set that environment up 
 is covered in the "<<gremlininstall>>" section below.
@@ -151,7 +151,6 @@ NOTE: The first few sections of the book focus on showing some basic Gremlin que
 that are both useful and yet easy to understand. By the end of Chapter 3 you should
 have a basic understanding of how to explore the air routes graph using commonly used
 Gremlin steps. Chapters 4, 5 and 6 explore Gremlin in more depth.
-
 
 .How this book is organized
 Chapter 1 - INTRODUCTION::
@@ -228,9 +227,9 @@ the very latest updates.
 - https://github.com/krlawrence/graph/tree/main/book
 Latest PDF and HTML snapshots::
 - These files are regularly updated to reflect any significant changes. These are the
-only generated formats that are updated outside of the full release cycle. The PDF
+only generated formats that are updated outside the full release cycle. The PDF
 version includes pagination as well as page numbering and is produced using an A4
-page size. The HTML version does not include these features. Otherwise they are
+page size. The HTML version does not include these features. Otherwise, they are
 more or less identical.
 - http://kelvinlawrence.net/book/PracticalGremlin.pdf
 - http://kelvinlawrence.net/book/PracticalGremlin.html
@@ -248,8 +247,9 @@ version. You will just not get any pagination or page numbers. The DocBook forma
 can be read using tools such as Yelp on Linux systems but is primarily included
 so that people can use it to generate other formats that I do not already provide.
 There is currently an issue with the MOBI and ePub versions that causes links to
-have the wrong text. Other than that they should work although you may need to
+have the wrong text. Other than that they should work, although you may need to
 change the font size you use on your device to make things easier to read.
+
 - https://github.com/krlawrence/graph/releases
 Sample data (`air-routes.graphml`)::
 - https://github.com/krlawrence/graph/tree/main/sample-data
@@ -269,16 +269,19 @@ Over the last 15 years, TinkerPop, and especially Gremlin, have evolved substant
 from their earliest versions. What we now know as Apache TinkerPop is the result of
 an open source project created in 2009 and moved to the Apache Software Foundation
 (ASF) in 2015, after the final release of TinkerPop version 2.  The first official
-release of Apache TinkerPop 3.0 came in July of 2015, with the project being promoted
+release of Apache TinkerPop 3.0 came in July 2015, with the project being promoted
 to Apache's "top-level" status the following year. After a decade of continuous 
 releases for TinkerPop 3.0, the project released a beta version of 4.0 in January
 2025 for early evaluation.
+
+We focus this second edition of the book on the semantics of Gremlin as of TinkerPop
+release 3.8.0.
 
 If you are new to TinkerPop and Gremlin, you can probably skip the next few sections.
 They appeared in a slightly modified form, as part of the first edition, and provided
 a way to highlight the arrival of key new features. These notes have been left in the
 second edition as there are still people using older versions of Gremlin, and it can
-be useful to have a list like this to cross reference.
+be useful to have a list like this to cross-reference.
 
 NOTE: The complete ApacheTinkerPop change history can be found at
 https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc
@@ -295,8 +298,8 @@ cases, notes have been added to point out when more recent features first appear
 [[tp34intro]]
 ==== TinkerPop 3.4
 
-A major update to Apache TinkerPop, version 3.4.0, was released in January 2019 and a
-number of point releases followed. 
+A major update to Apache TinkerPop, version 3.4.0, was released in January 2019, and
+a number of point releases followed.
 
 NOTE: Full details of all the new features added in the TinkerPop 3.4.x releases can 
 be found at the following link:
@@ -392,7 +395,7 @@ https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc#tinkerpop-370
 [[tp38intro]]
 ==== TinkerPop 3.8
 
-TinkerPop 3.8.0 was released September 2025 and established a wide mix of features 
+TinkerPop 3.8.0 was released November 2025 and established a wide mix of features
 and improvements to Gremlin semantics designed to enhance language consistency. Some 
 of these changes do lead to behaviors that break from previous versions of TinkerPop, 
 but are expected to stay consistent with TinkerPop 4.0, which should help ease the 
@@ -400,8 +403,10 @@ migration there when 4.0 eventually releases. Here are some of the important
 highlights to consider from this release:
 
 * New Gremlin steps for type conversions: 'asBool' and 'asNumber'.
-* The 'none' step was renamed to 'discard' and 'none' has been modified to take 'P'
-as an argument who's behavior is now a complement to 'any' and 'all' steps.
+* Added the new 'typeOf' predicate to make it possible to filter traverser objects
+given their data type.
+* The 'none' step was renamed to 'discard', and 'none' has been modified to take 'P'
+as an argument, whose behavior is now a complement to 'any' and 'all' steps.
 * The minimum Java version supported is JDK11.
 * The default implementation for the 'date' data type for Java is 'OffsetDateTime'
 rather than 'java.util.Date', which means that steps like 'asDate' and helpers like
@@ -422,10 +427,15 @@ unmatched, and introduces a new 'Pick.unproductive' option.
 go to 'double' instead.
 * The 'valueMap', 'propertyMap', 'groupCount', 'dedup', 'sack', 'sample', 'aggregate'
 steps can no longer take 'by' modulators beyond the number each step expects.
-* Added the new 'typeOf' predicate to make it possible to filter traverser objects
-given their data type.
 * Included the Air Routes dataset, as is used in this book, as official sample data
 in the distribution.
+* The form of 'has' that takes a key and a 'Traversal' as an argument has been
+removed to prevent confusion around its functionality and to prepare for a revised
+implementation of it in 4.0.0.
+* The semantics for 'limit', 'skip' and 'range' with 'global' scope are tracked per
+iteration inside of 'repeat'.
+* The semantics for 'limit', 'skip' and 'range', with 'local' scope will no longer
+automatically unwrap a single item in a list if there is only one object present.
 
 NOTE: Full details of all the new features added in the TinkerPop 3.8.x releases can 
 be found at the following link:
@@ -435,7 +445,11 @@ https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc#tinkerpop-380
 ==== TinkerPop 4.0
 
 TinkerPop 4.0.0 has released a beta version for early evaluation of specific features
-and remains under active development. 
+and remains under active development. We mention it here for awareness but do not
+intend to cover any features it offers in this edition of the book. We will only note
+that the intention of the TinkerPop Community is for 4.0.0 to have the same semantics
+for Gremlin as 3.8.0. As a result, all the Gremlin examples provided in this second
+edition of Practical Gremlin will work equally well for both versions.
 
 [[whygraph]]
 === So what is a graph database and why should I care?
