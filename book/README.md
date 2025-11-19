@@ -1,4 +1,4 @@
-![map](https://github.com/krlawrence/graph/raw/main/images/PRACTICAL-GREMLIN-Revised-v2.png?raw=true, "Book cover art")  
+![map](https://github.com/krlawrence/graph/raw/main/images/PRACTICAL-GREMLIN-2nd-edition.png?raw=true, "Book cover art")  
 
 ## About the files in this folder
 This folder contains the AsciiDoc source files used to produce the HTML, XML (DOCBOOK), EPUB, MOBI and PDF output.

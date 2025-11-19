@@ -10,11 +10,11 @@ asciidoctor book/Practical-Gremlin.adoc -o target/Practical-Gremlin.html
 # asciidoctor won't properly insert the title image and reformatted title so we do
 # that manually here
 search_string="<h1>PRACTICAL GREMLIN: An Apache TinkerPop Tutorial<\/h1>"
-replace_string='<img src="PRACTICAL-GREMLIN-Revised-v2.png">\n<h1>PRACTICAL GREMLIN:<br\/>An Apache TinkerPop Tutorial<\/h1>'
+replace_string='<img src="PRACTICAL-GREMLIN-2nd-edition.png">\n<h1>PRACTICAL GREMLIN:<br\/>An Apache TinkerPop Tutorial<\/h1>'
 sed -i "s/$search_string/${replace_string}/g" "target/Practical-Gremlin.html"
 
 cp target/Practical-Gremlin.html target/index.html
-cp images/PRACTICAL-GREMLIN-Revised-v2.png target/
+cp images/PRACTICAL-GREMLIN-2nd-edition.png target/
 
 echo "*** Producing DOCBOOK ***"
 asciidoctor -n -b docbook -d book book/Practical-Gremlin.adoc -o target/krltemp.xml
