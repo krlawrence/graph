@@ -3694,26 +3694,26 @@ but please, note that these are not part of the query itself.
 [source,groovy]
 ----
 1: g.withSideEffect('x', [] as Set).
-2:     V(0L).store('x').
-3:     bothE().store('x').
-4:     otherV().store('x').
+2:     V(0L).aggregate('x').
+3:     bothE().local(aggregate('x')).
+4:     otherV().local(aggregate('x')).
 5:     aggregate('tgtlist').
 6:     bothE().as('ref').otherV().where(within('tgtlist')).
-7:     select('ref').store('x').cap('x').unfold()
+7:     select('ref').aggregate('x').cap('x').unfold()
 ----
 
 Let's look at the query above line by line.
 
-//[%hardbreaks]
-1: Start the query and define 'x' as our, initially empty, Set.
-2: Start at vertex 0 and 'store' it into our set 'x'.
-3: Store all of the edges connected to 'V(0)' into our set.
-4: Store the vertices connected to 'V(0)' into our set.
-5: Aggregate all of these target vertices into 'tgtlist'.
-6: Find more edges but only remember them if they connect to vertices also connected
+1. Start the query and define 'x' as our, initially empty, Set.
+2. Start at vertex 0 and 'aggregate' it into our set 'x'.
+3. Aggregate all of the edges connected to 'V(0)' into our set. We use 'local' here
+to force an eager evaluation of the stream.
+4. Aggregate the vertices connected to 'V(0)' into our set.
+5. Aggregate all of these target vertices into 'tgtlist'.
+6. Find more edges but only remember them if they connect to vertices also connected
 to 'V(0)'.
-7: Store the edges we found in 'x' and finally return the set as the overall result of the
-query. The 'unfold' just makes the output a little easier to read.
+7. Aggregate the edges we found in 'x' and finally return the set as the overall 
+result   the query. The 'unfold' just makes the output a little easier to read.
 
 Here is the output we get from running the query. As you can see, the vertices and 
 edges that we were not interested in have been correctly left out of the result set.
@@ -4637,13 +4637,15 @@ guarantees that there is not a shorter path to the destinations found. If you ar
 good at reading backwards, you will see that the results match those found above but
 in the reverse order.
 
-The first example keeps track of where it has been using a 'store' step and only
-continues on to places it has not seen before until seven hops have completed.
+The first example keeps track of where it has been using a 'aggregate' step and only
+continues on to places it has not seen before until seven hops have completed. Note
+that it is important to wrap 'aggregate' inside of 'local' to get lazy evaluation
+behavior in this case. 
 
 [source,groovy]
 ----
 g.V().has('code','AUS').
-      repeat(out().where(without('a')).aggregate('a')).
+      repeat(out().where(without('a')).local(aggregate('a'))).
         times(7).
       path().
         by('code')
@@ -4658,10 +4660,10 @@ As you can see the results look familiar.
 [AUS,YYZ,YTS,YMO,YFA,ZKE,YAT,YPO]
 ----
 
-This alternate version of the query uses a 'dedup' step to achieve the same goal. On
-most Gremlin query engines this is an efficient way to look for targets only
-reachable in at least the given number of hops. This query is similar to the one used
-in the "<<doesanyrouteexist>>" section.
+This alternate version of the query uses a 'dedup' step to achieve the same goal and
+in a more performant manner. On most Gremlin query engines this is an efficient way 
+to look for targets only reachable in at least the given number of hops. This query 
+is similar to the one used in the "<<doesanyrouteexist>>" section.
 
 [source,groovy]
 ----
@@ -4948,9 +4950,9 @@ our experiments to build up this query from there is a non trivial journey!
 
 [source,groovy]
 ----
-g.E().hasLabel("route").order().by("dist", desc).store("d").by("dist").
+g.E().hasLabel("route").order().by("dist", desc).local(aggregate("d").by("dist")).
   filter(values("dist").as("cd").
-         select("d").by(limit(local, 1)).as("md").
+         select("d").by(limit(local, 1).unfold()).as("md").
          where("cd",eq("md"))).
   project("from","to","dist").
     by(outV()).
@@ -4962,9 +4964,9 @@ one more time as follows.
 
 [source,groovy]
 ----
-g.E().hasLabel("route").order().by("dist",desc).store("d").by("dist").
+g.E().hasLabel("route").order().by("dist",desc).local(aggregate("d").by("dist")).
   filter(values("dist").as("cd").
-         select("d").by(limit(local, 1)).as("md").
+         select("d").by(limit(local, 1).unfold()).as("md").
          where("cd",eq("md"))).
   project("from","to","dist").
     by(outV().values('code')).
@@ -4978,8 +4980,8 @@ such combinations once but we will leave that as an exercise for the reader!
 
 [source,groovy]
 ----
-[from:DXB,to:AKL,dist:8818]
-[from:AKL,to:DXB,dist:8818]
+[from:SIN,to:JFK,dist:9526]
+[from:JFK,to:SIN,dist:9526]
 ----
 
 [[miscq]]

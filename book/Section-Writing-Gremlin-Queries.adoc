@@ -1827,7 +1827,9 @@ last one. The following pattern allows you to do this by using 'store' to hold t
 g.V().has('airport','code', within('IAD','DAL','JFK','DCA','DFW')).
   order().by('code').
   fold().
-  sideEffect(tail(local).store('t')).unfold().where(neq('t')).by().by(unfold()).
+  sideEffect(tail(local).unfold().
+             local(aggregate('t'))).
+  unfold().where(neq('t')).by().by(unfold()).
   values('code').fold()
   
 [DAL,DCA,DFW,IAD]
