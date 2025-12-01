@@ -4291,11 +4291,10 @@ When run, five results such as those shown below are returned.
 [[sevendegrees]]
 === Seven degrees of separation!
 
-No, the word seven in the heading above is not a mistake, read on! Most people we are
-sure have heard of the famous "Six degrees of separation" theory. The theory
-essentially states that for any living person, using "friend of a friend" style
-connections, none of us is farther removed than six friendship relationships from
-anyone else.
+No, the word seven in the heading above is not a mistake, read on! Most people have
+likely heard of the famous "Six degrees of separation" theory. The theory essentially
+states that for any living person, using "friend of a friend" style connections, none
+of us is farther removed than six friendship relationships from anyone else.
 
 NOTE: You can read more about the Six degrees of separation theory on Wikipedia at
 this location https://en.wikipedia.org/wiki/Six_degrees_of_separation.
@@ -4331,7 +4330,7 @@ g.V().hasLabel('airport').not(outE('route')).count()
 So we know that there are 16 airports we need to ignore for this experiment. Leaving
 us with 3475 airports we care about but one of those will be LHR so we also need to
 discount that one as we are not looking for cyclic paths. So, we need a query that
-proves there is a route between all of these 3475 remaining airports and London
+proves there is a route between all of these 3474 remaining airports and London
 Heathrow but ignores the orphan airports and Heathrow itself as starting points.
 
 The core part of the query is shown below. We started out using just one hop for
@@ -4404,7 +4403,7 @@ g.V().has('airport','code',neq('LHR')).
 3452
 ----
 
-As you can see, with five hops were were able to reach LHR from 3345 of the 3357
+As you can see, with five hops were were able to reach LHR from 3452 of the 3474
 airports we are testing. Next we ran the query again but using six hops.
 
 [source,groovy]
@@ -4425,7 +4424,7 @@ g.V().has('airport','code',neq('LHR')).
 3461
 ----
 
-So with six hops 3354 of our 3357 airports were able to get to LHR. We then tried
+So with six hops 3461 of our 3474 airports were able to get to LHR. We then tried
 seven hops and found that all but two of the airports were able to reach LHR
 
 [source,groovy]
@@ -4449,7 +4448,7 @@ g.V().has('airport','code',neq('LHR')).
 This made me curious. We were fairly convinced that there are no airports in the
 graph that would not be able to reach LHR in seven hops unless of course they were
 orphans but we have already ruled those out as part of our query. So, we decided to
-go with 30 hops just to make sure. However we still got the answer 3355.
+go with 30 hops just to make sure. However we still got the answer 3462.
 
 [source,groovy]
 ----
@@ -4481,28 +4480,14 @@ LHR can be reached in seven hops or less. Hence the title of this section being
 ==== Finding isolated sub-networks
 
 As discussed above, while we were working on the queries for the previous section we
-realized that there are two airports in the graph that are not true orphans, as they
-do have routes between each other but that they are part of a small network that is
-not itself connected to the main route network. In other words, the network is an
+realized that there are airports in the graph that are not true orphans, as they do 
+have routes between each other but that they are part of a small network that is not
+itself connected to the main route network. In other words, the network is an
 isolated mini network within the main graph and you can never get to London from
-either one of them. After more analysis we realized that this was actually due to an
-error in our data set which we have fixed in subsequent updates but if you are using
-the version 0.77 level of `air-routes` then the following query will yield the
-results shown.
-
-NOTE: The 0.77 dataset was used in the first edition of this book. It can be found in
-https://github.com/krlawrence/graph/blob/main/sample-data/air-routes-edition-1.graphml
-as a reference.
+either any of them. 
 
 To solve the puzzle of the missing airports, we only had to slightly modify the seven
-degrees of separation query. Note that if you use the most recent version of the
-`air-routes` data set, this particular error is fixed, but you will find other
-isolated networks within the main graph exist. However, these are not due to errors
-but rather because there truly are a set of airports in Portugal connected to each
-other via commuter airlines but with no way to get from any one of them to the main,
-worldwide route network.
-
-So, here is the modified form of the query.
+degrees of separation query. 
 
 [source,groovy]
 ----
@@ -4532,8 +4517,18 @@ route network.
 
 [source,groovy]
 ----
-HPB
-VAK
+CAT
+VRL
+VSE
+PRM
+BGC
+BPG
+CQA
+BQJ
+CMK
+GYG
+UMS
+VUU
 ----
 
 Just to verify our findings we ran a couple of queries to double check on the routes
@@ -4541,15 +4536,31 @@ from each of these airports. As you can see they were just connected to each oth
 
 [source,groovy]
 ----
-g.V().has('code','HPB').out().path().by('code')
-[HPB,VAK]
+g.V().has('code','VUU').out().path().by('code')
 
-g.V().has('code','VAK').out().path().by('code')
-[VAK,HPB]
+[VUU,CMK]
+
+g.V().has('code','CAT').out().path().by('code')
+
+[CAT,VSE]
+[CAT,PRM]
 ----
 
-This proved both an interesting and useful exercise and uncovered some errors in the
-graph that had slipped through our error checking!
+As a point of curiosity, we also thought that we'd look the countries where these 
+airports were.
+
+[source,groovy]
+----
+g.V().has('code',within('CAT','VRL','VSE','PRM','BGC','BPG',
+                        'CQA','BQJ','CMK','GYG','UMS','VUU')).
+  values('country').dedup().fold()
+
+[PT,BR,RU,MW]
+----
+
+It is interesting that there are a set of airports in Portugal, Brazil, Russia, and
+Malawi connected only to each other via airlines but with no way to get from any one
+of them to the main, worldwide route network.
 
 [[longestroutes]]
 === Looking for the journey requiring the most stops
