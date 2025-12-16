@@ -107,6 +107,7 @@ When you start the Gremlin console you will be presented with a banner/logo and 
 prompt that will look something like this. Don't worry about the plugin messages yet
 we will talk about those a bit later.
 
+[source,text]
 ----
 $ ./gremlin.sh
 
@@ -117,12 +118,14 @@ plugin activated: tinkerpop.server
 plugin activated: tinkerpop.utilities
 plugin activated: tinkerpop.tinkergraph
 gremlin>
+----
 
 You can get a list of the available commands by typing ':help'. Note that all
 commands to the console itself are prefixed by a colon '":"'. This enables the
 console to distinguish them as special and different from actual Gremlin and
 Groovy commands.
 
+[source,text]
 ----
 gremlin> :help
 
@@ -205,8 +208,10 @@ Gremlin will execute the file and exit. For example if you had a file called
 "mycode.groovy" you could execute it directly from your command line window or
 terminal window as follows:
 
+[source,text]
 ----
 $ ./gremlin.sh -e mycode.groovy
+----
 
 If you wanted to have the console run your script and not exit afterwards, you can
 use the '-i' option instead of '-e'.
@@ -214,6 +219,7 @@ use the '-i' option instead of '-e'.
 You can get help on all of the command line options for the Gremlin console by typing
 'gremlin --help'. You should get back some help text that looks like this
 
+[source,text]
 ----
 $ ./gremlin.sh --help
 
@@ -233,7 +239,6 @@ Usage: gremlin.sh [-CDhlQvV] [-e=<SCRIPT ARG1 ARG2 ...>]... [-i=<SCRIPT ARG1
   -Q, --quiet     Suppress superfluous Console output
   -v, --version   Display the version
   -V, --verbose   Enable verbose Console output
-
 ----
 
 If you ever want to check which version of TinkerPop you have installed you can enter
@@ -353,6 +358,7 @@ arranged the list in two columns to aid readability. Don't worry if not all of t
 terms make sense right away - we'll get there soon!
 
 .Output from graph.features()
+[source,text]
 ----
 > GraphFeatures                          > VertexPropertyFeatures
 >-- ConcurrentAccess: false              >-- UserSuppliedIds: true
@@ -508,6 +514,7 @@ in and its geographic location.
 Specifically, each airport vertex has a unique ID, a label of 'airport' and contains
 the following properties. The word in parenthesis indicates the type of the property.
 
+[source,text]
 ----
  type    (string) : Vertex type. Will be 'airport' for airport vertices
  code    (string) : The three letter IATA code like AUS or LHR
@@ -611,6 +618,7 @@ Here are the Top 15 airports sorted by overall number of routes (in and out). In
 graph terminology this is often called the degree of the vertex or just 
 'vertex degree'.
 
+[source,text]
 ----
     POS  ID   CODE  TOTAL     DETAILS
 
