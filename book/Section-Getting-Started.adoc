@@ -3,11 +3,12 @@
 [[gs]]
 == GETTING STARTED
 
-Let's take a look at what you will need to have installed and what tools you will
-need available to make best use of the examples contained in this tutorial. The key
-thing that you will need is the Apache TinkerPop project's Gremlin Console download.
-In the sections below we will walk you through a discussion of what you need to
-download and how to set it up.
+In this chapter you will set up the Gremlin Console, load the air-routes sample 
+graph, and run your first Gremlin traversals against it. You will learn how to start 
+and stop the console, adjust a few useful settings, and verify that the sample data 
+has been loaded correctly. By the end of the chapter you should be comfortable using
+the console as a workspace for experimenting with the examples used throughout the 
+rest of the book.
 
 [[tpintro]]
 === What is Apache TinkerPop?
@@ -47,7 +48,7 @@ to those systems.
 Any TinkerPop enabled graph databases can be accessed using the Gremlin query
 language and corresponding API. We can also use the TinkerPop API to write client
 code, in languages like Java, that can talk to a TinkerPop enabled graph. For most of
-this book we will be working within the Gremlin console with a local graph. However
+this book we will be working within the Gremlin Console with a local graph. However
 in Chapters 7 and 8 we take a look at Gremlin Server and some other TinkerPop enabled
 environments. Most of Apache TinkerPop has been developed using Java but there are
 also bindings available for many other programming languages such as Groovy, Python,
@@ -71,10 +72,12 @@ other TinkerPop enabled graph stores.
 [[gconsole]]
 === The Gremlin Console
 
-The Gremlin Console is a fairly standard REPL (Read Eval Print Loop) shell. It is
-based on the Groovy console and if you have used any of the other console
+The Gremlin Console is an interactive shell for running Gremlin traversals against a
+graph. In this book it serves as the main workspace for experimenting with the 
+air-routes graph, trying out examples, and exploring variations of your own. It is
+based on the Groovy Shell and if you have used any of the other console
 environments such as those found with Scala, Python and Ruby you will feel right at
-home here. The Console offers a low overhead (you can set it up in seconds) and low
+home here. The console offers a low overhead (you can set it up in seconds) and low
 barrier of entry way to start to play with graphs on your local computer. The
 console can actually work with graphs that are running locally or remotely but for
 the majority of this book we will keep things simple and focus on local graphs.
@@ -84,28 +87,27 @@ console or have access to a TinkerPop/Gremlin enabled graph store such as
 TinkerGraph or JanusGraph.
 
 Regardless of the environment you use, if you work with Apache TinkerPop enabled
-graphs, the Gremlin console should always be installed on your machine!
+graphs, the console should always be installed on your machine!
 
 [[gremlininstall]]
-==== Downloading, installing and launching the console
+==== Download, install and launch the Gremlin Console
 
-You can download the Gremlin console from the official Apache TinkerPop website at 
+You can download the Gremlin Console from the official Apache TinkerPop website at 
 http://tinkerpop.apache.org/
 
-It only takes a few minutes to get the Gremlin Console installed and running. You
-just download the ZIP, 'unzip' it and you are all set. TinkerPop also
-requires Java to be at version 11 or higher.
+It only takes a few minutes to get the console installed and running. You just 
+download the ZIP, 'unzip' it and you are all set. TinkerPop also requires Java to be
+at version 11 or higher.
 
 NOTE: For more information on the compatability of Gremlin with versions of Java and
 other languages, please see the https://tinkerpop.apache.org/docs/current/upgrade/[official documentation].
 
-The Gremlin Console download also includes all of the JAR files that are needed to
-write a standalone Java or Groovy TinkerPop application but that is a topic for
-later!
+The Console download also includes all of the JAR files that are needed to write a 
+standalone Java or Groovy TinkerPop application but that is a topic for later!
 
-When you start the Gremlin console you will be presented with a banner/logo and a
-prompt that will look something like this. Don't worry about the plugin messages yet
-we will talk about those a bit later.
+When you start the console you will be presented with a banner/logo and a prompt that
+will look something like this. Don't worry about the plugin messages yet we will talk
+about those a bit later.
 
 [source,text]
 ----
@@ -171,10 +173,10 @@ TIP: Of all the commands listed above :clear (:c for short) is an important one 
 remember. If the console starts acting strangely or you find yourself stuck with a
 prompt like "......1>" , typing ':clear' will reset things nicely.
 
-It is worth noting that as mentioned above, the Gremlin console is based on the
-Groovy console and as such you can enter valid Groovy code directly into the console.
-So as well as using it to experiment with Graphs and Gremlin you can use it as, for
-example, a desktop calculator should you so desire!
+It is worth noting that as mentioned above, the console is based on the Groovy Shell
+and as such you can enter valid Groovy code directly into the console. So as well as
+using it to experiment with Graphs and Gremlin you can use it as, for example, a 
+desktop calculator should you so desire!
 
 [source,groovy]
 ----
@@ -191,19 +193,19 @@ gremlin> for (a in 1..5) {print "${a} "};println()
 1 2 3 4 5
 ----
 
-NOTE: The Gremlin Console does a very nice job of only showing you a nice and tidy
-set of query results. If you are working with a graph system that supports TinkerPop
-3 but not via the Gremlin console (an example of this would be talking to a Gremlin
-Server using the HTTP REST API) then what you will get back is going to be a JSON
-document that you will need to write some code to parse. We will explore that topic
-much later in the book.
+NOTE: The console does a very nice job of only showing you a nice and tidy set of 
+query results. If you are working with a graph system that supports TinkerPop 3 but
+not via the console (an example of this would be talking to a Gremlin Server using 
+the HTTP REST API) then what you will get back is going to be a JSON document that 
+you will need to write some code to parse. We will explore that topic much later in 
+the book.
 
 If you want to see lots of examples of the output from running various queries you
 will find plenty in the "<<msc>>" section of this book where we have tried to go
 into more depth on various topics.
 
-Mostly you will run the Gremlin console in its interactive mode. However you can also
-pass the name of a file as a command line parameter, preceded by the '-e' flag and
+Mostly you will run the console in its interactive mode. However you can also pass 
+the name of a file as a command line parameter, preceded by the '-e' flag and
 Gremlin will execute the file and exit. For example if you had a file called
 "mycode.groovy" you could execute it directly from your command line window or
 terminal window as follows:
@@ -216,7 +218,7 @@ $ ./gremlin.sh -e mycode.groovy
 If you wanted to have the console run your script and not exit afterwards, you can
 use the '-i' option instead of '-e'.
 
-You can get help on all of the command line options for the Gremlin console by typing
+You can get help on all of the command line options for the console by typing
 'gremlin --help'. You should get back some help text that looks like this
 
 [source,text]
@@ -242,35 +244,37 @@ Usage: gremlin.sh [-CDhlQvV] [-e=<SCRIPT ARG1 ARG2 ...>]... [-i=<SCRIPT ARG1
 ----
 
 If you ever want to check which version of TinkerPop you have installed you can enter
-the following command from inside the Gremlin console.
+the following command from inside the console.
 
 [source,groovy]
 ----
-// What version of Gremlin console am I running?
+// What version of the console am I running?
 gremlin>  Gremlin.version()
 ==>3.8.0
 ----
 
-One thing that is not at all obvious or apparent is that the Gremlin console quietly
-imports a large number of Java Classes and Enums on your behalf as it starts up. This
-makes writing queries within the console simpler. However, as we shall explore in the
+One thing that is not at all obvious or apparent is that the console quietly imports
+a large number of Java Classes and Enums on your behalf as it starts up. This makes
+writing queries within the console simpler. However, as we shall explore in the
 "<<javastatics>>" section later, once you start writing standalone programs in Java
 or other languages, you need to actually know what the console did on your behalf. 
 Reading through that section will help familiarize you with the classes you need to
 import to your application code.
 
 [[gremlinsave]]
-==== Saving output from the console to a file
+==== Saving output from the Gremlin Console to a file
 
-Sometimes it is useful to save part or all of a console session to a file. You can
-turn recording to a file on and off using the ':record' command.
+Sometimes it is useful to save part or all of a Gremlin Console session to a file so
+that you can review it later, compare different traversals, or share it with others. 
+The console provides a simple way to start and stop recording, which captures both 
+the commands you type and the results that are displayed.
 
-In the following example, we turn recording on using ':record start mylog.txt' which
-will force all commands entered and their output to be written to the file
-'mylog.txt' until the command ':record stop' is entered. The command
-'g.V().count().next()' just counts how many vertices (nodes) are in the graph. We
-will explain the Gremlin graph traversal and query language in detail starting in the
-next section.
+In the following example, we turn session recording on using 
+':record start mylog.txt' which will force all commands entered and their output to 
+be written to the file 'mylog.txt' until the command ':record stop' is entered. The 
+command 'g.V().count().next()' just counts how many vertices (nodes) are in the 
+graph. We will explain the Gremlin graph traversal and query language in detail 
+starting in the next section.
 
 [source,groovy]
 ----
@@ -297,8 +301,7 @@ g.V().count().next()
 
 For the remainder of this book we are not going to show the 'gremlin>' prompt or
 the '==>' output identifier as part of each example, just to reduce clutter a bit.
-You can assume that each command was entered and tested using the Gremlin console
-however.
+You can assume that each command was entered and tested using the console however.
 
 TIP: If you want to learn more about the console itself you can refer to the official
 TinkerPop documentation and, even better, have a play with the console and the built
@@ -307,9 +310,9 @@ in help.
 [[consolepreferences]]
 ==== Setting up console preferences
 
-There are a number of preferences that can be established within the console to make 
-it more suitable for your needs. The ':set' command is used to establish various 
-preference values. Let's look at a few helpful configurations. 
+There are a number of preferences that can be established within the Gremlin Console
+to make it more suitable for your needs. The ':set' command is used to establish 
+various preference values. Let's look at a few helpful configurations. 
 
 The first option to know is 'max-iteration'. The console will only display the first
 100 lines of output for any command by default. If you'd like to see more you would 
@@ -341,12 +344,16 @@ reference documentation https://tinkerpop.apache.org/docs/current/reference/#con
 [[tgintro]]
 === Introducing TinkerGraph
 
-As well as the Gremlin Console, the TinkerPop download includes an implementation
-of an in-memory graph store called TinkerGraph. This book was mostly developed
-using TinkerGraph The nice thing about TinkerGraph is that for learning and testing
-things you can run everything you need on your laptop or desktop computer and be up 
-and running very quickly. We will also explain how to get started with the Gremlin 
-Console and TinkerGraph a bit later in this section.
+TinkerGraph is the in-memory reference implementation that ships with Apache 
+TinkerPop and is included with the Gremlin Console download. It runs inside a single
+JVM process, stores its data in memory, and is designed primarily for learning, 
+experimentation, and small test graphs, but does have use cases for production 
+workloads in some scenarios. 
+
+This book was mostly developed using TinkerGraph The nice thing about TinkerGraph is 
+that for learning and testing things you can run everything you need on your laptop 
+or desktop computer and be up and running very quickly. We will also explain how to 
+get started with the console and TinkerGraph a bit later in this section.
 
 TinkerPop defines a number of capabilities that a graph store should support. Some
 are optional others are not. If supported, you can query any TinkerPop enabled graph
@@ -428,9 +435,8 @@ if you load a graph file, such as a GraphML format file, that specifies ID value
 vertices and edges then TinkerGraph will honor those IDs and use them. As we shall
 see later this is not the case with some other graph database systems.
 
-When running in the Gremlin Console, support for TinkerGraph should be on by default.
-If for any reason you find it to be off, you can enable it by issuing the following
-command.
+When running in the console, support for TinkerGraph should be on by default. If for
+any reason you find it to be off, you can enable it by issuing the following command.
 
 [source,groovy]
 ----
@@ -471,26 +477,27 @@ any object that represents an instance of a graph traversal source object.
 [[air]]
 === Introducing the air-routes graph
 
-Along with this book we have provided what is, in big data terms, a very small, but
-nonetheless real-world graph that is stored in GraphML, a standard XML format for
-describing graphs that can be used to move graphs between applications. The graph,
-'air-routes' is a model we built of the world airline route network that is
-fairly accurate.
+The examples in this book use a sample dataset called the air-routes graph. It models
+airports as vertices, flight routes as edges, and includes properties such as airport
+codes, city and country names, geographic coordinates, and distances between 
+airports. This graph is large enough to be interesting, but still small enough to 
+explore comfortably from the Gremlin Console.
 
 NOTE: The `air-routes.graphml` file can be downloaded from the `sample-data` folder
 located in the GitHub repository at the following URL:
 https://github.com/krlawrence/graph/tree/main/sample-data
 
-Of course, in the real world, routes are added and deleted by airlines all the time
-so please don't use this graph to plan your next vacation or business trip! However,
-as a learning tool we hope you will find it useful and easy to relate to. If you feel
-so inclined you can load the file into a text editor and examine how it is laid out.
-As you work with graphs you will want to become familiar with popular graph
-serialization formats. Two common ones are GraphML and GraphSON. The latter is a
-JSON format that is defined by Apache TinkerPop and heavily used in that environment.
-GraphML is widely recognized by TinkerPop and many other tools as well such as
-Gephi, a popular open source tool for visualizing graph data. A lot of graph
-ingestion tools also still use comma separated values (CSV) format files.
+While the air-routes graph was built from actual real-world data, routes are added 
+and deleted by airlines all the time so please don't use this graph to plan your next
+vacation or business trip! However, as a learning tool we hope you will find it 
+useful and easy to relate to. If you feel so inclined you can load the file into a 
+text editor and examine how it is laid out. As you work with graphs you will want to
+become familiar with popular graph serialization formats. Two common ones are GraphML
+and GraphSON. The latter is a JSON format that is defined by Apache TinkerPop and 
+heavily used in that environment. GraphML is widely recognized by TinkerPop and many
+other tools as well such as Gephi, a popular open source tool for visualizing graph 
+data. A lot of graph ingestion tools also still use comma separated values (CSV) 
+format files.
 
 We will briefly look at loading and saving graph data in Sections 2 and 4. We take a
 look at different ways to work with graph data stored in text format
@@ -648,13 +655,10 @@ located in: https://github.com/krlawrence/graph/tree/main/sample-code/groovy.
 [[airrouteupdates]]
 ==== Updated versions of the air route data
 
-To keep things consistent, all the examples presented in this book were produced
-using the 1.0 version of the air routes data set generated October 2025. The 1.0
-version is likely the last version of this data set to be produced. The form it is
-in for this version is rich enough for demonstration purposes and serves as an
-excellent resource for learning Gremlin and graphs. Having a stable 1.0 version means
-that any educational resources adopting this version in different contexts will
-simply just work when taken to other ones.
+Over time the air-routes graph has evolved, and several versions of the data files 
+are included with the book sources. The examples in this book assume that you are 
+using the 1.0 version of the air-routes data. Unless a section explicitly asks you to
+load a different file, you should use that default version when following along.
 
 NOTE: Even though no further releases of the dataset are expected, the GitHub
 repository still maintains a "latest" version. It is also 1.0. You can download it
@@ -680,11 +684,11 @@ That's it! The graph is now loaded with the 1.0 version of the dataset. These tw
 lines simplify a longer set of manual steps which we will go through as an
 explanatory next step so that you can understand the details.
 
-The following code loads the air routes graph using the Gremlin Console by putting it
-into a file and using ':load' to load and run it or by entering each line into the
-console manually. These commands will setup the console environment, create a
-TinkerGraph graph and load the `air-routes.graphml` file into it. Some extra console
-features are also enabled.
+The following code loads the air routes graph using the console by putting it into a
+file and using ':load' to load and run it or by entering each line into the console
+manually. These commands will setup the console environment, create a TinkerGraph 
+and load the `air-routes.graphml` file into it. Some extra console features are also
+enabled.
 
 These commands create an in-memory TinkerGraph which will use LONG values for the
 vertex, edge and vertex property IDs. As part of loading a graph we need to setup
@@ -729,9 +733,8 @@ TIP: As a best practice, you should use the full path to the location where the
 GraphML file resides if at all possible to make sure that the GraphML reading code
 can find it.
 
-Once you have the Gremlin Console up and running and have the graph loaded, if
-you feel like it you can cut-and-paste queries from this book directly into
-the console to see them run.
+Once you have the console up and running and have the graph loaded, if you feel like
+it you can cut-and-paste queries from this book directly into it to see them run.
 
 Once the 'air-routes' graph is loaded, you can enter the following command and you
 will get back information about the graph. In the case of a TinkerGraph you will get 
@@ -754,7 +757,7 @@ tinkergraph[vertices:3749 edges:57645]
 ----
 
 [[off]]
-=== Turning off some of the Gremlin console's output
+=== Turning off some of the Gremlin Console's output
 
 Sometimes, especially when assigning a result to a variable and you are not
 interested in seeing all the steps that Gremlin took to get there, the Gremlin
@@ -769,16 +772,11 @@ a=g.V().has('code','AUS').out().toList();[]
 [[indexschema]]
 === A word about indexes and schemas
 
-Some graph implementations have strict requirements on the use of an 'index'. This
-means that a schema and an index must be in place before you can work with a graph
-and that you can only begin a traversal by referencing a property in the graph that
-is included in the index. While that is, for the most part, outside the scope of this
-book, it should be pointed out that some of the queries included in this material
-will not work on any graph system that requires all queries to be backed by an index.
-Such graph stores tend not to allow what are sometimes called 'full graph searches'
-for cases where a particular item in a graph is not backed by an index. One example
-of this is vertex and edge 'labels' which are typically not indexed but are sometimes
-very useful items to specify at the start of a query. 
+Before going much further, it is worth briefly mentioning indexes and schemas. For 
+now, you will be working with TinkerGraph, which does not enforce a formal schema and
+offers only simple in-memory indexing. That is sufficient for the examples in this 
+chapter, but later chapters will return to these topics in more detail and show how 
+indexes and schemas can have a big impact on query performance and data quality.
 
 As most of the examples in this book are intended to work just fine with only a basic
 TinkerGraph the subject of indexes is not covered in detail until Chapter 6
