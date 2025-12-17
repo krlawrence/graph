@@ -1,6 +1,6 @@
 # Practical Gremlin: An Apache TinkerPop Tutorial
 
-![map](https://github.com/krlawrence/graph/raw/main/images/GremlinEaselNoText.png?raw=true, "graph picture")
+![map](https://raw.githubusercontent.com/krlawrence/graph/refs/heads/main/images/map-with-plane.png, "graph picture")
 
 ## Welcome!
 
@@ -8,16 +8,16 @@ This repository is the home for the source materials, sample code and examples f
 
 ### Quick Start - the latest version
 
-Preview releases for the second edition are published as HTML automatically as they are authored and can be found [here](https://krlawrence.github.io/graph/). It should be noted when reading this revision of the book that it is still a draft version and under significant modification, so you can expect volatile changes. 
+Preview releases for the second edition are published as HTML automatically as they are authored and can be found [here and HTML](https://krlawrence.github.io/graph/) and [here as PDF](https://krlawrence.github.io/graph/Practical-Gremlin.pdf). It should be noted when reading this revision of the book that it is still a draft version and under significant modification, so you can expect volatile changes. 
 
-The first edition is still available. To view it in a browser (HTML format) click [here](http://kelvinlawrence.net/book/PracticalGremlin.html) or for a PDF version click [here](http://kelvinlawrence.net/book/PracticalGremlin.pdf). These versions are not typically updated anymore. You will find other formats including MOBI, EPUB and XML (Docbook) in the [releases](https://github.com/krlawrence/graph/releases)  section. The PDF version is currently the "official" version. It has a better table of contents, page numbers, and some better formatting.
+The first edition is still available. To view it in a browser (HTML format) click [here](http://kelvinlawrence.net/book/PracticalGremlin.html) or for a PDF version click [here](http://kelvinlawrence.net/book/PracticalGremlin.pdf). These versions are not updated anymore. You will find other formats including MOBI, EPUB and XML (Docbook) in the [releases](https://github.com/krlawrence/graph/releases)  section. The PDF version is currently the "official" version. It has a better table of contents, page numbers, and some better formatting.
 
 ### LATEST NEWS
 
+- [Dec-17-2025] Auto-published the PDF version of book via GitHub Actions as changes arrive to the 'main' branch. 
 - [Oct-22-2025] Generated 1.0 of the Air Routes dataset. 
-- [Jul-17-2024] Auto-published the book via GitHub Actions as changes arrive to the 'main' branch. 
+- [Jul-17-2024] Auto-published the HTML version of book via GitHub Actions as changes arrive to the 'main' branch. 
 - [Sep-23-2023] Work has started on a second edition of the book! See the note below for more details.
-- [Sep-22-2023] Added a script to the sample-data folder for producing Cypher versions of the air-routes data.
 
 ### Work has begun on the second edition!
 
@@ -52,7 +52,7 @@ October 6th, 2017
 
 The title of this book could equally well be "A getting started guide for users of graph databases and the Gremlin query language featuring hints, tips and sample queries". It turns out that is a bit too too long to fit on one line for a heading but in a single sentence that describes the focus of this book pretty well.
 
-The book introduces the Apache TinkerPop 3 Gremlin graph query and traversal language via real examples against a real world graph. They are given as a set of working examples against a graph that is also provided in the sample-data folder. The graph, air-routes.graphml, is a model of the world airline route network between 3,367 airports including 43,160 routes. The examples presented will work unmodified with the air-routes.graphml file loaded into the Gremlin console running with a TinkerGraph.
+The book introduces the Apache TinkerPop Gremlin graph query and traversal language via real examples against a real world graph. They are given as a set of working examples against a graph that is also provided in the sample-data folder. The graph, air-routes.graphml, is a model of the world airline route network between 3,504 airports including 50,637 routes. The examples presented will work unmodified with the air-routes.graphml file loaded into the Gremlin Console running with a TinkerGraph.
 
 ## How this site is organized
 
@@ -107,7 +107,7 @@ may be added and the layout further refined.
   queries.
 
 **Chapter 6 - MOVING BEYOND THE GREMLIN CONSOLE**
-- The next step in our journey is to move beyond the Gremlin console and take a look
+- The next step in our journey is to move beyond the Gremlin Console and take a look
   at interacting with a TinkerGraph using Java and Groovy applications.
 
 **Chapter 7 - INTRODUCING GREMLIN SERVER**
@@ -131,6 +131,7 @@ may be added and the layout further refined.
 ---
 
 **NEWS ARCHIVE**
+[Sep-22-2023] Added a script to the sample-data folder for producing Cypher versions of the air-routes data.
 [Aug-29-2022] Updated versions of the sample data and corresponding demo apps have been uploaded.
 [May-04-2022] The latest preview draft of revision 283 (TP 3.5.1) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
 [Jun-28-2020] I have started creating a series of [issues](https://github.com/krlawrence/graph/issues) to capture changes and updates I hope to make soon. The issues contain some interesting examples of both new Gremlin features and some additional queries, some of which are quite advanced, that I intend to add to the manuscript as time allows. The issues have been sorted into a Kanban board which can be found in the Projects area. 
