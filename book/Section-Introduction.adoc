@@ -162,8 +162,8 @@ conversation with the community. Your questions, suggestions, and examples help 
 where the book goes next. If you find places where it could be clearer, more helpful,
 or more complete, your feedback is welcome and will help guide future updates.
 
-Stephen Mallette
-Second edition editor and co-author
+Stephen Mallette +
+Second edition editor and co-author +
 
 [[about]]
 === What is this book about?
