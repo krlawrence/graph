@@ -3452,7 +3452,7 @@ g.V().has('region','US-NM').
 Given we calculated that there were 27 runways in New Mexico and 26 in Arizona we can
 verify that we have the right result using the Gremlin Console.
 
-[source,console]
+[source,text]
 ----
 gremlin> 27/26
 
@@ -5977,7 +5977,7 @@ g.V().has('region','US-TX').out().has('region','US-CA').
 After you run the query, instead of showing you the results, Gremlin will show you
 where the time was spent processing the components of the query.
 
-[source,console]
+[source,text]
 ----
 Traversal Metrics
 Step                                                               Count  Traversers       Time (ms)    % Dur
@@ -6006,7 +6006,7 @@ g.V().has('airport','code','AUS').
 Here is the 'profile' report. We truncated some of the text with '"..." so that it
 will fit on a single page.
 
-[source,console]
+[source,text]
 ----
 Traversal Metrics
 Step                                                               Count  Traversers       Time (ms)    % Dur

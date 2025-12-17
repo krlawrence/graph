@@ -6,15 +6,15 @@ The focus of this book so far has been to teach the Gremlin query language, usin
 Gremlin Console and TinkerGraph as our learning environment. This is indeed a great
 way to learn, and that environment can be setup quickly, as we have seen, on a single
 laptop, or desktop, computer. Even as you move towards more sophisticated
-environments, keeping the Gremlin Console nearby is recommended as an easy way to
-experiment with new ideas.
+environments, keeping the console nearby is recommended as an easy way to experiment
+with new ideas.
 
 As we start to think about using graphs to solve problems in a production
 environment, we need some additional tools. We have to consider things such as
 programming language interfaces, persistent storage, making graphs available using
 servers and more advanced indexing. Those topics are the focus of this chapter, and
 the two that follow. Hopefully this will whet your appetite for moving beyond the
-Gremlin Console, and into the world of graph application programming and graph system
+console, and into the world of graph application programming and graph system
 deployment! 
 
 In this chapter we start the journey by introducing ways to access TinkerGraph
@@ -28,11 +28,11 @@ databases. First, let's take a look at the Apache TinkerPop Java API.
 
 So far in this book we have looked at many ways of working with a TinkerGraph from
 within the Gremlin Console. As you start to create more sophisticated applications,
-you will find that the Gremlin Console is just one of the tools to keep in your
-toolbox. It is very likely, if not certain, that you will want to write standalone
-applications that can work with graph data. There are a number of different
-programming language bindings currently available for TinkerPop. One of the most
-widely used is the Java API. Apache TinkerPop itself is coded mostly in Java.
+you will find that the console is just one of the tools to keep in your toolbox. It
+is very likely, if not certain, that you will want to write standalone applications
+that can work with graph data. There are a number of different programming language 
+bindings currently available for TinkerPop. One of the most widely used is the Java
+API. Apache TinkerPop itself is coded mostly in Java.
 
 NOTE: You will find several Java samples at the GitHub repository associated with
 this book. https://github.com/krlawrence/graph
@@ -65,7 +65,7 @@ When using the Gremlin Console, your environment is pre-configured for you so, f
 the most pat, you do not have to import any classes or interfaces. However, as soon
 as you move to the domain of the standalone Java application you will need to start
 importing the classes that your application needs. You will probably discover a few
-other things that the Gremlin Console was doing on your behalf.
+other things that the console was doing on your behalf.
 
 By way of a reasonable start, some of the most common imports needed by a Java
 application working with Gremlin are listed below. As you add more capabilities
@@ -211,7 +211,7 @@ System.out.println("The AUS airport is in " + city.get(0));
 
 So when we compile and run again we should now see this additional line of output.
 
-[source,console]
+[source,text]
 ----
 The AUS airport is in Austin
 ----
@@ -253,7 +253,7 @@ Long n = g.V().has("code","DFW").out().count().next();
 System.out.println("There are " + n + " routes from Dallas");
 ----
 
-[source,console]
+[source,text]
 ----
 There are 221 routes from Dallas
 ----
@@ -361,7 +361,7 @@ eng.forEach( (p) -> System.out.print(p + " "));
 
 The code we just added should generate output that looks like this.
 
-[source,console]
+[source,text]
 ----
 Places in England I can get to with one stop from AUS.
 
@@ -575,10 +575,10 @@ The 'DT' Enum provides constants representing units of time for the 'dateAdd' st
  |==============================================================================
 
 As discussed earlier, you can always use the 'getClass' method or simply '.class'
-while using the Gremlin Console to, in many cases, find out where something is
-defined. As we saw in the examples earlier in this section, lot of the keywords such
-as  'values', 'id' and 'local' are defined as Enums so you can use 'getClass' on them
-directly. A few examples are shown below.
+while using the console to, in many cases, find out where something is defined. As
+we saw in the examples earlier in this section, lot of the keywords such as 'values',
+'id' and 'local' are defined as Enums so you can use 'getClass' on them directly. A
+few examples are shown below.
 
 [source,groovy]
 ----
@@ -619,7 +619,7 @@ a String representing a three-character airport IATA code as input. The method t
 uses a Gremlin query to figure out which geographical region the specified airport is
 in and then returns all airports also in that region. Note the use of 'P.eq' as part
 of the 'where' step. This is another case of where, because we are not running inside
-the Gremlin console, we have to more precisely specify things.
+the Gremlin Console, we have to more precisely specify things.
 
 [source,java]
 ----
@@ -642,7 +642,7 @@ public void findByRegion(String iata) {
 If we were to call the 'findByRegion' method, passing in a parameter of 'DEN',
 representing the airport in Denver Colorado, the following output should be returned.
 
-[source,console]
+[source,text]
 ----
 Region code lookup for DEN
 [DEN,Denver,US-CO]
@@ -800,7 +800,7 @@ because while most of property keys are Strings, IDs and labels are a special ca
 If you look at the TinkerPop documentation you will see that T is a Java Enum that
 contains definitions for 'T.id', 'T.label', 'T.value' and 'T.key'. When working with
 Gremlin in Java it is important to remember that we need to use the '"T."' prefix in
-cases where when using the Gremlin Console we would not have to.
+cases where when using the console we would not have to.
 
 [source,java]
 ----

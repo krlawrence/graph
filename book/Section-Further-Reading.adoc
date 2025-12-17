@@ -13,10 +13,7 @@ Additional Apache TinkerPop community links
 .Official Apache TinkerPop home page and Gremlin downloads
 http://tinkerpop.apache.org/
 
-.Apache TinkerPop Getting Started guide
-http://tinkerpop.apache.org/docs/current/tutorials/getting-started/
-
-.Current Apache TinkerPop documentation
+.Current Apache TinkerPop Reference Documentation
 http://tinkerpop.apache.org/docs/current/reference/
 
 .Apache TinkerPop JavaDoc API reference material
@@ -24,7 +21,7 @@ http://tinkerpop.apache.org/javadocs/current/core/
 
 http://tinkerpop.apache.org/javadocs/current/full/
 
-.Gremlin IO serialization and file formats documentation
+.Gremlin serialization and file formats documentation
 http://tinkerpop.apache.org/docs/current/dev/io/
 
 .Useful Gremlin "recipes"
@@ -35,6 +32,9 @@ http://tinkerpop.apache.org/docs/current/upgrade/
 
 .Apache TinkerPop documentation for graph database providers
 http://tinkerpop.apache.org/docs/current/dev/provider/
+
+.Apache TinkerPop documentation for making contributions
+https://tinkerpop.apache.org/docs/current/dev/developer/
 
 [[tutorials]]
 Tutorials
@@ -52,19 +52,18 @@ Gremlin's Anatomy::
 The Gremlin Console::
 * http://tinkerpop.apache.org/docs/current/tutorials/the-gremlin-console/
 
-
 [[gremlindiscussionlists]]
 === Gremlin related mailing lists and discussion groups
+
+.Apache Tinkerpop Discord Server
+https://discord.gg/tinkerpop
 
 .Public mailing list for Gremlin users
 https://groups.google.com/forum/#!forum/gremlin-users
 
 .Apache TinkerPop developers mailing list archive
-//https://lists.apache.org/list.html?dev&#64;tinkerpop.apache.org
-https://lists.apache.org/
+https://lists.apache.org/list.html?dev@tinkerpop.apache.org
 
 .Stack Overflow posts tagged with "gremlin"
 https://stackoverflow.com/questions/tagged/gremlin
 
-.Apache Tinkerpop Discord Server
-https://discord.gg/tinkerpop

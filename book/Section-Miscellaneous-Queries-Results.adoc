@@ -3932,7 +3932,7 @@ that query you would find that it only spawns one traverser rather than the twel
 that we need to be successful.
 
 
-[source,console]
+[source,text]
 ----
 Traversal Metrics      Step                      Count Traver-  Time   %Dur
                                                        sers      (ms)
