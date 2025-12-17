@@ -35,7 +35,7 @@ As with the first edition, I have resisted the urge to cover every single featur
 TinkerPop one after the other in a reference manual fashion. Instead, what I have
 tried to do is capture the learning process that I myself have gone through using
 what I hope is a sensible flow from getting started to more advanced topics. To get
-the most from this book, I recommend having the Gremlin console open, with the air
+the most from this book, I recommend having the Gremlin Console open, with the air
 route sample data loaded, as you follow along. I have not assumed that anyone reading
 this book has any prior knowledge of Apache TinkerPop, the Gremlin query language or
 related tools.  Everything you need to get started is introduced in Chapter 2.
@@ -73,6 +73,8 @@ remains a lot of fun!
 
 Kelvin R. Lawrence +
 First draft (first edition): October 5th, 2017 +
+Final draft (first edition): May 4th, 2022 +
+First draft (second edition): January 1, 2026
 Current draft (second edition): {draftdate} +
 
 === Providing feedback
@@ -98,7 +100,7 @@ dedicated users. Apache TinkerPop continues to be not just a technology, but a
 vibrant community as well. This book would have no audience but for the continued
 hard work, and interest, of that community.
 
-As always, Special thanks should go to, Marko Rodriguez, Daniel Kuppitz, Stephen
+As always, special thanks should go to, Marko Rodriguez, Daniel Kuppitz, Stephen
 Mallette and others, who created TinkerPop and Gremlin, and drove its evolution for
 many years. I'm also grateful to Stephen for his help in putting this second edition
 of the book together.
@@ -108,7 +110,8 @@ active discussions on-line at venues such as
 https://stackoverflow.com/questions/tagged/gremlin[StackOverflow] and the
 https://groups.google.com/forum/#!forum/gremlin-users[Gremlin Users Google Group].
 Since the first edition of this book was released, Apache TinkerPop now also has an
-active Discord channel where many exciting topics get discussed daily.
+active https://discord.gg/tinkerpop[Discord server] where many exciting topics get 
+discussed daily.
 
 I continue to be grateful for the contributions of my former colleagues, Graham
 Wallis, Jason Plurad and Adam Holley who helped refine and improve several of the
@@ -120,6 +123,47 @@ Lastly, I would like to thank everyone who has submitted feedback and ideas via
 e-mail or GitHub issues, and pull requests. That is the best part about this
 being a 'living book' we can continue to improve and evolve it just as the technology
 it is about continues to evolve. Your help and support is very much appreciated.
+
+=== Thoughts on the Second Edition
+
+Except for this section, references to "I" in this book refer to the book's original
+author, Kelvin Lawrence. As the editor and co-author of the Second Edition, I didn't
+feel as though "I" should become "We" anywhere, as I believe that much of the appeal
+of this book lies in Kelvin relating his personal discoveries on his journey with 
+Gremlin. I've tried to preserve that feeling and voice as much as possible in my 
+many additions and edits.  
+
+As I write this section, I realize that I've authored many lines of TinkerPop's 
+Reference Documentation, Tutorials, and Recipes over the years and, as a result, I 
+tend to think there is a certain completeness to the documentation that is officially
+offered. I think that's a valuable aspect of the TinkerPop project, yet I've also 
+always recognized the importance and impact of this book as a resource for Gremlin 
+users. My personal opinion is that its approach and organization is what allows it to
+make that helpful impact. Where TinkerPop Documentation has its completeness 
+presented all at once, this book gives you a clear, ramped process to learning 
+Gremlin so that you can make use of that completeness in the official documentation.
+
+In 2023, TinkerPop was in the midst of releasing 3.6.x and 3.7.x release lines which
+had introduced a number of important new features. Kelvin and I started realizing 
+that Practical Gremlin was falling behind TinkerPop's continued evolution in a 
+significant way. With even bigger sets of changes expected on the horizon with 4.0,
+it felt as though it was time to make an organized effort to produce an updated 
+Second Edition.
+
+We officially announced that work had started on it in September 2023 and with the 
+big release of 3.8.0 in November 2025, we believed it time to polish up the draft and
+make an official publication of the new edition. As with the First Edition, we expect
+the book to continue to be a work-in-progress and will make minor publications as new
+TinkerPop releases appear.
+
+As you read this edition, please keep in mind that it reflects the state of Gremlin
+and TinkerPop at a particular point in time, but it is also part of an ongoing 
+conversation with the community. Your questions, suggestions, and examples help shape
+where the book goes next. If you find places where it could be clearer, more helpful,
+or more complete, your feedback is welcome and will help guide future updates.
+
+Stephen Mallette
+Second edition editor and co-author
 
 [[about]]
 === What is this book about?
