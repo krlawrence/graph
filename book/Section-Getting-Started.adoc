@@ -102,7 +102,7 @@ at version 11 or higher.
 NOTE: For more information on the compatability of Gremlin with versions of Java and
 other languages, please see the https://tinkerpop.apache.org/docs/current/upgrade/[official documentation].
 
-The Console download also includes all of the JAR files that are needed to write a 
+The console download also includes all of the JAR files that are needed to write a 
 standalone Java or Groovy TinkerPop application but that is a topic for later!
 
 When you start the console you will be presented with a banner/logo and a prompt that

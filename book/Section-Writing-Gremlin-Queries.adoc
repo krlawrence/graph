@@ -40,6 +40,7 @@ data in a single table called 'airports'. In a very simple case (the air routes
 graph actually stores a lot more data than this about each airport) we could setup
 our airports table so that it had entries for each airport as follows.
 
+[source,text]
 ----
 ID   CODE  ICAO  CITY             COUNTRY
 ---  ----  ----  ---------------  ----------
@@ -51,13 +52,14 @@ ID   CODE  ICAO  CITY             COUNTRY
 51   CDG   LFPG  Paris            FR
 52   FRA   EDDF  Frankfurt        DE
 55   SYD   YSSY  Sydney           AU
+----
 
-We could then use a SQL query to count the
-distribution of airports in each country as follows.
+We could then use a SQL query to count the distribution of airports in each country 
+as follows.
 
 [source,sql]
 ----
-select country,count(country) from airports group by country;
+SELECT country,count(country) FROM airports GROUP BY country;
 ----
 
 We can do this in Gremlin using the 'air-routes' graph with a query like the one 
@@ -75,7 +77,7 @@ is in no way required to learn Gremlin.
 One thing you will not find when working with a graph using Gremlin is the concept of
 a SQL 'join'. Graph databases by their very nature avoid the need to join things
 together (as things that need to be connected already are connected) and this is a
-core reason why, for many use cases, Graph databases are a very good choice and can
+core reason why, for many use cases, graph databases are a very good choice and can
 be more performant than relational databases.
 
 Graph databases are usually a good choice for storing and modelling networks. The
@@ -91,6 +93,7 @@ destination airport and the distance between them in miles (SRC,DEST and DIST). 
 would contain entries that looked like this (the real table would of course have
 thousands of rows but this gives a good idea of what the table would look like).
 
+[source,text]
 ----
 SRC  DEST  DIST
 ---  ----  ----
@@ -109,6 +112,7 @@ LHR  BOM   4479
 LHR  FRA   406
 YYZ  FRA   3938
 YYZ  LHR   3544
+----
 
 If we wanted to write a SQL query to calculate the ways of travelling from Austin
 (AUS) to Agra (AGR) with two stops, we would end up writing a query that looked
@@ -116,11 +120,11 @@ something like this:
 
 [source,sql]
 ----
-select a1.code,r1.dest,r2.dest,r3.dest from airports a1
-  join routes r1 on a1.code=r1.src
-  join routes r2 on r1.dest=r2.src
-  join routes r3 on r2.dest=r3.src
-  where a1.code='AUS' and r3.dest='AGR';
+SELECT a1.code,r1.dest,r2.dest,r3.dest FROM airports a1
+  JOIN routes r1 ON a1.code=r1.src
+  JOIN routes r2 ON r1.dest=r2.src
+  JOIN routes r3 ON r2.dest=r3.src
+  WHERE a1.code='AUS' AND r3.dest='AGR';
 ----
 
 Using our 'air-routes' graph database the query can be expressed quite simply as
@@ -153,7 +157,7 @@ take to get there.
 
 Again, don't worry if some of the Gremlin steps shown here are confusing, we will
 cover them all in detail a bit later. The key point to take away from this discussion
-of SQL and Gremlin is that for data that is very connected, Graph databases provide a
+of SQL and Gremlin is that for data that is very connected, graph databases provide a
 very good way to store that data and Gremlin provides a nice and fairly intuitive way
 to traverse that data efficiently.
 
@@ -177,13 +181,12 @@ doing. We are traversing the graph from a starting point to an ending point.
 Traversals consist of one or more 'steps' (essentially methods) that are chained
 together.
 
-As we start to look at some simple traversals here are a few 'steps' that you will
+As we start to look at some simple traversals, here are a few 'steps' that you will
 see used a lot. Firstly, you will notice that almost all traversals start with either
 a 'g.V()' or a 'g.E()'. Sometimes there will be parameters specified along with those
 steps but we will get into that a little later. You may remember from when we looked
 at how to load the 'air-routes' graph in Section 2 we used the following instruction
 to create a graph traversal source object for our loaded 'graph'.
-
 
 [source,groovy]
 ----
@@ -259,10 +262,10 @@ v[8]
 So, what we actually got back from these queries was a TinkerPop 'Vertex' data
 structure. Later in this book we will look at ways to store that value into a
 variable for additional processing. Remember that even though we are working with a
-Groovy environment while inside the Gremlin Console, everything we are working with
-here, at its core, is Java code. So we can use the 'getClass' method from Java to
-introspect the object. Note the call to 'next' which turns the result of the
-traversal into an object we can work with further.
+Groovy environment while inside the console, everything we are working with here, at
+its core, is Java code. So we can use the 'getClass' method from Java to introspect 
+the object. Note the call to 'next' which turns the result of the traversal into an
+object we can work with further.
 
 [source,groovy]
 ----
@@ -597,7 +600,7 @@ value 'AUS'). Having found that vertex we then go 'out' from there. This will fi
 all of the vertices connected to Austin by an outgoing edge. Having found those
 airports we then ask for the values of their 'code' properties using the 'values'
 step. Finally the 'fold' step puts all of the results into a list for us. This just
-makes it easier for us to inspect the results in the console.
+makes it easier for us to inspect the results in Gremlin Console.
 
 [source,groovy]
 ----
@@ -1941,7 +1944,7 @@ the Austin airport vertex.
 g.V().has('code','AUS').valueMap().unfold()
 ----
 
-If you are using the Gremlin console, the output from running the previous command
+If you are using the Gremlin Console, the output from running the previous command
 should look something like this. The unfold step at the end of the query is used
 to make the results easier to read.
 
@@ -2040,10 +2043,10 @@ runways=[2]
 lat=[30.1944999694824]
 ----
 
-If you are reading the output of queries that use 'valueMap' on the Gremlin console,
-it is sometimes easier to read the output if you add an 'unfold' step to the end of
-the query as follows. The 'unfold' step will unbundle a collection for us. You will
-see it used in many parts of this book.
+If you are reading the output of queries that use 'valueMap' from the console, it is
+sometimes easier to read the output if you add an 'unfold' step to the end of the 
+query as follows. The 'unfold' step will unbundle a collection for us. You will see 
+it used in many parts of this book.
 
 [source,groovy]
 ----
