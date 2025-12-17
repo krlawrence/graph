@@ -60,7 +60,8 @@ jobs:
           mkdir ../target
           cp Practical-Gremlin.html ../target/index.html
           cp ../images/PRACTICAL-GREMLIN-2nd-edition.png ../target
-
+          asciidoctor-pdf Practical-Gremlin.adoc -o ../target/Practical-Gremlin.pdf
+          
       - name: Setup Pages
         uses: actions/configure-pages@v3
 
