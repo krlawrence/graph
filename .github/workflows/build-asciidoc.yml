@@ -52,6 +52,7 @@ jobs:
         working-directory: ./book
         run: |
           gem install asciidoctor
+          gem install asciidoctor-pdf          
           gem install pygments.rb
           asciidoctor Practical-Gremlin.adoc
           SEARCH_STRING="<h1>PRACTICAL GREMLIN: An Apache TinkerPop Tutorial<\/h1>"
