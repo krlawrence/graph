@@ -74,6 +74,66 @@ should use when laying out your more complex queries. However, whatever you deci
 do, it is worth remembering that others reading your work may find well laid out and
 appropriately indented steps easier to read and understand.
 
+[[idiomaticgremlin]]
+=== A word about idiomatic Gremlin
+
+As you may have seen in earlier sections of this book, there are often several ways
+to write a Gremlin traversal that will obtain the same result. A great example was
+shown in the <<countgroup>> Section where we saw these two queries that returned an 
+identical result:
+
+[source,groovy]
+----
+// How many of each type of vertex are there?
+g.V().groupCount().by(label)
+
+g.V().label().groupCount()
+
+g.V().group().by(label).by(count())
+----
+
+We could expand that list further with other forms as well, so the list does not 
+really even end there. Much of Gremlin's power lies in its flexibility as a language,
+but with that flexibility comes a wider number of options that you get to choose from
+when you write your traversals. 
+
+When we think about the idiomatic way to write a particular Gremlin traversal, it is
+often best to think about the readability aspect first. What Gremlin forms will be 
+most widely recognized and best convey my intent with the least introspection? There
+aren't wide, hardened rules for this particularly, but you will notice them as you 
+continue to read this book and the official TinkerPop Documentation.
+
+Let's consider the example above which determines an answer to the question: "How 
+many of each type of vertex are there?" In this example, most experienced Gremlin 
+developers would reach for the first traversal of 'g.V().groupCount().by(label)' as
+the most idiomatic, because, unlike the second, it simply reads left-to-right like
+SQL and, unlike the third, prefers 'groupCount' which is a step intentionally meant
+for this task rather than pairing 'group' with a separate 'count'. 
+
+Intention is perhaps a second part to consider when thinking about idiomatic Gremlin.
+When we prefer a step that is intentionally meant to serve a specific task, we not 
+only provide better readability, but we also increase the chance that the underlying
+graph database will recognize that intention and optimize the traversal's 
+performance. When a graph database gets this query, most of them will analyze its 
+structure to see if there is anything it can do to make the query run faster. 
+Depending upon how advanced that analysis is, it may or may not recognize that all 
+three of those queries mean the same thing. You increase the likelihood of 
+recognition if you prefer encoding intent as a single step, rather than a pattern of
+several steps. 
+
+We've used 'groupCount' here as an example, but these concepts apply to many other
+steps. For example, you could use a complex pattern to do an 'upsert' of a vertex
+using 'coalesce' and 'fold', but it is more likely your upsert would be optimized 
+with a single 'mergeV' which is meant to explicitly handle that functionality.
+
+Idiomatic Gremlin will continue to emerge and evolve as the community and the 
+language grow, so it is not something you learn once and are finished with. As you 
+read this book and explore other Gremlin sources, pay attention to the patterns that 
+feel natural, expressive, and intentional, and favor those when you write your own 
+traversals. Over time, that habit will make your Gremlin easier for others to 
+understand and maintain, and will often give your graph database the best opportunity
+to run your traversals efficiently.
+
 [[rword]]
 === A warning about reserved word conflicts and collisions
 

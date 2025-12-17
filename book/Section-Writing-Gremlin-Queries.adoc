@@ -483,6 +483,9 @@ g.V().group().by(label).by(count())
 [continent:7,country:237,version:1,airport:3504]
 ----
 
+NOTE: There are often a number of different ways to write Gremlin that will obtain
+the same result. See the <<idiomaticgremlin>> Section for more details.
+
 We can be more selective in how we specify the groups of things that we want to
 count. In the examples below we first count how many airports there are in each
 country. This will return a map of key:value pairs where the key is the country code
