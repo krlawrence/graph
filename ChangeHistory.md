@@ -5,16 +5,20 @@ Starting with the v275 release, this file will contain a record of the major cha
 ## Release V2-001 change history (Release date TBD)
 _This will be the first release of work related to the Second Edition  ( [main branch](https://github.com/krlawrence/graph/tree/main) ) work._ The original First Edition work can still be found  on the [v1 branch](https://github.com/krlawrence/graph/tree/v1) .
 
+- All content has been reviewed and updated with TinkerPop 3.8.0 in mind. 
+- Produced a 1.0 version of the air routes dataset, which is the same version distributed with TinkerPop 3.8.0.
+- Regenerated all code example outputs with 3.8.0 and air routes 1.0.
 - Changes to the site layout and toolchain
   - The default branch is now called [main](https://github.com/krlawrence/graph).
   - The First Edition work has been moved to the [v1](https://github.com/krlawrence/graph/tree/v1) branch.
   - Split the single (big) Asciidoc file into multiple files with one file per major section.
+  - Automated building of the book with GitHub Actions such that each change pushed to the repository is published as HTML to [https://krlawrence.github.io/graph/](https://krlawrence.github.io/graph/)
 - Structural changes to the book
-  - Coverage of JanusGraph moved to its own chapter.
+  - Coverage of JanusGraph removed.
   - Reworked the introduction to the chapters adjacent to the JanusGraph one.
   - Removed specific mentions of early TinkerPop versions. The Second Edition will focus on Gremlin as it is today (after many years of evolution). 
 
-## Release 283 change history (Release date TBD)
+## Release 283 change history (May 4th 2022)
 
 _This will be the final release of work related to the First Edition ( [v1 branch](https://github.com/krlawrence/graph/tree/v1) ). Moving forward new work will focus on the Second Edition ( [main branch](https://github.com/krlawrence/graph/tree/main) ) work._
 

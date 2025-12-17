@@ -227,21 +227,21 @@ Chapter 5 - MISCELLANEOUS QUERIES AND THE RESULTS THEY GENERATE::
   a discussion of analyzing distances, route distribution, and writing geospatial
   queries.
 Chapter 6 - MOVING BEYOND THE GREMLIN CONSOLE::
-- The next step in our journey is to move beyond the Gremlin console and take a look
+- The next step in our journey is to move beyond the Gremlin Console and take a look
   at interacting with a TinkerGraph using Java and Groovy applications.
 Chapter 7 - INTRODUCING GREMLIN SERVER::
-- Our journey so far has focussed on working with graphs in a "directly attached"
+- Our journey so far has focused on working with graphs in a "directly attached"
   fashion. We now introduce Gremlin Server as a way to deploy and interact with
   remotely hosted graphs.
 Chapter 8 - COMMON GRAPH SERIALIZATION FORMATS::
 - Having introduced Gremlin Server we take a look at some common Graph serialization
   file formats along with coverage of how to use them in the context of TinkerPop
   enabled graphs. We take a close look at the TinkerPop GraphSON (JSON) format which
-  is  used extensively when using Gremlin queries in conjunction with a Gremlin
+  is used extensively when using Gremlin queries in conjunction with a Gremlin
   Server.
 Chapter 9 - FURTHER READING::
 - Our journey to explore Apache TinkerPop and Gremlin, concludes with a look at
-  useful sources of further reading. We present l links to useful web sites where you
+  useful sources of further reading. We present links to useful web sites where you
   can find tools and documentation for many of the topics and technologies covered in
   this book.
 
@@ -251,18 +251,20 @@ Chapter 9 - FURTHER READING::
 All work related to this project is being done in the open at GitHub. A list of where
 to find the key components is provided below. The examples in this book make use of a
 sample graph called 'air-routes' which contains a graph based on the world airline
-route network between over 3,370 airports. The sample graph data, quite a bit of
+route network between over 3,504 airports. The sample graph data, quite a bit of
 sample code and some larger demo applications can all be found at the same GitHub
 location that hosts the book manuscript. You will also find releases of the book
 in various formats (HTML, PDF, DocBook/XML, MOBI and EPUB) at the same GitHub
-location. The sample programs include standalone Java, Groovy, Python and Ruby
-examples as well as many examples that can be run from the Gremlin Console. There
-are some differences between using Gremlin from a standalone program and from the
-Gremlin Console. The sample programs demonstrate several of these differences. The
-sample applications area contains a full example HTML and JavaScript application that
-lets you explore the 'air-routes' graph visually. The home page for the GitHub
-project includes a README.md file to help you navigate the site. Below are some links
-to various resources included with this book.
+location. 
+
+The sample programs include standalone Java, Groovy, Python and Ruby examples as well
+as many examples that can be run from the Gremlin Console. There are some differences
+between using Gremlin from a standalone program and from the Gremlin Console. The 
+sample programs demonstrate several of these differences. The sample applications 
+area contains a full example HTML and JavaScript application that lets you explore 
+the 'air-routes' graph visually. The home page for the GitHub project includes a 
+README.md file to help you navigate the site. Below are some links to various 
+resources included with this book.
 
 .Where to find the book, samples and data
 Project home::
@@ -281,20 +283,17 @@ more or less identical.
 - http://kelvinlawrence.net/book/PracticalGremlin.html
 Official book releases in multiple formats::
 - Official releases include Asciidoc, HTML, PDF, ePub, MOBI and DocBook versions as
-well as snapshots of all the samples and other materials in a single package. My
-goal is to have an official release about once a month providing enough new
-material has been created to justify doing it. The eBook and MOBI versions are
-really intended to be read using e-reader devices and for that reason use a white
-background for all source code highlighting to make it easier to read on monochrome
-devices.
+well as snapshots of all the samples and other materials in a single package 
+available through GitHub Releases. The eBook and MOBI versions are really intended to
+be read using e-reader devices and for that reason use a white background for all 
+source code highlighting to make it easier to read on monochrome devices.
 - I recommend using the PDF version if possible as it has page numbering. If
 you prefer reading the book as if it were web page then by all means use the HTML
 version. You will just not get any pagination or page numbers. The DocBook format
-can be read using tools such as Yelp on Linux systems but is primarily included
+can be read using tools such as Yelp on Linux systems, but is primarily included
 so that people can use it to generate other formats that I do not already provide.
-There is currently an issue with the MOBI and ePub versions that causes links to
-have the wrong text. Other than that they should work, although you may need to
-change the font size you use on your device to make things easier to read.
+The MOBI and ePub versions may require you to change the font size you use on your 
+device to make things easier to read.
 
 - https://github.com/krlawrence/graph/releases
 Sample data (`air-routes.graphml`)::
@@ -324,9 +323,9 @@ We focus this second edition of the book on the semantics of Gremlin as of Tinke
 release 3.8.0.
 
 If you are new to TinkerPop and Gremlin, you can probably skip the next few sections.
-They appeared in a slightly modified form, as part of the first edition, and provided
+They appeared in a slightly modified form, as part of the First Edition, and provided
 a way to highlight the arrival of key new features. These notes have been left in the
-second edition as there are still people using older versions of Gremlin, and it can
+Second Edition as there are still people using older versions of Gremlin, and it can
 be useful to have a list like this to cross-reference.
 
 NOTE: The complete ApacheTinkerPop change history can be found at
@@ -491,11 +490,11 @@ https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc#tinkerpop-380
 ==== TinkerPop 4.0
 
 TinkerPop 4.0.0 has released a beta version for early evaluation of specific features
-and remains under active development. We mention it here for awareness but do not
-intend to cover any features it offers in this edition of the book. We will only note
-that the intention of the TinkerPop Community is for 4.0.0 to have the same semantics
-for Gremlin as 3.8.0. As a result, all the Gremlin examples provided in this second
-edition of Practical Gremlin will work equally well for both versions.
+and remains under active development. We mention it here for awareness, but do not
+intend to cover any features it offers until its full official release. We will only
+note that the intention of the TinkerPop Community is for 4.0.0 to have the same
+semantics for Gremlin as 3.8.0. As a result, all the Gremlin examples provided in 
+this second edition of Practical Gremlin will work equally well for both versions.
 
 [[whygraph]]
 === So what is a graph database and why should I care?
