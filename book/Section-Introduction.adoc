@@ -1,18 +1,14 @@
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
 == INTRODUCTION
 
-You are reading an early preview release of _Practical Gremlin - An Apache TinkerPop
-Tutorial, Second Edition_. A lot of work remains, to add coverage of many new Gremlin
-features and to update, as appropriate, material from the first edition. Much of the
-material remains accurate, but in some cases new Gremlin features have since been
-introduced, providing better ways of achieving the results previously described. The
-goal for the second edition is to bring the material fully up-to-date and to reflect
-the most recent Apache TinkerPop releases. Much of the work yet to be done can be
-seen by visiting the https://github.com/krlawrence/graph/projects/2[planning board].
+This second edition of Practical Gremlin is an evolving guide to the Apache TinkerPop
+Gremlin graph query and traversal language, built around real examples using 
+real-world graph data. It is written for developers and practitioners who want to 
+learn Gremlin by doing, with a focus on practical patterns, working traversals, and 
+lessons learned from applying graph technology to real problems.
 
-CAUTION: This book is a work in progress. Feedback is very much encouraged and
-welcomed!  Please open https://github.com/krlawrence/graph/issues[GitHub issues] as
-appropriate.
+CAUTION: Feedback on this book is very much encouraged and welcomed! Please open
+ https://github.com/krlawrence/graph/issues[GitHub issues] as appropriate.
 
 === Welcome to the second edition
 
@@ -128,10 +124,16 @@ it is about continues to evolve. Your help and support is very much appreciated.
 [[about]]
 === What is this book about?
 
-This book introduces the Apache TinkerPop 'Gremlin' graph query and traversal
-language via real examples featuring real-world graph data. That data, along with
-sample code and example applications, is available for download from the GitHub
-project as well as many other items. The graph, 'air-routes', is a model of
+This book is about learning to think in Gremlin by working through practical 
+examples. It focuses on how to express real graph questions as traversals, how to 
+read and reason about Gremlin code, and how to apply common patterns to your own 
+graphs. As the book evolves, new examples and refinements continue to be added, but 
+the core goal remains the same: to help you build an intuitive understanding of how 
+Gremlin works.
+
+In this book you will find real examples featuring real-world graph data. That data,
+along with sample code and example applications, is available for download from the 
+GitHub project as well as many other items. The graph, 'air-routes', is a model of
 the world airline route network between 3,504 airports including 50,637 routes. The
 examples presented will work unmodified with the `air-routes.graphml` file loaded 
 into the Gremlin console running with a TinkerGraph. How to set that environment up 
