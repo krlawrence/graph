@@ -1,6 +1,6 @@
 # Practical Gremlin: An Apache TinkerPop Tutorial
 
-![map](https://raw.githubusercontent.com/krlawrence/graph/refs/heads/main/images/map-with-plane.png, "graph picture")
+![map](https://github.com/krlawrence/graph/blob/main/images/map-with-plane.png?raw=true, "graph picture")
 
 ## Welcome!
 
