@@ -4700,7 +4700,7 @@ expressions can naturally express negations itself.
 // A regular expression to find airports not in Dallas or Austin
 g.V().has('airport','type','airport').
       has('city', TextP.notRegex('Dallas|Austin')).values('code')
----- 
+----
 
 [[sort]]
 Sorting things - introducing 'order'
@@ -5471,7 +5471,7 @@ g.V().has('airport','code','IAD').as('a').
     by('city').
     by(values('city').substring(0,3)).
   values('city')
-----  
+----
 
 Note that the order of the 'by' modulators is such that the first 'by' refers to the
 incoming traverser to 'where' and the second refers to the "a" vertex referenced in

@@ -5766,7 +5766,7 @@ g.withStrategies(seedStrategy).V().limit(10).values('code').
   
 // repeated executions will always shuffle the same way to return the same result
 [DFW,BOS,ANC,AUS,FLL,1.0,DCA,BNA,BWI,ATL]
-----  
+----
 
 [[traversal-strategies-subgraph]]
 SubgraphStrategy
@@ -5808,7 +5808,7 @@ strategy = SubgraphStrategy.build().
 g.withStrategies(strategy).V().out().count()
 
 7
-----    
+----
 
 [[performance]]
 === Analyzing the performance of your queries
