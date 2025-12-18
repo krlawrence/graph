@@ -289,6 +289,7 @@ Recording stopped; session saved as: "mylog.txt" (157 bytes)
 
 If we were to look at the 'mylog.txt' file, this is what it now contains.
 
+[source,text]
 ----
 // OPENED: Tue Sep 12 10:43:40 CDT 2017
 // RESULT: mylog.txt
@@ -296,7 +297,6 @@ g.V().count().next()
 // RESULT: 3618
 :record stop
 // CLOSED: Tue Sep 12 10:43:50 CDT 2017
-
 ----
 
 For the remainder of this book we are not going to show the 'gremlin>' prompt or
