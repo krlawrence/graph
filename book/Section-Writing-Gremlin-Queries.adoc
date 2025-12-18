@@ -217,7 +217,7 @@ rather, We have tried to provide a good and approachable foundation in writing m
 different types of Gremlin query using an interesting and real-world graph.
 
 NOTE: The latest TinkerPop documentation is always available at this URL:
-http://tinkerpop.apache.org/docs/current/reference/
+https://tinkerpop.apache.org/docs/current/reference/
 
 Below are some simple queries against the 'air-routes' graph to get us started. It is
 assumed that the 'air-routes' graph has been loaded already per the instructions 
@@ -2079,7 +2079,7 @@ the 'with' modulator.
 
 NOTE: The valueMap configuration options are described in the official
 documentation at the following link
-http://tinkerpop.apache.org/docs/current/reference/#valuemap-step.
+https://tinkerpop.apache.org/docs/current/reference/#valuemap-step.
 
 Instead of using 'valueMap(true)' to include the ID and label of an element (a vertex
 or an edge) in the results, the new 'with(WithOptions.tokens)' construct can
@@ -2107,8 +2107,7 @@ desc=[San Francisco International Airport]
 
 TIP: All of the possible values that can be specified using WithOptions can be found
 in the official Apache TinkerPop JavaDoc documentation
-http://tinkerpop.apache.org/javadocs/current/full/org/apache/tinkerpop/gremlin/process/traversal/step/util/WithOptions.html[at
-this location].
+https://tinkerpop.apache.org/javadocs/current/full/org/apache/tinkerpop/gremlin/process/traversal/step/util/WithOptions.html.
 
 You can still include the ID and label in the results, along with a subset of the
 properties, by explicitly naming the property keys you are interested in. In the
@@ -4424,7 +4423,7 @@ one or more characters within a string of text and three that search for the non
 existence of one or more characters.
 
 TIP: Additional information on the text predicates can be found in the official
-Apache TinkerPop documentation here: http://tinkerpop.apache.org/docs/current/reference/#a-note-on-predicates
+Apache TinkerPop documentation here: https://tinkerpop.apache.org/docs/current/reference/#a-note-on-predicates
 
 .Text searching predicates
 [cols="^1,4"]
@@ -7407,7 +7406,7 @@ The 'repeat' step can be nested inside another 'repeat' step as well as inside '
 and 'until' steps.
 
 TIP: The official documentation for these new capabilities can be located here:
-http://tinkerpop.apache.org/docs/current/reference/#repeat-step
+https://tinkerpop.apache.org/docs/current/reference/#repeat-step
 
 It is also possible to label a repeat step with a name so that it can be referenced
 later in a traversal. Nested 'repeat' steps allow for some interesting new graph
@@ -8459,7 +8458,7 @@ query, the result set will consist of a number of individual lists all with an i
 of zero.
 
 TIP: The official Apache TinkerPop documentation for the 'index' step can be found at
-the following link http://tinkerpop.apache.org/docs/current/reference/#index-step.
+the following link https://tinkerpop.apache.org/docs/current/reference/#index-step.
 
 [source,groovy]
 ----
@@ -8522,7 +8521,7 @@ which is the default. The results are then sorted in reverse order.
 
 TIP: All of the possible values that can be specified using WithOptions can be found
 in the official Apache TinkerPop JavaDoc documentation
-http://tinkerpop.apache.org/javadocs/current/full/org/apache/tinkerpop/gremlin/process/traversal/step/util/WithOptions.html[at
+https://tinkerpop.apache.org/javadocs/current/full/org/apache/tinkerpop/gremlin/process/traversal/step/util/WithOptions.html[at
 this location].
 
 Note that this query uses 'desc' rather than the now deprecated 'decr' to ask for

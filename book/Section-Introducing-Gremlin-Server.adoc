@@ -31,7 +31,7 @@ simple HTTP protocols.
 
 NOTE: The official Apache TinkerPop documentation includes in-depth coverage of
 configuring and using Gremlin Server.
-http://tinkerpop.apache.org/docs/current/reference/#gremlin-server
+https://tinkerpop.apache.org/docs/current/reference/#gremlin-server
 
 Gremlin Server offers a lot of valuable capabilities. In this section we are going to
 explain how to customize a local Gremlin Server setup with TinkerGraph. There are
@@ -55,7 +55,7 @@ infrastructure of their production graph. TinkerGraph can be configured within
 Gremlin Server to try to closely mimic the behavior of the that production graph.
 
 You can download Gremlin Server from the official Apache TinkerPop website at
-http://tinkerpop.apache.org/
+https://tinkerpop.apache.org/
 
 It only takes a few minutes to get Gremlin Server installed and running. You
 download the ZIP, 'unzip' it and you are all set. As with Gremlin Console,

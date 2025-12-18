@@ -53,7 +53,7 @@ Java application that uses Gremlin and TinkerGraph.
 There are a number of Java interfaces and classes, defined by the Apache TinkerPop
 project, that you will want to become familiar with. The most recent JavaDoc format
 API documentation is always available at
-http://tinkerpop.apache.org/javadocs/current/full
+https://tinkerpop.apache.org/javadocs/current/full
 
 The TinkerPop JavaDoc is a bit lacking in terms of English prose but is still a
 useful source of reference information when it comes to methods, parameters and
@@ -378,7 +378,7 @@ Java find confusing is figuring out which Classes and Enums have been statically
 imported "behind the scenes" and how to access those same capabilities from Java. You
 should also bookmark the TinkerPop javadoc pages as you can find more detail on all
 of the classes and enums covered below there. The latest javadoc is always available
-at http://tinkerpop.apache.org/javadocs/current/full/
+at https://tinkerpop.apache.org/javadocs/current/full/
 
 NOTE: The source code in this section comes from the 'TestImports.java' sample
 located at https://github.com/krlawrence/graph/tree/main/sample-code/java and
