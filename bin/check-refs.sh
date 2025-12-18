@@ -7,12 +7,11 @@ cd "$BOOK_DIR"
 
 echo "Checking for orphaned cross-references..."
 
-# Extract all cross-references with filenames
-refs_with_files=$(grep -roh "<<[^>]*>>" *.adoc | sed 's/<<//g; s/>>//g')
-refs=$(echo "$refs_with_files" | sort -u)
+# Extract all cross-references (handle filename:match format)
+refs=$(grep -o "<<[^>]*>>" *.adoc | cut -d: -f2- | sed 's/<<//g; s/>>//g' | sort -u)
 
-# Extract all anchor definitions
-anchors=$(grep -roh "\[\[[^]]*\]\]" *.adoc | sed 's/\[\[//g; s/\]\]//g' | sort -u)
+# Extract all anchor definitions (handle filename:match format)
+anchors=$(grep -o "\[\[[^]]*\]\]" *.adoc | cut -d: -f2- | sed 's/\[\[//g; s/\]\]//g' | sort -u)
 
 # Find orphaned references with their files
 orphaned=()

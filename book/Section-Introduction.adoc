@@ -40,6 +40,8 @@ route sample data loaded, as you follow along. I have not assumed that anyone re
 this book has any prior knowledge of Apache TinkerPop, the Gremlin query language or
 related tools.  Everything you need to get started is introduced in Chapter 2.
 
+We like Section <<xyz>>.
+
 I hope people continue to find what follows useful. It definitely remains a work in
 progress as the Apache TinkerPop framework, and in particular, the Gremlin query
 language, continues to evolve.
