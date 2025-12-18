@@ -2,11 +2,8 @@
 
 set -e
 
-# Check for orphaned cross-references
-./bin/check-refs.sh
-
-# Check formatting
-.bin/check-formatting.sh
+# Validate asciidoc structure and formatting
+./bin/check.sh
 
 # create the target directory for where the book will build
 rm -rf target

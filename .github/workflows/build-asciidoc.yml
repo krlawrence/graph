@@ -48,6 +48,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install --no-install-recommends calibre pandoc
 
+      - name: Validate Book Content
+        run: ./bin/check.sh
+
       - name: Build Documentation
         working-directory: ./book
         run: |
