@@ -32,7 +32,7 @@ for file in *.adoc; do
         next
     }
     
-    /^----/ {
+    /^----$/ {
         if ($0 != "----") {
             print "WARNING: ---- has trailing whitespace at line " NR
             warnings++
