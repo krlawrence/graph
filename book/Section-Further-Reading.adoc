@@ -11,27 +11,27 @@ are discussed daily.
 [[tplinks]]
 Additional Apache TinkerPop community links
 .Official Apache TinkerPop home page and Gremlin downloads
-http://tinkerpop.apache.org/
+https://tinkerpop.apache.org/
 
 .Current Apache TinkerPop Reference Documentation
-http://tinkerpop.apache.org/docs/current/reference/
+https://tinkerpop.apache.org/docs/current/reference/
 
 .Apache TinkerPop JavaDoc API reference material
-http://tinkerpop.apache.org/javadocs/current/core/
+https://tinkerpop.apache.org/javadocs/current/core/
 
-http://tinkerpop.apache.org/javadocs/current/full/
+https://tinkerpop.apache.org/javadocs/current/full/
 
 .Gremlin serialization and file formats documentation
-http://tinkerpop.apache.org/docs/current/dev/io/
+https://tinkerpop.apache.org/docs/current/dev/io/
 
 .Useful Gremlin "recipes"
-http://tinkerpop.apache.org/docs/current/recipes/
+https://tinkerpop.apache.org/docs/current/recipes/
 
 .Apache TinkerPop documentation describing new features per release
-http://tinkerpop.apache.org/docs/current/upgrade/
+https://tinkerpop.apache.org/docs/current/upgrade/
 
 .Apache TinkerPop documentation for graph database providers
-http://tinkerpop.apache.org/docs/current/dev/provider/
+https://tinkerpop.apache.org/docs/current/dev/provider/
 
 .Apache TinkerPop documentation for making contributions
 https://tinkerpop.apache.org/docs/current/dev/developer/
@@ -41,16 +41,16 @@ Tutorials
 There are a series of tutorials that can be found at the link below.
 
 .Apache TinkerPop Tutorials
-http://tinkerpop.apache.org/docs/current/tutorials/
+https://tinkerpop.apache.org/docs/current/tutorials/
 
 The tutorials include the following
 
 Getting Started::
-* http://tinkerpop.apache.org/docs/current/tutorials/getting-started/
+* https://tinkerpop.apache.org/docs/current/tutorials/getting-started/
 Gremlin's Anatomy::
-* http://tinkerpop.apache.org/docs/current/tutorials/gremlins-anatomy/
+* https://tinkerpop.apache.org/docs/current/tutorials/gremlins-anatomy/
 The Gremlin Console::
-* http://tinkerpop.apache.org/docs/current/tutorials/the-gremlin-console/
+* https://tinkerpop.apache.org/docs/current/tutorials/the-gremlin-console/
 
 [[gremlindiscussionlists]]
 === Gremlin related mailing lists and discussion groups

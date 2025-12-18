@@ -15,31 +15,31 @@ rest of the book.
 
 Apache TinkerPop is a graph computing framework and top-level project hosted by the
 Apache Software Foundation. The homepage for the project is located at this URL:
-http://tinkerpop.apache.org/
+https://tinkerpop.apache.org/
 
 .The project includes the following components:
 Gremlin::
 - A graph traversal (query) language
 Gremlin Console::
 - An interactive shell for working with local or remote graphs.
-- http://tinkerpop.apache.org/docs/current/reference/#gremlin-console
+- https://tinkerpop.apache.org/docs/current/reference/#gremlin-console
 Gremlin Server::
 - Allows hosting of graphs remotely via an HTTP/Web Sockets connection.
-- http://tinkerpop.apache.org/docs/current/reference/#gremlin-server
+- https://tinkerpop.apache.org/docs/current/reference/#gremlin-server
 TinkerGraph::
 - A small in-memory graph implementation that is great for learning.
-- http://tinkerpop.apache.org/docs/current/reference/#tinkergraph-gremlin
+- https://tinkerpop.apache.org/docs/current/reference/#tinkergraph-gremlin
 Programming Interfaces::
 - A set of programming interfaces written in Java
-- http://tinkerpop.apache.org/javadocs/current/full/
+- https://tinkerpop.apache.org/javadocs/current/full/
 Documentation::
 - A user guide, a tutorial and programming API documentation.
-- http://tinkerpop.apache.org/docs/current/
-- http://tinkerpop.apache.org/docs/current/reference/
+- https://tinkerpop.apache.org/docs/current/
+- https://tinkerpop.apache.org/docs/current/reference/
 Useful Recipes::
 - A set of examples or "recipes" showing how to perform common graph oriented tasks 
 using Gremlin queries.
-- http://tinkerpop.apache.org/docs/current/recipes/
+- https://tinkerpop.apache.org/docs/current/recipes/
 
 The programming interfaces allow providers of graph databases to build systems that
 are TinkerPop enabled and allow application programmers to write programs that talk
@@ -93,7 +93,7 @@ graphs, the console should always be installed on your machine!
 ==== Download, install and launch the Gremlin Console
 
 You can download the Gremlin Console from the official Apache TinkerPop website at 
-http://tinkerpop.apache.org/
+https://tinkerpop.apache.org/
 
 It only takes a few minutes to get the console installed and running. You just 
 download the ZIP, 'unzip' it and you are all set. TinkerPop also requires Java to be

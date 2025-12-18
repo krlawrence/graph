@@ -2303,8 +2303,7 @@ examples below build upon the examples shown in the previous section.
 
 TIP: All of the possible values that can be specified using WithOptions can be found
 in the official Apache TinkerPop JavaDoc documentation
-http://tinkerpop.apache.org/javadocs/current/full/org/apache/tinkerpop/gremlin/process/traversal/step/util/WithOptions.html[at
-this location].
+https://tinkerpop.apache.org/javadocs/current/full/org/apache/tinkerpop/gremlin/process/traversal/step/util/WithOptions.html.
 
 First of all, we know how to inspect the properties present for any vertex using the
 'properties' step.
@@ -5145,7 +5144,7 @@ the "<<serialize>>" section.
 
 NOTE: The official Apache TinkerPop documentation includes some good coverage of this
 topic. That documentation can be found at
-http://tinkerpop.apache.org/docs/current/reference/#_gremlin_i_o and in
+https://tinkerpop.apache.org/docs/current/reference/#_gremlin_i_o and in
 https://tinkerpop.apache.org/docs/current/dev/io/
 
 There are currently three versions of GraphSON and each has an option to include
@@ -6259,7 +6258,7 @@ several minutes to run in the TinkerGraph environment.
 
 NOTE: The TinkerPop documentation has in depth coverage of the various OLAP
 capabilities that are supported.
-http://tinkerpop.apache.org/docs/current/reference/#graphcomputer
+https://tinkerpop.apache.org/docs/current/reference/#graphcomputer
 
 Where OLAP comes into play is when you want to do detailed analysis across an entire
 graph. This is especially true as graphs get large and require  powerful clusters of
