@@ -934,7 +934,7 @@ vertices = [["WYZ","KWYZ"],["XYZ","KXYZ"]]
 g.inject(vertices).unfold().as("v").
   addV("airport").property("code", select("v").limit(local,1)).
                   property("iata", select("v").tail(local,1))
-----
+
 
 Each internal array is then given a label of "v" so that it can be referenced later
 in the traversal. We reference it in the calls to 'property' where we 'select' the 
@@ -2723,7 +2723,7 @@ g.V().has('airport','country','IE').
       aggregate('ireland').by('rnways').cap('ireland')
 
 []
----- 
+----
 
 This behavior is meant as a convenience when using 'aggregate' with heterogenous or
 incomplete elements where a value may not exist, thereby sparing an error. It may be
