@@ -3836,6 +3836,7 @@ each of these in use throughout this book.
 |between | Between two values inclusive/exclusive (upper bound is excluded)
 |within  | Must match at least one of the values provided. Can be a range or a list
 |without | Must not match any of the values provided. Can be a range or a list
+|typeOf  | Must match the specified data type
 |==============================================================================
 
 .Other predicates
@@ -4412,6 +4413,83 @@ v[1757]
 g.V(airports[x-1]).values('code')
 
 JTY
+----
+
+[[typeof]]
+=== Checking data types with 'typeOf'
+
+A quietly helpful predicate is 'typeOf' which can be used to help identify if an 
+object is of a particular type or not. There are a number of cases where you might
+want to have this capability. For example, let's take a basic output of 'path' for a
+simple traversal:
+
+[source,groovy]
+----
+g.V().has('airport','code','IAD').outE().inV().
+  path().
+  limit(3)
+  
+[v[10],e[6144][10-route->1053],v[1053]]
+[v[10],e[6145][10-route->1059],v[1059]]
+[v[10],e[6146][10-route->1060],v[1060]] 
+----
+
+Each 'Path' in the above results is a mix of two vertices and a single edge. We could
+envision a long extension this query with many more 'outE().inV()' chains which would
+make each 'Path' result have an even longer vertex to edge pattern. There are limited
+ways to control what appears as a result of calling 'path()' and there is no way to
+omit certain objects from the middle of a path if the traversal had passed through 
+them. If you only wanted to have the vertices in your 'Path' you would be forced to
+apply a filter. With the help of 'typeOf', the task becomes straighforward:
+
+[source,groovy]
+----
+g.V().has('airport','code','IAD').outE().inV().
+  path().
+  limit(3).
+  map(unfold().is(typeOf(VERTEX)).fold())
+  
+[v[10],v[1053]]
+[v[10],v[1059]]
+[v[10],v[1060]]
+----
+
+The 'typeOf' predicate accepts several values as an argument. In the above case, we
+used the 'GType' enum, which contains a listing of all the common types that Gremlin
+supports. That full listing is as follows:
+
+.GType listing
+[cols="^1,1,1"]
+|==============================================================================
+|BIGDECIMAL      |BIGINT          |BINARY
+|BOOLEAN         |BYTE            |CHAR
+|DATETIME        |DOUBLE          |DURATION
+|EDGE            |FLOAT           |GRAPH
+|INT             |LIST            |LONG
+|MAP             |NULL            |NUMBER
+|PATH            |PROPERTY        |SET
+|SHORT           |STRING          |TREE
+|UUID            |VERTEX          |VPROPERTY
+|==============================================================================
+
+The 'typeOf' predicate could also be used for graph administration functions, like
+for identifying data of the wrong type stored among properties. 
+
+[source,grooy]
+----
+g.V().has('airport','code','IAD').values('lat','lon')
+
+-77.45580292
+38.94449997
+----
+
+Given the schema for air-routes, we would expect our "lat" and "lon" values to be 
+stored as 'double'. We could verify this with Gremlin with the help of 'typeOf':
+
+[source,groovy]
+----
+g.V().has('airport','code','IAD').
+  filter(values('lat','lon').is(P.not(typeOf(DOUBLE))))
 ----
 
 [[textpredicates]]
