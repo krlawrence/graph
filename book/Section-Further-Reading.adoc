@@ -62,7 +62,7 @@ https://discord.gg/tinkerpop
 https://groups.google.com/forum/#!forum/gremlin-users
 
 .Apache TinkerPop developers mailing list archive
-https://lists.apache.org/list.html?dev@tinkerpop.apache.org
+link:++https://lists.apache.org/list.html?dev@tinkerpop.apache.org++[]
 
 .Stack Overflow posts tagged with "gremlin"
 https://stackoverflow.com/questions/tagged/gremlin
