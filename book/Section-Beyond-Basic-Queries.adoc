@@ -243,7 +243,7 @@ around that deficiency simply by writing clever queries!
 
 Sometimes, to improve query efficiency we find it is actually worth having the
 data available more than one place within the same graph. An example of this
-in the air routes graph would be the way we decided to model countries. We have
+in the air-routes graph would be the way we decided to model countries. We have
 a unique vertex for each country but we also store the country code as a property
 of each airport vertex. In a small graph this perhaps is overkill but we did it
 to make a point. Look at the following two queries that return the same
@@ -276,7 +276,7 @@ designing your data model.
 
 While on the topic of what to keep in the graph, something to resist being
 drawn into in many cases is the desire to keep absolutely everything in the
-graph. For example, in the air routes graph we do not keep every single detail
+graph. For example, in the air-routes graph we do not keep every single detail
 about an airport (radio frequencies, runway names, weather information etc.)
 in the airport vertices. That information is available in other places and easy
 to find. In a production system you should consider carefully what needs to be
@@ -314,8 +314,8 @@ face issues.
 
 As you design your graph model it is worth considering that some things are perhaps
 better modeled as a vertex property than as a vertex with lots of edges needing to
-connect to it. For example in the air routes graph there are country vertices and 
-each airport is connected to one of the country vertices. In the air routes graph 
+connect to it. For example in the air-routes graph there are country vertices and 
+each airport is connected to one of the country vertices. In the air-routes graph 
 this is not a problem as even if all the airports in the graph were in the same
  country, that would still give us fewer than 3,500 edges connected to that vertex.
 However, imagine if we were building a graph of containing a very large number of 
@@ -604,7 +604,7 @@ So far in this book we have largely focussed on loading a graph from a file and
 running queries against it. As you start to build your own graphs you will not always
 start with a graph saved as a text file in GraphML, CSV, GraphSON or some other
 format. You may start with an empty graph and incrementally add vertices and edges.
-Just as likely you may start with a graph like the air routes graph, read from a
+Just as likely you may start with a graph like the air-routes graph, read from a
 file, but want to add vertices, edges and properties to it over time. In this section
 we will explore various ways of doing just that.
 
@@ -865,7 +865,7 @@ Vertex with id already exists: 99999
 
 Sometimes for testing and for when you want to report a problem or ask for help on a
 mailing list it is handy to have a small standalone graph that you can use. The code
-below will create a mini version of the air routes graph in the Gremlin Console. Note
+below will create a mini version of the air-routes graph in the Gremlin Console. Note
 how all of the vertices and edges are created in a single query with each step joined
 together.
 
@@ -913,9 +913,9 @@ Note the call to 'iterate' at the end for without that terminal step, the query 
 not execute. If you don't recall why 'iterate' is important you can read about it in
 the "<<ignoringresults>>" section. 
 
-This technique of creating vertices and/or edges using a 'for' loop can also be useful
-when working with graphs remotely over HTTP connections. It is a very convenient way
-to combine a set of creation steps into a single REST API call.
+This technique of creating vertices and/or edges using a 'for' loop can also be 
+useful when working with graphs remotely over HTTP connections. It is a very 
+convenient way to combine a set of creation steps into a single REST API call.
 
 [[addinject]]
 ==== Adding vertices and edges using 'inject'
@@ -1153,8 +1153,8 @@ g.inject(m).unfold().as('m').
 
 ==== Incorporating 'fail' with 'mergeV' or 'mergeE'
 
-We learned about 'fail' step in "<<coalfail>>" where it will throw an exception when it
-is encountered. You can incorporate this step into 'mergeV' and 'mergeE' to stop a
+We learned about 'fail' step in "<<coalfail>>" where it will throw an exception when
+it is encountered. You can incorporate this step into 'mergeV' and 'mergeE' to stop a
 traversal in cases where you don't want the traversal to continue in 'onCreate' or
 'onMatch'.
 
@@ -1322,7 +1322,7 @@ lat=[30.1944999694824]
 desc=[Austin Bergstrom International Airport]
 ----
 
-In the air routes graph there is no vertex with an ID of 9999999. So if we rerun the
+In the air-routes graph there is no vertex with an ID of 9999999. So if we rerun the
 previous '"upsert"' query, this time a new vertex will be created.
 
 [source,groovy]
@@ -1386,7 +1386,7 @@ Gremlin provides the 'drop' step that we can use to remove things from a graph.
 ==== Deleting a vertex
 
 In some of our earlier examples we created a fictitious airport vertex with a code of
-'XYZ' and added it to the air routes graph. If we now wanted to delete it we could
+'XYZ' and added it to the air-routes graph. If we now wanted to delete it we could
 use the following Gremlin code. Note that removing the vertex will also remove any
 edges we created connected to that vertex.
 
@@ -5072,7 +5072,7 @@ sgt.V().groupCount().by(label)
 
 Here is a more complicated example. The query will create a subgraph just of airports
 and routes that are inside Europe. Effectively this will make the Europe only version
-of the air routes main graph. At first glance, this query looks a bit overwhelming
+of the air-routes main graph. At first glance, this query looks a bit overwhelming
 but if you read it slowly and look at each step you should be able to make sense of
 what it is doing. It is quite a bit more sophisticated than the previous examples in
 that as well as extracting the routes and airports into the subgraph it also extracts
@@ -6129,7 +6129,7 @@ Now let's drop the index.
 graph.dropIndex('code',Vertex)
 ----
 
-Because the air routes graph is small, a Vertex property index has little effect on
+Because the air-routes graph is small, a Vertex property index has little effect on
 overall performance. However, as there are a lot more edges, perhaps creating an edge
 property index could help some queries. Let's try an experiment. The following query
 looks for all edges that have a 'dist' property of 1000.
@@ -6250,7 +6250,7 @@ only look at a small part of a graph, often starting at a single node or a small
 group of nodes and traversing out a few hops from there are considered OLTP
 operations. Typically, an OLTP query takes a few seconds or less to run. They are
 often used in response to a user query where an almost real time answer is needed.
-Because the air routes graph is small - we can do even quite complex queries using
+Because the air-routes graph is small - we can do even quite complex queries using
 little more than a TinkerGraph and the Gremlin Console. This is not the case if your
 graph contains billions of vertices and edges. That said, We have seen some OLTP type
 queries, such as those looking for routes to remote airports, that can take

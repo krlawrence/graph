@@ -912,7 +912,7 @@ g.V().has('code','AUS').out('route').values('city').
 ==== Distribution of routes in the graph (mode and mean)
 
 An example of a common question we might want to answer with a network graph, of
-which air routes are an example, is "how are the routes in our graph distributed
+which air-routes are an example, is "how are the routes in our graph distributed
 between airport vertices?". We can also use this same query to find the statistical
 'mode' (most common number) for a set of routes.
 
@@ -1331,7 +1331,7 @@ runway value pair is now in its own individual list.
 [[noedges]]
 ==== How many vertices have no edges?
 
-In the air routes graph there are some vertices that have no outgoing edges, some
+In the air-routes graph there are some vertices that have no outgoing edges, some
 that have no incoming edges and a few, such as the vertex for the continent
 of Antarctica, that have neither. We can use some simple
 queries to count how many of each type exist.
@@ -2834,7 +2834,7 @@ The 'air-routes' graph stores the geographic coordinates (latitude and longitude
 each airport as floating point numbers. Some graph systems such as JanusGraph have
 geographic coordinate and shape (geospatial) functions built in, but TinkerGraph does
 not. Moreover, GraphML does not offer any specific geospatial support. To keep things
-simple and flexible, the air routes data set does not assume any specific back end 
+simple and flexible, the air-routes data set does not assume any specific back end 
 capabilities. Having coordinates provided as basic floating point numbers still 
 allows us to write some interesting geospatial queries.
 
@@ -4035,7 +4035,7 @@ You can of course model a tree structure as a graph. The following code will cre
 new graph containing an ordered binary tree. A graph like this is sometimes referred
 to as a 'connected acyclic' graph as there are no cycles in the graph. This means
 that once you leave a node there is no other path you could take that will allow you
-to get there again. By contrast the air routes graph is an example of a 'cyclic'
+to get there again. By contrast the air-routes graph is an example of a 'cyclic'
 graph as there are clearly many ways to revisit vertices.
 
 [source,groovy]

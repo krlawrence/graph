@@ -965,7 +965,7 @@ def g = traversal()
 ----
 
 We are now ready to create a new TinkerGraph instance, 'GraphTraversalSource' named
-"g" and try to load the air routes graph. We can do this in Groovy just like we did
+"g" and try to load the air-routes graph. We can do this in Groovy just like we did
 in the Java example. Unlike Java, however, Groovy does not require you to catch
 exceptions that may get thrown but as a best practice it is probably a good idea to
 still do so when you need to take some specific action if an exception does happen.

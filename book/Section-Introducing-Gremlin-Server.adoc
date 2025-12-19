@@ -241,14 +241,14 @@ $ bin/gremlin-server.sh stop
 Server stopped [25897]
 ----
 
-=== Loading Air Routes In Gremlin Server
+=== Loading air-routes In Gremlin Server
 
 We've now started and stopped Gremlin Server with an empty TinkerGraph, but we also
 alluded to being able to load data at the server startup by making changes to Gremlin
-Server's configuration files. Let's load the air routes dataset so that our
+Server's configuration files. Let's load the air-routes dataset so that our
 TinkerGraph has some data ready for querying when Gremlin Server starts. To load the
 data, we need to edit 'empty-sample.groovy', which is the initializer for the server.
-Since TinkerPop packages the air routes dataset starting at TinkerPop 3.8.0, we will
+Since TinkerPop packages the air-routes dataset starting at TinkerPop 3.8.0, we will
 also use the 'TinkerFactory' as a convenient way to load this data.
 
 [source,groovy]
@@ -273,7 +273,7 @@ globals << [g : traversal().with(graph)]
 ----
 
 We can see in the above script that we added a line to 'onStartUp' that will load the
-air routes data into the 'graph'. While this example made use of 'TinkerFactory' for
+air-routes data into the 'graph'. While this example made use of 'TinkerFactory' for
 an easy way to load the data, we could have equally chosen to use any other means
 we'd like to set up the graph.
 

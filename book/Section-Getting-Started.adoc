@@ -668,7 +668,7 @@ https://github.com/krlawrence/graph/blob/main/sample-data/air-routes-latest.grap
 [[ld]]
 === Loading the air-routes graph using the Gremlin Console
 
-The easiest way to load the air routes graph is to use the prepackaged version of the
+The easiest way to load the air-routes graph is to use the prepackaged version of the
 dataset that comes with TinkerGraph. We can demonstrate this in the Gremlin Console
 as follows.
 
@@ -684,7 +684,7 @@ That's it! The graph is now loaded with the 1.0 version of the dataset. These tw
 lines simplify a longer set of manual steps which we will go through as an
 explanatory next step so that you can understand the details.
 
-The following code loads the air routes graph using the console by putting it into a
+The following code loads the air-routes graph using the console by putting it into a
 file and using ':load' to load and run it or by entering each line into the console
 manually. These commands will setup the console environment, create a TinkerGraph 
 and load the `air-routes.graphml` file into it. Some extra console features are also

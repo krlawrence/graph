@@ -195,7 +195,7 @@ Java, Groovy and Python.
 
 NOTE: The first few sections of the book focus on showing some basic Gremlin queries
 that are both useful and yet easy to understand. By the end of Chapter 3 you should
-have a basic understanding of how to explore the air routes graph using commonly used
+have a basic understanding of how to explore the air-routes graph using commonly used
 Gremlin steps. Chapters 4, 5 and 6 explore Gremlin in more depth.
 
 .How this book is organized
@@ -472,7 +472,7 @@ unmatched, and introduces a new 'Pick.unproductive' option.
 go to 'double' instead.
 * The 'valueMap', 'propertyMap', 'groupCount', 'dedup', 'sack', 'sample', 'aggregate'
 steps can no longer take 'by' modulators beyond the number each step expects.
-* Included the Air Routes dataset, as is used in this book, as official sample data
+* Included the air-routes dataset, as is used in this book, as official sample data
 in the distribution.
 * The form of 'has' that takes a key and a 'Traversal' as an argument has been
 removed to prevent confusion around its functionality and to prepare for a revised
@@ -556,7 +556,7 @@ database is probably doing just fine where it is and likewise a document store i
 quite possibly just the right place to be storing your documents. So "use the right
 tool for the job" remains as valid a phrase here as elsewhere. Where graph databases
 come into their own is when the data you are storing is intrinsically linked by its
-very nature, the air routes network used as the basis for all of the examples in
+very nature, the air-routes network used as the basis for all of the examples in
 this book being a perfect example of such a situation.
 
 Those of you that looked at graphs as part of a computer science course are correct

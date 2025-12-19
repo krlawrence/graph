@@ -15,7 +15,7 @@ The first edition is still available. To view it in a browser (HTML format) clic
 ### LATEST NEWS
 
 - [Dec-17-2025] Auto-published the PDF version of book via GitHub Actions as changes arrive to the 'main' branch. 
-- [Oct-22-2025] Generated 1.0 of the Air Routes dataset. 
+- [Oct-22-2025] Generated 1.0 of the air-routes dataset. 
 - [Jul-17-2024] Auto-published the HTML version of book via GitHub Actions as changes arrive to the 'main' branch. 
 - [Sep-23-2023] Work has started on a second edition of the book! See the note below for more details.
 

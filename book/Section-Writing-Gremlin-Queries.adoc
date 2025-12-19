@@ -36,7 +36,7 @@ both show how we might count the number of airports there are in each country us
 firstly a relational database and secondly a property graph.
 
 When working with a relational database, we might decide to store all of the airport
-data in a single table called 'airports'. In a very simple case (the air routes
+data in a single table called 'airports'. In a very simple case (the air-routes
 graph actually stores a lot more data than this about each airport) we could setup
 our airports table so that it had entries for each airport as follows.
 
@@ -423,7 +423,7 @@ Sometimes it is useful to count how many of each type (or group) of things there
 in the graph. This can be done using the 'group' and 'groupCount' steps. While for a
 very large graph it is not recommended to run queries that look at all of the
 vertices or all of the edges in a graph, for smaller graphs this can be quite useful.
-For the air routes graph we could easily count the number of different vertex and
+For the air-routes graph we could easily count the number of different vertex and
 edge types in the graph as follows.
 
 [source,groovy]
@@ -1492,7 +1492,7 @@ Sometimes, it is the edge between two vertices that we are interested in examini
 and not the vertices themselves. Typically this is because we want to look at one or
 more properties associated with that edge. By way of an example, let's imagine we
 wanted to know how many miles the flight is between Miami (MIA) and Dallas Fort Worth
-(DFW). In our air routes graph, the distances between vertices are stored using a
+(DFW). In our air-routes graph, the distances between vertices are stored using a
 property called 'dist' on any edge that has a 'route' label. We can use the 'outE'
 and 'inV' steps to find the edge connecting Miami and Dallas. We can also use the
 'select' and 'as' steps that we just learned about to help with this task. Take a
@@ -4327,7 +4327,7 @@ gives results similar to these.
 67
 ----
 
-Given the air routes graph has over 3,300 airport vertices we wanted to come up with
+Given the air-routes graph has over 3,300 airport vertices we wanted to come up with
 a query that gave a more likely result of picking any one airport from across all of
 the possible airports in the graph. By taking advantage of the Java Math class we can
 do something that does seem to much more 'randomly' pick one airport from across all
@@ -6948,7 +6948,7 @@ g.V(3).both().order().by(id).fold()
 ----
 
 You probably also noticed that most of the vertices appear twice. This is because
-for most air routes there is an outgoing and an incoming edge. If we wanted to
+for most air-routes there is an outgoing and an incoming edge. If we wanted to
 eliminate any duplicate results we can do that by adding a 'dedup' step to our query.
 
 [source,groovy]
@@ -7441,7 +7441,7 @@ Atlanta (ATL).
 [SAF,DFW,LCH,IAH,LFW,LAX,SAN,ABQ,ATL]
 ----
 
-As we mentioned, working with the air routes data set does not perhaps present an
+As we mentioned, working with the air-routes data set does not perhaps present an
 ideal use case for using nested repeat steps. Most of the edges are routes and most
 of the vertices are airports. However, if your data had a broader variety of vertex
 and edge types, this capability may come in quite handy.
