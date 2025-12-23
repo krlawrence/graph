@@ -1,11 +1,10 @@
-// vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
 [[beyond]]
 == MOVING BEYOND THE GREMLIN CONSOLE
 
 The focus of this book so far has been to teach the Gremlin query language, using the
 Gremlin Console and TinkerGraph as our learning environment. This is indeed a great
-way to learn, and that environment can be setup quickly, as we have seen, on a single
-laptop, or desktop, computer. Even as you move towards more sophisticated
+way to learn, and that environment can be set up quickly, as we have seen, on a
+single laptop, or desktop, computer. Even as you move towards more sophisticated
 environments, keeping the console nearby is recommended as an easy way to experiment
 with new ideas.
 
@@ -19,7 +18,7 @@ deployment!
 
 In this chapter we start the journey by introducing ways to access TinkerGraph
 directly, embedded with your application code, from programming languages such as
-Java and Groovy. Later, we introduce ways to use these same programming
+Java and Groovy. Later we introduce ways to use these same programming
 languages, and others, to connect to a Gremlin Server and other remotely hosted graph
 databases. First, let's take a look at the Apache TinkerPop Java API. 
 
@@ -39,31 +38,31 @@ this book. https://github.com/krlawrence/graph
 
 When building a commercial application, you may need capabilities such as high
 availability and durability, and would not use TinkerGraph as your graph database in
-those cases. There are however, places where TinkerGraph may be just what you need.
+those cases. There are, however, places where TinkerGraph may be just what you need.
 One example might be doing analysis on a static graph that can fit into memory on
 your laptop. The 'air-routes' graph is a good example of such a graph. You might also
-have a large graph stored on a server, but just need to export part of it to do local
+have a large graph stored on a server but need to export part of it to do local
 analysis. As a first step towards writing standalone applications that use different
-graph database implementations, lets look at a few examples of how you can create a
+graph database implementations, let's look at a few examples of how you can create a
 Java application that uses Gremlin and TinkerGraph.
 
 [[tpinterfaces]]
 ==== The Apache TinkerPop interfaces and classes
 
 There are a number of Java interfaces and classes, defined by the Apache TinkerPop
-project, that you will want to become familiar with. The most recent JavaDoc format
+project, that you will want to become familiar with. The most recent Javadoc format
 API documentation is always available at
 https://tinkerpop.apache.org/javadocs/current/full
 
-The TinkerPop JavaDoc is a bit lacking in terms of English prose but is still a
+The TinkerPop Javadoc is a bit lacking in terms of English prose but is still a
 useful source of reference information when it comes to methods, parameters and
 types. Once you have coded up a couple of test programs and got them running, you
 should find it gets easier to make progress faster. To that end, we recommend you
 take a look at the sample code included with the book.
 
-When using the Gremlin Console, your environment is pre-configured for you so, for
-the most pat, you do not have to import any classes or interfaces. However, as soon
-as you move to the domain of the standalone Java application you will need to start
+When using the Gremlin Console, your environment is pre-configured for you, so for
+the most part, you do not have to import any classes or interfaces. However, as soon
+as you move to the domain of the standalone Java application, you will need to start
 importing the classes that your application needs. You will probably discover a few
 other things that the console was doing on your behalf.
 
@@ -75,7 +74,7 @@ statements.
 Take particular note of the rather odd import of the class called +++"__"+++
 (underscore underscore) on the second line. This is required to enable calling
 methods such as 'in' and 'out' in a traversal where there is no prior step
-to "dot" attach them to (such as inside of a 'repeat' step). If you prefer you
+to "dot" attach them to (such as inside a 'repeat' step). If you prefer, you
 can statically import the +++"__"+++ class which will make explicit use of
 +++".__"+++ in your code unnecessary except where you are faced with reserved
 word conflicts as discussed in prior chapters.
@@ -114,8 +113,8 @@ Lastly, in this initial class definition we create a 'GraphTraversalSource' and 
 make a Gremlin query to get the property 'valueMap' for the Austin airport vertex and
 print it. The 'toString' method provided by the 'Map' should give us some useful
 output. Take note of the call to 'next'. This terminates the graph traversal and
-causes the result to be returned. If this call is left off you will not get back what
-you were expecting!
+causes the result to be returned. If this call is left off, you will not get back
+what you were expecting!
 
 [source,java]
 ----
@@ -198,10 +197,10 @@ aware Java app!
 ==== Adding to our Java program
 
 Now that we have a basic skeleton application that compiles and runs, we can start to
-add more experiments to it. If we add the two lines below we can extract the city
-name from the value map that we just generated. From now on as we add to our program,
-we are just going to show the lines that we add and the additional output that those
-new lines will generate.
+add more experiments to it. If we add the two lines below, we can extract the city
+name from the value map that we just generated. From now on, as we add to our
+program, we are just going to show the lines that we add and the additional output
+that those new lines will generate.
 
 [source,java]
 ----
@@ -209,15 +208,15 @@ List city = (List)(aus.get("city"));
 System.out.println("The AUS airport is in " + city.get(0));
 ----
 
-So when we compile and run again we should now see this additional line of output.
+So when we compile and run again, we should now see this additional line of output.
 
 [source,text]
 ----
 The AUS airport is in Austin
 ----
 
-If we wanted to nicely print out all of the values returned in our value map we could
-do it as follows.
+If we wanted to nicely print out all values returned in our value map, we could do it
+as follows.
 
 [source,java]
 ----
@@ -346,7 +345,7 @@ operation. The code below will look for any cities in the UK that you can get to
 Austin with one stop on the way. A key thing to note here is that we have to prefix
 the call to 'out' with the strangely named class +++"__."+++ that we mentioned at
 the start of this discussion of using Java with TinkerPop. If you do not include the
-+++"__."+++ prefix you will get a compilation error as the compiler does not know
++++"__."+++ prefix, you will get a compilation error as the compiler does not know
 where the 'out' step is from.
 
 [source,java]
@@ -376,9 +375,9 @@ are done for you that you need to take care of yourself when writing standalone 
 code. A key area that we have found that people making the jump from the console to
 Java find confusing is figuring out which Classes and Enums have been statically
 imported "behind the scenes" and how to access those same capabilities from Java. You
-should also bookmark the TinkerPop javadoc pages as you can find more detail on all
-of the classes and enums covered below there. The latest javadoc is always available
-at https://tinkerpop.apache.org/javadocs/current/full/
+should also bookmark the TinkerPop Javadoc pages as you can find more detail on all
+classes and enums covered below there. The latest Javadoc is always available at
+https://tinkerpop.apache.org/javadocs/current/full/
 
 NOTE: The source code in this section comes from the 'TestImports.java' sample
 located at https://github.com/krlawrence/graph/tree/main/sample-code/java and
@@ -391,12 +390,12 @@ used in a Java program. You may choose to statically import some of these classe
 into your code. We prefer to use the explicit prefix, but that is a matter of
 personal preference in many cases. There is a table of all the available predicates
 in the "<<tranges>>" section. For the special +++".__"+++ class we have just shown a
-few examples. In general you use this prefix when you have nothing prior in the query
+few examples. In general, you use this prefix when you have nothing prior in the query
 that you can "dot chain" to.
 
-If you need to specify how a property value should be treated when added to a vertex
-you can use one of the keywords defined as part of the 'Cardinality' enum
-which is part of the 'VertexProperty' interface.
+If you need to specify how a property value should be treated when added to a vertex,
+you can use one of the keywords defined as part of the 'Cardinality' enum, which is
+part of the 'VertexProperty' interface.
 
 .Cardinality
 [cols="1,1,3"]
@@ -406,8 +405,8 @@ which is part of the 'VertexProperty' interface.
 |set     | Cardinality.set   | property(Cardinality.set,"mykey","ABC")
 |==============================================================================
 
-When local scope needs to be specified as a parameter or sort order direction needs
-to be specified the statics defined in the  'Scope' and 'Order' Enums can be used.
+When 'local' scope needs to be specified as a parameter or sort order needs to be
+specified, the statics defined in the  'Scope' and 'Order' Enums can be used.
 
 .Scope and ordering
 [cols="1,1,3"]
@@ -419,7 +418,7 @@ to be specified the statics defined in the  'Scope' and 'Order' Enums can be use
 |shuffle | Order.shuffle  | order().by(Order.shuffle)
 |==============================================================================
 
-If you need to access the keys or values from a map data structure you can use the
+If you need to access the keys or values from a map data structure, you can use the
 statics defined in the 'Column' enum.
 
 .Keys and values
@@ -429,7 +428,7 @@ statics defined in the 'Column' enum.
 |values  | Column.values  | order().by(Column.values)
 |==============================================================================
 
-When accessing the 'id' and 'label' values from a 'valueMap' you need to use the
+When accessing the 'id' and 'label' values from a 'valueMap', you need to use the
 statics defined in the 'T' Enum. The same is true if you want to access the keys and
 values from a set of properties.
 
@@ -442,10 +441,10 @@ values from a set of properties.
 |value   | T.value        | properties().order().by(T.value)
 |==============================================================================
 
-When there is no previous step to "dot chain" to then we can use the +++".__"+++
-class as our prefix. If you look at the javadoc for the class you will see it defines
-static methods that we can use to call Gremlin functionality in cases like the ones
-shown below.
+When there is no previous step to "dot chain", to then we can use the +++".__"+++
+class as our prefix. If you look at the Javadoc for the class, you will see it
+defines static methods that we can use to call Gremlin functionality in cases like
+the ones shown below.
 
 .Anonymous references
 [cols="1,1,3"]
@@ -474,7 +473,7 @@ defined in the 'P' class. Not all the methods defined are shown below.
 |between | P.between      | has("runways",P.between(2,5))
 |==============================================================================
 
-The 'TextP' class exposes text search based predicates.
+The 'TextP' class exposes text-search-based predicates.
 
 .Text Predicates
 [cols="1,1,3"]
@@ -489,12 +488,12 @@ The 'TextP' class exposes text search based predicates.
 |notRegex        | TextP.notRegex         | has("city",TextP.notRegex("D.*"))
 |==============================================================================
 
-If a traversal path has multiple values associated with a single label, such as '"x"'
-then you can use the 'first', 'last' , 'all' and 'mixed' statics that are defined as
-part of the 'Pop' Enum. As the name suggest, 'first' returns the first item in a
-collection. Specifying 'last' returns the last item and 'all' returns all of the
+If a traversal path has multiple values associated with a single label, such as
+'"x"', then you can use the 'first', 'last', 'all' and 'mixed' statics that are
+defined as part of the 'Pop' Enum. As the name suggests, 'first' returns the first
+item in a collection. Specifying 'last' returns the last item, and 'all' returns all
 items in a collection. Specifying 'mixed' will return a 'List' if the collection has
-more than one item. Otherwise an 'Object' will be returned.
+more than one item. Otherwise, an 'Object' will be returned.
 
 .First, last, all and mixed
 [cols="1,1,3"]
@@ -550,7 +549,7 @@ incoming traverser does not produce an output.
 |==============================================================================
 
 The 'Merge' Enum has constants that are associated to the `mergeV` and `mergeE`
-steps. 'onCreate' and 'onMatch' relate to the events triggered by these steps and
+steps. 'onCreate' and 'onMatch' relate to the events triggered by these steps, and
 'outV' and 'inV' are used to specify a way to late-bind in and out vertices for these
 operations.
 
@@ -576,9 +575,9 @@ The 'DT' Enum provides constants representing units of time for the 'dateAdd' st
 
 As discussed earlier, you can always use the 'getClass' method or simply '.class'
 while using the console to, in many cases, find out where something is defined. As
-we saw in the examples earlier in this section, lot of the keywords such as 'values',
-'id' and 'local' are defined as Enums so you can use 'getClass' on them directly. A
-few examples are shown below.
+we saw in the examples earlier in this section, a lot of the keywords such as
+'values', 'id' and 'local' are defined as Enums so you can use 'getClass' on them
+directly. A few examples are shown below.
 
 [source,groovy]
 ----
@@ -598,7 +597,7 @@ gremlin> Column.class
 ==>class org.apache.tinkerpop.gremlin.structure.Column
 ----
 
-If you compare this output to the tables above you can see that we have been able to
+If you compare this output to the tables above, you can see that we have been able to
 verify that, for example, that 'label' and 'key' are defined in the 'T' Enum. We can
 also see that 'keys' and 'values' are indeed defined in the 'Column' Enum. Lastly, we
 can see that 'local' is, as we expected, defined in the 'Scope' Enum.
@@ -607,9 +606,9 @@ can see that 'local' is, as we expected, defined in the 'Scope' Enum.
 ==== Using Gremlin predicates in a Java application
 
 As discussed in the previous section, when you use a Gremlin predicate such as 'eq'
-or 'neq' from a Java program you need to prefix it with a '"P."' which is a reference
-to the TinkerPop class of the same name where a set of static methods, representing
-the Gremlin predicates, are defined.
+or 'neq' from a Java program, you need to prefix it with a '"P."' which is a
+reference to the TinkerPop class of the same name where a set of static methods,
+representing the Gremlin predicates, are defined.
 
 NOTE: The source code in this section comes from the 'GraphRegion.java' sample
 located at https://github.com/krlawrence/graph/tree/main/sample-code/java.
@@ -666,7 +665,7 @@ Region code lookup for DEN
 
 It is often important to know if a query returned a result before trying to reference
 it to avoid those pesky Java 'NoSuchElementException' errors. Without worrying about
-Java for a second consider the query below purely from a Gremlin point of view.
+Java for a second, consider the query below purely from a Gremlin point of view.
 
 [source,groovy]
 ----
@@ -679,7 +678,7 @@ connecting Austin with Sydney (SYD) and then returns the distance value from tha
 edge. The problem here is that there is no direct route between Austin and Sydney and
 therefore no edge to retrieve the distance from. In other words, this query returns 
 no result. Now, within the Gremlin Console this is not a problem as we just get 
-nothing back and life goes on. However, take a look at the code below which is a 
+nothing back and life goes on. However, take a look at the code below, which is a
 first attempt at moving the query into Java code.
 
 [source,java]
@@ -689,16 +688,17 @@ Long result =
             select("edge").by("dist").next();
 ----
 
-On the surface, this looks fine. However, were we to execute this code we would get a
-'NoSuchElementException' as when we try to call 'next' there is no result to process 
-as there is no edge between Austin and Sydney and hence no distance value to process.
+On the surface, this looks fine. However, were we to execute this code, we would get
+a 'NoSuchElementException' as when we try to call 'next', there is no result to
+process as there is no edge between Austin and Sydney and hence no distance value to
+process.
 
 NOTE: The source code in this section comes from the 'GraphSearch2.java' sample
 located at https://github.com/krlawrence/graph/tree/main/sample-code/java.
 
 So we need a way to check to see if we go a valid result. One such way is to store
-the result of the query into a list. Then, worst case, if no results are found, we
-will get an empty list back. So, we can rewrite the query as follows.
+the result of the query into a list. Then, in the worst case, if no results are
+found, we will get an empty list back. So, we can rewrite the query as follows.
 
 [source,java]
 ----
@@ -718,8 +718,8 @@ if (result.isEmpty()) {
 }
 ----
 
-If we wanted a "pure Gremlin" solution, without using a List and without doing some
-post processing, one way we could do it is to use the 'coalesce' step and return a
+If we wanted a "pure Gremlin" solution, without using a List and without doing any
+post-processing, one way we could do it is to use the 'coalesce' step and return a
 special constant value, in this case minus one, to indicate that there were no
 results found.
 
@@ -731,15 +731,15 @@ Integer d = (Integer)
           coalesce(__.unfold(),__.constant(-1)).next();
 ----
 
-If the route exists the distance will be found and returned, otherwise a value of
+If the route exists, the distance will be found and returned, otherwise a value of
 '"-1"' will be returned. This is really using the same concept as the 'toList'
-example except in this case we generate the list using the 'fold' step within the
+ example, except in this case we generate the list using the 'fold' step within the
 query itself. The 'unfold' will return a result if the list is not empty, otherwise
 the constant value will be returned as 'coalesce' returns the first to yield a
 result.
 
-There are of course many other ways that you might come up with to solve this problem
-but using lists often provides a fairly easy to use solution.
+There are, of course, many other ways that you might come up with to solve this
+problem, but using lists often provides a fairly easy-to-use solution.
 
 [[javacreate]]
 ==== Creating a new graph from a Java application
@@ -750,10 +750,10 @@ source object and then uses a traversal to create a small graph.
 NOTE: The source code in this section comes from the 'CreateGraph.java' sample
 located at https://github.com/krlawrence/graph/tree/main/sample-code/java.
 
-Note the call to 'iterate' at the end of the traversal. When running as a
-standalone application this is necessary. This is another of those little things that
-the Gremlin Console does for you without you realizing it that we have to remember to
-do ourselves when not running inside the console.
+Note the call to 'iterate' at the end of the traversal. When running as a standalone
+application, this is necessary. This is another one of those little things that the
+Gremlin Console does for you without you realizing it that we have to remember to do
+for ourselves when we are not working inside the console.
 
 [source,java]
 ----
@@ -763,7 +763,7 @@ TinkerGraph graph = TinkerGraph.open() ;
 // Create a Traversal source object
 GraphTraversalSource g = traversal().with(graph);
 
-// Add some nodes and vertices - Note the use of "iterate".
+// Add some vertices and edges - Note the use of "iterate".
 g.addV("airport").property("code","AUS").as("aus").
   addV("airport").property("code","DFW").as("dfw").
   addV("airport").property("code","LAX").as("lax").
@@ -780,7 +780,7 @@ g.addV("airport").property("code","AUS").as("aus").
   addE("route").from("lax").to("dfw").iterate();
 ----
 
-Having created a new graph we can run some queries to make sure it looks correct.
+Having created a new graph, we can run some queries to make sure it looks correct.
 Firstly, let's check that the vertices were created and look at the IDs that were
 allocated to them. As with prior examples, a call to 'valueMap' with a parameter of
 'true' will return what we need. What we will get back from this code is a list of
@@ -794,13 +794,13 @@ List<Map<Object,Object>> vm = new ArrayList<Map<Object,Object>>() ;
 vm = g.V().valueMap(true).toList();
 ----
 
-Having got our list of maps back we can process them. Note that to get the 'id' and
+Having got our list of maps back, we can process them. Note that to get the 'id' and
 'label' values from the map we had to prefix the key name with a '"T."'. This is
-because while most of property keys are Strings, IDs and labels are a special case.
-If you look at the TinkerPop documentation you will see that T is a Java Enum that
-contains definitions for 'T.id', 'T.label', 'T.value' and 'T.key'. When working with
-Gremlin in Java it is important to remember that we need to use the '"T."' prefix in
-cases where when using the console we would not have to.
+because while most of the property keys are Strings, IDs and labels are a special
+case. If you look at the TinkerPop documentation, you will see that T is a Java Enum
+that contains definitions for 'T.id', 'T.label', 'T.value' and 'T.key'. When working
+with Gremlin in Java, it is important to remember that we need to use the '"T."'
+prefix in cases where when using the console, we would not have to.
 
 [source,java]
 ----
@@ -823,8 +823,8 @@ JFK 6 airport
 ATL 8 airport
 ----
 
-Finally, let's check that the edges were created correctly by displaying all of the
-paths between vertices in our new graph.
+Finally, let's check that the edges were created correctly by displaying all paths
+between vertices in our new graph.
 
 [source,java]
 ----
@@ -927,15 +927,15 @@ this book. https://github.com/krlawrence/graph
 
 In this section we will rewrite parts of the test application we coded in Java
 earlier in Groovy. A lot of what was covered in the "<<javatinker>>" section is
-equally relevant here and we have not duplicated that material. So even if you are
-writing a Groovy application please also give that section a read.
+equally relevant here, and we have not duplicated that material. So even if you are
+writing a Groovy application, please also give that section a read.
 
 NOTE: The source code in this section comes from the 'TinkerGraphTest.groovy' sample
 located at https://github.com/krlawrence/graph/tree/main/sample-code/groovy.
 
 It is assumed that you have downloaded and installed Groovy for your environment and
 have set the PATH to point to wherever the Groovy binaries are located. Just as in
-the Java example, the first thing we need to do is pull in via 'import' all of the
+the Java example, the first thing we need to do is pull in via 'import' all the
 TinkerPop classes that our program will use.
 
 [source,groovy]
@@ -954,7 +954,7 @@ import java.io.IOException
 ----
 
 Having imported the classes we need, we can make a start on our application.
-Initially we are just going to display the version of TinkerPop that we are using.
+Initially, we are just going to display the version of TinkerPop that we are using.
 
 [source,groovy]
 ----
@@ -967,7 +967,7 @@ def g = traversal()
 We are now ready to create a new TinkerGraph instance, 'GraphTraversalSource' named
 "g" and try to load the air-routes graph. We can do this in Groovy just like we did
 in the Java example. Unlike Java, however, Groovy does not require you to catch
-exceptions that may get thrown but as a best practice it is probably a good idea to
+exceptions that may get thrown, but as a best practice it is probably a good idea to
 still do so when you need to take some specific action if an exception does happen.
 
 [source,groovy]
@@ -983,7 +983,7 @@ try {
 }
 ----
 
-First we just do a simple query to find the vertex representing the AUS airport and
+First, we just do a simple query to find the vertex representing the AUS airport and
 use 'println' to display some information about it.
 
 [source,groovy]
@@ -997,16 +997,16 @@ NOTE: Just as when we were looking at building a Java application, you need to
 terminate your query with a step such as 'next', 'toList' or 'fill' to make sure you
 get back the results that you expect.
 
-Now we have the beginnings of an application it's time to make sure we can compile
-it. The key thing we need to do is make sure we pickup the TinkerPop specific JAR
-files as shown in the next section.
+Now that we have the beginnings of an application, it's time to make sure we can
+compile it. The key thing we need to do is make sure we pick up the TinkerPop
+specific JAR files as shown in the next section.
 
 [[groovyc]]
 ==== Compiling our Groovy application
 
 In the Java example, we included the CLASSPATH on the 'javac' invocation using the
 '-cp' flag. That can also be done when using Groovy, however, if you are using
-Microsoft Windows as your build environment you may find that using '-cp' gives
+Microsoft Windows as your build environment, you may find that using '-cp' gives
 unexpected errors. Therefore, it is recommended to define the CLASSPATH variable in
 your environment before running the Groovy compiler.
 
@@ -1037,7 +1037,7 @@ groovyc TinkerGraphTest.groovy
 
 ==== Running our Groovy application
 
-Assuming everything compiled cleanly we can now run our Groovy application.
+Assuming that the project is compiling cleanly, we can now run our Groovy application.
 
 [source,groovy]
 ----
@@ -1104,7 +1104,7 @@ println "\nThere are ${n} routes from Dallas"
 There are 253 routes from Dallas
 ----
 
-Next we can add some code to find the IATA codes representing the places that we can
+Next, we can add some code to find the IATA codes representing the places that we can
 fly to from DFW.
 
 [source,groovy]
@@ -1115,7 +1115,7 @@ println "\nHere are the places you can fly to from DFW\n"
 println fromDfw
 ----
 
-When we run the code we should get back some results that look like this.
+When we run the code, we should get back some results that look like this.
 
 [source,groovy]
 ----
@@ -1138,10 +1138,10 @@ Here are the places you can fly to from DFW
  DEN, SAT, MSY, EWR, CID, HNL, HOU, ELP, SJU, CLE, OAK, TUS, SAF, PHL, DTW]
 ----
 
-The code below will discover all of the airports in the United States that you can
-fly to from London's Heathrow airport (LHR). Only the first 10 results are selected
-using a 'limit' step. A 'path' step is used to nicely return the airport pairs and
-the distance between them. What we get back is a list of paths so we can use a simple
+The code below will discover all airports in the United States that you can fly to
+from London's Heathrow airport (LHR). Only the first 10 results are selected using a
+'limit' step. A 'path' step is used to nicely return the airport pairs and the
+distance between them. What we get back is a list of paths, so we can use a simple
 Groovy 'each' loop to print the results.
 
 [source,groovy]
@@ -1174,7 +1174,7 @@ From LHR to airports in the USA (only 10 shown)
 [LHR,4736,DFW]
 ----
 
-Finally, lets write the code to find the airports in England that you can get to from
+Finally, let's write the code to find the airports in England that you can get to from
 Austin with no more than one stop.
 
 [source,groovy]
@@ -1186,8 +1186,8 @@ println "\nAirports in England reachable with no more than one stop from AUS"
 println "\n${eng}\n"
 ----
 
-Here are the results, looks like we can get to a total of nine different airports if
-we make no more than one stop on the way.
+Here are the results, and it looks like we can get to a total of nine different
+airports if we make no more than one stop on the way.
 
 [source,groovy]
 ----
@@ -1205,7 +1205,7 @@ section.
 ==== Using Gremlin predicates in a Groovy application
 
 Just as we had to do when writing a standalone Java application, when you use a
-Gremlin predicate such as 'eq' or 'neq' from a Groovy program you need to prefix it
+Gremlin predicate such as 'eq' or 'neq' from a Groovy program, you need to prefix it
 with a '"P."' which references the TinkerPop class of the same name where a
 set of static methods, representing the Gremlin predicates, are defined.
 
@@ -1213,8 +1213,8 @@ NOTE: The source code in this section comes from the 'GraphRegion.groovy' sample
 located at https://github.com/krlawrence/graph/tree/main/sample-code/groovy.
 
 In the code below, the 'findByRegion' method that we wrote in Java earlier has been
-ported to Groovy. As before a String representing a three character airport IATA code
-is expected as input. The method then uses a Gremlin query to figure out which
+ported to Groovy. As before, a String representing a three-character airport IATA
+code is expected as input. The method then uses a Gremlin query to figure out which
 geographical region the specified airport is in and then returns all airports also in
 that region. Once again, note the use of 'P.eq' as part of the 'where' step.
 
@@ -1233,5 +1233,3 @@ def findByRegion(iata)
   list.each {println it}
 }
 ----
-
-

@@ -79,7 +79,7 @@ exceptions such as St. Helena which is a new airport with service pending, but
 delayed, due to issues with wind shear. Where an airport has no flights but
 remains in the graph it is probably because it was served by commercial airlines
 at some point. It is also useful for people learning to search graphs to be able
-to query for orphan nodes so for that reason as well I have left them in the
+to query for orphan vertices so for that reason as well I have left them in the
 graph.
 
 All of this said, I believe, as a learning tool there is plenty in the graph to

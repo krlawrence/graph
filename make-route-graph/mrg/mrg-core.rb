@@ -516,7 +516,7 @@ class MakeRouteGraph
       md.each do |tmp|
         smd +="#{tmp},"
       end
-      puts "  Maximum airport node degree (routes in and out) is #{deg} (#{smd[0..-2]})"
+      puts "  Maximum airport vertex degree (routes in and out) is #{deg} (#{smd[0..-2]})"
       reg,nc = calcRegionDegree()
       puts "  Region with the most airports: #{nc} (#{reg})"
       deg,nc = calcCountryDegree()
@@ -524,9 +524,9 @@ class MakeRouteGraph
       deg,nc = calcContinentDegree()
       puts "  Continent with the most airports: #{nc} (#{deg})"
       avg = (2.0 * rouSize) / aptSize
-      printf "  Average degree (airport nodes) is %3.3f\n", avg
+      printf "  Average degree (airport vertices) is %3.3f\n", avg
       avg = ((2.0 * rouSize) + (2.0 * aptSize)) / (aptSize + couSize + conSize)
-      printf "  Average degree (all nodes) is %3.3f\n", avg
+      printf "  Average degree (all vertices) is %3.3f\n", avg
     end
   end
 

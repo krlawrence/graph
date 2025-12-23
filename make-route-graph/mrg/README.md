@@ -93,8 +93,8 @@ Graph Data Validation
 ---------------------
   check          Check the graph for possible errors in the airport definitions.
                  If -all is also used the routes (edges) as well as the airports
-                 (nodes) will be checked and a test for duplicate (invalid)
-                 airport nodes will also be run. It is recommended that a full
+                 (vertices) will be checked and a test for duplicate (invalid)
+                 airport vertices will also be run. It is recommended that a full
                  check is always run before a graph is generated, especially if any
                  data has been modified.
 

@@ -41,7 +41,7 @@ exceptions such as St. Helena which is a new airport with service pending, but
 delayed, due to issues with wind shear. Where an airport has no flights but
 remains in the graph it is probably because it was served by commercial airlines
 at some point. It is also useful for people learning to search graphs to be able
-to query for orphan nodes so for that reason as well I have left them in the
+to query for orphan vertices so for that reason as well I have left them in the
 graph.
 
 All of this said, I believe, as a learning tool there is plenty in the graph to
@@ -67,7 +67,7 @@ Air Routes Graph (v1.0, 2025-Oct-22) contains:
   50,637 routes
   237 countries (and dependent areas)
   7 continents
-  3,749 total nodes
+  3,749 total vertices
   57,645 total edges
 
 Additional observations:
@@ -85,12 +85,12 @@ Additional observations:
   Closest to the Greenwich meridian is LDE (longitude: -0.006438999902457)
   Highest elevation is DCY (14,472 feet)
   Lowest elevation is GUW (-72 feet)
-  Maximum airport node degree (routes in and out) is 620 (FRA)
+  Maximum airport vertex degree (routes in and out) is 620 (FRA)
   Region with the most airports: US-AK (150)
   Country with the most airports: United States (586)
   Continent with the most airports: North America (989)
-  Average degree (airport nodes) is 28.902
-  Average degree (all nodes) is 28.891
+  Average degree (airport vertices) is 28.902
+  Average degree (all vertices) is 28.891
 
 This version has 130 more airports, and 7237 more routes than the original.
  

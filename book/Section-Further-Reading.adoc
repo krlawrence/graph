@@ -1,10 +1,8 @@
-// vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-
 [[fr]]
 == FURTHER READING
 
 Below you will find a selection of links to additional material related to the topics
-covered in this book. The links include additional web sites maintained by the Apache
+covered in this book. The links include additional websites maintained by the Apache
 TinkerPop community as well as some mailing lists where Gremlin and related topics
 are discussed daily.
 
@@ -16,7 +14,7 @@ https://tinkerpop.apache.org/
 .Current Apache TinkerPop Reference Documentation
 https://tinkerpop.apache.org/docs/current/reference/
 
-.Apache TinkerPop JavaDoc API reference material
+.Apache TinkerPop Javadoc API reference material
 https://tinkerpop.apache.org/javadocs/current/core/
 
 https://tinkerpop.apache.org/javadocs/current/full/
@@ -53,7 +51,7 @@ The Gremlin Console::
 * https://tinkerpop.apache.org/docs/current/tutorials/the-gremlin-console/
 
 [[gremlindiscussionlists]]
-=== Gremlin related mailing lists and discussion groups
+=== Gremlin-related mailing lists and discussion groups
 
 .Apache Tinkerpop Discord Server
 https://discord.gg/tinkerpop
@@ -66,4 +64,3 @@ link:++https://lists.apache.org/list.html?dev@tinkerpop.apache.org++[]
 
 .Stack Overflow posts tagged with "gremlin"
 https://stackoverflow.com/questions/tagged/gremlin
-

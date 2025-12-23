@@ -57,5 +57,3 @@ include::Section-Introducing-Gremlin-Server.adoc[]
 include::Section-Common-Serialization-Formats.adoc[]
 
 include::Section-Further-Reading.adoc[]
-
-// vim: set tw=85 cc=+1 wrap spell redrawtime=20000:

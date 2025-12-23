@@ -1,5 +1,3 @@
-// vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-
 [[gremlinserver]]
 == INTRODUCING GREMLIN SERVER
 
@@ -23,7 +21,7 @@ graph may even just expose Gremlin Server interfaces for you to connect to as th
 only way to have access.
 
 Gremlin Server supports a number of different connection protocols and methods. You
-can connect to it from a Gremlin Console, from a command line using 'curl' commands
+can connect to it from a Gremlin Console, from a command line using 'curl' commands,
 or from an application. Gremlin Server has a second advantage over allowing us to
 hide the graph implementation details. It allows people using programming languages
 that do not yet have Apache TinkerPop language bindings to work with a graph using
@@ -35,7 +33,7 @@ https://tinkerpop.apache.org/docs/current/reference/#gremlin-server
 
 Gremlin Server offers a lot of valuable capabilities. In this section we are going to
 explain how to customize a local Gremlin Server setup with TinkerGraph. There are
-many other useful ways that Gremlin Server can be configured, deployed and used. If
+many other useful ways that Gremlin Server can be configured, deployed, and used. If
 you plan to experiment further with Gremlin Server, we very much encourage you to
 read the official documentation.
 
@@ -58,7 +56,7 @@ You can download Gremlin Server from the official Apache TinkerPop website at
 https://tinkerpop.apache.org/
 
 It only takes a few minutes to get Gremlin Server installed and running. You
-download the ZIP, 'unzip' it and you are all set. As with Gremlin Console,
+download the ZIP, 'unzip' it, and you are all set. As with Gremlin Console,
 Gremlin Server also requires Java to be at version 11 or higher.
 
 If you look at the files that were unzipped on your machine, you will find a path of
@@ -144,7 +142,7 @@ any other 'global' variables that you may want to make available to the user of 
 console connected to your Gremlin Server. The file also configures some default
 log messages that will be generated when the server starts and stops. Note that you
 can add your own code to this script or replace it with your own script entirely. You
-will find additional example scripts included as part of Gremlin Server download.
+will find additional example scripts included as part of the Gremlin Server download.
 These scripts do things such as create a TinkerGraph instance and load some graph
 data as part of the server startup process. Using this technique, we could easily add
 a line to the script so that when the server starts, an empty TinkerGraph is created
@@ -183,7 +181,7 @@ $ gremlin-server.sh conf/gremlin-server/gremlin-server.yaml
 
 If all goes well, you should see output from Gremlin Server displayed. The server
 will keep running until you kill it. In this case a simple CTRL-C is all you need to
-do to kill the server. After you press CTRL-C the server will do a bit of cleaning
+do to kill the server. After you press CTRL-C, the server will do a bit of cleaning
 up.
 
 TIP: You can use the 'start' keyword to start Gremlin Server as a background task.
@@ -302,10 +300,11 @@ and Gremlin Server may not be able to correctly communicate. Note that in the
 'remote.yaml' file we also specify the name and port of the Gremlin Server host that
 we will be connecting to. As we are running everything locally, the default host name
 of 'localhost' is fine. If you are connecting to a remote Gremlin Server, the 'hosts'
-value needs to be edited to correctly identify name or IP address of the server where
-Gremlin Server is running. Also we can use the default port of 8182. By default, a
-Gremlin Server listens on port 8182. The only reason you would need to change this
-value is if you are connecting to a Gremlin Server using a different port.
+value needs to be edited to correctly identify the name or IP address of the server
+where Gremlin Server is running. Also, we can use the default port of 8182. By
+default, a Gremlin Server listens on port 8182. The only reason you would need to
+change this value is if you are connecting to a Gremlin Server using a different
+port.
 
 .remote.yaml
 [source,yaml]
@@ -359,7 +358,7 @@ gremlin> :>  g.V().hasLabel('continent').group().by('desc').by(out().count())
 ==>{South America=313, Asia=971, Europe=605, Africa=321, Antarctica=0, North America=989, Oceania=305}
 ----
 
-If we were to print the contents of the 'result' variable we would find it contains
+If we were to print the contents of the 'result' variable, we would find it contains
 the results from the query.
 
 [source,groovy]
@@ -433,10 +432,10 @@ TinkerGraph.
 [country:[US],code:[AUS],longest:[12250],city:[Austin],elev:[542],icao:[KAUS],lon:[-97.6698989868164],type:[airport],region:[US-TX],runways:[2],lat:[30.1944999694824],desc:[Austin Bergstrom International Airport]]
 ----
 
-Once you are done sending all commands to Gremlin Server you can switch out of that
+Once you are done sending all commands to Gremlin Server, you can switch out of that
 mode as follows. Commands will now be sent to your local console. This means that you
 can work with a local and remote graph at the same time. The ':remote console'
-command is therefore a toggle. Each time you use the command the console will switch
+command is therefore a toggle. Each time you use the command, the console will switch
 between local mode and remote mode or vice versa.
 
 [source,text]
@@ -447,8 +446,8 @@ gremlin> :remote console
 remote mode for Gremlin Server - [localhost/127.0.0.1:8182]
 ----
 
-If you are completely done with the remote connection for this console session you can
-truly close it as follows. Having done this you will need to reestablish the
+If you are completely done with the remote connection for this console session, you
+can truly close it as follows. Having done this, you will need to reestablish the
 connection before the ':remote console' will work again.
 
 [source,text]
@@ -599,7 +598,7 @@ public class RemoteClient
     builder.serializer(new GraphBinaryMessageSerializerV1());
 ----
 
-Once the 'Cluster.Builder' instance has been set up we can use it to create our
+Once the 'Cluster.Builder' instance has been set up, we can use it to create our
 'Cluster' instance.
 
 [source,java]
@@ -609,10 +608,10 @@ Cluster cluster = builder.create();
 
 Lastly, we need to set up a 'GraphTraversalSource' object for Gremlin Server hosted
 graph that we will be working with. This object is often named "g" by convention and
-is typically created using the statically imported 'traversal()' method which in turn
-allows the call to 'with' to bind the traversal source to a graph. We've seen 'with'
-take a graph instance before, but this time we will use it with a reference to a
-remote connection to a graph in Gremlin Server. Note that the cluster instance that
+is typically created using the statically imported 'traversal()' method, which in
+turn allows the call to 'with' to bind the traversal source to a graph. We've seen
+'with' take a graph instance before, but this time we will use it with a reference to
+a remote connection to a graph in Gremlin Server. Note that the cluster instance that
 we just created is passed in as a parameter. While this looks a little complicated,
 it is really not a lot different from when we connect to a local graph using the
 Gremlin Console. The only difference is that by setting up the remote connection this
@@ -630,8 +629,8 @@ GraphTraversalSource g = traversal().
 
 We can now use our new 'GraphTraversalSource' object to issue a Gremlin query. The
 results will be placed directly into the 'List' called 'vmaps'. The query finds the
-first 10 airports with a region code of 'GB-ENG' which is short for Great Britain
-- England.
+first 10 airports with a region code of 'GB-ENG', which is short for Great
+Britain–England.
 
 [source,java]
 ----
@@ -650,7 +649,7 @@ first 10 airports with a region code of 'GB-ENG' which is short for Great Britai
 }
 ----
 
-When the Java application is compiled and run the output should look similar to that
+When the Java application is compiled and run, the output should look similar to that
 shown below.
 
 [source,text]
@@ -1040,9 +1039,9 @@ g.withSack(0).V().has('code','SAF').out().sack(sum).by('runways').sack()
 ==== List of mixed types
 
 It is common for a query result to contain a variety of different data types. The
-example below generates a list containing a string, and integer and a double. Note,
+example below generates a list containing a string, and integer, and a double. Note,
 as we have seen before, TinkerPop does not guarantee the order in which results are
-returned so do not create any dependencies on that.
+returned, so does not create any dependencies on that.
 
 [source,groovy]
 ----
@@ -1084,9 +1083,9 @@ g.V().has('code','CDG').valueMap()
 
 In Gremlin Console you get back something like "'v[51]'" when your query returns a
 vertex. Wit Gremlin Server what you get back is a JSON object representing everything
-that is known about the vertex including its ID, label, properties and the ID of each
-property. If you do not need the entire vertex  returned, it might be worth writing
-your query in a way such that you only get back the properties that you are
+that is known about the vertex, including its ID, label, properties, and the ID of
+each property. If you do not need the entire vertex  returned, it might be worth
+writing your query in a way such that you only get back the properties that you are
 interested in. This is especially pertinent if your query could potentially return a
 lot of vertices in the result.
 
@@ -1159,8 +1158,8 @@ g.V().has('code','SAF').outE().limit(1)
 
 ==== New vertex
 
-When a new vertex and some properties are added the returned JSON will contain all of
-the information about the vertex including its ID, label and type as well as its
+When a new vertex and some properties are added, the returned JSON will contain all
+information about the vertex, including its ID, label and type as well as its
 properties.
 
 [source,groovy]
@@ -1194,7 +1193,7 @@ g.addV('test').as('a').property('fruit','apple').select('a').id()
 ==== Path by value (list of strings)
 
 The query below returns a path between two airports as a list of airport codes.
-Note the new 'objects' key that is used when the returned JSON represents a path.
+Note the new 'objects' key used when the returned JSON represents a path.
 
 [source,groovy]
 ----
@@ -1208,7 +1207,7 @@ g.V().has('code','SAF').out().path().by('code').limit(1)
 
 ==== Path by values (list of strings and integers)
 
-Similar to the previous query but this time the path also includes the distance
+Similar to the previous query, but this time the path also includes the distance
 between the airports.
 
 [source,groovy]
@@ -1224,8 +1223,8 @@ g.V().has('code','SAF').outE().inV().path().by('code').by('dist').limit(1)
 
 ==== Two vertex path
 
-The query below returns a path but does not include a 'by' modulator so what is
-returned is the two vertices along with their IDs, labels and properties.
+The query below returns a path but does not include a 'by' modulator, so what is
+returned is the two vertices along with their IDs, labels, and properties.
 
 [source,groovy]
 ----

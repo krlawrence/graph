@@ -1,5 +1,3 @@
-// vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
-
 [[serialize]]
 == COMMON GRAPH SERIALIZATION FORMATS
 
@@ -185,7 +183,7 @@ that shows how to read a CSV file like the one above and create a graph from it.
 
 If you wanted to print the list without the containing square brackets, you could
 take advantage of the Java 'forEachRemaining' method from the Iterator interface to
-add a bit of post-processing to the end of the query. Once again only the first 10
+add a bit of post-processing to the end of the query. Once again, only the first 10
 results are shown.
 
 [source,groovy]
@@ -506,7 +504,3 @@ unless you are implementing a server or a driver.
 
 NOTE: You can learn more about the specifics of the format itself in TinkerPop's IO 
 Documentation. https://tinkerpop.apache.org/docs/current/dev/io/#graphbinary
-
-
-
-

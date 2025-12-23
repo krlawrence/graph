@@ -1,4 +1,3 @@
-// vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
 == INTRODUCTION
 
 This second edition of Practical Gremlin is an evolving guide to the Apache TinkerPop
@@ -13,9 +12,9 @@ CAUTION: Feedback on this book is very much encouraged and welcomed! Please open
 === Welcome to the second edition
 
 Practical Gremlin was first published in 2017. In the years that followed, the Apache
-TinkerPop graph computing framework has continued to evolve.  While it was possible
-to keep the first edition mostly up to date, and to publish periodic updates, there
-comes a time when so much has changed that it makes more sense to take a step back,
+TinkerPop graph computing framework has continued to evolve. While it was possible
+to keep the first edition mostly up to date and to publish periodic updates, there
+comes a time when so much has changed that it makes more sense to take a step back
 and release a second edition. The book has been updated to include the most recent
 new features added to the Gremlin query language and related technologies. Material
 such as discussions of migrating from old versions of Gremlin, and discussions of how
@@ -27,7 +26,7 @@ as it was then.
 ____
 The title of this book could equally well be '"A getting started
 guide for users of graph databases and the Gremlin query language featuring hints,
-tips and sample queries"'. It turns out that is a bit too long to fit on one line for
+tips, and sample queries"'. It turns out that is a bit too long to fit on one line for
 a heading but in a single sentence that describes the focus of this work pretty well.
 ____
 
@@ -37,14 +36,14 @@ tried to do is capture the learning process that I myself have gone through usin
 what I hope is a sensible flow from getting started to more advanced topics. To get
 the most from this book, I recommend having the Gremlin Console open, with the air
 route sample data loaded, as you follow along. I have not assumed that anyone reading
-this book has any prior knowledge of Apache TinkerPop, the Gremlin query language or
+this book has any prior knowledge of Apache TinkerPop, the Gremlin query language, or
 related tools.  Everything you need to get started is introduced in Chapter 2.
 
 I hope people continue to find what follows useful. It definitely remains a work in
 progress as the Apache TinkerPop framework, and in particular, the Gremlin query
 language, continues to evolve.
 
-The book is available in multiple formats including PDF, HTML, ePub and MOBI. Those
+The book is available in multiple formats including PDF, HTML, ePub, and MOBI. Those
 versions, along with sample code and data, can be found at the
 https://github.com/krlawrence/graph[project's home on GitHub]. You will find a
 summary of everything that is available in the "<<samplesintro>>" section.
@@ -52,14 +51,14 @@ summary of everything that is available in the "<<samplesintro>>" section.
 === How this book came to be
 
 I forget exactly when, but sometime early in 2016 I started compiling a list of
-notes, hints and tips, initially for my own benefit. My notes were full of things I
+notes, hints, and tips, initially for my own benefit. My notes were full of things I
 had found poorly explained elsewhere while using graph databases and especially while
-using Apache TinkerPop, Gremlin and JanusGraph. Over time that document continued to
+using Apache TinkerPop, Gremlin, and JanusGraph. Over time that document continued to
 grow and had effectively become a book in all but name. After some encouragement from
-colleagues I decided to release my notes as a 'living book' in an open source venue
+ colleagues, I decided to release my notes as a 'living book' in an open source venue
 so that anyone who is interested can read it. It is definitely aimed at programmers
-and data scientists but I hope is also consumable by anyone using the Gremlin graph
-query and traversal language to work with graph databases.
+and data scientists, but I hope it is also consumable by anyone using the Gremlin
+graph query and traversal language to work with graph databases.
 
 I have included a large number of code examples and sample queries along with
 discussions of best practices and more than a few lessons I learned the hard way,
@@ -68,7 +67,7 @@ regularly make updates as I discover things that need adding while also trying t
 keep the content as up to date as possible as Apache TinkerPop itself evolves.
 
 I remain extremely grateful to all those who have encouraged me to keep going with
-this adventure. Keeping up with a moving target requires a fair bit of work, but
+this adventure. Keeping up with a moving target requires a fair bit of work, but it
 remains a lot of fun!
 
 Kelvin R. Lawrence +
@@ -79,11 +78,11 @@ Current draft (second edition): {draftdate} +
 
 === Providing feedback
 
-Please let me know about any mistakes you find in this material, and also please feel
-free to provide feedback of any sort. Suggested improvements are especially welcome.
-A good way to provide feedback is by opening an issue in the GitHub repository
-located at https://github.com/krlawrence/graph. You are currently reading revision
-{revision} of the book.
+Please let me know about any mistakes you find in this material, and also, please
+feel free to provide feedback of any sort. Suggested improvements are especially
+welcome. A good way to provide feedback is by opening an issue in the GitHub
+repository located at https://github.com/krlawrence/graph. You are currently reading
+revision {revision} of the book.
 
 NOTE: The change history contains details of everything that has been added over time
 and can be found at this location:
@@ -101,7 +100,7 @@ vibrant community as well. This book would have no audience but for the continue
 hard work, and interest, of that community.
 
 As always, special thanks should go to, Marko Rodriguez, Daniel Kuppitz, Stephen
-Mallette and others, who created TinkerPop and Gremlin, and drove its evolution for
+Mallette, and others, who created TinkerPop and Gremlin, and drove its evolution for
 many years. I'm also grateful to Stephen for his help in putting this second edition
 of the book together.
 
@@ -114,7 +113,7 @@ active https://discord.gg/tinkerpop[Discord server] where many exciting topics g
 discussed daily.
 
 I continue to be grateful for the contributions of my former colleagues, Graham
-Wallis, Jason Plurad and Adam Holley who helped refine and improve several of the
+Wallis, Jason Plurad, and Adam Holley, who helped refine and improve several of the
 example queries contained in the first edition of this book. Gremlin is definitely a
 bit of a team sport. We spent many fun hours discussing the best way to handle
 different types of queries and traversals!
@@ -145,9 +144,9 @@ Gremlin so that you can make use of that completeness in the official documentat
 
 In 2023, TinkerPop was in the midst of releasing 3.6.x and 3.7.x release lines which
 had introduced a number of important new features. Kelvin and I started realizing 
-that Practical Gremlin was falling behind TinkerPop's continued evolution in a 
-significant way. With even bigger sets of changes expected on the horizon with 4.0,
-it felt as though it was time to make an organized effort to produce an updated 
+that Practical Gremlin was falling behind TinkerPop's continued evolution
+significantly. With even bigger sets of changes expected on the horizon with 4.0, it
+felt as though it was time to make an organized effort to produce an updated
 Second Edition.
 
 We officially announced that work had started on it in September 2023 and with the 
@@ -168,7 +167,7 @@ Second edition editor and co-author +
 [[about]]
 === What is this book about?
 
-This book is about learning to think in Gremlin by working through practical 
+This book is about learning to think in Gremlin by working through practical
 examples. It focuses on how to express real graph questions as traversals, how to 
 read and reason about Gremlin code, and how to apply common patterns to your own 
 graphs. As the book evolves, new examples and refinements continue to be added, but 
@@ -176,9 +175,9 @@ the core goal remains the same: to help you build an intuitive understanding of 
 Gremlin works.
 
 In this book you will find real examples featuring real-world graph data. That data,
-along with sample code and example applications, is available for download from the 
+along with sample code and example applications, is available for download from the
 GitHub project as well as many other items. The graph, 'air-routes', is a model of
-the world airline route network between 3,504 airports including 50,637 routes. The
+the world airline route network between 3,504 airports, including 50,637 routes. The
 examples presented will work unmodified with the `air-routes.graphml` file loaded 
 into the Gremlin console running with a TinkerGraph. How to set that environment up 
 is covered in the "<<gremlininstall>>" section below.
@@ -188,27 +187,27 @@ NOTE: The examples in this book have been tested using Apache TinkerPop release
 
 TinkerGraph is an 'in-memory' graph, meaning nothing gets saved to disk
 automatically. It is included as part of the Apache TinkerPop download. The goal of
-this tutorial is to allow someone with little to no prior knowledge, to get up and
+this tutorial is to allow someone with little to no prior knowledge to get up and
 going quickly using the Gremlin Console and the 'air-routes' graph. Later in the book
 we discuss writing standalone applications in other programming languages such as 
-Java, Groovy and Python.
+Java, Groovy, and Python.
 
 NOTE: The first few sections of the book focus on showing some basic Gremlin queries
 that are both useful and yet easy to understand. By the end of Chapter 3 you should
 have a basic understanding of how to explore the air-routes graph using commonly used
-Gremlin steps. Chapters 4, 5 and 6 explore Gremlin in more depth.
+Gremlin steps. Chapters 4, 5, and 6 explore Gremlin in more depth.
 
 .How this book is organized
-Chapter 1 - INTRODUCTION::
+Chapter 1 – INTRODUCTION::
 - We start our journey with a brief introduction to Apache Tinkerpop and a quick look
   at why Graph databases are of interest to us. We also discuss how the book is
-  organized and where to find additional materials; such as sample code and data
+  organized and where to find additional materials, such as sample code and data
   sets. 
-Chapter 2 - GETTING STARTED::
+Chapter 2 – GETTING STARTED::
 - Many of the examples throughout the book use the Gremlin Console and TinkerGraph,
   and both are introduced in this chapter. We also introduce the air-routes example
   graph - `air-routes.graphml` -  used throughout the book.
-Chapter 3 - WRITING GREMLIN QUERIES::
+Chapter 3 – WRITING GREMLIN QUERIES::
 - Now that the basics have been covered, things start to get a lot more interesting!
   It's time to start writing Gremlin queries. We
   briefly explore how we could have built the 'air-routes' graph using a
@@ -216,57 +215,57 @@ Chapter 3 - WRITING GREMLIN QUERIES::
   way,s and very different in others. We then introduce several of the key Gremlin
   query language '"steps"'. We focus on exploring the graph rather than changing it
   in this chapter.
-Chapter 4 - BEYOND BASIC QUERIES::
+Chapter 4 – BEYOND BASIC QUERIES::
 - Having now introduced Gremlin in some detail, we introduce the Gremlin steps that
-  can be used to create, modify and delete, data. We present a selection of best
+  can be used to create, modify, and delete, data. We present a selection of best
   practices and start to explore some more advanced query writing.
-Chapter 5 - MISCELLANEOUS QUERIES AND THE RESULTS THEY GENERATE::
+Chapter 5 – MISCELLANEOUS QUERIES AND THE RESULTS THEY GENERATE::
 - Using the Gremlin steps introduced in Chapters 3 and 4, we are now ready to use
   what we have learned so far and write queries that analyze the air-routes graph in
-  more depth, and answer more complicated questions. The material presented includes
+  more depth and answer more complicated questions. The material presented includes
   a discussion of analyzing distances, route distribution, and writing geospatial
   queries.
-Chapter 6 - MOVING BEYOND THE GREMLIN CONSOLE::
+Chapter 6 – MOVING BEYOND THE GREMLIN CONSOLE::
 - The next step in our journey is to move beyond the Gremlin Console and take a look
   at interacting with a TinkerGraph using Java and Groovy applications.
-Chapter 7 - INTRODUCING GREMLIN SERVER::
+Chapter 7 – INTRODUCING GREMLIN SERVER::
 - Our journey so far has focused on working with graphs in a "directly attached"
   fashion. We now introduce Gremlin Server as a way to deploy and interact with
   remotely hosted graphs.
-Chapter 8 - COMMON GRAPH SERIALIZATION FORMATS::
-- Having introduced Gremlin Server we take a look at some common Graph serialization
+Chapter 8 – COMMON GRAPH SERIALIZATION FORMATS::
+- Having introduced Gremlin Server, we take a look at some common Graph serialization
   file formats along with coverage of how to use them in the context of TinkerPop
-  enabled graphs. We take a close look at the TinkerPop GraphSON (JSON) format which
+  enabled graphs. We take a close look at the TinkerPop GraphSON (JSON) format, which
   is used extensively when using Gremlin queries in conjunction with a Gremlin
   Server.
-Chapter 9 - FURTHER READING::
-- Our journey to explore Apache TinkerPop and Gremlin, concludes with a look at
-  useful sources of further reading. We present links to useful web sites where you
+Chapter 9 – FURTHER READING::
+- Our journey to explore Apache TinkerPop and Gremlin concludes with a look at
+  useful sources of further reading. We present links to useful websites where you
   can find tools and documentation for many of the topics and technologies covered in
   this book.
 
 [[samplesintro]]
-=== Introducing the book sources, sample programs and data
+=== Introducing the book sources, sample programs, and data
 
 All work related to this project is being done in the open at GitHub. A list of where
 to find the key components is provided below. The examples in this book make use of a
 sample graph called 'air-routes' which contains a graph based on the world airline
 route network between over 3,504 airports. The sample graph data, quite a bit of
-sample code and some larger demo applications can all be found at the same GitHub
+sample code, and some larger demo applications can all be found at the same GitHub
 location that hosts the book manuscript. You will also find releases of the book
-in various formats (HTML, PDF, DocBook/XML, MOBI and EPUB) at the same GitHub
+in various formats (HTML, PDF, DocBook/XML, MOBI, and EPUB) at the same GitHub
 location. 
 
-The sample programs include standalone Java, Groovy, Python and Ruby examples as well
+The sample programs include standalone Java, Groovy, Python, and Ruby examples as well
 as many examples that can be run from the Gremlin Console. There are some differences
 between using Gremlin from a standalone program and from the Gremlin Console. The 
 sample programs demonstrate several of these differences. The sample applications 
 area contains a full example HTML and JavaScript application that lets you explore 
 the 'air-routes' graph visually. The home page for the GitHub project includes a 
 README.md file to help you navigate the site. Below are some links to various 
-resources included with this book.
+resources included in this book.
 
-.Where to find the book, samples and data
+.Where to find the book, samples, and data
 Project home::
 - https://github.com/krlawrence/graph
 Book manuscript in Asciidoc format::
@@ -282,13 +281,13 @@ more or less identical.
 - https://kelvinlawrence.net/book/PracticalGremlin.pdf
 - https://kelvinlawrence.net/book/PracticalGremlin.html
 Official book releases in multiple formats::
-- Official releases include Asciidoc, HTML, PDF, ePub, MOBI and DocBook versions as
+- Official releases include AsciiDoc, HTML, PDF, ePub, MOBI, and DocBook versions as
 well as snapshots of all the samples and other materials in a single package 
 available through GitHub Releases. The eBook and MOBI versions are really intended to
-be read using e-reader devices and for that reason use a white background for all 
+be read using e-reader devices, and for that reason use a white background for all
 source code highlighting to make it easier to read on monochrome devices.
 - I recommend using the PDF version if possible as it has page numbering. If
-you prefer reading the book as if it were web page then by all means use the HTML
+you prefer reading the book as if it were a web page, then by all means use the HTML
 version. You will just not get any pagination or page numbers. The DocBook format
 can be read using tools such as Yelp on Linux systems, but is primarily included
 so that people can use it to generate other formats that I do not already provide.
@@ -303,7 +302,7 @@ Sample code::
 Example applications::
 - https://github.com/krlawrence/graph/tree/main/demos
 Change history::
-- If you want to keep up with the changes being made this is the file to keep an eye
+- If you want to keep up with the changes being made, this is the file to keep an eye
 on.
 - https://github.com/krlawrence/graph/blob/main/ChangeHistory.md
 
@@ -336,9 +335,9 @@ new releases, and it's always a good idea to verify the exact level the database
 are using supports.
 
 This version of the book covers features of Gremlin available as part of the
-TinkerPop {tpvercheck} release. As appropriate, notes and examples have been added,
-that show other ways to perform tasks that new features may make simpler. In some
-cases, notes have been added to point out when more recent features first appeared. 
+TinkerPop {tpvercheck} release. As appropriate, notes and examples have been added
+that show other ways to perform tasks that new features may simplify. In some cases,
+notes have been added to point out when more recent features first appeared.
 
 [[tp34intro]]
 ==== TinkerPop 3.4
@@ -354,7 +353,7 @@ https://github.com/apache/tinkerpop/blob/3.4-dev/CHANGELOG.asciidoc
 ==== TinkerPop 3.5
 
 Apache TinkerPop 3.5.0 was released in May 2021. This update introduced a number of
-improvements in areas such as Gremlin client drivers, the Gremlin Server and overall
+improvements in areas such as Gremlin client drivers, the Gremlin Server, and overall
 bug fixes. The release also improved the Gremlin query language in some key areas.
 Some features that had been declared deprecated in earlier releases were finally
 removed as part of the 3.5.0 update. If you have queries and code that still use
@@ -386,7 +385,7 @@ performed tasks much easier. Notable improvements include:
 
 - New 'mergeV' and 'mergeE' steps that make "create if not exist"
 type queries, sometimes referred to as "upserts", much easier to write. Over time,
-these steps will replace use of the 'fold...coalesce' pattern, and will also
+these steps will replace the use of the 'fold...coalesce' pattern and will also
 replace the various "map injection" patterns that can be used to create multiple
 vertices and edges in a single query.
 - A new 'TextP.regex' predicate that allows regular expressions to be
@@ -413,17 +412,17 @@ https://github.com/apache/tinkerpop/blob/3.6-dev/CHANGELOG.asciidoc
 ==== TinkerPop 3.7
 
 TinkerPop 3.7.0 was released July 2023 and with the follow-on release of 3.7.1 a few
-months later, introduced a large expansion of the Gremlin language, providing long
-awaited featurs for manipulating strings, collections and dates. There were other 
-major features as well, such as TinkerGraph gaining some simple transactional 
+months later, introduced a large expansion of the Gremlin language, providing
+long-awaited features for manipulating strings, collections, and dates. There were
+other major features as well, such as TinkerGraph gaining some simple transactional
 features and the ability for properties to be returned on elements from Gremlin 
 Server, rather than only getting references. Notable improvements include:
 
 * New Gremlin steps for working with strings: 'asString', 'concat', 'length', 
 'toLower', 'toUpper', 'trim', 'lTrim', 'rTrim', 'reverse', 'replace', 'split', 
-'substring and 'format'.
+'substring, and 'format'.
 * New Gremlin steps for working with collections: 'any', 'all', 'product', 'merge', 
-'intersect', 'combine', 'conjoin', 'difference', 'disjunct' and 'reverse'.
+'intersect', 'combine', 'conjoin', 'difference', 'disjunct,' and 'reverse'.
 * A new Gremlin steps for working with dates: 'asDate', 'dateAdd' and 
 'dateDiff'.
 * The 'union' step became available as a start step.
@@ -463,12 +462,12 @@ construction options of 'traversal().withEmbedded(...)' and
 * The 'split' method splits a string to characters if given an empty string as a 
 separator argument.
 * The Gremlin language removed syntax for 'Vertex', made use of 'new' optional, 
-included support for 'withoutStrategies' and removed 'Map' key restrictions related
+included support for 'withoutStrategies,' and removed 'Map' key restrictions related
 to reserved words.
 * The semantics for the 'choose' step changed to match the first option only, pass
 through traversers when the choice is unproductive or the determined choice 
 unmatched, and introduces a new 'Pick.unproductive' option.
-* Gremlin no longer follows Groovy by defaulting float values to 'BigDecimal' - they
+* Gremlin no longer follows Groovy by defaulting float values to 'BigDecimal' – they
 go to 'double' instead.
 * The 'valueMap', 'propertyMap', 'groupCount', 'dedup', 'sack', 'sample', 'aggregate'
 steps can no longer take 'by' modulators beyond the number each step expects.
@@ -477,9 +476,9 @@ in the distribution.
 * The form of 'has' that takes a key and a 'Traversal' as an argument has been
 removed to prevent confusion around its functionality and to prepare for a revised
 implementation of it in 4.0.0.
-* The semantics for 'limit', 'skip' and 'range' with 'global' scope are tracked per
-iteration inside of 'repeat'.
-* The semantics for 'limit', 'skip' and 'range', with 'local' scope will no longer
+* The semantics for 'limit', 'skip,' and 'range' with 'global' scope are tracked per
+iteration inside 'repeat'.
+* The semantics for 'limit', 'skip,' and 'range', with 'local' scope will no longer
 automatically unwrap a single item in a list if there is only one object present.
 
 NOTE: Full details of all the new features added in the TinkerPop 3.8.x releases can 
@@ -490,7 +489,7 @@ https://github.com/apache/tinkerpop/blob/3.8-dev/CHANGELOG.asciidoc
 ==== TinkerPop 4.0
 
 TinkerPop 4.0.0 has released a beta version for early evaluation of specific features
-and remains under active development. We mention it here for awareness, but do not
+and remains under active development. We mention it here for awareness but do not
 intend to cover any features it offers until its full official release. We will only
 note that the intention of the TinkerPop Community is for 4.0.0 to have the same
 semantics for Gremlin as 3.8.0. As a result, all the Gremlin examples provided in 
@@ -504,22 +503,22 @@ related technology using the Gremlin query language. However, it is worth spendi
 just a few moments to summarize why it is important to understand what a graph
 database is, what some good use cases for graphs are and why you should care in a
 world that is already full of all kinds of SQL and NoSQL databases. In this book we
-are going to be discussing 'directed property graphs'. At the conceptual level these
-types of graphs are quite simple to understand. You have three basic building blocks.
-Vertices (often referred to as nodes), edges and properties. Vertices represent
-"things" such as people or places. Edges represent connections between those
-vertices, and properties are information added to the vertices and edges as needed.
-The 'directed' part of the name means that any edge has a direction. It goes 'out'
-from one vertex and 'in' to another. You will sometimes hear people use the word
-'digraph' as shorthand for 'directed graph'. Consider the relationship "Kelvin knows
-Jack". This could be modeled as a vertex for each of the people and an edge for the
-relationship as follows.
+are going to be discussing 'directed property graphs'. At the conceptual level, these
+types of graphs are quite simple to understand. You have three basic building blocks:
+vertices, edges, and properties. Vertices represent "things" such as people or
+places. Edges represent connections between those vertices, and properties are
+information added to the vertices and edges as needed. The 'directed' part of the
+name means that any edge has a direction. It goes 'out' from one vertex and 'in' to
+another. You will sometimes hear people use the word 'digraph' as shorthand for
+'directed graph'. Consider the relationship "Kelvin knows Jack". This could be
+modeled as a vertex for each of the people and an edge for the relationship as
+follows.
 
 [.text-center]
 Kelvin -- knows -> Jack
 
 Note the arrow which implies the direction of the relationship. If we wanted to
-record the fact that Jack also admits to knowing Kelvin we would need to add a
+record the fact that Jack also admits to knowing Kelvin, we would need to add a
 second edge from Jack to Kelvin. Properties could be added to each person to give
 more information about them. For example, my age might be a property on my vertex.
 
@@ -529,35 +528,35 @@ well so we could create the relationship:
 [.text-center]
 Jack -- likes -> Cats
 
-Now that we have a bit more in our graph we could answer the question "who does
-Kelvin know that likes cats?"
+Now that we have a bit more in our graph, we could answer the following question:
+"who does Kelvin know that likes cats?"
 
 [.text-center]
 Kelvin -- knows -> Jack -- likes -> Cats
 
-This is a simple example but hopefully you can already see that we are modelling our
-data the way we think about it in the real world. Armed with this knowledge you now
-have all of the basic building blocks you need in order to start thinking about how
-you might model things you are familiar with as a graph.
+This is a simple example, but hopefully you can already see that we are modeling our
+data the way we think about it in the real world. Armed with this knowledge, you now
+have all the basic building blocks you need to start thinking about how you might
+model things you are familiar with as a graph.
 
-So getting back to the question "why should I care?", well, if something looks like a
-graph, then wouldn't it be great if we could model it that way. Many things in our
-everyday lives center around things that can very nicely be represented in a graph.
-Things such as your social and business networks, the route you take to get to work,
-the phone network, airline route choices for trips you need to take are all great
-candidates. There are also many great business applications for graph databases and
-algorithms. These include recommendation systems, crime prevention and fraud
+So getting back to the question of "why should I care?", well, if something looks
+like a graph, then wouldn't it be great if we could model it that way. Many things in
+our everyday lives center around things that can very nicely be represented in a
+graph. Things such as your social and business networks, the route you take to get to
+work, the phone network, airline route choices for trips you need to take are all
+great candidates. There are also many great business applications for graph databases
+and algorithms. These include recommendation systems, crime prevention, and fraud
 detection to name but three.
 
-The reverse is also true. If something does not feel like a graph then don't try to
+The reverse is also true. If something does not feel like a graph, then don't try to
 force it to be. Your videos are probably doing quite nicely living in the object
 store where you currently have them. A sales ledger system built using a relational
-database is probably doing just fine where it is and likewise a document store is
-quite possibly just the right place to be storing your documents. So "use the right
+database is probably doing just fine where it is, and likewise a document store is
+quite possibly just the right place to be storing your documents. So "using the right
 tool for the job" remains as valid a phrase here as elsewhere. Where graph databases
 come into their own is when the data you are storing is intrinsically linked by its
-very nature, the air-routes network used as the basis for all of the examples in
-this book being a perfect example of such a situation.
+very nature, the air-routes network used as the basis for all the examples in this
+book being a perfect example of such a situation.
 
 Those of you that looked at graphs as part of a computer science course are correct
 if your reaction was "Surely graphs have been around for ages, why is this considered
@@ -572,8 +571,8 @@ started: https://en.wikipedia.org/wiki/Graph_theory
 So, given Graph Theory is anything but a new idea, why is it that only recently we
 are seeing a massive growth in the building and deployment of graph database systems
 and applications? At least part of the answer is that computer hardware and software
-has reached the point where you can build large big data systems that scale well for
-a reasonable price. In fact, it's even easier than ever to build the large systems
+have reached the point where you can build large big data systems that scale well for
+a reasonable price. In fact, it's even easier than ever to build large systems
 because you don't have to buy the hardware that your system will run on when you use
 the cloud.
 
@@ -581,7 +580,7 @@ While you can certainly run a graph database on your laptop--I do just that ever
 day--the reality is that in production, at scale, they are big data systems. Large
 graphs commonly have many billions of vertices and edges in them, taking up petabytes
 of data on disk. Graph algorithms can be both compute- and memory-intensive, and it
-is only fairly recently that deploying the necessary resources for such big data
+is only fairly recent that deploying the necessary resources for such big data
 systems has made financial sense for more everyday uses in business, and not just in
 government or academia. Graph databases are becoming much more broadly adopted across
 the spectrum, from high-end scientific research to financial networks and beyond.
@@ -594,11 +593,11 @@ displaying graphs as part of the user interface layer. In particular, it is so-c
 'property graphs' where we are seeing the broadest development and uptake. In a
 property graph, both vertices and edges can have properties (effectively, key-value
 pairs) associated with them. There are many styles of graph that you may end up
-building and there have been whole books written on these various design patterns,
-but the property graph technology we will focus on in this book can support
-all of the most common usage patterns. If you hear phrases such as 'directed graph'
-and 'undirected graph', or 'cyclic' and 'acyclic' graph, and many more as you work
-with graph databases, a quick online search will get you to a place where you can get
+building, and there have been whole books written on these various design patterns,
+but the property graph technology we will focus on in this book can support all the
+most common usage patterns. If you hear phrases such as 'directed graph' and
+'undirected graph', or 'cyclic' and 'acyclic' graph, and many more as you work with
+graph databases, a quick online search will get you to a place where you can get
 familiar with that terminology. A deep discussion of these patterns is beyond the
 scope of this book, and it's in no way essential to have a full background in
 graph theory to get productive quickly.
@@ -607,11 +606,11 @@ A third, and equally important, factor in the growth we are seeing in graph data
 adoption is the low barrier of entry for programmers. As you will see from the
 examples in this book, someone wanting to experiment with graph technology can
 download the Apache TinkerPop package and as long as Java 11+ is installed, be up and
-running with zero configuration (other than doing an unzip of the files), in as
-little as five minutes. Graph databases do not force you to define schemas or
-specify the layout of tables and columns before you can get going and start building
-a graph. Programmers also seem to find the graph style of programming quite
-intuitive as it closely models the way they think of the world.
+running with zero configuration (other than unzipping of the files), in as little as
+five minutes. Graph databases do not force you to define schemas or specify the
+layout of tables and columns before you can get going and start building a graph.
+Programmers also seem to find the graph style of programming quite intuitive as it
+closely models the way they think of the world.
 
 Graph database technology should not be viewed as a "rip and replace" technology, but
 as very much complementary to other databases that you may already have deployed. One
@@ -621,16 +620,13 @@ stores. This is sometimes called having a polyglot data architecture.
 [[nodevert]]
 === A word about terminology
 
-The words 'node' and 'vertex' are synonymous when discussing a graph. Throughout this
-book you may find both words used. However, as the Apache TinkerPop documentation
-almost exclusively uses the word 'vertex', as much as possible when discussing
-Gremlin queries and other concepts, I endeavor to stick to the word 'vertex' or the
-plural form 'vertices'. As this book has evolved, I realized my use of these terms 
-had become inconsistent and as I continue to make updates, I plan, with a few 
-exceptions, such as when discussing binary trees, to standardize on 'vertex' rather 
-than 'node'. In that way, this book will be consistent with the official TinkerPop 
-documentation. Similarly, when discussing the connections between vertices I use the 
-term 'edge' or the plural form, 'edges'. In other books and articles you may also see
-terms like 'relationship' or 'arc' used.  Again these terms are synonymous in the 
-context of graphs.
-// vim: set tw=85 cc=+1 wrap spell redrawtime=20000
+The words 'node' and 'vertex' are synonymous when discussing a graph. This book will
+prefer the term 'vertex' and 'vertices' as the Apache TinkerPop documentation almost
+exclusively uses it when discussing Gremlin queries and other concepts. We will only
+see a shade of the term 'node' when we refer to "supernodes", relating to vertices
+of an especially high degree, as this term has wide acceptance independently of
+TinkerPop. By the same token, this book will be consistent with the official
+TinkerPop documentation when discussing the connections between vertices, where we
+will use the term 'edge' or the plural form, 'edges'. In other books and articles you
+may also see terms like 'relationship' or 'arc' used.  Again, these terms are
+synonymous in the context of graphs.
