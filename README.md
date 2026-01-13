@@ -8,18 +8,27 @@ This repository is the home for the source materials, sample code and examples f
 
 ### Quick Start - the latest version
 
-Preview releases for the second edition are published as HTML automatically as they are authored and can be found [here and HTML](https://krlawrence.github.io/graph/) and [here as PDF](https://krlawrence.github.io/graph/Practical-Gremlin.pdf). It should be noted when reading this revision of the book that it is still a draft version and under significant modification, so you can expect volatile changes. 
+Preview releases for the second edition, which covers TinkerPop 3.8.0, are published as HTML automatically as they are authored and can be found [here and HTML](https://krlawrence.github.io/graph/) and [here as PDF](https://krlawrence.github.io/graph/Practical-Gremlin.pdf). It should be noted when reading this revision of the book that it is still a draft version and under significant modification, so you can expect volatile changes. 
 
-The first edition is still available. To view it in a browser (HTML format) click [here](http://kelvinlawrence.net/book/PracticalGremlin.html) or for a PDF version click [here](http://kelvinlawrence.net/book/PracticalGremlin.pdf). These versions are not updated anymore. You will find other formats including MOBI, EPUB and XML (Docbook) in the [releases](https://github.com/krlawrence/graph/releases)  section. The PDF version is currently the "official" version. It has a better table of contents, page numbers, and some better formatting.
+The first edition, covering versions prior to 3.8.0, is still available, but no longer updated. The final publication of that version can be found at [Revision 283](https://github.com/krlawrence/graph/releases/tag/v283-tp-3.5.2). You will find the standard formats this book is published in, including PDF, HTML, MOBI, EPUB and XML (Docbook). The [releases](https://github.com/krlawrence/graph/releases) section will continue to offer access to all of these formats as snapshots for ongoing reference. The PDF version is currently the "official" version. It has a better table of contents, page numbers, and some better formatting.
 
 ### LATEST NEWS
 
+- [Jan-12-2026] Published the final version of the first edition, which is the version that has been generally available https://kelvinlawrence.net/book/Gremlin-Graph-Guide.html, as this link is expected to become unavailable once the second edition is made official.
 - [Dec-17-2025] Auto-published the PDF version of book via GitHub Actions as changes arrive to the 'main' branch. 
 - [Oct-22-2025] Generated 1.0 of the air-routes dataset. 
 - [Jul-17-2024] Auto-published the HTML version of book via GitHub Actions as changes arrive to the 'main' branch. 
 - [Sep-23-2023] Work has started on a second edition of the book! See the note below for more details.
 
-### Work has begun on the second edition!
+### Work has ~~begun~~ completed on the second edition!
+
+January 1st 2026
+
+Considering that the decision to work on a second edition started September 23, 2023, it has taken some time to reach completion of that work. Some of this delay was due to the unexpected introduction of the 3.8.0 release, which ultimately became the version this edition targets. The 3.8.0 release did not occur until November 12, 2025 and it therefore only made sense to finalize the second edition after that release became official. 
+
+Using 3.8.0 as a base for the second edition made a lot of sense because it means that this edition will have long relevance, as the expectation in TinkerPop is that Gremlin semantics will not change between the 3.8.0 and 4.0.0 releases. That said, the expectation is that the second edition will continue to be updated, just as was the case with the first. There are still many topics that were not covered, but the writing had to stop at some point and the end of 2025 seemed like a good a time as any to go pencils down.
+
+We hope you enjoy the second edition of Practical Gremlin!
 
 September 23rd 2023
 
@@ -28,12 +37,6 @@ Ever since I began working on Practical Gremlin, I've viewed it as a living book
 ## Releases and change history
 
 The most recent changes and additions are tracked in the [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) file.
-
-**A Special note about releases**
-
-Starting with revision 274 (Dec 24th 2017), all of the output files (XML, EPUB, MOBI, HTML and PDF) will now be stored using Git releases. Going forward, this should reduce the amount of disk space required for people who create forks of this project. The release notes and downloadable materials are located [here](https://github.com/krlawrence/graph/releases).
-
-Details of how to build the various output formats from the AsciiDoc source are contained in the `README.md` file under the *book* folder.
 
 ## How this book came to be
 
