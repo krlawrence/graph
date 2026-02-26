@@ -1,5 +1,8 @@
-# Practical Gremlin: An Apache TinkerPop Tutorial
+# <span style="color: red;">This is a branch for the First Edition and is available for administrative reasons only</span>
 
+<span style="color: red;">Do NOT submit pull requests to this branch. No further changes will be made on this edition.</span> 
+
+# Practical Gremlin: An Apache TinkerPop Tutorial
 
 ![map](https://github.com/krlawrence/graph/raw/main/images/GremlinEaselNoText.png?raw=true, "graph picture")
 
