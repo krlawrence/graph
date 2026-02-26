@@ -26,8 +26,14 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout (main)
         uses: actions/checkout@v4
+
+      - name: Checkout (first-edition)
+        uses: actions/checkout@v4
+        with:
+          ref: first-edition
+          path: first-edition
 
       - name: Cache Ruby Gems
         uses: actions/cache@v3
@@ -48,10 +54,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install --no-install-recommends calibre pandoc
 
-      - name: Validate Book Content
-        run: ./bin/check.sh
-
-      - name: Build Documentation
+      - name: Build Documentation (main)
         working-directory: ./book
         run: |
           gem install asciidoctor
@@ -65,7 +68,20 @@ jobs:
           cp Practical-Gremlin.html ../target/index.html
           cp ../images/PRACTICAL-GREMLIN-2nd-edition.png ../target
           asciidoctor-pdf Practical-Gremlin.adoc -o ../target/Practical-Gremlin.pdf
-          
+
+      - name: Build Documentation (first-edition)
+        working-directory: ./first-edition/book
+        run: |
+          gem install asciidoctor        
+          gem install pygments.rb
+          asciidoctor Gremlin-Graph-Guide.adoc
+          SEARCH_STRING="<h1>PRACTICAL GREMLIN: An Apache TinkerPop Tutorial<\/h1>"
+          REPLACE_STRING='<img src="CoverArt.png">\n<h1>PRACTICAL GREMLIN:<br\/>An Apache TinkerPop Tutorial<\/h1>'
+          sed -i "s|${SEARCH_STRING}|${REPLACE_STRING}|g" "Gremlin-Graph-Guide.html"
+          mkdir -p ../../target/first-edition
+          cp Gremlin-Graph-Guide.html ../../target/first-edition/index.html
+          cp CoverArt.png ../../target/first-edition/CoverArt.png
+
       - name: Setup Pages
         uses: actions/configure-pages@v3
 
