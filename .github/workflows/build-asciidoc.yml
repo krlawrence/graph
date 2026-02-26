@@ -76,11 +76,16 @@ jobs:
           gem install pygments.rb
           asciidoctor Gremlin-Graph-Guide.adoc
           SEARCH_STRING="<h1>PRACTICAL GREMLIN: An Apache TinkerPop Tutorial<\/h1>"
-          REPLACE_STRING='<img src="CoverArt.png">\n<h1>PRACTICAL GREMLIN:<br\/>An Apache TinkerPop Tutorial<\/h1>'
+          REPLACE_STRING='<img src="PRACTICAL-GREMLIN-revised-v2.png">\n<h1>PRACTICAL GREMLIN:<br\/>An Apache TinkerPop Tutorial<\/h1>'
+          # Insert the banner snippet just above the title so it is immediately visible
+          sed -i "s|${SEARCH_STRING}|__BANNER_SNIPPET__\n&|" "Gremlin-Graph-Guide.html"
+          sed -i '/__BANNER_SNIPPET__/{r banner-snippet.html
+          d}' "Gremlin-Graph-Guide.html"
+          # Replace the title with the image + line break version
           sed -i "s|${SEARCH_STRING}|${REPLACE_STRING}|g" "Gremlin-Graph-Guide.html"
           mkdir -p ../../target/first-edition
           cp Gremlin-Graph-Guide.html ../../target/first-edition/index.html
-          cp CoverArt.png ../../target/first-edition/CoverArt.png
+          cp ../images/PRACTICAL-GREMLIN-revised-v2.png ../../target/first-edition/PRACTICAL-GREMLIN-revised-v2.png
 
       - name: Setup Pages
         uses: actions/configure-pages@v3
