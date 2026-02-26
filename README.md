@@ -2,18 +2,22 @@
 
 ![map](https://github.com/krlawrence/graph/blob/main/images/map-with-plane.png?raw=true, "graph picture")
 
+[![Read the Book](https://img.shields.io/badge/Practical_Gremlin-Read_HTML-green?style=for-the-badge&logo=asciidoctor)](https://krlawrence.github.io/graph/) 
+[![Read the Book](https://img.shields.io/badge/Practical_Gremlin-Read_PDF-ade1ff?style=for-the-badge&logo=asciidoctor)](https://krlawrence.github.io/graph/Practical-Gremlin.pdf)
+
 ## Welcome!
 
 This repository is the home for the source materials, sample code and examples for the book "Practical Gremlin - An Apache TinkerPop Tutorial". This is also the home for the `air-routes` dataset referenced throughout the book and samples.
 
 ### Quick Start - the latest version
 
-Preview releases for the second edition, which covers TinkerPop 3.8.0, are published as HTML automatically as they are authored and can be found [here and HTML](https://krlawrence.github.io/graph/) and [here as PDF](https://krlawrence.github.io/graph/Practical-Gremlin.pdf). It should be noted when reading this revision of the book that it is still a draft version and under significant modification, so you can expect volatile changes. 
+The second edition, which covers TinkerPop 3.8.0, is published automatically as changes are authored and can be found [here and HTML](https://krlawrence.github.io/graph/) and [here as PDF](https://krlawrence.github.io/graph/Practical-Gremlin.pdf). As with the first edition, Practical Gremlin is considered a living book and may receive frequent updates. 
 
-The first edition, covering versions prior to 3.8.0, is still available, but no longer updated. The final publication of that version can be found at [Revision 283](https://github.com/krlawrence/graph/releases/tag/v283-tp-3.5.2). You will find the standard formats this book is published in, including PDF, HTML, MOBI, EPUB and XML (Docbook). The [releases](https://github.com/krlawrence/graph/releases) section will continue to offer access to all of these formats as snapshots for ongoing reference. The PDF version is currently the "official" version. It has a better table of contents, page numbers, and some better formatting.
+The first edition, covering versions prior to 3.8.0, is still available, but no longer updated. The final publication of that version can be found at [Revision 283](https://github.com/krlawrence/graph/releases/tag/v283-tp-3.5.2). You will find the standard formats this book is published in, including PDF, HTML, MOBI, EPUB and XML (Docbook). The [releases](https://github.com/krlawrence/graph/releases) section will continue to offer access to all of these formats as snapshots for ongoing reference. A published archived version of this edition can be found [here](https://krlawrence.github.io/graph/first-edition/). 
 
 ### LATEST NEWS
 
+- [Feb-26-2026] Published an archived HTML version of the first edition to https://krlawrence.github.io/graph/first-edition/
 - [Jan-12-2026] Published the final version of the first edition, which is the version that has been generally available https://kelvinlawrence.net/book/Gremlin-Graph-Guide.html, as this link is expected to become unavailable once the second edition is made official.
 - [Dec-17-2025] Auto-published the PDF version of book via GitHub Actions as changes arrive to the 'main' branch. 
 - [Oct-22-2025] Generated 1.0 of the air-routes dataset. 
@@ -22,7 +26,7 @@ The first edition, covering versions prior to 3.8.0, is still available, but no 
 
 ### Work has ~~begun~~ completed on the second edition!
 
-January 1st 2026
+#### January 1st 2026
 
 Considering that the decision to work on a second edition started September 23, 2023, it has taken some time to reach completion of that work. Some of this delay was due to the unexpected introduction of the 3.8.0 release, which ultimately became the version this edition targets. The 3.8.0 release did not occur until November 12, 2025 and it therefore only made sense to finalize the second edition after that release became official. 
 
@@ -30,7 +34,7 @@ Using 3.8.0 as a base for the second edition made a lot of sense because it mean
 
 We hope you enjoy the second edition of Practical Gremlin!
 
-September 23rd 2023
+#### September 23rd 2023
 
 Ever since I began working on Practical Gremlin, I've viewed it as a living book, and have tried to keep up with new features and changes taking place at Apache TinkerPop, updating the manuscript as TinkerPop and Gremlin evolve. However, and this is great to see, the rate and pace at which new features are appearing in Gremlin has steadily increased over the years. This has made it hard to keep up in a "living book" fashion. Moreover, some material currently in Practical Gremlin discusses features and limitations in the language that have since either been improved or deprecated. It's really time to start work on a second edition.  I'm excited to announce that [Stephen Mallette](https://stephen.genoprime.com/) has graciously offered to help with this task. We have created a [V1](https://github.com/krlawrence/graph/tree/v1) branch which archives the first edition progress. Work for the second edition will simply occur on the default branch. Many of the new Gremlin features that need adding to the manuscript are captured in a [tracking issue](https://github.com/krlawrence/graph/issues/115) and there is also a [planning board](https://github.com/krlawrence/graph/projects/2#) that will continue to be used as a way to organize the work ahead. I'm really looking forward to the collaboration with Stephen, and to the production of a fully up-to-date second edition of Practical Gremlin. Please keep an eye on the latest news section here for more updates.
 
@@ -133,7 +137,8 @@ may be added and the layout further refined.
                                                            
 ---
 
-**NEWS ARCHIVE**
+## News Archive
+
 [Sep-22-2023] Added a script to the sample-data folder for producing Cypher versions of the air-routes data.
 [Aug-29-2022] Updated versions of the sample data and corresponding demo apps have been uploaded.
 [May-04-2022] The latest preview draft of revision 283 (TP 3.5.1) is now available in HTML and PDF versions. See [change history](https://github.com/krlawrence/graph/blob/main/ChangeHistory.md) for details.  
