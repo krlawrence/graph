@@ -1,3 +1,4 @@
+// llms-summary: Introduces Apache TinkerPop and why graph databases matter, and explains how this book, its sample code, and its data sets are organized.
 == INTRODUCTION
 
 This second edition of Practical Gremlin is an evolving guide to the Apache TinkerPop

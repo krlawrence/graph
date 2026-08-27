@@ -1,3 +1,4 @@
+// llms-summary: Explains how Gremlin Server exposes a graph behind a web server, hiding implementation details and letting non-TinkerPop languages query over HTTP.
 [[gremlinserver]]
 == INTRODUCING GREMLIN SERVER
 
@@ -41,6 +42,7 @@ NOTE: For managed graph services that expose a Gremlin Server interface, there
 typically isn't any access to the low-level configuration options mentioned here.
 While some options may be exposed, most are hidden and maintained internally.
 
+// llms-summary: Walks through editing 'gremlin-server.yaml', choosing the 'WsAndHttpChannelizer', tuning 'evaluationTimeout', and the init Groovy script to run a local TinkerGraph server.
 [[serverconfig]]
 === Configuring Gremlin Server
 
@@ -239,6 +241,7 @@ $ bin/gremlin-server.sh stop
 Server stopped [25897]
 ----
 
+// llms-summary: Edits the 'empty-sample.groovy' init script to call 'TinkerFactory.generateAirRoutes' in 'onStartUp', loading air-routes data as the server boots.
 === Loading air-routes In Gremlin Server
 
 We've now started and stopped Gremlin Server with an empty TinkerGraph, but we also
@@ -275,6 +278,7 @@ air-routes data into the 'graph'. While this example made use of 'TinkerFactory'
 an easy way to load the data, we could have equally chosen to use any other means
 we'd like to set up the graph.
 
+// llms-summary: Connects the console via 'remote.yaml', covering the ':>' prefix, the 'result' variable in local mode, and toggling remote mode with ':remote console'.
 [[serverconsole]]
 === Connecting to a Gremlin Server from the Gremlin Console
 
@@ -458,6 +462,7 @@ gremlin> :remote close
 
 ----
 
+// llms-summary: Demonstrates querying a server with 'curl' over HTTP GET and the recommended POST, comparing the JSON returned with and without a 'valueMap' step.
 [[servercli]]
 === Connecting to a Gremlin Server from the command line
 
@@ -545,6 +550,7 @@ to read.
 We have included examples of the different types of JSON results that you are likely
 to have to process in the "<<serverjson>>" section that is coming up soon.
 
+// llms-summary: Builds a Java 'RemoteClient' that uses 'Cluster', 'GraphBinaryMessageSerializerV1', and 'with' to bind a remote traversal source and get typed results.
 [[javagsclient]]
 === Connecting to a Gremlin Server from Java using 'with'
 
@@ -666,6 +672,7 @@ LBA , Leeds Bradford Airport
 NCL , Newcastle Airport
 ----
 
+// llms-summary: Shows a standalone Ruby program using only 'net/http' and 'json' to POST a Gremlin query and read the JSON response, no language binding required.
 [[rubyclient]]
 === Connecting to a Gremlin Server from Ruby
 
@@ -721,6 +728,7 @@ requests using the 'curl' command earlier.
  "result":{"data":[62],"meta":{}}}
 ----
 
+// llms-summary: Reshapes verbose path JSON by appending 'toList().toString()', splitting, and parsing with Ruby's 'JSON' class to get clean per-route lists.
 [[servertweaks]]
 === Tweaking queries to make the JSON returned easier to work with
 
@@ -943,6 +951,7 @@ In the next section you will find more examples of the JSON that can be returned
 Gremlin Server and also some examples of how to reduce the amount of data that is
 returned.
 
+// llms-summary: Catalogs the JSON shapes Gremlin Server returns for numbers, strings, lists, maps, vertices, edges, paths, and 'select' or 'project' results.
 [[serverjson]]
 === More examples of the JSON returned from a Gremlin Server
 

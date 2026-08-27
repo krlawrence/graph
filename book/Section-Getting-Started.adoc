@@ -1,3 +1,4 @@
+// llms-summary: Sets up the Gremlin Console and TinkerGraph and loads the air-routes sample graph used for the examples throughout the book.
 [[gs]]
 == GETTING STARTED
 

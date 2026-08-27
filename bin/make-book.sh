@@ -21,6 +21,11 @@ sed -i "s/$search_string/${replace_string}/g" "target/Practical-Gremlin.html"
 cp target/Practical-Gremlin.html target/index.html
 cp images/PRACTICAL-GREMLIN-2nd-edition.png target/
 
+# Advertise the agent-friendly Markdown index (llms.txt) from the HTML so agents
+# can discover it. The link is relative so it resolves both locally and on the
+# published site (index.html and llms.txt both live at the site root).
+sed -i 's#</head>#<link rel="alternate" type="text/markdown" title="llms.txt" href="llms.txt">\n</head>#' target/index.html
+
 echo "*** Producing DOCBOOK ***"
 asciidoctor -n -b docbook -d book book/Practical-Gremlin.adoc -o target/krltemp.xml
 sed -e s/language=\"groovy\"/language=\"java\"/ target/krltemp.xml > target/Practical-Gremlin.xml
@@ -31,3 +36,13 @@ echo "*** Producing MOBI ***"
 ebook-convert target/Practical-Gremlin.epub target/Practical-Gremlin.mobi
 echo "*** Producing PDF ***"
 asciidoctor-pdf book/Practical-Gremlin.adoc -o target/Practical-Gremlin.pdf
+
+echo "*** Producing MARKDOWN + LLMS.TXT ***"
+# check.sh already ran above; make-llms.sh only needs to build and validate.
+# Requires Node.js (downdoc + afdocs); skip gracefully if it is not installed so
+# the rest of the book build still succeeds.
+if command -v downdoc >/dev/null 2>&1 || command -v npm >/dev/null 2>&1; then
+    ./bin/make-llms.sh --no-check
+else
+    echo "Skipping: downdoc/npm (Node.js) not found. Install Node.js to build llms.txt."
+fi

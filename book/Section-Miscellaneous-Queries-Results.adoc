@@ -1,3 +1,4 @@
+// llms-summary: Collects advanced OLTP-style example queries on the air-routes graph, showing route distribution, distance, and analysis techniques well suited to TinkerGraph.
 [[msc]]
 == MISCELLANEOUS QUERIES AND THEIR RESULTS
 
@@ -14,6 +15,7 @@ example of an ideal use case for TinkerGraph. Even if you have your main data in
 massive hosted graph, extracting parts of it and doing analysis locally using
 TinkerGraph is a technique that can make you very productive.
 
+// llms-summary: Introduces a set of slightly more complex counting and distribution examples that build on techniques covered earlier in the book.
 [[countmore]]
 === Counting more things
 
@@ -21,6 +23,7 @@ To get things started, let's look at a few more examples that basically just cou
 occurrences and distributions of things but are a little more complex than the
 examples we looked at earlier in the book.
 
+// llms-summary: Identifies countries with no airports by finding 'country' vertices that have no outgoing edges via 'not', 'where', and 'out'.
 [[noairports]]
 ==== Which countries have no airports?
 
@@ -58,6 +61,7 @@ g.V().hasLabel('country').where(__.not(out())).values('desc')
 
 ----
 
+// llms-summary: Finds orphan airports with no commercial routes using 'not' on 'bothE('route')' and returning their codes with 'fold'.
 [[noroutes]]
 ==== Which airports have no routes?
 
@@ -83,6 +87,7 @@ have no outgoing or incoming routes.
 [TXL,SXF,ILG,TWB,TUA,BVS,KGG,RIG,INT,APA,BWU,BID,NBW,SFH,CVT,AFW,PSY,EKA,ISL,APK,CRC,GYZ,HFN,HZK,NFO,SFD,VCV,YEI]
 ----
 
+// llms-summary: Counts the per-airport distribution of runways with a simple 'groupCount' by 'runways', showing most airports have one or two.
 [[runwaydist]]
 ==== What is the distribution of runways?
 
@@ -98,6 +103,7 @@ g.V().hasLabel('airport').groupCount().by('runways')
 [1:2429,2:775,3:227,4:53,5:14,6:4,7:2]
 ----
 
+// llms-summary: Finds busiest airports using 'where' on route counts, then labels and sorts them with 'group' and 'order(local)', including combined inbound and outbound totals.
 [[mostroutes]]
 ==== Airports with the most routes
 
@@ -184,6 +190,7 @@ g.V().hasLabel('airport').
 [ATL,DFW,JFK,LAX,ORD,DEN,EWR,LHR,LGW,CDG,FRA,DXB,PEK,PVG,FCO,AMS,BCN,MAD,VIE,MUC,MAN,STN,DME,IST,BER]
 ----
 
+// llms-summary: Counts the surprisingly many airports having exactly one outgoing route using 'where' with 'out().count()' and 'is(eq(1))'.
 [[oneroute]]
 ==== Airports with just one route
 
@@ -199,6 +206,7 @@ g.V().hasLabel('airport').
 777
 ----
 
+// llms-summary: Lists the busiest single-runway airports with 'order' and 'project', using an 'or' step to include Gatwick despite its emergency-use second runway.
 [[onerunway]]
 ==== Single runway airports with the most routes
 
@@ -235,6 +243,7 @@ is that three of the top five busiest single runway airports are in England.
 [apt:CRL,city:Brussels,routes:117]
 ----
 
+// llms-summary: Turns a 'groupCount' of runways into a nicely labeled map by chaining 'unfold' and 'project' over 'keys' and 'values'.
 [[runwaycountproject]]
 ==== Another way of counting runways
 
@@ -280,6 +289,7 @@ g.V().hasLabel('airport').
 
 [runways:[1,2,3,4,5,6,7],count:[2429,775,227,53,14,4,2]]
 ----
+// llms-summary: Ranks Canada's top ten airports by outgoing routes with 'order' and 'project', adding a one-based position via the 'index' method.
 [[canadamost]]
 ==== Airports with the most routes in Canada
 
@@ -311,6 +321,7 @@ Here are the results of running the query along with the index that we added.
 [10,[apt:YQB,city:Quebec City,routes:20]]
 ----
 
+// llms-summary: Counts airports across England, Scotland, Wales, and Northern Ireland with a 'groupCount' by 'region' over the UK's 'contains' edges.
 [[ukdist]]
 ==== Distribution of UK airports
 
@@ -324,6 +335,7 @@ g.V().has('country','code','UK').out('contains').groupCount().by('region')
 [GB-ENG:27,GB-WLS:3,GB-NIR:3,GB-SCT:25]
 ----
 
+// llms-summary: Builds airport-per-country distributions with 'groupCount', sorts them by values or keys with 'order(local)', and uses 'group' to include zero-airport countries.
 [[countrydist]]
 ==== Distribution of airports by country
 
@@ -451,6 +463,7 @@ g.V().hasLabel('continent').group().by('code').by(out().count())
 [EU:605,AS:971,NA:989,OC:305,AF:321,AN:0,SA:313]
 ----
 
+// llms-summary: Reports outgoing routes per airport with 'groupCount' and 'group', including selecting a numeric key through the Traversal form of 'select'.
 ==== Distribution of routes per airport
 
 We have already examined various ways to calculate the distribution of routes in the
@@ -515,6 +528,7 @@ This time the results only include the airports with 62 outgoing routes.
 [OAK,BEG,CVG,CAG]
 ----
 
+// llms-summary: Explains that passing a variable to 'groupCount' makes it behave like 'sideEffect', storing counts without altering the traversal, retrieved later with 'select'.
 [[groupvar]]
 ==== Using groupCount with a traversal variable
 
@@ -544,6 +558,7 @@ g.V(3).out().groupCount('a').by('runways').
 In the next section we will see another example of a 'groupCount' step that uses a
 traversal variable.
 
+// llms-summary: Shows how a 'constant' inside 'groupCount' sets the result key name, closing the named side-effect with 'cap'.
 [[gcconstant]]
 ==== Combining 'groupCount' and 'constant'
 
@@ -579,6 +594,7 @@ g.V().has('airport','region','US-OK').groupCount().by('region')
 [US-OK:4]
 ----
 
+// llms-summary: Chains several 'choose' steps feeding a shared 'groupCount' variable to tally disparate airport counts in one traversal, with 'choose' acting like 'sideEffect'.
 [[chainchoose]]
 ==== Combining 'choose' and 'groupCount'
 
@@ -614,6 +630,7 @@ found six airports that have six or more runways, 53 that had exactly four runwa
 Using 'choose' and 'groupCount' in this way provides a very nice pattern for counting
 somewhat disparate things during a traversal.
 
+// llms-summary: Shows how a 'group' step can nest inside another via its 'by' traversals, then drills into inner and outer results with 'select'.
 [[nestedgroup]]
 ==== Nesting one 'group' step inside another
 
@@ -704,6 +721,7 @@ the results for the keys of 'IAH' and 'LAX' only.
 [IAH:199,LAX:214]
 ----
 
+// llms-summary: Analyzes Europe-to-USA routes with 'count', 'dedup', and 'groupCount', profiling their distribution across US and European airports and listing sample paths with 'path'.
 [[eu-usa]]
 ==== Analysis of routes between Europe and the USA
 
@@ -830,6 +848,7 @@ g.V().has('continent','code','EU').
 [EU,LHR,PDX]
 ----
 
+// llms-summary: Uses 'fold' to collect city names and, with a seed value and closure, to reduce them map-reduce style into a total character count.
 [[mapreduce]]
 ==== Using 'fold' to do simple Map-Reduce computations
 
@@ -906,6 +925,7 @@ g.V().has('code','AUS').out('route').values('city').
       length().sum()
 ----
 
+// llms-summary: Studies how routes distribute across airports with 'groupCount', revealing the statistical mode, and computes the mean using 'local' with the 'mean' step.
 [[meanmode]]
 ==== Distribution of routes in the graph (mode and mean)
 
@@ -1046,6 +1066,7 @@ g.V().has('type','airport').local(both('route').count()).mean()
 28.902397260273972
 ----
 
+// llms-summary: Counts outgoing routes from London airports with 'group', then uses 'aggregate' and 'without' to count destinations two hops away excluding London.
 ==== How many routes are there from airports in London (UK)?
 
 This next query can be used to figure out how many outgoing routes each of the
@@ -1088,6 +1109,7 @@ g.V().has('region','GB-ENG').has('city','London').out().out().dedup().
 2353
 ----
 
+// llms-summary: Finds routes between English airports using 'aggregate' with 'within', and shows a 'where' comparison that returns each airport pair only once.
 [[englandroutes]]
 ==== How many routes are there between airports in England?
 
@@ -1171,6 +1193,7 @@ direction.
 [NQY,SEN]
 ----
 
+// llms-summary: Produces top-ten airport tables for incoming, outgoing, and total routes using 'order' by 'in', 'out', and 'both' counts with 'project'.
 [[topten]]
 ==== What are the top ten airports by route count?
 
@@ -1278,6 +1301,7 @@ as it changes too often for me to keep up with.
 [ap:ATL,routes:484]
 ----
 
+// llms-summary: Contrasts a plain 'fold' with wrapping it in 'local' so each airport's code and runway count is returned as its own paired list.
 [[localfold]]
 ==== Using 'local' while counting things
 
@@ -1327,6 +1351,7 @@ runway value pair is now in its own individual list.
 [AMS,6]
 ----
 
+// llms-summary: Counts vertices lacking outgoing, incoming, or any edges using 'not' with 'outE', 'inE', and 'bothE', plus an equivalent 'where' form.
 [[noedges]]
 ==== How many vertices have no edges?
 
@@ -1363,6 +1388,7 @@ g.V().where(outE().count().is(0)).count()
 36
 ----
 
+// llms-summary: Answers where-can-I-fly questions, using 'repeat' with 'dedup' to test route existence and 'aggregate' with 'within' to find routes among selected cities.
 [[wherefly]]
 === Where can I fly to from here?
 
@@ -1671,6 +1697,7 @@ columns to save space.
 [LTN,CDG] [LTN,MUC] [LTN,ORY]
 ----
 
+// llms-summary: Explores route distances by ordering on 'dist' with 'path', filtering return journeys, and using 'sack' to keep running totals for shortest multi-stop trips.
 [[moredist]]
 === More analysis of distances between airports
 
@@ -2827,6 +2854,7 @@ g.V().has('code','AUS').
 306
 ----
 
+// llms-summary: Writes geospatial queries on latitude and longitude with 'has', 'outside', and 'between', culminating in Great Circle distances computed via the 'math' step.
 [[latlonmanual]]
 === Using latitude, longitude and geographical region in queries
 
@@ -3376,6 +3404,7 @@ g.withSideEffect("rdeg", 0.017453293).
 5108.80166113392
 ----
 
+// llms-summary: Finds journeys passing through a chosen airport, first with a 'has' filter, then tracking a via-stop across 'repeat' hops using a 'sack' and 'choose'.
 [[via]]
 === Finding routes that go via a specific airport
 
@@ -3481,6 +3510,7 @@ see that MAN can appear in any position in the path.
 [AUS,LHR,INV,MAN,EDI]
 ----
 
+// llms-summary: Gathers unique values into a Set using 'withSideEffect' and 'aggregate' (store), comparing it with 'dedup' and extending it to collect related vertices and edges.
 [[storesideeffect]]
 === Using 'store' and a 'sideEffect' to make a set of unique values
 
@@ -3733,6 +3763,7 @@ e[8][2-knows->3]
 As you start to work with graphs and start to do more complex querying, this pattern
 of query based around 'withSideEffect' is extremely useful to keep in mind.
 
+// llms-summary: A case study copying the DFW vertex's label and properties with 'addV', 'select', and 'property', using 'sideEffect' and 'profile' to tame unwanted output.
 [[dfwcopy]]
 === Making a copy of the DFW vertex
 
@@ -4027,6 +4058,7 @@ stages and also to adapt to unexpected outcomes along the way. You could use
 essentially the same technique shown in this section to also copy one or more edges
 if you needed to.
 
+// llms-summary: Builds an ordered binary tree graph and navigates it with 'repeat' and 'until' to find min and max values, plus the TinkerPop 'tree' API.
 [[btree]]
 === Modeling an ordered binary tree as a graph
 
@@ -4194,6 +4226,7 @@ t.getObjectsAtDepth(5)
 16
 ----
 
+// llms-summary: Performs random graph walks using 'repeat' with 'sample' and 'otherV', starting from a fixed or random vertex, and 'local' to produce several independent walks.
 [[randwalk]]
 === Randomly walking a graph
 
@@ -4288,6 +4321,7 @@ When run, five results such as those shown below are returned.
 [BOS,2580,SAN,2253,IAD,960,NAS,4332,LHR,250,IOM]
 ----
 
+// llms-summary: Tests how many hops separate every airport from Heathrow using 'repeat', 'simplePath', and 'union', ultimately uncovering isolated subnetworks in the graph.
 [[sevendegrees]]
 === Seven degrees of separation!
 
@@ -4563,6 +4597,7 @@ It is interesting that there are a set of airports in Portugal, Brazil, Russia, 
 Malawi connected only to each other via airlines but with no way to get from any one
 of them to the main, worldwide route network.
 
+// llms-summary: Searches for airports needing the most hops to reach Austin using 'repeat' with 'emit' or 'until', filtering by path length and using 'dedup' for efficiency.
 [[longestroutes]]
 === Looking for the journey requiring the most stops
 
@@ -4719,6 +4754,7 @@ the contents of 'repeat' being expanded, where 'repeat(out()).times(2)' becomes,
 presented. This sort of information can become useful when you are looking for your 
 own query optimizations.
 
+// llms-summary: Detects duplicate parallel edges by grouping vertex pairs with 'groupCount' and 'select', filtering counts over one, and also nesting 'path' inside 'groupCount'.
 [[unwantededges]]
 === Finding unwanted parallel edges
 
@@ -4905,6 +4941,7 @@ Note that this technique does not replace the full query shown in the prior sect
 It is more intended to show that you can place a 'path' step inside a 'groupCount'
 step and achieve some useful results.
 
+// llms-summary: A case study evolving a query for the longest single route, showing why 'max' loses paths and settling on 'aggregate', 'filter', and 'project'.
 [[flr]]
 === Finding the longest flight route between two adjacent airports in the graph
 
@@ -4995,6 +5032,7 @@ such combinations once, but we will leave that as an exercise for the reader!
 [from:JFK,to:SIN,dist:9526]
 ----
 
+// llms-summary: Demonstrates using mathematical expressions and variables inside an 'is' step to filter airports by a computed route-count threshold.
 [[miscq]]
 === Miscellaneous other queries
 

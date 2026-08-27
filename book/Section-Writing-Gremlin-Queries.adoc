@@ -1,4 +1,5 @@
 // vim: set tw=85 cc=+1 wrap spell redrawtime=20000:
+// llms-summary: Opens the chapter on read-only Gremlin traversals against the air-routes graph, previewing how the language builds from basic to advanced queries.
 [[gq]]
 == WRITING GREMLIN QUERIES
 
@@ -16,6 +17,7 @@ then present some fairly basic queries and finally get into some more
 advanced concepts. Hopefully, each set of examples presented, building upon things
 previously discussed, will be easy to understand.
 
+// llms-summary: Introduces Gremlin as TinkerPop's graph traversal language, contrasting 'out' hops and 'repeat' with SQL joins and explaining why graphs suit connected data.
 [[gremlinintro]]
 === Introducing Gremlin
 
@@ -173,6 +175,7 @@ the index and can be used to find things efficiently. In large graph deployments
 greatly speeds up the process of finding things as you would expect. We look more
 closely at IDs in the "<<wid>>" section.
 
+// llms-summary: Starts traversals with 'g.V()' and 'g.E()', filtering by 'has' and 'hasLabel', reading 'values', and counting with 'count', 'group' and 'groupCount'.
 [[bq]]
 === Some fairly basic Gremlin queries
 
@@ -537,6 +540,7 @@ things or collect things into a group using a selection criteria. You will find 
 lot more examples of grouping and counting things in the section called
 "<<countmore>>".
 
+// llms-summary: Walks the graph with 'out', 'in', 'outE' and 'inV', capturing journeys via 'path' with 'by', 'from' and 'to', plus 'as', 'select' and 'project'.
 [[walk]]
 === Starting to walk the graph
 
@@ -1544,6 +1548,7 @@ g.V().has('code','MIA').inE().as('e').
 Throughout the remainder of the book you will find lots of examples that use steps
 such as 'outE', 'inE', 'outV' and 'inV'.
 
+// llms-summary: Restricts result size using 'limit', 'range', 'skip', 'tail' and 'timeLimit', with patterns for retrieving ranges and penultimate stream elements.
 [[limit]]
 === Limiting the amount of data returned
 
@@ -1839,6 +1844,7 @@ The pattern demonstrated in the prior examples shows how flexible Gremlin can be
 With a solid command of the steps Gremlin offers and a clever application of them,
 you can accomplish a great many things.
 
+// llms-summary: Removes duplicate results with 'dedup', including a 'by' modulator form and a labeled-step form that deduplicates against 'as' references.
 [[dedup]]
 === Removing duplicates - introducing 'dedup'
 
@@ -1922,6 +1928,7 @@ It is also possible to use 'sets' to achieve similar results as we shall see in 
 of the following sections such as the "<<setsandlists>>" section that is coming up
 soon.
 
+// llms-summary: Explores vertex and edge properties with 'valueMap', selecting keys, adding id and label via 'true' or 'WithOptions.tokens', and unwrapping lists.
 [[vm]]
 === Using 'valueMap' to explore the properties of a vertex or edge
 
@@ -2175,6 +2182,7 @@ NOTE: There are additional 'WithOptions' settings we can use to change how
 properties with meta-properties are returned by 'valueMap' This is covered later as
 part of the "<<tp34vmmetaprop>>" section.
 
+// llms-summary: Presents 'elementMap' as a simpler alternative to 'valueMap' that always includes id and label and returns incoming and outgoing vertex details for edges.
 [[element-map]]
 === An alternative to 'valueMap' - introducing 'elementMap'
 
@@ -2267,6 +2275,7 @@ IN={id=132, label=airport}
 OUT={id=1, label=airport}
 ----
 
+// llms-summary: Terminates traversals to store results using 'next', 'toList', 'toSet', 'toBulkSet' and 'fill', and discards output with 'iterate'.
 [[var]]
 === Assigning query results to a variable with a terminal step
 
@@ -2510,6 +2519,7 @@ The use of 'iterate' can bring some performance improvements because it signals 
 the graph that you are not interested in the results, which could save some
 processing costs (e.g., serialization, network).
 
+// llms-summary: Defines core terminology: the 'GraphTraversalSource' g, start and terminal steps, and anonymous traversals spawned from the double-underscore class.
 [[deepdivetraversals]]
 === Deep dive on traversal terminology
 
@@ -2668,6 +2678,7 @@ to any graph.
 Now that you've learned all of this important Gremlin terminology, you are
 well-prepared for the more advanced topics to come.
 
+// llms-summary: Explains that every element has an immutable, possibly regenerated id, and looks things up with 'id', 'hasId' and IDs passed into the 'V' step.
 [[wid]]
 === Working with IDs
 
@@ -2778,6 +2789,7 @@ vertex at the time you create it. How that can be done is explained in the
 Every property in the graph also has an ID as we shall explore in the "<<propid>>"
 section a bit later on.
 
+// llms-summary: Uses immutable labels to group elements, filtering with 'hasLabel', 'label', the label keyword, and the three-parameter 'has' form.
 [[lab]]
 === Working with labels
 
@@ -2870,6 +2882,7 @@ provided.
 g.E().hasLabel('route','contains')
 ----
 
+// llms-summary: Shows how wrapping steps in 'local' fixes per-element calculations like 'mean' route counts and builds lists of lists per airport.
 [[local]]
 === Using the 'local' step to make sure we get the result we intended
 
@@ -3009,6 +3022,7 @@ throughout the book. You will see some that show how local can be used as a para
 to the 'order' step when we dig deeper into route analysis in the "<<meanmode>>"
 section.
 
+// llms-summary: Covers the statistical steps 'count', 'sum', 'max', 'min' and 'mean', noting that 'min' and 'max' also work on comparable values like strings.
 [[st]]
 === Basic statistical and numerical operations
 
@@ -3104,6 +3118,7 @@ g.V().hasLabel('continent').values('desc').max()
 South America
 ----
 
+// llms-summary: Manipulates strings with steps such as 'asString', 'toLower', 'length', 'substring', 'split', 'replace', 'concat' and 'format', including 'local' scope.
 [[textsteps]]
 === Working with text
 
@@ -3370,6 +3385,7 @@ g.V().has('airport','code',within('IAD','MIA','LAX')).
 [m]  
 ----
 
+// llms-summary: Manipulates lists, sets and maps with steps like 'any', 'all', 'none', 'combine', 'intersect', 'reverse' and 'merge', plus 'select' for map keys and values.
 [[collectionsteps]]
 === Working with collections
 
@@ -3738,6 +3754,7 @@ form your application ultimately needs. They also help make Gremlin queries read
 concisely where they often replace patterns of other Gremlin steps that do the same
 job making queries much more readable.  
 
+// llms-summary: Handles dates with 'asDate', the 'datetime' function, and the 'dateAdd' and 'dateDiff' steps using the DT time-unit enum.
 [[datesteps]]
 === Working with dates
 
@@ -3809,6 +3826,7 @@ g.inject("2023-08-02T00:00:00Z").asDate().
 -86400000
 ----
 
+// llms-summary: Tests values with P predicates like 'gt', 'inside', 'between', 'within' and 'without', contrasts 'neq' with 'not', and samples data using 'coin' and 'sample'.
 [[tranges]]
 === Testing values and ranges of values with P
 
@@ -4407,6 +4425,7 @@ g.V(airports[x-1]).values('code')
 JTY
 ----
 
+// llms-summary: Identifies object types with the 'typeOf' predicate and the GType enum, filtering paths to keep only vertices or spotting wrongly typed property data.
 [[typeof]]
 === Checking data types with 'typeOf'
 
@@ -4484,6 +4503,7 @@ g.V().has('airport','code','IAD').
   filter(values('lat','lon').is(P.not(typeOf(DOUBLE))))
 ----
 
+// llms-summary: Searches string properties with case-sensitive text predicates 'startingWith', 'endingWith', 'containing', 'regex' and their negated counterparts.
 [[textpredicates]]
 === Text search predicates
 
@@ -4771,6 +4791,7 @@ g.V().has('airport','type','airport').
       has('city', TextP.notRegex('Dallas|Austin')).values('code')
 ----
 
+// llms-summary: Sorts results with 'order', using 'by' with 'asc', 'desc' and 'shuffle', ordering maps by 'keys' or 'values' with 'local', and noting unproductive-by filtering.
 [[sort]]
 Sorting things – introducing 'order'
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -5005,6 +5026,7 @@ g.V().hasLabel('airport').limit(10).
 [7:[DFW],6:[BOS],5:[ATL],4:[BNA,IAD],3:[ANC,BWI,DCA],2:[AUS,FLL]]
 ----
 
+// llms-summary: Forms logical queries with the 'and', 'or' and 'not' steps, showing infix and dot-combined forms and when 'within', 'without' or chained 'has' are cleaner.
 [[bool]]
 === Boolean operations
 
@@ -5177,6 +5199,7 @@ The 'where' step was used a lot in the examples above. Hopefully, the effect of 
 it was clear. Nonetheless, we will explain in more detail how the 'where' step works
 in the next section.
 
+// llms-summary: Filters traversals with 'where', combining it with 'is', 'by' modulators, two-parameter label comparisons, and 'not' to invert conditions.
 [[where]]
 === Using 'where' to filter things out of a result
 
@@ -5611,6 +5634,7 @@ Nice. Note that this also means that Nice is included in the results. Lastly, we
 the part of the query that prepares the output in a form we want in a 'local' step so
 that a separate list is created for each airport.
 
+// llms-summary: Writes if-then-else logic with 'choose', returning derived or 'constant' values based on a predicate, with implied else behavior.
 [[choose]]
 === Using 'choose' to write if...then...else type queries
 
@@ -5767,6 +5791,7 @@ The 'constant' step is not limited to use within 'choose' steps. It can be used
 wherever needed. You will find many examples of its use throughout this book
 including in the "<<union>>" section.
 
+// llms-summary: Combines 'choose' with 'option' for case/switch queries, using 'none' as the default and predicates like 'gt' to categorize airports.
 [[option]]
 === Using 'option' to write case/switch type queries
 
@@ -5834,6 +5859,7 @@ g.V().hasLabel('airport').
 [high:163,low:3127,medium:214]
 ----
 
+// llms-summary: Expresses declarative patterns with 'match' to find routes lacking return flights, and shows simpler equivalents written with 'where'.
 [[patmatch]]
 === Using 'match' to do pattern matching
 
@@ -6062,6 +6088,7 @@ When run, the query returns the following results.
 [s:SIN,d:PBH]
 ----
 
+// llms-summary: Combines multiple traversal branches with 'union', using it as a start step and mixing in 'identity', 'constant', 'local' and 'filter'.
 [[union]]
 === Using 'union' to combine query results
 
@@ -6466,6 +6493,7 @@ LHR
 DFW
 ----
 
+// llms-summary: Performs extra work without altering the stream using 'sideEffect', aggregating counts into labels and running closures such as a println.
 [[sideeffect]]
 === Using 'sideEffect' to do things on the side
 
@@ -6502,6 +6530,7 @@ San Francisco International Airport
 Later in the book we will look at other ways that side effects can be used to
 solve more interesting problems.
 
+// llms-summary: Uses 'aggregate' to stash visited vertices in a named collection, then 'where' with 'without' to exclude non-stop destinations when counting one-stop routes.
 [[aggregate]]
 === Using 'aggregate' to create a temporary collection
 
@@ -6556,6 +6585,7 @@ you cannot get to from anywhere else!
 We will take a more in depth look at the various types of collections that you can
 use as part of a Gremlin query in the "<<collrev>>" section a bit later.
 
+// llms-summary: Inserts extra values into a traversal with 'inject', including the trick of following 'g' with 'inject' so a 'choose' step can be used.
 [[inject]]
 === Using 'inject' to insert values into a query
 
@@ -6648,6 +6678,7 @@ demonstrate this point could indeed be rewritten to avoid any use of 'choose' bu
 hopefully the usefulness of 'inject' as a way to avoid using a 'V' when not wanted is
 clear.
 
+// llms-summary: Uses 'coalesce' to return the first traversal that yields a result, pairing it with 'constant', the 'fail' step, and use inside a 'by' modulator.
 [[coalesce]]
 === Using 'coalesce' to see which traversal returns a result
 
@@ -6820,6 +6851,7 @@ Santa Rosa=4
 A bit later in the "<<coaladdv>>" section we will again use 'coalesce' to check to
 see if a vertex already exists before we try to add it.
 
+// llms-summary: Returns a traversal result or the prior element with 'optional', shown as equivalent to 'coalesce' paired with an 'identity' step.
 [[optional]]
 === Returning one of two possible results - introducing 'optional'
 
@@ -6865,6 +6897,7 @@ g.V().has('code','AUS').
 Dallas
 ----
 
+// llms-summary: Uses 'V' and 'E' mid-traversal to launch fresh lookups, such as finding DFW routes longer than the longest route leaving IAD.
 [[midtraversalve]]
 === Using 'V' and 'E' mid-traversal
 
@@ -6934,6 +6967,7 @@ g.V().has('code','IAD').outE('route').
 [SYD]
 ----
 
+// llms-summary: Explores connections with 'both', 'bothE', 'bothV' and 'otherV', highlighting why 'bothE().bothV()' includes the start vertex while 'both' does not.
 [[otherv]]
 === Other ways to explore vertices and edges using 'both', 'bothE', 'bothV' and 'otherV'
 
@@ -7124,6 +7158,7 @@ g.V(3).bothE().otherV().dedup().order().by(id()).fold()
 As you can see, when we use 'otherV' we do not get 'v[3]' returned as we are only
 looking at the other vertices relative to where we started from, which was 'v[3]'.
 
+// llms-summary: Finds paths with 'repeat' plus 'until', 'times', 'emit', 'simplePath' and 'cyclicPath', with nested repeats and warnings on path-finding memory cost.
 [[sp]]
 === Shortest paths (between airports) - introducing 'repeat'
 
@@ -7810,6 +7845,7 @@ If you find yourself running into memory limitation issues, there are often ways
 circumvent the problem using different approaches to writing the query. You will find
 an example of such a case in the "<<sackpredicate>>" section.
 
+// llms-summary: Calculates in, out and overall vertex degree by counting edges and using 'group' or 'project' with 'bothE' to report route counts per airport.
 [[nd]]
 === Calculating vertex degree
 
@@ -7938,6 +7974,7 @@ The results below were generated by running the query.
 [DCA:192,BNA:150,DFW:506,BWI:182,ANC:82,BOS:286,FLL:316,ATL:484,IAD:315,AUS:196]
 ----
 
+// llms-summary: Performs arithmetic, trigonometry and standard-deviation math with the 'math' step, using the underscore symbol, labels, 'by' and 'project' to feed values.
 [[mathstep]]
 === Gremlin's scientific calculator – introducing 'math'
 
@@ -8464,6 +8501,7 @@ There are obviously many other operators that we have not provided examples for,
 hopefully the ones we have provided give you a feel for ways that the 'math' step can
 be used to create interesting queries.
 
+// llms-summary: Adds position counters with Groovy 'withIndex' and 'indexed' and the Gremlin 'index' step, using 'fold', 'WithOptions' and index values to reverse lists.
 [[withindex]]
 === Including an index with results – introducing 'withIndex' and 'indexed'
 
@@ -8677,6 +8715,7 @@ g.V().has('code','SAF').
 [[DEN],[PHX],[LAX],[DFW]]
 ----
 
+// llms-summary: Reinforces earlier steps with worked route queries, comparing 'as'/'select' against 'path'/'by' and using 'where', 'project' and 'order'.
 [[sx]]
 === More examples using concepts we have covered so far
 

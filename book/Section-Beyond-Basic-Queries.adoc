@@ -1,3 +1,4 @@
+// llms-summary: Introduces the chapter on creating, modifying, and deleting graph data, along with query layout, data modeling, and more advanced Gremlin techniques.
 [[beq]]
 == BEYOND BASIC QUERIES
 
@@ -9,6 +10,7 @@ deleting them. We will also look at how to create a sub-graph and how to save a
 graph to an XML or JSON file and a lot more. Let's start off with a short discussion
 of query layout, reserved words, and data modeling.
 
+// llms-summary: Shows how to spread long Gremlin queries over multiple lines in the Console using backslash or trailing-period continuations, and mentions the Gremlint formatter.
 [[indents]]
 === A word about layout and indentation
 
@@ -73,6 +75,7 @@ should use when laying out your more complex queries. However, whatever you deci
 do, it is worth remembering that others reading your work may find well-laid-out and
 appropriately indented steps easier to read and understand.
 
+// llms-summary: Discusses writing idiomatic Gremlin, favoring readable single-purpose steps like 'groupCount' and 'mergeV' that convey intent and let the database optimize.
 [[idiomaticgremlin]]
 === A word about idiomatic Gremlin
 
@@ -133,6 +136,7 @@ traversals. Over time, that habit will make your Gremlin easier for others to
 understand and maintain, and will often give your graph database the best opportunity
 to run your traversals efficiently.
 
+// llms-summary: Explains how Gremlin steps like 'in', 'not', and 'as' clash with Groovy reserved words, and when the '__.' prefix is needed to disambiguate.
 [[rword]]
 === A warning about reserved word conflicts and collisions
 
@@ -182,6 +186,7 @@ notation when it is not clear what the reserved word, like 'in', applies to.
 You will find an example of 'not' being used with the '"__."' prefix in the
 "<<btree>>" section a bit later on.
 
+// llms-summary: Offers graph data modeling advice, weighing vertices versus properties, storing data in two places for query efficiency, polyglot storage, and avoiding supernodes.
 [[dmodel]]
 === Thinking about your data model
 
@@ -330,6 +335,7 @@ but we encourage you to always be thinking about their possibility as you design
 graph and also be thinking about how you can prevent them becoming a big issue for
 you.
 
+// llms-summary: Shows how to mix Groovy into the Gremlin Console by defining methods, looping over query results, and using variables and 'fill' to feed further traversals.
 [[grv]]
 === Making Gremlin even Groovier
 
@@ -597,6 +603,7 @@ Here is the output from running the code.
 [JFK, 1390, DFW]
 ----
 
+// llms-summary: Covers adding vertices, edges, and properties with 'addV', 'addE', 'property', 'inject', 'repeat', and upserting via 'mergeV', 'mergeE', and 'coalesce'.
 [[addvertices]]
 === Adding vertices, edges, and properties
 
@@ -1377,6 +1384,7 @@ section. Feel free to skip ahead but be aware that the techniques used in that
 section have not yet been fully covered, so you may want to also take a look at some
 other sections along the way.
 
+// llms-summary: Covers removing vertices, edges, and properties with 'drop', why steps after 'drop' do not run, and wrapping it in 'sideEffect' to drop and add together.
 [[deleting]]
 === Deleting vertices, edges, and properties
 
@@ -1507,6 +1515,7 @@ You could also delete the whole graph, vertices, and edges by deleting all verti
 g.V().drop()
 ----
 
+// llms-summary: Examines the 'Property' and 'VertexProperty' interfaces, property IDs, list and set cardinality, 'explain', meta-properties, and 'WithOptions' with 'valueMap'.
 [[pkvrevisited]]
 === Property keys and values revisited
 
@@ -2435,6 +2444,7 @@ Note that in this case, the ID for each property is also shown.
 [id:39,key:desc,value:Austin Bergstrom International Airport]
 ----
 
+// llms-summary: Uses queries with 'label', 'dedup', 'groupCount', and 'keys' to discover a graph's vertex and edge labels, property keys, and their data types.
 [[deduce]]
 === Deducing the schema of a graph using queries
 
@@ -2567,6 +2577,7 @@ graph that don't involve surveying the graph. For example, JanusGraph allows us 
 define an explicit schema and also to query the schema using its Graph Management
 API, and Amazon Neptune provides a Graph Summary API that can yield these details.
 
+// llms-summary: Explores how 'group', 'groupCount', 'fold', 'project', and 'aggregate' build collections, and how to access, merge, and manipulate them with 'unfold' and 'local' scope.
 [[collrev]]
 === Collections revisited
 
@@ -3240,6 +3251,7 @@ can be used in conjunction with 'reducing barrier' steps to still achieve a desi
 result. We will also see other cases where 'unfold' is needed to access the parts of
 a collection that we care about.
 
+// llms-summary: Explains reducing barrier steps like 'count', 'sum', and 'fold' that block access to earlier 'as' labels, and how to compute sums and averages with 'math'.
 [[rbarriers]]
 === Collections and reducing barrier steps
 
@@ -3517,6 +3529,7 @@ gremlin> 27/26
 ==>1.0384615385
 ----
 
+// llms-summary: Introduces the 'sack' step for carrying per-traverser values, using operators like 'sum', 'mult', 'min', 'max', 'addAll', and booleans to accumulate distances and hop counts.
 [[sackintro]]
 === Introducing 'sack' as a way to store values
 
@@ -4339,6 +4352,7 @@ The results from running the modified query are shown below.
 [SAF,708,LAX,2470,JFK,2447,SNA,2482,ISP,8107]
 ----
 
+// llms-summary: Discusses using Groovy closures in steps like 'filter', 'map', 'flatMap', and 'sack', why lambdas are discouraged, and how 'map' differs from 'flatMap'.
 [[lambdas]]
 === Using Lambda functions
 
@@ -4915,6 +4929,7 @@ When run, this time the results do indeed include the edges as well as the verti
 [v[3],e[3832][3-route->37],v[37],e[8452][37-route->122],v[122]]
 ----
 
+// llms-summary: Uses the 'tree' step with 'repeat' to build a depth-limited tree rooted at a vertex, then works with it via the TinkerPop Tree API.
 [[tre]]
 === Turning graphs into trees
 
@@ -4952,6 +4967,7 @@ tree.getObjectsAtDepth(2)
 
 We will see the  Tree API used again in the "<<btree>>" section later on.
 
+// llms-summary: Shows how the 'subgraph' step extracts edges and their vertices into a new TinkerGraph, capped with 'cap' and queried through its own traversal source.
 [[subgraph]]
 === Creating a subgraph
 
@@ -5127,6 +5143,7 @@ Gremlin provides for us. If you have a large graph but only want to work with a 
 of it, it is nice to be able to create a subgraph from it and perhaps even work with
 that subgraph locally in memory while running some queries.
 
+// llms-summary: Covers saving and loading whole graphs as GraphML or GraphSON with the 'io' step, GraphSON versions and packaging, and rendering query results as JSON.
 [[graphmlandjsonintro]]
 === Working with GraphML and GraphSON
 
@@ -5403,6 +5420,7 @@ the results of your queries as JSON. Remember that if you do save an entire grap
 JSON, unless you specify otherwise, the default format is GraphSON 3.0 with
 embedded types.
 
+// llms-summary: Explains how null values flow through traversals, how 'property' with null removes or ignores properties, and null-safe behavior in graphs that support storing null.
 [[nulls]]
 === Using null in Gremlin
 
@@ -5534,6 +5552,7 @@ support null values and use the 'property('key',null)' syntax to remove properti
 then keep in mind that this syntax will behave quite differently if you switch to a
 graph that suddenly supports storing nulls!
 
+// llms-summary: Explains TraversalStrategy types and covers verification strategies plus 'PartitionStrategy', 'SeedStrategy', and 'SubgraphStrategy' for filtering and determinism.
 [[traversal-strategies]]
 === Understanding TraversalStrategies
 
@@ -5807,6 +5826,7 @@ g.withStrategies(strategy).V().out().count()
 7
 ----
 
+// llms-summary: Demonstrates timing queries with 'clock' and 'clockWithResult', pinpointing costs with 'profile', and speeding lookups using TinkerGraph 'createIndex'.
 [[performance]]
 === Analyzing the performance of your queries
 
@@ -6177,6 +6197,7 @@ clockWithResult(100) {g.E().has('dist',gt(1000)).count().next()}
 20422
 ----
 
+// llms-summary: Shows how to attach metadata to a TinkerGraph using graph 'variables', setting, listing, retrieving, and removing key/value pairs with 'set', 'keys', 'asMap', 'get', and 'remove'.
 [[graphvars]]
 === Using graph variables to associate metadata with TinkerGraph
 
@@ -6239,6 +6260,7 @@ graph.variables().asMap()
 updated=July 18th 2017
 ----
 
+// llms-summary: Contrasts OLTP and OLAP graph processing and demonstrates OLAP with the TinkerPop GraphComputer, running 'pageRank' and a PageRankVertexProgram on air-routes.
 [[olapoltp]]
 === OLTP vs OLAP
 
@@ -6455,6 +6477,7 @@ We have barely scratched the surface in this section on these new TinkerPop OLAP
 capabilities. If this is an area that you are interested in, we strongly recommend
 reading the official TinkerPop reference documentation.
 
+// llms-summary: Introduces gremlin-lang, the native grammar behind Gremlin, obtaining it via 'gremlinLang', and converting between languages using 'GremlinTranslator'.
 [[translators]]
 === Translating Gremlin to different programming languages
 

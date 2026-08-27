@@ -1,3 +1,4 @@
+// llms-summary: Moves beyond the Gremlin Console to interact with a TinkerGraph from Java and Groovy applications.
 [[beyond]]
 == MOVING BEYOND THE GREMLIN CONSOLE
 

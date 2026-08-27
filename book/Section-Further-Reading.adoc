@@ -1,3 +1,4 @@
+// llms-summary: Points to useful websites, tools, and documentation for continued learning about Apache TinkerPop and Gremlin.
 [[fr]]
 == FURTHER READING
 

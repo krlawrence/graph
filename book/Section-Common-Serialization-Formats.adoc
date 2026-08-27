@@ -1,3 +1,4 @@
+// llms-summary: Surveys common graph serialization formats, with a close look at the TinkerPop GraphSON (JSON) format.
 [[serialize]]
 == COMMON GRAPH SERIALIZATION FORMATS
 
