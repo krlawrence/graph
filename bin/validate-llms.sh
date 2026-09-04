@@ -42,23 +42,36 @@ mkdir -p "$SERVE_DIR"
 ln -s ../md "$SERVE_DIR/md"
 ruby bin/llms/generate-llms-txt.rb --prefix "http://127.0.0.1:${PORT}/" --out "$SERVE_DIR/llms.txt" "$MD_DIR" >/dev/null
 
+REPORT="$(mktemp)"
 python3 -m http.server "$PORT" --directory "$SERVE_DIR" >/tmp/afdocs-httpd.log 2>&1 &
 HTTPD_PID=$!
 cleanup() {
     kill "$HTTPD_PID" >/dev/null 2>&1 || true
-    rm -rf "$SERVE_DIR"
+    rm -rf "$SERVE_DIR" "$REPORT"
 }
 trap cleanup EXIT
 sleep 1.5
 
+# Scope validation to the checks that apply to a statically hosted llms.txt +
+# Markdown mirror. afdocs' remaining checks (content-negotiation, per-page HTML
+# discovery directive, .md URL support) assume the spec's canonical serving model
+# -- HTML page URLs that also yield Markdown -- which a single-HTML book on
+# GitHub Pages cannot satisfy (static hosting has no content negotiation). afdocs
+# is version-pinned so CI results stay deterministic as the tool evolves.
+AFDOCS="afdocs@0.20.0"
+CHECKS="llms-txt-exists,llms-txt-valid,llms-txt-size,llms-txt-links-resolve,llms-txt-links-markdown"
+
 echo "=== Running afdocs check against http://127.0.0.1:${PORT}/llms.txt ==="
-OUTPUT="$(npx --yes afdocs check "http://127.0.0.1:${PORT}/llms.txt" \
-    --max-links 500 --max-concurrency 4 --request-delay 30 2>&1)"
-STATUS=$?
-echo "$OUTPUT"
+# Stream output live (so failures are visible in CI) while capturing afdocs'
+# exit status; a bare command substitution here would trip `set -e` and hide it.
+set +e
+npx --yes "$AFDOCS" check "http://127.0.0.1:${PORT}/llms.txt" \
+    --max-links 500 --max-concurrency 4 --request-delay 30 --checks "$CHECKS" 2>&1 | tee "$REPORT"
+STATUS=${PIPESTATUS[0]}
+set -e
 
 # Fail on a non-zero afdocs exit or any failed (✗) check.
-if [ "$STATUS" -ne 0 ] || echo "$OUTPUT" | grep -q '✗'; then
+if [ "$STATUS" -ne 0 ] || grep -q '✗' "$REPORT"; then
     echo "" >&2
     echo "✗ afdocs validation failed." >&2
     exit 1
