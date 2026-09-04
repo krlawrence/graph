@@ -3,7 +3,7 @@
 ## About the files in this folder
 
 This folder contains the AsciiDoc source files used to produce the HTML, XML 
-(DOCBOOK), EPUB, MOBI, and PDF output.
+(DOCBOOK), EPUB, MOBI, Markdown and PDF output.
 
 The `Practical-Gremlin.adoc` file contains links to the different sections of the 
 book. The names of the other AsciiDoc format files follow the naming convention: 
@@ -13,12 +13,14 @@ color coding, chapter numbering, and other niceties that are present in the HTML
 PDF versions; as they have been run through an AsciiDoc processor and had various 
 style sheets and code pretty printers applied. Your mileage may vary, but I find the 
 HTML and PDF versions to be the most pleasing to read. The PDF version includes page 
-numbers, the HTML version is one continuous document. 
+numbers, the HTML version is one continuous document. The Markdown version is 
+optimized for use by agents, like Kiro or Claude and is indexed by way of an 
+[llms.txt](https://krlawrence.github.io/graph/llms.txt) file.
 
 The '.adoc' files in this folder represent the most recent updates and may not have 
 been published elsewhere yet, even in preview form. The other formats (HTML, DocBook,
-PDF, ePub, and MOBI) will be generated once there are enough updates to make it 
-worthwhile creating a full release. 
+PDF, Markdown, ePub, and MOBI) will be generated once there are enough updates to 
+make it worthwhile creating a full release. 
 
 ## Building the book
 
@@ -72,8 +74,7 @@ ebook-convert Practical-Gremlin.epub Practical-Gremlin.mobi
 In addition to the human-facing formats above, the build produces an agent-friendly
 Markdown edition of the book following the
 [Agent Friendly Documentation Spec](https://agentdocsspec.com/) (built on
-[llms.txt](https://llmstxt.org/)), mirroring the publishing pattern used by Apache
-TinkerPop. This yields:
+[llms.txt](https://llmstxt.org/)). This yields:
 
 - `target/llms.txt` — a machine-readable index of the book, published at the site
   root (`https://krlawrence.github.io/graph/llms.txt`), and

@@ -11,12 +11,13 @@ This repository is the home for the source materials, sample code and examples f
 
 ### Quick Start - the latest version
 
-The second edition, which covers TinkerPop 3.8.0, is published automatically as changes are authored and can be found [here and HTML](https://krlawrence.github.io/graph/) and [here as PDF](https://krlawrence.github.io/graph/Practical-Gremlin.pdf). As with the first edition, Practical Gremlin is considered a living book and may receive frequent updates. 
+The second edition, which covers TinkerPop 3.8.0, is published automatically as changes are authored and can be found published as [HTML](https://krlawrence.github.io/graph/), [PDF](https://krlawrence.github.io/graph/Practical-Gremlin.pdf) and more suitably for agents as Markdown via [llms.txt](https://krlawrence.github.io/graph/llms.txt). As with the first edition, Practical Gremlin is considered a living book and may receive frequent updates. 
 
 The first edition, covering versions prior to 3.8.0, is still available, but no longer updated. The final publication of that version can be found at [Revision 283](https://github.com/krlawrence/graph/releases/tag/v283-tp-3.5.2). You will find the standard formats this book is published in, including PDF, HTML, MOBI, EPUB and XML (Docbook). The [releases](https://github.com/krlawrence/graph/releases) section will continue to offer access to all of these formats as snapshots for ongoing reference. A published archived version of this edition can be found [here](https://krlawrence.github.io/graph/first-edition/). 
 
 ### LATEST NEWS
 
+- [Sep-04-2026] Published a Markdown version of the book and `llms.txt` file at https://krlawrence.github.io/graph/llms.txt
 - [Feb-26-2026] Published an archived HTML version of the first edition to https://krlawrence.github.io/graph/first-edition/
 - [Jan-12-2026] Published the final version of the first edition, which is the version that has been generally available https://kelvinlawrence.net/book/Gremlin-Graph-Guide.html, as this link is expected to become unavailable once the second edition is made official.
 - [Dec-17-2025] Auto-published the PDF version of book via GitHub Actions as changes arrive to the 'main' branch. 
